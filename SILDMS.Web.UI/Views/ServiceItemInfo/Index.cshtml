@@ -1,0 +1,361 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+
+<div class="box box-primary box-body" ng-controller="ServiceItemInfoCtrl">
+    <form name="ServiceItemInfo" novalidate ng-submit="submitform(ServiceItemInfo.$valid)" autocomplete="off">
+        <!-- box-header  box header-->
+        <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
+            @*<i class="fa fa-list-alt"></i>*@
+            <h2 class="box-title" style="font-family: 'MV Boli';font-weight:500; ">ServiceItem Information</h2>
+            <div class="box-tools pull-right">
+                <div class="col-lg-12 pull-right">
+                    <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                        <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
+                    </div>
+                    <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                        <button type="button" data-ng-click="SearchServiceItemInfoModal()" class="button-custom" ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
+                    </div>
+                    <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                        <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <label for="ServiceItemCategory">Service Category</label>
+                        <label style="font-size: larger;color:red;">*</label>
+                    </div>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <select id="ServiceItemCategory" name="serviceItemCategory" class="form-control" ng-model="vmServiceItemInfo.ServiceItemCategory" ng-change="ServiceCategoryChange()"
+                                ng-options="serviceItemCategory as serviceItemCategory.ServiceItemCategoryName for serviceItemCategory in serviceItemCategorys track by serviceItemCategory.ServiceItemCategoryID" required="required">
+                            <option value="" style="display: none">-- Select--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <label for="Status">Status</label>
+                    </div>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <select data-ng-model="vmServiceItemInfo.Status" class="form-control">
+                        <option value="">-- None --</option>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <label>Item Code</label>
+                        <label style="font-size: larger;color:red;">*</label>
+                    </div>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <input id="ServiceItemCode" name="ServiceItemCode" type="text" autocomplete="off" class="form-control" placeholder="Service Item Code" required data-ng-model="vmServiceItemInfo.ServiceItemCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <label for="ServiceItemName">Item Name</label>
+                        <label style="font-size: larger;color:red;">*</label>
+                    </div>
+                </div>
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                    <div class="form-group">
+                        <input id="ServiceItemName" type="text" name="ServiceItemName" required class="form-control" autofocus ng-model="vmServiceItemInfo.ServiceItemName" placeholder="Service Item Name" style="height: 25px; font-size: smaller" />
+                        <p ng-show="ServiceItemInfo.ServiceItemName.$error.required && !ServiceItemInfo.ServiceItemName.$pristine" class="help-block" style="height:10px;">ServiceItem Name is required.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="position:relative;top:2px;">
+                <div class="col-md-12">
+                    <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
+                        <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
+                            <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Service Item Information List</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="table-responsive" data-ng-disabled="" ng-cloak>
+        <table st-table="ServiceItemInfoDisplayedCollection" st-safe-src="ServiceItemInfoSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+            <thead>
+                <tr style="color: darkblue;">
+                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ServiceItemCode')">Item Code</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ServiceItemName')">Item Name</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ServiceItemCategoryName')">Service Category</th>
+                    <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('Status')">Status</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                </tr>
+                <tr>
+                    <th><input st-search="ItemCode" placeholder="Item Code" class="input-sm form-control" type="search" /></th>
+                    <th><input st-search="ServiceItemName" placeholder="Item Name" class="input-sm form-control" type="search" /></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in ServiceItemInfoDisplayedCollection">
+                    <td class="hidden">{{row.ServiceItemID}}</td>
+                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ServiceItemCode}}</td>
+                    <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ServiceItemName}}</td>
+                    <td class="hidden">{{row.ServiceItemCategoryID}}</td>
+                    <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ServiceItemCategoryName}}</td>
+                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                            {{row.Status == '1'? 'Active':'InActive'}}
+                        </span>
+                    </td>
+                    <td class="col-lg-2 col-md-2 col-sm-2 text-center">
+                        <button type="button" class="button-detail" style="height:28px;" data-ng-click="toggleEdit(row)"><i class="fa fa-edit"></i> Edit</button>
+                        <button type="button" class="btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" data-ng-click="toggleDelete(row)"><i class="fa fa-remove"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="7" class="text-center">
+                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- Delete ServiceCategory Modal -->
+    <div id="deleteModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">Delete Confirmation</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>Are you sure? </label>
+                            <p> You want to delete this record.</p>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="yes" class="btn btn-danger" ng-disabled="loading" data-ng-click="deleteConfirm()">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Delete ServiceCategory Modal -->
+    <div id="mydiv" data-ng-show="loading">
+        <div class="overlay">
+            <div class="loder">
+                <img src="~/Content/AdminLTE/img/cube.gif" /> <span class="text-bold">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    app.controller('ServiceItemInfoCtrl', function ($scope, $http) {
+        //applySecurity();
+
+        ///////////////Variable Declaration////////////////////////
+        $scope.itemsByPage = 20;
+        $scope.getAllServiceItemInfoDtl = [];  // base collection
+        $scope.displayedCollection = [].concat($scope.getAllServiceItemInfoDtl);  // displayed collection
+        $scope.disableKey = true;
+
+        $http.get('/ServiceItemInfo/GetServicesCategory')
+            .success(function (response) {
+                $scope.loading = false;
+                $scope.serviceItemCategorys = response.result;
+            }).error(function () { });
+        
+        $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList")
+            .success(function (response) {
+                $scope.ServiceItemInfoSearchList = response.ServiceItemInfoSearchList;
+                $scope.ServiceItemInfoDisplayedCollection = [].concat($scope.ServiceItemInfoSearchList);
+            })
+            .error(function () { });
+        var ServiceItemCategoryID = "";
+        $scope.ServiceCategoryChange = function () {
+            ServiceItemCategoryID = $scope.vmServiceItemInfo.ServiceItemCategory.ServiceItemCategoryID;
+            $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + $scope.vmServiceItemInfo.ServiceItemCategory.ServiceItemCategoryID)
+                .success(function (response) {
+                    $scope.ServiceItemInfoSearchList = response.ServiceItemInfoSearchList;
+                    $scope.ServiceItemInfoDisplayedCollection = [].concat($scope.ServiceItemInfoSearchList);
+                })
+                .error(function () { });
+        };
+        ///////////////Master Model////////////////
+        $scope.vmServiceItemInfo =
+        {
+            ServiceItemID: "",
+            ServiceItemCode: "",
+            ServiceItemName: "",
+            ServiceItemCategory: { ServiceItemCategoryID: "", ServiceItemCategoryName: "" },
+            Status: ""
+        };
+
+        $scope.ClearServiceItemInfo = function () {
+            $scope.vmServiceItemInfo =
+            {
+                //ServiceItemID: "",
+                ServiceItemCode: "",
+                ServiceItemName: "",
+                //ServiceItemCategory: { ServiceItemCategoryID: "", ServiceItemCategoryName: "" },
+                //Status: ""
+            };
+        }
+
+        /////////////////////Default Value////////////////////////
+
+        $scope.vmServiceItemInfo.Status = "1";
+
+        ///////////////////////Save/Update Master///////////////////////
+
+        $scope.Post = function () {
+
+            if ($("#ServiceItemCode").val() == "") {
+                toastr.error("ServiceItem Code is required");
+                return;
+            }
+
+            if ($("#ServiceItemName").val() == "") {
+                toastr.error("ServiceItem Name is required");
+                return;
+            }
+
+            if ($("#ServiceItemCategory").val() == "") {
+                toastr.error("ServiceItem Category is required");
+                return;
+            }
+
+            $scope.loading = true;
+            $scope.vmServiceItemInfo.ServiceItemCode = $('#ServiceItemCode').val();
+            $scope.vmServiceItemInfo.ServiceItemName = $('#ServiceItemName').val();
+            $scope.vmServiceItemInfo.ServiceItemCategoryID = $scope.vmServiceItemInfo.ServiceItemCategory.ServiceItemCategoryID;
+            $scope.vmServiceItemInfo.Status = $scope.vmServiceItemInfo.Status;
+
+            $http.post('/ServiceItemInfo/SaveServiceItemInfo', { _modelServiceItemInfo: $scope.vmServiceItemInfo })
+                .success(function (response) {
+                    if (response.status == "S201") {
+                        toastr.success("Data Saved Successfully.");
+                        $scope.ClearServiceItemInfo();
+                        //$scope.ServiceCategoryChange();
+                        //alert(ServiceItemCategoryID);
+                        $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + ServiceItemCategoryID)
+                            .success(function (response) {
+                                $scope.ServiceItemInfoSearchList = response.ServiceItemInfoSearchList;
+                                $scope.ServiceItemInfoDisplayedCollection = [].concat($scope.ServiceItemInfoSearchList);
+                            })
+                            .error(function () { });
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "S202") {
+                        toastr.success("Data Updated Successfully.");
+                        $scope.ClearServiceItemInfo();
+                        $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + ServiceItemCategoryID)
+                            .success(function (response) {
+                                $scope.ServiceItemInfoSearchList = response.ServiceItemInfoSearchList;
+                                $scope.ServiceItemInfoDisplayedCollection = [].concat($scope.ServiceItemInfoSearchList);
+                            })
+                            .error(function () { });
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "S203") {
+                        toastr.success("Data Deleted Successfully.");
+                        $scope.ClearServiceItemInfo();
+                        $$http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + ServiceItemCategoryID)
+                            .success(function (response) {
+                                $scope.ServiceItemInfoSearchList = response.ServiceItemInfoSearchList;
+                                $scope.ServiceItemInfoDisplayedCollection = [].concat($scope.ServiceItemInfoSearchList);
+                            })
+                            .error(function () { });
+                        $scope.loading = false;
+                        return;
+                    }
+                    else {
+                        toastr.error("Data Save Failed.");
+                        $scope.loading = false;
+                        return;
+                    }
+                })
+                .error(function () {
+                    toastr.error("Data Save Failed");
+                    $scope.loading = false;
+                    return;
+                });
+        };
+
+        ////////////////////////////////////////////////////////////////////////////////
+
+        // ################# Detail Edit Modal ####################
+        $scope.toggleEdit = function (row) {
+            console.log(row);
+            $scope.vmServiceItemInfo.ServiceItemID = row.ServiceItemID;
+            $scope.vmServiceItemInfo.ServiceItemCode = row.ServiceItemCode;
+            $scope.vmServiceItemInfo.ServiceItemName = row.ServiceItemName;
+            alert("row" + row.ServiceItemCategoryID);
+            $scope.vmServiceItemInfo.ServiceItemCategory.ServiceItemCategoryID = row.ServiceItemCategoryID;
+            alert($scope.vmServiceItemInfo.ServiceItemCategory.ServiceItemCategoryID);
+            $scope.vmServiceItemInfo.Status = row.Status;
+
+            $scope.loading = false;
+            $("#btnDtlSaveUpdate").html('Update');
+        };
+
+        //#################### Delete Action ###############
+        $scope.deleteConfirm = function () {
+            var postData = JSON.stringify(convArrToObj($scope.vmServiceItemInfo));
+            $scope.loading = true;
+            $http.post('/ServiceItemInfo/DeleteServiceItemInfo', postData).success(function (response) {
+                if (response.status == "S203") {
+                    toastr.success("Data Deleted Successfully.");
+                    $('#deleteModal').modal('hide');
+                    $scope.loading = false;
+                    $scope.ClearServiceItemInfo();
+                    $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + ServiceItemCategoryID)
+                        .success(function (response) {
+                            $scope.ServiceItemInfoSearchList = response.ServiceItemInfoSearchList;
+                            $scope.ServiceItemInfoDisplayedCollection = [].concat($scope.ServiceItemInfoSearchList);
+                        })
+                        .error(function () { });
+                    return;
+                }
+            }).error(function (data) {
+                $scope.loading = false;
+                toastr.error(data);
+            });
+        };
+
+        $scope.toggleDelete = function (row) {
+            $scope.vmServiceItemInfo = row;
+            $('#deleteModal').modal('show');
+        };
+
+
+        $scope.ResetDtlModel = function () {
+            $scope.ClearVisionDtl();
+        };
+
+        $scope.toggleRefreshTable = function () {
+            window.location.reload();
+        };
+        ////////////////////////////////////////////////////////////////////////////////
+    });
+
+</script>

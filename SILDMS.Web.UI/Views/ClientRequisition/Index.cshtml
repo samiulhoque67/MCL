@@ -1,0 +1,1286 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+
+<style type="text/css">
+    label {
+        margin-bottom: 2px;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .form-control {
+        height: 25px;
+        font-size: smaller;
+        padding: 3px 6px 3px;
+    }
+</style>
+
+<div class="box box-primary box-body" ng-controller="ClientRequisitionCtrl">
+
+    <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
+        <i class="fa fa-user"></i>
+        <h3 style="font-family: Verdana" class="box-title">Requisition From Client</h3>
+
+        <div class="box-tools pull-right">
+            <div class="col-lg-12 pull-right">
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
+                </div>
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="SearchClientReqModal()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
+                </div>
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>   {{ ClientReq.ClientReqID ? 'Update' : 'Save' }}</button>
+                </div>
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="Cancel()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box-body " style="margin: 1%; padding: 5px 5px 5px 5px;" data-ng-disabled="">
+        <div class="row">
+            <div class="row">
+                <div class="col-lg-3 ">
+                    <div class="form-group">
+                        <label for="ClientName">Client Name :</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="ClientName" name="ClientName" type="text" data-ng-model="ClientReq.ClientName" class="form-control" ng-readonly="true" />
+                    </div>
+                </div>
+                <div class="col-lg-1">
+                    <button type="button" data-ng-click="ShowClientList()" class="form-control">Search</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Client Requisition No.</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="ClientReqNo" name="ClientReqNo" type="text" class="form-control" placeholder="Client Requisition No" ng-model="ClientReq.ClientReqNo" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Requisition No.:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="ClientReqID" name="ClientReqID" readonly type="text" class="form-control" placeholder="Auto Requisition No." ng-model="ClientReq.ClientReqID" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3 ">
+                    <div class="form-group">
+                        <label for="SubmissionDate">Submission Date:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="SubmissionDate" name="SubmissionDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.SubmissionDate" />
+                    </div>
+                </div>
+                <div class="col-lg-3 ">
+                    <div class="form-group">
+                        <label for="RequisitionDate">Requisition Date:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="RequisitionDate" name="RequisitionDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.RequisitionDate" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3 ">
+                    <div class="form-group">
+                        <label for="Remarks">Remarks :</label>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="form-group">
+                        <input id="Remarks" name="Remarks" type="text" data-ng-model="ClientReq.Remarks" class="form-control" placeholder="Remarks" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ClientInfoModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Client Information</h3>
+                </div>
+                <div class="modal-body table-responsive">
+                    <table st-table="ClientDisplayedCollection" st-safe-src="ClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCode')">Client Code</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientName')">Client Name</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCategoryName')">Client Category</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactPerson')">Contact Person</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactNumber')">Contact Number</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+                            <tr>
+                                <th><input st-search="ClientCode" placeholder="Client Code" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="ClientName" placeholder="ClientName" class="input-sm form-control" type="search" /></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in ClientDisplayedCollection">
+                                <td class="hidden">{{row.ClientID}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientCode}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
+                                <td class="hidden">{{row.ClientCategoryID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientCategoryName}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactPerson}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactNumber}}</td>
+                                <td class="hidden">{{row.ClientAddressID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.Address}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                    <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                                        {{row.Status == '1'? 'Active':'InActive'}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleClientSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="SearchClientReqModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Client Requisition Information</h3>
+                </div>
+                <div class="table-responsive" data-ng-disabled="" ng-cloak>
+                    <table st-table="clientReqDisplayedCollection" st-safe-src="clientReqSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCode')">Client Code</th>*@
+                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
+                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientReqNo')">Requisition No</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('SubmissionDate')">Submission Date</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+                            <tr>
+                                <th><input st-search="ClientCode" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="ClientName" placeholder="ClientName" class="input-sm form-control" type="search" /></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in clientReqDisplayedCollection">
+                                <td class="hidden">{{row.ClientReqID}}</td>
+                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientCode}}</td>*@
+                                <td class="hidden">{{row.ClientID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientReqNo}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.RequisitionDate}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.SubmissionDate}}</td>
+                                <td class="hidden">{{row.Remarks}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                    <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                                        {{row.Status == '1'? 'Active':'InActive'}}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleClientReqSelect(row)">Select</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div></td>
+                            </tr>
+                        </tfoot>
+
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetSearchModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
+                <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
+                    <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Requisition Item List</h2>
+                    <div class="box-tools pull-right">
+                        <div class="col-lg-12 pull-right">
+                            <div class="btn-group pull-right" style="margin:2px;">
+                                <button type="button" id="btnAddReqItem" ng-disabled="btnAddReqItem" data-ng-click="AddReqItemModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="GridDisplayCollection" st-safe-src="masterDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;" st-sort="">Item Code</th>
+                            <th style="text-align: left;" st-sort="">Item Name</th>
+                            <th style="text-align: left;" st-sort="">Service Category</th>
+                            <th style="text-align: left;" st-sort="">Description</th>
+                            <th style="text-align: left;" st-sort="">Delivery Location</th>
+                            <th style="text-align: left;" st-sort="">Delivery Date</th>
+                            <th style="text-align: left;" st-sort="">Delivery Mode</th>
+                            <th style="text-align: left;" st-sort="">ReqQnty</th>
+                            <th style="text-align: left;" st-sort="">ReqUnit</th>
+                            <th style="text-align: left;">Action</th>
+                        </tr>
+                        @*<tr>
+                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                            </tr>*@
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td class="hidden">{{row.ClientReqItemID}}</td>
+                            <td class="hidden">{{row.ClientReqID}}</td>
+                            <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
+                            <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.ServiceCategoryName}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.Description}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.DeliveryLocation}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.DeliveryDate}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.DeliveryMode}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
+                            <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
+
+                            <td class="col-lg-1" style="width:5%;">
+                                <button type="button" ng-if="row.ClientReqItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" ng-if="!row.ClientReqItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqItemDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        @*<tr>
+                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                            </tr>*@
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="RequisitionItemModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-sm-5 col-md-5 col-lg-5">
+                            <h3 class="modal-title">Requisition Item Information</h3>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                        </div>
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                            <button type="button" class="close" data-dismiss="modal" ng-click="ResetReqItemModel()" aria-hidden="true" style="color:red;">x</button>
+                        </div>
+                    </div>
+                </div>
+                <div ng-cloak>
+                    <div class="row">
+                        <div class="col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="ServiceCategory">Service Category:</label>
+                            </div>
+                        </div>
+                        <div class=" col-lg-3">
+                            <div class="form-group">
+                                <select id="ServiceCategory" name="ServiceCategory" class="form-control" ng-model="ClientReqItem.ServiceCategory" ng-change="ServiceCategoryChange()"
+                                        ng-options="serviceCategory as serviceCategory.ServiceCategoryName for serviceCategory in serviceCategorys track by serviceCategory.ServiceCategoryID" required="required">
+                                    <option value="" style="display: none">-- Select--</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="ServiceItem">Item Name :</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <select id="ServiceItem" name="ServiceItem" class="form-control" ng-model="ClientReqItem.ServiceItem"
+                                        ng-options="serviceItem as serviceItem.ServiceItemName for serviceItem in serviceItems track by serviceItem.ServiceItemID" required="required">
+                                    <option value="" style="display: none">-- Select--</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="Description">Description:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="Description" type="text" name="Description" ng-model="ClientReqItem.Description" class="form-control" autofocus />
+
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="Delivery Location">Delivery Location:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="DeliveryLocation" type="text" name="DeliveryLocation" ng-model="ClientReqItem.DeliveryLocation" class="form-control" autofocus />
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="DeliveryDate">Delivery Date :</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="DeliveryDate" name="DeliveryDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                                       ng-model="ClientReqItem.DeliveryDate" style=" background-color:#ffffff; " />
+
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="DeliveryMode">Delivery Mode :</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <select data-ng-model="ClientReqItem.DeliveryMode" class="form-control">
+                                <option value="">-- None --</option>
+                                <option value="Hardcopy">Hardcopy</option>
+                                <option value="Softcopy">Softcopy</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="ReqQnty">ReqQnty :</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="ReqQnty" type="text" name="ReqQnty" ng-model="ClientReqItem.ReqQnty" class="form-control" placeholder="0.000" min="0.001" autofocus />
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="ReqUnit">ReqUnit :</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <select data-ng-model="ClientReqItem.ReqUnit" class="form-control">
+                                <option value="">-- None --</option>
+                                <option value="Hour">Hour</option>
+                                <option value="Minute">Minute</option>
+                                <option value="Second">Second</option>
+                                <option value="Piece">Piece</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <div class="btn-group pull-right" style="margin:2px;">
+                                <button type="button" id="btnAddReqItem" data-ng-click="AddReqItem()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add to Item List</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ClientReqTermsConditionsModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Terms & Conditions Information</h3>
+                </div>
+                <div class="modal-body table-responsive">
+                    <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormName')">Form Name</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+                            <tr>
+                                <th><input st-search="FormCode" placeholder="Form Code" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="FormName" placeholder="Form Name" class="input-sm form-control" type="search" /></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in TermsConditionsDisplayedCollection">
+                                <td class="hidden">{{row.TermsID}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.FormCode}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.FormName}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                    <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                                        {{row.Status == '1'? 'Active':'InActive'}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleTermsConditionsSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteReqItemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
+                <div class="modal-header" style="height: 46px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Delete Selected Item</h4>
+                </div>
+                <div class="modal-body" style="height: 80px;">
+                    Are you sure to delete this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: red;" ng-click="DeleteClientReqItem()">Yes</button>
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
+                <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
+                    @*<h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>*@
+                    <div class="col-lg-3 ">
+                        <div class="form-group">
+                            <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>
+                        </div>
+                    </div>
+                    @*<div class="row">*@
+                    <div class="col-lg-3 ">
+                        <div class="form-group">
+                            <label for="TermsAndConditions">Terms & Coonditions List:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="FormName" name="FormName" type="text" data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                        <button type="button" data-ng-click="ShowTermsConditionsList()" class="form-control">Search</button>
+                    </div>
+                    @*</div>*@
+                    <div class="box-tools pull-right">
+                        <div class="col-lg-12 pull-right">
+                            <div class="btn-group pull-right" style="margin:2px;">
+                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" data-ng-click="AddReqTermModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;" st-sort="">Terms Code</th>
+                            <th style="text-align: left;" st-sort="">Terms & Conditions</th>
+                            <th style="text-align: left;">Action</th>
+                        </tr>
+                        @*<tr>
+                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                            </tr>*@
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td class="hidden">{{row.ClientReqTermsID}}</td>
+                            <td class="hidden">{{row.ClientReqID}}</td>
+                            <td class="hidden">{{row.TermsID}}</td>
+                            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
+
+                            <td class="col-lg-1" style="width:5%;">
+                                <button type="button" ng-if="row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" ng-if="!row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        @*<tr>
+                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                            </tr>*@
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="RequisitionTermModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-sm-5 col-md-5 col-lg-5">
+                            <h3 class="modal-title">Terms & Conditions Information</h3>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+
+                        </div>
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                            <button type="button" class="close" data-dismiss="modal" ng-click="ResetReqTermModel()" aria-hidden="true" style="color:red;">x</button>
+                        </div>
+                    </div>
+                </div>
+                <div ng-cloak>
+                    <div class="row">
+                        <div class="col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="TermsCode">Terms & Conditions Code:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="TermsCode" type="text" name="TermsCode" ng-model="ClientReqTerm.TermsCode" class="form-control" autofocus />
+
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="TermsName">Terms & Conditions:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="TermsName" type="text" name="TermsName" ng-model="ClientReqTerm.TermsName" class="form-control" autofocus />
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <div class="btn-group pull-right" style="margin:2px;">
+                                <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteReqTermModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
+                <div class="modal-header" style="height: 46px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Delete Selected Item</h4>
+                </div>
+                <div class="modal-body" style="height: 80px;">
+                    Are you sure to delete this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: red;" ng-click="DeleteReqTerm()">Yes</button>
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    app.controller('ClientRequisitionCtrl', ['$scope', '$http', function ($scope, $http) {
+
+        $scope.clientReqItemArray = [];
+        $scope.clientReqTermArray = [];
+        $scope.itemsByPage = 10;
+
+        $http.get('/ClientRequisition/GetServicesCategory')
+            .success(function (response) {
+                $scope.loading = false;
+                $scope.serviceCategorys = response.result;
+            }).error(function () { });
+
+        $scope.ClientReq = {
+            ClientReqID: "",
+            ClientID: "",
+            ClientName: "",
+
+            TermsID: "",
+            FormName: "",
+
+            //ContactPerson: "",
+            //ContactNumber: "",
+            //ClientTINNo: "",
+            //ClientBINNo: "",
+            //ClientAddress: "",
+
+            ClientReqNo: "",
+            SubmissionDate: "",
+            RequisitionDate: "",
+            Remarks: "",
+            Status: ""
+        }
+
+        $scope.ClientReqItem = {
+            ClientReqItemID: "",
+            Description: "",
+            DeliveryLocation: "",
+            DeliveryDate: "",
+            ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
+            ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
+            DeliveryMode: "",
+            ReqQnty: "",
+            ReqUnit: ""
+        }
+
+        $('.DatePicker').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true
+            // Set minDate to 0 to disable selecting previous dates
+        });
+
+        $('.DatePicker')
+            .on('changeDate', function (ev) {
+                $('.datepicker').hide();
+            });
+
+        $('#DeliveryDate').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: false,
+            minDate: new Date() // Set minDate to the current date to disable selecting previous dates
+        }).on('changeDate', function (ev) {
+            var EnteredDate = $('#DeliveryDate').val();
+            var today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            var date = EnteredDate.substring(0, 2);
+            var month = EnteredDate.substring(3, 5);
+            var year = EnteredDate.substring(6, 10);
+            var myDate = new Date(year, month - 1, date);
+            myDate.setHours(0, 0, 0, 0);
+
+            //if (myDate < today) {
+            //    $('#DeliveryDate').val('');
+            //    toastr.error("Purchase date should not be less than system date.");
+            //}
+
+            $('.datepicker').hide();
+        });
+
+        // ################# Detail Add Modal ####################
+        $scope.AddReqItemModal = function () {
+            if ($('#ClientName').val() == "") {
+                toastr.error("Client Name Required");
+                return;
+            }
+
+            if ($('#ClientReqNo').val() == "") {
+                toastr.error("Client ReqNo.  Required");
+                return;
+            }
+
+            if ($('#SubmissionDate').val() == "") {
+                toastr.error("Submission Date Required.");
+                return;
+            }
+
+            if ($('#RequisitionDate').val() == "") {
+                toastr.error("Requisition Date Date Required");
+                return;
+            }
+            $('#RequisitionItemModal').modal('show');
+        };
+
+        $scope.masterDataSetupGridData = [];  // base collection
+        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+
+        $scope.AddReqItem = function () {
+
+            if ($scope.ClientReqItem.ServiceCategory.ServiceCategoryID == "") {
+                toastr.error("Service Category Required");
+                return;
+            }
+
+            if ($scope.ClientReqItem.ServiceItem.ServiceItemID == "") {
+                toastr.error("Service Item  Required");
+                return;
+            }
+
+            if ($scope.ClientReqItem.DeliveryMode == "") {
+                toastr.error("Submission Date Required.");
+                return;
+            }
+
+            if ($scope.ClientReqItem.ReqUnit == "") {
+                toastr.error("Requisition Date Date Required");
+                return;
+            }
+
+            if ($('#DeliveryLocation').val() == "") {
+                toastr.error("Service Category Required");
+                return;
+            }
+
+            if ($('#DeliveryDate').val() == "") {
+                toastr.error("Service Item  Required");
+                return;
+            }
+
+            if ($('#Description').val() == "") {
+                toastr.error("Submission Date Required.");
+                return;
+            }
+
+            if ($('#ReqQnty').val() == "") {
+                toastr.error("Requisition Date Date Required");
+                return;
+            }
+
+            $scope.ClientReqItem.ServiceCategoryID = $scope.ClientReqItem.ServiceCategory.ServiceCategoryID;
+            $scope.ClientReqItem.ServiceCategoryName = $scope.ClientReqItem.ServiceCategory.ServiceCategoryName;
+            $scope.ClientReqItem.ServiceItemID = $scope.ClientReqItem.ServiceItem.ServiceItemID;
+            $scope.ClientReqItem.ServiceItemName = $scope.ClientReqItem.ServiceItem.ServiceItemName;
+
+            $scope.ClientReqItem.DeliveryMode = $scope.ClientReqItem.DeliveryMode;
+            $scope.ClientReqItem.ReqUnit = $scope.ClientReqItem.ReqUnit;
+
+            $scope.ClientReqItem.DeliveryLocation = $('#DeliveryLocation').val();
+            $scope.ClientReqItem.DeliveryDate = $('#DeliveryDate').val();
+            $scope.ClientReqItem.Description = $('#Description').val();
+            $scope.ClientReqItem.ReqQnty = $('#ReqQnty').val();
+
+            $scope.clientReqItemArray.push($scope.ClientReqItem);
+
+            $scope.GridDisplayCollection = $scope.GridDisplayCollection.concat($scope.ClientReqItem);
+
+            $scope.resetClientReqItem();
+            $("#btnAddReqItem").html('Add');
+            $('#RequisitionItemModal').modal('hide');
+        }
+
+        $scope.resetClientReqItem = function () {
+            $('#DeliveryDate').val('');
+            $scope.ClientReqItem = {
+                ClientReqItemID: "",
+                ClientReqID: "",
+                ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
+                ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
+                Description: "",
+                DeliveryLocation: "",
+                DeliveryDate: "",
+                DeliveryMode: "",
+                ReqQnty: "",
+                ReqUnit: ""
+            }
+        }
+
+        $scope.ShowClientList = function () {
+            $http.get("/ClientRequisition/GetClientInfoList")
+                .success(function (response) {
+                    console.log(response);
+                    $scope.ClientList = response.ClientInfoList;
+                    $scope.ClientDisplayedCollection = [].concat($scope.ClientList);
+                    console.log($scope.ClientDisplayedCollection);
+                    $scope.loading = false;
+                })
+                .error(function () { });
+
+            $('#ClientInfoModal').modal('show');
+        };
+
+        var ServiceCategoryID = "";
+        $scope.ServiceCategoryChange = function () {
+            ServiceCategoryID = $scope.ClientReqItem.ServiceCategory.ServiceCategoryID;
+            $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + ServiceCategoryID)
+                .success(function (response) {
+                    $scope.loading = false;
+                    $scope.serviceItems = response.ServiceItemInfoSearchList;
+                })
+                .error(function () { });
+        };
+
+        $scope.clearClientReq = function () {
+            $scope.ClientReq = {
+                ClientReqID: "",
+                ClientID: "",
+                ClientCode: "",
+                ClientName: "",
+                ContactPerson: "",
+                ContactNumber: "",
+                ClientTINNo: "",
+                ClientBINNo: "",
+                ClientAddress: "",
+                ClientReqNo: "",
+                SubmissionDate: "",
+                RequisitionDate: "",
+                Remarks: ""
+            }
+
+            $scope.ClientReqItem = {
+                ClientReqItemID: "",
+                ClientReqID: "",
+                Description: "",
+                DeliveryLocation: "",
+                DeliveryDate: "",
+                ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
+                ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
+                DeliveryMode: "",
+                ReqQnty: "",
+                ReqUnit: ""
+            }
+            $scope.ClientReqTerm = {
+                ClientReqTermsID: "",
+                ClientReqID: "",
+                TermsID: "",
+                TermsCode: "",
+                TermsName: ""
+            }
+            $("#DeliveryDate").val('');
+            $scope.masterDataSetupGridData = [];  // base collection
+            $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+
+            $scope.ReqTermDataSetupGridData = [];  // base collection
+            $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+        }
+
+        $scope.toggleReqItemEdit = function (tableRow, $i) {
+            $('#RequisitionItemModal').modal('show');
+            $scope.resetClientReqItem();
+
+            $scope.ClientReqItem.ClientReqItemID = tableRow.ClientReqItemID;
+
+            $scope.ClientReqItem.ServiceCategory.ServiceCategoryID = tableRow.ServiceCategoryID;
+            $scope.ClientReqItem.ServiceCategory.ServiceCategoryName = tableRow.ServiceCategoryName;
+            $scope.ClientReqItem.ServiceItem.ServiceItemID = tableRow.ServiceItemID;
+            $scope.ClientReqItem.ServiceItem.ServiceItemName = tableRow.ServiceItemName;
+
+            $scope.ClientReqItem.DeliveryMode = tableRow.DeliveryMode;
+            $scope.ClientReqItem.DeliveryLocation = tableRow.DeliveryLocation;
+            $scope.ClientReqItem.DeliveryDate = tableRow.DeliveryDate;
+            $scope.ClientReqItem.Description = tableRow.Description;
+
+            $scope.ClientReqItem.ReqQnty = tableRow.ReqQnty;
+            $scope.ClientReqItem.ReqUnit = tableRow.ReqUnit;
+
+            $scope.GridDisplayCollection.splice($i, 1);
+            $scope.clientReqItemArray.splice($i, 1);
+
+            $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + tableRow.ServiceCategoryID)
+                .success(function (response) {
+                    $scope.loading = false;
+                    $scope.serviceItems = response.ServiceItemInfoSearchList;
+                })
+                .error(function () { });
+
+            $("#btnAddReqItem").html('Update');
+        };
+
+        $scope.toggleReqItemDelete = function (tableRow, $i) {
+            if (!tableRow.ClientReqItemID) {
+                $scope.resetClientReqItem();
+                $scope.GridDisplayCollection.splice($i, 1);
+                $scope.clientReqItemArray.splice($i, 1);
+                toastr.success('Data Deleted Successsfully');
+            }
+            else {
+                $scope.resetClientReqItem();
+                $scope.ClientReqItem.ClientReqItemID = tableRow.ClientReqItemID;
+                $('#deleteReqItemModal').modal('show');
+            }
+        };
+
+        $scope.DeleteClientReqItem = function () {
+            $http.post('/ClientRequisition/DeleteClientReqItemAndTerm',
+                { ClientReqItemID: $scope.ClientReqItem.ClientReqItemID, ClientReqTermID: $scope.ClientReqTerm.ClientReqTermID })
+                .success(function (response) {
+                    if (response.status == "S203") {
+                        $scope.resetClientReqItem();
+                        $scope.GridDisplayCollection.splice($i, 1);
+                        $scope.clientReqItemArray.splice($i, 1);
+                        toastr.success('Data Deleted Successsfully');
+                        return;
+                    }
+                });
+        }
+
+        ////////////////////////Select for Update from Search grid ///////////////////////
+
+        $scope.toggleClientSelect = function (row) {
+            $scope.ClientReq.ClientID = row.ClientID;
+            $scope.ClientReq.ClientCode = row.ClientCode;
+            $scope.ClientReq.ClientName = row.ClientName;
+
+            $('#ClientInfoModal').modal('hide');
+        };
+
+        ///////////////////////Save/Update Master///////////////////////
+
+        //////////////////Search Grid List///////////////////////////////
+
+        $scope.SearchClientReqModal = function () {
+            $scope.GetClientReqSearchList();
+            $('#SearchClientReqModal').modal('show');
+        };
+
+        $scope.GetClientReqSearchList = function () {
+            $http.post("/ClientRequisition/GetClientReqSearchList")
+                .success(function (response) {
+                    $scope.clientReqSearchList = response.clientReqSearchList;
+                    $scope.clientReqDisplayedCollection = [].concat($scope.clientReqSearchList);
+                })
+                .error(function () { });
+        }
+
+        ////////////////////////Select for Update from Search grid ///////////////////////
+
+        $scope.toggleClientReqSelect = function (tableRow) {
+            $scope.ClientReq.ClientReqID = tableRow.ClientReqID;
+            $scope.ClientReq.ClientID = tableRow.ClientID;
+            $scope.ClientReq.ClientName = tableRow.ClientName;
+            $scope.ClientReq.ClientReqNo = tableRow.ClientReqNo;
+            $scope.ClientReq.RequisitionDate = tableRow.RequisitionDate;
+            $scope.ClientReq.SubmissionDate = tableRow.SubmissionDate;
+            $scope.ClientReq.Remarks = tableRow.Remarks;
+            $scope.ClientReq.Status = tableRow.Status;
+
+            $http.post('/ClientRequisition/GetClientReqItemList', { ClientReqID: tableRow.ClientReqID })
+                .success(function (response) {
+                    $scope.masterDataSetupGridData = response.ClientReqItemList;
+                    $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+            $http.post('/ClientRequisition/GetClientReqTermList', { ClientReqID: tableRow.ClientReqID })
+                .success(function (response) {
+                    $scope.ReqTermDataSetupGridData = response.ClientReqTermList;
+                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+            $('#SearchClientReqModal').modal('hide');
+        };
+
+        ///////////////////////////////////////////////
+
+        ////////////////////////Requsition Terms & Conditions ///////////////////////
+
+        $scope.ShowTermsConditionsList = function () {
+            $http.get("/ClientRequisition/GetTermsConditionsList")
+                .success(function (response) {
+                    console.log(response);
+                    $scope.TermsConditionsList = response.termsConditionsList;
+                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
+                    console.log($scope.TermsConditionsDisplayedCollection);
+                    $scope.loading = false;
+                })
+                .error(function () { });
+
+            $('#ClientReqTermsConditionsModal').modal('show');
+        };
+
+        $scope.toggleTermsConditionsSelect = function (row) {
+            $scope.ClientReq.TermsID = row.TermsID;
+            //$scope.ClientReq.FormCode = row.FormCode;
+            $scope.ClientReq.FormName = row.FormName;
+
+            $http.post('/ClientRequisition/GetClientReqTermAgainstFormList', { TermsID: row.TermsID })
+                .success(function (response) {
+                    $scope.ReqTermDataSetupGridData = response.ClientReqTermList;
+                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+            $('#ClientReqTermsConditionsModal').modal('hide');
+        };
+
+        $scope.ClientReqTerm = {
+            ClientReqTermsID: "",
+            ClientReqID: "",
+            TermsID: "",
+            TermsCode: "",
+            TermsName: ""
+        }
+
+        $scope.AddReqTermModal = function () {
+            if ($('#ClientName').val() == "") {
+                toastr.error("Client Name Required");
+                return;
+            }
+
+            if ($('#ClientReqNo').val() == "") {
+                toastr.error("Client ReqNo.  Required");
+                return;
+            }
+
+            if ($('#SubmissionDate').val() == "") {
+                toastr.error("Submission Date Required.");
+                return;
+            }
+
+            if ($('#RequisitionDate').val() == "") {
+                toastr.error("Requisition Date Date Required");
+                return;
+            }
+            $('#RequisitionTermModal').modal('show');
+        };
+
+        $scope.ReqTermDataSetupGridData = [];  // base collection
+        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+
+        $scope.AddReqTerm = function () {
+
+            if ($('#TermsCode').val() == "") {
+                toastr.error("Terms Code Required");
+                return;
+            }
+
+            if ($('#TermsName').val() == "") {
+                toastr.error("Terms Name Required.");
+                return;
+            }
+
+            $scope.ClientReqTerm.TermsCode = $('#TermsCode').val();
+            $scope.ClientReqTerm.TermsName = $('#TermsName').val();
+
+            $scope.clientReqTermArray.push($scope.ClientReqTerm);
+
+            $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection.concat($scope.ClientReqTerm);
+
+            $scope.resetClientReqTerm();
+            $("#btnAddReqTerm").html('Add');
+            $('#RequisitionTermModal').modal('hide');
+        }
+
+        $scope.resetClientReqTerm = function () {
+            $scope.ClientReqTerm = {
+                ClientReqTermsID: "",
+                ClientReqID: "",
+                TermsID: "",
+                TermsCode: "",
+                TermsName: ""
+            }
+        }
+
+        $scope.toggleReqTermEdit = function (tableRow, $i) {
+            $('#RequisitionTermModal').modal('show');
+            $scope.resetClientReqTerm();
+            $scope.ClientReqTerm.ClientReqTermID = tableRow.ClientReqTermD;
+            $scope.ClientReqTerm.ClientReqID = tableRow.ClientReqID;
+            $scope.ClientReqTerm.TermsID = tableRow.TermsID;
+            $scope.ClientReqTerm.TermsCode = tableRow.TermsCode;
+            $scope.ClientReqTerm.TermsName = tableRow.TermsName;
+            $scope.ReqTermGridDisplayCollection.splice($i, 1);
+            $scope.clientReqTermArray.splice($i, 1);
+            $("#btnAddReqTerm").html('Update');
+        };
+
+        $scope.toggleReqTermDelete = function (tableRow, $i) {
+            if (!tableRow.ClientReqTermID) {
+                $scope.resetClientReqTerm();
+                $scope.ReqTermGridDisplayCollection.splice($i, 1);
+                $scope.clientReqTermArray.splice($i, 1);
+                toastr.success('Data Deleted Successsfully');
+            }
+            else {
+                $scope.resetClientReqTerm();
+                $scope.ClientReqTerm.ClientReqTermID = tableRow.ClientReqTermID;
+                $('#deleteReqTermModal').modal('show');
+            }
+        };
+
+        $scope.DeleteClientReqTerm = function () {
+            $http.post('/ClientRequisition/DeleteClientReqItemAndTerm',
+                { ClientReqItemID: $scope.ClientReqItem.ClientReqItemID, ClientReqTermID: $scope.ClientReqTerm.ClientReqTermID })
+                .success(function (response) {
+                    if (response.status == "S203") {
+                        $scope.resetClientReqTerm();
+                        $scope.ReqTermGridDisplayCollection.splice($i, 1);
+                        $scope.clientReqTermArray.splice($i, 1);
+                        toastr.success('Data Deleted Successsfully');
+                        return;
+                    }
+                });
+        }
+
+        ///////////////////////////////////////////////
+
+        $scope.Post = function () {
+
+            if ($('#ClientName').val() == "") {
+                toastr.error("Client Name Required");
+                return;
+            }
+
+            if ($('#ClientReqNo').val() == "") {
+                toastr.error("Client ReqNo.  Required");
+                return;
+            }
+
+            if ($('#SubmissionDate').val() == "") {
+                toastr.error("Submission Date Required.");
+                return;
+            }
+
+            if ($('#RequisitionDate').val() == "") {
+                toastr.error("Requisition Date Date Required");
+                return;
+            }
+
+            $scope.ClientReq.RequisitionDate = $('#RequisitionDate').val();
+            $scope.ClientReq.SubmissionDate = $('#SubmissionDate').val();
+
+            $http.post('/ClientRequisition/SaveClientRequisition',
+                {
+                    clientReq: $scope.ClientReq,
+                    clientReqItem: $scope.GridDisplayCollection,//$scope.clientReqItemArray,
+                    clientReqTerm: $scope.ReqTermGridDisplayCollection
+                })
+                .success(function (response) {
+                    if (response.status == "S201") {
+                        toastr.success("Data Saved Successfully.");
+                        $scope.clearClientReq();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "S202") {
+                        toastr.success("Data Updated Successfully.");
+                        $scope.clearClientReq();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "S203") {
+                        toastr.success("Data Deleted Successfully.");
+                        $scope.clearClientReq();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else {
+                        toastr.error("Data Save Failed.");
+                        $scope.loading = false;
+                        return;
+                    }
+                })
+                .error(function () {
+                    toastr.error("Data Save Failed.");
+                    $scope.loading = false;
+                    return;
+                });
+        }
+
+        $scope.toggleRefreshTable = function () {
+            window.location.reload();
+        };
+    }])
+</script>
