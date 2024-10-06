@@ -335,9 +335,9 @@ namespace SILDMS.DataAccess
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@VendorCSInfoID", SqlDbType.NVarChar, vendorCSInfo.VendorCSInfoID);
                     db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.NVarChar, vendorCSInfo.VendorID);
-                    db.AddInParameter(dbCommandWrapper, "@RequisitionNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.RequisitionNo));
-                    db.AddInParameter(dbCommandWrapper, "@RequisitionDate", SqlDbType.NVarChar, vendorCSInfo.RequisitionDate);
-                    db.AddInParameter(dbCommandWrapper, "@SubmissionDate", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.SubmissionDate));
+                    //db.AddInParameter(dbCommandWrapper, "@RequisitionNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.RequisitionNo));
+                    //db.AddInParameter(dbCommandWrapper, "@RequisitionDate", SqlDbType.NVarChar, vendorCSInfo.RequisitionDate);
+                    //db.AddInParameter(dbCommandWrapper, "@SubmissionDate", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.SubmissionDate));
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSInfoItem", SqlDbType.Structured, VendorCSItem);
