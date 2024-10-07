@@ -9,17 +9,17 @@ namespace SILDMS.DataAccessInterface
 {
     public interface IVendorCSInfoDataService
     {
-        List<OBS_VendorCSInfoItem> GetVendorCSInfoDashBordData(string action, out string errorNumber);
+        List<OBS_VendorCSRecmItem> GetVendorCSInfoDashBordData(string action, out string errorNumber);
         List<OBS_ServicesCategory> GetServicesCategory(string action, out string errorNumber);
         List<OBS_VendorAndAddressInfo> GetVendorInfoList();
         List<OBS_ClientReq> GetVendorCSClientInfo(string ServiceItemCategoryID);
-        List<OBS_VendorCSInfo> OBS_GetVendorCSVendorsUsingClient(string ClientID);
-        List<OBS_VendorCSInfoItem> OBS_GetVendorCSQuotationItem(string VendorID);
-        List<OBS_VendorCSInfoTerms> GetVendorCSInfoTermList(string VendorCSInfoID);
-        string SaveVendorCSInfo(OBS_VendorCSInfo clientReq, List<OBS_VendorCSInfoItem> clientReqItem, List<OBS_VendorCSInfoTerms> clientReqTerm, List<OBS_VendorCSVendorsItemWise> vendorReqItemWise);
+        List<OBS_VendorCSRecm> OBS_GetVendorCSVendorsUsingClient(string ClientID);
+        List<OBS_VendorCSRecmItem> OBS_GetVendorCSQuotationItem(string VendorID);
+        List<OBS_VendorCSRecmTerms> GetVendorCSInfoTermList(string VendorCSInfoID);
+        string SaveVendorCSInfo(OBS_VendorCSRecm clientReq, List<OBS_VendorCSRecmItem> clientReqItem, List<OBS_VendorCSRecmTerms> clientReqTerm, List<OBS_VendorCSRecmVendors> vendorReqItemWise);
        
-        List<OBS_VendorCSInfoTerms> GetVendorCSInfoTermAgainstFormList(string TermsID);
-        List<OBS_VendorCSVendorsItemWise> GetReqWiseVendorList(string VendorCSInfoID);
+        List<OBS_VendorCSRecmTerms> GetVendorCSInfoTermAgainstFormList(string TermsID);
+        List<OBS_VendorCSRecmVendors> GetReqWiseVendorList(string VendorCSInfoID);
         string DeleteVendorCSInfoItemAndTerm(string VendorCSInfoItemID, string VendorCSInfoTermID);
         List<OBS_Terms> GetTermsConditionsList();
     }

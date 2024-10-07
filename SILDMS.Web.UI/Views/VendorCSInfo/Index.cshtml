@@ -216,6 +216,7 @@
         </div>
     </div>
 
+
     <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
@@ -230,13 +231,10 @@
                             <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('TolQnty')">TolQnty</th>
                             <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                         </tr>
-                        @*<tr>
-                                <th><input st-search="VendorCode" placeholder="Vendor Code" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="VendorName" placeholder="VendorName" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
                     </thead>
                     <tbody>
-                        <tr ng-repeat="row in CSVendorDisplayedCollection">
+                        <tr ng-repeat="row in CSVendorDisplayedCollection" ng-cloak style="font-size:12px;">
+                            <td class="hidden">{{row.index+1}}</td>
                             <td class="hidden">{{row.VendorQutnID}}</td>
                             <td class="hidden">{{row.VendorID}}</td>
                             <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
@@ -265,6 +263,7 @@
             </div>
         </div>
     </div>
+
 
     <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
         <div class="row">
@@ -304,14 +303,6 @@
                             <td class="col-lg-1" style="width:6%;">{{row.VatPerc}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
-
-
-                            @*<td class="col-lg-1" style="width:5%;">
-                                    <button type="button" class="ChildButtons" ng-click="selectEntity(row)" data-dismiss="modal" title="Select">
-                                        <i ng-show="!row.buttonCheckedforVendor" class="fa fa-square-o"></i>
-                                        <i ng-show="row.buttonCheckedforVendor" class="fa fa-check-square-o"></i>
-                                    </button>
-                                </td>*@
                         </tr>
                     </tbody>
                     <tfoot>
@@ -440,7 +431,6 @@
     </div>
 </div>
 
-
 <script type="text/javascript">
 
     app.controller('VendorCSInfoCtrl', ['$scope', '$http', function ($scope, $http) {
@@ -467,16 +457,21 @@
         };
 
         $scope.ClientSelect = function (row) {
-            $http.post("/VendorCSInfo/OBS_GetVendorCSVendorsUsingClient?ClientID=" + row.ClientID)
+            alert('');
+            $http.post("/VendorCSInfo/GetVendorCSVendorsUsingClient?ClientID=" + row.ClientID)
                 .success(function (response) {
                     $scope.CSVendorList = response.CSVendorList;
                     $scope.CSVendorDisplayedCollection = [].concat($scope.CSVendorList);
+                    $scope.CSVendorDisplayedCollection.forEach(function (item, index) {
+                        // Add an index field to each object
+                        item.index = index; // Adding 1 to start index from 1
+                    });
                 })
                 .error(function () { });
         };
 
         $scope.ItemSelect = function (row) {
-            $http.post("/VendorCSInfo/OBS_GetVendorCSQuotationItem?VendorID=" + row.VendorID)
+            $http.post("/VendorCSInfo/GetVendorCSQuotationItem?VendorID=" + row.VendorID)
                 .success(function (response) {
                     $scope.VenCSItemList = response.VenCSItemList;
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
@@ -497,6 +492,7 @@
             VendorCSInfoID: "",
             VendorID: "",
             VendorName: "",
+            ClientID: "",
             AutoCSNo: "",
             CSRecDate: "",
             Operation: "",
@@ -850,26 +846,22 @@
 
         $scope.selectEntity = function (row) {
             var selecteditems = {
-                ServiceItemID: row.ServiceItemID,
-                ServiceItemName: row.ServiceItemName,
-                DeliveryDate: row.DeliveryDate,
-                DeliveryLocation: row.DeliveryLocation,
-                ReqQnty: row.ReqQnty,
-                ReqUnit: row.ReqUnit,
-                VendorCSInfoItemID: row.VendorCSInfoItemID,
-                VendorCSInfoID: row.VendorCSInfoID,
+                VendorQutnID: row.VendorQutnID,
+                VendorID: row.VendorID,
+                VendorName: row.VendorName,
+                ContactPerson: row.ContactPerson,
+                ContactNumber: row.ContactNumber,
+                VendorQutnNo: row.VendorQutnNo,
+                QuotationDate: row.QuotationDate,
+                TolQnty: row.TolQnty,
                 index: row.index
             };
-            $scope.ExistedVendor = 0;
             var indexToRemove = -1;
-            //console.log(indexToRemove);
             $scope.selectedRowsForVendor.forEach(function (item, index) {
                 if (item.index === selecteditems.index) {
                     indexToRemove = index;
                 }
             });
-            //console.log("After:" + indexToRemove);
-            // If indexToRemove is not -1, remove the item; otherwise, add it to the list
             if (indexToRemove !== -1) {
                 $scope.selectedRowsForVendor.splice(indexToRemove, 1);
                 $scope.SelectedVendorForBiddingDisplayedCollection.splice(indexToRemove, 1);
@@ -883,7 +875,6 @@
                 $scope.showVendorforBiddingArea = true;
             }
             row.buttonCheckedforVendor = row.selected;
-            console.log($scope.SelectedVendorForBiddingDisplayedCollection);
 
             if ($scope.selectedRowsForVendor.length <= 0) {
                 $scope.showVendorforBiddingArea = false;
@@ -1133,9 +1124,9 @@
             $http.post('/VendorCSInfo/SaveVendorCSInfo',
                 {
                     vendorCS: $scope.VendorCSInfo,
-                    vendorCSItem: $scope.VenCSItemGridDisplayCollection,//$scope.VenCSItemGridDisplayCollection,//$scope.vendorCSItemArray,
+                    vendorCSItem: $scope.VenCSItemGridDisplayCollection,
                     vendorCSTerm: $scope.ReqTermGridDisplayCollection,
-                    vendorCSItemWise: $scope.SelectedVendorForBiddingDisplayedCollection//$scope.CSVendorDisplayedCollection
+                    vendorCSItemWise: $scope.SelectedVendorForBiddingDisplayedCollection
                 })
                 .success(function (response) {
                     if (response.status == "S201") {

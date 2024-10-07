@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SILDMS.Model
 {
-    public class OBS_VendorCSVendorsItemWise
+    public class OBS_VendorCSRecmVendors
     {
         public string VendorCSVendorsItemWiseID { get; set; }
         public string VendorCSInfoID { get; set; }

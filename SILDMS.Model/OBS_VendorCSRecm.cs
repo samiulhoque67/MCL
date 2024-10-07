@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SILDMS.Model
 {
-    public class OBS_VendorCSInfo
+    public class OBS_VendorCSRecm
     {
         public string VendorCSInfoID { get; set; }
         public string VendorQutnID { get; set; } 
@@ -28,6 +28,7 @@ namespace SILDMS.Model
         [Required]
         public string CSRecDate { get; set; }
         public string Operation { get; set; }
+        public string RecommendedBy { get; set; } 
         public string VendorQutnNo { get; set; }
         public string QuotationDate { get; set; }
         public string TolQnty { get; set; } 
