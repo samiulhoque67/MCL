@@ -115,6 +115,8 @@ using SILDMS.Service.EmailNotification;
 using SILDMS.Service.TestData;
 using SILDMS.DataAccessInterface.TestData;
 using SILDMS.DataAccess.TestData;
+using SILDMS.DataAccess.QuotationToClientService;
+using SILDMS.Service.QuotationToClient;
 
 namespace SILDMS.InfraStructure
 {
@@ -253,7 +255,9 @@ namespace SILDMS.InfraStructure
             kernel.Bind<IVendorQuotationDataService>().To<VendorQuotationDataService>();
 
             kernel.Bind<IVendorCSInfoService>().To<VendorCSInfoService>();
-            kernel.Bind<IVendorCSInfoDataService>().To<VendorCSInfoDataService>(); 
-        }
+            kernel.Bind<IVendorCSInfoDataService>().To<VendorCSInfoDataService>();
+
+            kernel.Bind<IQuotationToClientService>().To<QuotationToClientService>();
+            kernel.Bind<IQuotationToClientDataService>().To<QuotationToClientDataService>();        }
     }
 } 
