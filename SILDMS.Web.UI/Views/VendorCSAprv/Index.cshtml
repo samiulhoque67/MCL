@@ -1,6 +1,7 @@
 ﻿@{
     Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
 }
+
 <style>
     .link_total_bm {
         color: black;
@@ -45,10 +46,10 @@
     }
 </style>
 
-<div class="box box-primary box-body" ng-controller="VendorCSInfoCtrl">
+<div class="box box-primary box-body" ng-controller="VendorCSAprvCtrl">
     <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
         <i class="fa fa-user"></i>
-        <h3 style="font-family: Verdana" class="box-title">Vendor CS Information</h3>
+        <h3 style="font-family: Verdana" class="box-title">Vendor CS Approval</h3>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
@@ -291,8 +292,8 @@
                     <tbody>
                         <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
                             <td class="hidden">{{row.index+1}}</td>
-                            <td class="hidden">{{row.VendorCSInfoItemID}}</td>
-                            <td class="hidden">{{row.VendorCSInfoID}}</td>
+                            <td class="hidden">{{row.VendorCSAprvItemID}}</td>
+                            <td class="hidden">{{row.VendorCSAprvID}}</td>
                             <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
                             <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
@@ -326,7 +327,7 @@
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
-                    <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSInfo.CSRecDate" />
+                    <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSAprv.CSRecDate" />
                 </div>
             </div>
 
@@ -337,7 +338,7 @@
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
-                    <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSInfo.AutoCSNo" ng-readonly="true" />
+                    <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSAprv.AutoCSNo" ng-readonly="true" />
                 </div>
             </div>
         </div>
@@ -351,22 +352,24 @@
                 </div>
             </div>
             <div class="col-lg-3">
-                <select data-ng-model="VendorCSInfo.Operation" class="form-control">
+                <select data-ng-model="VendorCSAprv.Operation" class="form-control">
                     <option value="">-- None --</option>
+                    <option value="Aprv">Approved</option>
                     <option value="Rec">Recommended</option>
                     <option value="Bck">Back</option>
                     <option value="Pst">Postponed</option>
                     <option value="Can">Cancel</option>
                 </select>
             </div>
+
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="QuotationFor">Note:</label>
+                    <label for="Note">Note:</label>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
-                    <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
+                    <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSAprv.Remarks" class="form-control" placeholder="Note for CS" />
                 </div>
             </div>
 
@@ -377,26 +380,26 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="RecommendedBy" name="RecommendedBy" type="text" value={{dashBoardResult[0].ServiceCategoryName}} class="form-control" placeholder="RecommendedBy" ng-model="VendorCSInfo.RecommendedBy" />
+                        <input id="RecommendedBy" name="RecommendedBy" type="text" value={{dashBoardResult[0].ServiceCategoryName}} class="form-control" placeholder="RecommendedBy" ng-model="VendorCSAprv.RecommendedBy" />
                     </div>
                 </div>*@
 
         </div>
 
         @*<div class="row">
-                <div class="col-sm-1 col-md-1 col-lg-1">
+            <div class="col-sm-1 col-md-1 col-lg-1">
+            </div>
+            <div class="col-lg-3 ">
+                <div class="form-group">
+                    <label for="QuotationFor">Note:</label>
                 </div>
-                <div class="col-lg-3 ">
-                    <div class="form-group">
-                        <label for="QuotationFor">Note:</label>
-                    </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="form-group">
+                    <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSAprv.Remarks" class="form-control" placeholder="Note for CS" />
                 </div>
-                <div class="col-lg-8">
-                    <div class="form-group">
-                        <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
-                    </div>
-                </div>
-            </div>*@
+            </div>
+        </div>*@
 
     </div>
 
@@ -416,15 +419,15 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-                            <td class="hidden">{{row.VendorCSInfoTermsID}}</td>
-                            <td class="hidden">{{row.VendorCSInfoID}}</td>
+                            <td class="hidden">{{row.VendorCSAprvTermsID}}</td>
+                            <td class="hidden">{{row.VendorCSAprvID}}</td>
                             <td class="hidden">{{row.TermsID}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
 
                             <td class="col-lg-1" style="width:5%;">
-                                <button type="button" ng-if="row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" ng-if="!row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" ng-if="row.VendorCSAprvTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" ng-if="!row.VendorCSAprvTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                 <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
                             </td>
                         </tr>
@@ -442,7 +445,7 @@
 
 <script type="text/javascript">
 
-    app.controller('VendorCSInfoCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('VendorCSAprvCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $scope.vendorCSItemArray = [];
         $scope.vendorCSTermArray = [];
@@ -450,15 +453,15 @@
 
         $scope.dashBoardResult = {};
 
-        $http.get('/VendorCSInfo/GetVendorCSInfoDashBordData')
+        $http.get('/VendorCSAprv/GetVendorCSAprvDashBordData')
             .success(function (response) {
                 $scope.loading = false;
                 $scope.dashBoardResult = response.result;
             }).error(function () { });
 
         $scope.VendorSelect = function (ServiceCategoryID) {
-            $scope.VendorCSInfo.ServiceCategoryID = ServiceCategoryID;
-            $http.post("/VendorCSInfo/GetVendorCSClientInfo?ServiceCategoryID=" + ServiceCategoryID)
+            $scope.VendorCSAprv.ServiceCategoryID = ServiceCategoryID;
+            $http.post("/VendorCSAprv/GetVendorCSClientInfo?ServiceCategoryID=" + ServiceCategoryID)
                 .success(function (response) {
                     $scope.CSClientList = response.CSClientList;
                     $scope.CSClientDisplayedCollection = [].concat($scope.CSClientList);
@@ -467,9 +470,9 @@
         };
 
         $scope.ClientSelect = function (row) {
-            $scope.VendorCSInfo.ClientID = row.ClientID;
-            $scope.VendorCSInfo.ClientReqID = row.ClientReqID;
-            $http.post("/VendorCSInfo/GetVendorCSVendorsUsingClient?ClientID=" + row.ClientID)
+            $scope.VendorCSAprv.ClientID = row.ClientID;
+            $scope.VendorCSAprv.ClientReqID = row.ClientReqID;
+            $http.post("/VendorCSAprv/GetVendorCSVendorsUsingClient?ClientID=" + row.ClientID)
                 .success(function (response) {
                     $scope.CSVendorList = response.CSVendorList;
                     $scope.CSVendorDisplayedCollection = [].concat($scope.CSVendorList);
@@ -482,16 +485,16 @@
         };
 
         $scope.ItemSelect = function (row) {
-            $http.post("/VendorCSInfo/GetVendorCSQuotationItem?VendorID=" + row.VendorID)
+            $http.post("/VendorCSAprv/GetVendorCSQuotationItem?VendorID=" + row.VendorID)
                 .success(function (response) {
                     $scope.VenCSItemList = response.VenCSItemList;
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
                 })
                 .error(function () { });
 
-            $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: row.VendorQutnID })
+            $http.post('/VendorCSAprv/GetVendorCSAprvTermList', { VendorQutnID: row.VendorQutnID })
                 .success(function (response) {
-                    $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
+                    $scope.ReqTermDataSetupGridData = response.VendorCSAprvTermList;
                     $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                     $scope.loading = false;
                 }).error(function () {
@@ -499,7 +502,7 @@
                 });
         };
 
-        $scope.VendorCSInfo = {
+        $scope.VendorCSAprv = {
             VendorCSRecmID: "",
             ServiceCategoryID: "",
             VendorID: "",
@@ -513,10 +516,10 @@
             Status: ""
         }
 
-        $scope.VendorCSInfoItem = {
+        $scope.VendorCSAprvItem = {
             VendorCSRecmItemID: "",
             VendorCSRecmID: "",
-            //ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
+            ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
             ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
             ReqQnty: "",
             ReqUnit: "",
@@ -531,8 +534,8 @@
 
         $scope.VendorCSVendorsItemWise = {
             VendorCSVendorsItemWiseID: "",
-            VendorCSInfoID: "",
-            VendorCSInfoItemID: "",
+            VendorCSAprvID: "",
+            VendorCSAprvItemID: "",
             VendorID: "",
             VendorName: "",
             TolQnty: "",
@@ -584,22 +587,22 @@
 
         $scope.AddReqItem = function () {
 
-            if ($scope.VendorCSInfoItem.ServiceCategory.ServiceCategoryID == "") {
+            if ($scope.VendorCSAprvItem.ServiceCategory.ServiceCategoryID == "") {
                 toastr.error("Service Category Required");
                 return;
             }
 
-            if ($scope.VendorCSInfoItem.ServiceItem.ServiceItemID == "") {
+            if ($scope.VendorCSAprvItem.ServiceItem.ServiceItemID == "") {
                 toastr.error("Service Item  Required");
                 return;
             }
 
-            if ($scope.VendorCSInfoItem.DeliveryMode == "") {
+            if ($scope.VendorCSAprvItem.DeliveryMode == "") {
                 toastr.error("Submission Date Required.");
                 return;
             }
 
-            if ($scope.VendorCSInfoItem.ReqUnit == "") {
+            if ($scope.VendorCSAprvItem.ReqUnit == "") {
                 toastr.error("Requisition Date Date Required");
                 return;
             }
@@ -624,33 +627,33 @@
                 return;
             }
 
-            $scope.VendorCSInfoItem.ServiceCategoryID = $scope.VendorCSInfoItem.ServiceCategory.ServiceCategoryID;
-            $scope.VendorCSInfoItem.ServiceCategoryName = $scope.VendorCSInfoItem.ServiceCategory.ServiceCategoryName;
-            $scope.VendorCSInfoItem.ServiceItemID = $scope.VendorCSInfoItem.ServiceItem.ServiceItemID;
-            $scope.VendorCSInfoItem.ServiceItemName = $scope.VendorCSInfoItem.ServiceItem.ServiceItemName;
+            $scope.VendorCSAprvItem.ServiceCategoryID = $scope.VendorCSAprvItem.ServiceCategory.ServiceCategoryID;
+            $scope.VendorCSAprvItem.ServiceCategoryName = $scope.VendorCSAprvItem.ServiceCategory.ServiceCategoryName;
+            $scope.VendorCSAprvItem.ServiceItemID = $scope.VendorCSAprvItem.ServiceItem.ServiceItemID;
+            $scope.VendorCSAprvItem.ServiceItemName = $scope.VendorCSAprvItem.ServiceItem.ServiceItemName;
 
-            $scope.VendorCSInfoItem.DeliveryMode = $scope.VendorCSInfoItem.DeliveryMode;
-            $scope.VendorCSInfoItem.ReqUnit = $scope.VendorCSInfoItem.ReqUnit;
+            $scope.VendorCSAprvItem.DeliveryMode = $scope.VendorCSAprvItem.DeliveryMode;
+            $scope.VendorCSAprvItem.ReqUnit = $scope.VendorCSAprvItem.ReqUnit;
 
-            $scope.VendorCSInfoItem.DeliveryLocation = $('#DeliveryLocation').val();
-            $scope.VendorCSInfoItem.DeliveryDate = $('#DeliveryDate').val();
-            $scope.VendorCSInfoItem.Description = $('#Description').val();
-            $scope.VendorCSInfoItem.ReqQnty = $('#ReqQnty').val();
+            $scope.VendorCSAprvItem.DeliveryLocation = $('#DeliveryLocation').val();
+            $scope.VendorCSAprvItem.DeliveryDate = $('#DeliveryDate').val();
+            $scope.VendorCSAprvItem.Description = $('#Description').val();
+            $scope.VendorCSAprvItem.ReqQnty = $('#ReqQnty').val();
 
-            $scope.vendorCSItemArray.push($scope.VendorCSInfoItem);
+            $scope.vendorCSItemArray.push($scope.VendorCSAprvItem);
 
-            $scope.VenCSItemGridDisplayCollection = $scope.VenCSItemGridDisplayCollection.concat($scope.VendorCSInfoItem);
+            $scope.VenCSItemGridDisplayCollection = $scope.VenCSItemGridDisplayCollection.concat($scope.VendorCSAprvItem);
 
-            $scope.resetVendorCSInfoItem();
+            $scope.resetVendorCSAprvItem();
             $("#btnAddReqItem").html('Add');
             $('#RequisitionItemModal').modal('hide');
         }
 
-        $scope.resetVendorCSInfoItem = function () {
+        $scope.resetVendorCSAprvItem = function () {
             $('#DeliveryDate').val('');
-            $scope.VendorCSInfoItem = {
-                VendorCSInfoItemID: "",
-                VendorCSInfoID: "",
+            $scope.VendorCSAprvItem = {
+                VendorCSAprvItemID: "",
+                VendorCSAprvID: "",
                 ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
                 ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
                 Description: "",
@@ -663,9 +666,9 @@
         }
 
         $scope.toggleClientReqSelect = function (tableRow) {
-            $scope.VendorCSInfo.ClientReqID = tableRow.ClientReqID;
-            $scope.VendorCSInfo.ClientID = tableRow.ClientID;
-            $scope.VendorCSInfo.ClientName = tableRow.ClientName;
+            $scope.VendorCSAprv.ClientReqID = tableRow.ClientReqID;
+            $scope.VendorCSAprv.ClientID = tableRow.ClientID;
+            $scope.VendorCSAprv.ClientName = tableRow.ClientName;
             $http.post('/ClientRequisition/GetClientReqItemList', { ClientReqID: tableRow.ClientReqID })
                 .success(function (response) {
                     $scope.VenCSItemList = response.ClientReqItemList;
@@ -691,9 +694,9 @@
             $('#ClientInfoModal').modal('hide');
         };
 
-        $scope.clearVendorCSInfo = function () {
-            $scope.VendorCSInfo = {
-                VendorCSInfoID: "",
+        $scope.clearVendorCSAprv = function () {
+            $scope.VendorCSAprv = {
+                VendorCSAprvID: "",
                 VendorID: "",
                 VendorCode: "",
                 VendorName: "",
@@ -708,9 +711,9 @@
                 Remarks: ""
             }
 
-            $scope.VendorCSInfoItem = {
-                VendorCSInfoItemID: "",
-                VendorCSInfoID: "",
+            $scope.VendorCSAprvItem = {
+                VendorCSAprvItemID: "",
+                VendorCSAprvID: "",
                 Description: "",
                 DeliveryLocation: "",
                 DeliveryDate: "",
@@ -720,19 +723,19 @@
                 ReqQnty: "",
                 ReqUnit: ""
             }
-            $scope.VendorCSInfoTerm = {
-                VendorCSInfoTermsID: "",
-                VendorCSInfoID: "",
+            $scope.VendorCSAprvTerm = {
+                VendorCSAprvTermsID: "",
+                VendorCSAprvID: "",
                 TermsID: "",
                 TermsCode: "",
                 TermsName: ""
             }
             $scope.VendorCSVendorsItemWise = {
-                VendorCSInfoID: "",
+                VendorCSAprvID: "",
                 VendorID: "",
                 VendorName: "",
                 TransactionName: "",
-                VendorCSInfoItemID: "",
+                VendorCSAprvItemID: "",
                 ContactPerson: "",
                 ContactNumber: "",
                 VendorQutnID: "",
@@ -756,22 +759,22 @@
 
         $scope.toggleReqItemEdit = function (tableRow, $i) {
             $('#RequisitionItemModal').modal('show');
-            $scope.resetVendorCSInfoItem();
+            $scope.resetVendorCSAprvItem();
 
-            $scope.VendorCSInfoItem.VendorCSInfoItemID = tableRow.VendorCSInfoItemID;
+            $scope.VendorCSAprvItem.VendorCSAprvItemID = tableRow.VendorCSAprvItemID;
 
-            $scope.VendorCSInfoItem.ServiceCategory.ServiceCategoryID = tableRow.ServiceCategoryID;
-            $scope.VendorCSInfoItem.ServiceCategory.ServiceCategoryName = tableRow.ServiceCategoryName;
-            $scope.VendorCSInfoItem.ServiceItem.ServiceItemID = tableRow.ServiceItemID;
-            $scope.VendorCSInfoItem.ServiceItem.ServiceItemName = tableRow.ServiceItemName;
+            $scope.VendorCSAprvItem.ServiceCategory.ServiceCategoryID = tableRow.ServiceCategoryID;
+            $scope.VendorCSAprvItem.ServiceCategory.ServiceCategoryName = tableRow.ServiceCategoryName;
+            $scope.VendorCSAprvItem.ServiceItem.ServiceItemID = tableRow.ServiceItemID;
+            $scope.VendorCSAprvItem.ServiceItem.ServiceItemName = tableRow.ServiceItemName;
 
-            $scope.VendorCSInfoItem.DeliveryMode = tableRow.DeliveryMode;
-            $scope.VendorCSInfoItem.DeliveryLocation = tableRow.DeliveryLocation;
-            $scope.VendorCSInfoItem.DeliveryDate = tableRow.DeliveryDate;
-            $scope.VendorCSInfoItem.Description = tableRow.Description;
+            $scope.VendorCSAprvItem.DeliveryMode = tableRow.DeliveryMode;
+            $scope.VendorCSAprvItem.DeliveryLocation = tableRow.DeliveryLocation;
+            $scope.VendorCSAprvItem.DeliveryDate = tableRow.DeliveryDate;
+            $scope.VendorCSAprvItem.Description = tableRow.Description;
 
-            $scope.VendorCSInfoItem.ReqQnty = tableRow.ReqQnty;
-            $scope.VendorCSInfoItem.ReqUnit = tableRow.ReqUnit;
+            $scope.VendorCSAprvItem.ReqQnty = tableRow.ReqQnty;
+            $scope.VendorCSAprvItem.ReqUnit = tableRow.ReqUnit;
 
             $scope.VenCSItemGridDisplayCollection.splice($i, 1);
             $scope.vendorCSItemArray.splice($i, 1);
@@ -787,25 +790,25 @@
         };
 
         $scope.toggleReqItemDelete = function (tableRow, $i) {
-            if (!tableRow.VendorCSInfoItemID) {
-                $scope.resetVendorCSInfoItem();
+            if (!tableRow.VendorCSAprvItemID) {
+                $scope.resetVendorCSAprvItem();
                 $scope.VenCSItemGridDisplayCollection.splice($i, 1);
                 $scope.vendorCSItemArray.splice($i, 1);
                 toastr.success('Data Deleted Successsfully');
             }
             else {
-                $scope.resetVendorCSInfoItem();
-                $scope.VendorCSInfoItem.VendorCSInfoItemID = tableRow.VendorCSInfoItemID;
+                $scope.resetVendorCSAprvItem();
+                $scope.VendorCSAprvItem.VendorCSAprvItemID = tableRow.VendorCSAprvItemID;
                 $('#deleteReqItemModal').modal('show');
             }
         };
 
-        $scope.DeleteVendorCSInfoItem = function () {
-            $http.post('/VendorCSInfo/DeleteVendorCSInfoItemAndTerm',
-                { VendorCSInfoItemID: $scope.VendorCSInfoItem.VendorCSInfoItemID, VendorCSInfoTermID: $scope.VendorCSInfoTerm.VendorCSInfoTermID })
+        $scope.DeleteVendorCSAprvItem = function () {
+            $http.post('/VendorCSAprv/DeleteVendorCSAprvItemAndTerm',
+                { VendorCSAprvItemID: $scope.VendorCSAprvItem.VendorCSAprvItemID, VendorCSAprvTermID: $scope.VendorCSAprvTerm.VendorCSAprvTermID })
                 .success(function (response) {
                     if (response.status == "S203") {
-                        $scope.resetVendorCSInfoItem();
+                        $scope.resetVendorCSAprvItem();
                         $scope.VenCSItemGridDisplayCollection.splice($i, 1);
                         $scope.vendorCSItemArray.splice($i, 1);
                         toastr.success('Data Deleted Successsfully');
@@ -816,7 +819,7 @@
 
         ////////////////////////Select for Update from Search grid ///////////////////////
         $scope.toggleVendorWiseItemReqDelete = function (tableRow, $i) {
-            if (!tableRow.VendorCSInfoItemWiseID) {
+            if (!tableRow.VendorCSAprvItemWiseID) {
                 $scope.resetVendorWiseItemReq();
                 $scope.VendorInfoDisplayedCollection.splice($i, 1);
                 //$scope.vendorCSItemArray.splice($i, 1);
@@ -824,16 +827,16 @@
             }
             else {
                 $scope.resetVendorWiseItemReq();
-                $scope.VendorCSVendorsItemWise.VendorCSInfoItemWiseID = tableRow.VendorCSInfoItemWiseID;
+                $scope.VendorCSVendorsItemWise.VendorCSAprvItemWiseID = tableRow.VendorCSAprvItemWiseID;
                 $('#deleteReqItemModal').modal('show');
             }
         };
 
         $scope.toggleVendorSelect = function (row) {
 
-            $scope.VendorCSInfo.VendorID = row.VendorID;
-            $scope.VendorCSInfo.VendorCode = row.VendorCode;
-            $scope.VendorCSInfo.VendorName = row.VendorName;
+            $scope.VendorCSAprv.VendorID = row.VendorID;
+            $scope.VendorCSAprv.VendorCode = row.VendorCode;
+            $scope.VendorCSAprv.VendorName = row.VendorName;
 
             $scope.VendorCSVendorsItemWise.VendorID = row.VendorID;
             $scope.VendorCSVendorsItemWise.VendorName = row.VendorName;
@@ -895,11 +898,11 @@
 
         $scope.resetVendorWiseItemReq = function () {
             $scope.VendorCSVendorsItemWise = {
-                VendorCSInfoID: "",
+                VendorCSAprvID: "",
                 VendorID: "",
                 VendorName: "",
                 TransactionName: "",
-                VendorCSInfoItemID: "",
+                VendorCSAprvItemID: "",
                 ContactPerson: "",
                 ContactNumber: "",
                 VendorTINNo: "",
@@ -916,13 +919,13 @@
 
         //////////////////Search Grid List///////////////////////////////
 
-        $scope.SearchVendorCSInfoModal = function () {
-            $scope.GetVendorCSInfoSearchList();
-            $('#SearchVendorCSInfoModal').modal('show');
+        $scope.SearchVendorCSAprvModal = function () {
+            $scope.GetVendorCSAprvSearchList();
+            $('#SearchVendorCSAprvModal').modal('show');
         };
 
-        $scope.GetVendorCSInfoSearchList = function () {
-            $http.post("/VendorCSInfo/GetVendorCSInfoSearchList")
+        $scope.GetVendorCSAprvSearchList = function () {
+            $http.post("/VendorCSAprv/GetVendorCSAprvSearchList")
                 .success(function (response) {
                     $scope.vendorCSSearchList = response.vendorCSSearchList;
                     $scope.vendorCSDisplayedCollection = [].concat($scope.vendorCSSearchList);
@@ -932,38 +935,38 @@
 
         ////////////////////////Select for Update from Search grid ///////////////////////
 
-        $scope.toggleVendorCSInfoSelect = function (tableRow) {
-            $scope.VendorCSInfo.VendorCSInfoID = tableRow.VendorCSInfoID;
-            $scope.VendorCSInfo.ClientID = tableRow.ClientID;
-            $scope.VendorCSInfo.ClientName = tableRow.ClientName;
-            $scope.VendorCSInfo.VendorID = tableRow.VendorID;
-            $scope.VendorCSInfo.VendorName = tableRow.VendorName;
-            $scope.VendorCSInfo.RequisitionNo = tableRow.RequisitionNo;
-            $scope.VendorCSInfo.RequisitionDate = tableRow.RequisitionDate;
-            $scope.VendorCSInfo.SubmissionDate = tableRow.SubmissionDate;
-            $scope.VendorCSInfo.LastDateofQuotation = tableRow.LastDateofQuotation;
-            $scope.VendorCSInfo.Remarks = tableRow.Remarks;
-            $scope.VendorCSInfo.Status = tableRow.Status;
+        $scope.toggleVendorCSAprvSelect = function (tableRow) {
+            $scope.VendorCSAprv.VendorCSAprvID = tableRow.VendorCSAprvID;
+            $scope.VendorCSAprv.ClientID = tableRow.ClientID;
+            $scope.VendorCSAprv.ClientName = tableRow.ClientName;
+            $scope.VendorCSAprv.VendorID = tableRow.VendorID;
+            $scope.VendorCSAprv.VendorName = tableRow.VendorName;
+            $scope.VendorCSAprv.RequisitionNo = tableRow.RequisitionNo;
+            $scope.VendorCSAprv.RequisitionDate = tableRow.RequisitionDate;
+            $scope.VendorCSAprv.SubmissionDate = tableRow.SubmissionDate;
+            $scope.VendorCSAprv.LastDateofQuotation = tableRow.LastDateofQuotation;
+            $scope.VendorCSAprv.Remarks = tableRow.Remarks;
+            $scope.VendorCSAprv.Status = tableRow.Status;
 
-            $http.post('/VendorCSInfo/GetVendorCSInfoItemList', { VendorCSInfoID: tableRow.VendorCSInfoID })
+            $http.post('/VendorCSAprv/GetVendorCSAprvItemList', { VendorCSAprvID: tableRow.VendorCSAprvID })
                 .success(function (response) {
-                    $scope.VenCSItemList = response.VendorCSInfoItemList;
+                    $scope.VenCSItemList = response.VendorCSAprvItemList;
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
                     $scope.loading = false;
                 }).error(function () {
                     $scope.loading = false;
                 });
 
-            $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorCSInfoID: tableRow.VendorCSInfoID })
+            $http.post('/VendorCSAprv/GetVendorCSAprvTermList', { VendorCSAprvID: tableRow.VendorCSAprvID })
                 .success(function (response) {
-                    $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
+                    $scope.ReqTermDataSetupGridData = response.VendorCSAprvTermList;
                     $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                     $scope.loading = false;
                 }).error(function () {
                     $scope.loading = false;
                 });
 
-            $http.post('/VendorCSInfo/GetReqWiseVendorList', { VendorCSInfoID: tableRow.VendorCSInfoID })
+            $http.post('/VendorCSAprv/GetReqWiseVendorList', { VendorCSAprvID: tableRow.VendorCSAprvID })
                 .success(function (response) {
                     $scope.ReqWiseVendorList = response.ReqWiseVendorList;
                     $scope.VendorInfoDisplayedCollection = [].concat($scope.ReqWiseVendorList);//VendorInfoDisplayedCollection
@@ -972,7 +975,7 @@
                 .error(function () { });
 
 
-            $('#SearchVendorCSInfoModal').modal('hide');
+            $('#SearchVendorCSAprvModal').modal('hide');
         };
 
         ///////////////////////////////////////////////
@@ -980,7 +983,7 @@
         ////////////////////////Requsition Terms & Conditions ///////////////////////
 
         $scope.ShowTermsConditionsList = function () {
-            $http.get("/VendorCSInfo/GetTermsConditionsList")
+            $http.get("/VendorCSAprv/GetTermsConditionsList")
                 .success(function (response) {
                     $scope.TermsConditionsList = response.termsConditionsList;
                     $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
@@ -988,28 +991,28 @@
                 })
                 .error(function () { });
 
-            $('#VendorCSInfoTermsConditionsModal').modal('show');
+            $('#VendorCSAprvTermsConditionsModal').modal('show');
         };
 
         $scope.toggleTermsConditionsSelect = function (row) {
-            $scope.VendorCSInfo.TermsID = row.TermsID;
-            $scope.VendorCSInfo.FormName = row.FormName;
+            $scope.VendorCSAprv.TermsID = row.TermsID;
+            $scope.VendorCSAprv.FormName = row.FormName;
 
-            $http.post('/VendorCSInfo/GetVendorCSInfoTermAgainstFormList', { TermsID: row.TermsID })
+            $http.post('/VendorCSAprv/GetVendorCSAprvTermAgainstFormList', { TermsID: row.TermsID })
                 .success(function (response) {
-                    $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
+                    $scope.ReqTermDataSetupGridData = response.VendorCSAprvTermList;
                     $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                     $scope.loading = false;
                 }).error(function () {
                     $scope.loading = false;
                 });
 
-            $('#VendorCSInfoTermsConditionsModal').modal('hide');
+            $('#VendorCSAprvTermsConditionsModal').modal('hide');
         };
 
-        $scope.VendorCSInfoTerm = {
-            VendorCSInfoTermsID: "",
-            VendorCSInfoID: "",
+        $scope.VendorCSAprvTerm = {
+            VendorCSAprvTermsID: "",
+            VendorCSAprvID: "",
             TermsID: "",
             TermsCode: "",
             TermsName: ""
@@ -1049,22 +1052,22 @@
                 return;
             }
 
-            $scope.VendorCSInfoTerm.TermsCode = $('#TermsCode').val();
-            $scope.VendorCSInfoTerm.TermsName = $('#TermsName').val();
+            $scope.VendorCSAprvTerm.TermsCode = $('#TermsCode').val();
+            $scope.VendorCSAprvTerm.TermsName = $('#TermsName').val();
 
-            $scope.vendorCSTermArray.push($scope.VendorCSInfoTerm);
+            $scope.vendorCSTermArray.push($scope.VendorCSAprvTerm);
 
-            $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection.concat($scope.VendorCSInfoTerm);
+            $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection.concat($scope.VendorCSAprvTerm);
 
-            $scope.resetVendorCSInfoTerm();
+            $scope.resetVendorCSAprvTerm();
             $("#btnAddReqTerm").html('Add');
             $('#RequisitionTermModal').modal('hide');
         }
 
-        $scope.resetVendorCSInfoTerm = function () {
-            $scope.VendorCSInfoTerm = {
-                VendorCSInfoTermsID: "",
-                VendorCSInfoID: "",
+        $scope.resetVendorCSAprvTerm = function () {
+            $scope.VendorCSAprvTerm = {
+                VendorCSAprvTermsID: "",
+                VendorCSAprvID: "",
                 TermsID: "",
                 TermsCode: "",
                 TermsName: ""
@@ -1073,37 +1076,37 @@
 
         $scope.toggleReqTermEdit = function (tableRow, $i) {
             $('#RequisitionTermModal').modal('show');
-            $scope.resetVendorCSInfoTerm();
-            $scope.VendorCSInfoTerm.VendorCSInfoTermID = tableRow.VendorCSInfoTermD;
-            $scope.VendorCSInfoTerm.VendorCSInfoID = tableRow.VendorCSInfoID;
-            $scope.VendorCSInfoTerm.TermsID = tableRow.TermsID;
-            $scope.VendorCSInfoTerm.TermsCode = tableRow.TermsCode;
-            $scope.VendorCSInfoTerm.TermsName = tableRow.TermsName;
+            $scope.resetVendorCSAprvTerm();
+            $scope.VendorCSAprvTerm.VendorCSAprvTermID = tableRow.VendorCSAprvTermD;
+            $scope.VendorCSAprvTerm.VendorCSAprvID = tableRow.VendorCSAprvID;
+            $scope.VendorCSAprvTerm.TermsID = tableRow.TermsID;
+            $scope.VendorCSAprvTerm.TermsCode = tableRow.TermsCode;
+            $scope.VendorCSAprvTerm.TermsName = tableRow.TermsName;
             $scope.ReqTermGridDisplayCollection.splice($i, 1);
             $scope.vendorCSTermArray.splice($i, 1);
             $("#btnAddReqTerm").html('Update');
         };
 
         $scope.toggleReqTermDelete = function (tableRow, $i) {
-            if (!tableRow.VendorCSInfoTermID) {
-                $scope.resetVendorCSInfoTerm();
+            if (!tableRow.VendorCSAprvTermID) {
+                $scope.resetVendorCSAprvTerm();
                 $scope.ReqTermGridDisplayCollection.splice($i, 1);
                 $scope.vendorCSTermArray.splice($i, 1);
                 toastr.success('Data Deleted Successsfully');
             }
             else {
-                $scope.resetVendorCSInfoTerm();
-                $scope.VendorCSInfoTerm.VendorCSInfoTermID = tableRow.VendorCSInfoTermID;
+                $scope.resetVendorCSAprvTerm();
+                $scope.VendorCSAprvTerm.VendorCSAprvTermID = tableRow.VendorCSAprvTermID;
                 $('#deleteReqTermModal').modal('show');
             }
         };
 
-        $scope.DeleteVendorCSInfoTerm = function () {
-            $http.post('/VendorCSInfo/DeleteVendorCSInfoItemAndTerm',
-                { VendorCSInfoItemID: $scope.VendorCSInfoItem.VendorCSInfoItemID, VendorCSInfoTermID: $scope.VendorCSInfoTerm.VendorCSInfoTermID })
+        $scope.DeleteVendorCSAprvTerm = function () {
+            $http.post('/VendorCSAprv/DeleteVendorCSAprvItemAndTerm',
+                { VendorCSAprvItemID: $scope.VendorCSAprvItem.VendorCSAprvItemID, VendorCSAprvTermID: $scope.VendorCSAprvTerm.VendorCSAprvTermID })
                 .success(function (response) {
                     if (response.status == "S203") {
-                        $scope.resetVendorCSInfoTerm();
+                        $scope.resetVendorCSAprvTerm();
                         $scope.ReqTermGridDisplayCollection.splice($i, 1);
                         $scope.vendorCSTermArray.splice($i, 1);
                         toastr.success('Data Deleted Successsfully');
@@ -1131,10 +1134,10 @@
                 return;
             }
 
-            $scope.VendorCSInfo.CSRecDate = $('#CSRecDate').val();
-            $http.post('/VendorCSInfo/SaveVendorCSInfo',
+            $scope.VendorCSAprv.CSRecDate = $('#CSRecDate').val();
+            $http.post('/VendorCSAprv/SaveVendorCSAprv',
                 {
-                    vendorCS: $scope.VendorCSInfo,
+                    vendorCS: $scope.VendorCSAprv,
                     vendorCSItem: $scope.VenCSItemGridDisplayCollection,
                     vendorCSTerm: $scope.ReqTermGridDisplayCollection,
                     vendorCSItemWise: $scope.SelectedVendorForBiddingDisplayedCollection
@@ -1142,19 +1145,19 @@
                 .success(function (response) {
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
-                        $scope.clearVendorCSInfo();
+                        $scope.clearVendorCSAprv();
                         $scope.loading = false;
                         return;
                     }
                     else if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
-                        $scope.clearVendorCSInfo();
+                        $scope.clearVendorCSAprv();
                         $scope.loading = false;
                         return;
                     }
                     else if (response.status == "S203") {
                         toastr.success("Data Deleted Successfully.");
-                        $scope.clearVendorCSInfo();
+                        $scope.clearVendorCSAprv();
                         $scope.loading = false;
                         return;
                     }

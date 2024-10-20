@@ -8,40 +8,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Http.Results;
 using System.Web.Mvc;
 
 namespace SILDMS.Web.UI.Controllers
 {
-    public class VendorCSInfoController : Controller
+    public class VendorCSAprvController : Controller
     {
-        readonly IVendorCSInfoService _vendorCSInfoService; 
+        readonly IVendorCSAprvService _vendorCSInfoService;
         private readonly ILocalizationService _localizationService;
         private ValidationResult respStatus = new ValidationResult();
         private string outStatus = string.Empty;
         private readonly string UserID = string.Empty;
         private string action = string.Empty;
 
-        public VendorCSInfoController(IVendorCSInfoService repository, ILocalizationService localizationService)
+        public VendorCSAprvController(IVendorCSAprvService repository, ILocalizationService localizationService)
         {
             this._vendorCSInfoService = repository;
             this._localizationService = localizationService;
             UserID = SILAuthorization.GetUserID();
         }
-        // GET: /VendorCSInfo/Index
+        // GET: /VendorCSAprv/Index
         public ActionResult Index()
         {
             return View();
         }
-        public async Task<dynamic> GetVendorCSInfoDashBordData()
+        public async Task<dynamic> GetVendorCSAprvDashBordData()
         {
-            List<OBS_VendorCSRecmItem> result = new List<OBS_VendorCSRecmItem>();
-            await Task.Run(() => _vendorCSInfoService.GetVendorCSInfoDashBordData(UserID, out result));
-            //var TotalPendingParking = pd.Count();
-            //var OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count();
-            //var WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count();
-
-            //return Json(new { TotalPendingParking = pd.Count(), OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count(), WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count() }, JsonRequestBehavior.AllowGet);
+            List<OBS_VendorCSAprvItem> result = new List<OBS_VendorCSAprvItem>();
+            await Task.Run(() => _vendorCSInfoService.GetVendorCSAprvDashBordData(UserID, out result));
             return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
         }
         [HttpGet]
@@ -59,7 +53,7 @@ namespace SILDMS.Web.UI.Controllers
 
             return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
         }
-        
+
         public async Task<dynamic> GetVendorCSClientInfo(string ServiceCategoryID)
         {
             var CSClientList = new List<OBS_ClientReq>();
@@ -71,8 +65,8 @@ namespace SILDMS.Web.UI.Controllers
 
         public async Task<dynamic> GetVendorCSVendorsUsingClient(string ClientID)
         {
-            var CSVendorList = new List<OBS_VendorCSRecm>();
-            await Task.Run(() => _vendorCSInfoService.OBS_GetVendorCSVendorsUsingClient(ClientID,out CSVendorList));
+            var CSVendorList = new List<OBS_VendorCSAprv>();
+            await Task.Run(() => _vendorCSInfoService.GetVendorCSVendorsUsingClient(ClientID, out CSVendorList));
             var result = Json(new { CSVendorList, msg = "CSVendorList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
@@ -80,37 +74,37 @@ namespace SILDMS.Web.UI.Controllers
 
         public async Task<dynamic> GetVendorCSQuotationItem(string VendorID)
         {
-            var VenCSItemList = new List<OBS_VendorCSRecmItem>();
-            await Task.Run(() => _vendorCSInfoService.OBS_GetVendorCSQuotationItem(VendorID, out VenCSItemList));
+            var VenCSItemList = new List<OBS_VendorCSAprvItem>();
+            await Task.Run(() => _vendorCSInfoService.GetVendorCSQuotationItem(VendorID, out VenCSItemList));
             var result = Json(new { VenCSItemList, msg = "VenCSItemList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
 
-        public async Task<dynamic> GetVendorCSInfoTermList(string VendorQutnID)
+        public async Task<dynamic> GetVendorCSAprvTermList(string VendorQutnID)
         {
-            var VendorCSInfoTermList = new List<OBS_VendorCSRecmTerms>();
-            await Task.Run(() => _vendorCSInfoService.GetVendorCSInfoTermList(VendorQutnID, out VendorCSInfoTermList));
-            var result = Json(new { VendorCSInfoTermList, msg = "VendorCSInfoTermList are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            var VendorCSAprvTermList = new List<OBS_VendorCSAprvTerms>();
+            await Task.Run(() => _vendorCSInfoService.GetVendorCSAprvTermList(VendorQutnID, out VendorCSAprvTermList));
+            var result = Json(new { VendorCSAprvTermList, msg = "VendorCSAprvTermList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
 
-        public async Task<dynamic> SaveVendorCSInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm, List<OBS_VendorCSRecmVendors> vendorCSItemWise)
+        public async Task<dynamic> SaveVendorCSAprv(OBS_VendorCSAprv vendorCS, List<OBS_VendorCSAprvItem> vendorCSItem, List<OBS_VendorCSAprvTerms> vendorCSTerm, List<OBS_VendorCSAprvVendors> vendorCSItemWise)
         {
             vendorCS.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
-            status = _vendorCSInfoService.SaveVendorCSInfo(vendorCS, vendorCSItem, vendorCSTerm, vendorCSItemWise);
+            status = _vendorCSInfoService.SaveVendorCSAprv(vendorCS, vendorCSItem, vendorCSTerm, vendorCSItemWise);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
         //[HttpPost]
         //[Authorize]
         //[SILLogAttribute]
-        public async Task<dynamic> DeleteVendorCSInfoItemAndTerm(string VendorCSInfoItemID, string VendorCSInfoTermID)
+        public async Task<dynamic> DeleteVendorCSAprvItemAndTerm(string VendorCSAprvItemID, string VendorCSAprvTermID)
         {
             string status = string.Empty;
-            status = _vendorCSInfoService.DeleteVendorCSInfoItemAndTerm(VendorCSInfoItemID, VendorCSInfoTermID);
+            status = _vendorCSInfoService.DeleteVendorCSAprvItemAndTerm(VendorCSAprvItemID, VendorCSAprvTermID);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
             //return Json(new { ResponseCode = status, message }, JsonRequestBehavior.AllowGet);
         }
@@ -124,18 +118,18 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> GetVendorCSInfoTermAgainstFormList(string TermsID)
+        public async Task<dynamic> GetVendorCSAprvTermAgainstFormList(string TermsID)
         {
-            var VendorCSInfoTermList = new List<OBS_VendorCSRecmTerms>();
-            await Task.Run(() => _vendorCSInfoService.GetVendorCSInfoTermAgainstFormList(TermsID, out VendorCSInfoTermList));
-            var result = Json(new { VendorCSInfoTermList, msg = "VendorCSInfoTermList are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            var VendorCSAprvTermList = new List<OBS_VendorCSAprvTerms>();
+            await Task.Run(() => _vendorCSInfoService.GetVendorCSAprvTermAgainstFormList(TermsID, out VendorCSAprvTermList));
+            var result = Json(new { VendorCSAprvTermList, msg = "VendorCSAprvTermList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
-        public async Task<dynamic> GetReqWiseVendorList(string VendorCSInfoID)
+        public async Task<dynamic> GetReqWiseVendorList(string VendorCSAprvID)
         {
-            var ReqWiseVendorList = new List<OBS_VendorCSRecmVendors>();
-            await Task.Run(() => _vendorCSInfoService.GetReqWiseVendorList(VendorCSInfoID, out ReqWiseVendorList));
+            var ReqWiseVendorList = new List<OBS_VendorCSAprvVendors>();
+            await Task.Run(() => _vendorCSInfoService.GetReqWiseVendorList(VendorCSAprvID, out ReqWiseVendorList));
             var result = Json(new { ReqWiseVendorList, msg = "ReqWiseVendorList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;

@@ -168,7 +168,7 @@ namespace SILDMS.DataAccess
             DataTable dtVenReqItemWise = new DataTable();
             dtVenReqItemWise.Columns.Add("VendorReqItemID");
             dtVenReqItemWise.Columns.Add("VendorID");
-            dtVenReqItemWise.Columns.Add("ServiceItemID");
+            //dtVenReqItemWise.Columns.Add("ServiceItemID");
             dtVenReqItemWise.Columns.Add("VenReqQnty");
             dtVenReqItemWise.Columns.Add("VenReqUnit");
             foreach (var item in vendorReqItemWise)
@@ -176,9 +176,9 @@ namespace SILDMS.DataAccess
                 DataRow objDataRow = dtVenReqItemWise.NewRow();
                 objDataRow[0] = item.VendorReqItemID;
                 objDataRow[1] = item.VendorID;
-                objDataRow[2] = item.ServiceItemID;
-                objDataRow[3] = item.VenReqQnty;
-                objDataRow[4] = item.VenReqUnit;
+                //objDataRow[2] = item.ServiceItemID;
+                objDataRow[2] = item.VenReqQnty;
+                objDataRow[3] = item.VenReqUnit;
                 dtVenReqItemWise.Rows.Add(objDataRow);
             }
 

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace SILDMS.Model
 {
-    public class OBS_VendorCSRecmVendors
+    public class OBS_VendorCSAprvVendors
     {
-        public string VendorCSVendorsItemWiseID { get; set; }
-        public string VendorCSInfoID { get; set; }
-        public string VendorCSInfoItemID { get; set; }
+        public string VendorCSAprvVendorsID { get; set; }
+        public string VendorCSAprvID { get; set; }
+        public string VendorCSAprvItemID { get; set; }
         public string VendorID { get; set; }
         public string VendorName { get; set; }
         public string VendorQutnID { get; set; }
@@ -27,7 +27,6 @@ namespace SILDMS.Model
         public string Address { get; set; }
         public string Email { get; set; }
         public string TolQnty { get; set; }
-        public string TolAmt { get; set; }
         public string VenReqQnty { get; set; }
         public string VenReqUnit { get; set; }
         public string SetOn { get; set; }
@@ -36,6 +35,6 @@ namespace SILDMS.Model
         public string ModifiedBy { get; set; }
         public string Action { get; set; }
         [Required]
-        public string Status { get; set; } 
+        public string Status { get; set; }
     }
 }

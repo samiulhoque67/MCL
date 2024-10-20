@@ -253,8 +253,6 @@
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
                         $scope.ClearServiceItemInfo();
-                        //$scope.ServiceCategoryChange();
-                        //alert(ServiceItemCategoryID);
                         $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + ServiceItemCategoryID)
                             .success(function (response) {
                                 $scope.ServiceItemInfoSearchList = response.ServiceItemInfoSearchList;
@@ -309,9 +307,7 @@
             $scope.vmServiceItemInfo.ServiceItemID = row.ServiceItemID;
             $scope.vmServiceItemInfo.ServiceItemCode = row.ServiceItemCode;
             $scope.vmServiceItemInfo.ServiceItemName = row.ServiceItemName;
-            alert("row" + row.ServiceItemCategoryID);
             $scope.vmServiceItemInfo.ServiceItemCategory.ServiceItemCategoryID = row.ServiceItemCategoryID;
-            alert($scope.vmServiceItemInfo.ServiceItemCategory.ServiceItemCategoryID);
             $scope.vmServiceItemInfo.Status = row.Status;
 
             $scope.loading = false;

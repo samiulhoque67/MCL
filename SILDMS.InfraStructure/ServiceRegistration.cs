@@ -259,6 +259,10 @@ namespace SILDMS.InfraStructure
             kernel.Bind<IVendorQuotationDataService>().To<VendorQuotationDataService>();
 
             kernel.Bind<IVendorCSInfoService>().To<VendorCSInfoService>();
+            kernel.Bind<IVendorCSInfoDataService>().To<VendorCSInfoDataService>();
+
+            kernel.Bind<IVendorCSAprvService>().To<VendorCSAprvService>();
+            kernel.Bind<IVendorCSAprvDataService>().To<VendorCSAprvDataService>();
             kernel.Bind<IVendorCSInfoDataService>().To<VendorCSInfoDataService>(); 
 
             kernel.Bind<IPOCreationService>().To<POCreationService>();
