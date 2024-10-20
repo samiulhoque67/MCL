@@ -115,6 +115,12 @@ using SILDMS.Service.EmailNotification;
 using SILDMS.Service.TestData;
 using SILDMS.DataAccessInterface.TestData;
 using SILDMS.DataAccess.TestData;
+using SILDMS.Service.PoCreation;
+using SILDMS.DataAccess.POCreation;
+using SILDMS.Service.PoRecom;
+using SILDMS.DataAccess.PoRecom;
+using SILDMS.Service.PoAprv;
+using SILDMS.DataAccess.PoAprv;
 
 namespace SILDMS.InfraStructure
 {
@@ -254,6 +260,17 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IVendorCSInfoService>().To<VendorCSInfoService>();
             kernel.Bind<IVendorCSInfoDataService>().To<VendorCSInfoDataService>(); 
+
+            kernel.Bind<IPOCreationService>().To<POCreationService>();
+            kernel.Bind<IPOCreationData>().To<POCreationData>();
+
+            kernel.Bind<IPoRecomService>().To<PoRecomService>();
+
+            kernel.Bind<IPoRecomData>().To<PoRecomData>();
+
+            kernel.Bind<IPoAprvService>().To<PoAprvService>();
+            kernel.Bind<IPoAprvData>().To<PoAprvData>();
+
         }
     }
 } 

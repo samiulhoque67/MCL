@@ -28,6 +28,7 @@ namespace SILDMS.Model
         public string Address { get; set; }
         public string Email { get; set; }
         public string TolQnty { get; set; }
+        public string TolAmt { get; set; }
         public string VenReqQnty { get; set; }
         public string VenReqUnit { get; set; }
         public string SetOn { get; set; }
