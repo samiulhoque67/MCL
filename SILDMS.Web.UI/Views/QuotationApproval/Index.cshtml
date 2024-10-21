@@ -7,7 +7,7 @@
     }
 
     .box-body, .form-group, .btn, .form-control, .box-header {
-        font-size: 12px; 
+        font-size: 12px;
     }
 
     .btn {
@@ -30,15 +30,15 @@
     /* Adjust icon size */
     .fa {
         font-size: 12px;
-       /* padding-right: 3px;*/
+        /* padding-right: 3px;*/
     }
 </style>
 
-<div class="box box-primary box-body" ng-controller="QuotationToClientCntrl">
+<div class="box box-primary box-body" ng-controller="QuotationApproveCntrl">
     <!-- Upper buttons -->
     <div class="box-header with-border">
         <i class="fa fa-user"></i>
-        <h3 class="box-title">Quotation to Client</h3>
+        <h3 class="box-title">Quotation Approval</h3>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
@@ -178,18 +178,18 @@
         </div>
     </div>
 
-    <div id="AvailableClients" class="modal fade">
+    <div id="QuotationForRecom" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Available Clients</h3>
+                    <h3 class="modal-title">Quotations for Recommendation</h3>
                 </div>
 
                 <!-- Modal Body -->
                 <div class="modal-body table-responsive" data-ng-disabled="" ng-cloak>
-                    <table st-table="AllAvailableClientstCollection" st-safe-src="AllAvailableClientsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <table st-table="AllQuotationsCollection" st-safe-src="AllQuotationsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr>
                                 <!-- Columns with sorting -->
@@ -198,10 +198,27 @@
                                     <span ng-show="PagingInfo.sortBy == 'ClientCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
                                     <span ng-show="PagingInfo.sortBy == 'ClientCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
                                 </th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('ClientName')">
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientName')">
                                     Client Name
                                     <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
                                     <span ng-show="PagingInfo.sortBy == 'ClientName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientReqNo')">
+                                    Requisition No
+                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Requisition Date
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Quotation No
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Quotation Date
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Quotation Amount
                                 </th>
                                 <th class="col-lg-1 col-md-1 col-sm-1">
                                     Action
@@ -216,15 +233,27 @@
                                 <th>
                                     <input st-search="ClientName" placeholder="Search Client Name" class="input-sm form-control" type="search" />
                                 </th>
+                                <th>
+                                    <input st-search="ClientReqNo" placeholder="Search Req No" class="input-sm form-control" type="search" />
+                                </th>
+                                <th></th> <!-- No search for dates -->
+                                <th></th> <!-- No search for Quotation No -->
+                                <th></th> <!-- No search for Quotation Date -->
+                                <th></th> <!-- No search for Quotation Amount -->
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="row in AllAvailableClientsList | orderBy:'IsBack':true">
+                            <tr ng-repeat="row in AllQuotationsList | orderBy:'IsBack':true">
                                 <td class="text-center">{{row.ClientCode}}</td>
                                 <td class="text-center">{{row.ClientName}}</td>
+                                <td class="text-center">{{row.ClientReqNo}}</td>
+                                <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">{{row.QuotationNo}}</td>
+                                <td class="text-center">{{row.QuotationDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">{{row.QutnAmt | currency}}</td>
                                 <td class="col-lg-1 text-center">
-                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectAvailableClient(row)">Select</a>
+                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row)">Select</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -241,6 +270,7 @@
             </div>
         </div>
     </div>
+
 
     <div class="row" ng-if="GetClientReqDetails.length > 0">
         <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
@@ -475,28 +505,30 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="QuotationNote">Quotation Note :</label>
+                            <label>Operation:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <select data-ng-model="MasterData.Operation" class="form-control">
+                            <option value="">-- None --</option>
+                            <option value="Rec">Recommended</option>
+                            <option value="Bck">Back</option>
+                            <option value="Pst">Postponed</option>
+                            <option value="Can">Cancel</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="QuotationNote">Recommendation Note :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
                             <input id="QuotationNote" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1"></div>
-
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="BriefingDate">Client Briefing Date :</label>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-2" @*style="width: 12.50%;*@>
-                        <div class="form-group">
-
-                            <input id="BriefingDate" name="BriefingDate" readonly type="datetime" class="DatePicker form-control" placeholder="DD/MM/YYYY"
-                                   data-ng-model="MasterData.BriefingDate" style="height: 25px; background-color:#ffffff;" />
                         </div>
                     </div>
 
@@ -561,7 +593,7 @@
 
 
 
-    app.controller('QuotationToClientCntrl', function ($scope, $http) {
+    app.controller('QuotationApproveCntrl', function ($scope, $http) {
 
         $scope.PagingInfo = {
             page: 1,
@@ -573,20 +605,21 @@
         };
 
         $scope.Client = {
-            ClientName :"",
-            ClientRequisitionNo :"",
-            ClientRequisitionDate :"",
-            ContactPerson :"",
-            ContactNumber :"",
-            ContactTIN :"",
-            ContactBIN :"",
-            ContactAddress :"",
+            ClientName: "",
+            ClientRequisitionNo: "",
+            ClientRequisitionDate: "",
+            ContactPerson: "",
+            ContactNumber: "",
+            ContactTIN: "",
+            ContactBIN: "",
+            ContactAddress: "",
         }
 
         $scope.MasterData = {
             ClientID: "",
             ClientReqID: "",
-            BriefingDate: "",
+            ClientQutnRecmID: "",
+            Operation: "",
             QuotationNote: ""
         }
 
@@ -616,7 +649,7 @@
 
         $scope.SearchAvailableClients = function () {
             $scope.Client = "";
-            $http.post('/QuotationToClient/AllAvailableClients', {
+            $http.post('/QuotationApproval/AllAvailableClients', {
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
                 sortBy: $scope.PagingInfo.sortBy,
@@ -625,17 +658,17 @@
                 type: "isBack"
 
             }).success(function (response) {
-                $scope.AllAvailableClientsList = response.AllAvailableClientsList;
-                $scope.AllAvailableClientstCollection = [].concat($scope.AllAvailableClientsList);
+                $scope.AllQuotationsList = response.AllAvailableClientsList;
+                $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsList);
                 $scope.loading = false;
             }).error(function () {
                 $scope.loading = false;
             });
-            $('#AvailableClients').modal('show');
+            $('#QuotationForRecom').modal('show');
         };
 
         $scope.selectPageList = function () {
-            $http.post('/QuotationToClient/AllAvailableClients', {
+            $http.post('/QuotationRecommendation/AllAvailableClients', {
 
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
@@ -645,8 +678,8 @@
                 type: "isBack"
 
             }).success(function (response) {
-                $scope.AllAvailableClientsList = response.AllAvailableClientsList;
-                $scope.AllAvailableClientstCollection = [].concat($scope.AllAvailableClientsList);
+                $scope.AllQuotationsList = response.AllAvailableClientsList;
+                $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsCollection);
                 $scope.loading = false;
             })
                 .error(function () {
@@ -665,8 +698,8 @@
             $scope.Search();
         };
 
-        $scope.selectAvailableClient = function (row) {
-            $('#AvailableClients').modal('hide');
+        $scope.selectQuotationForRecom = function (row) {
+            $('#QuotationForRecom').modal('hide');
             $scope.loading = true;
 
             $http.post('/QuotationToClient/AvailableClientDetailInfo', {
@@ -685,14 +718,14 @@
                     ContactAddress: $scope.ClientDetails[0].Address
                 };
                 $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID);
-                 $scope.loading = false;
+                $scope.loading = false;
             }).error(function () {
                 $scope.loading = false;
             });
         };
 
         $scope.GetClientReqDataInfo = function (ClientID) {
-            $http.post('/QuotationToClient/GetClientReqDataInfo', {
+            $http.post('/QuotationApproval/GetClientReqDataInfo', {
                 ClientID: ClientID
             }).success(function (response) {
                 $scope.GetClientReqDetails = response.GetClientReqDetails;
@@ -703,7 +736,7 @@
             });
         };
 
-      
+
         $scope.showFlag = false;
         $scope.selectedRows = [];
         $scope.buttonChecked = false;
@@ -712,7 +745,8 @@
 
             $scope.MasterData = {
                 ClientID: row.ClientID,
-                ClientReqID: row.ClientReqID
+                ClientReqID: row.ClientReqID,
+                ClientQutnRecmID: row.ClientQutnRecmID
             }
 
             var selecteditems = {
@@ -726,8 +760,8 @@
                 QutnQnty: row.QutnQnty, //--
                 QutnUnit: row.ReqUnit, //--
                 VenPrice: row.QutnPrice, //-- VenPrice
-                MclPrice: row.givenQutnPrice, //--  
-                QutnAmt: row.QutnAmt, //--  
+                MclPrice: row.givenQutnPrice, //--
+                QutnAmt: row.QutnAmt, //--
                 VatPerc: row.VatPerc, //--
                 VatAmt: row.VatAmt, //--
                 TolAmt: row.givenTolAmt
@@ -765,7 +799,7 @@
 
         $scope.GetTermsItemList = function (TermsID) {
 
-           $http.post('/Terms/GetTermsItemList', { TermsID: TermsID })
+            $http.post('/Terms/GetTermsItemList', { TermsID: TermsID })
                 .success(function (response) {
                     $scope.ClearTermsItem();
                     $scope.getAllTermsDtl = response.TermsItemList;
@@ -779,29 +813,29 @@
 
         $scope.checkEnter = function (event, row) {
             if (event.keyCode === 13) {
-                row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0; 
+                row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
                 row.givenQutnAmt = row.givenQutnPrice * row.QutnQnty;
                 row.givenTolAmt = parseFloat(row.givenQutnAmt) + (parseFloat(row.VatAmt) || 0);
             }
         };
 
         $scope.openConfirmModal = function () {
-            if (!$scope.MasterData.BriefingDate || $scope.MasterData.BriefingDate.trim() === '') {
-                toastr.error('Please enter a Briefing Date');
+            if (!$scope.MasterData.Operation || $scope.MasterData.Operation.trim() === '') {
+                toastr.error('Please select Operation');
             } else {
                 // $('#ConfirmModal').modal('show');
                 $scope.SaveQuotToClient();
             }
         };
 
-        
+
         $scope.SaveQuotToClient = function () {
 
             console.log($scope.MasterData);
             console.log($scope.selectedRows);
             console.log($scope.getAllTermsDtl);
 
-            $http.post('/QuotationToClient/SaveQuotToClient', {
+            $http.post('/QuotationApproval/SaveQuotToClient', {
                 MasterData: [$scope.MasterData],
                 DetailData: $scope.selectedRows,
                 AllTermsDtl: $scope.getAllTermsDtl

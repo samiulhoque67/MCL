@@ -42,6 +42,21 @@ namespace SILDMS.Model
 
     }
 
+    public class OBS_ClientwithReqQoutn
+    {
+        public string ClientID { get; set; }
+        public string ClientCode { get; set; }
+        public string ClientName { get; set; }
+        public string ClientReqNo { get; set; }
+        public string RequisitionDate { get; set; }
+        public string ClientQutnID { get; set; }
+        public string QuotationNo { get; set; }
+        public string QuotationDate { get; set; }
+        public string QutnAmt { get; set; }
+        public string ServiceCategoryID { get; set; }
+        public string QutnPrice { get; set; }
+    }
+
 
     public class ClientReqData
     {
@@ -67,6 +82,8 @@ namespace SILDMS.Model
         public string TermsID { get; set; }
         public string ClientID { get; set; }
         public string ClientReqID { get; set; }
+        public string ClientQuotationID { get; set; }
+        public string ClientQutnRecmID { get; set; }
     }
 
     public class OBS_QutntoClientMaster
@@ -74,7 +91,10 @@ namespace SILDMS.Model
         public string BriefingDate { get; set; }
         public string ClientID { get; set; }
         public string ClientReqID { get; set; }
+        public string ClientQuotationID { get; set; }
+        public string ClientQutnRecmID { get; set; }
         public string QuotationNote { get; set; }
+        public string Operation { get; set; }
     }
 
 }

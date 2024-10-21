@@ -117,6 +117,10 @@ using SILDMS.DataAccessInterface.TestData;
 using SILDMS.DataAccess.TestData;
 using SILDMS.DataAccess.QuotationToClientService;
 using SILDMS.Service.QuotationToClient;
+using SILDMS.Service.QuotationRecommendation;
+using SILDMS.DataAccess.QuotationRecommendation;
+using SILDMS.Service.QuotationApproval;
+using SILDMS.DataAccess.QuotationApproval;
 
 namespace SILDMS.InfraStructure
 {
@@ -258,6 +262,15 @@ namespace SILDMS.InfraStructure
             kernel.Bind<IVendorCSInfoDataService>().To<VendorCSInfoDataService>();
 
             kernel.Bind<IQuotationToClientService>().To<QuotationToClientService>();
-            kernel.Bind<IQuotationToClientDataService>().To<QuotationToClientDataService>();        }
+            kernel.Bind<IQuotationToClientDataService>().To<QuotationToClientDataService>();
+
+            kernel.Bind<IQuotationRecommendationService>().To<QuotationRecommendationService>();
+            kernel.Bind<IQuotationRecommendationData>().To<QuotationRecommendationData>();
+
+            kernel.Bind <IQuotationApprovalService>().To<QuotationApprovalService>();
+            kernel.Bind<IQuotationApprovalDataService>().To<QuotationApprovalDataService>();
+
+
+        }
     }
 } 
