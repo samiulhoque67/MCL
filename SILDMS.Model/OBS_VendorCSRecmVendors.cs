@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace SILDMS.Model
 {
-    public class OBS_VendorCSVendorsItemWise
+    public class OBS_VendorCSRecmVendors
     {
         public string VendorCSVendorsItemWiseID { get; set; }
         public string VendorCSInfoID { get; set; }
-
         public string VendorCSInfoItemID { get; set; }
         public string VendorID { get; set; }
         public string VendorName { get; set; }
@@ -28,6 +27,7 @@ namespace SILDMS.Model
         public string Address { get; set; }
         public string Email { get; set; }
         public string TolQnty { get; set; }
+        public string TolAmt { get; set; }
         public string VenReqQnty { get; set; }
         public string VenReqUnit { get; set; }
         public string SetOn { get; set; }

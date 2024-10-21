@@ -75,7 +75,7 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
             List<GetUserAccessPermission_Result> permissionMenu = null;
             //string returnUrl = ViewBag.ReturnUrl == null ? "/CBPSModule/DashboardV2" : ViewBag.ReturnUrl;
             //string returnUrl = ViewBag.ReturnUrl == null ? "/ActivityCategory/Index" : ViewBag.ReturnUrl;
-            string returnUrl = ViewBag.ReturnUrl == null ? "/VendorCSInfo/Index" : ViewBag.ReturnUrl;
+            string returnUrl = ViewBag.ReturnUrl == null ? "/VendorCSAprv/Index" : ViewBag.ReturnUrl;
 
             if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(password))
             {

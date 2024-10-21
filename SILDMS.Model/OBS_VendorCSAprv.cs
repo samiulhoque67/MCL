@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace SILDMS.Model
 {
-    public class OBS_VendorCSInfo
+    public class OBS_VendorCSAprv
     {
-        public string VendorCSInfoID { get; set; }
-        public string VendorQutnID { get; set; } 
+        public string VendorCSAprvID { get; set; }
+        public string VendorQutnID { get; set; }
+        public string ServiceCategoryID { get; set; }
         public string ClientReqID { get; set; }
         public string ClientID { get; set; }
         [Required]
@@ -28,9 +29,10 @@ namespace SILDMS.Model
         [Required]
         public string CSRecDate { get; set; }
         public string Operation { get; set; }
+        public string RecommendedBy { get; set; }
         public string VendorQutnNo { get; set; }
         public string QuotationDate { get; set; }
-        public string TolQnty { get; set; } 
+        public string TolQnty { get; set; }
         public string LastDateofQuotation { get; set; }
         public string Remarks { get; set; }
         public string SetOn { get; set; }

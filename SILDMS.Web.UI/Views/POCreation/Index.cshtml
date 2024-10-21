@@ -45,10 +45,10 @@
     }
 </style>
 
-<div class="box box-primary box-body" ng-controller="VendorCSInfoCtrl">
+<div class="box box-primary box-body" ng-controller="POCreationCtrl">
     <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
         <i class="fa fa-user"></i>
-        <h3 style="font-family: Verdana" class="box-title">Vendor CS Information</h3>
+        <h3 style="font-family: Verdana" class="box-title">Purchase Order Preparation</h3>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
@@ -182,6 +182,7 @@
                 <table st-table="CSClientDisplayedCollection" st-safe-src="CSClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                     <thead>
                         <tr>
+                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Approve ID</th>
                             <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
                             <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientReqNo')">Requisition No</th>
                             <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
@@ -195,8 +196,9 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in CSClientDisplayedCollection">
-                            <td class="hidden">{{row.ClientReqID}}</td>
+                            @*<td class="hidden">{{row.ClientReqID}}</td>*@
                             <td class="hidden">{{row.ClientID}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.VendorCSAprvID}}</td>
                             <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
                             <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.ClientReqNo}}</td>
                             <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.RequisitionDate}}</td>
@@ -235,7 +237,7 @@
                     <tbody>
                         <tr ng-repeat="row in CSVendorDisplayedCollection" ng-cloak style="font-size:12px;">
                             <td class="hidden">{{row.index+1}}</td>
-                            <td class="hidden">{{row.VendorQutnID}}</td>
+                            <td class="hidden">{{row.VendorCSAprvID}}</td>
                             <td class="hidden">{{row.VendorID}}</td>
                             <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactPerson}}</td>
@@ -321,23 +323,23 @@
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label>CS Date</label>
+                    <label>PO Date</label>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
-                    <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSInfo.CSRecDate" />
+                    <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="PO Date" ng-model="VendorCSInfo.CSRecDate" />
                 </div>
             </div>
 
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label>CS No:</label>
+                    <label>PO No:</label>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
-                    <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSInfo.AutoCSNo" ng-readonly="true" />
+                    <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto PO  No" ng-model="VendorCSInfo.AutoCSNo" ng-readonly="true" />
                 </div>
             </div>
         </div>
@@ -347,56 +349,43 @@
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label>Operation:</label>
+                    <label>PO Amount:</label>
                 </div>
             </div>
             <div class="col-lg-3">
-                <select data-ng-model="VendorCSInfo.Operation" class="form-control">
-                    <option value="">-- None --</option>
-                    <option value="Rec">Recommended</option>
-                    <option value="Bck">Back</option>
-                    <option value="Pst">Postponed</option>
-                    <option value="Can">Cancel</option>
-                </select>
+                <div class="form-group">
+                    <input id="POAmount" name="POAmount" type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.PoAmount"  />
+                </div>
+            </div>
+
+            <div class="col-lg-2">
+                @*<div class="col-sm-1 col-md-1 col-lg-1">
+            </div>*@
+                <div class="form-group">
+                    <label>PO Created by:</label>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <input id="RecommendedBy" name="RecommendedBy" type="text" class="form-control" placeholder="CreatedBy" ng-model="VendorCSInfo.RecommendedBy" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-1 col-md-1 col-lg-1">
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="QuotationFor">Note:</label>
                 </div>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-8">
                 <div class="form-group">
                     <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
                 </div>
             </div>
-
-            @*<div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Recommended by:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="RecommendedBy" name="RecommendedBy" type="text" value={{dashBoardResult[0].ServiceCategoryName}} class="form-control" placeholder="RecommendedBy" ng-model="VendorCSInfo.RecommendedBy" />
-                    </div>
-                </div>*@
-
         </div>
-
-        @*<div class="row">
-                <div class="col-sm-1 col-md-1 col-lg-1">
-                </div>
-                <div class="col-lg-3 ">
-                    <div class="form-group">
-                        <label for="QuotationFor">Note:</label>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="form-group">
-                        <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
-                    </div>
-                </div>
-            </div>*@
 
     </div>
 
@@ -442,7 +431,7 @@
 
 <script type="text/javascript">
 
-    app.controller('VendorCSInfoCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('POCreationCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $scope.vendorCSItemArray = [];
         $scope.vendorCSTermArray = [];
@@ -450,15 +439,15 @@
 
         $scope.dashBoardResult = {};
 
-        $http.get('/VendorCSInfo/GetVendorCSInfoDashBordData')
+        $http.get('/POCreation/GetPOCreationDashBordData')
             .success(function (response) {
                 $scope.loading = false;
                 $scope.dashBoardResult = response.result;
             }).error(function () { });
 
         $scope.VendorSelect = function (ServiceCategoryID) {
-            $scope.VendorCSInfo.ServiceCategoryID = ServiceCategoryID;
-            $http.post("/VendorCSInfo/GetVendorCSClientInfo?ServiceCategoryID=" + ServiceCategoryID)
+            $scope.ServiceCategoryID = ServiceCategoryID;
+            $http.post("/POCreation/GetPoCreationClientInfo?ServiceCategoryID=" + ServiceCategoryID)
                 .success(function (response) {
                     $scope.CSClientList = response.CSClientList;
                     $scope.CSClientDisplayedCollection = [].concat($scope.CSClientList);
@@ -469,7 +458,13 @@
         $scope.ClientSelect = function (row) {
             $scope.VendorCSInfo.ClientID = row.ClientID;
             $scope.VendorCSInfo.ClientReqID = row.ClientReqID;
-            $http.post("/VendorCSInfo/GetVendorCSVendorsUsingClient?ClientID=" + row.ClientID)
+            $scope.VendorCSInfo.ServiceCategoryID = $scope.ServiceCategoryID;
+            $scope.VendorCSInfo.VendorCSAprvID = row.VendorCSAprvID;
+            $http.post("/POCreation/OBS_GetPOVendorsUsingClient", {
+                ClientID: row.ClientID,
+                VendorCSAprvID: row.VendorCSAprvID,
+                ServiceCategoryID: $scope.ServiceCategoryID
+            })
                 .success(function (response) {
                     $scope.CSVendorList = response.CSVendorList;
                     $scope.CSVendorDisplayedCollection = [].concat($scope.CSVendorList);
@@ -482,14 +477,23 @@
         };
 
         $scope.ItemSelect = function (row) {
-            $http.post("/VendorCSInfo/GetVendorCSQuotationItem?VendorID=" + row.VendorID)
+            
+            $http.post("/POCreation/GetVendorPOQuotationItem", {
+                VendorID: row.VendorID,
+                ClientID: row.ClientID,
+                ServiceCategoryID: $scope.ServiceCategoryID,
+                VendorCSAprvID: row.VendorCSAprvID
+            })
                 .success(function (response) {
                     $scope.VenCSItemList = response.VenCSItemList;
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
+                    console.log($scope.VenCSItemGridDisplayCollection);
                 })
-                .error(function () { });
+                    .error(function () {
+                        $scope.loading = false;
+                    });
 
-            $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: row.VendorQutnID })
+            $http.post('/POCreation/GetVendorPOInfoTermList', { VendorCSAprvID: row.VendorCSAprvID })
                 .success(function (response) {
                     $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
                     $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
@@ -500,23 +504,24 @@
         };
 
         $scope.VendorCSInfo = {
-            VendorCSRecmID: "",
-            ServiceCategoryID: "",
+            VendorCSAprvID: "",
             VendorID: "",
-            ClientReqID: "",
+            VendorName: "",
             ClientID: "",
             AutoCSNo: "",
             CSRecDate: "",
             Operation: "",
             RecommendedBy: "",
             Remarks: "",
-            Status: ""
+            Status: "",
+            PoAmount: "",
+            ServiceCategoryID: "",
+            ClientReqID:""
         }
 
         $scope.VendorCSInfoItem = {
-            VendorCSRecmItemID: "",
-            VendorCSRecmID: "",
-            //ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
+            VendorCSInfoItemID: "",
+            ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
             ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
             ReqQnty: "",
             ReqUnit: "",
@@ -662,6 +667,7 @@
             }
         }
 
+
         $scope.toggleClientReqSelect = function (tableRow) {
             $scope.VendorCSInfo.ClientReqID = tableRow.ClientReqID;
             $scope.VendorCSInfo.ClientID = tableRow.ClientID;
@@ -693,7 +699,7 @@
 
         $scope.clearVendorCSInfo = function () {
             $scope.VendorCSInfo = {
-                VendorCSInfoID: "",
+                VendorCSAprvID: "",
                 VendorID: "",
                 VendorCode: "",
                 VendorName: "",
@@ -705,7 +711,8 @@
                 RequisitionNo: "",
                 SubmissionDate: "",
                 RequisitionDate: "",
-                Remarks: ""
+                Remarks: "",
+                PoAmount:""
             }
 
             $scope.VendorCSInfoItem = {
@@ -858,7 +865,7 @@
 
         $scope.selectEntity = function (row) {
             var selecteditems = {
-                VendorQutnID: row.VendorQutnID,
+                VendorQutnID: row.VendorQutnNo,
                 VendorID: row.VendorID,
                 VendorName: row.VendorName,
                 ContactPerson: row.ContactPerson,
@@ -866,6 +873,7 @@
                 VendorQutnNo: row.VendorQutnNo,
                 QuotationDate: row.QuotationDate,
                 TolQnty: row.TolQnty,
+                TolAmt:row.TolAmt,
                 index: row.index
             };
             var indexToRemove = -1;
@@ -1116,23 +1124,25 @@
 
         $scope.Post = function () {
 
-            //if ($('#RequisitionNo').val() == "") {
-            //    toastr.error("Vendor ReqNo.  Required");
-            //    return;
-            //}
-
-            //if ($('#SubmissionDate').val() == "") {
-            //    toastr.error("Submission Date Required.");
-            //    return;
-            //}
-
-            if ($('#CSRecDate').val() == "") {
-                toastr.error("CSRecDate Date Required");
+            if ($('#RequisitionNo').val() == "") {
+                toastr.error("Vendor ReqNo.  Required");
                 return;
             }
 
+            if ($('#SubmissionDate').val() == "") {
+                toastr.error("Submission Date Required.");
+                return;
+            }
+
+            if ($('#RequisitionDate').val() == "") {
+                toastr.error("Requisition Date Date Required");
+                return;
+            }
+
+            $scope.VendorCSInfo.RequisitionDate = $('#RequisitionDate').val();
+            $scope.VendorCSInfo.SubmissionDate = $('#SubmissionDate').val();
             $scope.VendorCSInfo.CSRecDate = $('#CSRecDate').val();
-            $http.post('/VendorCSInfo/SaveVendorCSInfo',
+            $http.post('/POCreation/SaveVendorPOInfo',
                 {
                     vendorCS: $scope.VendorCSInfo,
                     vendorCSItem: $scope.VenCSItemGridDisplayCollection,
