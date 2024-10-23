@@ -121,6 +121,12 @@ using SILDMS.Service.PoRecom;
 using SILDMS.DataAccess.PoRecom;
 using SILDMS.Service.PoAprv;
 using SILDMS.DataAccess.PoAprv;
+using SILDMS.Service.VendorFinalBillReceived;
+using SILDMS.DataAccess.VendorFinalBillReceived;
+using SILDMS.Service.RcmdFinalBillRcvd;
+using SILDMS.DataAccess.RcmdFinalBillRcvd;
+using SILDMS.Service.AprvFinalBillRcvd;
+using SILDMS.DataAccess.AprvFinalBillRcvd;
 
 namespace SILDMS.InfraStructure
 {
@@ -274,6 +280,15 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IPoAprvService>().To<PoAprvService>();
             kernel.Bind<IPoAprvData>().To<PoAprvData>();
+
+            kernel.Bind<IVendorFinalBillReceivedService>().To<VendorFinalBillReceivedService>();
+            kernel.Bind<IVendorFinalBillReceivedData>().To<VendorFinalBillReceivedData>();
+
+            kernel.Bind<IRcmdFinalBillRcvdService>().To<RcmdFinalBillRcvdService>();
+            kernel.Bind<IRcmdFinalBillRcvdData>().To<RcmdFinalBillRcvdData>();
+
+            kernel.Bind<IAprvFinalBillRcvdService>().To<AprvFinalBillRcvdService>();
+            kernel.Bind<IAprvFinalBillRcvdData>().To<AprvFinalBillRcvdData>();  
 
         }
     }
