@@ -127,6 +127,12 @@ using SILDMS.Service.QuotationRecommendation;
 using SILDMS.DataAccess.QuotationRecommendation;
 using SILDMS.Service.QuotationApproval;
 using SILDMS.DataAccess.QuotationApproval;
+using SILDMS.Service.AdvDemandVendor;
+using SILDMS.DataAccess.AdvDemandVendor;
+using SILDMS.Service.AdvanceRecommendation;
+using SILDMS.Service.AdvanceApproval;
+using SILDMS.DataAccess.AdvanceApproval;
+using SILDMS.DataAccess.AdvanceRecommendation;
 
 namespace SILDMS.InfraStructure
 {
@@ -269,7 +275,7 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IVendorCSAprvService>().To<VendorCSAprvService>();
             kernel.Bind<IVendorCSAprvDataService>().To<VendorCSAprvDataService>();
-            kernel.Bind<IVendorCSInfoDataService>().To<VendorCSInfoDataService>(); 
+            kernel.Bind<IVendorCSInfoDataService>().To<VendorCSInfoDataService>();
 
             kernel.Bind<IPOCreationService>().To<POCreationService>();
             kernel.Bind<IPOCreationData>().To<POCreationData>();
@@ -289,10 +295,17 @@ namespace SILDMS.InfraStructure
             kernel.Bind<IQuotationRecommendationService>().To<QuotationRecommendationService>();
             kernel.Bind<IQuotationRecommendationData>().To<QuotationRecommendationData>();
 
-            kernel.Bind <IQuotationApprovalService>().To<QuotationApprovalService>();
+            kernel.Bind<IQuotationApprovalService>().To<QuotationApprovalService>();
             kernel.Bind<IQuotationApprovalDataService>().To<QuotationApprovalDataService>();
 
+            kernel.Bind<IAdvDemandVendorService>().To<AdvDemandVendorService>();
+            kernel.Bind<IAdvDemandVendorData>().To<AdvDemandVendorData>();
 
+            kernel.Bind<IAdvanceRecommendationService>().To<AdvanceRecommendationService>();
+            kernel.Bind<IAdvanceRecommendationData>().To<AdvanceRecommendationData>();
+
+            kernel.Bind<IAdvanceApprovalService>().To<AdvanceApprovalService>();
+            kernel.Bind<IAdvanceApprovalData>().To<AdvanceApprovalData>();
         }
     }
 } 

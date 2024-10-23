@@ -1,0 +1,728 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+<style>
+    body {
+        font-size: 12px; /* Set global font size */
+    }
+
+    .box-body, .form-group, .btn, .form-control, .box-header {
+        font-size: 12px;
+    }
+
+    .btn {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    h3.box-title {
+        font-size: 14px;
+    }
+
+    input.form-control, button.form-control {
+        font-size: 12px;
+    }
+
+    label {
+        font-size: 12px;
+    }
+
+    /* Adjust icon size */
+    .fa {
+        font-size: 12px;
+        /* padding-right: 3px;*/
+    }
+</style>
+
+<div class="box box-primary box-body" ng-controller="AdvDemandVendorCtrl">
+    <!-- Upper buttons -->
+    <div class="box-header with-border">
+        <i class="fa fa-user"></i>
+        <h3 class="box-title">Advace Demand</h3>
+
+        <div class="box-tools pull-right">
+            <div class="col-lg-12 pull-right">
+                <div class="btn-group pull-right">
+                    <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh">
+                        <i class="fa fa-refresh"></i>Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box-body">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+
+
+                <!-- PoNo -->
+                <div class="row">
+
+
+
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ApprovedPOs">Available Approved PO :</label>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="PoNo" name="PoNo" type="text" data-ng-model="PoNo" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1">
+                        <div class="form-group">
+                            <button type="button" data-ng-click="SearchAvailableClients()" class="form-control">Search</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-1"></div>
+                </div>
+
+
+                <!-- ClientName -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ClientName">Client Name :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="ClientName" name="ClientName" type="text" data-ng-model="Client.ClientName" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+                    <div class="col-lg-1"></div>
+                </div>
+
+
+                <!-- ClientRequisition Person & Number -->
+                <div class="row">
+
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ContactNumber">Contact Number :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="ContactNumber" name="ContactNumber" type="text" data-ng-model="Client.ContactNumber" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ContactAddress">Contact Address :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <input id="ContactAddress" name="ContactAddress" type="text" data-ng-model="Client.ContactAddress" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- WO Number & WO Amount-->
+                <div class="row">
+
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="WONumber">WO Number :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="WONumber" name="WONumber" type="text" @*data-ng-model="Client.ContactNumber"*@ class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="WOAmount">WO Amount :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <input id="WOAmount" name="WOAmount" type="text" @*data-ng-model="Client.ContactAddress"*@ class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div id="AvailableVendors" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Available Purchase Orders</h3>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body table-responsive" ng-cloak>
+                    <table st-table="AllAvailablePOsCollection" st-safe-src="AllAvailablePOsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <!-- Columns with sorting for VendorName, PoNo, PODate, VendorQutnNo, and QuotationDate -->
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('VendorName')">
+                                    Vendor Name
+                                    <span ng-show="PagingInfo.sortBy == 'VendorName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'VendorName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('PoNo')">
+                                    Purchase Order No
+                                    <span ng-show="PagingInfo.sortBy == 'PoNo' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'PoNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('PODate')">
+                                    Purchase Order Date
+                                    <span ng-show="PagingInfo.sortBy == 'PODate' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'PODate' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('VendorQutnNo')">
+                                    Quotation No
+                                    <span ng-show="PagingInfo.sortBy == 'VendorQutnNo' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'VendorQutnNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('QuotationDate')">
+                                    Quotation Date
+                                    <span ng-show="PagingInfo.sortBy == 'QuotationDate' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'QuotationDate' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">
+                                    Action
+                                </th>
+                            </tr>
+
+                            <!-- Search Fields -->
+                            <tr>
+                                <th>
+                                    <input ng-model="PagingInfo.search.VendorName" placeholder="Search Vendor Name" class="input-sm form-control" type="search" />
+                                </th>
+                                <th>
+                                    <input ng-model="PagingInfo.search.PoNo" placeholder="Search PO No" class="input-sm form-control" type="search" />
+                                </th>
+                                <th>
+                                    <input ng-model="PagingInfo.search.PODate" placeholder="Search PO Date" class="input-sm form-control" type="search" />
+                                </th>
+                                <th>
+                                    <input ng-model="PagingInfo.search.VendorQutnNo" placeholder="Search Quotation No" class="input-sm form-control" type="search" />
+                                </th>
+                                <th>
+                                    <input ng-model="PagingInfo.search.QuotationDate" placeholder="Search Quotation Date" class="input-sm form-control" type="search" />
+                                </th>
+                                <th></th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in AllAvailablePOsList | orderBy:'IsBack':true">
+                                <td class="text-center">{{row.VendorName}}</td>
+                                <td class="text-center">{{row.PoNo}}</td>
+                                <td class="text-center">{{row.PODate | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">{{row.VendorQutnNo}}</td>
+                                <td class="text-center">{{row.QuotationDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="col-lg-1 text-center">
+                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectAvailablePO(row)">Select</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination and No Item Message -->
+                    <div ng-if="PagingInfo.totalItems > 0" class="text-center">
+                        <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" force-ellipses="true" ng-change="selectPageList()"></ul>
+                    </div>
+                    <div ng-if="PagingInfo.totalItems <= 0" class="text-center">
+                        NO ITEM
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr style="border: none; height: 3px; background-color: #8d8d8d; margin-top: 20px; margin-bottom: 20px; width: 100%; border-radius: 5px; " />
+    <label style="font-size: 14px; font-family: math;" class="box-title">Advance Demand Info</label>
+    <hr style="margin-top: 5px;" />
+
+    <div class="box-body">
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+
+                <!-- Purchase Order Amount -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="PurchaseOrderAmount">Purchase Order Amount :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.PurchaseOrderAmount" readonly class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="AdvanceInvoiceNo">Advance Invoice No :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="AdvanceInvoiceNo" name="AdvanceInvoiceNo" type="text" data-ng-model="AdvanceInformmation.AdvanceInvoiceNo" readonly class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quotation Note & Billing Date -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="AdvanceDemandAmount">Advance Demand Amount :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="AdvanceDemandAmount" name="AdvanceDemandAmount" type="text" data-ng-model="AdvanceInformmation.AdvanceDemandAmount" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="AdvanceDemandDate">Advance Demand Date :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="AdvanceDemandDate" name="AdvanceDemandDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                                   ng-model="AdvanceInformmation.AdvanceDemandDate" style=" background-color:#ffffff; " />
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Quotation Note & Billing Date -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ProposedAmount">Proposed Amount :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="ProposedAmount" name="ProposedAmount" type="text" data-ng-model="AdvanceInformmation.ProposedAmount"
+                                   class="form-control" ng-keydown="calculateRemainingAmount($event)" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="RemainingAmount">Remaining Amount :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="RemainingAmount" name="RemainingAmount" type="text" data-ng-model="AdvanceInformmation.RemainingAmount"
+                                   readonly class="form-control" />
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="Note">Note :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <input id="Note" name="Note" type="text" data-ng-model="AdvanceInformmation.Note" class="form-control" />
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-9">
+
+                    </div>
+
+                    <div class="col-lg-2">
+                        <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
+                                ng-click="openConfirmModal()" data-dismiss="modal" title="Save"
+                                style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius: 5px;">
+                            <i class="fa fa-check"></i> Submit
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    @*Save / Delete Modal*@
+    <div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important ">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
+                <div class="modal-header" style="height: 46px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" style="height:30px;" id="myModalLabel">Confirm your Action</h4>
+                </div>
+                <div class="modal-body" style="height:80px;">
+                    <h5 class="modal-title" style="height:30px;" id="myModalLabel">Are you sure to Save</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSaveMaster" class="btn button-custom" style="color: white; background-color: darkgreen;" data-dismiss="modal" ng-click="SaveQCApprove()">Confirm</button>
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: darkred;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="mydiv" data-ng-show="loading">
+        <div class="overlay">
+            <div class="loder">
+                <img src="~/Content/AdminLTE/img/cube.gif" /> <span class="text-bold">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+<script type="text/javascript">
+
+
+
+    app.controller('AdvDemandVendorCtrl', function ($scope, $http) {
+
+        $scope.PagingInfo = {
+            page: 1,
+            itemsPerPage: 10,
+            sortBy: null,
+            reverse: false,
+            search: null,
+            totalItems: 0
+        };
+
+
+        $scope.Client = {
+            ClientName: "",
+            ClientRequisitionNo: "",
+            ClientRequisitionDate: "",
+            ContactPerson: "",
+            ContactNumber: "",
+            ContactTIN: "",
+            ContactBIN: "",
+            ContactAddress: "",
+        }
+
+        $scope.AdvanceInformmation = {
+            ClientID: "",
+            VendorID: "",
+            POAprvID: "",
+            VendorQutnID : "",
+            PurchaseOrderAmount: "",
+            AdvanceInvoiceNo: "",
+            AdvanceDemandAmount: "",
+            AdvanceDemandDate: "",
+            ProposedAmount: "",
+            RemainingAmount: "",
+            Note: ""
+        }
+
+        $('.DatePicker').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true
+        }).on('changeDate', function (ev) {
+            var selectedDate = $(this).val(); // Get the selected date
+            $('.datepicker').hide();          // Hide the datepicker
+
+            // Apply the selected date to AngularJS model
+            var scope = angular.element($(this)).scope();
+            scope.$apply(function () {
+                scope.AdvanceInformmation.AdvanceDemandDate = selectedDate;
+            });
+        });
+
+
+
+        const currentDate = new Date();
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const year = currentDate.getFullYear();
+        document.getElementById("AdvanceDemandDate").value = `${day}/${month}/${year}`;
+
+
+        $scope.SearchAvailableClients = function () {
+            $scope.Client = "";
+            $http.post('/AdvDemandVendor/AllAvailableClients', {
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack"
+
+            }).success(function (response) {
+                $scope.AllAvailablePOsList = response.AllAvailableClientsList;
+                $scope.AllAvailablePOsCollection = [].concat($scope.AllAvailablePOsList);
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+            });
+            $('#AvailableVendors').modal('show');
+        };
+
+        $scope.selectPageList = function () {
+            $http.post('/AdvDemandVendor/AllAvailableClients', {
+
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack"
+
+            }).success(function (response) {
+                $scope.AllAvailablePOsList = response.AllAvailableClientsList;
+                $scope.AllAvailablePOsCollection = [].concat($scope.AllAvailablePOsList);
+                $scope.loading = false;
+            })
+                .error(function () {
+                    $scope.loading = false;
+                });
+        }
+
+        $scope.sortList = function (sortBy) {
+            if (sortBy === $scope.PagingInfo.sortBy) {
+                $scope.PagingInfo.reverse = !$scope.pagingInfo.reverse;
+            } else {
+                $scope.PagingInfo.sortBy = sortBy;
+                $scope.PagingInfo.reverse = false;
+            }
+            $scope.PagingInfo.page = 1;
+            /*$scope.Search();*/
+        };
+
+        $scope.selectAvailablePO = function (row) {
+            $('#AvailableVendors').modal('hide');
+            $scope.loading = true;
+
+            $scope.PoNo = row.PoNo;
+            $scope.AdvanceInformmation.PurchaseOrderAmount = row.POAprvAmnt;
+            $scope.AdvanceInformmation.ClientID = row.ClientID;
+            $scope.AdvanceInformmation.VendorID = row.VendorID;
+            $scope.AdvanceInformmation.POAprvID = row.POAprvID;
+            $scope.AdvanceInformmation.VendorQutnID = row.VendorQutnID;
+
+            $http.post('/QuotationToClient/AvailableClientDetailInfo', {
+                ClientID: row.ClientID
+            }).success(function (response) {
+                $scope.ClientDetails = response.ClientDetails;
+
+                $scope.Client = {
+                    ClientName: $scope.ClientDetails[0].ClientName,
+                    ContactNumber: $scope.ClientDetails[0].ContactNumber,
+                    ContactAddress: $scope.ClientDetails[0].Address
+                };
+            /*    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID);*/
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+            });
+        };
+
+        $scope.calculateRemainingAmount = function (event) {
+            if (event.keyCode === 13 || event.keyCode === 9) {
+                performCalculation();
+            }
+        };
+
+
+
+        function performCalculation() {
+            if ($scope.AdvanceInformmation.PurchaseOrderAmount && $scope.AdvanceInformmation.ProposedAmount) {
+                $scope.AdvanceInformmation.RemainingAmount = $scope.AdvanceInformmation.PurchaseOrderAmount - $scope.AdvanceInformmation.ProposedAmount;
+            } else {
+                $scope.AdvanceInformmation.RemainingAmount = 0;
+            }
+        }
+
+        $scope.$watchGroup(['AdvanceInformmation.PurchaseOrderAmount', 'AdvanceInformmation.ProposedAmount'], function (newValues, oldValues) {
+            performCalculation();
+        });
+
+
+
+
+        $scope.showFlag = false;
+        $scope.selectedRows = [];
+        $scope.buttonChecked = false;
+
+
+        $scope.checkEnter = function (event, row) {
+            if (event.keyCode === 13) {
+                row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
+                row.givenQutnAmt = row.givenQutnPrice * row.QutnQnty;
+                row.givenTolAmt = parseFloat(row.givenQutnAmt) + (parseFloat(row.VatAmt) || 0);
+            }
+        };
+
+        $scope.openConfirmModal = function () {
+            if (!$scope.AdvanceInformmation.AdvanceDemandDate || $scope.AdvanceInformmation.AdvanceDemandDate.trim() === '') {
+                toastr.error('Please enter an Advance Demand Date');
+            } else if (!$scope.AdvanceInformmation.AdvanceDemandAmount || $scope.AdvanceInformmation.AdvanceDemandAmount.trim() === '') {
+                toastr.error('Please enter an Advance Demand Amount');
+            } else if (!$scope.AdvanceInformmation.ProposedAmount || $scope.AdvanceInformmation.ProposedAmount.trim() === '') {
+                toastr.error('Please enter a Proposed Amount');
+            } else {
+                // $('#ConfirmModal').modal('show');
+                $scope.SaveQuotToClient();
+            }
+        };
+
+        $scope.SaveQuotToClient = function () {
+
+            console.log($scope.AdvanceInformmation);
+
+            $http.post('/AdvDemandVendor/SaveQuotToClient', {
+                MasterData: [$scope.AdvanceInformmation]
+
+            }).success(function (response) {
+
+                if (response.status === "Data Save Successfully" || "Operation Done") {
+                    toastr.success('Data Saved Successfully');
+                    $scope.refreshPage();
+                }
+                else {
+                    toastr.error('Something went wrong');
+                }
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+                toastr.error('Data Loading Failed.');
+            });
+        }
+
+
+        // ################# Detail Add Modal ####################
+        $scope.AddDtlModal = function () {
+
+            $scope.ClearTermsItem();
+
+            $('#TermsDtlModal').modal('show');
+            $scope.vmTermsItem.ItemStatus = "1";
+            $("#btnDtlSaveUpdate").html('Add');
+        };
+
+        // ################# Detail Edit Modal ####################
+        $scope.toggleEdit = function (row) {
+            $('#TermsDtlModal').modal('show');
+            $scope.loading = true;
+            //console.log(row);
+            $scope.vmTermsItem.TermsItemID = row.TermsItemID;
+            $scope.vmTermsMst.TermsID = row.TermsID;
+            $scope.vmTermsItem.TermsCode = row.TermsCode;
+            $scope.vmTermsItem.TermsName = row.TermsName;
+            $scope.vmTermsItem.ItemStatus = row.ItemStatus;
+
+            $scope.loading = false;
+            $("#btnDtlSaveUpdate").html('Update');
+        };
+
+        //#################### Delete Action ###############
+        $scope.deleteConfirm = function () {
+            var postData = JSON.stringify(convArrToObj($scope.vmTermsItem));
+            $scope.loading = true;
+            $http.post('/Terms/DeleteTermsItem', postData).success(function (response) {
+                $scope.loading = false;
+                if (response.status == "S203") {
+                    toastr.success("Data Deleted Successfully.");
+                    $scope.ClearTermsItem();
+                    $('#deleteModal').modal('hide');
+                    $scope.loading = false;
+                    $scope.GetTermsItemList();
+                    return;
+                }
+            }).error(function (data) {
+                $scope.loading = false;
+                toastr.error(data);
+            });
+        };
+
+        $scope.toggleDelete = function (row) {
+            $scope.vmTermsItem = row;
+            $('#deleteModal').modal('show');
+        };
+
+
+        $scope.ResetDtlModel = function () {
+            $scope.ClearTermsItem();
+        };
+
+        $scope.toggleRefreshTable = function () {
+            window.location.reload();
+        };
+        ///////////////Reset Detail Model////////////////
+        $scope.ClearTermsItem = function () {
+            //$scope.getAllTermsDtl.TermsItemID = "";
+            //$scope.getAllTermsDtl.TermsCode = "";
+            //$scope.getAllTermsDtl.TermsName = "";
+            //$scope.getAllTermsDtl.ItemStatus = "";
+
+            $scope.getAllTermsDtl = "";
+            $scope.displayedCollection = "";
+        }
+
+        $scope.refreshPage = function () {
+            setTimeout(function () {
+                window.location.reload();
+            }, 2000);
+        }
+        //utilities//
+        $scope.getRowStyle = function (row) {
+            if (row.selected) {
+                return { background: '#b9e7d8' }; // Change this to your desired color
+            } else {
+                return {}; // No additional styling
+            }
+        };
+    }
+  )
+
+
+</script>
+
+
