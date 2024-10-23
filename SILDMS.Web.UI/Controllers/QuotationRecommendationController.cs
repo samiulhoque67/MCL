@@ -1,0 +1,77 @@
+﻿using SILDMS.Service.QuotationRecommendation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using SILDMS.Utillity;
+using SILDMS.Utillity.Localization;
+using SILDMS.Web.UI.Areas.SecurityModule.Models;
+using System.Web.Mvc;
+using SILDMS.Model;
+using System.Threading.Tasks;
+
+
+namespace SILDMS.Web.UI.Controllers
+{
+    public class QuotationRecommendationController : Controller
+    {
+        readonly IQuotationRecommendationService _quotationRecommendationService;
+        private readonly ILocalizationService _localizationService;
+        private ValidationResult respStatus = new ValidationResult();
+        private string outStatus = string.Empty;
+        private readonly string UserID = string.Empty;
+        private string action = string.Empty;
+
+
+        public QuotationRecommendationController(IQuotationRecommendationService repository, ILocalizationService localizationService)
+        {
+            this._quotationRecommendationService = repository;
+            this._localizationService = localizationService;
+            UserID = SILAuthorization.GetUserID();
+        }
+
+        // GET: QuotationRecommendation
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<dynamic> AllAvailableClients(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
+        {
+            var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
+            await Task.Run(() => _quotationRecommendationService.AllAvailableCSVendorApprovalService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out AllAvailableClientsList));
+            var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
+            return result;
+        }
+
+        [HttpPost]
+        public async Task<dynamic> GetClientReqDataInfo(string ClientID)
+        {
+            var GetClientReqDetails = new List<ClientReqData>();  // Renamed to ClientDetails
+            await Task.Run(() => _quotationRecommendationService.GetClientReqDataInfoService(ClientID, out GetClientReqDetails));
+            var result = Json(new { GetClientReqDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
+            return result;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SaveQuotToClient(List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl)
+        {
+            if (MasterData == null || !MasterData.Any() || DetailData == null || !DetailData.Any())
+            {
+                return Json(new { status = "Error", message = "MasterList is empty or null." }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                string status = _quotationRecommendationService.SaveQuotToClientService(UserID, MasterData, DetailData, AllTermsDtl);
+                return Json(new { status = status }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = "Error", message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+    }
+}

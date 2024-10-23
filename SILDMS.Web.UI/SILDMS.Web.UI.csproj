@@ -326,6 +326,9 @@
     <Compile Include="Areas\SecurityModule\SILLogAttribute.cs" />
     <Compile Include="Areas\Test77\Test77AreaRegistration.cs" />
     <Compile Include="Controllers\ActivityCategoryController.cs" />
+    <Compile Include="Controllers\AdvanceApprovalController.cs" />
+    <Compile Include="Controllers\AdvanceRecommendationController.cs" />
+    <Compile Include="Controllers\AdvDemandVendorController.cs" />
     <Compile Include="Controllers\apiLcEmailScheduleController.cs" />
     <Compile Include="Controllers\AprvFinalBillRcvdController.cs" />
     <Compile Include="Controllers\ClientInfoController.cs" />
@@ -333,6 +336,9 @@
     <Compile Include="Controllers\PoAprvController.cs" />
     <Compile Include="Controllers\POCreationController.cs" />
     <Compile Include="Controllers\PoRecomController.cs" />
+    <Compile Include="Controllers\QuotationApprovalController.cs" />
+    <Compile Include="Controllers\QuotationRecommendationController.cs" />
+    <Compile Include="Controllers\QuotationToClientController.cs" />
     <Compile Include="Controllers\RcmdFinalBillRcvdController.cs" />
     <Compile Include="Controllers\ServiceItemInfoController.cs" />
     <Compile Include="Controllers\TermsController.cs" />
@@ -1514,6 +1520,12 @@
     <Content Include="Views\POCreation\Index.cshtml" />
     <Content Include="Views\PoRecom\Index.cshtml" />
     <Content Include="Views\PoAprv\Index.cshtml" />
+    <Content Include="Views\QuotationToClient\Index.cshtml" />
+    <Content Include="Views\QuotationApproval\Index.cshtml" />
+    <Content Include="Views\QuotationRecommendation\Index.cshtml" />
+    <Content Include="Views\AdvDemandVendor\Index.cshtml" />
+    <Content Include="Views\AdvanceApproval\Index.cshtml" />
+    <Content Include="Views\AdvanceRecommendation\Index.cshtml" />
     <Content Include="Views\VendorFinalBillReceived\Index.cshtml" />
     <Content Include="Views\RcmdFinalBillRcvd\Index.cshtml" />
     <Content Include="Views\AprvFinalBillRcvd\Index.cshtml" />
@@ -1544,8 +1556,20 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\201511160838195_Init.resx">
+      <DependentUpon>201511160838195_Init.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\SILDMS.DataAccess\SILDMS.DataAccess.csproj">
-      <Project>{9613E6D2-2F28-4AE0-90DE-A0A13EFDD0F7}</Project>
+      <Project>{9613e6d2-2f28-4ae0-90de-a0a13efdd0f7}</Project>
       <Name>SILDMS.DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\SILDMS.InfraStructure\SILDMS.InfraStructure.csproj">
@@ -1560,18 +1584,6 @@
       <Project>{6b39620b-dcc8-44f7-befe-ba2dff520205}</Project>
       <Name>SILDMS.Service</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511160838195_Init.resx">
-      <DependentUpon>201511160838195_Init.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
