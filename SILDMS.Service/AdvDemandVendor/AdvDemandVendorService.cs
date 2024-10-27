@@ -36,6 +36,14 @@ namespace SILDMS.Service.AdvDemandVendor
                 : ValidationResult.Success;
         }
 
+        ValidationResult IAdvDemandVendorService.AvailableClientDetailInfoService(string ClientID, string POAprvID, out List<POinfo> ClientDetails)
+        {
+            ClientDetails = _advDemandVendorData.AvailableClientDetailInfoDataService(ClientID, POAprvID, out _errorNumber);
+
+            return _errorNumber.Length > 0
+                ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
+                : ValidationResult.Success;
+        }
 
         public string SaveQuotToClientService(string UserID, List<AdvanceDemandMaster> MasterData)
         {

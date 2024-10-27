@@ -40,10 +40,39 @@ namespace SILDMS.Web.UI.Controllers
         [HttpPost]
         public async Task<dynamic> AllAvailableClients(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
         {
-            var AllAvailableClientsList = new List<AdvanceDemandMaster>();
+            var AllAvailableClientsList = new List<POinfo>();
             await Task.Run(() => _advanceRecommendationService.AllAvailableCSVendorApprovalService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out AllAvailableClientsList));
             var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
             return result;
+        }
+
+
+        [HttpPost]
+        public async Task<dynamic> AvailableClientDetailInfo(string ClientID, string VendrAdvncDemnID)
+        {
+            var ClientDetails = new List<POinfo>();  // Renamed to ClientDetails
+            await Task.Run(() => _advanceRecommendationService.AvailableClientDetailInfoService(ClientID, VendrAdvncDemnID, out ClientDetails));
+            var result = Json(new { ClientDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
+            return result;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SaveQuotToClient(List<AdvanceDemandMaster> MasterData)
+        {
+            if (MasterData == null || !MasterData.Any())
+            {
+                return Json(new { status = "Error", message = "MasterList is empty or null." }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                string status = _advanceRecommendationService.SaveQuotToClientService(UserID, MasterData);
+                return Json(new { status = status }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = "Error", message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
     }

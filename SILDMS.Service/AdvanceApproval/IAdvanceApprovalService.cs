@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SILDMS.Model;
+using SILDMS.Utillity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,10 @@ namespace SILDMS.Service.AdvanceApproval
 {
     public interface IAdvanceApprovalService
     {
+
+        ValidationResult AllAvailableCSVendorApprovalService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out List<POinfo> AllAvailableClientsList);
+        ValidationResult AvailableClientDetailInfoService(string ClientID, string VendrAdvncDemnID, out List<POinfo> ClientDetails);
+        string SaveQuotToClientService(string UserID, List<AdvanceDemandMaster> MasterData);
+
     }
 }
