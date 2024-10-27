@@ -133,6 +133,12 @@ using SILDMS.Service.AdvanceRecommendation;
 using SILDMS.Service.AdvanceApproval;
 using SILDMS.DataAccess.AdvanceApproval;
 using SILDMS.DataAccess.AdvanceRecommendation;
+using SILDMS.Service.VendorFinalBillReceived;
+using SILDMS.DataAccess.VendorFinalBillReceived;
+using SILDMS.Service.RcmdFinalBillRcvd;
+using SILDMS.DataAccess.RcmdFinalBillRcvd;
+using SILDMS.Service.AprvFinalBillRcvd;
+using SILDMS.DataAccess.AprvFinalBillRcvd;
 
 namespace SILDMS.InfraStructure
 {
@@ -306,6 +312,15 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IAdvanceApprovalService>().To<AdvanceApprovalService>();
             kernel.Bind<IAdvanceApprovalData>().To<AdvanceApprovalData>();
+            kernel.Bind<IVendorFinalBillReceivedService>().To<VendorFinalBillReceivedService>();
+            kernel.Bind<IVendorFinalBillReceivedData>().To<VendorFinalBillReceivedData>();
+
+            kernel.Bind<IRcmdFinalBillRcvdService>().To<RcmdFinalBillRcvdService>();
+            kernel.Bind<IRcmdFinalBillRcvdData>().To<RcmdFinalBillRcvdData>();
+
+            kernel.Bind<IAprvFinalBillRcvdService>().To<AprvFinalBillRcvdService>();
+            kernel.Bind<IAprvFinalBillRcvdData>().To<AprvFinalBillRcvdData>();  
+
         }
     }
 } 
