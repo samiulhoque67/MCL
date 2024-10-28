@@ -92,7 +92,7 @@ namespace SILDMS.DataAccess.QuotationApproval
                     {
 
                         ClientID = reader.GetString("ClientID"),
-                        ClientQutnRecmID = reader.GetString("ClientReqID"),
+                        ClientQutnRecmID = reader.GetString("ClientQutnRecmID"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         TermsID = reader.GetString("TermsID"),

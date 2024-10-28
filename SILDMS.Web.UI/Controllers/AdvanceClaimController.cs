@@ -1,0 +1,76 @@
+﻿using SILDMS.Model;
+using SILDMS.Service.AdvanceClaim;
+using SILDMS.Service.AdvDemandVendor;
+using SILDMS.Web.UI.Areas.SecurityModule.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using SILDMS.Utillity;
+using SILDMS.Utillity.Localization;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
+
+namespace SILDMS.Web.UI.Controllers
+{
+    public class AdvanceClaimController : Controller
+    {
+        readonly IAdvanceClaimService _advanceClaimService;
+        private readonly ILocalizationService _localizationService;
+        private ValidationResult respStatus = new ValidationResult();
+        private string outStatus = string.Empty;
+        private readonly string UserID = string.Empty;
+        private string action = string.Empty;
+        public AdvanceClaimController(IAdvanceClaimService repository, ILocalizationService localizationService)
+        {
+            this._advanceClaimService = repository;
+            this._localizationService = localizationService;
+            UserID = SILAuthorization.GetUserID();
+        }
+
+        // GET: AdvanceClaim
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<dynamic> AllAvailableClients(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
+        {
+            var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
+            await Task.Run(() => _advanceClaimService.AllAvailableCSVendorApprovalService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out AllAvailableClientsList));
+            var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
+            return result;
+        }
+
+        [HttpPost]
+        public async Task<dynamic> WoQtforAdvanClaim(string ClientID /*, string POAprvID*/)
+        {
+            var WODetails = new List<AdvanClaimWo>();  // Renamed to ClientDetails
+            await Task.Run(() => _advanceClaimService.WoQtforAdvanClaimService(ClientID,/* POAprvID,*/ out WODetails));
+            var result = Json(new { WODetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
+            return result;
+        }
+
+
+
+        [HttpPost]
+        public async Task<ActionResult> SaveQuotToClient(List<AdvanceClaimMaster> MasterData)
+        {
+            if (MasterData == null || !MasterData.Any())
+            {
+                return Json(new { status = "Error", message = "MasterList is empty or null." }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                string status = _advanceClaimService.SaveQuotToClientService(UserID, MasterData);
+                return Json(new { status = status }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = "Error", message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+    }
+}

@@ -139,6 +139,8 @@ using SILDMS.Service.RcmdFinalBillRcvd;
 using SILDMS.DataAccess.RcmdFinalBillRcvd;
 using SILDMS.Service.AprvFinalBillRcvd;
 using SILDMS.DataAccess.AprvFinalBillRcvd;
+using SILDMS.Service.AdvanceClaim;
+using SILDMS.DataAccess.AdvanceClaim;
 
 namespace SILDMS.InfraStructure
 {
@@ -319,7 +321,10 @@ namespace SILDMS.InfraStructure
             kernel.Bind<IRcmdFinalBillRcvdData>().To<RcmdFinalBillRcvdData>();
 
             kernel.Bind<IAprvFinalBillRcvdService>().To<AprvFinalBillRcvdService>();
-            kernel.Bind<IAprvFinalBillRcvdData>().To<AprvFinalBillRcvdData>();  
+            kernel.Bind<IAprvFinalBillRcvdData>().To<AprvFinalBillRcvdData>();
+
+            kernel.Bind<IAdvanceClaimService>().To<AdvanceClaimService>();
+            kernel.Bind<IAdvanceClaimData>().To<AdvanceClaimData>();
 
         }
     }

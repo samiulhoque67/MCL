@@ -55,4 +55,16 @@ namespace SILDMS.Model
 
     }
 
+    public class AdvanceClaimMaster
+    {
+        public string ClientID { get; set; }
+        public string ClientQutnAprvID { get; set; }
+        public string WOInfoID { get; set; }
+        public string WOAmt { get; set; }
+        public string AdvanceClaimAmount { get; set; }
+        public string RemainingAmount { get; set; }
+        public string AdvanceClaimDate { get; set; }
+        public string Note { get; set; }
+    }
+
 }

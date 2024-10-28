@@ -97,4 +97,13 @@ namespace SILDMS.Model
         public string Operation { get; set; }
     }
 
+    public class AdvanClaimWo
+    {
+        public string ClientID { get; set; }
+        public string ClientQutnAprvID { get; set; }
+        public string WOInfoID { get; set; }
+        public string WOAmt { get; set; }
+                
+    }
+
 }
