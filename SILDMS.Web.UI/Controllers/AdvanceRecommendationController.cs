@@ -30,7 +30,6 @@ namespace SILDMS.Web.UI.Controllers
             UserID = SILAuthorization.GetUserID();
         }
 
-
         // GET: AdvanceRecommendation
         public ActionResult Index()
         {
