@@ -306,6 +306,12 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IAdvanceApprovalService>().To<AdvanceApprovalService>();
             kernel.Bind<IAdvanceApprovalData>().To<AdvanceApprovalData>();
+
+            kernel.Bind<IQuotationToClientRevisedService>().To<QuotationToClientRevisedService>();
+            kernel.Bind<IQuotationToClientRevisedDataService>().To<QuotationToClientRevisedDataService>();
+
+            kernel.Bind<IWorkOrderInfoService>().To<WorkOrderInfoService>();
+            kernel.Bind<IWorkOrderInfoDataService>().To<WorkOrderInfoDataService>();
         }
     }
 } 

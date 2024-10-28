@@ -30,21 +30,20 @@ namespace SILDMS.Web.UI.Controllers
             UserID = SILAuthorization.GetUserID();
         }
 
-
         // GET: AdvanceRecommendation
         public ActionResult Index()
         {
             return View();
         }
 
-        [HttpPost]
-        public async Task<dynamic> AllAvailableClients(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
-        {
-            var AllAvailableClientsList = new List<AdvanceDemandMaster>();
-            await Task.Run(() => _advanceRecommendationService.AllAvailableCSVendorApprovalService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out AllAvailableClientsList));
-            var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
-            return result;
-        }
+        //[HttpPost]
+        //public async Task<dynamic> AllAvailableClients(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
+        //{
+        //    var AllAvailableClientsList = new List<AdvanceDemandMaster>();
+        //    await Task.Run(() => _advanceRecommendationService.AllAvailableCSVendorApprovalService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out AllAvailableClientsList));
+        //    var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
+        //    return result;
+        //}
 
     }
 }

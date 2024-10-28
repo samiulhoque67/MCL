@@ -34,7 +34,7 @@
     }
 </style>
 
-<div class="box box-primary box-body" ng-controller="QuotationToClientCntrl">
+<div class="box box-primary box-body" ng-controller="WorkOrderInfoCntrl">
     <!-- Upper buttons -->
     <div class="box-header with-border">
         <i class="fa fa-user"></i>
@@ -561,7 +561,7 @@
 
 
 
-    app.controller('QuotationToClientCntrl', function ($scope, $http) {
+    app.controller('WorkOrderInfoCntrl', function ($scope, $http) {
 
         $scope.PagingInfo = {
             page: 1,
@@ -616,7 +616,7 @@
 
         $scope.SearchAvailableClients = function () {
             $scope.Client = "";
-            $http.post('/QuotationToClient/AllAvailableClients', {
+            $http.post('/WorkOrderInfo/AllAvailableClients', {
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
                 sortBy: $scope.PagingInfo.sortBy,
@@ -635,7 +635,7 @@
         };
 
         $scope.selectPageList = function () {
-            $http.post('/QuotationToClient/AllAvailableClients', {
+            $http.post('/WorkOrderInfo/AllAvailableClients', {
 
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
@@ -669,7 +669,7 @@
             $('#AvailableClients').modal('hide');
             $scope.loading = true;
 
-            $http.post('/QuotationToClient/AvailableClientDetailInfo', {
+            $http.post('/WorkOrderInfo/AvailableClientDetailInfo', {
                 ClientID: row.ClientID
             }).success(function (response) {
                 $scope.ClientDetails = response.ClientDetails;
@@ -692,7 +692,7 @@
         };
 
         $scope.GetClientReqDataInfo = function (ClientID) {
-            $http.post('/QuotationToClient/GetClientReqDataInfo', {
+            $http.post('/WorkOrderInfo/GetClientReqDataInfo', {
                 ClientID: ClientID
             }).success(function (response) {
                 $scope.GetClientReqDetails = response.GetClientReqDetails;
@@ -801,7 +801,7 @@
             console.log($scope.selectedRows);
             console.log($scope.getAllTermsDtl);
 
-            $http.post('/QuotationToClient/SaveQuotToClient', {
+            $http.post('/WorkOrderInfo/SaveQuotToClient', {
                 MasterData: [$scope.MasterData],
                 DetailData: $scope.selectedRows,
                 AllTermsDtl: $scope.getAllTermsDtl
