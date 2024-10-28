@@ -38,7 +38,7 @@
     <!-- Upper buttons -->
     <div class="box-header with-border">
         <i class="fa fa-user"></i>
-        <h3 class="box-title">Advace Demand</h3>
+        <h3 class="box-title">Advace Demand Approval</h3>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
@@ -58,10 +58,6 @@
 
                 <!-- PoNo -->
                 <div class="row">
-
-
-
-
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label for="ApprovedPOs">Available Approved PO :</label>
@@ -83,6 +79,38 @@
                 </div>
 
 
+                <div class="row">
+
+                    <!-- Vendor Name -->
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="VendorName">Vendor Name :</label>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="VendorName" name="VendorName" type="text" data-ng-model="Client.VendorName" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+
+                    <!-- Vendor Quotation No -->
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="VendorQuotationNo">Vendor Quotation No :</label>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="VendorQuotationNo" name="VendorQuotationNo" type="text" data-ng-model="Client.VendorQutnNo" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+                </div>
+
+
                 <!-- ClientName -->
                 <div class="row">
                     <div class="col-lg-2">
@@ -98,36 +126,6 @@
                     <div class="col-lg-1"></div>
                 </div>
 
-
-                <!-- ClientRequisition Person & Number -->
-                <div class="row">
-
-
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="ContactNumber">Contact Number :</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="ContactNumber" name="ContactNumber" type="text" data-ng-model="Client.ContactNumber" class="form-control" ng-readonly="true" />
-                        </div>
-                    </div>
-
-
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="ContactAddress">Contact Address :</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <input id="ContactAddress" name="ContactAddress" type="text" data-ng-model="Client.ContactAddress" class="form-control" ng-readonly="true" />
-                        </div>
-                    </div>
-                </div>
-
-
                 <!-- WO Number & WO Amount-->
                 <div class="row">
 
@@ -142,14 +140,14 @@
                             <input id="WONumber" name="WONumber" type="text" @*data-ng-model="Client.ContactNumber"*@ class="form-control" ng-readonly="true" />
                         </div>
                     </div>
-
+                    <div class="col-lg-1"></div>
 
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label for="WOAmount">WO Amount :</label>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-2">
                         <div class="form-group">
                             <input id="WOAmount" name="WOAmount" type="text" @*data-ng-model="Client.ContactAddress"*@ class="form-control" ng-readonly="true" />
                         </div>
@@ -176,11 +174,16 @@
                     <table st-table="AllAvailablePOsCollection" st-safe-src="AllAvailablePOsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr>
-                                <!-- Columns with sorting for VendorName, PoNo, PODate, VendorQutnNo, and QuotationDate -->
+                                <!-- Columns with sorting for VendorName, PoNo, PODate, AdvanceDemandAmount, and VendrAdvncDemnID -->
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('VendorName')">
                                     Vendor Name
                                     <span ng-show="PagingInfo.sortBy == 'VendorName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
                                     <span ng-show="PagingInfo.sortBy == 'VendorName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientName')">
+                                    Vendor Name
+                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
                                 </th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('PoNo')">
                                     Purchase Order No
@@ -192,16 +195,17 @@
                                     <span ng-show="PagingInfo.sortBy == 'PODate' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
                                     <span ng-show="PagingInfo.sortBy == 'PODate' && PagingInfo.reverse" class="fa fa-caret-up"></span>
                                 </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('VendorQutnNo')">
-                                    Quotation No
-                                    <span ng-show="PagingInfo.sortBy == 'VendorQutnNo' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'VendorQutnNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('POAmt')">
+                                    Purchase Order Amount
+                                    <span ng-show="PagingInfo.sortBy == 'POAmt' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'POAmt' && PagingInfo.reverse" class="fa fa-caret-up"></span>
                                 </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('QuotationDate')">
-                                    Quotation Date
-                                    <span ng-show="PagingInfo.sortBy == 'QuotationDate' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'QuotationDate' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('AdvanceDemandAmount')">
+                                    Recommended Demand Amount
+                                    <span ng-show="PagingInfo.sortBy == 'AdvanceDemandAmount' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'AdvanceDemandAmount' && PagingInfo.reverse" class="fa fa-caret-up"></span>
                                 </th>
+
                                 <th class="col-lg-1 col-md-1 col-sm-1">
                                     Action
                                 </th>
@@ -213,17 +217,12 @@
                                     <input ng-model="PagingInfo.search.VendorName" placeholder="Search Vendor Name" class="input-sm form-control" type="search" />
                                 </th>
                                 <th>
+                                    <input ng-model="PagingInfo.search.ClientName" placeholder="Search Client Name" class="input-sm form-control" type="search" />
+                                </th>
+                                <th>
                                     <input ng-model="PagingInfo.search.PoNo" placeholder="Search PO No" class="input-sm form-control" type="search" />
                                 </th>
-                                <th>
-                                    <input ng-model="PagingInfo.search.PODate" placeholder="Search PO Date" class="input-sm form-control" type="search" />
-                                </th>
-                                <th>
-                                    <input ng-model="PagingInfo.search.VendorQutnNo" placeholder="Search Quotation No" class="input-sm form-control" type="search" />
-                                </th>
-                                <th>
-                                    <input ng-model="PagingInfo.search.QuotationDate" placeholder="Search Quotation Date" class="input-sm form-control" type="search" />
-                                </th>
+
                                 <th></th>
                             </tr>
 
@@ -231,10 +230,11 @@
                         <tbody>
                             <tr ng-repeat="row in AllAvailablePOsList | orderBy:'IsBack':true">
                                 <td class="text-center">{{row.VendorName}}</td>
+                                <td class="text-center">{{row.ClientName}}</td>
                                 <td class="text-center">{{row.PoNo}}</td>
                                 <td class="text-center">{{row.PODate | date:'dd/MM/yyyy'}}</td>
-                                <td class="text-center">{{row.VendorQutnNo}}</td>
-                                <td class="text-center">{{row.QuotationDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">{{row.POAmt}}</td>
+                                <td class="text-center">{{row.AdvncDemnAmt}}</td>
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectAvailablePO(row)">Select</a>
                                 </td>
@@ -254,8 +254,9 @@
         </div>
     </div>
 
+
     <hr style="border: none; height: 3px; background-color: #8d8d8d; margin-top: 20px; margin-bottom: 20px; width: 100%; border-radius: 5px; " />
-    <label style="font-size: 14px; font-family: math;" class="box-title">Advance Demand Info</label>
+    <label style="font-size: 14px; font-family: math;" class="box-title">Advance Recommendation Info</label>
     <hr style="margin-top: 5px;" />
 
     <div class="box-body">
@@ -280,12 +281,12 @@
                     <div class="col-lg-1"></div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="AdvanceInvoiceNo">Advance Invoice No :</label>
+                            <label for="AdvanceInvoiceNo">Advance Recom No :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceInvoiceNo" name="AdvanceInvoiceNo" type="text" data-ng-model="AdvanceInformmation.AdvanceInvoiceNo" readonly class="form-control" />
+                            <input id="AdvanceInvoiceNo" name="AdvanceInvoiceNo" type="text" data-ng-model="AdvanceRecom.AdvanceInvoiceNo" readonly class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -294,12 +295,12 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="AdvanceDemandAmount">Advance Demand Amount :</label>
+                            <label for="AdvanceDemandAmount">Recom Demand Amount :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceDemandAmount" name="AdvanceDemandAmount" type="text" data-ng-model="AdvanceInformmation.AdvanceDemandAmount" class="form-control" />
+                            <input id="AdvanceDemandAmount" name="AdvanceDemandAmount" type="text" data-ng-model="AdvanceInformmation.AdvanceDemandAmount" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -307,13 +308,12 @@
 
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="AdvanceDemandDate">Advance Demand Date :</label>
+                            <label for="AdvanceDemandDate">Recom Demand Date :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceDemandDate" name="AdvanceDemandDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
-                                   ng-model="AdvanceInformmation.AdvanceDemandDate" style=" background-color:#ffffff; " />
+                            <input id="AdvanceDemandDate" name="AdvanceDemandDate" type="text" data-ng-model="AdvanceInformmation.AdvanceDemandDate" readonly class="form-control" />
 
                         </div>
                     </div>
@@ -329,8 +329,8 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ProposedAmount" name="ProposedAmount" type="text" data-ng-model="AdvanceInformmation.ProposedAmount"
-                                   class="form-control" ng-keydown="calculateRemainingAmount($event)" />
+                            <input id="ProposedAmount" name="ProposedAmount" type="text" readonly data-ng-model="AdvanceInformmation.ProposedAmount"
+                                   class="form-control" />
                         </div>
                     </div>
 
@@ -338,7 +338,7 @@
 
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="RemainingAmount">Remaining Amount :</label>
+                            <label for="RemainingAmount">Recom Remaining Amount :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
@@ -354,12 +354,125 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="Note">Note :</label>
+                            <label for="ProposedBy">Proposed By :</label>
                         </div>
                     </div>
                     <div class="col-lg-5">
                         <div class="form-group">
-                            <input id="Note" name="Note" type="text" data-ng-model="AdvanceInformmation.Note" class="form-control" />
+                            <input id="ProposedBy" name="ProposedBy" type="text" readonly data-ng-model="AdvanceInformmation.ProposedBy" class="form-control" />
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <hr style="border: none; height: 3px; background-color: #8d8d8d; margin-top: 20px; margin-bottom: 20px; width: 100%; border-radius: 5px; " />
+    <label style="font-size: 14px; font-family: math;" class="box-title">Advance Approval Info</label>
+    <hr style="margin-top: 5px;" />
+
+    <div class="box-body">
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+
+                <!--Recommendation Amount -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="RecommendationAmount">Recommendation Amount :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="RecommendationAmount" name="RecommendationAmount" type="text" data-ng-model="AdvanceRecom.RecommendationAmount"
+                                   class="form-control" ng-keydown="calculateRemainingAmount($event)" />
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="AdvanceAgainstClaim">Advance Against Claim :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="AdvanceAgainstClaim" readonly name="AdvanceAgainstClaim" type="text" data-ng-model="AdvanceRecom.ProposedAmount" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quotation Note & Billing Date -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="RemainingAmount">Remaining Amount :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="RemainingAmount" name="RemainingAmount" type="text" data-ng-model="AdvanceRecom.RemainingAmount" readonly
+                                   class="form-control" />
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="RecommendedDate">Recommended Date :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="RecommendedDate" name="RecommendedDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                                   ng-model="AdvanceRecom.RecommendedDate" style=" background-color:#ffffff; " />
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Quotation Note & Billing Date -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label>Operation:</label>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <select data-ng-model="AdvanceRecom.Operation" class="form-control">
+                            <option value="">-- None --</option>
+                            <option value="Rec">Recommended</option>
+                            <option value="Bck">Back</option>
+                            <option value="Pst">Postponed</option>
+                            <option value="Can">Cancel</option>
+                        </select>
+                    </div>
+
+
+
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="Note">Note :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="Note" name="Note" type="text" data-ng-model="AdvanceRecom.Note" class="form-control" />
                         </div>
                     </div>
 
@@ -385,6 +498,8 @@
         </div>
 
     </div>
+
+
     @*Save / Delete Modal*@
     <div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important ">
         <div class="modal-dialog" role="document">
@@ -426,7 +541,6 @@
 
 
     app.controller('AdvDemandVendorCtrl', function ($scope, $http) {
-
         $scope.PagingInfo = {
             page: 1,
             itemsPerPage: 10,
@@ -439,31 +553,48 @@
 
         $scope.Client = {
             ClientName: "",
-            ClientRequisitionNo: "",
-            ClientRequisitionDate: "",
-            ContactPerson: "",
-            ContactNumber: "",
-            ContactTIN: "",
-            ContactBIN: "",
-            ContactAddress: "",
+            VendorName: "",
+            VendorQutnNo: "",
+            QuotationDate: ""
         }
 
         $scope.AdvanceInformmation = {
             ClientID: "",
             VendorID: "",
             POAprvID: "",
-            VendorQutnID : "",
+            VendorQutnID: "",
             PurchaseOrderAmount: "",
-            AdvanceInvoiceNo: "",
+            VendorAdvancID: "",
             AdvanceDemandAmount: "",
             AdvanceDemandDate: "",
             ProposedAmount: "",
+            Operation: "",
             RemainingAmount: "",
-            Note: ""
+            Note: "",
+            UserFullName: ""
         }
 
+        $scope.AdvanceRecom = {
+            ClientID: "",
+            AdvanceInvoiceNo: "",
+            POAprvID: "",
+            VendorQutnID: "",
+            VendorAdvancID: "",
+            PurchaseOrderAmount: "",
+            RecommendationAmount: "",
+            AdvanceDemandAmount: "",
+            ProposedAmount: "",
+            AdvanceDemandDate: "",
+            RecommendedDate: "",
+            Operation: "",
+            RemainingAmount: "",
+            Note: "",
+            UserFullName: ""
+        }
+
+
         $('.DatePicker').datepicker({
-            format: "dd/mm/yyyy",
+            format: "yyyy-mm-dd",
             autoclose: true
         }).on('changeDate', function (ev) {
             var selectedDate = $(this).val(); // Get the selected date
@@ -472,7 +603,7 @@
             // Apply the selected date to AngularJS model
             var scope = angular.element($(this)).scope();
             scope.$apply(function () {
-                scope.AdvanceInformmation.AdvanceDemandDate = selectedDate;
+                scope.AdvanceRecom.RecommendedDate = selectedDate;
             });
         });
 
@@ -482,12 +613,12 @@
         const day = String(currentDate.getDate()).padStart(2, '0');
         const month = String(currentDate.getMonth() + 1).padStart(2, '0');
         const year = currentDate.getFullYear();
-        document.getElementById("AdvanceDemandDate").value = `${day}/${month}/${year}`;
+        document.getElementById("RecommendedDate").value = `${year}-${month}-${day}`;
 
 
         $scope.SearchAvailableClients = function () {
             $scope.Client = "";
-            $http.post('/AdvDemandVendor/AllAvailableClients', {
+            $http.post('/AdvanceApproval/AllAvailableClients', {
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
                 sortBy: $scope.PagingInfo.sortBy,
@@ -506,7 +637,7 @@
         };
 
         $scope.selectPageList = function () {
-            $http.post('/AdvDemandVendor/AllAvailableClients', {
+            $http.post('/AdvanceApproval/AllAvailableClients', {
 
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
@@ -541,23 +672,57 @@
             $scope.loading = true;
 
             $scope.PoNo = row.PoNo;
-            $scope.AdvanceInformmation.PurchaseOrderAmount = row.POAprvAmnt;
+            /*  $scope.AdvanceInformmation.PurchaseOrderAmount = row.POAprvAmnt;*/
             $scope.AdvanceInformmation.ClientID = row.ClientID;
             $scope.AdvanceInformmation.VendorID = row.VendorID;
             $scope.AdvanceInformmation.POAprvID = row.POAprvID;
             $scope.AdvanceInformmation.VendorQutnID = row.VendorQutnID;
 
-            $http.post('/QuotationToClient/AvailableClientDetailInfo', {
-                ClientID: row.ClientID
+            $http.post('/AdvanceApproval/AvailableClientDetailInfo', {
+                ClientID: row.ClientID,
+                VendrAdvncDemnID: row.VendrAdvncDemnID,
+
             }).success(function (response) {
                 $scope.ClientDetails = response.ClientDetails;
 
+                /*  $scope.AdvanceInformmation.PurchaseOrderAmount = $scope.ClientDetails[0].POAprvAmnt;*/
                 $scope.Client = {
                     ClientName: $scope.ClientDetails[0].ClientName,
-                    ContactNumber: $scope.ClientDetails[0].ContactNumber,
-                    ContactAddress: $scope.ClientDetails[0].Address
+                    VendorID: $scope.ClientDetails[0].VendorID,
+                    VendorQutnNo: $scope.ClientDetails[0].VendorQutnNo,
+                    VendorName: $scope.ClientDetails[0].VendorName
                 };
-            /*    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID);*/
+
+                $scope.AdvanceInformmation = {
+                    ClientID: $scope.ClientDetails[0].ClientID,
+                    VendorID: $scope.ClientDetails[0].VendorID,
+                    POAprvID: $scope.ClientDetails[0].POAprvID,
+                    AdvanceInvoiceNo: $scope.ClientDetails[0].VendrAdvncDemnID,
+                    VendorQutnID: $scope.ClientDetails[0].VendorQutnID,
+                    PurchaseOrderAmount: $scope.ClientDetails[0].POAprvAmnt,
+                    AdvanceDemandAmount: $scope.ClientDetails[0].AdvncDemnAmt,
+                    ProposedAmount: $scope.ClientDetails[0].ProposedAmt,
+                    RemainingAmount: $scope.ClientDetails[0].RemainingAmt,
+                    AdvanceDemandDate: $scope.ClientDetails[0].AdvncDemnDate,
+                    POAprvID: $scope.ClientDetails[0].POAprvID,
+                    ProposedBy: $scope.ClientDetails[0].UserFullName,
+
+                };
+
+                $scope.AdvanceRecom = {
+                    ClientID: $scope.ClientDetails[0].ClientID,
+                    AdvanceInvoiceNo: $scope.ClientDetails[0].VendrAdvncDemnID,
+                    ProposedAmount: $scope.ClientDetails[0].ProposedAmt,
+                    PurchaseOrderAmount: $scope.ClientDetails[0].POAprvAmnt,
+                    /* AdvanceDemandAmount: $scope.ClientDetails[0].AdvncDemnAmt,
+                     ProposedAmount: $scope.ClientDetails[0].ProposedAmt,
+                     RemainingAmount: $scope.ClientDetails[0].RemainingAmt,
+                     AdvanceDemandDate: $scope.ClientDetails[0].AdvncDemnDate,
+                     POAprvID: $scope.ClientDetails[0].POAprvID,
+                     ProposedBy: $scope.ClientDetails[0].UserFullName,*/
+
+                };
+
                 $scope.loading = false;
             }).error(function () {
                 $scope.loading = false;
@@ -573,14 +738,14 @@
 
 
         function performCalculation() {
-            if ($scope.AdvanceInformmation.PurchaseOrderAmount && $scope.AdvanceInformmation.ProposedAmount) {
-                $scope.AdvanceInformmation.RemainingAmount = $scope.AdvanceInformmation.PurchaseOrderAmount - $scope.AdvanceInformmation.ProposedAmount;
+            if ($scope.AdvanceRecom.PurchaseOrderAmount && $scope.AdvanceRecom.RecommendationAmount) {
+                $scope.AdvanceRecom.RemainingAmount = $scope.AdvanceRecom.PurchaseOrderAmount - $scope.AdvanceRecom.RecommendationAmount;
             } else {
-                $scope.AdvanceInformmation.RemainingAmount = 0;
+                $scope.AdvanceRecom.RemainingAmount = 0;
             }
         }
 
-        $scope.$watchGroup(['AdvanceInformmation.PurchaseOrderAmount', 'AdvanceInformmation.ProposedAmount'], function (newValues, oldValues) {
+        $scope.$watchGroup(['AdvanceRecom.PurchaseOrderAmount', 'AdvanceRecom.RecommendationAmount'], function (newValues, oldValues) {
             performCalculation();
         });
 
@@ -592,21 +757,14 @@
         $scope.buttonChecked = false;
 
 
-        $scope.checkEnter = function (event, row) {
-            if (event.keyCode === 13) {
-                row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
-                row.givenQutnAmt = row.givenQutnPrice * row.QutnQnty;
-                row.givenTolAmt = parseFloat(row.givenQutnAmt) + (parseFloat(row.VatAmt) || 0);
-            }
-        };
 
         $scope.openConfirmModal = function () {
-            if (!$scope.AdvanceInformmation.AdvanceDemandDate || $scope.AdvanceInformmation.AdvanceDemandDate.trim() === '') {
-                toastr.error('Please enter an Advance Demand Date');
-            } else if (!$scope.AdvanceInformmation.AdvanceDemandAmount || $scope.AdvanceInformmation.AdvanceDemandAmount.trim() === '') {
+            if (!$scope.AdvanceRecom.RecommendedDate || $scope.AdvanceRecom.RecommendedDate.trim() === '') {
+                toastr.error('Please enter an Recommended Date');
+            } else if (!$scope.AdvanceRecom.RecommendationAmount || $scope.AdvanceRecom.RecommendationAmount.trim() === '') {
                 toastr.error('Please enter an Advance Demand Amount');
-            } else if (!$scope.AdvanceInformmation.ProposedAmount || $scope.AdvanceInformmation.ProposedAmount.trim() === '') {
-                toastr.error('Please enter a Proposed Amount');
+            } else if (!$scope.AdvanceRecom.Operation || $scope.AdvanceRecom.Operation.trim() === '') {
+                toastr.error('Please select Operatiomn');
             } else {
                 // $('#ConfirmModal').modal('show');
                 $scope.SaveQuotToClient();
@@ -615,10 +773,10 @@
 
         $scope.SaveQuotToClient = function () {
 
-            console.log($scope.AdvanceInformmation);
+            console.log($scope.AdvanceRecom);
 
-            $http.post('/AdvDemandVendor/SaveQuotToClient', {
-                MasterData: [$scope.AdvanceInformmation]
+            $http.post('/AdvanceApproval/SaveQuotToClient', {
+                MasterData: [$scope.AdvanceRecom]
 
             }).success(function (response) {
 
@@ -720,9 +878,7 @@
             }
         };
     }
-  )
+    )
 
 
 </script>
-
-

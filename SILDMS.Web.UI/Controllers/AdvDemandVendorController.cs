@@ -47,6 +47,15 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
+        public async Task<dynamic> AvailableClientDetailInfo(string ClientID, string POAprvID)
+        {
+            var ClientDetails = new List<POinfo>();  // Renamed to ClientDetails
+            await Task.Run(() => _advDemandVendorService.AvailableClientDetailInfoService(ClientID, POAprvID, out ClientDetails));
+            var result = Json(new { ClientDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
+            return result;
+        }
+
+        [HttpPost]
         public async Task<ActionResult> SaveQuotToClient(List<AdvanceDemandMaster> MasterData)
         {
             if (MasterData == null || !MasterData.Any())

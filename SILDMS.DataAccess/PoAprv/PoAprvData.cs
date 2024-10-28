@@ -40,6 +40,7 @@ namespace SILDMS.DataAccess.PoAprv
                         ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         VendorID = reader.GetString("VendorID"),
+                        VendorQutnID = reader.GetString("VendorQutnID"),
                    
                         VendorName = reader.GetString("VendorName"),
 

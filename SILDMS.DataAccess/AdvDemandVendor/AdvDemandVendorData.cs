@@ -69,6 +69,50 @@ namespace SILDMS.DataAccess.AdvDemandVendor
             return AllAvailableClientsList;
         }
 
+        public List<POinfo> AvailableClientDetailInfoDataService(string ClientID, string POAprvID, out string _errorNumber)
+        {
+            _errorNumber = string.Empty;
+            var ClientDetails = new List<POinfo>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailablePOforDemand"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@ClientID", DbType.String, ClientID);
+                db.AddInParameter(dbCommandWrapper, "@POAprvID", DbType.String, POAprvID);
+                db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 10);
+                dbCommandWrapper.CommandTimeout = 300;
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (!db.GetParameterValue(dbCommandWrapper, _spStatusParam).IsNullOrZero())
+                {
+                    _errorNumber = db.GetParameterValue(dbCommandWrapper, _spStatusParam).PrefixErrorCode();
+                }
+                else
+                {
+                    if (ds.Tables[0].Rows.Count <= 0) return ClientDetails;
+                    var dt1 = ds.Tables[0];
+                    ClientDetails = dt1.AsEnumerable().Select(reader => new POinfo
+                    {
+                        ClientID = reader.GetString("ClientID"),
+                        ClientName = reader.GetString("ClientName"),
+                        VendorName = reader.GetString("VendorName"),
+                        VendorQutnNo = reader.GetString("VendorQutnNo"),
+                        QuotationDate = reader.GetString("QuotationDate"),
+                        PoNo = reader.GetString("PoNo"),
+                        POAprvID = reader.GetString("POAprvID"),
+                        POAprvAmnt = reader.GetString("POAprvAmnt"),
+                        VendorQutnID = reader.GetString("VendorQutnID"),
+                        VendorID = reader.GetString("VendorID")
+                    }).ToList();
+
+                }
+            }
+
+            return ClientDetails;
+        }
+
+
         public string SaveQuotToClientServiceData(string UserID, List<AdvanceDemandMaster> MasterData, out string errorNumber)
         {
             errorNumber = string.Empty;
@@ -88,6 +132,9 @@ namespace SILDMS.DataAccess.AdvDemandVendor
             masterDataTable.Columns.Add("ProposedAmount", typeof(string));
             masterDataTable.Columns.Add("RemainingAmount", typeof(string));
             masterDataTable.Columns.Add("Note", typeof(string));
+            masterDataTable.Columns.Add("RecomAmount", typeof(string));
+            masterDataTable.Columns.Add("RecommendedDate", typeof(string));
+            masterDataTable.Columns.Add("Operation", typeof(string));
 
             if (MasterData != null)
             {
@@ -105,12 +152,15 @@ namespace SILDMS.DataAccess.AdvDemandVendor
                     masterRow["ProposedAmount"] = string.IsNullOrEmpty(masterItem.ProposedAmount) ? DBNull.Value : (object)masterItem.ProposedAmount;
                     masterRow["RemainingAmount"] = string.IsNullOrEmpty(masterItem.RemainingAmount) ? DBNull.Value : (object)masterItem.RemainingAmount;
                     masterRow["Note"] = string.IsNullOrEmpty(masterItem.Note) ? DBNull.Value : (object)masterItem.Note;
+                    masterRow["RecomAmount"] = string.IsNullOrEmpty(masterItem.RecommendationAmount) ? DBNull.Value : (object)masterItem.RecommendationAmount;
+                    masterRow["RecommendedDate"] = string.IsNullOrEmpty(masterItem.RecommendedDate) ? DBNull.Value : (object)masterItem.RecommendedDate;
+                    masterRow["Operation"] = string.IsNullOrEmpty(masterItem.Operation) ? DBNull.Value : (object)masterItem.Operation;
 
                     masterDataTable.Rows.Add(masterRow);
                 }
             }
 
-           
+
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveAdvanceDemand"))

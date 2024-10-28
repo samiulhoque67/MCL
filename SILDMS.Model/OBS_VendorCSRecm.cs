@@ -14,6 +14,7 @@ namespace SILDMS.Model
         public string ServiceCategoryID { get; set; }
         public string POPreparationID { get; set; }
   
+ 
         public string ClientReqID { get; set; }
         public string ClientID { get; set; }
         [Required]
@@ -49,6 +50,7 @@ namespace SILDMS.Model
         public string Status { get; set; }
         public string VendorCSAprvID { get; set; }
      
+       
         public double RecommendedAmount { get; set; }
         public object PORecmID { get; set; }
     }
