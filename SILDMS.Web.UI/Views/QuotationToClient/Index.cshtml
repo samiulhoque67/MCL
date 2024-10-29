@@ -616,7 +616,7 @@
 
         $scope.SearchAvailableClients = function () {
             $scope.Client = "";
-            $http.post('/WorkOrderInfo/AllAvailableClients', {
+            $http.post('/QuotationToClient/AllAvailableClients', {
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
                 sortBy: $scope.PagingInfo.sortBy,
@@ -635,7 +635,7 @@
         };
 
         $scope.selectPageList = function () {
-            $http.post('/WorkOrderInfo/AllAvailableClients', {
+            $http.post('/QuotationToClient/AllAvailableClients', {
 
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
@@ -669,7 +669,7 @@
             $('#AvailableClients').modal('hide');
             $scope.loading = true;
 
-            $http.post('/WorkOrderInfo/AvailableClientDetailInfo', {
+            $http.post('/QuotationToClient/AvailableClientDetailInfo', {
                 ClientID: row.ClientID
             }).success(function (response) {
                 $scope.ClientDetails = response.ClientDetails;
@@ -692,7 +692,7 @@
         };
 
         $scope.GetClientReqDataInfo = function (ClientID) {
-            $http.post('/WorkOrderInfo/GetClientReqDataInfo', {
+            $http.post('/QuotationToClient/GetClientReqDataInfo', {
                 ClientID: ClientID
             }).success(function (response) {
                 $scope.GetClientReqDetails = response.GetClientReqDetails;
@@ -801,7 +801,7 @@
             console.log($scope.selectedRows);
             console.log($scope.getAllTermsDtl);
 
-            $http.post('/WorkOrderInfo/SaveQuotToClient', {
+            $http.post('/QuotationToClient/SaveQuotToClient', {
                 MasterData: [$scope.MasterData],
                 DetailData: $scope.selectedRows,
                 AllTermsDtl: $scope.getAllTermsDtl
