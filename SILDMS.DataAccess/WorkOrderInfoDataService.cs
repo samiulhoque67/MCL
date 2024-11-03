@@ -313,8 +313,6 @@ namespace SILDMS.DataAccess
             return WOInfoList;
         }
 
-
-
         public List<OBS_WOInfoItem> GetWOInfoSearchItemList(string WOInfoID)
         {
             string errorNumber = string.Empty;

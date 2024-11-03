@@ -287,7 +287,7 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IVendorCSAprvService>().To<VendorCSAprvService>();
             kernel.Bind<IVendorCSAprvDataService>().To<VendorCSAprvDataService>();
-            kernel.Bind<IVendorCSInfoDataService>().To<VendorCSInfoDataService>();
+
 
             kernel.Bind<IPOCreationService>().To<POCreationService>();
             kernel.Bind<IPOCreationData>().To<POCreationData>();
@@ -299,7 +299,7 @@ namespace SILDMS.InfraStructure
             kernel.Bind<IPoAprvService>().To<PoAprvService>();
             kernel.Bind<IPoAprvData>().To<PoAprvData>();
 
-            kernel.Bind<IVendorCSInfoDataService>().To<VendorCSInfoDataService>();
+
 
             kernel.Bind<IQuotationToClientService>().To<QuotationToClientService>();
             kernel.Bind<IQuotationToClientDataService>().To<QuotationToClientDataService>();
@@ -336,8 +336,8 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IWorkOrderInfoService>().To<WorkOrderInfoService>();
             kernel.Bind<IWorkOrderInfoDataService>().To<WorkOrderInfoDataService>();
-            kernel.Bind<IAprvFinalBillRcvdData>().To<AprvFinalBillRcvdData>(); 
-            
+            kernel.Bind<IAprvFinalBillRcvdData>().To<AprvFinalBillRcvdData>();
+
             kernel.Bind<IClientFinalBillPrepareService>().To<ClientFinalBillPrepareService>();
             kernel.Bind<IClientFinalBillPrepareData>().To<ClientFinalBillPrepareData>();
 
@@ -346,4 +346,4 @@ namespace SILDMS.InfraStructure
 
         }
     }
-} 
+}

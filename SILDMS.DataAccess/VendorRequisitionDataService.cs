@@ -261,6 +261,39 @@ namespace SILDMS.DataAccess
             return VendorReqList;
         }
 
+        public List<OBS_VendorInfo> GetServiceCategoryWiseVendorList(string ServiceCategoryID)
+        {
+            string errorNumber = string.Empty;
+            List<OBS_VendorInfo> VendorReqList = new List<OBS_VendorInfo>();
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorReqSearchList"))
+            {
+                // Execute SP. 
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt1 = ds.Tables[0];
+                    VendorReqList = dt1.AsEnumerable().Select(reader => new OBS_VendorInfo
+                    {
+                        VendorID = reader.GetString("VendorID"),
+                        VendorCode = reader.GetString("VendorCode"),
+                        VendorName = reader.GetString("VendorName"),
+                        VendorCategoryID = reader.GetString("ServicesCategoryID"),
+                        VendorCategoryName = reader.GetString("ServicesCategoryName"),
+                        VendorTinNo = reader.GetString("VendorTinNo"),
+                        VendorBinNo = reader.GetString("VendorBinNo"),
+                        ContactPerson = reader.GetString("ContactPerson"),
+                        ContactNumber = reader.GetString("ContactNumber"),
+                        Address = reader.GetString("Address"),
+                        Email = reader.GetString("Email"),
+                        Status = reader.GetString("Status")
+                    }).ToList();
+                }
+            }
+            return VendorReqList;
+        }
+
         public List<OBS_VendorReqItem> GetVendorReqItemList(string VendorReqID)
         {
             string errorNumber = string.Empty;

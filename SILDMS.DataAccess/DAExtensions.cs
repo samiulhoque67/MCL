@@ -308,7 +308,7 @@ namespace SILDMS.DataAccess
         // returns a string value, checking for nulls
         public static string GetString(this DataRow row, string fieldName)
         {
-            if (!row.IsNull(fieldName))
+                if (!row.IsNull(fieldName))
                 return row[fieldName].ToString();
             else
                 return string.Empty;
