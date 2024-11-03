@@ -336,8 +336,7 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IWorkOrderInfoService>().To<WorkOrderInfoService>();
             kernel.Bind<IWorkOrderInfoDataService>().To<WorkOrderInfoDataService>();
-            kernel.Bind<IAprvFinalBillRcvdData>().To<AprvFinalBillRcvdData>();
-
+            
             kernel.Bind<IClientFinalBillPrepareService>().To<ClientFinalBillPrepareService>();
             kernel.Bind<IClientFinalBillPrepareData>().To<ClientFinalBillPrepareData>();
 

@@ -95,7 +95,7 @@ namespace SILDMS.DataAccess.QuotationApproval
                         ClientQutnRecmID = reader.GetString("ClientQutnRecmID"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
-                        TermsID = reader.GetString("TermsID"),
+                        //TermsID = reader.GetString("TermsID"),
                         ServiceItemCode = reader.GetString("ServiceItemCode"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
                         ServiceCategoryID = reader.GetString("ServiceCategoryID"),
