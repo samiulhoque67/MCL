@@ -81,10 +81,10 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> GetServiceCategoryWiseVendorList(string ServiceCategoryID)
+        public async Task<dynamic> GetVendorWiseItemList(string ServiceItemID)
         {
             var VendorInfoSearchList = new List<OBS_VendorInfo>();
-            await Task.Run(() => _clientInfoService.GetServiceCategoryWiseVendorList(ServiceCategoryID,out VendorInfoSearchList));
+            await Task.Run(() => _clientInfoService.GetVendorWiseItemList(ServiceItemID, out VendorInfoSearchList));
             var result = Json(new { VendorInfoSearchList, msg = "VendorInfoSearchList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
