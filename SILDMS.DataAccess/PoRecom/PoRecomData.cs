@@ -38,7 +38,7 @@ namespace SILDMS.DataAccess.PoRecom
                         ClientName = reader.GetString("ClientName"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
-                        RequisitionDate = DateTime.Parse(reader.GetString("PODate")).ToString("dd/MM/yyyy"),
+                        RequisitionDate = reader.GetString("PODate"),
                         VendorID = reader.GetString("VendorID"),
                         VendorQutnID = reader.GetString("VendorQutnID"),
                         VendorName = reader.GetString("VendorName"),
@@ -137,7 +137,7 @@ namespace SILDMS.DataAccess.PoRecom
                         VendorName = reader.GetString("VendorName"),
                         POAmt = reader.GetString("POAmt"),
                         POCreatedBy = reader.GetString("POCreatedBy"),
-                        PODate = DateTime.Parse(reader.GetString("PODate")).ToString("dd/MM/yyyy"),
+                        PODate = (reader.GetString("PODate")),
                         PONo = reader.GetString("PONo"),
                         Remarks = reader.GetString("Remarks"),
 
