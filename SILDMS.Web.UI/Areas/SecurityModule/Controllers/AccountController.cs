@@ -73,9 +73,13 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
         public async Task<string> SetAuthorization(string user, string password, string isRemeber)
         {
             List<GetUserAccessPermission_Result> permissionMenu = null;
+            string roletitle = string.Empty;
+            string returnUrl = string.Empty;
+
             //string returnUrl = ViewBag.ReturnUrl == null ? "/CBPSModule/DashboardV2" : ViewBag.ReturnUrl;
+            //string returnUrl = ViewBag.ReturnUrl == null ? "/DashboardMCL/Index" : ViewBag.ReturnUrl;
             //string returnUrl = ViewBag.ReturnUrl == null ? "/ActivityCategory/Index" : ViewBag.ReturnUrl;
-            string returnUrl = ViewBag.ReturnUrl == null ? "/WorkOrderInfo/Index" : ViewBag.ReturnUrl;
+            //string returnUrl = ViewBag.ReturnUrl == null ? "/WorkOrderInfo/Index" : ViewBag.ReturnUrl;
 
             if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(password))
             {
@@ -112,6 +116,18 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
                     MenuOrder =temp.MenuOrder,
                     PermissionClass=temp.PermissionClass
                 }).ToList();
+
+                roletitle = (from temp in permissionMenu where temp.RoleTitle != "" select temp.RoleTitle).FirstOrDefault();
+                if (roletitle == "Max Role")
+                {
+                    returnUrl = ViewBag.ReturnUrl == null ? "/DashboardMCL/Index" : ViewBag.ReturnUrl;
+                }
+                
+                /*else
+                {
+                    returnUrl = ViewBag.ReturnUrl == null ? "/CBPSModule/DashboardV2" : ViewBag.ReturnUrl;
+                }*/
+
                 HttpContext.GetOwinContext().Authentication.SignIn(
                 new AuthenticationProperties { IsPersistent = false }, ident);
                 
