@@ -25,8 +25,8 @@ namespace SILDMS.DataAccess
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetServicesCategory"))
             {
                 // Set parameters 
-                db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.VarChar, userID);
-                db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.VarChar, "");
+                //db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.VarChar, userID);
+                //db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.VarChar, "");
                 db.AddOutParameter(dbCommandWrapper, spStatusParam, DbType.String, 10);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -45,12 +45,13 @@ namespace SILDMS.DataAccess
                         {
                             ServicesCategoryID = reader.GetString("ServicesCategoryID"),
                             ServicesCategoryCode = reader.GetString("ServicesCategoryCode"),
-                            ServicesCategoryName = reader.GetString("ServicesCategoryName"),
-                            SetOn = reader.GetString("SetOn"),
-                            SetBy = reader.GetString("SetBy"),
-                            ModifiedOn = reader.GetString("ModifiedOn"),
-                            ModifiedBy = reader.GetString("ModifiedBy"),
-                            Status = reader.GetInt32("Status")
+                            ServicesCategoryName = reader.GetString("ServicesCategoryName")
+                            //,
+                            //SetOn = reader.GetString("SetOn"),
+                            //SetBy = reader.GetString("SetBy"),
+                            //ModifiedOn = reader.GetString("ModifiedOn"),
+                            //ModifiedBy = reader.GetString("ModifiedBy"),
+                            //Status = reader.GetInt32("Status")
                         }).ToList();
                     }
                 }
@@ -254,6 +255,40 @@ namespace SILDMS.DataAccess
                         SubmissionDate = reader.GetString("SubmissionDate"),
                         LastDateofQuotation = reader.GetString("LastDateofQuotation"),
                         Remarks = reader.GetString("Remarks"),
+                        Status = reader.GetString("Status")
+                    }).ToList();
+                }
+            }
+            return VendorReqList;
+        }
+
+        public List<OBS_VendorInfo> GetVendorWiseItemList(string ServiceCategoryID)
+        {
+            string errorNumber = string.Empty;
+            List<OBS_VendorInfo> VendorReqList = new List<OBS_VendorInfo>();
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("GetVendorWiseItemList"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.VarChar, ServiceCategoryID);
+                // Execute SP. 
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt1 = ds.Tables[0];
+                    VendorReqList = dt1.AsEnumerable().Select(reader => new OBS_VendorInfo
+                    {
+                        VendorID = reader.GetString("VendorID"),
+                        VendorWiseItemID = reader.GetString("VendorWiseItemID"),
+                        VendorName = reader.GetString("VendorName"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        //VendorCategoryName = reader.GetString("ServicesCategoryName"),
+                        //VendorTinNo = reader.GetString("VendorTinNo"),
+                        //VendorBinNo = reader.GetString("VendorBinNo"),
+                        //ContactPerson = reader.GetString("ContactPerson"),
+                        //ContactNumber = reader.GetString("ContactNumber"),
+                        //Address = reader.GetString("Address"),
+                        //Email = reader.GetString("Email"),
                         Status = reader.GetString("Status")
                     }).ToList();
                 }

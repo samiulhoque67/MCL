@@ -25,8 +25,8 @@ namespace SILDMS.DataAccess
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetServicesCategory"))
             {
                 // Set parameters 
-                db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.VarChar, userID);
-                db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.VarChar, "");
+                //db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.VarChar, userID);
+                //db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.VarChar, "");
                 db.AddOutParameter(dbCommandWrapper, spStatusParam, DbType.String, 10);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -45,12 +45,13 @@ namespace SILDMS.DataAccess
                         {
                             ServicesCategoryID = reader.GetString("ServicesCategoryID"),
                             ServicesCategoryCode = reader.GetString("ServicesCategoryCode"),
-                            ServicesCategoryName = reader.GetString("ServicesCategoryName"),
-                            SetOn = reader.GetString("SetOn"),
-                            SetBy = reader.GetString("SetBy"),
-                            ModifiedOn = reader.GetString("ModifiedOn"),
-                            ModifiedBy = reader.GetString("ModifiedBy"),
-                            Status = reader.GetInt32("Status")
+                            ServicesCategoryName = reader.GetString("ServicesCategoryName")
+                            //,
+                            //SetOn = reader.GetString("SetOn"),
+                            //SetBy = reader.GetString("SetBy"),
+                            //ModifiedOn = reader.GetString("ModifiedOn"),
+                            //ModifiedBy = reader.GetString("ModifiedBy"),
+                            //Status = reader.GetInt32("Status")
                         }).ToList();
                     }
                 }

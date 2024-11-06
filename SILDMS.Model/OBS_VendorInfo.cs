@@ -16,6 +16,9 @@ namespace SILDMS.Model
         public string VendorName { get; set; }
         public string VendorCategoryID { get; set; }
         public string VendorCategoryName { get; set; }
+        public string VendorWiseItemID { get; set; }
+        public string ServiceItemID { get; set; }
+        public string ServiceItemName { get; set; }
         public string VendorTinNo { get; set; }
         public string VendorBinNo { get; set; }
         public string ContactPerson { get; set; }

@@ -57,6 +57,13 @@ namespace SILDMS.Service
             VendorReqSearchList = clientInfoDataService.GetVendorReqSearchList();
             return ValidationResult.Success;
         }
+
+        public ValidationResult GetVendorWiseItemList(string ServiceCategoryID, out List<OBS_VendorInfo> VendorReqSearchList)
+        {
+            VendorReqSearchList = clientInfoDataService.GetVendorWiseItemList(ServiceCategoryID);
+            return ValidationResult.Success;
+        }
+
         public ValidationResult GetVendorReqItemList(string VendorReqID, out List<OBS_VendorReqItem> VendorReqItemList)
         {
             VendorReqItemList = clientInfoDataService.GetVendorReqItemList(VendorReqID);
