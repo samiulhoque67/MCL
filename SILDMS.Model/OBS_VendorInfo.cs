@@ -33,8 +33,6 @@ namespace SILDMS.Model
         public string Action { get; set; }
         [Required]
         public string Status { get; set; }
-        public string ServiceItemName { get; set; }
-        public string ServiceItemID { get; set; }
         public string TotalPages { get; set; }
     }
 }

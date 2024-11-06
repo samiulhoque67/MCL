@@ -21,7 +21,7 @@ namespace SILDMS.DataAccess
         private readonly string spStatusParam = "@p_Status";
 
         public string SaveVendorwithMatDataService(string UserID, string VendorCode, string VendorName, string ContactPerson, string ContactNumber, string Email,
-            string VendorTinNo, string VendorBinNo, string VAddress, List<OBS_ServicesCategory> ServiceItemInfo, int VendorStatus, out string errorNumber)
+            string VendorTinNo, string VendorBinNo, string VAddress, List<OBS_ServicesCategory> ServiceItemInfo, int VendorStatus, string TempVendorID, out string errorNumber)
         {
             errorNumber = string.Empty;
             string message = "";
@@ -62,6 +62,7 @@ namespace SILDMS.DataAccess
 
                 db.AddInParameter(dbCommandWrapper, "@OBS_QtC_ServiceItemInfolType", SqlDbType.Structured, detailDataTable);
                 db.AddInParameter(dbCommandWrapper, "@VendorStatus", SqlDbType.Int, VendorStatus);
+                db.AddInParameter(dbCommandWrapper, "@TempVendorID", SqlDbType.VarChar, TempVendorID);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 
