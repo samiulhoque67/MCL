@@ -191,7 +191,7 @@ namespace SILDMS.DataAccess
             return VendorCSInfoList;
         }
 
-        public List<OBS_VendorCSRecmItem> OBS_GetVendorCSQuotationItem(string VendorID)
+        public List<OBS_VendorCSRecmItem> OBS_GetVendorCSQuotationItem(string VendorID, string ClientID)
         {
             string errorNumber = string.Empty;
             List<OBS_VendorCSRecmItem> VendorCSInfoItemList = new List<OBS_VendorCSRecmItem>();
@@ -200,6 +200,7 @@ namespace SILDMS.DataAccess
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSQuotationItem"))
             {
                 db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
+                db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.VarChar, ClientID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)

@@ -235,6 +235,49 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [SILAuthorize]
+        public ActionResult VendorCSApprevedReport()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> VendorCSApprevedReport(ReportModel model)
+        {
+            DataTable dt = new DataTable();
+
+            await Task.Run(() => _reportService.VendorCSApprevedReport(model.UserRptID, model.BillReceiveFromDate, model.Status, "", UserID, out dt));
+
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports");
+            ReportPath = ReportPath + "/rptVendorCSInfo.rpt";
+            reportDocument.Load(ReportPath);
+            reportDocument.SetDataSource(dt);
+            reportDocument.Refresh();
+            //reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
+            //reportDocument.SetParameterValue("rptName", "User Details");
+            //reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
+
+
+            string reportName = "VendorCSApprevedReport";
+            reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            //if (model.ButtonType == "Preview")
+            //    reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            //else
+            //{
+            //    if (model.ReportType == "PDF")
+            //        reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, true, reportName);
+            //    else if (model.ReportType == "EXCEL")
+            //        reportDocument.ExportToHttpResponse(ExportFormatType.ExcelRecord, System.Web.HttpContext.Current.Response, true, reportName);
+            //    else
+            //        reportDocument.ExportToHttpResponse(ExportFormatType.EditableRTF, System.Web.HttpContext.Current.Response, true, reportName);
+            //}
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
+
+        [SILAuthorize]
         public ActionResult UserDetails()
         {
             return View();

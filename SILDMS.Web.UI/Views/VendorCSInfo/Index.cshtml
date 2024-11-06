@@ -482,7 +482,8 @@
         };
 
         $scope.ItemSelect = function (row) {
-            $http.post("/VendorCSInfo/GetVendorCSQuotationItem?VendorID=" + row.VendorID)
+            //$http.post("/VendorCSInfo/GetVendorCSQuotationItem?VendorID=" + row.VendorID)
+            $http.post('/VendorCSInfo/GetVendorCSQuotationItem', { VendorID: row.VendorID, ClientID: $scope.VendorCSInfo.ClientID })
                 .success(function (response) {
                     $scope.VenCSItemList = response.VenCSItemList;
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);

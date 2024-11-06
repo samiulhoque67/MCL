@@ -14,7 +14,7 @@ namespace SILDMS.DataAccessInterface
         List<OBS_VendorAndAddressInfo> GetVendorInfoList();
         List<OBS_ClientReq> GetVendorCSClientInfo(string ServiceItemCategoryID);
         List<OBS_VendorCSRecm> OBS_GetVendorCSVendorsUsingClient(string ClientID);
-        List<OBS_VendorCSRecmItem> OBS_GetVendorCSQuotationItem(string VendorID);
+        List<OBS_VendorCSRecmItem> OBS_GetVendorCSQuotationItem(string VendorID, string ClientID);
         List<OBS_VendorCSRecmTerms> GetVendorCSInfoTermList(string VendorCSInfoID);
         string SaveVendorCSInfo(OBS_VendorCSRecm clientReq, List<OBS_VendorCSRecmItem> clientReqItem, List<OBS_VendorCSRecmTerms> clientReqTerm, List<OBS_VendorCSRecmVendors> vendorReqItemWise);
        

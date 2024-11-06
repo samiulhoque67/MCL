@@ -103,6 +103,7 @@ namespace SILDMS.DataAccess
             dtReqItem.Columns.Add("DeliveryLocation");
             dtReqItem.Columns.Add("DeliveryDate");
             dtReqItem.Columns.Add("DeliveryMode");
+            dtReqItem.Columns.Add("ReqType");
             dtReqItem.Columns.Add("ReqQnty");
             dtReqItem.Columns.Add("ReqUnit");
             foreach (var item in clientReqItem)
@@ -116,8 +117,9 @@ namespace SILDMS.DataAccess
                 objDataRow[4] = item.DeliveryLocation;
                 objDataRow[5] = item.DeliveryDate;
                 objDataRow[6] = item.DeliveryMode;
-                objDataRow[7] = item.ReqQnty;
-                objDataRow[8] = item.ReqUnit;
+                objDataRow[7] = item.ReqType;
+                objDataRow[8] = item.ReqQnty;
+                objDataRow[9] = item.ReqUnit;
                 dtReqItem.Rows.Add(objDataRow);
             }
 

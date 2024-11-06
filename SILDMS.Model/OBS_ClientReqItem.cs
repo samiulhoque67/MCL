@@ -22,6 +22,7 @@ namespace SILDMS.Model
         [Required]
         public string DeliveryDate { get; set; }
         public string DeliveryMode { get; set; }
+        public string ReqType { get; set; }
         public string ReqQnty { get; set; }
         public string ReqUnit { get; set; }
         public string SetOn { get; set; }
@@ -30,6 +31,6 @@ namespace SILDMS.Model
         public string ModifiedBy { get; set; }
         public string Action { get; set; }
         [Required]
-        public string Status { get; set; } 
+        public string Status { get; set; }
     }
 }

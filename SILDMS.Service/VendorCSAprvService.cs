@@ -10,7 +10,7 @@ using SILDMS.DataAccessInterface;
 
 namespace SILDMS.Service
 {
-    public class VendorCSAprvService: IVendorCSAprvService 
+    public class VendorCSAprvService : IVendorCSAprvService
     {
         #region Fields
 
@@ -62,9 +62,9 @@ namespace SILDMS.Service
             VendorCSAprvSearchList = clientInfoDataService.GetVendorCSVendorsUsingClient(ClientID);
             return ValidationResult.Success;
         }
-        public ValidationResult GetVendorCSQuotationItem(string VendorID, out List<OBS_VendorCSAprvItem> VendorCSAprvItemList)
+        public ValidationResult GetVendorCSQuotationItem(string VendorID, string ClientID, out List<OBS_VendorCSAprvItem> VendorCSAprvItemList)
         {
-            VendorCSAprvItemList = clientInfoDataService.GetVendorCSQuotationItem(VendorID);
+            VendorCSAprvItemList = clientInfoDataService.GetVendorCSQuotationItem(VendorID, ClientID);
             return ValidationResult.Success;
         }
         public ValidationResult GetVendorCSAprvTermList(string VendorCSAprvID, out List<OBS_VendorCSAprvTerms> VendorCSAprvTermList)

@@ -54,17 +54,17 @@ namespace SILDMS.Service
         }
         public ValidationResult GetVendorCSClientInfo(string ServiceItemCategoryID, out List<OBS_ClientReq> VendorInfoList)
         {
-            VendorInfoList = clientInfoDataService.GetVendorCSClientInfo( ServiceItemCategoryID);
+            VendorInfoList = clientInfoDataService.GetVendorCSClientInfo(ServiceItemCategoryID);
             return ValidationResult.Success;
         }
-        public ValidationResult OBS_GetVendorCSVendorsUsingClient(string ClientID,out List<OBS_VendorCSRecm> VendorCSInfoSearchList)
+        public ValidationResult OBS_GetVendorCSVendorsUsingClient(string ClientID, out List<OBS_VendorCSRecm> VendorCSInfoSearchList)
         {
-            VendorCSInfoSearchList = clientInfoDataService.OBS_GetVendorCSVendorsUsingClient( ClientID);
+            VendorCSInfoSearchList = clientInfoDataService.OBS_GetVendorCSVendorsUsingClient(ClientID);
             return ValidationResult.Success;
         }
-        public ValidationResult OBS_GetVendorCSQuotationItem(string VendorID, out List<OBS_VendorCSRecmItem> VendorCSInfoItemList)
+        public ValidationResult OBS_GetVendorCSQuotationItem(string VendorID, string ClientID, out List<OBS_VendorCSRecmItem> VendorCSInfoItemList)
         {
-            VendorCSInfoItemList = clientInfoDataService.OBS_GetVendorCSQuotationItem(VendorID);
+            VendorCSInfoItemList = clientInfoDataService.OBS_GetVendorCSQuotationItem(VendorID, ClientID);
             return ValidationResult.Success;
         }
         public ValidationResult GetVendorCSInfoTermList(string VendorCSInfoID, out List<OBS_VendorCSRecmTerms> VendorCSInfoTermList)
@@ -76,7 +76,7 @@ namespace SILDMS.Service
         {
             return clientInfoDataService.SaveVendorCSInfo(clientReq, clientReqItem, clientReqTerm, vendorReqItemWise);
         }
-       
+
         public ValidationResult GetVendorCSInfoTermAgainstFormList(string TermsID, out List<OBS_VendorCSRecmTerms> VendorCSInfoTermList)
         {
             VendorCSInfoTermList = clientInfoDataService.GetVendorCSInfoTermAgainstFormList(TermsID);
