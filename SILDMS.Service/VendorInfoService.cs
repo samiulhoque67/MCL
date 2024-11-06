@@ -29,48 +29,36 @@ namespace SILDMS.Service
             this.localizationService = localizationService;
         }
 
+
         #endregion
 
-        public string SaveVendorInfoMst(OBS_VendorInfo modelVendorInfoMst)
+        public ValidationResult GetAllListedVendorsService(string userID, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out List<OBS_VendorInfo> listedVendorsList)
         {
-            return clientInfoDataService.SaveVendorInfoMst(modelVendorInfoMst);
+            listedVendorsList = clientInfoDataService.GetAllListedVendorsDataService(userID, page, itemsPerPage, sortBy, reverse, search, type, out errorNumber);
+
+            return errorNumber.Length > 0 ? new ValidationResult(errorNumber, localizationService.GetResource(errorNumber))
+                : ValidationResult.Success;
         }
 
-        public string SaveVendorAddress(OBS_VendorAddressInfo modelVendorAddress)
+
+
+        public ValidationResult GetAllMaterialService(out List<OBS_ServicesCategory> materials)
         {
-            return clientInfoDataService.SaveVendorAddress(modelVendorAddress);
+            materials = clientInfoDataService.GetAllMaterialData(out errorNumber);
+            return errorNumber.Length > 0
+                ? new ValidationResult(errorNumber, localizationService.GetResource(errorNumber))
+                : ValidationResult.Success;
         }
 
-        public ValidationResult GetServicesCategory(string action, out List<OBS_ServicesCategory> servicesCategoryList)
+
+        public string SaveVendorwithMatService(string UserID, string VendorCode, string VendorName, string ContactPerson, string ContactNumber, string Email,
+            string VendorTinNo, string VendorBinNo, string VAddress, List<OBS_ServicesCategory> ServiceItemInfo, int VendorStatus, out string errorNumber)
         {
-            servicesCategoryList = clientInfoDataService.GetServicesCategory(action, out errorNumber);
-            if (errorNumber.Length > 0)
-            {
-                return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
-            }
-            return ValidationResult.Success;
+            return clientInfoDataService.SaveVendorwithMatDataService(UserID, VendorCode, VendorName, ContactPerson, ContactNumber, Email,
+             VendorTinNo, VendorBinNo, VAddress, ServiceItemInfo, VendorStatus, out errorNumber);
+
+            throw new NotImplementedException();
         }
 
-        public ValidationResult GetVendorInfoSearchList(out List<OBS_VendorInfo> VendorInfoSearchList)
-        {
-            VendorInfoSearchList = clientInfoDataService.GetVendorInfoSearchList();
-            return ValidationResult.Success;
-        }
-
-        public ValidationResult GetVendorAddressList(string VendorID, out List<OBS_VendorAddressInfo> VendorAddressList)
-        {
-            VendorAddressList = clientInfoDataService.GetVendorAddressList(VendorID);
-            return ValidationResult.Success;
-        }
-
-        public ValidationResult GetJobLocation(string UserID, out List<Sys_MasterData> objMasterDatas)
-        {
-            objMasterDatas = clientInfoDataService.GetJobLocation(UserID, out errorNumber);
-            if (errorNumber.Length > 0)
-            {
-                return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
-            }
-            return ValidationResult.Success;
-        }
     }
 }

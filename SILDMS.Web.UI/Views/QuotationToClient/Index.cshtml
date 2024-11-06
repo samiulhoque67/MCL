@@ -274,9 +274,6 @@
             <table st-table="GetClientReqDetailsCollection" st-safe-src="GetClientReqDetails" class="table table-condensed table-bordered table-striped table-hover pnlView">
 
                 <thead>
-                    @*<tr style="font-size: 15px;">
-                    <th colspan="17" style="text-align:left; color: black; font-weight: bold">Item List</th>
-                </tr>*@
                     <tr style="background-color: #78bfd6; color: darkblue; font-size: 12px;">
                         <th style="text-align: left;">Item Code</th>
                         <th style="text-align: left;">Item Name</th>
@@ -328,372 +325,309 @@
                 <tfoot></tfoot>
             </table>
 
-            @*<div class="row">
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="TotalinWords">Total in Words:</label>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <input id="totalAmountInWords" name="totalAmountInWords" type="text" ng-model="totalAmountInWords" class="form-control" ng-readonly="true" />
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <input id="totalAmount" name="totalAmount" type="text" ng-model="totalAmount" class="form-control" ng-readonly="true" />
-                </div>
-            </div>
-        </div>*@
         </div>
     </div>
 
-    @*</div>*@
+   
 
 
-    @*TERMS & Conditions*@
+    <div class="box-body" ng-show="showTermsItem===true">
 
-    @*<div id="TermsDtlModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="row">
-                        <div class="col-sm-5 col-md-5 col-lg-5">
-                            <h3 class="modal-title">Terms Information</h3>
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                        </div>
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                            <button type="button" class="close" data-dismiss="modal" ng-click="ResetDtlModel()" aria-hidden="true" style="color:red;">x</button>
-                        </div>
+        @*terms and conditons*@
+
+        <div id="VendorReqTermsConditionsModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
+                        <h3 class="modal-title">Terms & Conditions Information</h3>
                     </div>
-                </div>
-                <div ng-cloak>
-                    <div class="row" style="position:relative;top:5px;">
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2">
-                            <div class="form-group">
-                                <label for="TermsCode">Terms Code</label>
-                                <label style="font-size: larger;color:red;">*</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2">
-                            <input id="TermsCode" type="text" name="TermsCode" required class="form-control" autofocus ng-model="vmTermsItem.TermsCode" placeholder="TermsCode" style="height: 25px; font-size: smaller" />
-                        </div>
+                    <div class="modal-body table-responsive">
+                        <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                            <thead>
+                                <tr>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormName')">Form Name</th>
 
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                        </div>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                                </tr>
+                                <tr>
+                                    <th><input st-search="FormCode" placeholder="Form Code" class="input-sm form-control" type="search" /></th>
+                                    <th><input st-search="FormName" placeholder="Form Name" class="input-sm form-control" type="search" /></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="row in TermsConditionsDisplayedCollection">
+                                    <td class="hidden">{{row.TermsID}}</td>
+                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.FormCode}}</td>
 
-                        <div class="col-sm-2 col-md-2 col-lg-2">
-                            <div class="form-group">
-                                <label for="TermsName">Terms Name</label>
-                                <label style="font-size:larger;color:red;">*</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2">
-                            <input id="TermsName" name="TermsName" type="text" class="form-control" placeholder="Contact Number"
-                                   ng-model="vmTermsItem.TermsName" style="height: 25px; background-color:#ffffff; font-size: smaller" />
-                        </div>
+                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                                            {{row.Status == '1'? 'Active':'InActive'}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" ng-click="toggleTermsConditionsSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
-
-                    <div class="row" style="position: relative; top: -3px; margin-bottom: 5px;">
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="modal-footer">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                <label for="ItemStatus">Status</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2">
-                            <select data-ng-model="vmTermsItem.ItemStatus" class="form-control">
-                                <option value="">-- None --</option>
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <div class="btn-group pull-right" style="margin:2px;">
-                                <button type="button" id="btnDtlSaveUpdate" data-ng-click="AddUpdateDtl()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Save</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>*@
 
 
-
-<div class="box-body" ng-show="showTermsItem===true">
-    <!--<div class="table-responsive">
-        <table st-table="displayedCollection"-->
-    @*st-safe-src="getAllTermsDtl"*@
-    <!--class="table table-condensed table-bordered table-striped table-hover pnlView">
-    <thead>
-        <tr style="color: darkblue;">
-            <th class="col-lg-1 col-md-1 col-sm-1">SL.</th>
-            <th class="col-lg-2 col-md-2 col-sm-2">Terms Code</th>
-            <th class="col-lg-1 col-md-1 col-sm-1">Terms Name</th>
-            <th class="col-lg-1 col-md-1 col-sm-1">Status</th>
-            <th class="col-lg-2 col-md-2 col-sm-2">Action</th>
-        </tr>-->
-    @*<tr>
-            <th><input st-search="TermsCode" placeholder="Sl No" class="input-sm form-control" type="search" /></th>
-            <th></th>
-            <th><input st-search="TermsName" placeholder="Introduce Date" class="input-sm form-control" type="search" /></th>
-        </tr>*@
-    <!--</thead>
-    <tbody>
-        <tr ng-repeat="row in displayedCollection" style="height:20px;">-->
-    @*<td class="hidden">{{row.TermsItemID}}</td>*@
-    <!--<td class="col-lg-1 col-md-1 col-sm-1">{{row.TermsItemID}}</td>
-                    <td class="col-lg-2 col-md-2 col-sm-2">{{row.TermsCode}}</td>
-                    <td class="col-lg-1 col-md-1 col-sm-1">{{row.TermsName}}</td>
-                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                        <span ng-attr-class="{{row.ItemStatus =='1'? 'label label-success' : 'label label-danger' }}">
-                            {{row.ItemStatus == '1'? 'Active':'InActive'}}
-                        </span>
-                    </td>
-                    <td class="col-lg-2 col-md-2 col-sm-2 text-center">
-                        <button type="button" class="button-detail" style="height:28px;" data-ng-click="toggleEdit(row)"><i class="fa fa-edit"></i> Edit</button>
-                        <button type="button" class="btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" data-ng-click="toggleDelete(row)">Delete<i class="fa fa-remove"></i></button>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="7" class="text-center">
-                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>-->
-
-    @*change*@
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
-                <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
-                    @*<h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>*@
-                    <div class="col-lg-3 ">
-                        <div class="form-group">
-                            <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
+                    <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
+                        @*<h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>*@
+                        <div class="col-lg-3 ">
+                            <div class="form-group">
+                                <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>
+                            </div>
+                        </div>
+                        @*<div class="row">*@
+                        <div class="col-lg-3 ">
+                            <div class="form-group">
+                                <label for="TermsAndConditions">Terms & Coonditions List:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <input id="FormName" name="FormName" type="text" data-ng-model="VendorReq.FormName" class="form-control" ng-readonly="true" />
+                            </div>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" data-ng-click="ShowTermsConditionsList()" class="form-control">Search</button>
+                        </div>
+                        @*</div>*@
+                        <div class="box-tools pull-right">
+                            <div class="col-lg-12 pull-right">
+                                <div class="btn-group pull-right" style="margin:2px;">
+                                    <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" data-ng-click="AddReqTermModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    @*<div class="row">*@
-                    <div class="col-lg-3 ">
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+            <div class="row">
+                <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                    <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;" st-sort="">Terms Code</th>
+                                <th style="text-align: left;" st-sort="">Terms & Conditions</th>
+                                <th style="text-align: left;">Action</th>
+                            </tr>
+                            @*<tr>
+                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                            </tr>*@
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
+                                <td class="hidden">{{row.VendorReqTermsID}}</td>
+                                <td class="hidden">{{row.VendorReqID}}</td>
+                                <td class="hidden">{{row.TermsID}}</td>
+                                <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
+                                <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
+
+                                <td class="col-lg-1" style="width:5%;">
+                                    <button type="button" ng-if="row.VendorReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                    <button type="button" ng-if="!row.VendorReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                    <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            @*<tr>
+                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                            </tr>*@
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="RequisitionTermModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="row">
+                            <div class="col-sm-5 col-md-5 col-lg-5">
+                                <h3 class="modal-title">Terms & Conditions Information</h3>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+
+                            </div>
+                            <div class="col-sm-1 col-md-1 col-lg-1">
+                                <button type="button" class="close" data-dismiss="modal" ng-click="ResetReqTermModel()" aria-hidden="true" style="color:red;">x</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-cloak>
+                        <div class="row">
+                            <div class="col-lg-1">
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label for="TermsCode">Terms & Conditions Code:</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <input id="TermsCode" type="text" name="TermsCode" ng-model="VendorReqTerm.TermsCode" class="form-control" autofocus />
+
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label for="TermsName">Terms & Conditions:</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <input id="TermsName" type="text" name="TermsName" ng-model="VendorReqTerm.TermsName" class="form-control" autofocus />
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <div class="btn-group pull-right" style="margin:2px;">
+                                    <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="deleteReqTermModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
+                    <div class="modal-header" style="height: 46px;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Delete Selected Item</h4>
+                    </div>
+                    <div class="modal-body" style="height: 80px;">
+                        Are you sure to delete this item?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: red;" ng-click="DeleteReqTerm()">Yes</button>
+                        <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*terms and conditons ends*@
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+
+                <!-- Quotation No & Date -->
+                <div class="row">
+                    <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="TermsAndConditions">Terms & Coonditions List:</label>
+                            <label for="QuotationNo">Quotation No :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="FormName" name="FormName" type="text" data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true" />
-                        </div>
-                    </div>
-                    <div class="col-lg-1">
-                        <button type="button" data-ng-click="ShowTermsConditionsList()" class="form-control">Search</button>
-                    </div>
-                    @*</div>*@
-                    <div class="box-tools pull-right">
-                        <div class="col-lg-12 pull-right">
-                            <div class="btn-group pull-right" style="margin:2px;">
-                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" data-ng-click="AddReqTermModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-        <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;" st-sort="">Terms Code</th>
-                            <th style="text-align: left;" st-sort="">Terms & Conditions</th>
-                            <th style="text-align: left;">Action</th>
-                        </tr>
-                        @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-                            <td class="hidden">{{row.ClientReqTermsID}}</td>
-                            <td class="hidden">{{row.ClientReqID}}</td>
-                            <td class="hidden">{{row.TermsID}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
-
-                            <td class="col-lg-1" style="width:5%;">
-                                <button type="button" ng-if="row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" ng-if="!row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div id="RequisitionTermModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="row">
-                        <div class="col-sm-5 col-md-5 col-lg-5">
-                            <h3 class="modal-title">Terms & Conditions Information</h3>
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-
-                        </div>
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                            <button type="button" class="close" data-dismiss="modal" ng-click="ResetReqTermModel()" aria-hidden="true" style="color:red;">x</button>
-                        </div>
-                    </div>
-                </div>
-                <div ng-cloak>
-                    <div class="row">
-                        <div class="col-lg-1">
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="TermsCode">Terms & Conditions Code:</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <input id="TermsCode" type="text" name="TermsCode" ng-model="ClientReqTerm.TermsCode" class="form-control" autofocus />
-
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="TermsName">Terms & Conditions:</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <input id="TermsName" type="text" name="TermsName" ng-model="ClientReqTerm.TermsName" class="form-control" autofocus />
-
-                            </div>
+                            <input id="QuotationNo" name="QuotationNo" type="text" data-ng-model="Quotation.QuotationNo" readonly class="form-control" />
                         </div>
                     </div>
 
-                </div>
-                <div class="modal-footer">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-2">
                         <div class="form-group">
-                            <div class="btn-group pull-right" style="margin:2px;">
-                                <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add</button>
-                            </div>
+                            <label for="QuotationDate">Quotation Date :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="QuotationDate" name="QuotationDate" type="text" class="form-control" style="background-color:#ffffff;" readonly />
                         </div>
                     </div>
                 </div>
+
+                <!-- Quotation Note & Billing Date -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="QuotationNote">Quotation Note :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="QuotationNote" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="BriefingDate">Client Briefing Date :</label>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2" @*style="width: 12.50%;*@>
+                        <div class="form-group">
+
+                            <input id="BriefingDate" name="BriefingDate" readonly type="datetime" class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                                   data-ng-model="MasterData.BriefingDate" style="height: 25px; background-color:#ffffff;" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-9">
+
+                    </div>
+
+                    <div class="col-lg-2">
+                        <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
+                                ng-click="openConfirmModal()" data-dismiss="modal" title="Save"
+                                style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius: 5px;">
+                            <i class="fa fa-check"></i> Submit
+                        </button>
+                    </div>
+
+                </div>
+
             </div>
         </div>
+
     </div>
-
-
-    @*change*@
-
-    <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-
-            <!-- Quotation No & Date -->
-            <div class="row">
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label for="QuotationNo">Quotation No :</label>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <input id="QuotationNo" name="QuotationNo" type="text" data-ng-model="Quotation.QuotationNo" readonly class="form-control" />
-                    </div>
-                </div>
-
-                <div class="col-lg-1"></div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label for="QuotationDate">Quotation Date :</label>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <input id="QuotationDate" name="QuotationDate" type="text" class="form-control" style="background-color:#ffffff;" readonly />
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quotation Note & Billing Date -->
-            <div class="row">
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label for="QuotationNote">Quotation Note :</label>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <input id="QuotationNote" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
-                    </div>
-                </div>
-
-                <div class="col-lg-1"></div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label for="BriefingDate">Client Briefing Date :</label>
-                    </div>
-                </div>
-
-                <div class="col-lg-2" @*style="width: 12.50%;*@>
-                    <div class="form-group">
-
-                        <input id="BriefingDate" name="BriefingDate" readonly type="datetime" class="DatePicker form-control" placeholder="DD/MM/YYYY"
-                               data-ng-model="MasterData.BriefingDate" style="height: 25px; background-color:#ffffff;" />
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-lg-9">
-
-                </div>
-
-                <div class="col-lg-2">
-                    <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
-                            ng-click="openConfirmModal()" data-dismiss="modal" title="Save"
-                            style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius: 5px;">
-                        <i class="fa fa-check"></i> Submit
-                    </button>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
-</div>
     @*Save / Delete Modal*@
     <div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important ">
         <div class="modal-dialog" role="document">
@@ -735,6 +669,11 @@
 
 
     app.controller('WorkOrderInfoCntrl', function ($scope, $http) {
+
+
+        $scope.vendorReqItemArray = [];
+        $scope.vendorReqTermArray = [];
+
 
         $scope.PagingInfo = {
             page: 1,
@@ -932,22 +871,20 @@
             else {
                 $scope.showFlag = false;
                 $scope.showTermsItem = false;
-                $scope.ClearTermsItem();
+             //   $scope.ClearTermsItem();
             }
         }
 
         $scope.GetTermsItemList = function (TermsID) {
+            /*$scope.QuotationType = ;*/
 
-           $http.post('/Terms/GetTermsItemList', { TermsID: TermsID })
+            $http.get("/QuotationToClient/GetTermsConditionsList", { TermsID: TermsID })
                 .success(function (response) {
-                    $scope.ClearTermsItem();
-                    $scope.getAllTermsDtl = response.TermsItemList;
-                    $scope.displayedCollection = [].concat($scope.getAllTermsDtl);  // displayed collection
+                    $scope.TermsConditionsList = response.termsConditionsList;
+                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
                     $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
-
+                })
+                .error(function () { });
         }
 
         $scope.checkEnter = function (event, row) {
@@ -956,7 +893,142 @@
                 row.givenQutnAmt = row.givenQutnPrice * row.QutnQnty;
                 row.givenTolAmt = parseFloat(row.givenQutnAmt) + (parseFloat(row.VatAmt) || 0);
             }
+        }; 
+
+        ////////////////////////Requsition Terms & Conditions ///////////////////////
+
+        $scope.ShowTermsConditionsList = function () {
+            $http.get("/VendorRequisition/GetTermsConditionsList")
+                .success(function (response) {
+                    $scope.TermsConditionsList = response.termsConditionsList;
+                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
+                    $scope.loading = false;
+                })
+                .error(function () { });
+
+            $('#VendorReqTermsConditionsModal').modal('show');
         };
+
+        $scope.toggleTermsConditionsSelect = function (row) {
+            //$scope.VendorReq.TermsID = row.TermsID;
+            //$scope.VendorReq.FormName = row.FormName;
+
+            $http.post('/QuotationToClient/GetVendorTermList', { TermsID: row.TermsID })
+                .success(function (response) {
+                    $scope.ReqTermDataSetupGridData = response.VendorTermTermList;
+                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+            $('#VendorReqTermsConditionsModal').modal('hide');
+        };
+
+        $scope.VendorReqTerm = {
+            VendorReqTermsID: "",
+            VendorReqID: "",
+            TermsID: "",
+            TermsCode: "",
+            TermsName: ""
+        }
+
+        $scope.AddReqTermModal = function () {
+
+            if ($('#RequisitionNo').val() == "") {
+                toastr.error("Vendor ReqNo.  Required");
+                return;
+            }
+
+            if ($('#SubmissionDate').val() == "") {
+                toastr.error("Submission Date Required.");
+                return;
+            }
+
+            if ($('#RequisitionDate').val() == "") {
+                toastr.error("Requisition Date Date Required");
+                return;
+            }
+            $('#RequisitionTermModal').modal('show');
+        };
+
+        $scope.ReqTermDataSetupGridData = [];  // base collection
+        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+
+        $scope.AddReqTerm = function () {
+
+            if ($('#TermsCode').val() == "") {
+                toastr.error("Terms Code Required");
+                return;
+            }
+
+            if ($('#TermsName').val() == "") {
+                toastr.error("Terms Name Required.");
+                return;
+            }
+
+            $scope.VendorReqTerm.TermsCode = $('#TermsCode').val();
+            $scope.VendorReqTerm.TermsName = $('#TermsName').val();
+
+            $scope.vendorReqTermArray.push($scope.VendorReqTerm);
+
+            $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection.concat($scope.VendorReqTerm);
+
+            $scope.resetVendorReqTerm();
+            $("#btnAddReqTerm").html('Add');
+            $('#RequisitionTermModal').modal('hide');
+        }
+
+        $scope.resetVendorReqTerm = function () {
+            $scope.VendorReqTerm = {
+                VendorReqTermsID: "",
+                VendorReqID: "",
+                TermsID: "",
+                TermsCode: "",
+                TermsName: ""
+            }
+        }
+
+        $scope.toggleReqTermEdit = function (tableRow, $i) {
+            $('#RequisitionTermModal').modal('show');
+            $scope.resetVendorReqTerm();
+            $scope.VendorReqTerm.VendorReqTermID = tableRow.VendorReqTermD;
+            $scope.VendorReqTerm.VendorReqID = tableRow.VendorReqID;
+            $scope.VendorReqTerm.TermsID = tableRow.TermsID;
+            $scope.VendorReqTerm.TermsCode = tableRow.TermsCode;
+            $scope.VendorReqTerm.TermsName = tableRow.TermsName;
+            $scope.ReqTermGridDisplayCollection.splice($i, 1);
+            $scope.vendorReqTermArray.splice($i, 1);
+            $("#btnAddReqTerm").html('Update');
+        };
+
+        $scope.toggleReqTermDelete = function (tableRow, $i) {
+            if (!tableRow.VendorReqTermID) {
+                $scope.resetVendorReqTerm();
+                $scope.ReqTermGridDisplayCollection.splice($i, 1);
+                $scope.vendorReqTermArray.splice($i, 1);
+                toastr.success('Data Deleted Successsfully');
+            }
+            else {
+                $scope.resetVendorReqTerm();
+                $scope.VendorReqTerm.VendorReqTermID = tableRow.VendorReqTermID;
+                $('#deleteReqTermModal').modal('show');
+            }
+        };
+
+        $scope.DeleteVendorReqTerm = function () {
+            $http.post('/VendorRequisition/DeleteVendorReqItemAndTerm',
+                { VendorReqItemID: $scope.VendorReqItem.VendorReqItemID, VendorReqTermID: $scope.VendorReqTerm.VendorReqTermID })
+                .success(function (response) {
+                    if (response.status == "S203") {
+                        $scope.resetVendorReqTerm();
+                        $scope.ReqTermGridDisplayCollection.splice($i, 1);
+                        $scope.vendorReqTermArray.splice($i, 1);
+                        toastr.success('Data Deleted Successsfully');
+                        return;
+                    }
+                });
+        }
 
         $scope.openConfirmModal = function () {
             if (!$scope.MasterData.BriefingDate || $scope.MasterData.BriefingDate.trim() === '') {
@@ -995,75 +1067,9 @@
             });
         }
 
-
-        // ################# Detail Add Modal ####################
-        $scope.AddDtlModal = function () {
-
-            $scope.ClearTermsItem();
-
-            $('#TermsDtlModal').modal('show');
-            $scope.vmTermsItem.ItemStatus = "1";
-            $("#btnDtlSaveUpdate").html('Add');
-        };
-
-        // ################# Detail Edit Modal ####################
-        $scope.toggleEdit = function (row) {
-            $('#TermsDtlModal').modal('show');
-            $scope.loading = true;
-            //console.log(row);
-            $scope.vmTermsItem.TermsItemID = row.TermsItemID;
-            $scope.vmTermsMst.TermsID = row.TermsID;
-            $scope.vmTermsItem.TermsCode = row.TermsCode;
-            $scope.vmTermsItem.TermsName = row.TermsName;
-            $scope.vmTermsItem.ItemStatus = row.ItemStatus;
-
-            $scope.loading = false;
-            $("#btnDtlSaveUpdate").html('Update');
-        };
-
-        //#################### Delete Action ###############
-        $scope.deleteConfirm = function () {
-            var postData = JSON.stringify(convArrToObj($scope.vmTermsItem));
-            $scope.loading = true;
-            $http.post('/Terms/DeleteTermsItem', postData).success(function (response) {
-                $scope.loading = false;
-                if (response.status == "S203") {
-                    toastr.success("Data Deleted Successfully.");
-                    $scope.ClearTermsItem();
-                    $('#deleteModal').modal('hide');
-                    $scope.loading = false;
-                    $scope.GetTermsItemList();
-                    return;
-                }
-            }).error(function (data) {
-                $scope.loading = false;
-                toastr.error(data);
-            });
-        };
-
-        $scope.toggleDelete = function (row) {
-            $scope.vmTermsItem = row;
-            $('#deleteModal').modal('show');
-        };
-
-
-        $scope.ResetDtlModel = function () {
-            $scope.ClearTermsItem();
-        };
-
         $scope.toggleRefreshTable = function () {
             window.location.reload();
         };
-        ///////////////Reset Detail Model////////////////
-        $scope.ClearTermsItem = function () {
-            //$scope.getAllTermsDtl.TermsItemID = "";
-            //$scope.getAllTermsDtl.TermsCode = "";
-            //$scope.getAllTermsDtl.TermsName = "";
-            //$scope.getAllTermsDtl.ItemStatus = "";
-
-            $scope.getAllTermsDtl = "";
-            $scope.displayedCollection = "";
-        }
 
         $scope.refreshPage = function () {
             setTimeout(function () {

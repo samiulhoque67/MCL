@@ -158,6 +158,40 @@ namespace SILDMS.DataAccess.QuotationToClientService
             return GetClientReqDetails;
         }
 
+        public List<OBS_VendorReqTerms> GetTermsConditionsListServiceData(string TermsID, out string _errorNumber)
+        {
+            _errorNumber = string.Empty;
+            var VendorTermTermList = new List<OBS_VendorReqTerms>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientReqDataInfo"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.Int, TermsID);
+                db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
+                dbCommandWrapper.CommandTimeout = 300;
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (!db.GetParameterValue(dbCommandWrapper, _spStatusParam).IsNullOrZero())
+                {
+                    _errorNumber = db.GetParameterValue(dbCommandWrapper, _spStatusParam).PrefixErrorCode();
+                }
+                else
+                {
+                    if (ds.Tables[0].Rows.Count <= 0) return VendorTermTermList;
+                    var dt1 = ds.Tables[0];
+                    VendorTermTermList = dt1.AsEnumerable().Select(reader => new OBS_VendorReqTerms
+                    {
+
+
+                    }).ToList();
+
+                }
+            }
+
+            return VendorTermTermList;
+        }
+
         public string SaveQuotToClientServiceData(string UserID, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, out string errorNumber)
         {
             errorNumber = string.Empty;

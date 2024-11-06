@@ -11,12 +11,11 @@ namespace SILDMS.Service
 {
     public interface IVendorInfoService
     {
-        string SaveVendorInfoMst(OBS_VendorInfo _modelVendorInfoMst);
-        string SaveVendorAddress(OBS_VendorAddressInfo _modelVendorInfoMst);
-        ValidationResult GetServicesCategory(string action, out List<OBS_ServicesCategory> ownerLevelList);
-        ValidationResult GetVendorInfoSearchList(out List<OBS_VendorInfo> VendorInfoSearchList);
-        ValidationResult GetVendorAddressList(string VendorID, out List<OBS_VendorAddressInfo> VendorInfoSearchList);
-        ValidationResult GetJobLocation(string UserID, out List<Sys_MasterData> objMasterDatas);
+        string SaveVendorwithMatService(string UserID, string VendorCode, string VendorName, string ContactPerson, string ContactNumber, string Email,
+            string VendorTinNo, string VendorBinNo, string VAddress, List<OBS_ServicesCategory> ServiceItemInfo, int VendorStatus, out string Status);
+
+        ValidationResult GetAllMaterialService(out List<OBS_ServicesCategory> materials);
+        ValidationResult GetAllListedVendorsService(string userID, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out List<OBS_VendorInfo> listedVendorsList);
     }
 }
 

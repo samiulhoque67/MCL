@@ -24,8 +24,6 @@ namespace SILDMS.Service.QuotationToClient
             _errorNumber = string.Empty;
         }
 
-      
-
         ValidationResult IQuotationToClientService.AllAvailableCSVendorApprovalService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out List<OBS_ClientInfo> AllAvailableClientsList)
         {
             AllAvailableClientsList = _iQuotationToClientDataService.AllAvailableCSVendorApprovalDataService(UserId, page, itemsPerPage, sortBy, reverse, search, type, out _errorNumber);
@@ -38,6 +36,14 @@ namespace SILDMS.Service.QuotationToClient
         ValidationResult IQuotationToClientService.AvailableClientDetailInfoService(string ClientID, out List<OBS_ClientDetails> ClientDetails)
         {
             ClientDetails = _iQuotationToClientDataService.AvailableClientDetailInfoDataService(ClientID, out _errorNumber);
+
+            return _errorNumber.Length > 0
+                ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
+                : ValidationResult.Success;
+        }
+        public ValidationResult GetTermsConditionsListService(string TermsID, out List<OBS_VendorReqTerms> VendorTermTermList)
+        {
+            VendorTermTermList = _iQuotationToClientDataService.GetTermsConditionsListServiceData(TermsID, out _errorNumber);
 
             return _errorNumber.Length > 0
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
@@ -60,5 +66,6 @@ namespace SILDMS.Service.QuotationToClient
             throw new NotImplementedException();
         }
 
+        
     }
 }
