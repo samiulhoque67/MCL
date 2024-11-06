@@ -11,6 +11,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Remoting.Messaging;
+using System.Data.SqlClient;
 
 namespace SILDMS.DataAccess
 {
@@ -18,115 +20,106 @@ namespace SILDMS.DataAccess
     {
         private readonly string spStatusParam = "@p_Status";
 
-        public string SaveVendorInfoMst(OBS_VendorInfo modelVendorInfoMst)
-        {
-
-            if (string.IsNullOrEmpty(modelVendorInfoMst.VendorID))
-                modelVendorInfoMst.Action = "add";
-            else
-                modelVendorInfoMst.Action = "edit";
-            string errorNumber = String.Empty;
-            try
-            {
-                DatabaseProviderFactory factory = new DatabaseProviderFactory();
-                SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetVendorInfo"))
-                {
-                    // Set parameters 
-                    db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.NVarChar, modelVendorInfoMst.VendorID);
-                    db.AddInParameter(dbCommandWrapper, "@VendorCode", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelVendorInfoMst.VendorCode));
-                    db.AddInParameter(dbCommandWrapper, "@VendorName", SqlDbType.NVarChar, modelVendorInfoMst.VendorName);
-                    db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelVendorInfoMst.VendorCategoryID));
-                    db.AddInParameter(dbCommandWrapper, "@VendorTinNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelVendorInfoMst.VendorTinNo));
-                    db.AddInParameter(dbCommandWrapper, "@VendorBinNo", SqlDbType.NVarChar, modelVendorInfoMst.VendorBinNo);
-                    db.AddInParameter(dbCommandWrapper, "@SetBy ", SqlDbType.NVarChar, modelVendorInfoMst.SetBy);
-                    db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelVendorInfoMst.ModifiedBy);
-                    db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.Int, modelVendorInfoMst.Status);
-                    db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, modelVendorInfoMst.Action);
-                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
-                    // Execute SP.
-                    db.ExecuteNonQuery(dbCommandWrapper);
-                    // Getting output parameters and setting response details.
-                    if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
-                    {
-                        // Get the error number, if error occurred.
-                        errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                errorNumber = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
-            }
-            return errorNumber;
-        }
-
-        public string SaveVendorAddress(OBS_VendorAddressInfo modelVendorAddress)
-        {
-            if (modelVendorAddress.Action == "delete")
-                modelVendorAddress.Action = "delete";
-            else
-            {
-                if (string.IsNullOrEmpty(modelVendorAddress.VendorAddressID))
-                    modelVendorAddress.Action = "add";
-                else
-                    modelVendorAddress.Action = "edit";
-            }
-            string errorNumber = String.Empty;
-            try
-            {
-                DatabaseProviderFactory factory = new DatabaseProviderFactory();
-                SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetVendorAddress"))
-                {
-                    // Set parameters 
-                    db.AddInParameter(dbCommandWrapper, "@VendorAddressID", SqlDbType.NVarChar, modelVendorAddress.VendorAddressID);
-                    db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.NVarChar, modelVendorAddress.VendorID);
-                    db.AddInParameter(dbCommandWrapper, "@ContactPerson", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelVendorAddress.ContactPerson));
-                    db.AddInParameter(dbCommandWrapper, "@ContactNumber", SqlDbType.NVarChar, modelVendorAddress.ContactNumber);
-                    db.AddInParameter(dbCommandWrapper, "@PhoneNumber", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelVendorAddress.PhoneNumber));
-                    db.AddInParameter(dbCommandWrapper, "@Address", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelVendorAddress.Address));
-                    db.AddInParameter(dbCommandWrapper, "@Email", SqlDbType.NVarChar, modelVendorAddress.Email);
-                    db.AddInParameter(dbCommandWrapper, "@SetBy ", SqlDbType.NVarChar, modelVendorAddress.SetBy);
-                    db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelVendorAddress.ModifiedBy);
-                    db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.Int, modelVendorAddress.AddressStatus);
-                    db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, modelVendorAddress.Action);
-                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
-                    // Execute SP.
-                    db.ExecuteNonQuery(dbCommandWrapper);
-                    // Getting output parameters and setting response details.
-                    if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
-                    {
-                        // Get the error number, if error occurred.
-                        errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                errorNumber = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
-            }
-            return errorNumber;
-        }
-
-        public List<OBS_ServicesCategory> GetServicesCategory(string userID, out string errorNumber)
+        public string SaveVendorwithMatDataService(string UserID, string VendorCode, string VendorName, string ContactPerson, string ContactNumber, string Email,
+            string VendorTinNo, string VendorBinNo, string VAddress, List<OBS_ServicesCategory> ServiceItemInfo, int VendorStatus, out string errorNumber)
         {
             errorNumber = string.Empty;
-            List<OBS_ServicesCategory> servicesCategoryList = new List<OBS_ServicesCategory>();
+            string message = "";
+
+           
+            // ################# Detail Data ####################
+
+            DataTable detailDataTable = new DataTable();
+
+            detailDataTable.Columns.Add("ServiceItemID", typeof(string));
+            detailDataTable.Columns.Add("ServiceItemName", typeof(string));
+
+            if (ServiceItemInfo != null)
+            {
+                foreach (var item in ServiceItemInfo)
+                {
+                    DataRow objDataRow = detailDataTable.NewRow();
+                    objDataRow["ServiceItemID"] = string.IsNullOrEmpty(item.ServiceItemID) ? DBNull.Value : (object)item.ServiceItemID;
+                    objDataRow["ServiceItemName"] = string.IsNullOrEmpty(item.ServiceItemName) ? DBNull.Value : (object)item.ServiceItemName;
+                    
+                    detailDataTable.Rows.Add(objDataRow);
+                }
+            }
+
+
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetServicesCategory"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveVendorWiseSer"))
             {
-                // Set parameters 
-                db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.VarChar, userID);
-                db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.VarChar, "");
-                db.AddOutParameter(dbCommandWrapper, spStatusParam, DbType.String, 10);
-                // Execute SP. 
-                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+                db.AddInParameter(dbCommandWrapper, "@VendorCode", SqlDbType.VarChar, VendorCode);
+                db.AddInParameter(dbCommandWrapper, "@VendorName", SqlDbType.VarChar, VendorName);
+                db.AddInParameter(dbCommandWrapper, "@ContactPerson", SqlDbType.VarChar, ContactPerson);
+                db.AddInParameter(dbCommandWrapper, "@ContactNumber", SqlDbType.VarChar, ContactNumber);
+                db.AddInParameter(dbCommandWrapper, "@Email", SqlDbType.VarChar, Email);
+                db.AddInParameter(dbCommandWrapper, "@VendorTinNo", SqlDbType.VarChar, VendorTinNo);
+                db.AddInParameter(dbCommandWrapper, "@VendorBinNo", SqlDbType.VarChar, VendorBinNo);
+                db.AddInParameter(dbCommandWrapper, "@VAddress", SqlDbType.VarChar, VAddress);
+
+                db.AddInParameter(dbCommandWrapper, "@OBS_QtC_ServiceItemInfolType", SqlDbType.Structured, detailDataTable);
+                db.AddInParameter(dbCommandWrapper, "@VendorStatus", SqlDbType.Int, VendorStatus);
+                db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
+                db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
+
+
+                try
+                {
+                    var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        var dt = ds.Tables[0];
+                        var dr = dt.Rows[0];
+
+                        if (dr["Status"].ToString() == "Successfully Submitted")
+                        {
+                            message = "Success";
+                        }
+                        else
+                        {
+                            message = "Error Found";
+                        }
+                    }
+                }
+                catch (SqlException sqlEx)
+                {
+                    // Log SQL exception details
+                    errorNumber = sqlEx.Number.ToString();
+                    message = "Database error occurred: " + sqlEx.Message;
+                    Console.WriteLine("SQL Exception: " + sqlEx.Message);
+                }
+                catch (Exception ex)
+                {
+                    // Log general exception details
+                    errorNumber = "General Exception";
+                    message = "An error occurred: " + ex.Message;
+                    Console.WriteLine("Exception: " + ex.Message);
+                }
+            }
+
+            return message;
+        }
+
+
+        public List<OBS_ServicesCategory> GetAllMaterialData(out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            var materialList = new List<OBS_ServicesCategory>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAllServicesCategoryList"))
+            {
+                db.AddOutParameter(dbCommandWrapper, spStatusParam, DbType.String, 10); // Correct parameter name here
+                dbCommandWrapper.CommandTimeout = 300;
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
 
                 if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
                 {
-                    // Get the error number, if error occurred.
                     errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
                 }
                 else
@@ -134,158 +127,74 @@ namespace SILDMS.DataAccess
                     if (ds.Tables[0].Rows.Count > 0)
                     {
                         DataTable dt1 = ds.Tables[0];
-                        servicesCategoryList = dt1.AsEnumerable().Select(reader => new OBS_ServicesCategory
+
+                        materialList = dt1.AsEnumerable().Select(reader => new OBS_ServicesCategory
                         {
-                            ServicesCategoryID = reader.GetString("ServicesCategoryID"),
                             ServicesCategoryCode = reader.GetString("ServicesCategoryCode"),
                             ServicesCategoryName = reader.GetString("ServicesCategoryName"),
-                            SetOn = reader.GetString("SetOn"),
-                            SetBy = reader.GetString("SetBy"),
-                            ModifiedOn = reader.GetString("ModifiedOn"),
-                            ModifiedBy = reader.GetString("ModifiedBy"),
-                            Status = reader.GetInt32("Status")
+                            ServicesCategoryID = reader.GetString("ServicesCategoryID"),
+                            ServiceItemName = reader.GetString("ServiceItemName"),
+                            ServiceItemCode = reader.GetString("ServiceItemCode"),
+                            ServiceItemID = reader.GetString("ServiceItemID")
                         }).ToList();
                     }
                 }
             }
-            return servicesCategoryList;
+            return materialList;
         }
 
-        public List<OBS_VendorInfo> GetVendorInfoSearchList()
+        public List<OBS_VendorInfo> GetAllListedVendorsDataService(string UserID, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber)
         {
-            string errorNumber = string.Empty;
-            List<OBS_VendorInfo> VendorInfoSearchList = new List<OBS_VendorInfo>();
-            DatabaseProviderFactory factory = new DatabaseProviderFactory();
-            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorInfo"))
+            _errorNumber = string.Empty;
+            var ListedVendorsList = new List<OBS_VendorInfo>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("VCMS_GetAllListedVendor"))
             {
-                // Set parameters 
-                //db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.VarChar, userID);
-                //db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.VarChar, "");
-                //db.AddOutParameter(dbCommandWrapper, spStatusParam, DbType.String, 10);
-
-                // Execute SP. 
-                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
-
-                //if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
-                //{
-                //    // Get the error number, if error occurred.
-                //    errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
-                //}
-                //else
-                //{
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    DataTable dt1 = ds.Tables[0];
-                    VendorInfoSearchList = dt1.AsEnumerable().Select(reader => new OBS_VendorInfo
-                    {
-                        VendorID = reader.GetString("VendorID"),
-                        VendorCode = reader.GetString("VendorCode"),
-                        VendorName = reader.GetString("VendorName"),
-                        VendorCategoryID = reader.GetString("ServicesCategoryID"),
-                        VendorCategoryName = reader.GetString("ServicesCategoryName"),
-                        VendorTinNo = reader.GetString("VendorTinNo"),
-                        VendorBinNo = reader.GetString("VendorBinNo"),
-                        ContactPerson = reader.GetString("ContactPerson"),
-                        ContactNumber = reader.GetString("ContactNumber"),
-                        //PhoneNumber = reader.GetString("PhoneNumber"),
-                        Address = reader.GetString("Address"),
-                        Email = reader.GetString("Email"),
-                        Status = reader.GetString("Status")
-                    }).ToList();
-                }
-                //}
-            }
-            return VendorInfoSearchList;
-        }
-
-        public List<OBS_VendorAddressInfo> GetVendorAddressList(string VendorID)
-        {
-            string errorNumber = string.Empty;
-            List<OBS_VendorAddressInfo> VendorInfoSearchList = new List<OBS_VendorAddressInfo>();
-            DatabaseProviderFactory factory = new DatabaseProviderFactory();
-            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorAddress"))
-            {
-                // Set parameters 
-                //db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.VarChar, userID);
-                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
-                //db.AddOutParameter(dbCommandWrapper, spStatusParam, DbType.String, 10);
-
-                // Execute SP. 
-                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
-
-                //if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
-                //{
-                //    // Get the error number, if error occurred.
-                //    errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
-                //}
-                //else
-                //{
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    DataTable dt1 = ds.Tables[0];
-                    VendorInfoSearchList = dt1.AsEnumerable().Select(reader => new OBS_VendorAddressInfo
-                    {
-                        VendorAddressID = reader.GetString("VendorAddressID"),
-                        VendorID = reader.GetString("VendorID"),
-                        ContactPerson = reader.GetString("ContactPerson"),
-                        ContactNumber = reader.GetString("ContactNumber"),
-                        PhoneNumber = reader.GetString("PhoneNumber"),
-                        Address = reader.GetString("Address"),
-                        Email = reader.GetString("Email"),
-                        AddressStatus = reader.GetString("Status")
-                        //AddressStatus = reader.GetInt32("Status")
-                    }).ToList();
-                }
-                //}
-            }
-            return VendorInfoSearchList;
-        }
-
-        public List<Sys_MasterData> GetJobLocation(string UserID, out string errorNumber)
-        {
-            errorNumber = string.Empty;
-            List<Sys_MasterData> masterDataList = new List<Sys_MasterData>();
-            DatabaseProviderFactory factory = new DatabaseProviderFactory();
-            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("CBPS_GetAllLocations"))
-            {
-                // Set parameters 
-
+                db.AddInParameter(dbCommandWrapper, "@page", SqlDbType.Int, page);
+                db.AddInParameter(dbCommandWrapper, "@itemsPerPage", SqlDbType.Int, itemsPerPage);
+                db.AddInParameter(dbCommandWrapper, "@sortBy", SqlDbType.NVarChar, sortBy);
+                db.AddInParameter(dbCommandWrapper, "@reverse", SqlDbType.Int, reverse ? 1 : 0);
+                db.AddInParameter(dbCommandWrapper, "@search", SqlDbType.NVarChar, search);
+                db.AddInParameter(dbCommandWrapper, "@type", SqlDbType.NVarChar, type.ToString());
                 db.AddOutParameter(dbCommandWrapper, spStatusParam, DbType.String, 10);
-                // Execute SP.
-                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+                dbCommandWrapper.CommandTimeout = 300;
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
 
                 if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
                 {
-                    errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
+                    _errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
                 }
                 else
                 {
                     if (ds.Tables[0].Rows.Count > 0)
                     {
                         DataTable dt1 = ds.Tables[0];
-                        masterDataList = dt1.AsEnumerable().Select(reader => new Sys_MasterData
+                        ListedVendorsList = dt1.AsEnumerable().Select(reader => new OBS_VendorInfo
                         {
-                            //MasterDataID = reader.GetString("MasterDataID"),
-                            //MasterDataValue = reader.GetString("MasterDataValue"),
-                            //MasterDataTypeID = reader.GetString("MasterDataTypeID"),
-                            //OwnerID = reader.GetString("OwnerID"),
-                            //UserLevel = reader.GetString("UserLevel"),
-                            //SetBy = reader.GetString("SetBy"),
-                            //ModifiedBy = reader.GetString("ModifiedBy"),
-                            //Status = reader.GetInt32("Status"),
-                            //IsDefault = reader.GetString("IsDefault"),
-                            //SerialNo = reader.GetString("SerialNo"),
-                            //UDCode = reader.GetString("UDCode"),
-                            //ServicesCategoryID = reader.GetString("ServicesCategoryID")
-
+                            VendorCode = reader.GetString("VendorCode"),
+                            VendorID = reader.GetString("VendorID"),
+                            VendorName = reader.GetString("VendorName"),
+                            ContactPerson = reader.GetString("ContactPerson"),
+                            VendorTinNo = reader.GetString("VendorTinNo"),
+                            VendorBinNo = reader.GetString("VendorBinNo"),
+                            Email = reader.GetString("Email"),
+                            ContactNumber = reader.GetString("ContactNumber"),
+                            Address = reader.GetString("CurrentAddress"),
+                            ServiceItemName = reader.GetString("ServiceItemName"),
+                            ServiceItemID = reader.GetString("ServiceItemID"),
+                            Status = reader.GetString("Status"),
+                            TotalPages = reader.GetString("TotalPages")
                         }).ToList();
                     }
                 }
             }
-            return masterDataList;
+
+            return ListedVendorsList;
         }
+
+
+
     }
 }

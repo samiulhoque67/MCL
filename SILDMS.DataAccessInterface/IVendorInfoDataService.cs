@@ -10,11 +10,14 @@ namespace SILDMS.DataAccessInterface
 {
     public interface IVendorInfoDataService
     {
-        string SaveVendorInfoMst(OBS_VendorInfo _modelVendorInfoMst);
-        string SaveVendorAddress(OBS_VendorAddressInfo _modelVendorInfoMst);
-        List<OBS_ServicesCategory> GetServicesCategory(string action, out string errorNumber);
-        List<OBS_VendorInfo> GetVendorInfoSearchList();
-        List<OBS_VendorAddressInfo> GetVendorAddressList(string VendorID);
-        List<Sys_MasterData> GetJobLocation(string UserID, out string errorNumber);
+
+        string SaveVendorwithMatDataService(string UserID, string VendorCode, string VendorName, string ContactPerson, string ContactNumber, string Email,
+            string VendorTinNo, string VendorBinNo, string VAddress, List<OBS_ServicesCategory> ServiceItemInfo,int VendorStatus, out string _errorNumber);
+
+        List<OBS_VendorInfo> GetAllListedVendorsDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
+
+        List<OBS_ServicesCategory> GetAllMaterialData(out string _errorNumber);
+
+
     }
 }
