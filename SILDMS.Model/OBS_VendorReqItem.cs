@@ -10,6 +10,7 @@ namespace SILDMS.Model
     public class OBS_VendorReqItem
     {
         public string VendorReqItemID { get; set; }
+        public string ClientReqItemID { get; set; }
         public string VendorReqID { get; set; }
         public string ServiceCategoryID { get; set; }
         public string ServiceCategoryName { get; set; }
@@ -24,6 +25,7 @@ namespace SILDMS.Model
         public string DeliveryMode { get; set; }
         public string ReqQnty { get; set; }
         public string ReqUnit { get; set; }
+        public string CsStatus { get; set; }
         public string SetOn { get; set; }
         public string SetBy { get; set; }
         public string ModifiedOn { get; set; }

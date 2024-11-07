@@ -27,6 +27,7 @@ namespace SILDMS.Model
         public string SubmissionDate { get; set; }
         public string LastDateofQuotation { get; set; }
         public string Remarks { get; set; }
+        public string CsStatus { get; set; }
         public string SetOn { get; set; }
         public string SetBy { get; set; }
         public string ModifiedOn { get; set; }

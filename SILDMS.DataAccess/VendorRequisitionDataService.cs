@@ -201,7 +201,7 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, VendorReq.ClientReqID);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, VendorReq.ClientID);
 
-                    //db.AddInParameter(dbCommandWrapper, "@RequisitionNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(VendorReq.RequisitionNo));
+                    db.AddInParameter(dbCommandWrapper, "@CsStatus", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(VendorReq.CsStatus));
                     db.AddInParameter(dbCommandWrapper, "@RequisitionDate", SqlDbType.NVarChar, VendorReq.RequisitionDate);
                     db.AddInParameter(dbCommandWrapper, "@SubmissionDate", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(VendorReq.SubmissionDate));
                     db.AddInParameter(dbCommandWrapper, "@LastDateofQuotation", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(VendorReq.LastDateofQuotation));

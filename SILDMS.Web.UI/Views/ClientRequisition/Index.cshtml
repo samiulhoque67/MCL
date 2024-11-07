@@ -280,6 +280,7 @@
                             <th style="text-align: left;" st-sort="">Delivery Location</th>
                             <th style="text-align: left;" st-sort="">Delivery Date</th>
                             <th style="text-align: left;" st-sort="">Delivery Mode</th>
+                            <th style="text-align: left;" st-sort="">ReqType</th>
                             <th style="text-align: left;" st-sort="">ReqQnty</th>
                             <th style="text-align: left;" st-sort="">ReqUnit</th>
                             <th style="text-align: left;">Action</th>
@@ -299,6 +300,7 @@
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryLocation}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryDate}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryMode}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.ReqType}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
 
@@ -996,6 +998,7 @@
             $scope.ClientReqItem.DeliveryDate = tableRow.DeliveryDate;
             $scope.ClientReqItem.Description = tableRow.Description;
 
+            $scope.ClientReqItem.ReqType = tableRow.ReqType;
             $scope.ClientReqItem.ReqQnty = tableRow.ReqQnty;
             $scope.ClientReqItem.ReqUnit = tableRow.ReqUnit;
 
@@ -1080,7 +1083,7 @@
             $scope.ClientReq.Remarks = tableRow.Remarks;
             $scope.ClientReq.Status = tableRow.Status;
 
-            $http.post('/ClientRequisition/GetClientReqItemList', { ClientReqID: tableRow.ClientReqID })
+            $http.post('/ClientRequisition/GetClientReqItemList', { ClientReqID: tableRow.ClientReqID, ReqType: "ALL" })
                 .success(function (response) {
                     $scope.masterDataSetupGridData = response.ClientReqItemList;
                     $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
