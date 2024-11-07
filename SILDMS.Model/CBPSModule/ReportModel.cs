@@ -10,6 +10,9 @@ namespace SILDMS.Model.CBPSModule
     {
         public string UserRptID { get; set; }
         public string UserFullName { get; set; }
+        public string ClientName { get; set; }
+        public string Remarks { get; set; }
+        public string VendorName { get; set; }
         public string BillReceiveFromDate { get; set; }
         public string BillReceiveToDate { get; set; }
         public string VendorPaymentFromDate { get; set; }
@@ -27,7 +30,7 @@ namespace SILDMS.Model.CBPSModule
         public string VendorID { get; set; }
         public string VendorCode { get; set; }
         public string VendorCode2 { get; set; }
-        public string VendorName { get; set; }
+        //public string VendorName { get; set; }
         public string VendorAddress { get; set; }
         public string EFTindicator { get; set; }
         public string WebUserIndicator { get; set; }

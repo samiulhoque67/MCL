@@ -21,5 +21,8 @@ namespace SILDMS.Model
         public string ModifiedBy { get; set; }
         [Required]
         public int? Status { get; set; }
+        public string ServiceItemName { get; set; }
+        public string ServiceItemCode { get; set; }
+        public string ServiceItemID { get; set; }
     }
 }

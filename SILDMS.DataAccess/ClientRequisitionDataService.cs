@@ -26,8 +26,8 @@ namespace SILDMS.DataAccess
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetServicesCategory"))
             {
                 // Set parameters 
-                db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.VarChar, userID);
-                db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.VarChar, "");
+                //db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.VarChar, userID);
+                //db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.VarChar, "");
                 db.AddOutParameter(dbCommandWrapper, spStatusParam, DbType.String, 10);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -103,6 +103,7 @@ namespace SILDMS.DataAccess
             dtReqItem.Columns.Add("DeliveryLocation");
             dtReqItem.Columns.Add("DeliveryDate");
             dtReqItem.Columns.Add("DeliveryMode");
+            dtReqItem.Columns.Add("ReqType");
             dtReqItem.Columns.Add("ReqQnty");
             dtReqItem.Columns.Add("ReqUnit");
             foreach (var item in clientReqItem)
@@ -116,8 +117,9 @@ namespace SILDMS.DataAccess
                 objDataRow[4] = item.DeliveryLocation;
                 objDataRow[5] = item.DeliveryDate;
                 objDataRow[6] = item.DeliveryMode;
-                objDataRow[7] = item.ReqQnty;
-                objDataRow[8] = item.ReqUnit;
+                objDataRow[7] = item.ReqType;
+                objDataRow[8] = item.ReqQnty;
+                objDataRow[9] = item.ReqUnit;
                 dtReqItem.Rows.Add(objDataRow);
             }
 
@@ -208,7 +210,7 @@ namespace SILDMS.DataAccess
             return ClientReqList;
         }
 
-        public List<OBS_ClientReqItem> GetClientReqItemList(string ClientReqID)
+        public List<OBS_ClientReqItem> GetClientReqItemList(string ClientReqID, string ReqType)
         {
             string errorNumber = string.Empty;
             List<OBS_ClientReqItem> ClientReqItemList = new List<OBS_ClientReqItem>();
@@ -217,6 +219,7 @@ namespace SILDMS.DataAccess
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientReqItemList"))
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, ClientReqID);
+                db.AddInParameter(dbCommandWrapper, "@ReqType", SqlDbType.VarChar, ReqType);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -234,6 +237,7 @@ namespace SILDMS.DataAccess
                         DeliveryLocation = reader.GetString("DeliveryLocation"),
                         DeliveryDate = reader.GetString("DeliveryDate"),
                         DeliveryMode = reader.GetString("DeliveryMode"),
+                        ReqType = reader.GetString("ReqType"),
                         ReqQnty = reader.GetString("ReqQnty"),
                         ReqUnit = reader.GetString("ReqUnit"),
                         Status = reader.GetString("Status")

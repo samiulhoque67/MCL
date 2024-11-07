@@ -201,6 +201,8 @@
                     <table st-table="VendorDisplayedCollection" st-safe-src="VendorList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ServiceItemID')">Vendor Code</th>*@
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ServiceItemName')">ServiceItem Name</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorCode')">Vendor Code</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorName')">Vendor Name</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactPerson')">Contact Person</th>
@@ -218,6 +220,8 @@
                         <tbody>
                             <tr ng-repeat="row in VendorDisplayedCollection">
                                 <td class="hidden">{{row.VendorID}}</td>
+                                <td class="hidden">{{row.ServiceItemID}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ServiceItemName}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.VendorCode}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactPerson}}</td>
@@ -363,6 +367,7 @@
                     <tbody>
                         <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;">
                             <td class="hidden">{{row.index+1}}</td>
+                            <td class="hidden">{{row.ClientReqItemID}}</td>
                             <td class="hidden">{{row.VendorReqItemID}}</td>
                             <td class="hidden">{{row.VendorReqID}}</td>
                             <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
@@ -623,11 +628,6 @@
                             <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Vendor List:</h2>
                         </div>
                     </div>
-                    @*<div class="col-lg-3 ">
-                            <div class="form-group">
-                                <label for="TermsAndConditions">Vendor List:</label>
-                            </div>
-                        </div>*@
                     <div class="col-lg-3">
                         <div class="form-group">
                             <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorReq.VendorName" class="form-control" ng-readonly="true" />
@@ -637,13 +637,21 @@
                         <button type="button" data-ng-click="ShowVendorList()" class="form-control">Search</button>
                     </div>
 
-                    @*<div class="box-tools pull-right">
-                            <div class="col-lg-12 pull-right">
-                                <div class="btn-group pull-right" style="margin:2px;">
-                                    <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" data-ng-click="AddReqTermModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
-                                </div>
-                            </div>
-                        </div>*@
+                    <div class="col-lg-1">
+                    </div>
+                    <div class="col-lg-1">
+                        <div class="form-group">
+                            <label for="ReqQnty">CS Status</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <select name="ss" style="background-color: #ffffff; width: 90px; height: 26px; font-size: 9px" class="form-control" ng-model="VendorReq.CsStatus">
+                                <option value="WCS">With CS</option>
+                                <option value="NCS">Without CS</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1072,7 +1080,7 @@
             $scope.VendorReq.ClientID = tableRow.ClientID;
             $scope.VendorReq.ClientName = tableRow.ClientName;
 
-            $http.post('/ClientRequisition/GetClientReqItemList', { ClientReqID: tableRow.ClientReqID })
+            $http.post('/ClientRequisition/GetClientReqItemList', { ClientReqID: tableRow.ClientReqID, ReqType: "QV" })
                 .success(function (response) {
                     $scope.masterDataSetupGridData = response.ClientReqItemList;
                     $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
@@ -1098,15 +1106,13 @@
         };
 
         $scope.ShowVendorList = function () {
-            /*$http.get("/VendorInfo/GetVendorInfoSearchList")*/
-            $http.get("/VendorInfo/GetServiceCategoryWiseVendorList?ServiceCategoryID=" + ServiceCategoryID)
+            $http.get("/VendorRequisition/GetVendorWiseItemList?ServiceItemID=" + ServiceItemID)
                 .success(function (response) {
                     $scope.VendorList = response.VendorInfoSearchList;
                     $scope.VendorDisplayedCollection = [].concat($scope.VendorList);
                     $scope.loading = false;
                 })
                 .error(function () { });
-
             $('#VendorInfoModal').modal('show');
         };
 
@@ -1310,7 +1316,7 @@
                 VendorReqID: row.VendorReqID,
                 index: row.index
             };
-            ServiceItemID = row.ServiceItemID;
+            ServiceItemID  = row.ServiceItemID;
             ServiceCategoryID = row.ServiceCategoryID;
             $scope.ExistedVendor = 0;
             var indexToRemove = -1;
@@ -1558,7 +1564,7 @@
                 });
         }
 
-        ///////////////////////////////////////////////
+        //////////////////    SAVE    /////////////////////////////
 
         $scope.Post = function () {
 

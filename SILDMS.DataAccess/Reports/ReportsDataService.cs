@@ -90,6 +90,38 @@ namespace SILDMS.DataAccess.Reports
             }
         }
 
+        public DataTable VendorCSApprevedReport(string userID, string FromDate, string Status, string id, string action, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetReportVendorCSApprevedData"))
+            {
+              
+                //if (!string.IsNullOrEmpty(FromDate))
+                //{
+                //    string[] fromdate = FromDate.Split('/');
+                //    FromDate = fromdate[2] + "-" + fromdate[1] + "-" + fromdate[0];
+                //}
+                ////if (!string.IsNullOrEmpty(ToDate))
+                ////{
+                ////    string[] todate = ToDate.Split('/');
+                ////    ToDate = todate[2] + "-" + todate[1] + "-" + todate[0];
+                ////}
+
+                //db.AddInParameter(dbCommandWrapper, "@RptUserID", SqlDbType.VarChar, userID);
+                //db.AddInParameter(dbCommandWrapper, "@FromDate", SqlDbType.VarChar, FromDate);
+                ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
+                //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
+                ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
+
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+        }
+
         public DataTable GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out string errorNumber)
         {
             errorNumber = string.Empty;

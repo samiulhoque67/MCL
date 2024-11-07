@@ -280,6 +280,7 @@
                             <th style="text-align: left;" st-sort="">Delivery Location</th>
                             <th style="text-align: left;" st-sort="">Delivery Date</th>
                             <th style="text-align: left;" st-sort="">Delivery Mode</th>
+                            <th style="text-align: left;" st-sort="">ReqType</th>
                             <th style="text-align: left;" st-sort="">ReqQnty</th>
                             <th style="text-align: left;" st-sort="">ReqUnit</th>
                             <th style="text-align: left;">Action</th>
@@ -299,6 +300,7 @@
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryLocation}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryDate}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryMode}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.ReqType}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
 
@@ -419,6 +421,36 @@
                                 <option value="">-- None --</option>
                                 <option value="Hardcopy">Hardcopy</option>
                                 <option value="Softcopy">Softcopy</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        @*<div class="col-lg-1">
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label for="DeliveryDate">Delivery Date :</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <input id="DeliveryDate" name="DeliveryDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                                           ng-model="ClientReqItem.DeliveryDate" style=" background-color:#ffffff; " />
+                                </div>
+                            </div>*@
+                        <div class="col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="DeliveryMode">Req. Type:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <select data-ng-model="ClientReqItem.ReqType" class="form-control">
+                                <option value="">-- None --</option>
+                                <option value="QC">Qutn to Client</option>
+                                <option value="QV">Qutn to Vendor</option>
                             </select>
                         </div>
                     </div>
@@ -561,13 +593,13 @@
                         </div>
                     </div>
                     <div class="col-lg-1">
-                        <button type="button" data-ng-click="ShowTermsConditionsList()" class="form-control">Search</button>
+                        <button type="button" ng-click="ShowTermsConditionsList()" class="form-control">Search</button>
                     </div>
                     @*</div>*@
                     <div class="box-tools pull-right">
                         <div class="col-lg-12 pull-right">
                             <div class="btn-group pull-right" style="margin:2px;">
-                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" data-ng-click="AddReqTermModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
+                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
                             </div>
                         </div>
                     </div>
@@ -599,9 +631,9 @@
                             <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
 
                             <td class="col-lg-1" style="width:5%;">
-                                <button type="button" ng-if="row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" ng-if="!row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                                <button type="button" ng-if="row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" ng-if="!row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
                             </td>
                         </tr>
                     </tbody>
@@ -735,6 +767,7 @@
             ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
             ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
             DeliveryMode: "",
+            ReqType: "",
             ReqQnty: "",
             ReqUnit: ""
         }
@@ -965,6 +998,7 @@
             $scope.ClientReqItem.DeliveryDate = tableRow.DeliveryDate;
             $scope.ClientReqItem.Description = tableRow.Description;
 
+            $scope.ClientReqItem.ReqType = tableRow.ReqType;
             $scope.ClientReqItem.ReqQnty = tableRow.ReqQnty;
             $scope.ClientReqItem.ReqUnit = tableRow.ReqUnit;
 
@@ -1049,7 +1083,7 @@
             $scope.ClientReq.Remarks = tableRow.Remarks;
             $scope.ClientReq.Status = tableRow.Status;
 
-            $http.post('/ClientRequisition/GetClientReqItemList', { ClientReqID: tableRow.ClientReqID })
+            $http.post('/ClientRequisition/GetClientReqItemList', { ClientReqID: tableRow.ClientReqID, ReqType: "ALL" })
                 .success(function (response) {
                     $scope.masterDataSetupGridData = response.ClientReqItemList;
                     $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
@@ -1135,6 +1169,7 @@
             }
             $('#RequisitionTermModal').modal('show');
         };
+
 
         $scope.ReqTermDataSetupGridData = [];  // base collection
         $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);

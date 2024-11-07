@@ -10,7 +10,7 @@ namespace SILDMS.Model
     public class OBS_VendorCSAprv
     {
         public string VendorCSAprvID { get; set; }
-        public string VendorQutnID { get; set; }
+        public string VendorCSRecmID { get; set; }
         public string ServiceCategoryID { get; set; }
         public string ClientReqID { get; set; }
         public string ClientID { get; set; }

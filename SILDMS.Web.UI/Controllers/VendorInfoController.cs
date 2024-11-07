@@ -1,4 +1,5 @@
-﻿using SILDMS.Model;
+﻿using Microsoft.Owin.BuilderProperties;
+using SILDMS.Model;
 using SILDMS.Service;
 using SILDMS.Utillity;
 using SILDMS.Utillity.Localization;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace SILDMS.Web.UI.Controllers
@@ -34,68 +36,45 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
-        [HttpGet]
-        //[Authorize]
-        public async Task<dynamic> GetServicesCategory()
+        [HttpPost]
+        [Authorize]
+        public async Task<dynamic> SaveVendorwithMat(string VendorCode,string VendorName, string ContactPerson, string ContactNumber, string Email,
+            string VendorTinNo, string VendorBinNo,string VAddress, List<OBS_ServicesCategory> ServiceItemInfo, int VendorStatus, string TempVendorID =  null)
+
         {
-            //UserID = SILAuthorization.GetUserID();
-            List<OBS_ServicesCategory> obServicesCategory = null;
-            await Task.Run(() => _vendorInfoService.GetServicesCategory(UserID, out obServicesCategory));
-            var result = obServicesCategory.Select(x => new
+            string Status = string.Empty, message = string.Empty;
+
+            Status = _vendorInfoService.SaveVendorwithMatService(UserID, VendorCode, VendorName, ContactPerson, ContactNumber, Email,
+             VendorTinNo,  VendorBinNo,  VAddress, ServiceItemInfo, VendorStatus, TempVendorID, out Status);
+            if (Status == "Success" || Status != null || Status != "")
             {
-                VendorCategoryID = x.ServicesCategoryID,
-                VendorCategoryName = x.ServicesCategoryName
-            }).OrderByDescending(ob => ob.VendorCategoryID);
+                message = "Data Saved Successfully";
+                return Json(new { Status, message }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                message = "Error Found";
+                return Json(new { Status, message }, JsonRequestBehavior.AllowGet);
 
-            return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
+            }
         }
 
-        [HttpPost]
-        [Authorize]
-        [SILLogAttribute]
-        public async Task<dynamic> SaveVendorInfoMst(OBS_VendorInfo _modelVendorInfoMst)
+        public async Task<dynamic> GetAllListedVendors(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
         {
-            _modelVendorInfoMst.SetBy = UserID;
-            string status = string.Empty;//, message = string.Empty;
-            status = _vendorInfoService.SaveVendorInfoMst(_modelVendorInfoMst);
-            return Json(new { status }, JsonRequestBehavior.AllowGet);
-        }
-
-        public async Task<dynamic> SaveVendorAddress(OBS_VendorAddressInfo _modelVendorAddress)
-        {
-            _modelVendorAddress.SetBy = UserID;
-            string status = string.Empty;//, message = string.Empty;
-            status = _vendorInfoService.SaveVendorAddress(_modelVendorAddress);
-            return Json(new { status }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        [Authorize]
-        [SILLogAttribute]
-        public async Task<dynamic> DeleteVendorAddress(OBS_VendorAddressInfo _modelVendorAddress)
-        {
-            _modelVendorAddress.Action = "delete";
-            string status = string.Empty;//, message = string.Empty;
-            status = _vendorInfoService.SaveVendorAddress(_modelVendorAddress);
-            return Json(new { status }, JsonRequestBehavior.AllowGet);
-        }
-
-        public async Task<dynamic> GetVendorInfoSearchList()
-        {
-            var VendorInfoSearchList = new List<OBS_VendorInfo>();
-            await Task.Run(() => _vendorInfoService.GetVendorInfoSearchList(out VendorInfoSearchList));
-            var result = Json(new { VendorInfoSearchList, msg = "VendorInfoSearchList are loaded in the table." }, JsonRequestBehavior.AllowGet);
-            result.MaxJsonLength = Int32.MaxValue;
+            var ListedVendorsList = new List<OBS_VendorInfo>();
+            await Task.Run(() => _vendorInfoService.GetAllListedVendorsService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out ListedVendorsList));
+            var result = Json(new { ListedVendorsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
             return result;
         }
 
-        public async Task<dynamic> GetVendorAddressList(string VendorID)
+        [Authorize]
+        public async Task<dynamic> GetAllMaterial()
         {
-            var VendorAddressList = new List<OBS_VendorAddressInfo>();
-            await Task.Run(() => _vendorInfoService.GetVendorAddressList(VendorID, out VendorAddressList));
-            var result = Json(new { VendorAddressList, msg = "VendorInfoSearchList are loaded in the table." }, JsonRequestBehavior.AllowGet);
-            result.MaxJsonLength = Int32.MaxValue;
-            return result;
+            string MaterialCategory = null;
+            var MaterialList = new List<OBS_ServicesCategory>();
+            await Task.Run(() => _vendorInfoService.GetAllMaterialService(out MaterialList));
+            return Json(new { MaterialList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

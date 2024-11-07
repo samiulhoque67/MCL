@@ -14,7 +14,7 @@ namespace SILDMS.Service
         ValidationResult GetClientInfoList(out List<OBS_ClientAndAddressInfo> ClientInfoSearchList);
         string SaveClientRequisition(OBS_ClientReq clientReq, List<OBS_ClientReqItem> clientReqItem, List<OBS_ClientReqTerms> clientReqTerm);
         ValidationResult GetClientReqSearchList(out List<OBS_ClientReq> ClientReqSearchList);
-        ValidationResult GetClientReqItemList(string ClientReqID,out List<OBS_ClientReqItem> ClientReqItemList);
+        ValidationResult GetClientReqItemList(string ClientReqID, string ReqType, out List<OBS_ClientReqItem> ClientReqItemList);
         ValidationResult GetClientReqTermList(string ClientReqID, out List<OBS_ClientReqTerms> ClientReqTermList);
         ValidationResult GetClientReqTermAgainstFormList(string TermsID, out List<OBS_ClientReqTerms> ClientReqTermList);
         string DeleteClientReqItemAndTerm(string ClientReqItemID, string ClientReqTermID);

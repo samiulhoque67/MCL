@@ -12,9 +12,9 @@ namespace SILDMS.Service.QuotationToClient
     {
         ValidationResult AllAvailableCSVendorApprovalService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out List<OBS_ClientInfo> AllAvailableClientsList);
         ValidationResult AvailableClientDetailInfoService(string ClientID, out List<OBS_ClientDetails> ClientDetails);
+        ValidationResult GetTermsConditionsListService(string TermsID,  out List<OBS_VendorReqTerms> VendorTermTermList);
         ValidationResult GetClientReqDataInfoService(string ClientID, out List<ClientReqData> GetClientReqDetails);
         string SaveQuotToClientService(string UserID, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl);
-
-
+       
     }
 }

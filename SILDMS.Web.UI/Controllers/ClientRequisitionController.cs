@@ -73,10 +73,10 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> GetClientReqItemList(string ClientReqID)
+        public async Task<dynamic> GetClientReqItemList(string ClientReqID,string ReqType)
         {
             var ClientReqItemList = new List<OBS_ClientReqItem>();
-            await Task.Run(() => _clientInfoService.GetClientReqItemList(ClientReqID, out ClientReqItemList));
+            await Task.Run(() => _clientInfoService.GetClientReqItemList(ClientReqID, ReqType, out ClientReqItemList));
             var result = Json(new { ClientReqItemList, msg = "ClientReqItemList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;

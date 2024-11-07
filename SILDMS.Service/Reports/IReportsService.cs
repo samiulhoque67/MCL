@@ -17,7 +17,8 @@ namespace SILDMS.Service.Reports
         ValidationResult GetRptUserActivityStatus(string FromDate, string ToDate, string userID, string id, string action, out DataTable UserActivityStatus);
         
         ValidationResult GetRptUserDetails(string UserRptID, string BillReceiveFromDate, string Status, string id, string action, out DataTable UserDetails);
-      
+        ValidationResult VendorCSApprevedReport(string UserRptID, string BillReceiveFromDate, string Status, string id, string action, out DataTable UserDetails);
+
         ValidationResult GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out DataTable OwnerList);
 
         ValidationResult GetRptDocumentsList(string OwnerLevelID, string OwnerID, string DocCategoryID, string DocTypeID, string DocPropertyID, string Status, string id, string action, out DataTable DocumentsList);

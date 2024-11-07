@@ -134,7 +134,7 @@ namespace SILDMS.DataAccess
             List<OBS_ClientReq> VendorInfoList = new List<OBS_ClientReq>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSClientInfo"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSAprvClientInfo"))
             {
                 db.AddInParameter(dbCommandWrapper, "@ServiceCategoryID", SqlDbType.VarChar, ServiceCategoryID);
                 // Execute SP. 
@@ -162,7 +162,7 @@ namespace SILDMS.DataAccess
             List<OBS_VendorCSAprv> VendorCSAprvList = new List<OBS_VendorCSAprv>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSVendorsUsingClient"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSAprvVendorsUsingClient"))
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.VarChar, ClientID);
                 // Execute SP. 
@@ -172,33 +172,30 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     VendorCSAprvList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSAprv
                     {
-                        VendorQutnID = reader.GetString("VendorQutnID"),
+                        VendorCSRecmID = reader.GetString("VendorCSRecmID"),
                         VendorID = reader.GetString("VendorID"),
                         VendorName = reader.GetString("VendorName"),
                         ContactPerson = reader.GetString("ContactPerson"),
                         ContactNumber = reader.GetString("ContactNumber"),
-                        VendorQutnNo = reader.GetString("VendorQutnNo"),
-                        QuotationDate = reader.GetString("QuotationDate"),
+                        CSNo = reader.GetString("CSNo"),
+                        CSRecDate = reader.GetString("CSRecDate"),
                         TolQnty = reader.GetString("QutnQnty")
-                        //,
-                        //LastDateofQuotation = reader.GetString("LastDateofQuotation"),
-                        //Remarks = reader.GetString("Remarks"),
-                        //Status = reader.GetString("Status")
                     }).ToList();
                 }
             }
             return VendorCSAprvList;
         }
 
-        public List<OBS_VendorCSAprvItem> GetVendorCSQuotationItem(string VendorID)
+        public List<OBS_VendorCSAprvItem> GetVendorCSQuotationItem(string VendorID, string ClientID)
         {
             string errorNumber = string.Empty;
             List<OBS_VendorCSAprvItem> VendorCSAprvItemList = new List<OBS_VendorCSAprvItem>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSQuotationItem"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSAprvQuotationItem"))
             {
                 db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
+                db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.VarChar, ClientID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -216,34 +213,28 @@ namespace SILDMS.DataAccess
                         DeliveryMode = reader.GetString("DeliveryMode"),
                         ReqQnty = reader.GetString("ReqQnty"),
                         ReqUnit = reader.GetString("ReqUnit"),
-
                         QutnQnty = reader.GetString("QutnQnty"),
                         QutnPrice = reader.GetString("QutnPrice"),
                         QutnUnit = reader.GetString("QutnUnit"),
-
                         QutnAmt = reader.GetString("QutnAmt"),
-
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
                         TolAmt = reader.GetString("TolAmt")
-                        // ,
-
-                        //Status = reader.GetString("Status")
                     }).ToList();
                 }
             }
             return VendorCSAprvItemList;
         }
 
-        public List<OBS_VendorCSAprvTerms> GetVendorCSAprvTermList(string VendorCSAprvID)
+        public List<OBS_VendorCSAprvTerms> GetVendorCSAprvTermList(string VendorCSRecmID)
         {
             string errorNumber = string.Empty;
             List<OBS_VendorCSAprvTerms> VendorCSAprvItemList = new List<OBS_VendorCSAprvTerms>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorQutnTermList"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSTermList"))
             {
-                db.AddInParameter(dbCommandWrapper, "@VendorQutnID", SqlDbType.VarChar, VendorCSAprvID);
+                db.AddInParameter(dbCommandWrapper, "@VendorCSRecmID", SqlDbType.VarChar, VendorCSRecmID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)

@@ -56,6 +56,16 @@
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
                 </div>
+                <div class="btn-group pull-right" style="margin: 3px">
+                    @using (Html.BeginForm("VendorCSApprevedReport", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+                    {
+                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="btn btn-sm btn-flat btn-success pull-right">
+                            <i class="fa fa-print"></i> CS Print
+                        </button>
+                    }
+
+
+                </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="SearchVendorReqModal()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
                 </div>
@@ -236,7 +246,7 @@
                     <tbody>
                         <tr ng-repeat="row in CSVendorDisplayedCollection" ng-cloak style="font-size:12px;">
                             <td class="hidden">{{row.index+1}}</td>
-                            <td class="hidden">{{row.VendorQutnID}}</td>
+                            <td class="hidden">{{row.VendorCSRecmID}}</td>
                             <td class="hidden">{{row.VendorID}}</td>
                             <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactPerson}}</td>
@@ -373,33 +383,7 @@
                 </div>
             </div>
 
-            @*<div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Recommended by:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="RecommendedBy" name="RecommendedBy" type="text" value={{dashBoardResult[0].ServiceCategoryName}} class="form-control" placeholder="RecommendedBy" ng-model="VendorCSAprv.RecommendedBy" />
-                    </div>
-                </div>*@
-
         </div>
-
-        @*<div class="row">
-            <div class="col-sm-1 col-md-1 col-lg-1">
-            </div>
-            <div class="col-lg-3 ">
-                <div class="form-group">
-                    <label for="QuotationFor">Note:</label>
-                </div>
-            </div>
-            <div class="col-lg-8">
-                <div class="form-group">
-                    <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSAprv.Remarks" class="form-control" placeholder="Note for CS" />
-                </div>
-            </div>
-        </div>*@
 
     </div>
 
@@ -471,6 +455,8 @@
 
         $scope.ClientSelect = function (row) {
             $scope.VendorCSAprv.ClientID = row.ClientID;
+            $scope.VendorCSAprv.ClientName = row.ClientName;
+            $scope.ReportModel.ClientName = row.ClientName;
             $scope.VendorCSAprv.ClientReqID = row.ClientReqID;
             $http.post("/VendorCSAprv/GetVendorCSVendorsUsingClient?ClientID=" + row.ClientID)
                 .success(function (response) {
@@ -485,14 +471,16 @@
         };
 
         $scope.ItemSelect = function (row) {
-            $http.post("/VendorCSAprv/GetVendorCSQuotationItem?VendorID=" + row.VendorID)
+            $scope.VendorCSAprv.ClientName = row.ClientName;
+            //$http.post("/VendorCSAprv/GetVendorCSQuotationItem?VendorID=" + row.VendorID)
+            $http.post('/VendorCSAprv/GetVendorCSQuotationItem', { VendorID: row.VendorID, ClientID: $scope.VendorCSAprv.ClientID })
                 .success(function (response) {
                     $scope.VenCSItemList = response.VenCSItemList;
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
                 })
                 .error(function () { });
 
-            $http.post('/VendorCSAprv/GetVendorCSAprvTermList', { VendorQutnID: row.VendorQutnID })
+            $http.post('/VendorCSAprv/GetVendorCSAprvTermList', { VendorCSRecmID: row.VendorCSRecmID })
                 .success(function (response) {
                     $scope.ReqTermDataSetupGridData = response.VendorCSAprvTermList;
                     $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
@@ -501,6 +489,21 @@
                     $scope.loading = false;
                 });
         };
+
+        $scope.ReportModel = {
+            ClientName: "",
+            Remarks: ""
+            //,
+            //VendorID: "",
+            //ClientReqID: "",
+            //ClientID: "",
+            //AutoCSNo: "",
+            //CSRecDate: "",
+            //Operation: "",
+            //RecommendedBy: "",
+            //Remarks: "",
+            //Status: ""
+        }
 
         $scope.VendorCSAprv = {
             VendorCSRecmID: "",
@@ -539,7 +542,7 @@
             VendorID: "",
             VendorName: "",
             TolQnty: "",
-            VendorQutnID: "",
+            VendorCSRecmID: "",
             //ContactPerson: "",
             //ContactNumber: "",
             //VendorTINNo: "",
@@ -738,7 +741,7 @@
                 VendorCSAprvItemID: "",
                 ContactPerson: "",
                 ContactNumber: "",
-                VendorQutnID: "",
+                VendorCSRecmID: "",
                 VendorQutnNo: "",
                 QuotationDate: "",
                 TolQnty: "",
@@ -861,7 +864,7 @@
 
         $scope.selectEntity = function (row) {
             var selecteditems = {
-                VendorQutnID: row.VendorQutnID,
+                VendorCSRecmID: row.VendorCSRecmID,
                 VendorID: row.VendorID,
                 VendorName: row.VendorName,
                 ContactPerson: row.ContactPerson,
