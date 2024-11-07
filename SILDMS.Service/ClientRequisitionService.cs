@@ -53,9 +53,9 @@ namespace SILDMS.Service
             ClientReqSearchList = clientInfoDataService.GetClientReqSearchList();
             return ValidationResult.Success;
         }
-        public ValidationResult GetClientReqItemList(string ClientReqID, out List<OBS_ClientReqItem> ClientReqItemList)
+        public ValidationResult GetClientReqItemList(string ClientReqID, string ReqType, out List<OBS_ClientReqItem> ClientReqItemList)
         {
-            ClientReqItemList = clientInfoDataService.GetClientReqItemList(ClientReqID);
+            ClientReqItemList = clientInfoDataService.GetClientReqItemList(ClientReqID, ReqType);
             return ValidationResult.Success;
         }
         public ValidationResult GetClientReqTermList(string ClientReqID, out List<OBS_ClientReqTerms> ClientReqTermList)
