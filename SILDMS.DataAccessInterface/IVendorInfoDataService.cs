@@ -12,7 +12,7 @@ namespace SILDMS.DataAccessInterface
     {
 
         string SaveVendorwithMatDataService(string UserID, string VendorCode, string VendorName, string ContactPerson, string ContactNumber, string Email,
-            string VendorTinNo, string VendorBinNo, string VAddress, List<OBS_ServicesCategory> ServiceItemInfo,int VendorStatus, out string _errorNumber);
+            string VendorTinNo, string VendorBinNo, string VAddress, List<OBS_ServicesCategory> ServiceItemInfo,int VendorStatus, string TempVendorID, out string _errorNumber);
 
         List<OBS_VendorInfo> GetAllListedVendorsDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
 

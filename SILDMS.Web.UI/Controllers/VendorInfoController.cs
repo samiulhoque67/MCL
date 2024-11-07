@@ -39,13 +39,13 @@ namespace SILDMS.Web.UI.Controllers
         [HttpPost]
         [Authorize]
         public async Task<dynamic> SaveVendorwithMat(string VendorCode,string VendorName, string ContactPerson, string ContactNumber, string Email,
-            string VendorTinNo, string VendorBinNo,string VAddress, List<OBS_ServicesCategory> ServiceItemInfo, int VendorStatus)
+            string VendorTinNo, string VendorBinNo,string VAddress, List<OBS_ServicesCategory> ServiceItemInfo, int VendorStatus, string TempVendorID =  null)
 
         {
             string Status = string.Empty, message = string.Empty;
 
             Status = _vendorInfoService.SaveVendorwithMatService(UserID, VendorCode, VendorName, ContactPerson, ContactNumber, Email,
-             VendorTinNo,  VendorBinNo,  VAddress, ServiceItemInfo, VendorStatus, out Status);
+             VendorTinNo,  VendorBinNo,  VAddress, ServiceItemInfo, VendorStatus, TempVendorID, out Status);
             if (Status == "Success" || Status != null || Status != "")
             {
                 message = "Data Saved Successfully";
