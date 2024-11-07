@@ -133,6 +133,7 @@ namespace SILDMS.DataAccess
             dtReqItem.Columns.Add("DeliveryMode");
             dtReqItem.Columns.Add("ReqQnty");
             dtReqItem.Columns.Add("ReqUnit");
+            dtReqItem.Columns.Add("ClientReqItemID");
             foreach (var item in VendorReqItem)
             {
                 DataRow objDataRow = dtReqItem.NewRow();
@@ -146,6 +147,7 @@ namespace SILDMS.DataAccess
                 objDataRow[6] = item.DeliveryMode;
                 objDataRow[7] = item.ReqQnty;
                 objDataRow[8] = item.ReqUnit;
+                objDataRow[9] = item.ClientReqItemID;
                 dtReqItem.Rows.Add(objDataRow);
             }
 
