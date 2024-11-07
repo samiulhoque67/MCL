@@ -145,6 +145,8 @@ using SILDMS.Service.ClientFinalBillPrepare;
 using SILDMS.DataAccess.ClientFinalBillPrepare;
 using SILDMS.Service.ClientBillRcmd;
 using SILDMS.DataAccess.ClientBillRcmd;
+using SILDMS.Service.ClientAprvBill;
+using SILDMS.DataAccess.ClientAprvBill;
 
 namespace SILDMS.InfraStructure
 {
@@ -342,6 +344,11 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IClientBillRcmdService>().To<ClientBillRcmdService>();
             kernel.Bind<IClientBillRcmdData>().To<ClientBillRcmdData>();
+
+            kernel.Bind<IClientAprvBillService>().To<ClientAprvBillService>();
+            kernel.Bind<IClientAprvBillData>().To<ClientAprvBillData>();
+
+      
 
         }
     }
