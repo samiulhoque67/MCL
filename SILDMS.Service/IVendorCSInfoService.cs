@@ -15,7 +15,7 @@ namespace SILDMS.Service
         ValidationResult GetVendorInfoList(out List<OBS_VendorAndAddressInfo> VendorInfoSearchList);
         ValidationResult GetVendorCSClientInfo(string ServiceItemCategoryID, out List<OBS_ClientReq> VendorInfoSearchList);
         ValidationResult OBS_GetVendorCSVendorsUsingClient(string ClientID, out List<OBS_VendorCSRecm> VendorCSInfoSearchList);
-        ValidationResult OBS_GetVendorCSQuotationItem(string VendorID, string ClientID, out List<OBS_VendorCSRecmItem> VendorCSInfoItemList);
+        ValidationResult OBS_GetVendorCSQuotationItem(string VendorID, string ClientID, string VendorQutnItemID, out List<OBS_VendorCSRecmItem> VendorCSInfoItemList);
         ValidationResult GetVendorCSInfoTermList(string VendorCSInfoID, out List<OBS_VendorCSRecmTerms> VendorCSInfoTermList);
         string SaveVendorCSInfo(OBS_VendorCSRecm clientReq, List<OBS_VendorCSRecmItem> clientReqItem, List<OBS_VendorCSRecmTerms> clientReqTerm, List<OBS_VendorCSRecmVendors> vendorReqItemWise);
         ValidationResult GetVendorCSInfoTermAgainstFormList(string TermsID, out List<OBS_VendorCSRecmTerms> VendorCSInfoTermList);

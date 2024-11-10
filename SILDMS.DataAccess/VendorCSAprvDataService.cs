@@ -144,6 +144,8 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     VendorInfoList = dt1.AsEnumerable().Select(reader => new OBS_ClientReq
                     {
+                        VendorCSRecmID = reader.GetString("VendorCSRecmID"),
+                        VendorCSRecmItemID = reader.GetString("VendorCSRecmItemID"),
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqID = reader.GetString("ClientReqID"),
@@ -156,7 +158,7 @@ namespace SILDMS.DataAccess
             return VendorInfoList;
         }
 
-        public List<OBS_VendorCSAprv> GetVendorCSVendorsUsingClient(string ClientID)
+        public List<OBS_VendorCSAprv> GetVendorCSVendorsUsingClient(string ClientID, string VendorCSRecmID)
         {
             string errorNumber = string.Empty;
             List<OBS_VendorCSAprv> VendorCSAprvList = new List<OBS_VendorCSAprv>();
@@ -165,6 +167,7 @@ namespace SILDMS.DataAccess
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSAprvVendorsUsingClient"))
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.VarChar, ClientID);
+                db.AddInParameter(dbCommandWrapper, "@VendorCSRecmID", SqlDbType.VarChar, VendorCSRecmID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -173,6 +176,7 @@ namespace SILDMS.DataAccess
                     VendorCSAprvList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSAprv
                     {
                         VendorCSRecmID = reader.GetString("VendorCSRecmID"),
+                        VendorCSRecmItemID = reader.GetString("VendorCSRecmItemID"),
                         VendorID = reader.GetString("VendorID"),
                         VendorName = reader.GetString("VendorName"),
                         ContactPerson = reader.GetString("ContactPerson"),
@@ -186,7 +190,7 @@ namespace SILDMS.DataAccess
             return VendorCSAprvList;
         }
 
-        public List<OBS_VendorCSAprvItem> GetVendorCSQuotationItem(string VendorID, string ClientID)
+        public List<OBS_VendorCSAprvItem> GetVendorCSQuotationItem(string VendorID, string ClientID, string VendorCSRecmItemID)
         {
             string errorNumber = string.Empty;
             List<OBS_VendorCSAprvItem> VendorCSAprvItemList = new List<OBS_VendorCSAprvItem>();
@@ -196,6 +200,7 @@ namespace SILDMS.DataAccess
             {
                 db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
                 db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.VarChar, ClientID);
+                db.AddInParameter(dbCommandWrapper, "@VendorCSRecmItemID", SqlDbType.VarChar, VendorCSRecmItemID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)

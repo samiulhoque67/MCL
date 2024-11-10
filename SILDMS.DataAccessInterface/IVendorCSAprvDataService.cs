@@ -13,8 +13,8 @@ namespace SILDMS.DataAccessInterface
         List<OBS_ServicesCategory> GetServicesCategory(string action, out string errorNumber);
         List<OBS_VendorAndAddressInfo> GetVendorInfoList();
         List<OBS_ClientReq> GetVendorCSClientInfo(string ServiceItemCategoryID);
-        List<OBS_VendorCSAprv> GetVendorCSVendorsUsingClient(string ClientID);
-        List<OBS_VendorCSAprvItem> GetVendorCSQuotationItem(string VendorID, string ClientID);
+        List<OBS_VendorCSAprv> GetVendorCSVendorsUsingClient(string ClientID, string VendorCSRecmID);
+        List<OBS_VendorCSAprvItem> GetVendorCSQuotationItem(string VendorID, string ClientID, string VendorCSRecmItemID);
         List<OBS_VendorCSAprvTerms> GetVendorCSAprvTermList(string VendorCSAprvID);
         string SaveVendorCSAprv(OBS_VendorCSAprv clientReq, List<OBS_VendorCSAprvItem> clientReqItem, List<OBS_VendorCSAprvTerms> clientReqTerm, List<OBS_VendorCSAprvVendors> vendorReqItemWise);
         List<OBS_VendorCSAprvTerms> GetVendorCSAprvTermAgainstFormList(string TermsID);

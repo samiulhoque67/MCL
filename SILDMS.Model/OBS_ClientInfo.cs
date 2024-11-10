@@ -84,6 +84,7 @@ namespace SILDMS.Model
         public string ClientReqID { get; set; }
         public string ClientQuotationID { get; set; }
         public string ClientQutnRecmID { get; set; }
+        public string VendorCSAprvID { get; set; }
     }
 
     public class OBS_QutntoClientMaster

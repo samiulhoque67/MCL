@@ -57,14 +57,14 @@ namespace SILDMS.Service
             VendorInfoList = clientInfoDataService.GetVendorCSClientInfo(ServiceItemCategoryID);
             return ValidationResult.Success;
         }
-        public ValidationResult OBS_GetVendorCSVendorsUsingClient(string ClientID, out List<OBS_VendorCSRecm> VendorCSInfoSearchList)
+        public ValidationResult OBS_GetVendorCSVendorsUsingClient(string ClientID,  out List<OBS_VendorCSRecm> VendorCSInfoSearchList)
         {
             VendorCSInfoSearchList = clientInfoDataService.OBS_GetVendorCSVendorsUsingClient(ClientID);
             return ValidationResult.Success;
         }
-        public ValidationResult OBS_GetVendorCSQuotationItem(string VendorID, string ClientID, out List<OBS_VendorCSRecmItem> VendorCSInfoItemList)
+        public ValidationResult OBS_GetVendorCSQuotationItem(string VendorID, string ClientID,string VendorQutnItemID, out List<OBS_VendorCSRecmItem> VendorCSInfoItemList)
         {
-            VendorCSInfoItemList = clientInfoDataService.OBS_GetVendorCSQuotationItem(VendorID, ClientID);
+            VendorCSInfoItemList = clientInfoDataService.OBS_GetVendorCSQuotationItem(VendorID, ClientID, VendorQutnItemID);
             return ValidationResult.Success;
         }
         public ValidationResult GetVendorCSInfoTermList(string VendorCSInfoID, out List<OBS_VendorCSRecmTerms> VendorCSInfoTermList)
