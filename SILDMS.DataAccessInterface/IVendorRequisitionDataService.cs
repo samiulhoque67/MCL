@@ -12,6 +12,7 @@ namespace SILDMS.DataAccessInterface
         List<OBS_ServicesCategory> GetServicesCategory(string action, out string errorNumber);
         List<OBS_VendorAndAddressInfo> GetVendorInfoList();
         List<OBS_ClientReq> GetClientReqInfoList();
+        List<OBS_ClientReq> GetClientListForVendorRequisition();
         string SaveVendorRequisition(OBS_VendorReq clientReq, List<OBS_VendorReqItem> clientReqItem, List<OBS_VendorReqTerms> clientReqTerm, List<OBS_VendorReqItemWise> vendorReqItemWise);
         List<OBS_VendorReq> GetVendorReqSearchList();
         List<OBS_VendorInfo> GetVendorWiseItemList(string ServiceCategoryID);

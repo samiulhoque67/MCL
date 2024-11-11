@@ -46,6 +46,15 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
+        public async Task<dynamic> GetVendorTermList(string ClientQuotationID)
+        {
+            var VendorTermTermList = new List<OBS_TermsItem>();  // Renamed to ClientDetails
+            await Task.Run(() => _quotationRecommendationService.GetVendorTermListService(ClientQuotationID, out VendorTermTermList));
+            var result = Json(new { VendorTermTermList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
+            return result;
+        }
+
+        [HttpPost]
         public async Task<dynamic> GetClientReqDataInfo(string ClientID)
         {
             var GetClientReqDetails = new List<ClientReqData>();  // Renamed to ClientDetails

@@ -72,16 +72,16 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> GetVendorCSVendorsUsingClient(string ClientID)
         {
             var CSVendorList = new List<OBS_VendorCSRecm>();
-            await Task.Run(() => _vendorCSInfoService.OBS_GetVendorCSVendorsUsingClient(ClientID,out CSVendorList));
+            await Task.Run(() => _vendorCSInfoService.OBS_GetVendorCSVendorsUsingClient(ClientID, out CSVendorList));
             var result = Json(new { CSVendorList, msg = "CSVendorList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
 
-        public async Task<dynamic> GetVendorCSQuotationItem(string VendorID, string ClientID)
+        public async Task<dynamic> GetVendorCSQuotationItem(string VendorID, string ClientID, string VendorQutnItemID)
         {
             var VenCSItemList = new List<OBS_VendorCSRecmItem>();
-            await Task.Run(() => _vendorCSInfoService.OBS_GetVendorCSQuotationItem(VendorID, ClientID, out VenCSItemList));
+            await Task.Run(() => _vendorCSInfoService.OBS_GetVendorCSQuotationItem(VendorID, ClientID, VendorQutnItemID, out VenCSItemList));
             var result = Json(new { VenCSItemList, msg = "VenCSItemList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;

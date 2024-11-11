@@ -35,6 +35,16 @@ namespace SILDMS.Service.QuotationRecommendation
                 : ValidationResult.Success;
         }
 
+        public ValidationResult GetVendorTermListService(string ClientQuotationID, out List<OBS_TermsItem> VendorTermTermList)
+        {
+            VendorTermTermList = _quotationRecommendationData.GetVendorTermListServiceData(ClientQuotationID, out _errorNumber);
+
+            return _errorNumber.Length > 0
+                ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
+                : ValidationResult.Success;
+        }
+
+
         ValidationResult IQuotationRecommendationService.GetClientReqDataInfoService(string ClientID, out List<ClientReqData> GetClientReqDetails)
         {
             GetClientReqDetails = _quotationRecommendationData.GetClientReqDataInfoDataService(ClientID, out _errorNumber);
@@ -43,6 +53,7 @@ namespace SILDMS.Service.QuotationRecommendation
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
                 : ValidationResult.Success;
         }
+
 
         public string SaveQuotToClientService(string UserID, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl)
         {

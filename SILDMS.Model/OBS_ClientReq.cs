@@ -35,5 +35,8 @@ namespace SILDMS.Model
         public string VendorQutnID { get; set; }
         public string VendorName { get; set; }
         public string PORecmID { get; set; }
+        public string VendorQutnItemID { get; set; }
+        public string VendorCSRecmItemID { get; set; }
+        public string VendorCSRecmID { get; set; }
     }
 }

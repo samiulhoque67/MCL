@@ -65,6 +65,15 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
+        public async Task<dynamic> GetClientListForVendorRequisition()
+        {
+            var clientReqSearchList = new List<OBS_ClientReq>();
+            await Task.Run(() => _clientInfoService.GetClientListForVendorRequisition(out clientReqSearchList));
+            var result = Json(new { clientReqSearchList, msg = "clientReqSearchList are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
+        }
+
         public async Task<dynamic> SaveVendorRequisition(OBS_VendorReq vendorReq, List<OBS_VendorReqItem> vendorReqItem, List<OBS_VendorReqTerms> vendorReqTerm, List<OBS_VendorReqItemWise> vendorReqItemWise)
         {
             vendorReq.SetBy = UserID;

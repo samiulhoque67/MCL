@@ -105,6 +105,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
             return ClientDetails;
         }
 
+
         public List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, out string _errorNumber)
         {
             _errorNumber = string.Empty;
@@ -129,7 +130,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                     var dt1 = ds.Tables[0];
                     GetClientReqDetails = dt1.AsEnumerable().Select(reader => new ClientReqData
                     {
-
+                        VendorCSAprvID = reader.GetString("VendorCSAprvID"),
                         ClientID = reader.GetString("ClientID"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
@@ -158,16 +159,16 @@ namespace SILDMS.DataAccess.QuotationToClientService
             return GetClientReqDetails;
         }
 
-        public List<OBS_VendorReqTerms> GetTermsConditionsListServiceData(string TermsID, out string _errorNumber)
+        public List<OBS_TermsItem> GetTermsConditionsListServiceData(string VendorCSAprvID, out string _errorNumber)
         {
             _errorNumber = string.Empty;
-            var VendorTermTermList = new List<OBS_VendorReqTerms>();
+            var VendorTermTermList = new List<OBS_TermsItem>();
 
             var factory = new DatabaseProviderFactory();
             var db = factory.CreateDefault() as SqlDatabase;
-            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientReqDataInfo"))
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQtnTermData"))
             {
-                db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.Int, TermsID);
+                db.AddInParameter(dbCommandWrapper, "@VendorCSAprvID", DbType.String, VendorCSAprvID);
                 db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
                 dbCommandWrapper.CommandTimeout = 300;
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -180,10 +181,13 @@ namespace SILDMS.DataAccess.QuotationToClientService
                 {
                     if (ds.Tables[0].Rows.Count <= 0) return VendorTermTermList;
                     var dt1 = ds.Tables[0];
-                    VendorTermTermList = dt1.AsEnumerable().Select(reader => new OBS_VendorReqTerms
+                    VendorTermTermList = dt1.AsEnumerable().Select(reader => new OBS_TermsItem
                     {
-
-
+                        VendorCSAprvTermID = reader.GetString("VendorCSAprvTermID"),
+                        TermsItemID = reader.GetString("TermsItemID"),
+                        TermsID = reader.GetString("TermsID"),
+                        TermsCode = reader.GetString("TermsCode"),
+                        TermsName = reader.GetString("TermsName")
                     }).ToList();
 
                 }

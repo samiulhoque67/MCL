@@ -3,6 +3,32 @@
 }
 
 <style>
+    .dbody {
+        background-color: whitesmoke;
+    }
+
+
+    .font-weight-bold {
+        font-weight: bold;
+        color: darkgreen;
+    }
+
+    .w-100 {
+        width: 100%;
+    }
+
+    .d-flex {
+        display: flex;
+    }
+
+    .align-items-center {
+        align-items: center;
+    }
+
+    .justify-content-center {
+        justify-content: center;
+    }
+
     .link_total_bm {
         color: black;
         font-weight: bold;
@@ -44,6 +70,20 @@
     .box.box-solid.box-primary > .box-header {
         text-align: center;
     }
+
+    .table-header {
+        background-color: #8aa4af !important;
+        color: darkblue !important;
+        font-size: 13px;
+    }
+
+    .tableVen-striped > tbody > tr:nth-of-type(odd) {
+        background-color: rgba(23, 250, 132, 0.01);
+    }
+
+    .selected-row {
+        background-color: #dff0d8; /* Light green color to indicate selection */
+    }
 </style>
 
 <div class="box box-primary box-body" ng-controller="VendorCSAprvCtrl">
@@ -79,110 +119,23 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-2">
+
+    <div class="row" style="margin:1%;">
+        <div class="col-md-2" ng-repeat="item in dashBoardResult">
             <div class="box box-primary box-solid">
                 <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center">{{dashBoardResult[0].ServiceCategoryName}}</h3>
+                    <h3 class="box-title text-center" style="font-size: 110%;">{{item.ServiceCategoryName}}</h3>
                 </div>
 
-                <div style="padding-top:5px;padding-bottom:5px">
-                    <button id="dashBoardResult[0].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[0].ServiceCategoryID)">
-                        <div class="col-sm-2 border-right" style="padding-left:5px;">
-                            <h5 class="description-header">{{dashBoardResult[0].ServicesCategoryCount}}</h5>
-                        </div>
-                    </button>
-                </div>
+                <div class="dbody">
+                    <div class="row justify-content-center align-items-center" style="height: 100%;">
+                        <button id="{{item.ServiceCategoryID}}" ng-click="VendorSelect(item.ServiceCategoryID)" class="d-flex align-items-center justify-content-center w-100" style="border: none; background: none;"
+                                ng-class=" {'selected-row': row.selected}" ng-style="getRowStyle(row)">
 
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center">{{dashBoardResult[1].ServiceCategoryName}}</h3>
-                </div>
-
-                <div class="box-body">
-                    <div class="row">
-                        <button id="dashBoardResult[1].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[1].ServiceCategoryID)">
-                            <div class="col-sm-2 border-right">
-                                <h5 class="description-header">{{dashBoardResult[1].ServicesCategoryCount}}</h5>
-                            </div>
+                            <h3 class="description-header font-weight-bold">{{item.ServicesCategoryCount}}</h3>
                         </button>
                     </div>
                 </div>
-
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center">{{dashBoardResult[2].ServiceCategoryName}}</h3>
-                </div>
-
-                <div class="box-body">
-                    <div class="row">
-                        <button id="dashBoardResult[2].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[2].ServiceCategoryID)">
-                            <div class="col-sm-2 border-right">
-                                <h5 class="description-header">{{dashBoardResult[2].ServicesCategoryCount}}</h5>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center">{{dashBoardResult[3].ServiceCategoryName}}</h3>
-                </div>
-
-                <div class="box-body">
-                    <div class="row">
-                        <button id="dashBoardResult[3].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[3].ServiceCategoryID)">
-                            <div class="col-sm-2 border-right">
-                                <h5 class="description-header">{{dashBoardResult[3].ServicesCategoryCount}}</h5>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center">{{dashBoardResult[4].ServiceCategoryName}}</h3>
-                </div>
-
-                <div class="box-body">
-                    <div class="row">
-                        <button id="dashBoardResult[4].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[4].ServiceCategoryID)">
-                            <div class="col-sm-2 border-right">
-                                <h5 class="description-header">{{dashBoardResult[4].ServicesCategoryCount}}</h5>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center">{{dashBoardResult[5].ServiceCategoryName}}</h3>
-                </div>
-
-                <div class="box-body">
-                    <div class="row">
-                        <button id="dashBoardResult[5].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[5].ServiceCategoryID)">
-                            <div class="col-sm-2 border-right">
-                                <h5 class="description-header">{{dashBoardResult[5].ServicesCategoryCount}}</h5>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
@@ -205,7 +158,7 @@
                             </tr>*@
                     </thead>
                     <tbody>
-                        <tr ng-repeat="row in CSClientDisplayedCollection">
+                        <tr ng-repeat="row in CSClientDisplayedCollection" ng-class=" {'selected-row': row.selected}" ng-style="getRowStyle(row)">
                             <td class="hidden">{{row.ClientReqID}}</td>
                             <td class="hidden">{{row.ClientID}}</td>
                             <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
@@ -213,7 +166,7 @@
                             <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.RequisitionDate}}</td>
                             <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.NoOfVendor}}</td>
                             <td>
-                                <a class="btn col-center btn-sm btn-flat btn-success" data-ng-click="ClientSelect(row)">Details</a>
+                                <a class="btn col-center btn-sm btn-flat btn-success" ng-click="ClientSelect(row)">Details</a>
                             </td>
                         </tr>
                     </tbody>
@@ -239,7 +192,7 @@
                             <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactNumber')">Contact Number</th>
                             <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorQutnNo')">VendorQutnNo</th>
                             <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('QuotationDate')">QuotationDate</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('TolQnty')">TolQnty</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('TolQnty')">Total Qunty</th>
                             <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                         </tr>
                     </thead>
@@ -248,22 +201,22 @@
                             <td class="hidden">{{row.index+1}}</td>
                             <td class="hidden">{{row.VendorCSRecmID}}</td>
                             <td class="hidden">{{row.VendorID}}</td>
-                            <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.VendorName}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactPerson}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactNumber}}</td>
-                            <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorQutnNo}}</td>
-                            <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.QuotationDate}}</td>
-                            <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.TolQnty}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.VendorQutnNo}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.QuotationDate}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.TolQnty}}</td>
                             <td class="col-lg-1" style="width:5%;">
-                                <button type="button" class="ChildButtons" ng-click="selectEntity(row)" data-dismiss="modal" title="Select">
-                                    <i ng-show="!row.buttonCheckedforVendor" class="fa fa-square-o"></i>
-                                    <i ng-show="row.buttonCheckedforVendor" class="fa fa-check-square-o"></i>
+                                <button type="button" class="btn col-center btn-sm btn-flat btn-success"
+                                        ng-click="selectEntity(row); ItemSelect(row)"
+                                        data-dismiss="modal"
+                                        title="Select and Details">
+                                    Select and Details
                                 </button>
                             </td>
-                            <td>
-                                <button type="button" class="btn col-center btn-sm btn-flat btn-success" data-ng-click="ItemSelect(row)">Details</button>
-                            </td>
-                        </tr>
+
+                       </tr>
                     </tbody>
                     <tfoot>
                         @*<tr>
@@ -458,7 +411,10 @@
             $scope.VendorCSAprv.ClientName = row.ClientName;
             $scope.ReportModel.ClientName = row.ClientName;
             $scope.VendorCSAprv.ClientReqID = row.ClientReqID;
-            $http.post("/VendorCSAprv/GetVendorCSVendorsUsingClient?ClientID=" + row.ClientID)
+            $http.post("/VendorCSAprv/GetVendorCSVendorsUsingClient", {
+                ClientID: row.ClientID,
+                VendorCSRecmID: row.VendorCSRecmID
+            })
                 .success(function (response) {
                     $scope.CSVendorList = response.CSVendorList;
                     $scope.CSVendorDisplayedCollection = [].concat($scope.CSVendorList);
@@ -473,7 +429,7 @@
         $scope.ItemSelect = function (row) {
             $scope.VendorCSAprv.ClientName = row.ClientName;
             //$http.post("/VendorCSAprv/GetVendorCSQuotationItem?VendorID=" + row.VendorID)
-            $http.post('/VendorCSAprv/GetVendorCSQuotationItem', { VendorID: row.VendorID, ClientID: $scope.VendorCSAprv.ClientID })
+            $http.post('/VendorCSAprv/GetVendorCSQuotationItem', { VendorID: row.VendorID, ClientID: $scope.VendorCSAprv.ClientID, VendorCSRecmItemID: row.VendorCSRecmItemID })
                 .success(function (response) {
                     $scope.VenCSItemList = response.VenCSItemList;
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
@@ -1179,6 +1135,14 @@
 
         $scope.toggleRefreshTable = function () {
             window.location.reload();
+        };
+
+        $scope.getRowStyle = function (row) {
+            if (row.selected) {
+                return { background: '#b9e7d8' }; // Change this to your desired color
+            } else {
+                return {}; // No additional styling
+            }
         };
     }])
 </script>

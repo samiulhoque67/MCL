@@ -119,7 +119,35 @@ namespace SILDMS.DataAccess
             }
             return VendorInfoList;
         }
-         
+
+        public List<OBS_ClientReq> GetClientListForVendorRequisition()
+        {
+            string errorNumber = string.Empty;
+            List<OBS_ClientReq> VendorInfoList = new List<OBS_ClientReq>();
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientListForVendorRequisition"))
+            {
+                // Execute SP. 
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt1 = ds.Tables[0];
+                    VendorInfoList = dt1.AsEnumerable().Select(reader => new OBS_ClientReq
+                    {
+                        ClientID = reader.GetString("ClientID"),
+                        ClientName = reader.GetString("ClientName"),
+                        //VendorTinNo = reader.GetString("VendorTinNo"),
+                        //VendorBinNo = reader.GetString("VendorBinNo"),
+                        ClientReqNo = reader.GetString("ClientReqNo"),
+                        RequisitionDate = reader.GetString("RequisitionDate"),
+                        Status = reader.GetString("Status")
+                    }).ToList();
+                }
+            }
+            return VendorInfoList;
+        }
+
         public string SaveVendorRequisition(OBS_VendorReq VendorReq, List<OBS_VendorReqItem> VendorReqItem, List<OBS_VendorReqTerms> VendorReqTerm, List<OBS_VendorReqItemWise> vendorReqItemWise)
         {
             DataTable dtReqItem = new DataTable();
@@ -171,17 +199,18 @@ namespace SILDMS.DataAccess
             DataTable dtVenReqItemWise = new DataTable();
             dtVenReqItemWise.Columns.Add("VendorReqItemID");
             dtVenReqItemWise.Columns.Add("VendorID");
-            //dtVenReqItemWise.Columns.Add("ServiceItemID");
             dtVenReqItemWise.Columns.Add("VenReqQnty");
             dtVenReqItemWise.Columns.Add("VenReqUnit");
+            dtVenReqItemWise.Columns.Add("ServiceItemID");
             foreach (var item in vendorReqItemWise)
             {
                 DataRow objDataRow = dtVenReqItemWise.NewRow();
                 objDataRow[0] = item.VendorReqItemID;
                 objDataRow[1] = item.VendorID;
-                //objDataRow[2] = item.ServiceItemID;
                 objDataRow[2] = item.VenReqQnty;
                 objDataRow[3] = item.VenReqUnit;
+                objDataRow[4] = item.ServiceItemID;
+
                 dtVenReqItemWise.Rows.Add(objDataRow);
             }
 
@@ -213,7 +242,9 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorReqItem", SqlDbType.Structured, dtReqItem);
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorReqTerm", SqlDbType.Structured, dtReqTerm);
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorReqItemWise", SqlDbType.Structured, dtVenReqItemWise);
-                    db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, VendorReq.Action);
+                    db.AddInParameter(dbCommandWrapper, "@Action ", SqlDbType.NVarChar, VendorReq.Action);
+                    db.AddInParameter(dbCommandWrapper, "@TolalItem", SqlDbType.Int, VendorReq.TolalItem);
+                    db.AddInParameter(dbCommandWrapper, "@SelectedItem", SqlDbType.Int, VendorReq.SelectedItem);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
@@ -264,7 +295,7 @@ namespace SILDMS.DataAccess
             return VendorReqList;
         }
 
-        public List<OBS_VendorInfo> GetVendorWiseItemList(string ServiceCategoryID)
+        public List<OBS_VendorInfo> GetVendorWiseItemList(string ServiceItemID)
         {
             string errorNumber = string.Empty;
             List<OBS_VendorInfo> VendorReqList = new List<OBS_VendorInfo>();
@@ -272,7 +303,7 @@ namespace SILDMS.DataAccess
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("GetVendorWiseItemList"))
             {
-                db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.VarChar, ServiceCategoryID);
+                db.AddInParameter(dbCommandWrapper, "@ServiceItemID", SqlDbType.VarChar, ServiceItemID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -282,15 +313,17 @@ namespace SILDMS.DataAccess
                     {
                         VendorID = reader.GetString("VendorID"),
                         VendorWiseItemID = reader.GetString("VendorWiseItemID"),
+                        VendorCode = reader.GetString("VendorCode"),
                         VendorName = reader.GetString("VendorName"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
                         //VendorCategoryName = reader.GetString("ServicesCategoryName"),
-                        //VendorTinNo = reader.GetString("VendorTinNo"),
-                        //VendorBinNo = reader.GetString("VendorBinNo"),
-                        //ContactPerson = reader.GetString("ContactPerson"),
-                        //ContactNumber = reader.GetString("ContactNumber"),
-                        //Address = reader.GetString("Address"),
-                        //Email = reader.GetString("Email"),
+                        VendorTinNo = reader.GetString("VendorTinNo"),
+                        VendorBinNo = reader.GetString("VendorBinNo"),
+                        ContactPerson = reader.GetString("ContactPerson"),
+                        ContactNumber = reader.GetString("ContactNumber"),
+                        Address = reader.GetString("Address"),
+                        Email = reader.GetString("Email"),
                         Status = reader.GetString("Status")
                     }).ToList();
                 }

@@ -42,7 +42,14 @@ namespace SILDMS.Service.QuotationApproval
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
                 : ValidationResult.Success;
         }
+        public ValidationResult GetVendorTermListService(string ClientQutnRecmID, out List<OBS_TermsItem> VendorTermTermList)
+        {
+            VendorTermTermList = _quotationApprovalDataService.GetVendorTermListServiceData(ClientQutnRecmID, out _errorNumber);
 
+            return _errorNumber.Length > 0
+                ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
+                : ValidationResult.Success;
+        }
         public string SaveQuotToClientService(string UserID, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl)
         {
             return _quotationApprovalDataService.SaveQuotToClientServiceData(UserID, MasterData, DetailData, AllTermsDtl, out _errorNumber);

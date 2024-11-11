@@ -291,11 +291,11 @@
                         <th style="text-align: left;">VatAmt</th>
                         <th style="text-align: left;">TolAmt</th>
                         <th style="text-align: left;">Given TolAmt</th>
-                        <th style="text-align: left;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="row in GetClientReqDetailsCollection" ng-cloak style="font-size:12px;" ng-class="{'selected-row': row.selected}" ng-style="getRowStyle(row)">
+                    <tr ng-repeat="row in GetClientReqDetailsCollection" ng-cloak style="font-size:12px;">
+
                         <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }}</td>
                         <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
                         <td class="col-lg-1" style="width:6%;">{{row.Description}}</td>
@@ -306,7 +306,8 @@
                         <td class="col-lg-1" style="width:6%;">{{row.QutnQnty}}</td>
                         <td class="col-lg-1" style="width:6%;">{{row.QutnPrice}}</td>
                         <td class="col-lg-1">
-                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.givenQutnPrice" ng-keypress="checkEnter($event, row)" />
+                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0"
+                                   ng-model="row.givenQutnPrice" ng-keypress="checkEnter($event, row)" />
                         </td>
                         <td class="col-lg-1" style="width:6%;">{{row.QutnAmt}}</td>
                         <td class="col-lg-1" style="width: 6%; color: #126e0f">{{ row.givenQutnAmt}}</td>
@@ -314,13 +315,8 @@
                         <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
                         <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
                         <td class="col-lg-1" style="width: 6%; color: #126e0f">{{ row.givenTolAmt }}</td>
-                        <td class="col-lg-1" style="width:5%;">
-                            <button type="button" class="ChildButtons" ng-click="selectEntity(row)" data-dismiss="modal" title="Select">
-                                <i ng-show="!row.buttonChecked" class="fa fa-square-o"></i>
-                                <i ng-show="row.buttonChecked" class="fa fa-check-square-o"></i>
-                            </button>
-                        </td>
                     </tr>
+
                 </tbody>
                 <tfoot></tfoot>
             </table>
@@ -346,10 +342,10 @@
                         <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                             <thead>
                                 <tr>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormName')">Form Name</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" >Form Code</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" >Form Name</th>
 
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" >Status</th>
                                     <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                                 </tr>
                                 <tr>
@@ -445,9 +441,8 @@
                             </tr>*@
                         </thead>
                         <tbody>
-                            <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-                                <td class="hidden">{{row.VendorReqTermsID}}</td>
-                                <td class="hidden">{{row.VendorReqID}}</td>
+                            <tr ng-repeat="row in TermsConditionsDisplayedCollection" ng-cloak style="font-size:12px;">
+                               
                                 <td class="hidden">{{row.TermsID}}</td>
                                 <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
                                 <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
@@ -810,6 +805,11 @@
                 $scope.GetClientReqDetails = response.GetClientReqDetails;
                 $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
                 $scope.loading = false;
+
+                // Call $scope.selectEntity for each row in $scope.GetClientReqDetails
+                $scope.GetClientReqDetails.forEach(function (row) {
+                    $scope.selectEntity(row);
+                });
             }).error(function () {
                 $scope.loading = false;
             });
@@ -821,66 +821,53 @@
         $scope.buttonChecked = false;
 
         $scope.selectEntity = function (row) {
-
+            // Initialize master data as needed
             $scope.MasterData = {
                 ClientID: row.ClientID,
                 ClientReqID: row.ClientReqID
-            }
+            };
 
+            // Prepare the selected item data
             var selecteditems = {
-                ServiceCategoryID: row.ServiceCategoryID, //--
+                VendorCSAprvID: row.VendorCSAprvID,
+                ServiceCategoryID: row.ServiceCategoryID,
                 TermsID: row.TermsID,
                 ServiceItemID: row.ServiceItemID,
-                Description: row.Description, //--
-                DeliveryLocation: row.DeliveryLocation, //--
-                DeliveryDate: row.DeliveryDate, //--
-                DeliveryMode: row.DeliveryMode, //--
-                QutnQnty: row.QutnQnty, //--
-                QutnUnit: row.ReqUnit, //--
-                VenPrice: row.QutnPrice, //-- VenPrice
-                MclPrice: row.givenQutnPrice, //--  
-                QutnAmt: row.QutnAmt, //--  
-                VatPerc: row.VatPerc, //--
-                VatAmt: row.VatAmt, //--
+                Description: row.Description,
+                DeliveryLocation: row.DeliveryLocation,
+                DeliveryDate: row.DeliveryDate,
+                DeliveryMode: row.DeliveryMode,
+                QutnQnty: row.QutnQnty,
+                QutnUnit: row.ReqUnit,
+                VenPrice: row.QutnPrice,
+                MclPrice: row.givenQutnPrice,
+                QutnAmt: row.QutnAmt,
+                VatPerc: row.VatPerc,
+                VatAmt: row.VatAmt,
                 TolAmt: row.givenTolAmt
-            }
+            };
 
-            var indexToRemove = -1;
+            // Directly add the item to selectedRows without checking
+            $scope.selectedRows.push(selecteditems);
 
-            $scope.selectedRows.forEach(function (item, index) {
-                if (item.ServiceItemID === selecteditems.ServiceItemID && item.ServiceItemCode === selecteditems.ServiceItemCode) {
-                    indexToRemove = index;
-                }
-            })
-
-            if (indexToRemove !== -1) {
-                $scope.selectedRows.splice(indexToRemove, 1);
-                /*$scope.ObservationDisplayedCollection.splice(indexToRemove, 1);*/
-                row.selected = false;
-            } else {
-                $scope.selectedRows.push(selecteditems);
-                /*$scope.ObservationDisplayedCollection = [].concat($scope.selectedRows);*/
-                row.selected = true;
-            }
-            row.buttonChecked = row.selected;
-
+            // Update flags and call any necessary functions
             if ($scope.selectedRows.length >= 1) {
                 $scope.showTermsItem = true;
-                $scope.GetTermsItemList($scope.selectedRows[0].TermsID);
-            }
-            else {
+                $scope.GetTermsItemList(selecteditems.VendorCSAprvID);
+            } else {
                 $scope.showFlag = false;
                 $scope.showTermsItem = false;
-             //   $scope.ClearTermsItem();
             }
-        }
+        };
 
-        $scope.GetTermsItemList = function (TermsID) {
+        //need to fetch that vendorcsAprvID
+        $scope.GetTermsItemList = function (VendorCSAprvID) {
             /*$scope.QuotationType = ;*/
 
-            $http.get("/QuotationToClient/GetTermsConditionsList", { TermsID: TermsID })
+            $http.post('/QuotationToClient/GetVendorTermList',
+                { VendorCSAprvID: VendorCSAprvID })
                 .success(function (response) {
-                    $scope.TermsConditionsList = response.termsConditionsList;
+                    $scope.TermsConditionsList = response.VendorTermTermList;
                     $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
                     $scope.loading = false;
                 })
@@ -897,7 +884,7 @@
 
         ////////////////////////Requsition Terms & Conditions ///////////////////////
 
-        $scope.ShowTermsConditionsList = function () {
+/*        $scope.ShowTermsConditionsList = function () {
             $http.get("/VendorRequisition/GetTermsConditionsList")
                 .success(function (response) {
                     $scope.TermsConditionsList = response.termsConditionsList;
@@ -1028,7 +1015,7 @@
                         return;
                     }
                 });
-        }
+        }*/
 
         $scope.openConfirmModal = function () {
             if (!$scope.MasterData.BriefingDate || $scope.MasterData.BriefingDate.trim() === '') {
@@ -1044,12 +1031,12 @@
 
             console.log($scope.MasterData);
             console.log($scope.selectedRows);
-            console.log($scope.getAllTermsDtl);
+            console.log($scope.TermsConditionsDisplayedCollection);
 
             $http.post('/QuotationToClient/SaveQuotToClient', {
                 MasterData: [$scope.MasterData],
                 DetailData: $scope.selectedRows,
-                AllTermsDtl: $scope.getAllTermsDtl
+                AllTermsDtl: $scope.TermsConditionsDisplayedCollection
 
             }).success(function (response) {
 
