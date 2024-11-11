@@ -13,6 +13,7 @@ namespace SILDMS.Service
         ValidationResult GetServicesCategory(string action, out List<OBS_ServicesCategory> ownerLevelList);
         ValidationResult GetVendorInfoList(out List<OBS_VendorAndAddressInfo> VendorInfoSearchList);
         ValidationResult GetClientReqInfoList(out List<OBS_ClientReq> VendorInfoSearchList);
+        ValidationResult GetClientListForVendorRequisition(out List<OBS_ClientReq> VendorInfoSearchList);
         string SaveVendorRequisition(OBS_VendorReq clientReq, List<OBS_VendorReqItem> clientReqItem, List<OBS_VendorReqTerms> clientReqTerm, List<OBS_VendorReqItemWise> vendorReqItemWise);
         ValidationResult GetVendorReqSearchList(out List<OBS_VendorReq> VendorReqSearchList);
         ValidationResult GetVendorWiseItemList(string ServiceCategoryID, out List<OBS_VendorInfo> VendorReqSearchList);
