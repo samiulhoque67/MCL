@@ -828,6 +828,7 @@
             }
 
             var selecteditems = {
+                VendorCSAprvID: row.VendorCSAprvID,
                 ServiceCategoryID: row.ServiceCategoryID, //--
                 TermsID: row.TermsID,
                 ServiceItemID: row.ServiceItemID,
@@ -866,7 +867,8 @@
 
             if ($scope.selectedRows.length >= 1) {
                 $scope.showTermsItem = true;
-                $scope.GetTermsItemList($scope.selectedRows[0].TermsID);
+                $scope.GetTermsItemList(selecteditems.VendorCSAprvID);
+
             }
             else {
                 $scope.showFlag = false;
@@ -875,10 +877,12 @@
             }
         }
 
-        $scope.GetTermsItemList = function (TermsID) {
+
+        //need to fetch that vendorcsAprvID
+        $scope.GetTermsItemList = function (VendorCSAprvID) {
             /*$scope.QuotationType = ;*/
 
-            $http.get("/QuotationToClient/GetTermsConditionsList", { TermsID: TermsID })
+            $http.get("/QuotationToClient/GetTermsConditionsList", { VendorCSAprvID: VendorCSAprvID })
                 .success(function (response) {
                     $scope.TermsConditionsList = response.termsConditionsList;
                     $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);

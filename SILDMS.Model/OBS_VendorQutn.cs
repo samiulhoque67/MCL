@@ -107,6 +107,7 @@ namespace SILDMS.Model
         public string QuotatDate { get; set; }
         public string RequiDate { get; set; }
         public int ClientFinalBilRecmID { get; set; }
+        public int ClientFinalBilAprvID { get; set; }
     }
 
 

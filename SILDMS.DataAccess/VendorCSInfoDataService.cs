@@ -145,6 +145,8 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     VendorInfoList = dt1.AsEnumerable().Select(reader => new OBS_ClientReq
                     {
+                        VendorQutnID = reader.GetString("VendorQutnID"),
+                        VendorQutnItemID = reader.GetString("VendorQutnItemID"),
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqID = reader.GetString("ClientReqID"),
@@ -173,6 +175,7 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     VendorCSInfoList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecm
                     {
+                        VendorQutnItemID = reader.GetString("VendorQutnItemID"),
                         VendorQutnID = reader.GetString("VendorQutnID"),
                         VendorID = reader.GetString("VendorID"),
                         VendorName = reader.GetString("VendorName"),
@@ -191,7 +194,7 @@ namespace SILDMS.DataAccess
             return VendorCSInfoList;
         }
 
-        public List<OBS_VendorCSRecmItem> OBS_GetVendorCSQuotationItem(string VendorID, string ClientID)
+        public List<OBS_VendorCSRecmItem> OBS_GetVendorCSQuotationItem(string VendorID, string ClientID, string VendorQutnItemID)
         {
             string errorNumber = string.Empty;
             List<OBS_VendorCSRecmItem> VendorCSInfoItemList = new List<OBS_VendorCSRecmItem>();
@@ -201,6 +204,7 @@ namespace SILDMS.DataAccess
             {
                 db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
                 db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.VarChar, ClientID);
+                db.AddInParameter(dbCommandWrapper, "@VendorQutnItemID", SqlDbType.VarChar, VendorQutnItemID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)

@@ -53,5 +53,6 @@ namespace SILDMS.Model
        
         public double RecommendedAmount { get; set; }
         public object PORecmID { get; set; }
+        public string VendorQutnItemID { get; set; }
     }
 }

@@ -129,7 +129,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                     var dt1 = ds.Tables[0];
                     GetClientReqDetails = dt1.AsEnumerable().Select(reader => new ClientReqData
                     {
-
+                        VendorCSAprvID = reader.GetString("VendorCSAprvID"),
                         ClientID = reader.GetString("ClientID"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
