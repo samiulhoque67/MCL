@@ -35,5 +35,7 @@ namespace SILDMS.Model
         public string Action { get; set; }
         [Required]
         public string Status { get; set; }
+        public int TolalItem { get; set; }
+        public int SelectedItem { get; set; }
     }
 }
