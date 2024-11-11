@@ -663,43 +663,42 @@
                 <table st-table="VendorInfoDisplayedCollection" st-safe-src="ReqWiseVendorList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                     <thead>
                         <tr>
-                            @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorCode')">Vendor Code</th>*@
+                            @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorCode')">Item Code</th>*@
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorName')">Item Name</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorCode')">Vendor Code</th>
                             <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorName')">Vendor Name</th>
                             <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactPerson')">Contact Person</th>
                             <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactNumber')">Contact Number</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Email')">Email</th>
+                            @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Email')">Email</th>*@
                             <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Quantity</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VenReqUnit')">Unit</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Quantity')">Quantity</th>
+                            @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VenReqUnit')">Unit</th>*@
                             <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                         </tr>
-
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in VendorInfoDisplayedCollection">
                             <td class="hidden">{{row.VendorReqItemWiseID}}</td>
                             <td class="hidden">{{row.VendorID}}</td>
-                            @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.VendorCode}}</td>*@
+                            <td class="hidden">{{row.ServiceItemID}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ServiceItemName}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.VendorCode}}</td>
                             <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactPerson}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactNumber}}</td>
-                            <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.Email}}</td>
+                            @*<td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.Email}}</td>*@
                             <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.Address}}</td>
                             <td class="col-lg-1">
-                                @*<input class="form-control" style="width:100%; height:18px;font-size:10px" type="number" ng-model="row.txtAmount" />*@
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.VenReqQnty" />
-                                @*<input class="form-control" style="width:100%; height:18px;font-size:10px" type="number" min="0" ng-model="row.txtquantity" ng-value="0" ng-blur="checkQuantity(row)" />*@
                             </td>
-                            <td style="text-align: center; width: 90px;">
-
-                                <select name="ss" style="background-color: #ffffff; width: 90px; height: 26px; font-size: 9px" class="form-control" ng-model="row.VenReqUnit">
-                                    @*<option value="">-- None --</option>*@
-                                    <option value="Hour">Hour</option>
-                                    <option value="Minute">Minute</option>
-                                    <option value="Second">Second</option>
-                                    <option value="Piece">Piece</option>
-                                </select>
-                            </td>
+                            @*<td style="text-align: center; width: 90px;">
+                                    <select name="ss" style="background-color: #ffffff; width: 90px; height: 26px; font-size: 9px" class="form-control" ng-model="row.VenReqUnit">
+                                        <option value="Hour">Hour</option>
+                                        <option value="Minute">Minute</option>
+                                        <option value="Second">Second</option>
+                                        <option value="Piece">Piece</option>
+                                    </select>
+                                </td>*@
                             <td>
                                 <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleVendorWiseItemReqDelete(row,$index)"><i class="fa fa-remove"></i> </button>
                             </td>
@@ -1275,15 +1274,18 @@
             $scope.VendorReq.VendorCode = row.VendorCode;
             $scope.VendorReq.VendorName = row.VendorName;
 
-            $scope.VendorWiseItemReq.ServiceItemID = ServiceItemID;
+            $scope.VendorWiseItemReq.ServiceItemID = row.ServiceItemID;
+            $scope.VendorWiseItemReq.ServiceItemName = row.ServiceItemName;
 
             $scope.VendorWiseItemReq.VendorID = row.VendorID;
+            $scope.VendorWiseItemReq.VendorCode = row.VendorCode;
             $scope.VendorWiseItemReq.VendorName = row.VendorName;
             $scope.VendorWiseItemReq.TransactionName = row.TransactionName;
             $scope.VendorWiseItemReq.ContactPerson = row.ContactPerson;
             $scope.VendorWiseItemReq.ContactNumber = row.ContactNumber;
             $scope.VendorWiseItemReq.Email = row.Email;
             $scope.VendorWiseItemReq.Address = row.Address;
+            $scope.VendorWiseItemReq.VenReqQnty = VenReqQnty;
 
             $scope.VendorInfoDisplayedCollection = $scope.VendorInfoDisplayedCollection.concat($scope.VendorWiseItemReq);
 
@@ -1300,6 +1302,7 @@
 
         var ServiceCategoryID = "";
         var ServiceItemID = "";
+        var VenReqQnty = "";
         $scope.selectEntity = function (row) {
             var selecteditems = {
                 ServiceCategoryID: row.ServiceCategoryID,
@@ -1316,8 +1319,9 @@
                 VendorReqID: row.VendorReqID,
                 index: row.index
             };
-            ServiceItemID  = row.ServiceItemID;
+            ServiceItemID = row.ServiceItemID;
             ServiceCategoryID = row.ServiceCategoryID;
+            VenReqQnty = row.ReqQnty;
             $scope.ExistedVendor = 0;
             var indexToRemove = -1;
             $scope.selectedRowsForVendor.forEach(function (item, index) {

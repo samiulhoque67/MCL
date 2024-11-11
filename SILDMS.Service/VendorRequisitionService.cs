@@ -93,6 +93,8 @@ namespace SILDMS.Service
             TermsConditionsList = clientInfoDataService.GetTermsConditionsList();
             return ValidationResult.Success;
         }
+
+        
     }
 }
 

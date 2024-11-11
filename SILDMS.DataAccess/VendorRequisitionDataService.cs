@@ -477,5 +477,7 @@ namespace SILDMS.DataAccess
             }
             return TermsConditionsList;
         }
+
+       
     }
 }
