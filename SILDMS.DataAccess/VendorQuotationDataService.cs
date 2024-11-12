@@ -59,6 +59,41 @@ namespace SILDMS.DataAccess
             return servicesCategoryList;
         }
 
+        public List<OBS_VendorReqItem> GetVendorReqItemListForVenQutn(string VendorReqID)
+        {
+            string errorNumber = string.Empty;
+            List<OBS_VendorReqItem> VendorReqItemList = new List<OBS_VendorReqItem>();
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorReqItemListForVenQutn"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.VarChar, VendorReqID);
+                // Execute SP. 
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt1 = ds.Tables[0];
+                    VendorReqItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorReqItem
+                    {
+                        VendorReqItemID = reader.GetString("VendorReqItemID"),
+                        VendorReqID = reader.GetString("VendorReqID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        ServiceCategoryName = reader.GetString("ServicesCategoryName"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        Description = reader.GetString("Description"),
+                        DeliveryLocation = reader.GetString("DeliveryLocation"),
+                        DeliveryDate = reader.GetString("DeliveryDate"),
+                        DeliveryMode = reader.GetString("DeliveryMode"),
+                        ReqQnty = reader.GetString("ReqQnty"),
+                        ReqUnit = reader.GetString("ReqUnit"),
+                        QutnQnty = reader.GetString("QutnQnty"),
+                        Status = reader.GetString("Status")
+                    }).ToList();
+                }
+            }
+            return VendorReqItemList;
+        }
         public List<OBS_VendorQutn> GetShowVendorReqList()
         {
             string errorNumber = string.Empty;

@@ -314,7 +314,7 @@
                 <table st-table="GridDisplayCollection" st-safe-src="masterDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
                     <thead>
                         <tr>
-                            <th style="text-align: left;" st-sort="">Item Code</th>
+                            @*<th style="text-align: left;" st-sort="">Item Code</th>*@
                             <th style="text-align: left;" st-sort="">Item Name</th>
                             <th style="text-align: left;" st-sort="">Service Category</th>
                             <th style="text-align: left;" st-sort="">Description</th>
@@ -323,7 +323,8 @@
                             <th style="text-align: left;" st-sort="">Delivery Mode</th>
                             <th style="text-align: left;" st-sort="">Req Qnty</th>
                             <th style="text-align: left;" st-sort="">Req Unit</th>
-                            <th style="text-align: left;" st-sort="">Unit Price</th>
+                            <th style="text-align: left;" st-sort="">Qutn Qnty</th>
+                            <th style="text-align: left;" st-sort="">Qutn Price</th>
                             <th style="text-align: left;" st-sort="">Qutn Amt</th>
                             <th style="text-align: left;" st-sort="">Vat(%)</th>
                             <th style="text-align: left;" st-sort="">Vat Amt</th>
@@ -338,7 +339,7 @@
                         <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;">
                             <td class="hidden">{{row.VendorQutnItemID}}</td>
                             <td class="hidden">{{row.VendorQutnID}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
+                            @*<td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>*@
                             <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.ServiceCategoryName}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.Description}}</td>
@@ -347,6 +348,7 @@
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryMode}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.QutnQnty | number:2}}</td>
                             <td class="col-lg-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.QutnPrice" ng-value="0" ng-blur="checkUnitPrice(row)" />
                             </td>
@@ -1087,7 +1089,7 @@
             $scope.VendorQutn.SubmissionDate = row.SubmissionDate;
             $scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;
 
-            $http.post('/VendorRequisition/GetVendorReqItemList', { VendorReqID: row.VendorReqID })
+            $http.post('/VendorQuotation/GetVendorReqItemListForVenQutn', { VendorReqID: row.VendorReqID })
                 .success(function (response) {
                     $scope.masterDataSetupGridData = response.VendorReqItemList;
                     $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);

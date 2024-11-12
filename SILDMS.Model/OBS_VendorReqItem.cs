@@ -24,6 +24,7 @@ namespace SILDMS.Model
         public string DeliveryDate { get; set; }
         public string DeliveryMode { get; set; }
         public string ReqQnty { get; set; }
+        public string QutnQnty { get; set; } 
         public string ReqUnit { get; set; }
         public string CsStatus { get; set; }
         public string SetOn { get; set; }

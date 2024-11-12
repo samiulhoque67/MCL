@@ -137,8 +137,7 @@ namespace SILDMS.DataAccess
                     {
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
-                        //VendorTinNo = reader.GetString("VendorTinNo"),
-                        //VendorBinNo = reader.GetString("VendorBinNo"),
+                        ClientReqID = reader.GetString("ClientReqID"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         Status = reader.GetString("Status")

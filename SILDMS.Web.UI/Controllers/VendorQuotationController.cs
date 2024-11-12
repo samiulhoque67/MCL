@@ -47,6 +47,14 @@ namespace SILDMS.Web.UI.Controllers
 
             return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
         }
+        public async Task<dynamic> GetVendorReqItemListForVenQutn(string VendorReqID)
+        {
+            var VendorReqItemList = new List<OBS_VendorReqItem>();
+            await Task.Run(() => _clientInfoService.GetVendorReqItemListForVenQutn(VendorReqID, out VendorReqItemList));
+            var result = Json(new { VendorReqItemList, msg = "VendorReqItemList are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
+        }
         public async Task<dynamic> GetShowVendorReqList()
         {
             var VendorReqList = new List<OBS_VendorQutn>();

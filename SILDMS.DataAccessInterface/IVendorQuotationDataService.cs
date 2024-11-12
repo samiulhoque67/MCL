@@ -10,6 +10,7 @@ namespace SILDMS.DataAccessInterface
     public interface IVendorQuotationDataService
     {
         List<OBS_ServicesCategory> GetServicesCategory(string action, out string errorNumber);
+        List<OBS_VendorReqItem> GetVendorReqItemListForVenQutn(string VendorReqID);
         List<OBS_VendorQutn> GetShowVendorReqList();
         string SaveVendorQuotation(OBS_VendorQutn clientReq, List<OBS_VendorQutnItem> clientReqItem, List<OBS_VendorQutnTerms> clientReqTerm);
         List<OBS_VendorQutn> GetVendorQutnSearchList();
