@@ -41,9 +41,9 @@ namespace SILDMS.Service.QuotationToClient
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
                 : ValidationResult.Success;
         }
-        public ValidationResult GetTermsConditionsListService(string TermsID, out List<OBS_VendorReqTerms> VendorTermTermList)
+        public ValidationResult GetTermsConditionsListService(string VendorCSAprvID, out List<OBS_TermsItem> VendorTermTermList)
         {
-            VendorTermTermList = _iQuotationToClientDataService.GetTermsConditionsListServiceData(TermsID, out _errorNumber);
+            VendorTermTermList = _iQuotationToClientDataService.GetTermsConditionsListServiceData(VendorCSAprvID, out _errorNumber);
 
             return _errorNumber.Length > 0
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))

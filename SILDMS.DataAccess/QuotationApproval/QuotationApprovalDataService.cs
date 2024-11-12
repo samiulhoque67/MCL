@@ -56,8 +56,7 @@ namespace SILDMS.DataAccess.QuotationApproval
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         QuotationNo = reader.GetString("AutoQutnNo"),
-                        QuotationDate = reader.GetString("QuotationDate"),
-                        QutnPrice = reader.GetString("QutnPrice"),
+                        QuotationDate = reader.GetString("QuotationDate")
                     }).ToList();
 
                 }
@@ -65,6 +64,44 @@ namespace SILDMS.DataAccess.QuotationApproval
 
             return AllAvailableClientsList;
         }
+
+        public List<OBS_TermsItem> GetVendorTermListServiceData(string ClientQutnRecmID, out string _errorNumber)
+        {
+            _errorNumber = string.Empty;
+            var VendorTermTermList = new List<OBS_TermsItem>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQtnAprvTermData"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@ClientQutnRecmID", DbType.String, ClientQutnRecmID);
+                db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
+                dbCommandWrapper.CommandTimeout = 300;
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (!db.GetParameterValue(dbCommandWrapper, _spStatusParam).IsNullOrZero())
+                {
+                    _errorNumber = db.GetParameterValue(dbCommandWrapper, _spStatusParam).PrefixErrorCode();
+                }
+                else
+                {
+                    if (ds.Tables[0].Rows.Count <= 0) return VendorTermTermList;
+                    var dt1 = ds.Tables[0];
+                    VendorTermTermList = dt1.AsEnumerable().Select(reader => new OBS_TermsItem
+                    {
+                        ClientQutnRecmTermID = reader.GetString("ClientQutnRecmTermID"),
+                        TermsItemID = reader.GetString("TermsItemID"),
+                        TermsID = reader.GetString("TermsID"),
+                        TermsCode = reader.GetString("TermsCode"),
+                        TermsName = reader.GetString("TermsName")
+                    }).ToList();
+
+                }
+            }
+
+            return VendorTermTermList;
+        }
+
 
         public List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, out string _errorNumber)
         {
