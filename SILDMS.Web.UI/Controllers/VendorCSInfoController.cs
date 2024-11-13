@@ -37,11 +37,6 @@ namespace SILDMS.Web.UI.Controllers
         {
             List<OBS_VendorCSRecmItem> result = new List<OBS_VendorCSRecmItem>();
             await Task.Run(() => _vendorCSInfoService.GetVendorCSInfoDashBordData(UserID, out result));
-            //var TotalPendingParking = pd.Count();
-            //var OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count();
-            //var WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count();
-
-            //return Json(new { TotalPendingParking = pd.Count(), OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count(), WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count() }, JsonRequestBehavior.AllowGet);
             return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
         }
         [HttpGet]

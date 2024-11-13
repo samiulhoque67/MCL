@@ -22,5 +22,6 @@ namespace SILDMS.DataAccessInterface
         List<OBS_VendorReqItemWise> GetReqWiseVendorList(string VendorReqID);
         string DeleteVendorReqItemAndTerm(string VendorReqItemID, string VendorReqTermID);
         List<OBS_Terms> GetTermsConditionsList();
+      
     }
 }

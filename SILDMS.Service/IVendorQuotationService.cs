@@ -11,6 +11,7 @@ namespace SILDMS.Service
     public interface IVendorQuotationService
     {
         ValidationResult GetServicesCategory(string action, out List<OBS_ServicesCategory> ownerLevelList);
+        ValidationResult GetVendorReqItemListForVenQutn(string VendorReqID, out List<OBS_VendorReqItem> VendorReqItemList);
         ValidationResult GetShowVendorReqList(out List<OBS_VendorQutn> ClientInfoSearchList);
         string SaveVendorQuotation(OBS_VendorQutn clientReq, List<OBS_VendorQutnItem> clientReqItem, List<OBS_VendorQutnTerms> clientReqTerm);
         ValidationResult GetVendorQutnSearchList(out List<OBS_VendorQutn> VendorQutnSearchList);

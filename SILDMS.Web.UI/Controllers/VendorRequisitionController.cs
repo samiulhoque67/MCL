@@ -154,5 +154,24 @@ namespace SILDMS.Web.UI.Controllers
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
+
+        //[Authorize]
+        //public async Task<dynamic> GetExistingVendor(string Mat_Code)
+        //{
+        //    var ExistingVendorlist = new List<GoogleSearch>();
+        //    if (!string.IsNullOrEmpty(SILAuthorization.GetUserID()))
+        //    {
+
+
+        //        await Task.Run(() => _clientInfoService.GetExistingVendorService(Mat_Code, out ExistingVendorlist));
+
+        //    }
+        //    return Json(new { ExistingVendorlist, Msg = "" }, JsonRequestBehavior.AllowGet);
+        //}
+
+
+
+
+
     }
 }

@@ -36,4 +36,14 @@ namespace SILDMS.Model
         [Required]
         public string Status { get; set; }
     }
+
+
+
+   
+
+
+
+
+
+
 }
