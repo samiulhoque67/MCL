@@ -131,6 +131,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                         ClientID = reader.GetString("ClientID"),
                         ClientQuotationID = reader.GetString("ClientQutnID"),
                         ClientReqID = reader.GetString("ClientReqID"),
+                        ClientReqNo = reader.GetString("ClientReqNo"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         //TermsID = reader.GetString("TermsID"),
                         ServiceItemCode = reader.GetString("ServiceItemCode"),
