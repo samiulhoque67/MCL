@@ -7,7 +7,7 @@
     }
 
     .box-body, .form-group, .btn, .form-control, .box-header {
-        font-size: 12px; 
+        font-size: 12px;
     }
 
     .btn {
@@ -30,7 +30,7 @@
     /* Adjust icon size */
     .fa {
         font-size: 12px;
-       /* padding-right: 3px;*/
+        /* padding-right: 3px;*/
     }
 </style>
 
@@ -46,6 +46,14 @@
                     <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh">
                         <i class="fa fa-refresh" style="padding-right: 5px;"></i>Refresh
                     </button>
+                </div>
+                <div class="btn-group pull-right" style="margin: 3px">
+                    @using (Html.BeginForm("rptQuotationtoClient", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+                    {
+                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="btn btn-sm btn-flat btn-success pull-right">
+                            <i class="fa fa-print"></i> Print
+                        </button>
+                    }
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="SearchClientReqModal()" class="btn btn-primary btn-flat pull-right" ng-disabled="btnSearch">
@@ -324,7 +332,7 @@
         </div>
     </div>
 
-   
+
 
 
     <div class="box-body" ng-show="showTermsItem===true">
@@ -342,10 +350,10 @@
                         <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                             <thead>
                                 <tr>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" >Form Code</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" >Form Name</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1">Form Code</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1">Form Name</th>
 
-                                    <th class="col-lg-1 col-md-1 col-sm-1" >Status</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1">Status</th>
                                     <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                                 </tr>
                                 <tr>
@@ -437,12 +445,12 @@
                                 <th style="text-align: left;">Action</th>
                             </tr>
                             @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
+                                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                                </tr>*@
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in TermsConditionsDisplayedCollection" ng-cloak style="font-size:12px;">
-                               
+
                                 <td class="hidden">{{row.TermsID}}</td>
                                 <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
                                 <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
@@ -456,8 +464,8 @@
                         </tbody>
                         <tfoot>
                             @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
+                                    <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                                </tr>*@
                         </tfoot>
                     </table>
                 </div>
@@ -680,14 +688,14 @@
         };
 
         $scope.Client = {
-            ClientName :"",
-            ClientRequisitionNo :"",
-            ClientRequisitionDate :"",
-            ContactPerson :"",
-            ContactNumber :"",
-            ContactTIN :"",
-            ContactBIN :"",
-            ContactAddress :"",
+            ClientName: "",
+            ClientRequisitionNo: "",
+            ClientRequisitionDate: "",
+            ContactPerson: "",
+            ContactNumber: "",
+            ContactTIN: "",
+            ContactBIN: "",
+            ContactAddress: "",
         }
 
         $scope.MasterData = {
@@ -792,7 +800,7 @@
                     ContactAddress: $scope.ClientDetails[0].Address
                 };
                 $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID);
-                 $scope.loading = false;
+                $scope.loading = false;
             }).error(function () {
                 $scope.loading = false;
             });
@@ -815,7 +823,7 @@
             });
         };
 
-      
+
         $scope.showFlag = false;
         $scope.selectedRows = [];
         $scope.buttonChecked = false;
@@ -876,146 +884,146 @@
 
         $scope.checkEnter = function (event, row) {
             if (event.keyCode === 13) {
-                row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0; 
+                row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
                 row.givenQutnAmt = row.givenQutnPrice * row.QutnQnty;
                 row.givenTolAmt = parseFloat(row.givenQutnAmt) + (parseFloat(row.VatAmt) || 0);
             }
-        }; 
+        };
 
         ////////////////////////Requsition Terms & Conditions ///////////////////////
 
-/*        $scope.ShowTermsConditionsList = function () {
-            $http.get("/VendorRequisition/GetTermsConditionsList")
-                .success(function (response) {
-                    $scope.TermsConditionsList = response.termsConditionsList;
-                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-                    $scope.loading = false;
-                })
-                .error(function () { });
+        /*        $scope.ShowTermsConditionsList = function () {
+                    $http.get("/VendorRequisition/GetTermsConditionsList")
+                        .success(function (response) {
+                            $scope.TermsConditionsList = response.termsConditionsList;
+                            $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
+                            $scope.loading = false;
+                        })
+                        .error(function () { });
 
-            $('#VendorReqTermsConditionsModal').modal('show');
-        };
+                    $('#VendorReqTermsConditionsModal').modal('show');
+                };
 
-        $scope.toggleTermsConditionsSelect = function (row) {
-            //$scope.VendorReq.TermsID = row.TermsID;
-            //$scope.VendorReq.FormName = row.FormName;
+                $scope.toggleTermsConditionsSelect = function (row) {
+                    //$scope.VendorReq.TermsID = row.TermsID;
+                    //$scope.VendorReq.FormName = row.FormName;
 
-            $http.post('/QuotationToClient/GetVendorTermList', { TermsID: row.TermsID })
-                .success(function (response) {
-                    $scope.ReqTermDataSetupGridData = response.VendorTermTermList;
-                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-                    $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
+                    $http.post('/QuotationToClient/GetVendorTermList', { TermsID: row.TermsID })
+                        .success(function (response) {
+                            $scope.ReqTermDataSetupGridData = response.VendorTermTermList;
+                            $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                            $scope.loading = false;
+                        }).error(function () {
+                            $scope.loading = false;
+                        });
 
-            $('#VendorReqTermsConditionsModal').modal('hide');
-        };
+                    $('#VendorReqTermsConditionsModal').modal('hide');
+                };
 
-        $scope.VendorReqTerm = {
-            VendorReqTermsID: "",
-            VendorReqID: "",
-            TermsID: "",
-            TermsCode: "",
-            TermsName: ""
-        }
+                $scope.VendorReqTerm = {
+                    VendorReqTermsID: "",
+                    VendorReqID: "",
+                    TermsID: "",
+                    TermsCode: "",
+                    TermsName: ""
+                }
 
-        $scope.AddReqTermModal = function () {
+                $scope.AddReqTermModal = function () {
 
-            if ($('#RequisitionNo').val() == "") {
-                toastr.error("Vendor ReqNo.  Required");
-                return;
-            }
+                    if ($('#RequisitionNo').val() == "") {
+                        toastr.error("Vendor ReqNo.  Required");
+                        return;
+                    }
 
-            if ($('#SubmissionDate').val() == "") {
-                toastr.error("Submission Date Required.");
-                return;
-            }
+                    if ($('#SubmissionDate').val() == "") {
+                        toastr.error("Submission Date Required.");
+                        return;
+                    }
 
-            if ($('#RequisitionDate').val() == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
-            }
-            $('#RequisitionTermModal').modal('show');
-        };
+                    if ($('#RequisitionDate').val() == "") {
+                        toastr.error("Requisition Date Date Required");
+                        return;
+                    }
+                    $('#RequisitionTermModal').modal('show');
+                };
 
-        $scope.ReqTermDataSetupGridData = [];  // base collection
-        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                $scope.ReqTermDataSetupGridData = [];  // base collection
+                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
 
-        $scope.AddReqTerm = function () {
+                $scope.AddReqTerm = function () {
 
-            if ($('#TermsCode').val() == "") {
-                toastr.error("Terms Code Required");
-                return;
-            }
+                    if ($('#TermsCode').val() == "") {
+                        toastr.error("Terms Code Required");
+                        return;
+                    }
 
-            if ($('#TermsName').val() == "") {
-                toastr.error("Terms Name Required.");
-                return;
-            }
+                    if ($('#TermsName').val() == "") {
+                        toastr.error("Terms Name Required.");
+                        return;
+                    }
 
-            $scope.VendorReqTerm.TermsCode = $('#TermsCode').val();
-            $scope.VendorReqTerm.TermsName = $('#TermsName').val();
+                    $scope.VendorReqTerm.TermsCode = $('#TermsCode').val();
+                    $scope.VendorReqTerm.TermsName = $('#TermsName').val();
 
-            $scope.vendorReqTermArray.push($scope.VendorReqTerm);
+                    $scope.vendorReqTermArray.push($scope.VendorReqTerm);
 
-            $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection.concat($scope.VendorReqTerm);
+                    $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection.concat($scope.VendorReqTerm);
 
-            $scope.resetVendorReqTerm();
-            $("#btnAddReqTerm").html('Add');
-            $('#RequisitionTermModal').modal('hide');
-        }
+                    $scope.resetVendorReqTerm();
+                    $("#btnAddReqTerm").html('Add');
+                    $('#RequisitionTermModal').modal('hide');
+                }
 
-        $scope.resetVendorReqTerm = function () {
-            $scope.VendorReqTerm = {
-                VendorReqTermsID: "",
-                VendorReqID: "",
-                TermsID: "",
-                TermsCode: "",
-                TermsName: ""
-            }
-        }
+                $scope.resetVendorReqTerm = function () {
+                    $scope.VendorReqTerm = {
+                        VendorReqTermsID: "",
+                        VendorReqID: "",
+                        TermsID: "",
+                        TermsCode: "",
+                        TermsName: ""
+                    }
+                }
 
-        $scope.toggleReqTermEdit = function (tableRow, $i) {
-            $('#RequisitionTermModal').modal('show');
-            $scope.resetVendorReqTerm();
-            $scope.VendorReqTerm.VendorReqTermID = tableRow.VendorReqTermD;
-            $scope.VendorReqTerm.VendorReqID = tableRow.VendorReqID;
-            $scope.VendorReqTerm.TermsID = tableRow.TermsID;
-            $scope.VendorReqTerm.TermsCode = tableRow.TermsCode;
-            $scope.VendorReqTerm.TermsName = tableRow.TermsName;
-            $scope.ReqTermGridDisplayCollection.splice($i, 1);
-            $scope.vendorReqTermArray.splice($i, 1);
-            $("#btnAddReqTerm").html('Update');
-        };
+                $scope.toggleReqTermEdit = function (tableRow, $i) {
+                    $('#RequisitionTermModal').modal('show');
+                    $scope.resetVendorReqTerm();
+                    $scope.VendorReqTerm.VendorReqTermID = tableRow.VendorReqTermD;
+                    $scope.VendorReqTerm.VendorReqID = tableRow.VendorReqID;
+                    $scope.VendorReqTerm.TermsID = tableRow.TermsID;
+                    $scope.VendorReqTerm.TermsCode = tableRow.TermsCode;
+                    $scope.VendorReqTerm.TermsName = tableRow.TermsName;
+                    $scope.ReqTermGridDisplayCollection.splice($i, 1);
+                    $scope.vendorReqTermArray.splice($i, 1);
+                    $("#btnAddReqTerm").html('Update');
+                };
 
-        $scope.toggleReqTermDelete = function (tableRow, $i) {
-            if (!tableRow.VendorReqTermID) {
-                $scope.resetVendorReqTerm();
-                $scope.ReqTermGridDisplayCollection.splice($i, 1);
-                $scope.vendorReqTermArray.splice($i, 1);
-                toastr.success('Data Deleted Successsfully');
-            }
-            else {
-                $scope.resetVendorReqTerm();
-                $scope.VendorReqTerm.VendorReqTermID = tableRow.VendorReqTermID;
-                $('#deleteReqTermModal').modal('show');
-            }
-        };
-
-        $scope.DeleteVendorReqTerm = function () {
-            $http.post('/VendorRequisition/DeleteVendorReqItemAndTerm',
-                { VendorReqItemID: $scope.VendorReqItem.VendorReqItemID, VendorReqTermID: $scope.VendorReqTerm.VendorReqTermID })
-                .success(function (response) {
-                    if (response.status == "S203") {
+                $scope.toggleReqTermDelete = function (tableRow, $i) {
+                    if (!tableRow.VendorReqTermID) {
                         $scope.resetVendorReqTerm();
                         $scope.ReqTermGridDisplayCollection.splice($i, 1);
                         $scope.vendorReqTermArray.splice($i, 1);
                         toastr.success('Data Deleted Successsfully');
-                        return;
                     }
-                });
-        }*/
+                    else {
+                        $scope.resetVendorReqTerm();
+                        $scope.VendorReqTerm.VendorReqTermID = tableRow.VendorReqTermID;
+                        $('#deleteReqTermModal').modal('show');
+                    }
+                };
+
+                $scope.DeleteVendorReqTerm = function () {
+                    $http.post('/VendorRequisition/DeleteVendorReqItemAndTerm',
+                        { VendorReqItemID: $scope.VendorReqItem.VendorReqItemID, VendorReqTermID: $scope.VendorReqTerm.VendorReqTermID })
+                        .success(function (response) {
+                            if (response.status == "S203") {
+                                $scope.resetVendorReqTerm();
+                                $scope.ReqTermGridDisplayCollection.splice($i, 1);
+                                $scope.vendorReqTermArray.splice($i, 1);
+                                toastr.success('Data Deleted Successsfully');
+                                return;
+                            }
+                        });
+                }*/
 
         $scope.openConfirmModal = function () {
             if (!$scope.MasterData.BriefingDate || $scope.MasterData.BriefingDate.trim() === '') {
@@ -1026,7 +1034,7 @@
             }
         };
 
-        
+
         $scope.SaveQuotToClient = function () {
 
             console.log($scope.MasterData);

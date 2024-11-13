@@ -47,19 +47,20 @@ namespace SILDMS.Web.UI.Controllers
 
             return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
         }
-        public async Task<dynamic> GetVendorReqItemListForVenQutn(string VendorReqID)
-        {
-            var VendorReqItemList = new List<OBS_VendorReqItem>();
-            await Task.Run(() => _clientInfoService.GetVendorReqItemListForVenQutn(VendorReqID, out VendorReqItemList));
-            var result = Json(new { VendorReqItemList, msg = "VendorReqItemList are loaded in the table." }, JsonRequestBehavior.AllowGet);
-            result.MaxJsonLength = Int32.MaxValue;
-            return result;
-        }
-        public async Task<dynamic> GetShowVendorReqList()
+        public async Task<dynamic> GetShowVendorReqForVenQutnList()
         {
             var VendorReqList = new List<OBS_VendorQutn>();
             await Task.Run(() => _clientInfoService.GetShowVendorReqList(out VendorReqList));
             var result = Json(new { VendorReqList, msg = "Client Info List are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
+        }
+
+        public async Task<dynamic> GetVendorReqItemListForVenQutn(string VendorID, string VendorReqID)
+        {
+            var VendorReqItemList = new List<OBS_VendorReqItem>();
+            await Task.Run(() => _clientInfoService.GetVendorReqItemListForVenQutn(VendorID, VendorReqID, out VendorReqItemList));
+            var result = Json(new { VendorReqItemList, msg = "VendorReqItemList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
