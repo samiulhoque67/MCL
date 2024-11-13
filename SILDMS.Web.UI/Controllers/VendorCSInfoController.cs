@@ -96,11 +96,11 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> SaveVendorCSInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm, List<OBS_VendorCSRecmVendors> vendorCSItemWise)
+        public async Task<dynamic> SaveVendorCSInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm)
         {
             vendorCS.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
-            status = _vendorCSInfoService.SaveVendorCSInfo(vendorCS, vendorCSItem, vendorCSTerm, vendorCSItemWise);
+            status = _vendorCSInfoService.SaveVendorCSInfo(vendorCS, vendorCSItem, vendorCSTerm);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
@@ -140,5 +140,41 @@ namespace SILDMS.Web.UI.Controllers
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
+
+
+        [Authorize]
+        public async Task<dynamic> GetAllRequisition()
+        {
+            var InvitationList = new List<Invitation>();
+            await Task.Run(() => _vendorCSInfoService.GetAllRequisition(UserID, out InvitationList));
+            return Json(new { InvitationList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        [Authorize]
+        public async Task<dynamic> GetMaterialByRequisition(string VendorRequisitionNumber)
+        {
+            var ReqWiseMaterialList = new List<OBS_VendorCSRecmItem>();
+            await Task.Run(() => _vendorCSInfoService.GetMaterialByRequisition(VendorRequisitionNumber, out ReqWiseMaterialList));
+            return Json(new { ReqWiseMaterialList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [Authorize]
+        public async Task<dynamic> GetVendorByMaterial(string VendorReqID, string ServiceItemID)
+        {
+            var MatWiseVendorList = new List<OBS_VendorCSRecmItem>();
+            await Task.Run(() => _vendorCSInfoService.GetVendorByMaterialService(VendorReqID, ServiceItemID, out MatWiseVendorList));
+            return Json(new { MatWiseVendorList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
+
+
+
+
     }
 }
