@@ -59,7 +59,7 @@ namespace SILDMS.DataAccess
             return servicesCategoryList;
         }
 
-        public List<OBS_VendorReqItem> GetVendorReqItemListForVenQutn(string VendorID, string VendorReqID)
+        public List<OBS_VendorReqItem> GetVendorReqItemListForVenQutn(string VendorReqID)
         {
             string errorNumber = string.Empty;
             List<OBS_VendorReqItem> VendorReqItemList = new List<OBS_VendorReqItem>();
@@ -67,7 +67,6 @@ namespace SILDMS.DataAccess
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorReqItemListForVenQutn"))
             {
-                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
                 db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.VarChar, VendorReqID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);

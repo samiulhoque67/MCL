@@ -947,7 +947,7 @@
         }
 
         $scope.ShowVendorReqList = function () {
-            $http.get("/VendorQuotation/GetShowVendorReqForVenQutnList")
+            $http.get("/VendorQuotation/GetShowVendorReqList")
                 .success(function (response) {
                     console.log(response);
                     $scope.VendorReqList = response.VendorReqList;
@@ -1089,7 +1089,7 @@
             $scope.VendorQutn.SubmissionDate = row.SubmissionDate;
             $scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;
 
-            $http.post('/VendorQuotation/GetVendorReqItemListForVenQutn', { VendorID: row.VendorID, VendorReqID: row.VendorReqID })
+            $http.post('/VendorQuotation/GetVendorReqItemListForVenQutn', { VendorReqID: row.VendorReqID })
                 .success(function (response) {
                     $scope.masterDataSetupGridData = response.VendorReqItemList;
                     $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);

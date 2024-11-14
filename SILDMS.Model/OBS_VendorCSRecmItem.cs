@@ -12,9 +12,6 @@ namespace SILDMS.Model
         public string VendorCSInfoItemID { get; set; }
         public string VendorCSInfoID { get; set; }
         public string VendorReqID { get; set; }
-        public string VendorQutnNo { get; set; }
-        public string VendorQutnID { get; set; }
-
         public string ServiceCategoryID { get; set; }
         public string ServiceCategoryName { get; set; }
         public string ServicesCategoryCount { get; set; }

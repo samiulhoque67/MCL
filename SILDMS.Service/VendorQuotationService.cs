@@ -12,7 +12,7 @@ namespace SILDMS.Service
 {
     public class VendorQuotationService : IVendorQuotationService
     {
-
+         
         #region Fields
 
         private readonly IVendorQuotationDataService clientInfoDataService;
@@ -39,9 +39,9 @@ namespace SILDMS.Service
             }
             return ValidationResult.Success;
         }
-        public ValidationResult GetVendorReqItemListForVenQutn(string VendorID, string VendorReqID, out List<OBS_VendorReqItem> VendorReqItemList)
+        public ValidationResult GetVendorReqItemListForVenQutn(string VendorReqID, out List<OBS_VendorReqItem> VendorReqItemList)
         {
-            VendorReqItemList = clientInfoDataService.GetVendorReqItemListForVenQutn(VendorID, VendorReqID);
+            VendorReqItemList = clientInfoDataService.GetVendorReqItemListForVenQutn(VendorReqID);
             return ValidationResult.Success;
         }
         public ValidationResult GetShowVendorReqList(out List<OBS_VendorQutn> ClientInfoList)
