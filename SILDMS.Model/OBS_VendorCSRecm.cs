@@ -54,5 +54,13 @@ namespace SILDMS.Model
         public double RecommendedAmount { get; set; }
         public object PORecmID { get; set; }
         public string VendorQutnItemID { get; set; }
+
+        public string ClientReqNo { get; set; }
+        public string VendorReqID { get; set; }
+        public string ServiceItemID { get; set; }
+        public string Description { get; set; }
+        public string DeliveryDate { get; set; }
+        public string DeliveryLocation { get; set; }
+        public string DeliveryMode { get; set; }
     }
 }
