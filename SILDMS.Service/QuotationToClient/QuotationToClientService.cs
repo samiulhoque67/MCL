@@ -50,9 +50,9 @@ namespace SILDMS.Service.QuotationToClient
                 : ValidationResult.Success;
         }
 
-        ValidationResult IQuotationToClientService.GetClientReqDataInfoService(string ClientID, out List<ClientReqData> GetClientReqDetails)
+        ValidationResult IQuotationToClientService.GetClientReqDataInfoService(string ClientID, string ClientReqID, out List<ClientReqData> GetClientReqDetails)
         {
-            GetClientReqDetails = _iQuotationToClientDataService.GetClientReqDataInfoDataService(ClientID, out _errorNumber);
+            GetClientReqDetails = _iQuotationToClientDataService.GetClientReqDataInfoDataService(ClientID, ClientReqID, out _errorNumber);
 
             return _errorNumber.Length > 0
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
