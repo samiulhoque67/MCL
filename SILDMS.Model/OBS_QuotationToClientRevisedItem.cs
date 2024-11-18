@@ -39,6 +39,10 @@ namespace SILDMS.Model
 
         public string TolAmt { get; set; }
 
+        public string RevQutnQnty { get; set; }
+        public string RevQutnPrice { get; set; } 
+        public string RevQutnAmt { get; set; }
+
         public string SetOn { get; set; }
         public string SetBy { get; set; }
         public string ModifiedOn { get; set; }

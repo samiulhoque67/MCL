@@ -288,19 +288,16 @@
                             <th style="text-align: left;" st-sort="">Delivery Location</th>
                             <th style="text-align: left;" st-sort="">Delivery Date</th>
                             <th style="text-align: left;" st-sort="">Delivery Mode</th>
-                            @*<th style="text-align: left;" st-sort="">ReqQnty</th>
-                                <th style="text-align: left;" st-sort="">ReqUnit</th>*@
-
                             <th style="text-align: left;" st-sort="">QutnUnit</th>
-
                             <th style="text-align: left;" st-sort="">QutnQnty</th>
                             <th style="text-align: left;" st-sort="">QutnPrice</th>
                             <th style="text-align: left;" st-sort="">QutnAmt</th>
-
                             <th style="text-align: left;" st-sort="">VatPerc</th>
                             <th style="text-align: left;" st-sort="">VatAmt</th>
-
                             <th style="text-align: left;" st-sort="">TolAmt</th>
+
+                            <th style="text-align: left;" st-sort="">RevQutnQnty</th>
+                            <th style="text-align: left;" st-sort="">RevQutnAmt</th>
 
                             <th style="text-align: left;">Action</th>
                         </tr>
@@ -319,20 +316,19 @@
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryLocation}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryDate}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryMode}}</td>
-                            @*<td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
-                                <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>*@
-
                             <td class="col-lg-1" style="width:5%;">{{row.QutnUnit}}</td>
-
                             <td class="col-lg-1" style="width:6%;">{{row.QutnQnty | number:2}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.QutnPrice}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.QutnAmt | number:2}}</td>
-
                             <td class="col-lg-1" style="width:5%;">{{row.VatPerc}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.VatAmt | number:2}}</td>
-
                             <td class="col-lg-1" style="width:5%;">{{row.TolAmt}}</td>
-
+                            <td class="col-lg-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.RevQutnQnty" />
+                            </td>
+                            <td class="col-lg-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.RevQutnAmt" />
+                            </td>
                             <td class="col-lg-1" style="width:5%;">
                                 <button type="button" ng-if="row.QuotationToClientRevisedItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                 <button type="button" ng-if="!row.QuotationToClientRevisedItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
