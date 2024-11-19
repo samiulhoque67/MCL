@@ -62,5 +62,8 @@ namespace SILDMS.Model
         public string DeliveryDate { get; set; }
         public string DeliveryLocation { get; set; }
         public string DeliveryMode { get; set; }
+        public string ItemCount { get; set; }
+        public string Email { get; set; }
+        public string CurrentAddress { get; set; }
     }
 }

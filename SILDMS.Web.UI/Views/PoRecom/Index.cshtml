@@ -2,6 +2,33 @@
     Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
 }
 <style>
+
+    .dbody {
+        background-color: whitesmoke;
+    }
+
+
+    .font-weight-bold {
+        font-weight: bold;
+        color: darkgreen;
+    }
+
+    .w-100 {
+        width: 100%;
+    }
+
+    .d-flex {
+        display: flex;
+    }
+
+    .align-items-center {
+        align-items: center;
+    }
+
+    .justify-content-center {
+        justify-content: center;
+    }
+
     .link_total_bm {
         color: black;
         font-weight: bold;
@@ -43,6 +70,20 @@
     .box.box-solid.box-primary > .box-header {
         text-align: center;
     }
+
+    .table-header {
+        background-color: #8aa4af !important;
+        color: darkblue !important;
+        font-size: 13px;
+    }
+
+    .tableVen-striped > tbody > tr:nth-of-type(odd) {
+        background-color: rgba(23, 250, 132, 0.01);
+    }
+
+    .selected-row {
+        background-color: #dff0d8; /* Light green color to indicate selection */
+    }
 </style>
 
 <div class="box box-primary box-body" ng-controller="PoRecomCtrl">
@@ -68,118 +109,121 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-2">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center">{{dashBoardResult[0].ServiceCategoryName}}</h3>
-                </div>
+    @*<div class="row">
+            <div class="col-md-2">
+                <div class="box box-primary box-solid">
+                    <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
+                        <h3 class="box-title text-center">{{dashBoardResult[0].ServiceCategoryName}}</h3>
+                    </div>
 
-                <div style="padding-top:5px;padding-bottom:5px">
-                    <button id="dashBoardResult[0].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[0].ServiceCategoryID)">
-                        <div class="col-sm-2 border-right" style="padding-left:5px;">
-                            <h5 class="description-header">{{dashBoardResult[0].ServicesCategoryCount}}</h5>
+                    <div style="padding-top:5px;padding-bottom:5px">
+                        <button id="dashBoardResult[0].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[0].ServiceCategoryID)">
+                            <div class="col-sm-2 border-right" style="padding-left:5px;">
+                                <h5 class="description-header">{{dashBoardResult[0].ServicesCategoryCount}}</h5>
+                            </div>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="box box-primary box-solid">
+                    <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
+                        <h3 class="box-title text-center">{{dashBoardResult[1].ServiceCategoryName}}</h3>
+                    </div>
+
+                    <div class="box-body">
+                        <div class="row">
+                            <button id="dashBoardResult[1].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[1].ServiceCategoryID)">
+                                <div class="col-sm-2 border-right">
+                                    <h5 class="description-header">{{dashBoardResult[1].ServicesCategoryCount}}</h5>
+                                </div>
+                            </button>
                         </div>
-                    </button>
-                </div>
-
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center">{{dashBoardResult[1].ServiceCategoryName}}</h3>
-                </div>
-
-                <div class="box-body">
-                    <div class="row">
-                        <button id="dashBoardResult[1].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[1].ServiceCategoryID)">
-                            <div class="col-sm-2 border-right">
-                                <h5 class="description-header">{{dashBoardResult[1].ServicesCategoryCount}}</h5>
-                            </div>
-                        </button>
                     </div>
-                </div>
 
+                </div>
             </div>
-        </div>
-        <div class="col-md-2">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center">{{dashBoardResult[2].ServiceCategoryName}}</h3>
-                </div>
+            <div class="col-md-2">
+                <div class="box box-primary box-solid">
+                    <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
+                        <h3 class="box-title text-center">{{dashBoardResult[2].ServiceCategoryName}}</h3>
+                    </div>
 
-                <div class="box-body">
-                    <div class="row">
-                        <button id="dashBoardResult[2].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[2].ServiceCategoryID)">
-                            <div class="col-sm-2 border-right">
-                                <h5 class="description-header">{{dashBoardResult[2].ServicesCategoryCount}}</h5>
-                            </div>
-                        </button>
+                    <div class="box-body">
+                        <div class="row">
+                            <button id="dashBoardResult[2].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[2].ServiceCategoryID)">
+                                <div class="col-sm-2 border-right">
+                                    <h5 class="description-header">{{dashBoardResult[2].ServicesCategoryCount}}</h5>
+                                </div>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-2">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center">{{dashBoardResult[3].ServiceCategoryName}}</h3>
-                </div>
-
-                <div class="box-body">
-                    <div class="row">
-                        <button id="dashBoardResult[3].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[3].ServiceCategoryID)">
-                            <div class="col-sm-2 border-right">
-                                <h5 class="description-header">{{dashBoardResult[3].ServicesCategoryCount}}</h5>
-                            </div>
-                        </button>
+            <div class="col-md-2">
+                <div class="box box-primary box-solid">
+                    <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
+                        <h3 class="box-title text-center">{{dashBoardResult[3].ServiceCategoryName}}</h3>
                     </div>
-                </div>
 
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center">{{dashBoardResult[4].ServiceCategoryName}}</h3>
-                </div>
-
-                <div class="box-body">
-                    <div class="row">
-                        <button id="dashBoardResult[4].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[4].ServiceCategoryID)">
-                            <div class="col-sm-2 border-right">
-                                <h5 class="description-header">{{dashBoardResult[4].ServicesCategoryCount}}</h5>
-                            </div>
-                        </button>
+                    <div class="box-body">
+                        <div class="row">
+                            <button id="dashBoardResult[3].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[3].ServiceCategoryID)">
+                                <div class="col-sm-2 border-right">
+                                    <h5 class="description-header">{{dashBoardResult[3].ServicesCategoryCount}}</h5>
+                                </div>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
-        </div>
-        <div class="col-md-2">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center">{{dashBoardResult[5].ServiceCategoryName}}</h3>
-                </div>
-
-                <div class="box-body">
-                    <div class="row">
-                        <button id="dashBoardResult[5].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[5].ServiceCategoryID)">
-                            <div class="col-sm-2 border-right">
-                                <h5 class="description-header">{{dashBoardResult[5].ServicesCategoryCount}}</h5>
-                            </div>
-                        </button>
+            <div class="col-md-2">
+                <div class="box box-primary box-solid">
+                    <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
+                        <h3 class="box-title text-center">{{dashBoardResult[4].ServiceCategoryName}}</h3>
                     </div>
+
+                    <div class="box-body">
+                        <div class="row">
+                            <button id="dashBoardResult[4].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[4].ServiceCategoryID)">
+                                <div class="col-sm-2 border-right">
+                                    <h5 class="description-header">{{dashBoardResult[4].ServicesCategoryCount}}</h5>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
-
             </div>
-        </div>
-    </div>
+            <div class="col-md-2">
+                <div class="box box-primary box-solid">
+                    <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
+                        <h3 class="box-title text-center">{{dashBoardResult[5].ServiceCategoryName}}</h3>
+                    </div>
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+                    <div class="box-body">
+                        <div class="row">
+                            <button id="dashBoardResult[5].ServiceCategoryID" ng-click="VendorSelect(dashBoardResult[5].ServiceCategoryID)">
+                                <div class="col-sm-2 border-right">
+                                    <h5 class="description-header">{{dashBoardResult[5].ServicesCategoryCount}}</h5>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>*@
+
+    <div class="row" style="margin: 1%; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-if="CSClientDisplayedCollection.length > 0">
         <div class="row">
+
+
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="CSClientDisplayedCollection" st-safe-src="CSClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                <div style="background-color: #cbd4d9; padding: 0.7%; border-radius: 4px; font-size: 15px; font-weight: bold; ">Client List</div>
+                <table st-table="CSClientDisplayedCollection" st-safe-src="CSClientList" style="width:100%;" class="table table-condensed table-bordered table-striped table-hover pnlView">
                     <thead>
                         <tr>
                             <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">POPreparation ID</th>
@@ -258,63 +302,62 @@
                         </tr>
                     </tbody>
                     <tfoot>-->
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
-                    <!--</tfoot>
+    @*<tr>
+            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+        </tr>*@
+    <!--</tfoot>
                 </table>
             </div>
         </div>
     </div>-->
 
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-        <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;" st-sort="">Item Code</th>
-                            <th style="text-align: left;" st-sort="">Item Name</th>
-                            <th style="text-align: left;" st-sort="">ReqQnty</th>
-                            <th style="text-align: left;" st-sort="">ReqUnit</th>
-                            <th style="text-align: left;" st-sort="">QutnQnty</th>
-                            <th style="text-align: left;" st-sort="">QutnPrice</th>
-                            <th style="text-align: left;" st-sort="">QutnAmt</th>
-                            <th style="text-align: left;" st-sort="">VatPerc</th>
-                            <th style="text-align: left;" st-sort="">VatAmt</th>
-                            <th style="text-align: left;" st-sort="">TolAmt</th>
+<div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="VenCSItemGridDisplayCollection.length > 0">
+    <div class="row">
+        <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+            <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                <thead>
+                    <tr>
+                        <th style="text-align: left;" st-sort="">Item Code</th>
+                        <th style="text-align: left;" st-sort="">Item Name</th>
+                        <th style="text-align: left;" st-sort="">ReqQnty</th>
+                        <th style="text-align: left;" st-sort="">ReqUnit</th>
+                        <th style="text-align: left;" st-sort="">QutnQnty</th>
+                        <th style="text-align: left;" st-sort="">QutnPrice</th>
+                        <th style="text-align: left;" st-sort="">QutnAmt</th>
+                        <th style="text-align: left;" st-sort="">VatPerc</th>
+                        <th style="text-align: left;" st-sort="">VatAmt</th>
+                        <th style="text-align: left;" st-sort="">TolAmt</th>
 
-                            @*<th style="text-align: left;">Action</th>*@
-                        </tr>
-                        @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
-                            <td class="hidden">{{row.index+1}}</td>
-                            <td class="hidden">{{row.VendorCSInfoItemID}}</td>
-                            <td class="hidden">{{row.VendorCSInfoID}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnQnty}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnPrice}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnAmt}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.VatPerc}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
-                    </tfoot>
-                </table>
-            </div>
+                        @*<th style="text-align: left;">Action</th>*@
+                    </tr>
+                    @*<tr>
+                            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                        </tr>*@
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
+                        <td class="hidden">{{row.index+1}}</td>
+                        <td class="hidden">{{row.VendorCSInfoItemID}}</td>
+                        <td class="hidden">{{row.VendorCSInfoID}}</td>
+                        <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
+                        <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
+                        <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.QutnQnty}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.QutnPrice}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.QutnAmt}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.VatPerc}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    @*<tr>
+                            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                        </tr>*@
+                </tfoot>
+            </table>
         </div>
     </div>
 
@@ -404,10 +447,17 @@
 
     </div>
 
-        <!--<div class="col-lg-2">-->
-        @*<div class="col-sm-1 col-md-1 col-lg-1">
+
+
+
+</div>
+
+    
+
+    <!--<div class="col-lg-2">-->
+    @*<div class="col-sm-1 col-md-1 col-lg-1">
         </div>*@
-        <!--<div class="form-group">
+    <!--<div class="form-group">
             <label>PO Created by:</label>
         </div>
     </div>
@@ -416,13 +466,13 @@
             <input id="RecommendedBy" name="RecommendedBy" type="text" class="form-control" placeholder="CreatedBy" ng-model="VendorCSInfo.RecommendedBy" />
         </div>
     </div>-->
-    
-
-            
- 
 
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+
+
+
+
+    @*<div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
                 <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
@@ -432,9 +482,9 @@
                             <th style="text-align: left;" st-sort="">Terms & Conditions</th>
                             <th style="text-align: left;">Action</th>
                         </tr>
-                        @*<tr>
+                        <tr>
                                 <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
+                            </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
@@ -452,19 +502,19 @@
                         </tr>
                     </tbody>
                     <tfoot>
-                        @*<tr>
+                        <tr>
                                 <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
+                            </tr>
                     </tfoot>
                 </table>
             </div>
         </div>
-    </div>
+    </div>*@
 </div>
 
 <script type="text/javascript">
 
-    app.controller('PoRecomCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('PoRecomCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
         $scope.vendorCSItemArray = [];
         $scope.vendorCSTermArray = [];
@@ -478,16 +528,16 @@
                 $scope.dashBoardResult = response.result;
             }).error(function () { });
 
-        $scope.VendorSelect = function (ServiceCategoryID) {
-            $scope.ServiceCategoryID = ServiceCategoryID;
-            $http.post("/PORecom/GetPoRecomClientInfo?ServiceCategoryID=" + ServiceCategoryID)
+    
+    
+            $http.post("/PORecom/GetPoRecomClientInfo/")
                 .success(function (response) {
                     $scope.CSClientList = response.CSClientList;
                     $scope.VendorCSInfo.VendorQutnID = response.CSClientList[0].VendorQutnID;
                     $scope.CSClientDisplayedCollection = [].concat($scope.CSClientList);
                 })
                 .error(function () { });
-        };
+       
 
         //$scope.ClientSelect = function (row) {
         //    $scope.VendorCSInfo.ClientID = row.ClientID;
@@ -513,12 +563,11 @@
         $scope.ItemSelect = function (row) {
                 $scope.VendorCSInfo.ClientID = row.ClientID;
                 $scope.VendorCSInfo.ClientReqID = row.ClientReqID;
-                $scope.VendorCSInfo.ServiceCategoryID = $scope.ServiceCategoryID;
+               
             $scope.VendorCSInfo.POPreparationID = row.POPreparationID;
             $http.post("/PoRecom/GetVendorPORecomQuotationItem", {
                 VendorID: row.VendorID,
                 ClientID: row.ClientID,
-                ServiceCategoryID: $scope.ServiceCategoryID,
                 POPreparationID: row.POPreparationID
             })
                 .success(function (response) {
@@ -1202,6 +1251,7 @@
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
                         $scope.clearVendorCSInfo();
+                        $scope.toggleRefreshTable();
                         $scope.loading = false;
                         return;
                     }
@@ -1231,7 +1281,12 @@
         }
 
         $scope.toggleRefreshTable = function () {
-            window.location.reload();
+
+            $timeout(function () {
+                // Reload the current page
+                window.location.reload();
+            }, 2000);
+
         };
     }])
 </script>

@@ -34,32 +34,32 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
-        public async Task<dynamic> GetPORecomDashBordData()
-        {
-            List<OBS_VendorCSRecmItem> result = new List<OBS_VendorCSRecmItem>();
-            await Task.Run(() => poRecomService.GetPORecomDashBordData(UserID, out result));
-            //var TotalPendingParking = pd.Count();
-            //var OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count();
-            //var WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count();
+        //public async Task<dynamic> GetPORecomDashBordData()
+        //{
+        //    List<OBS_VendorCSRecmItem> result = new List<OBS_VendorCSRecmItem>();
+        //    await Task.Run(() => poRecomService.GetPORecomDashBordData(UserID, out result));
+        //    //var TotalPendingParking = pd.Count();
+        //    //var OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count();
+        //    //var WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count();
 
-            //return Json(new { TotalPendingParking = pd.Count(), OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count(), WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count() }, JsonRequestBehavior.AllowGet);
-            return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
-        }
+        //    //return Json(new { TotalPendingParking = pd.Count(), OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count(), WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count() }, JsonRequestBehavior.AllowGet);
+        //    return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
+        //}
 
-        public async Task<dynamic> GetPoRecomClientInfo(string ServiceCategoryID)
+        public async Task<dynamic> GetPoRecomClientInfo()
         {
             var CSClientList = new List<OBS_ClientReq>();
-            await Task.Run(() => poRecomService.GetPoRecomClientInfo(ServiceCategoryID, out CSClientList));
+            await Task.Run(() => poRecomService.GetPoRecomClientInfo( out CSClientList));
             var result = Json(new { CSClientList, msg = "CSClientList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
 
 
-        public async Task<dynamic> GetVendorPORecomQuotationItem(string VendorID, string ClientID, string ServiceCategoryID, string POPreparationID)
+        public async Task<dynamic> GetVendorPORecomQuotationItem(string VendorID, string ClientID, string POPreparationID)
         {
             var VenCSItemList = new List<OBS_VendorCSRecmItem>();
-            await Task.Run(() => poRecomService.GetVendorPORecomQuotationItem(VendorID, ClientID, ServiceCategoryID, POPreparationID, out VenCSItemList));
+            await Task.Run(() => poRecomService.GetVendorPORecomQuotationItem(VendorID, ClientID, POPreparationID, out VenCSItemList));
             var result = Json(new { VenCSItemList, msg = "CSVendorList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;

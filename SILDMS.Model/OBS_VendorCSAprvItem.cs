@@ -41,5 +41,8 @@ namespace SILDMS.Model
         public string Action { get; set; }
         [Required]
         public string Status { get; set; }
+        public string VendorQutnNo { get; set; }
+        public string VendorID { get; set; }
+        public string VendorName { get; set; }
     }
 }

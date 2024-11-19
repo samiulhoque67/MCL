@@ -68,7 +68,7 @@
         </div>
     </div>
 
-    <div class="row">
+    @*<div class="row">
         <div class="col-md-2">
             <div class="box box-primary box-solid">
                 <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
@@ -174,9 +174,9 @@
 
             </div>
         </div>
-    </div>
+    </div>*@
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-if="CSClientDisplayedCollection.length > 0">
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
                 <table st-table="CSClientDisplayedCollection" st-safe-src="CSClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
@@ -268,56 +268,54 @@
     </div>-->
 
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-        <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;" st-sort="">Item Code</th>
-                            <th style="text-align: left;" st-sort="">Item Name</th>
-                            <th style="text-align: left;" st-sort="">ReqQnty</th>
-                            <th style="text-align: left;" st-sort="">ReqUnit</th>
-                            <th style="text-align: left;" st-sort="">QutnQnty</th>
-                            <th style="text-align: left;" st-sort="">QutnPrice</th>
-                            <th style="text-align: left;" st-sort="">QutnAmt</th>
-                            <th style="text-align: left;" st-sort="">VatPerc</th>
-                            <th style="text-align: left;" st-sort="">VatAmt</th>
-                            <th style="text-align: left;" st-sort="">TolAmt</th>
+<div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="VenCSItemGridDisplayCollection.length > 0">
+    <div class="row">
+        <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+            <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                <thead>
+                    <tr>
+                        <th style="text-align: left;" st-sort="">Item Code</th>
+                        <th style="text-align: left;" st-sort="">Item Name</th>
+                        <th style="text-align: left;" st-sort="">ReqQnty</th>
+                        <th style="text-align: left;" st-sort="">ReqUnit</th>
+                        <th style="text-align: left;" st-sort="">QutnQnty</th>
+                        <th style="text-align: left;" st-sort="">QutnPrice</th>
+                        <th style="text-align: left;" st-sort="">QutnAmt</th>
+                        <th style="text-align: left;" st-sort="">VatPerc</th>
+                        <th style="text-align: left;" st-sort="">VatAmt</th>
+                        <th style="text-align: left;" st-sort="">TolAmt</th>
 
-                            @*<th style="text-align: left;">Action</th>*@
-                        </tr>
-                        @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
-                            <td class="hidden">{{row.index+1}}</td>
-                            <td class="hidden">{{row.VendorCSInfoItemID}}</td>
-                            <td class="hidden">{{row.VendorCSInfoID}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnQnty}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnPrice}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnAmt}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.VatPerc}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
-                    </tfoot>
-                </table>
-            </div>
+                        @*<th style="text-align: left;">Action</th>*@
+                    </tr>
+                    @*<tr>
+                            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                        </tr>*@
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
+                        <td class="hidden">{{row.index+1}}</td>
+                        <td class="hidden">{{row.VendorCSInfoItemID}}</td>
+                        <td class="hidden">{{row.VendorCSInfoID}}</td>
+                        <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
+                        <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
+                        <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.QutnQnty}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.QutnPrice}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.QutnAmt}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.VatPerc}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
+                        <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    @*<tr>
+                            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                        </tr>*@
+                </tfoot>
+            </table>
         </div>
     </div>
-
     <div class="row">
         <div class="row">
             <div class="col-sm-1 col-md-1 col-lg-1">
@@ -335,7 +333,7 @@
             </div>
 
 
-            
+
         </div>
 
 
@@ -392,7 +390,7 @@
                     <input id="PORecDate" name="PORecDate" type="text" class="DatePicker form-control" placeholder="PO Date" ng-model="VendorCSInfo.PORecDate" />
                 </div>
             </div>
-            </div>
+        </div>
         <div class="row">
             <div class="col-sm-1 col-md-1 col-lg-1">
             </div>
@@ -422,6 +420,9 @@
 
 
     </div>
+</div>
+
+    
 
     <!--<div class="col-lg-2">-->
     @*<div class="col-sm-1 col-md-1 col-lg-1">
@@ -441,7 +442,7 @@
 
 
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+    <!--<div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
                 <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
@@ -450,11 +451,11 @@
                             <th style="text-align: left;" st-sort="">Terms Code</th>
                             <th style="text-align: left;" st-sort="">Terms & Conditions</th>
                             <th style="text-align: left;">Action</th>
-                        </tr>
+                        </tr>-->
                         @*<tr>
                                 <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
                             </tr>*@
-                    </thead>
+                    <!--</thead>
                     <tbody>
                         <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
                             <td class="hidden">{{row.VendorCSInfoTermsID}}</td>
@@ -470,20 +471,20 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tfoot>
+                    <tfoot>-->
                         @*<tr>
                                 <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
                             </tr>*@
-                    </tfoot>
+                    <!--</tfoot>
                 </table>
             </div>
         </div>
-    </div>
+    </div>-->
 </div>
 
 <script type="text/javascript">
 
-    app.controller('PoAprvCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('PoAprvCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
         $scope.vendorCSItemArray = [];
         $scope.vendorCSTermArray = [];
@@ -491,22 +492,20 @@
 
         $scope.dashBoardResult = {};
 
-        $http.get('/PoAprv/GetPOAprvDashBordData')
-            .success(function (response) {
-                $scope.loading = false;
-                $scope.dashBoardResult = response.result;
-            }).error(function () { });
+        //$http.get('/PoAprv/GetPOAprvDashBordData')
+        //    .success(function (response) {
+        //        $scope.loading = false;
+        //        $scope.dashBoardResult = response.result;
+        //    }).error(function () { });
 
-        $scope.VendorSelect = function (ServiceCategoryID) {
-            $scope.ServiceCategoryID = ServiceCategoryID;
-            $http.post("/PoAprv/GetPoAprvClientInfo?ServiceCategoryID=" + ServiceCategoryID)
+            $http.post("/PoAprv/GetPoAprvClientInfo/")
                 .success(function (response) {
                     $scope.CSClientList = response.CSClientList;
                     $scope.VendorCSInfo.VendorQutnID = response.CSClientList[0].VendorQutnID;
                     $scope.CSClientDisplayedCollection = [].concat($scope.CSClientList);
                 })
                 .error(function () { });
-        };
+   
 
         //$scope.ClientSelect = function (row) {
         //    $scope.VendorCSInfo.ClientID = row.ClientID;
@@ -532,13 +531,13 @@
         $scope.ItemSelect = function (row) {
                 $scope.VendorCSInfo.ClientID = row.ClientID;
                 $scope.VendorCSInfo.ClientReqID = row.ClientReqID;
-                $scope.VendorCSInfo.ServiceCategoryID = $scope.ServiceCategoryID;
+         
             $scope.VendorCSInfo.POPreparationID = row.POPreparationID;
             $scope.VendorCSInfo.PORecmID = row.PORecmID;
             $http.post("/PoAprv/GetVendorPOAprvQuotationItem", {
                 VendorID: row.VendorID,
                 ClientID: row.ClientID,
-                ServiceCategoryID: $scope.ServiceCategoryID,
+      
                 PORecmID: row.PORecmID
             })
                 .success(function (response) {
@@ -557,15 +556,15 @@
                         $scope.loading = false;
                     });
 
-            $http.post('/PoAprv/GetPOAprvInfoTermList', { PORecmID: row.PORecmID })
-                .success(function (response) {
-                    $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
+            //$http.post('/PoAprv/GetPOAprvInfoTermList', { PORecmID: row.PORecmID })
+            //    .success(function (response) {
+            //        $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
 
-                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-                    $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
+            //        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+            //        $scope.loading = false;
+            //    }).error(function () {
+            //        $scope.loading = false;
+            //    });
         };
 
         $scope.VendorCSInfo = {
@@ -1223,6 +1222,7 @@
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
                         $scope.clearVendorCSInfo();
+                        $scope.toggleRefreshTable();
                         $scope.loading = false;
                         return;
                     }
@@ -1252,7 +1252,12 @@
         }
 
         $scope.toggleRefreshTable = function () {
-            window.location.reload();
+
+            $timeout(function () {
+                // Reload the current page
+                window.location.reload();
+            }, 2000);
+
         };
     }])
 </script>
