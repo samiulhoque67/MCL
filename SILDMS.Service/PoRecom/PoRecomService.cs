@@ -24,9 +24,9 @@ namespace SILDMS.Service.PoRecom
             this.localizationService = localizationService;
         }
 
-        public ValidationResult GetPoRecomClientInfo(string serviceCategoryID, out List<OBS_ClientReq> cSClientList)
+        public ValidationResult GetPoRecomClientInfo( out List<OBS_ClientReq> cSClientList)
         {
-            cSClientList = poRecomData.GetPoRecomClientInfo(serviceCategoryID, out errorNumber);
+            cSClientList = poRecomData.GetPoRecomClientInfo(out errorNumber);
             if (errorNumber.Length > 0)
             {
                 return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
@@ -34,15 +34,7 @@ namespace SILDMS.Service.PoRecom
             return ValidationResult.Success;
         }
 
-        public ValidationResult GetPORecomDashBordData(string userID, out List<OBS_VendorCSRecmItem> result)
-        {
-            result = poRecomData.GetPORecomDashBordData(userID, out errorNumber);
-            if (errorNumber.Length > 0)
-            {
-                return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
-            }
-            return ValidationResult.Success;
-        }
+       
 
         public ValidationResult GetPORecomInfoTermList(string pOPreparationID, out List<OBS_VendorCSRecmTerms> vendorCSInfoTermList)
         {
@@ -54,9 +46,9 @@ namespace SILDMS.Service.PoRecom
             return ValidationResult.Success;
         }
 
-        public ValidationResult GetVendorPORecomQuotationItem(string vendorID, string clientID, string serviceCategoryID, string pOPreparationID, out List<OBS_VendorCSRecmItem> venCSItemList)
+        public ValidationResult GetVendorPORecomQuotationItem(string vendorID, string clientID,  string pOPreparationID, out List<OBS_VendorCSRecmItem> venCSItemList)
         {
-            venCSItemList = poRecomData.GetVendorPORecomQuotationItem(vendorID, clientID, serviceCategoryID, pOPreparationID, out errorNumber);
+            venCSItemList = poRecomData.GetVendorPORecomQuotationItem(vendorID, clientID, pOPreparationID, out errorNumber);
             if (errorNumber.Length > 0)
             {
                 return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));

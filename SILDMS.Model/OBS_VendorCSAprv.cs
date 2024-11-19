@@ -43,5 +43,7 @@ namespace SILDMS.Model
         [Required]
         public string Status { get; set; }
         public string VendorCSRecmItemID { get; set; }
+        public string ServiceItemID { get; set; }
+        public object VendorReqID { get; set; }
     }
 }

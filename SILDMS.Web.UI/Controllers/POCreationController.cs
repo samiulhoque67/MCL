@@ -45,28 +45,28 @@ namespace SILDMS.Web.UI.Controllers
             return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<dynamic> GetPoCreationClientInfo(string ServiceCategoryID)
+        public async Task<dynamic> GetPoCreationClientInfo()
         {
             var CSClientList = new List<OBS_ClientReq>();
-            await Task.Run(() => pOCreationService.GetPoCreationClientInfo(ServiceCategoryID, out CSClientList));
+            await Task.Run(() => pOCreationService.GetPoCreationClientInfo(out CSClientList));
             var result = Json(new { CSClientList, msg = "CSClientList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
 
-        public async Task<dynamic> OBS_GetPOVendorsUsingClient(string ClientID,string VendorCSAprvID, string ServiceCategoryID)
+        public async Task<dynamic> OBS_GetPOVendorsUsingClient(string ClientReqID)
         {
             var CSVendorList = new List<OBS_VendorCSRecm>();
-            await Task.Run(() => pOCreationService.OBS_GetPOVendorsUsingClient(ClientID, VendorCSAprvID, ServiceCategoryID, out CSVendorList));
+            await Task.Run(() => pOCreationService.OBS_GetPOVendorsUsingClient(ClientReqID,out CSVendorList));
             var result = Json(new { CSVendorList, msg = "CSVendorList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         } 
         
-        public async Task<dynamic> GetVendorPOQuotationItem(string VendorID, string ClientID, string ServiceCategoryID,string VendorCSAprvID)
+        public async Task<dynamic> GetVendorPOQuotationItem(string VendorID, string ClientReqID)
         {
             var VenCSItemList = new List<OBS_VendorCSRecmItem>();
-            await Task.Run(() => pOCreationService.GetVendorPOQuotationItem(VendorID,ClientID, ServiceCategoryID, VendorCSAprvID, out VenCSItemList));
+            await Task.Run(() => pOCreationService.GetVendorPOQuotationItem(VendorID, ClientReqID, out VenCSItemList));
             var result = Json(new { VenCSItemList, msg = "CSVendorList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
@@ -81,11 +81,11 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> SaveVendorPOInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm, List<OBS_VendorCSRecmVendors> vendorCSItemWise)
+        public async Task<dynamic> SaveVendorPOInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem,List<OBS_VendorCSRecmVendors> vendorCSItemWise)
         {
             vendorCS.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
-            status = pOCreationService.SaveVendorPOInfo(vendorCS, vendorCSItem, vendorCSTerm, vendorCSItemWise);
+            status = pOCreationService.SaveVendorPOInfo(vendorCS, vendorCSItem, vendorCSItemWise);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 

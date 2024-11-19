@@ -45,7 +45,7 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     servicesCategoryList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
-                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServiceSCategoryName"),
                         ServicesCategoryCount = reader.GetString("ServicesCategoryCount")
                     }).ToList();
@@ -212,7 +212,7 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
-                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
@@ -273,8 +273,8 @@ namespace SILDMS.DataAccess
         {
             DataTable VendorCSItem = new DataTable();
             //VendorCSItem.Columns.Add("VendorReqID");
-            VendorCSItem.Columns.Add("ServiceCategoryID");
-            VendorCSItem.Columns.Add("ServiceItemID");
+            VendorCSItem.Columns.Add("VendorID");
+            VendorCSItem.Columns.Add("VendorQutnID");
             VendorCSItem.Columns.Add("ReqQnty");
             VendorCSItem.Columns.Add("ReqUnit");
             VendorCSItem.Columns.Add("QutnQnty");
@@ -283,16 +283,14 @@ namespace SILDMS.DataAccess
             VendorCSItem.Columns.Add("QutnAmt");
             VendorCSItem.Columns.Add("VatPerc");
             VendorCSItem.Columns.Add("VatAmt");
-            VendorCSItem.Columns.Add("VendorID");
-            VendorCSItem.Columns.Add("VendorQutnID");
+           
             VendorCSItem.Columns.Add("TolQnty");
             VendorCSItem.Columns.Add("VendorName");
             foreach (var item in vendorCSInfoItem)
             {
                 DataRow objDataRow = VendorCSItem.NewRow();
-            
-                objDataRow[0] = item.ServiceCategoryID;
-                objDataRow[1] = item.ServiceItemID;
+                objDataRow[0] = item.VendorID;
+                objDataRow[1] = item.VendorQutnID;
                 objDataRow[2] = item.ReqQnty;
                 objDataRow[3] = item.ReqUnit;
                 objDataRow[4] = item.QutnQnty;
@@ -301,10 +299,8 @@ namespace SILDMS.DataAccess
                 objDataRow[7] = item.QutnAmt;
                 objDataRow[8] = item.VatPerc;
                 objDataRow[9] = item.VatAmt;
-                objDataRow[10] = item.VendorID;
-                objDataRow[11] = item.VendorQutnID;
-                objDataRow[12] = item.TolAmt;
-                objDataRow[13] = item.VendorName;
+                objDataRow[10] = item.TolAmt;
+                objDataRow[11] = item.VendorName;
                 VendorCSItem.Rows.Add(objDataRow);
             }
 
@@ -570,7 +566,7 @@ namespace SILDMS.DataAccess
                     ReqWiseMaterialList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
                             VendorReqID = reader.GetString("VendorReqID"),
-                            ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                            ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
                             ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                             ServiceItemID = reader.GetString("ServiceItemID"),
                             ServiceItemName = reader.GetString("ServiceItemName"),
@@ -607,7 +603,7 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
-                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         ServiceItemName = reader.GetString("ServiceItemName"),

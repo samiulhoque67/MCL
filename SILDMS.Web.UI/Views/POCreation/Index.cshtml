@@ -140,7 +140,7 @@
         </div>
     </div>
 
-    <div class="row" style="margin:1%;">
+    @*<div class="row" style="margin:1%;">
         <div class="col-md-2">
             <div class="box box-primary box-solid">
                 <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
@@ -236,7 +236,7 @@
 
             </div>
         </div>
-    </div>
+    </div>*@
 
     <div class="row" style="margin: 1%; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-if="CSClientDisplayedCollection.length > 0">
         <div class="row">
@@ -248,11 +248,11 @@
                     <thead>
 
                         <tr>
-                            <th data-ng-click="sort('ClientName')">Approve ID</th>
+                            @*<th data-ng-click="sort('ClientName')">Approve ID</th>*@
                             <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
-                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientReqNo')">Requisition No</th>
+                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientReqNo')">Requisition ID</th>
                             <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
-                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('NoOfVendor')">NoOfVendor</th>
+                       
                             <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                         </tr>
                         @*<tr>
@@ -266,11 +266,11 @@
                             ng-style="getRowStyle(row)">
 
                             <td class="hidden">{{row.ClientID}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.VendorCSAprvID}}</td>
+                            @*<td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.VendorCSAprvID}}</td>*@
                             <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.ClientReqNo}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.ClientReqID}}</td>
                             <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.RequisitionDate}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.NoOfVendor}}</td>
+          
                             <td>
                                 <a class="btn col-center btn-sm btn-flat btn-success" ng-click="ClientSelect(row)">Select</a>
                             </td>
@@ -297,11 +297,13 @@
                       
                         <tr>
                             <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorName')">Vendor Name</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactPerson')">Contact Person</th>
                             <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactNumber')">Contact Number</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorQutnNo')">VendorQutnNo</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('QuotationDate')">QuotationDate</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('TolQnty')">TolQnty</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactPerson')">Contact Person</th>
+
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Email')">Email</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('CurrentAddress')">Contact Address</th>
+
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('TolQnty')">Number of Items</th>
                             <th class="col-lg-1 col-md-1 col-sm-2">Action</th>
                         </tr>
                     </thead>
@@ -313,9 +315,9 @@
                             <td class="col-lg-3 col-md-2 col-sm-3 text-center">{{row.VendorName}}</td>
                             <td class="col-lg-1 col-md-2 col-sm-1 text-center">{{row.ContactPerson}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactNumber}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.VendorQutnNo}}</td>
-                            <td class="col-lg-2 col-md-1 col-sm-2 text-center">{{row.QuotationDate}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.TolQnty}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.Email}}</td>
+                            <td class="col-lg-2 col-md-1 col-sm-2 text-center">{{row.CurrentAddress}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ItemCount}}</td>
                             <td class="col-lg-2" style="width:5%;">
                                 <button type="button" class="ChildButtons" ng-click="selectEntity(row)" data-dismiss="modal" title="Select">
                                     <i ng-show="!row.buttonCheckedforVendor" class="fa fa-square-o"></i>
@@ -586,7 +588,7 @@
 
 <script type="text/javascript">
 
-    app.controller('POCreationCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('POCreationCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
         $scope.vendorCSItemArray = [];
         $scope.vendorCSTermArray = [];
@@ -594,21 +596,21 @@
 
         $scope.dashBoardResult = {};
 
-        $http.get('/POCreation/GetPOCreationDashBordData')
-            .success(function (response) {
-                $scope.loading = false;
-                $scope.dashBoardResult = response.result;
-            }).error(function () { });
+        //$http.get('/POCreation/GetPOCreationDashBordData')
+        //    .success(function (response) {
+        //        $scope.loading = false;
+        //        $scope.dashBoardResult = response.result;
+        //    }).error(function () { });
 
-        $scope.VendorSelect = function (ServiceCategoryID) {
-            $scope.ServiceCategoryID = ServiceCategoryID;
-            $http.post("/POCreation/GetPoCreationClientInfo?ServiceCategoryID=" + ServiceCategoryID)
+    
+
+            $http.post("/POCreation/GetPoCreationClientInfo/")
                 .success(function (response) {
                     $scope.CSClientList = response.CSClientList;
                     $scope.CSClientDisplayedCollection = [].concat($scope.CSClientList);
                 })
                 .error(function () { });
-        };
+       
 
         //$scope.ClientSelect = function (row) {
         //    $scope.VendorCSInfo.ClientID = row.ClientID;
@@ -657,14 +659,14 @@
                 // Update the VendorCSInfo fields
                 $scope.VendorCSInfo.ClientID = row.ClientID;
                 $scope.VendorCSInfo.ClientReqID = row.ClientReqID;
-                $scope.VendorCSInfo.ServiceCategoryID = $scope.ServiceCategoryID;
-                $scope.VendorCSInfo.VendorCSAprvID = row.VendorCSAprvID;
+                //$scope.VendorCSInfo.ServiceCategoryID = $scope.ServiceCategoryID;
+                //$scope.VendorCSInfo.VendorCSAprvID = row.VendorCSAprvID;
 
                 // Perform the HTTP request
                 $http.post("/POCreation/OBS_GetPOVendorsUsingClient", {
-                    ClientID: row.ClientID,
-                    VendorCSAprvID: row.VendorCSAprvID,
-                    ServiceCategoryID: $scope.ServiceCategoryID
+                    ClientReqID: row.ClientReqID
+                    //VendorCSAprvID: row.VendorCSAprvID,
+                    //ServiceCategoryID: $scope.ServiceCategoryID
                 })
                     .then(function (response) {
                         $scope.CSVendorList = response.data.CSVendorList;
@@ -1072,6 +1074,22 @@
         $scope.showVendorforBiddingArea = false;
 
         $scope.selectEntity = function (row) {
+            // Check if the row is already selected
+            if (row.selected) {
+                // Unselect the row
+                row.selected = false;
+                row.buttonCheckedforVendor = false;
+                $scope.selectedRowsForVendor = [];
+                $scope.SelectedVendorForBiddingDisplayedCollection = [];
+                $scope.VenCSItemList = [];
+                $scope.VenCSItemGridDisplayCollection = [];
+                $scope.ReqTermDataSetupGridData = [];
+                $scope.ReqTermGridDisplayCollection = [];
+                $scope.showVendorforBiddingArea = false;
+                return;
+            }
+
+            // If not already selected, proceed with selection
             // Deselect all other rows
             $scope.CSVendorDisplayedCollection.forEach(function (item) {
                 item.selected = false;
@@ -1086,17 +1104,11 @@
             $scope.ReqTermDataSetupGridData = [];
             $scope.ReqTermGridDisplayCollection = [];
 
-            // Add the current selection
             var selecteditems = {
-                VendorQutnID: row.VendorQutnNo,
                 VendorID: row.VendorID,
                 VendorName: row.VendorName,
                 ContactPerson: row.ContactPerson,
                 ContactNumber: row.ContactNumber,
-                VendorQutnNo: row.VendorQutnNo,
-                QuotationDate: row.QuotationDate,
-                TolQnty: row.TolQnty,
-                TolAmt: row.TolAmt,
                 index: row.index
             };
 
@@ -1108,9 +1120,7 @@
 
             $http.post("/POCreation/GetVendorPOQuotationItem", {
                 VendorID: row.VendorID,
-                ClientID: row.ClientID,
-                ServiceCategoryID: $scope.ServiceCategoryID,
-                VendorCSAprvID: row.VendorCSAprvID
+                ClientReqID: row.ClientReqID
             })
                 .success(function (response) {
                     $scope.VenCSItemList = response.VenCSItemList;
@@ -1121,21 +1131,15 @@
                     $scope.loading = false;
                 });
 
-
-
-
-
-
-
-
-            $http.post('/POCreation/GetVendorPOInfoTermList', { VendorCSAprvID: row.VendorCSAprvID })
-                .success(function (response) {
-                    $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
-                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-                    $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
+            //$http.post('/POCreation/GetVendorPOInfoTermList', { VendorCSAprvID: row.VendorCSAprvID })
+            //    .success(function (response) {
+            //        $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
+            //        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+            //        $scope.loading = false;
+            //    })
+            //    .error(function () {
+            //        $scope.loading = false;
+            //    });
         };
         $scope.resetVendorWiseItemReq = function () {
             $scope.VendorCSVendorsItemWise = {
@@ -1382,13 +1386,14 @@
                 {
                     vendorCS: $scope.VendorCSInfo,
                     vendorCSItem: $scope.VenCSItemGridDisplayCollection,
-                    vendorCSTerm: $scope.ReqTermGridDisplayCollection,
+         /*           vendorCSTerm: $scope.ReqTermGridDisplayCollection,*/
                     vendorCSItemWise: $scope.SelectedVendorForBiddingDisplayedCollection
                 })
                 .success(function (response) {
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
                         $scope.clearVendorCSInfo();
+                        $scope.toggleRefreshTable();
                         $scope.loading = false;
                         return;
                     }
@@ -1401,6 +1406,7 @@
                     else if (response.status == "S203") {
                         toastr.success("Data Deleted Successfully.");
                         $scope.clearVendorCSInfo();
+                      
                         $scope.loading = false;
                         return;
                     }
@@ -1418,7 +1424,12 @@
         }
 
         $scope.toggleRefreshTable = function () {
-            window.location.reload();
+
+            $timeout(function () {
+                // Reload the current page
+                window.location.reload();
+            }, 2000);
+
         };
     }])
 </script>

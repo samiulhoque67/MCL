@@ -15,7 +15,7 @@ namespace SILDMS.Model
         public string VendorQutnNo { get; set; }
         public string VendorQutnID { get; set; }
 
-        public string ServiceCategoryID { get; set; }
+        public int ServiceCategoryID { get; set; }
         public string ServiceCategoryName { get; set; }
         public string ServicesCategoryCount { get; set; }
         public string ServiceItemID { get; set; }
@@ -50,5 +50,6 @@ namespace SILDMS.Model
         public string PODate { get; set; }
         public string PONo { get; set; }
         public string Remarks { get; set; }
+        public string VendorCSAprvID { get; set; }
     }
 }
