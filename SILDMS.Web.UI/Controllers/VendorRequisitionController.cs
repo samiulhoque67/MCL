@@ -1,14 +1,20 @@
-﻿using SILDMS.Model;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.CrystalReports.ViewerObjectModel;
+using CrystalDecisions.Shared;
+using SILDMS.Model;
 using SILDMS.Service;
 using SILDMS.Utillity;
 using SILDMS.Utillity.Localization;
+using SILDMS.Web.UI.Areas.SecurityModule;
 using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 
 
 namespace SILDMS.Web.UI.Controllers
@@ -33,6 +39,7 @@ namespace SILDMS.Web.UI.Controllers
         {
             return View();
         }
+
         [HttpGet]
         //[Authorize]
         public async Task<dynamic> GetServicesCategory()
@@ -76,11 +83,98 @@ namespace SILDMS.Web.UI.Controllers
 
         public async Task<dynamic> SaveVendorRequisition(OBS_VendorReq vendorReq, List<OBS_VendorReqItem> vendorReqItem, List<OBS_VendorReqTerms> vendorReqTerm, List<OBS_VendorReqItemWise> vendorReqItemWise)
         {
+
             vendorReq.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
             status = _clientInfoService.SaveVendorRequisition(vendorReq, vendorReqItem, vendorReqTerm, vendorReqItemWise);
+
+            if (status != string.Empty)
+            {
+                string[] statusarr = status.Split(',');
+                vendorReq.VendorReqID = statusarr[1];
+                status = statusarr[0];
+            }
+            TempData["VendorRequisition"] = vendorReq;
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
+
+
+        [SILAuthorize]
+        public ActionResult RptRequisitionToVendorReport()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> RptRequisitionToVendorReport(string ReportType)
+        {
+            var tempdata = TempData["VendorRequisition"];
+
+            ReportType = "PDF";
+            if (TempData["VendorRequisition"] == null)
+            {
+                ViewBag.Title = "No valid data.";
+                return View();
+            }
+
+            OBS_VendorReq objVendorReq = new OBS_VendorReq();
+            objVendorReq = (OBS_VendorReq)TempData["VendorRequisition"];
+
+            string VendorReqID = objVendorReq.VendorReqID;
+
+
+            DataSet ds = new DataSet();
+
+            //DataTable dtVR = new DataTable();
+            //DataTable dtVendors = new DataTable();
+            //DataTable dtTerms = new DataTable();
+
+            await Task.Run(() => _clientInfoService.rptRequisitionToVendorReport(VendorReqID, "", out ds));
+
+            // Load main report
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports/rptVendorRequisition.rpt");
+            reportDocument.Load(ReportPath);
+
+            // Set main report data source
+            DataTable dtVR = ds.Tables[0];
+            reportDocument.SetDataSource(dtVR);
+            // Refresh report
+            reportDocument.Refresh();
+
+            // Load subreport for Vendors
+            string ReportPathdtVendors = Server.MapPath("~/Reports/rptVendorRequisitionVendors.rpt");
+            reportDocument.Subreports["rptVendorRequisitionVendors"].Load(ReportPathdtVendors);
+            DataTable dtVendors = ds.Tables[1];
+            reportDocument.Subreports["rptVendorRequisitionVendors"].SetDataSource(dtVendors);
+            //reportDocument.Subreports[0].SetDataSource(dtVendors);
+            // Refresh report
+            reportDocument.Refresh();
+
+            // Load subreport for Terms
+            string ReportPathdtTerms = Server.MapPath("~/Reports/rptVendorRequisitionTerms.rpt");
+            reportDocument.Subreports["rptVendorRequisitionTerms"].Load(ReportPathdtTerms);
+            DataTable dtTerms = ds.Tables[2];
+            reportDocument.Subreports["rptVendorRequisitionTerms"].SetDataSource(dtTerms);
+            //reportDocument.Subreports[1].SetDataSource(dtTerms);
+
+            // Refresh report
+            reportDocument.Refresh();
+
+            //reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
+            //reportDocument.SetParameterValue("rptName", "User Details");
+            //reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
+
+
+            string reportName = "VendorRequisition";
+            reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
+
 
         public async Task<dynamic> GetVendorReqSearchList()
         {

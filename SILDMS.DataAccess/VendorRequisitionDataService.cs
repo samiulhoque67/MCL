@@ -244,7 +244,8 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@Action ", SqlDbType.NVarChar, VendorReq.Action);
                     db.AddInParameter(dbCommandWrapper, "@TolalItem", SqlDbType.Int, VendorReq.TolalItem);
                     db.AddInParameter(dbCommandWrapper, "@SelectedItem", SqlDbType.Int, VendorReq.SelectedItem);
-                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 50);
+                    //db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
                     // Getting output parameters and setting response details.
@@ -260,6 +261,23 @@ namespace SILDMS.DataAccess
                 errorNumber = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
             }
             return errorNumber;
+        }
+        public DataSet rptRequisitionToVendorReport(string userID,string action)
+        {
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("GetRptRequisitionToVendorReport"))
+            {
+                //db.AddInParameter(dbCommandWrapper, "@RptUserID", SqlDbType.VarChar, userID);
+                //db.AddInParameter(dbCommandWrapper, "@FromDate", SqlDbType.VarChar, FromDate);
+                ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
+                //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
+                ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                //DataTable dt1 = ds.Tables[0];
+                return ds;
+            }
         }
 
         public List<OBS_VendorReq> GetVendorReqSearchList()

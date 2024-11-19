@@ -767,6 +767,7 @@
         $scope.Client = {
             ClientName :"",
             ClientRequisitionNo :"",
+            ClientReqID :"",
             ClientRequisitionDate :"",
             ContactPerson :"",
             ContactNumber :"",
@@ -870,6 +871,7 @@
                 $scope.Client = {
                     ClientName: $scope.ClientDetails[0].ClientName,
                     ClientRequisitionNo: $scope.ClientDetails[0].ClientReqNo,
+                    ClientReqID: $scope.ClientDetails[0].ClientReqID,
                     ClientRequisitionDate: $scope.ClientDetails[0].RequisitionDate,
                     ContactPerson: $scope.ClientDetails[0].ContactPerson,
                     ContactNumber: $scope.ClientDetails[0].ContactNumber,
@@ -877,16 +879,17 @@
                     ContactBIN: $scope.ClientDetails[0].ClientBinNo,
                     ContactAddress: $scope.ClientDetails[0].Address
                 };
-                $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID);
+                $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID, $scope.ClientDetails[0].ClientReqID);
                  $scope.loading = false;
             }).error(function () {
                 $scope.loading = false;
             });
         };
 
-        $scope.GetClientReqDataInfo = function (ClientID) {
+        $scope.GetClientReqDataInfo = function (ClientID, ClientReqID) {
             $http.post('/QuotationRecommendation/GetClientReqDataInfo', {
-                ClientID: ClientID
+                ClientID: ClientID,
+                ClientReqID: ClientReqID,
             }).success(function (response) {
                 $scope.GetClientReqDetails = response.GetClientReqDetails;
                 $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);

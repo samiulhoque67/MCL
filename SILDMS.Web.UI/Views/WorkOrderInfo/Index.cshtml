@@ -931,6 +931,9 @@
         $scope.clearWOInfo = function () {
             $scope.WOInfo = {
                 WOInfoID: "",
+                ClientQutnAprvID: "",
+                ClientReqID: "",
+                ClientReqNo: "",
                 ClientID: "",
                 ClientCode: "",
                 ClientName: "",
@@ -1038,6 +1041,10 @@
             $scope.WOInfo.ClientID = row.ClientID;
             $scope.WOInfo.ClientCode = row.ClientCode;
             $scope.WOInfo.ClientName = row.ClientName;
+            alert(row.ClientQutnAprvID);
+            $scope.WOInfo.ClientQutnAprvID = row.ClientQutnAprvID;
+            $scope.WOInfo.ClientReqID = row.ClientReqID;
+            $scope.WOInfo.ClientReqNo = row.ClientReqNo;
 
             //alert(row.ClientQutnAprvID);
             $http.post('/WorkOrderInfo/GetWOInfoItemList', { ClientQutnAprvID: row.ClientQutnAprvID })

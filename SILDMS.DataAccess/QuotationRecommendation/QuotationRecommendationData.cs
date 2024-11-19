@@ -53,10 +53,12 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                         ClientCode = reader.GetString("ClientCode"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
+                        ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         QuotationNo = reader.GetString("AutoQutnNo"),
                         QuotationDate = reader.GetString("QuotationDate"),
-                        ClientQutnID = reader.GetString("ClientQutnID")
+                        ClientQutnID = reader.GetString("ClientQutnID"),
+                        ProcessStatus = reader.GetString("ProcessStatus")
                     }).ToList();
 
                 }
@@ -103,7 +105,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
         }
 
 
-        public List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, out string _errorNumber)
+        public List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, string ClientReqID, out string _errorNumber)
         {
             _errorNumber = string.Empty;
             var GetClientReqDetails = new List<ClientReqData>();
@@ -112,7 +114,8 @@ namespace SILDMS.DataAccess.QuotationRecommendation
             var db = factory.CreateDefault() as SqlDatabase;
             using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientRecomQDataInfo"))
             {
-                db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.Int, ClientID);
+                db.AddInParameter(dbCommandWrapper, "@ClientID", DbType.String, ClientID);
+                db.AddInParameter(dbCommandWrapper, "@ClientReqID", DbType.String, ClientReqID);
                 db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
                 dbCommandWrapper.CommandTimeout = 300;
                 var ds = db.ExecuteDataSet(dbCommandWrapper);

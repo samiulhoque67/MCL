@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace SILDMS.Service
 {
@@ -57,6 +58,12 @@ namespace SILDMS.Service
         {
             return clientInfoDataService.SaveVendorRequisition(clientReq, clientReqItem, clientReqTerm, vendorReqItemWise);
         }
+        public ValidationResult rptRequisitionToVendorReport(string UserRptID, string action, out DataSet dt)
+        {
+            dt = clientInfoDataService.rptRequisitionToVendorReport(UserRptID, action);
+           
+            return ValidationResult.Success;
+        }
         public ValidationResult GetVendorReqSearchList(out List<OBS_VendorReq> VendorReqSearchList)
         {
             VendorReqSearchList = clientInfoDataService.GetVendorReqSearchList();
@@ -99,7 +106,7 @@ namespace SILDMS.Service
             return ValidationResult.Success;
         }
 
-        
+
     }
 }
 
