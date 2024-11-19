@@ -104,6 +104,7 @@ namespace SILDMS.Web.UI.Controllers
         {
             return View();
         }
+
         [Authorize]
         [HttpPost]
         [SILLogAttribute]
@@ -120,16 +121,8 @@ namespace SILDMS.Web.UI.Controllers
 
             OBS_VendorReq objVendorReq = new OBS_VendorReq();
             objVendorReq = (OBS_VendorReq)TempData["VendorRequisition"];
-
             string VendorReqID = objVendorReq.VendorReqID;
-
-
             DataSet ds = new DataSet();
-
-            //DataTable dtVR = new DataTable();
-            //DataTable dtVendors = new DataTable();
-            //DataTable dtTerms = new DataTable();
-
             await Task.Run(() => _clientInfoService.rptRequisitionToVendorReport(VendorReqID, "", out ds));
 
             // Load main report
@@ -140,33 +133,8 @@ namespace SILDMS.Web.UI.Controllers
             // Set main report data source
             DataTable dtVR = ds.Tables[0];
             reportDocument.SetDataSource(dtVR);
-            // Refresh report
             reportDocument.Refresh();
-
-            // Load subreport for Vendors
-            string ReportPathdtVendors = Server.MapPath("~/Reports/rptVendorRequisitionVendors.rpt");
-            reportDocument.Subreports["rptVendorRequisitionVendors"].Load(ReportPathdtVendors);
-            DataTable dtVendors = ds.Tables[1];
-            reportDocument.Subreports["rptVendorRequisitionVendors"].SetDataSource(dtVendors);
-            //reportDocument.Subreports[0].SetDataSource(dtVendors);
-            // Refresh report
-            reportDocument.Refresh();
-
-            // Load subreport for Terms
-            string ReportPathdtTerms = Server.MapPath("~/Reports/rptVendorRequisitionTerms.rpt");
-            reportDocument.Subreports["rptVendorRequisitionTerms"].Load(ReportPathdtTerms);
-            DataTable dtTerms = ds.Tables[2];
-            reportDocument.Subreports["rptVendorRequisitionTerms"].SetDataSource(dtTerms);
-            //reportDocument.Subreports[1].SetDataSource(dtTerms);
-
-            // Refresh report
-            reportDocument.Refresh();
-
-            //reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
-            //reportDocument.SetParameterValue("rptName", "User Details");
-            //reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
-
-
+            
             string reportName = "VendorRequisition";
             reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
 
