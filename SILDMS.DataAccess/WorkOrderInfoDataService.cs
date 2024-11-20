@@ -77,9 +77,9 @@ namespace SILDMS.DataAccess
                     {
                         ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
                         ClientID = reader.GetString("ClientID"),
-                        ClientName = reader.GetString("ClientName"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
+                        ClientName = reader.GetString("ClientName"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         AprvNo = reader.GetString("AprvNo"),
                         AprvDate = reader.GetString("AprvDate"),
@@ -90,7 +90,7 @@ namespace SILDMS.DataAccess
             }
             return ClientInfoList;
         }
-        public List<OBS_WOInfoItem> GetWOInfoItemList(string ClientID)
+        public List<OBS_WOInfoItem> GetWOInfoItemList(string ClientQutnAprvID)
         {
             string errorNumber = string.Empty;
             List<OBS_WOInfoItem> WOInfoItemList = new List<OBS_WOInfoItem>();
@@ -98,7 +98,7 @@ namespace SILDMS.DataAccess
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQutnAprvItemDataForRevisedAndWO"))
             {
-                db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.VarChar, ClientID);
+                db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.VarChar, ClientQutnAprvID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -120,12 +120,7 @@ namespace SILDMS.DataAccess
                         DeliveryDate = reader.GetString("DeliveryDate"),
                         DeliveryMode = reader.GetString("DeliveryMode"),
 
-                        //ReqQnty = reader.GetString("ReqQnty"),
-                        //ReqUnit = reader.GetString("ReqUnit"),
-
                         QutnUnit = reader.GetString("QutnUnit"),
-
-
                         QutnQnty = reader.GetString("QutnQnty"),
                         QutnPrice = reader.GetString("QutnPrice"),
                         QutnAmt = reader.GetString("QutnAmt"),

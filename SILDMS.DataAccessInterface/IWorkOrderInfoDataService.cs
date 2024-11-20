@@ -13,7 +13,7 @@ namespace SILDMS.DataAccessInterface
         List<OBS_WOInfo> GetClientInfoList();
         string SaveWorkOrderInfo(OBS_WOInfo woInfo, List<OBS_WOInfoItem> woInfoItem, List<OBS_WOInfoTerms> woInfoTerm);
         List<OBS_WOInfo> GetWOInfoSearchList();
-        List<OBS_WOInfoItem> GetWOInfoItemList(string WOInfoID);
+        List<OBS_WOInfoItem> GetWOInfoItemList(string ClientQutnAprvID);
         List<OBS_WOInfoTerms> GetWOInfoTermList(string WOInfoID);
         List<OBS_WOInfoItem> GetWOInfoSearchItemList(string WOInfoID);
         List<OBS_WOInfoTerms> GetWOInfoSearchTermsList(string WOInfoID);

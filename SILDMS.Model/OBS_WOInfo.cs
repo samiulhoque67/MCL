@@ -12,6 +12,8 @@ namespace SILDMS.Model
         public string WOInfoID { get; set; }
         public string ClientQutnAprvID { get; set; }
         public string ClientID { get; set; }
+        public string ClientReqID { get; set; }
+        public string ClientReqNo { get; set; }
         public string ClientName { get; set; }
         public string Address { get; set; }
         [Required]
@@ -21,8 +23,6 @@ namespace SILDMS.Model
         [Required]
         public string WODate { get; set; }
         public string WOAmt { get; set; }
-        public string ClientReqID { get; set; }
-        public string ClientReqNo { get; set; }
         public string RequisitionDate { get; set; }
         public string AprvNo { get; set; }
         public string AprvDate { get; set; } 
