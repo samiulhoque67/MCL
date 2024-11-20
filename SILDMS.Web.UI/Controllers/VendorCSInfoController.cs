@@ -15,7 +15,7 @@ namespace SILDMS.Web.UI.Controllers
 {
     public class VendorCSInfoController : Controller
     {
-        readonly IVendorCSInfoService _vendorCSInfoService; 
+        readonly IVendorCSInfoService _vendorCSInfoService;
         private readonly ILocalizationService _localizationService;
         private ValidationResult respStatus = new ValidationResult();
         private string outStatus = string.Empty;
@@ -54,7 +54,7 @@ namespace SILDMS.Web.UI.Controllers
 
             return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
         }
-        
+
         public async Task<dynamic> GetVendorCSClientInfo(string ServiceCategoryID)
         {
             var CSClientList = new List<OBS_ClientReq>();

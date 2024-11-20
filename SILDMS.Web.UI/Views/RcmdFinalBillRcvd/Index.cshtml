@@ -141,7 +141,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <!--<div class="row">-->
                 @*<div class="col-lg-3">
                     <div class="form-group">
                         <label>Vendor Quotation No.:</label>
@@ -153,7 +153,7 @@
                     </div>
                 </div>*@
 
-                <div class="col-lg-3">
+                <!--<div class="col-lg-3">
                     <div class="form-group">
                         <label>Quotation No:</label>
                     </div>
@@ -175,7 +175,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div>-->
             @*<div class="row">
 
 
@@ -194,24 +194,24 @@
             <div class="row">
                 <div class="col-lg-3 ">
                     <div class="form-group">
-                        <label for="WoNo">Wo No:</label>
+                        <label for="WONo">Wo No:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="WoNo" name="WoNo" type="text" data-ng-model="VendorQutn.WoNo" class="form-control" placeholder="Wo No" />
+                        <input id="WONo" name="WONo" type="text" data-ng-model="VendorQutn.WONo" class="form-control" placeholder="Wo No" ng-readonly="true"  />
                     </div>
                 </div>
 
 
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label for="WoNo">Wo Amount:</label>
+                        <label for="WOAmt">Wo Amount:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="WoAmount" name="WoAmount" type="text" data-ng-model="VendorQutn.WoAmount" class="form-control" placeholder="Wo No" />
+                        <input id="WOAmt" name="WOAmt" type="text" data-ng-model="VendorQutn.WOAmt" class="form-control" placeholder="Wo Amount" ng-readonly="true" />
                     </div>
                 </div>
 
@@ -607,6 +607,8 @@
             Status: "",
             POAmount: "",
             AdvancePaidAmount: "",
+            AdvancePaidDate: "",
+            AdvancePaidID: "",
             BillAmount: "",
             VendorBillNo: "",
             VendorBillDate: "",
@@ -623,7 +625,9 @@
             RecommendedAmnt: "",
             RecommendDate: "",
             Operation: "",
-            RAWO : ""
+            RAWO: "",
+            WOAmt: "",
+            WONo: ""
 
         }
 
@@ -951,6 +955,7 @@
             // You can also map the rest of the fields similarly:
             $scope.VendorQutn.POAmount = tableRow.POAmount;
             $scope.VendorQutn.AdvancePaidAmount = tableRow.AdvancePaidAmount;
+            $scope.VendorQutn.AdvancePaidDate = tableRow.AdvancePaidDate;
             $scope.VendorQutn.BillAmount = tableRow.BillAmount;
             $scope.VendorQutn.RecommendedAmnt = tableRow.BillAmount;
             $scope.VendorQutn.VendorBillNo = tableRow.VendorBillNo;
@@ -964,6 +969,10 @@
             $scope.VendorQutn.TotalBillAmount = tableRow.TotalBillAmount;
             $scope.VendorQutn.NetPayableAmount = tableRow.NetPayableAmount;
             $scope.VendorQutn.Note = tableRow.Note;
+
+            $scope.VendorQutn.WONo = tableRow.WONo;
+            $scope.VendorQutn.WOAmt = tableRow.WOAmt;
+            $scope.VendorQutn.AdvancePaidID = tableRow.AdvancePaidID;
             $scope.p = 1;
 
             //$scope.VendorQutn.SubmissionDate = row.SubmissionDate;

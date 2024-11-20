@@ -39,8 +39,6 @@ namespace SILDMS.Model
         public string Status { get; set; } 
     }
 
-
-
     public class Invitation
     {
         public string VendorRequisitionNumber { get; set; }
@@ -72,6 +70,9 @@ namespace SILDMS.Model
 
 
     }
+
+
+ 
 
 
 

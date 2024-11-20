@@ -57,12 +57,12 @@ namespace SILDMS.Service
             VendorInfoList = clientInfoDataService.GetVendorCSClientInfo(ServiceItemCategoryID);
             return ValidationResult.Success;
         }
-        public ValidationResult OBS_GetVendorCSVendorsUsingClient(string ClientID,  out List<OBS_VendorCSRecm> VendorCSInfoSearchList)
+        public ValidationResult OBS_GetVendorCSVendorsUsingClient(string ClientID, out List<OBS_VendorCSRecm> VendorCSInfoSearchList)
         {
             VendorCSInfoSearchList = clientInfoDataService.OBS_GetVendorCSVendorsUsingClient(ClientID);
             return ValidationResult.Success;
         }
-        public ValidationResult OBS_GetVendorCSQuotationItem(string VendorID, string ClientID,string VendorQutnItemID, out List<OBS_VendorCSRecmItem> VendorCSInfoItemList)
+        public ValidationResult OBS_GetVendorCSQuotationItem(string VendorID, string ClientID, string VendorQutnItemID, out List<OBS_VendorCSRecmItem> VendorCSInfoItemList)
         {
             VendorCSInfoItemList = clientInfoDataService.OBS_GetVendorCSQuotationItem(VendorID, ClientID, VendorQutnItemID);
             return ValidationResult.Success;
@@ -101,7 +101,7 @@ namespace SILDMS.Service
         {
 
             invitationList = clientInfoDataService.GetAllRequisition(userID);
-            return  ValidationResult.Success;
+            return ValidationResult.Success;
         }
 
         public ValidationResult GetMaterialByRequisition(string vendorRequisitionNumber, out List<OBS_VendorCSRecmItem> reqWiseMaterialList)

@@ -43,14 +43,17 @@ namespace SILDMS.Model
         public string PoAprvDate { get; set; }
         public string POAmount { get; set; }
         public string WONo { get; set; }
+
         public string WODate { get; set; }
         public decimal WOAmt { get; set; }
+       
         public string Address { get; set; }
         public decimal AdvancClaimRcvAmt { get; set; }
         public decimal RemainingAmnt { get; set; }
         public string AdvancRecvID { get; set; }
         public string WOInfoID { get; set; }
         public string AdvancClaimRcvdDate { get; set; }
+
     }
 
 
@@ -110,6 +113,8 @@ namespace SILDMS.Model
         public string RequiDate { get; set; }
         public int ClientFinalBilRecmID { get; set; }
         public int ClientFinalBilAprvID { get; set; }
+        public string AdvancePaidDate { get; set; }
+        public string AdvancePaidID { get; set; }
     }
 
 

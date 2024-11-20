@@ -610,11 +610,11 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSAprvItem
                     {
-                      
 
-                      VendorCSInfoID = reader.GetString("VendorCSRecmItemID"),
-                      VendorCSInfoItemID = reader.GetString("VendorCSRecmItemID"),
-                      ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+
+                        VendorCSInfoID = reader.GetString("VendorCSRecmItemID"),
+                        VendorCSInfoItemID = reader.GetString("VendorCSRecmItemID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
