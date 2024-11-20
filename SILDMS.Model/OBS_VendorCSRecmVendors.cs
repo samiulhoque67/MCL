@@ -72,39 +72,7 @@ namespace SILDMS.Model
     }
 
 
-    public class Invitation
-    {
-        public string VendorRequisitionNumber { get; set; }
-        public string ClientRequisitionNumber { get; set; }
-        public string ClientReqID { get; set; }
-
-        public string ClientID { get; set; }
-
-        public string ClientName { get; set; }
-
-        public string VendorCSNumber { get; set; }
-
-        public string RequisitionDate { get; set; }
-
-
-
-        public string LastDateofQuotation { get; set; }
-
-
-
-        public string Mat_Code { get; set; }
-        public string Mat_Name { get; set; }
-
-        public string QuotationNo { get; set; }
-
-        public string VendorName { get; set; }
-
-        public string VendorID { get; set; }
-
-
-    }
-
-
+ 
 
 
 
