@@ -558,7 +558,7 @@
 
 <script type="text/javascript">
 
-    app.controller('RcmdFinalBillRcvdCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('RcmdFinalBillRcvdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
         $scope.clientReqItemArray = [];
         $scope.clientReqTermArray = [];
@@ -627,7 +627,9 @@
             Operation: "",
             RAWO: "",
             WOAmt: "",
-            WONo: ""
+            WONo: "",
+            WOInfoID:""
+          
 
         }
 
@@ -971,8 +973,10 @@
             $scope.VendorQutn.Note = tableRow.Note;
 
             $scope.VendorQutn.WONo = tableRow.WONo;
+            $scope.VendorQutn.WOInfoID = tableRow.WOInfoID;
             $scope.VendorQutn.WOAmt = tableRow.WOAmt;
             $scope.VendorQutn.AdvancePaidID = tableRow.AdvancePaidID;
+            $scope.VendorQutn.RAWO = tableRow.RAWO;
             $scope.p = 1;
 
             //$scope.VendorQutn.SubmissionDate = row.SubmissionDate;
@@ -1086,6 +1090,7 @@
             // You can also map the rest of the fields similarly:
             $scope.VendorQutn.POAmount = tableRow.POAmount;
             $scope.VendorQutn.AdvancePaidAmount = tableRow.AdvancePaidAmount;
+            $scope.VendorQutn.AdvancePaidDate = tableRow.AdvancePaidDate;
             $scope.VendorQutn.BillAmount = tableRow.BillAmount;
             $scope.VendorQutn.VendorBillNo = tableRow.VendorBillNo;
             $scope.VendorQutn.VendorBillDate = tableRow.VendorBillDate;
@@ -1101,6 +1106,10 @@
             $scope.VendorQutn.RecommendDate = tableRow.RecommendDate;
             $scope.VendorQutn.Operation = tableRow.Operation;
             $scope.VendorQutn.RAWO = tableRow.RAWO;
+            $scope.VendorQutn.WONo = tableRow.WONo;
+            $scope.VendorQutn.WOAmt = tableRow.WOAmt;
+            $scope.VendorQutn.AdvancePaidID = tableRow.AdvancePaidID;
+            $scope.VendorQutn.Note = tableRow.Note;
             $scope.q = 2;
             $scope.p = 1;
 
@@ -1291,12 +1300,14 @@
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
                         $scope.clearVendorQutn();
+                        $scope.toggleRefreshTable();
                         $scope.loading = false;
                         return;
                     }
                     else if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
                         $scope.clearVendorQutn();
+                        $scope.toggleRefreshTable();
                         $scope.loading = false;
                         return;
                     }
@@ -1320,7 +1331,12 @@
         }
 
         $scope.toggleRefreshTable = function () {
-            window.location.reload();
+
+            $timeout(function () {
+                // Reload the current page
+                window.location.reload();
+            }, 2000);
+
         };
     }])
 </script>

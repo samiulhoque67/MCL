@@ -47,7 +47,7 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         AdvancePaidAmount = reader.GetToDecimal("AdvncPaidAmt"),
                         WOAmt = reader.GetToDecimal("WOAmount"),
                         AdvancePaidDate = reader.IsNull("AdvncPaidDate") ? string.Empty : reader.GetString("AdvncPaidDate"),
-                        WONo = reader.IsNull("WOInfoID") ? string.Empty : reader.GetString("WOInfoID"),
+                        WONo = reader.IsNull("WONo") ? string.Empty : reader.GetString("WONo"),
                   
                         BillAmount = reader.GetToDecimal("VendorBillAmount"),
                         TotalBillAmount = reader.GetToDecimal("VendorTotalBillAmount"),
@@ -84,7 +84,8 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         PoNo = reader.GetString("PoNo"),
                         POAmount = reader.GetString("AprvAmnt"),
                         PoAprvDate = reader.GetString("PoAprvDate"),
-                        WONo = reader.GetString("AutoWONo"),
+                        WOInfoID = reader.GetString("WOInfoID"),
+                        WONo = reader.GetString("WONo"),
                         WOAmt = reader.GetToDecimal("WOAmt"),
                         RemainingAmnt = reader.GetToDecimal("RemainingAmt"),
                         AdvancClaimRcvAmt = reader.GetToDecimal("VendorAdvncAprvAmt"),
@@ -126,6 +127,7 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, billRecv.ClientID);
                     db.AddInParameter(dbCommandWrapper, "@ClientName", SqlDbType.NVarChar, billRecv.ClientName);
                     db.AddInParameter(dbCommandWrapper, "@WONo", SqlDbType.NVarChar, billRecv.WONo);
+                    db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.NVarChar, billRecv.WOInfoID);
                     db.AddInParameter(dbCommandWrapper, "@WOAmt", SqlDbType.NVarChar, billRecv.WOAmt);
                     //db.AddInParameter(dbCommandWrapper, "@VendorQutnNo", SqlDbType.NVarChar, (billRecv.VendorQutnNo));
                     db.AddInParameter(dbCommandWrapper, "@PoDate", SqlDbType.NVarChar, billRecv.RequisitionDate);

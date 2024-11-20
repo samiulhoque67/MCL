@@ -115,6 +115,7 @@ namespace SILDMS.Model
         public int ClientFinalBilAprvID { get; set; }
         public string AdvancePaidDate { get; set; }
         public string AdvancePaidID { get; set; }
+       
     }
 
 

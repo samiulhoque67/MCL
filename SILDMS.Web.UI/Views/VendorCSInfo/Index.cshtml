@@ -702,7 +702,7 @@
 
     <script type="text/javascript">
 
-        app.controller('VendorCSInfoCtrl', ['$scope', '$http', function ($scope, $http) {
+        app.controller('VendorCSInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
             $scope.vendorCSItemArray = [];
             $scope.vendorCSTermArray = [];
@@ -1654,7 +1654,12 @@
         }
 
             $scope.toggleRefreshTable = function () {
-                window.location.reload();
+
+                $timeout(function () {
+                    // Reload the current page
+                    window.location.reload();
+                }, 2000);
+
             };
 
             $scope.getRowStyle = function (row) {
