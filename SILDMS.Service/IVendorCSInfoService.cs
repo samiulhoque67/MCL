@@ -17,10 +17,13 @@ namespace SILDMS.Service
         ValidationResult OBS_GetVendorCSVendorsUsingClient(string ClientID, out List<OBS_VendorCSRecm> VendorCSInfoSearchList);
         ValidationResult OBS_GetVendorCSQuotationItem(string VendorID, string ClientID, string VendorQutnItemID, out List<OBS_VendorCSRecmItem> VendorCSInfoItemList);
         ValidationResult GetVendorCSInfoTermList(string VendorCSInfoID, out List<OBS_VendorCSRecmTerms> VendorCSInfoTermList);
-        string SaveVendorCSInfo(OBS_VendorCSRecm clientReq, List<OBS_VendorCSRecmItem> clientReqItem, List<OBS_VendorCSRecmTerms> clientReqTerm, List<OBS_VendorCSRecmVendors> vendorReqItemWise);
+        string SaveVendorCSInfo(OBS_VendorCSRecm clientReq, List<OBS_VendorCSRecmItem> clientReqItem, List<OBS_VendorCSRecmTerms> clientReqTerm);
         ValidationResult GetVendorCSInfoTermAgainstFormList(string TermsID, out List<OBS_VendorCSRecmTerms> VendorCSInfoTermList);
         ValidationResult GetReqWiseVendorList(string VendorCSInfoID, out List<OBS_VendorCSRecmVendors> VendorCSInfoTermList);
         string DeleteVendorCSInfoItemAndTerm(string VendorCSInfoItemID, string VendorCSInfoTermID);
         ValidationResult GetTermsConditionsList(out List<OBS_Terms> TermsConditionsList);
+        ValidationResult GetAllRequisition(string userID, out List<Invitation> invitationList);
+        ValidationResult GetMaterialByRequisition(string vendorRequisitionNumber, out List<OBS_VendorCSRecmItem> reqWiseMaterialList);
+        ValidationResult GetVendorByMaterialService(string vendorReqID, string serviceItemID, out List<OBS_VendorCSRecmItem> matWiseVendorList);
     }
 }
