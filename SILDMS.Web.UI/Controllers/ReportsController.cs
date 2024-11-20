@@ -40,6 +40,7 @@ using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
 using Microsoft.Practices.EnterpriseLibrary.Data;
 using SILDMS.DataAccess;
 using System.Data.Common;
+using SILDMS.Model;
 /////////////////////////////////////////Test///////////////////////////
 namespace SILDMS.Web.UI.Controllers
 {
@@ -242,11 +243,11 @@ namespace SILDMS.Web.UI.Controllers
         [Authorize]
         [HttpPost]
         [SILLogAttribute]
-        public async Task<dynamic> VendorCSApprevedReport(ReportModel model)
+        public async Task<dynamic> VendorCSApprevedReport(OBS_VendorCSAprv model)
         {
             DataTable dt = new DataTable();
 
-            await Task.Run(() => _reportService.VendorCSApprevedReport(model.UserRptID, model.BillReceiveFromDate, model.Status, "", UserID, out dt));
+         //   await Task.Run(() => _reportService.VendorCSApprevedReport(model.UserRptID, model.BillReceiveFromDate, model.Status, "", UserID, out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");

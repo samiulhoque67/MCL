@@ -33,9 +33,9 @@ namespace SILDMS.Service.QuotationToClient
                 : ValidationResult.Success;
         }
         
-        ValidationResult IQuotationToClientService.AvailableClientDetailInfoService(string ClientID, out List<OBS_ClientDetails> ClientDetails)
+        ValidationResult IQuotationToClientService.AvailableClientDetailInfoService(string ClientID, string ClientReqID, out List<OBS_ClientDetails> ClientDetails)
         {
-            ClientDetails = _iQuotationToClientDataService.AvailableClientDetailInfoDataService(ClientID, out _errorNumber);
+            ClientDetails = _iQuotationToClientDataService.AvailableClientDetailInfoDataService(ClientID, ClientReqID, out _errorNumber);
 
             return _errorNumber.Length > 0
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
@@ -59,9 +59,9 @@ namespace SILDMS.Service.QuotationToClient
                 : ValidationResult.Success;
         }
 
-        public string SaveQuotToClientService(string UserID, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl)
+        public string SaveQuotToClientService(string UserID, string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl)
         {
-            return _iQuotationToClientDataService.SaveQuotToClientServiceData(UserID, MasterData, DetailData, AllTermsDtl, out _errorNumber);
+            return _iQuotationToClientDataService.SaveQuotToClientServiceData(UserID, action, MasterData, DetailData, AllTermsDtl, out _errorNumber);
 
             throw new NotImplementedException();
         }

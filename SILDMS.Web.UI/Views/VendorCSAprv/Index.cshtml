@@ -86,299 +86,300 @@
     }
 </style>
 
-<div class="box box-primary box-body" ng-controller="VendorCSAprvCtrl">
-    <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
-        <i class="fa fa-user"></i>
-        <h3 style="font-family: Verdana" class="box-title">Vendor CS Approval</h3>
+<div class="box box-primary box-body" ng-controller="VendorCSAprvCtrl"  data-ng-init="init()">
+    @using (Html.BeginForm("VendorCSApprevedReport", "../Reports", System.Web.Mvc.FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+    {
+        <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
+            <i class="fa fa-user"></i>
+            <h3 style="font-family: Verdana" class="box-title">Vendor CS Approval</h3>
 
-        <div class="box-tools pull-right">
-            <div class="col-lg-12 pull-right">
-                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
-                </div>
-                <div class="btn-group pull-right" style="margin: 3px">
-                    @using (Html.BeginForm("VendorCSApprevedReport", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
-                    {
+            <div class="box-tools pull-right">
+                <div class="col-lg-12 pull-right">
+                    <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                        <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
+                    </div>
+                    <div class="btn-group pull-right" style="margin: 3px">
+
                         <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="btn btn-sm btn-flat btn-success pull-right">
                             <i class="fa fa-print"></i> CS Print
                         </button>
-                    }
 
 
-                </div>
-                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="SearchVendorReqModal()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
-                </div>
-                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>   {{ VendorReq.VendorReqID ? 'Update' : 'Save' }}</button>
-                </div>
-                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Cancel()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="row" style="margin:1%;">
-        <div class="col-md-2" ng-repeat="item in dashBoardResult">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center" style="font-size: 110%;">{{item.ServiceCategoryName}}</h3>
-                </div>
-
-                <div class="dbody">
-                    <div class="row justify-content-center align-items-center" style="height: 100%;">
-                        <button id="{{item.ServiceCategoryID}}" ng-click="VendorSelect(item.ServiceCategoryID)" class="d-flex align-items-center justify-content-center w-100" style="border: none; background: none;"
-                                ng-class=" {'selected-row': row.selected}" ng-style="getRowStyle(row)">
-
-                            <h3 class="description-header font-weight-bold">{{item.ServicesCategoryCount}}</h3>
-                        </button>
+                    </div>
+                    <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                        <button type="button" data-ng-click="SearchVendorReqModal()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
+                    </div>
+                    <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                        <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>   {{ VendorReq.VendorReqID ? 'Update' : 'Save' }}</button>
+                    </div>
+                    <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                        <button type="button" data-ng-click="Cancel()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-        <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="CSClientDisplayedCollection" st-safe-src="CSClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                    <thead>
-                        <tr>
-                            <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
-                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientReqNo')">Requisition No</th>
-                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
-                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('NoOfVendor')">NoOfVendor</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
-                        </tr>
-                        @*<tr>
-                                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="ClientReqNo" placeholder="Client Req.No" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in CSClientDisplayedCollection" ng-class=" {'selected-row': row.selected}" ng-style="getRowStyle(row)">
-                            <td class="hidden">{{row.ClientReqID}}</td>
-                            <td class="hidden">{{row.ClientID}}</td>
-                            <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.ClientReqNo}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.RequisitionDate}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.NoOfVendor}}</td>
-                            <td>
-                                <a class="btn col-center btn-sm btn-flat btn-success" ng-click="ClientSelect(row)">Details</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
 
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-        <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="CSVendorDisplayedCollection" st-safe-src="CSVendorList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                    <thead>
-                        <tr>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorName')">Vendor Name</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactPerson')">Contact Person</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactNumber')">Contact Number</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorQutnNo')">VendorQutnNo</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('QuotationDate')">QuotationDate</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('TolQnty')">Total Qunty</th>
-                            <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in CSVendorDisplayedCollection" ng-cloak style="font-size:12px;">
-                            <td class="hidden">{{row.index+1}}</td>
-                            <td class="hidden">{{row.VendorCSRecmID}}</td>
-                            <td class="hidden">{{row.VendorID}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.VendorName}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactPerson}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactNumber}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.VendorQutnNo}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.QuotationDate}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.TolQnty}}</td>
-                            <td class="col-lg-1" style="width:5%;">
-                                <button type="button" class="btn col-center btn-sm btn-flat btn-success"
-                                        ng-click="selectEntity(row); ItemSelect(row)"
-                                        data-dismiss="modal"
-                                        title="Select and Details">
-                                    Select and Details
-                                </button>
-                            </td>
+        <div class="row" style="margin:1%;">
+            <div class="col-md-2" ng-repeat="item in dashBoardResult">
+                <div class="box box-primary box-solid">
+                    <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
+                        <h3 class="box-title text-center" style="font-size: 110%;">{{item.ServiceCategoryName}}</h3>
+                    </div>
 
-                       </tr>
-                    </tbody>
-                    <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
+                    <div class="dbody">
+                        <div class="row justify-content-center align-items-center" style="height: 100%;">
+                            <button id="{{item.ServiceCategoryID}}" ng-click="VendorSelect(item.ServiceCategoryID)" class="d-flex align-items-center justify-content-center w-100" style="border: none; background: none;"
+                                    ng-class=" {'selected-row': row.selected}" ng-style="getRowStyle(row)">
 
-
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-        <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;" st-sort="">Item Code</th>
-                            <th style="text-align: left;" st-sort="">Item Name</th>
-                            <th style="text-align: left;" st-sort="">ReqQnty</th>
-                            <th style="text-align: left;" st-sort="">ReqUnit</th>
-                            <th style="text-align: left;" st-sort="">QutnQnty</th>
-                            <th style="text-align: left;" st-sort="">QutnPrice</th>
-                            <th style="text-align: left;" st-sort="">QutnAmt</th>
-                            <th style="text-align: left;" st-sort="">VatPerc</th>
-                            <th style="text-align: left;" st-sort="">VatAmt</th>
-                            <th style="text-align: left;" st-sort="">TolAmt</th>
-
-                            @*<th style="text-align: left;">Action</th>*@
-                        </tr>
-                        @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
-                            <td class="hidden">{{row.index+1}}</td>
-                            <td class="hidden">{{row.VendorCSAprvItemID}}</td>
-                            <td class="hidden">{{row.VendorCSAprvID}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnQnty}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnPrice}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnAmt}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.VatPerc}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="row">
-            <div class="col-sm-1 col-md-1 col-lg-1">
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>CS Date</label>
+                                <h3 class="description-header font-weight-bold">{{item.ServicesCategoryCount}}</h3>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSAprv.CSRecDate" />
-                </div>
-            </div>
+        </div>
 
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>CS No:</label>
+        <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+            <div class="row">
+                <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                    <table st-table="CSClientDisplayedCollection" st-safe-src="CSClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientReqNo')">Requisition No</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('NoOfVendor')">NoOfVendor</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+                            @*<tr>
+                                    <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+                                    <th><input st-search="ClientReqNo" placeholder="Client Req.No" class="input-sm form-control" type="search" /></th>
+                                </tr>*@
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in CSClientDisplayedCollection" ng-class=" {'selected-row': row.selected}" ng-style="getRowStyle(row)">
+                                <td class="hidden">{{row.ClientReqID}}</td>
+                                <td class="hidden">{{row.ClientID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
+                                <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.ClientReqNo}}</td>
+                                <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.RequisitionDate}}</td>
+                                <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.NoOfVendor}}</td>
+                                <td>
+                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-click="ClientSelect(row)">Details</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            @*<tr>
+                                    <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                                </tr>*@
+                        </tfoot>
+                    </table>
                 </div>
             </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSAprv.AutoCSNo" ng-readonly="true" />
+        </div>
+
+
+        <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+            <div class="row">
+                <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                    <table st-table="CSVendorDisplayedCollection" st-safe-src="CSVendorList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorName')">Vendor Name</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactPerson')">Contact Person</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactNumber')">Contact Number</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorQutnNo')">VendorQutnNo</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('QuotationDate')">QuotationDate</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('TolQnty')">Total Qunty</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in CSVendorDisplayedCollection" ng-cloak style="font-size:12px;">
+                                <td class="hidden">{{row.index+1}}</td>
+                                <td class="hidden">{{row.VendorCSRecmID}}</td>
+                                <td class="hidden">{{row.VendorID}}</td>
+                                <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.VendorName}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactPerson}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactNumber}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.VendorQutnNo}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.QuotationDate}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.TolQnty}}</td>
+                                <td class="col-lg-1" style="width:5%;">
+                                    <button type="button" class="btn col-center btn-sm btn-flat btn-success"
+                                            ng-click="selectEntity(row); ItemSelect(row)"
+                                            data-dismiss="modal"
+                                            title="Select and Details">
+                                        Select and Details
+                                    </button>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            @*<tr>
+                                    <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                                </tr>*@
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+            <div class="row">
+                <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                    <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;" st-sort="">Item Code</th>
+                                <th style="text-align: left;" st-sort="">Item Name</th>
+                                <th style="text-align: left;" st-sort="">ReqQnty</th>
+                                <th style="text-align: left;" st-sort="">ReqUnit</th>
+                                <th style="text-align: left;" st-sort="">QutnQnty</th>
+                                <th style="text-align: left;" st-sort="">QutnPrice</th>
+                                <th style="text-align: left;" st-sort="">QutnAmt</th>
+                                <th style="text-align: left;" st-sort="">VatPerc</th>
+                                <th style="text-align: left;" st-sort="">VatAmt</th>
+                                <th style="text-align: left;" st-sort="">TolAmt</th>
+
+                                @*<th style="text-align: left;">Action</th>*@
+                            </tr>
+                            @*<tr>
+                                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                                </tr>*@
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
+                                <td class="hidden">{{row.index+1}}</td>
+                                <td class="hidden">{{row.VendorCSAprvItemID}}</td>
+                                <td class="hidden">{{row.VendorCSAprvID}}</td>
+                                <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
+                                <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
+                                <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
+                                <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
+                                <td class="col-lg-1" style="width:6%;">{{row.QutnQnty}}</td>
+                                <td class="col-lg-1" style="width:6%;">{{row.QutnPrice}}</td>
+                                <td class="col-lg-1" style="width:6%;">{{row.QutnAmt}}</td>
+                                <td class="col-lg-1" style="width:6%;">{{row.VatPerc}}</td>
+                                <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
+                                <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            @*<tr>
+                                    <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                                </tr>*@
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-sm-1 col-md-1 col-lg-1">
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>Operation:</label>
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
                 </div>
-            </div>
-            <div class="col-lg-3">
-                <select data-ng-model="VendorCSAprv.Operation" class="form-control">
-                    <option value="">-- None --</option>
-                    <option value="Aprv">Approved</option>
-                    <option value="Rec">Recommended</option>
-                    <option value="Bck">Back</option>
-                    <option value="Pst">Postponed</option>
-                    <option value="Can">Cancel</option>
-                </select>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>CS Date</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSAprv.CSRecDate" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>CS No:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSAprv.AutoCSNo" ng-readonly="true" />
+                    </div>
+                </div>
             </div>
 
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="Note">Note:</label>
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
                 </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSAprv.Remarks" class="form-control" placeholder="Note for CS" />
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Operation:</label>
+                    </div>
                 </div>
+                <div class="col-lg-3">
+                    <select data-ng-model="VendorCSAprv.Operation" class="form-control">
+                        <option value="">-- None --</option>
+                        <option value="Aprv">Approved</option>
+                        <option value="Rec">Recommended</option>
+                        <option value="Bck">Back</option>
+                        <option value="Pst">Postponed</option>
+                        <option value="Can">Cancel</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="Note">Note:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSAprv.Remarks" class="form-control" placeholder="Note for CS" />
+                    </div>
+                </div>
+
             </div>
 
         </div>
 
-    </div>
+        <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+            <div class="row">
+                <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                    <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;" st-sort="">Terms Code</th>
+                                <th style="text-align: left;" st-sort="">Terms & Conditions</th>
+                                <th style="text-align: left;">Action</th>
+                            </tr>
+                            @*<tr>
+                                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                                </tr>*@
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
+                                <td class="hidden">{{row.VendorCSAprvTermsID}}</td>
+                                <td class="hidden">{{row.VendorCSAprvID}}</td>
+                                <td class="hidden">{{row.TermsID}}</td>
+                                <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
+                                <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-        <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;" st-sort="">Terms Code</th>
-                            <th style="text-align: left;" st-sort="">Terms & Conditions</th>
-                            <th style="text-align: left;">Action</th>
-                        </tr>
-                        @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-                            <td class="hidden">{{row.VendorCSAprvTermsID}}</td>
-                            <td class="hidden">{{row.VendorCSAprvID}}</td>
-                            <td class="hidden">{{row.TermsID}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
-
-                            <td class="col-lg-1" style="width:5%;">
-                                <button type="button" ng-if="row.VendorCSAprvTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" ng-if="!row.VendorCSAprvTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
-                    </tfoot>
-                </table>
+                                <td class="col-lg-1" style="width:5%;">
+                                    <button type="button" ng-if="row.VendorCSAprvTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                    <button type="button" ng-if="!row.VendorCSAprvTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                    <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            @*<tr>
+                                    <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                                </tr>*@
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
+    }
     </div>
-</div>
 
 <script type="text/javascript">
 

@@ -54,7 +54,8 @@ namespace SILDMS.DataAccess.QuotationToClientService
                     {
                         ClientID   = reader.GetString("ClientID"),
                         ClientCode = reader.GetString("ClientCode"),
-                        ClientName = reader.GetString("ClientName")
+                        ClientName = reader.GetString("ClientName"),
+                        ClientReqID = reader.GetString("ClientReqID"),
                     }).ToList();
 
                 }
@@ -63,7 +64,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
             return AllAvailableClientsList;
         }
 
-        public List<OBS_ClientDetails> AvailableClientDetailInfoDataService(string ClientID, out string _errorNumber)
+        public List<OBS_ClientDetails> AvailableClientDetailInfoDataService(string ClientID, string ClientReqID, out string _errorNumber)
         {
             _errorNumber = string.Empty;
             var ClientDetails = new List<OBS_ClientDetails>();
@@ -72,7 +73,8 @@ namespace SILDMS.DataAccess.QuotationToClientService
             var db = factory.CreateDefault() as SqlDatabase;
             using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailableClientDetailedInfo"))
             {
-                db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.Int, ClientID);
+                db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, ClientID);
+                db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, ClientReqID);
                 db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
                 dbCommandWrapper.CommandTimeout = 300;
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -96,8 +98,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                         ContactPerson = reader.GetString("ContactPerson"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
-                        RequisitionDate = reader.GetString("RequisitionDate"),
-                        ServiceCategoryID = reader.GetString("ServiceCategoryID")
+                        RequisitionDate = reader.GetString("RequisitionDate")
                     }).ToList();
 
                 }
@@ -132,6 +133,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                     var dt1 = ds.Tables[0];
                     GetClientReqDetails = dt1.AsEnumerable().Select(reader => new ClientReqData
                     {
+                        VendorCSAprvItemID = reader.GetString("VendorCSAprvID"),
                         VendorCSAprvID = reader.GetString("VendorCSAprvID"),
                         ClientID = reader.GetString("ClientID"),
                         ClientReqID = reader.GetString("ClientReqID"),
@@ -198,7 +200,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
             return VendorTermTermList;
         }
 
-        public string SaveQuotToClientServiceData(string UserID, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, out string errorNumber)
+        public string SaveQuotToClientServiceData(string UserID, string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, out string errorNumber)
         {
             errorNumber = string.Empty;
             string message = "";
@@ -210,6 +212,8 @@ namespace SILDMS.DataAccess.QuotationToClientService
             masterDataTable.Columns.Add("ClientQuotationID", typeof(string));
             masterDataTable.Columns.Add("ClientReqID", typeof(string));
             masterDataTable.Columns.Add("ClientQutnRecmID", typeof(string));
+            masterDataTable.Columns.Add("ClientQutnAprvID", typeof(string));
+
             masterDataTable.Columns.Add("Operation", typeof(string));
             masterDataTable.Columns.Add("BriefingDate", typeof(string));
             masterDataTable.Columns.Add("QuotationNote", typeof(string));
@@ -223,6 +227,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                     masterRow["ClientReqID"] = string.IsNullOrEmpty(masterItem.ClientReqID) ? DBNull.Value : (object)masterItem.ClientReqID;
                     masterRow["ClientQuotationID"] = string.IsNullOrEmpty(masterItem.ClientQuotationID) ? DBNull.Value : (object)masterItem.ClientQuotationID;
                     masterRow["ClientQutnRecmID"] = string.IsNullOrEmpty(masterItem.ClientQutnRecmID) ? DBNull.Value : (object)masterItem.ClientQutnRecmID;
+                    masterRow["ClientQutnAprvID"] = string.IsNullOrEmpty(masterItem.ClientQutnAprvID) ? DBNull.Value : (object)masterItem.ClientQutnAprvID;
                     masterRow["Operation"] = string.IsNullOrEmpty(masterItem.Operation) ? DBNull.Value : (object)masterItem.Operation;
                     masterRow["BriefingDate"] = string.IsNullOrEmpty(masterItem.BriefingDate) ? DBNull.Value : (object)masterItem.BriefingDate;
                     masterRow["QuotationNote"] = string.IsNullOrEmpty(masterItem.QuotationNote) ? DBNull.Value : (object)masterItem.QuotationNote;
@@ -234,6 +239,11 @@ namespace SILDMS.DataAccess.QuotationToClientService
             // ################# Detail Data ####################
 
             DataTable detailDataTable = new DataTable();
+            detailDataTable.Columns.Add("ClientQuotationID", typeof(string));
+            detailDataTable.Columns.Add("ClientQutnRecmID", typeof(string));
+            detailDataTable.Columns.Add("ClientQutnAprvID", typeof(string));
+
+
             detailDataTable.Columns.Add("ServiceCategoryID", typeof(string));
             detailDataTable.Columns.Add("TermsID", typeof(string));
             detailDataTable.Columns.Add("ServiceItemID", typeof(string));
@@ -255,9 +265,14 @@ namespace SILDMS.DataAccess.QuotationToClientService
                 foreach (var item in DetailData)
                 {
                     DataRow objDataRow = detailDataTable.NewRow();
+                    objDataRow["ClientQuotationID"] = string.IsNullOrEmpty(item.ClientQuotationID) ? DBNull.Value : (object)item.ClientQuotationID;
+                    objDataRow["ClientQutnRecmID"] = string.IsNullOrEmpty(item.ClientQutnRecmID) ? DBNull.Value : (object)item.ClientQutnRecmID;
+                    objDataRow["ClientQutnAprvID"] = string.IsNullOrEmpty(item.ClientQutnAprvID) ? DBNull.Value : (object)item.ClientQutnAprvID;
+
+
                     objDataRow["ServiceCategoryID"] = string.IsNullOrEmpty(item.ServiceCategoryID) ? DBNull.Value : (object)item.ServiceCategoryID;
                     objDataRow["TermsID"] = string.IsNullOrEmpty(item.TermsID) ? DBNull.Value : (object)item.TermsID;
-                    objDataRow["ServiceItemID"] = string.IsNullOrEmpty(item.TermsID) ? DBNull.Value : (object)item.ServiceItemID;
+                    objDataRow["ServiceItemID"] = string.IsNullOrEmpty(item.ServiceItemID) ? DBNull.Value : (object)item.ServiceItemID;
                     objDataRow["Description"] = string.IsNullOrEmpty(item.Description) ? DBNull.Value : (object)item.Description;
                     objDataRow["DeliveryLocation"] = string.IsNullOrEmpty(item.DeliveryLocation) ? DBNull.Value : (object)item.DeliveryLocation;
                     objDataRow["DeliveryDate"] = string.IsNullOrEmpty(item.DeliveryDate) ? DBNull.Value : (object)item.DeliveryDate;
@@ -278,6 +293,9 @@ namespace SILDMS.DataAccess.QuotationToClientService
             // ################# Terms Detail Data ####################
 
             DataTable TermsDtlTable = new DataTable(); // Renamed
+            //TermsDtlTable.Columns.Add("ClientQutnID", typeof(string));
+            //TermsDtlTable.Columns.Add("ClientQutnRecmID", typeof(string));
+            //TermsDtlTable.Columns.Add("ClientQutnAprvID", typeof(string));
             TermsDtlTable.Columns.Add("TermsID", typeof(string));
             TermsDtlTable.Columns.Add("TermsCode", typeof(string));
             TermsDtlTable.Columns.Add("TermsName", typeof(string));
@@ -287,6 +305,9 @@ namespace SILDMS.DataAccess.QuotationToClientService
                 foreach (var TermsItem in AllTermsDtl)
                 {
                     DataRow TermRow = TermsDtlTable.NewRow();
+                    //TermRow["ClientQutnID"] = string.IsNullOrEmpty(TermsItem.ClientQutnID) ? DBNull.Value : (object)TermsItem.ClientQutnID;
+                    //TermRow["ClientQutnRecmID"] = string.IsNullOrEmpty(TermsItem.ClientQutnRecmID) ? DBNull.Value : (object)TermsItem.ClientQutnRecmID;
+                    //TermRow["ClientQutnAprvID"] = string.IsNullOrEmpty(TermsItem.ClientQutnAprvID) ? DBNull.Value : (object)TermsItem.ClientQutnAprvID;
                     TermRow["TermsID"] = string.IsNullOrEmpty(TermsItem.TermsID) ? DBNull.Value : (object)TermsItem.TermsID;
                     TermRow["TermsCode"] = string.IsNullOrEmpty(TermsItem.TermsCode) ? DBNull.Value : (object)TermsItem.TermsCode;
                     TermRow["TermsName"] = string.IsNullOrEmpty(TermsItem.TermsName) ? DBNull.Value : (object)TermsItem.TermsName;
@@ -299,11 +320,16 @@ namespace SILDMS.DataAccess.QuotationToClientService
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveQuotToClient"))
             {
+                db.AddInParameter(dbCommandWrapper, "@action", SqlDbType.VarChar, action);
                 db.AddInParameter(dbCommandWrapper, "@OBS_QtC_MasterType", SqlDbType.Structured, masterDataTable);
                 db.AddInParameter(dbCommandWrapper, "@OBS_QtC_DetailType", SqlDbType.Structured, detailDataTable);
                 db.AddInParameter(dbCommandWrapper, "@OBS_Qtc_TermsDtl", SqlDbType.Structured, TermsDtlTable);
+                db.AddInParameter(dbCommandWrapper, "@BriefingDate", SqlDbType.NVarChar, MasterData[0].BriefingDate);
+                db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, MasterData[0].ClientReqID);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
+
+              
 
 
                 var ds = db.ExecuteDataSet(dbCommandWrapper);

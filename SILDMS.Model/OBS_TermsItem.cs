@@ -25,5 +25,8 @@ namespace SILDMS.Model
         public string VendorCSAprvTermID { get; set; }
         public string ClientQutnTermID { get; set; }
         public string ClientQutnRecmTermID { get; set; }
+        public string ClientQutnID { get; set; }
+        public string ClientQutnRecmID { get; set; }
+        public string ClientQutnAprvID { get; set; }
     }
 }

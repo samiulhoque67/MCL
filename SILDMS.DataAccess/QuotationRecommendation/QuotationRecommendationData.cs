@@ -91,6 +91,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                     var dt1 = ds.Tables[0];
                     VendorTermTermList = dt1.AsEnumerable().Select(reader => new OBS_TermsItem
                     {
+                        ClientQutnID = reader.GetString("ClientQutnID"),
                         ClientQutnTermID = reader.GetString("ClientQutnTermID"),
                         TermsItemID = reader.GetString("TermsItemID"),
                         TermsID = reader.GetString("TermsID"),
@@ -133,8 +134,8 @@ namespace SILDMS.DataAccess.QuotationRecommendation
 
                         ClientID = reader.GetString("ClientID"),
                         ClientQuotationID = reader.GetString("ClientQutnID"),
+                        ClientQutnItemID = reader.GetString("ClientQutnItemID"),
                         ClientReqID = reader.GetString("ClientReqID"),
-                        ClientReqNo = reader.GetString("ClientReqNo"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         //TermsID = reader.GetString("TermsID"),
                         ServiceItemCode = reader.GetString("ServiceItemCode"),
@@ -149,6 +150,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                         QutnPrice = reader.GetString("VenPrice"),
                         QutnUnit = reader.GetString("QutnUnit"),
                         QutnAmt = reader.GetString("QutnAmt"),
+                        ClientQutnAmt = reader.GetString("ClientQutnAmt"),
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
                         TolAmt = reader.GetString("TolAmt")
@@ -172,6 +174,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
             masterDataTable.Columns.Add("ClientReqID", typeof(string));
             masterDataTable.Columns.Add("ClientQuotationID", typeof(string));
             masterDataTable.Columns.Add("ClientQutnRecmID", typeof(string));
+            masterDataTable.Columns.Add("ClientQutnAprvID", typeof(string));
             masterDataTable.Columns.Add("BriefingDate", typeof(string));
             masterDataTable.Columns.Add("Operation", typeof(string));
             masterDataTable.Columns.Add("QuotationNote", typeof(string));
@@ -185,6 +188,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                     masterRow["ClientReqID"] = string.IsNullOrEmpty(masterItem.ClientReqID) ? DBNull.Value : (object)masterItem.ClientReqID;
                     masterRow["ClientQuotationID"] = string.IsNullOrEmpty(masterItem.ClientQuotationID) ? DBNull.Value : (object)masterItem.ClientQuotationID;
                     masterRow["ClientQutnRecmID"] = string.IsNullOrEmpty(masterItem.ClientQutnRecmID) ? DBNull.Value : (object)masterItem.ClientQutnRecmID;
+                    masterRow["ClientQutnAprvID"] = string.IsNullOrEmpty(masterItem.ClientQutnAprvID) ? DBNull.Value : (object)masterItem.ClientQutnAprvID;
                     masterRow["BriefingDate"] = string.IsNullOrEmpty(masterItem.BriefingDate) ? DBNull.Value : (object)masterItem.BriefingDate;
                     masterRow["Operation"] = string.IsNullOrEmpty(masterItem.Operation) ? DBNull.Value : (object)masterItem.Operation;
                     masterRow["QuotationNote"] = string.IsNullOrEmpty(masterItem.QuotationNote) ? DBNull.Value : (object)masterItem.QuotationNote;
@@ -196,6 +200,13 @@ namespace SILDMS.DataAccess.QuotationRecommendation
             // ################# Detail Data ####################
 
             DataTable detailDataTable = new DataTable();
+
+            // Add missing columns
+            detailDataTable.Columns.Add("ClientQuotationID", typeof(string));
+            detailDataTable.Columns.Add("ClientQutnRecmID", typeof(string));
+            detailDataTable.Columns.Add("ClientQutnAprvID", typeof(string));
+
+            // Add other required columns
             detailDataTable.Columns.Add("ServiceCategoryID", typeof(string));
             detailDataTable.Columns.Add("TermsID", typeof(string));
             detailDataTable.Columns.Add("ServiceItemID", typeof(string));
@@ -217,9 +228,15 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                 foreach (var item in DetailData)
                 {
                     DataRow objDataRow = detailDataTable.NewRow();
+
+                    // Populate columns
+                    objDataRow["ClientQuotationID"] = string.IsNullOrEmpty(item.ClientQuotationID) ? DBNull.Value : (object)item.ClientQuotationID;
+                    objDataRow["ClientQutnRecmID"] = string.IsNullOrEmpty(item.ClientQutnRecmID) ? DBNull.Value : (object)item.ClientQutnRecmID;
+                    objDataRow["ClientQutnAprvID"] = string.IsNullOrEmpty(item.ClientQutnAprvID) ? DBNull.Value : (object)item.ClientQutnAprvID;
+
                     objDataRow["ServiceCategoryID"] = string.IsNullOrEmpty(item.ServiceCategoryID) ? DBNull.Value : (object)item.ServiceCategoryID;
                     objDataRow["TermsID"] = string.IsNullOrEmpty(item.TermsID) ? DBNull.Value : (object)item.TermsID;
-                    objDataRow["ServiceItemID"] = string.IsNullOrEmpty(item.TermsID) ? DBNull.Value : (object)item.ServiceItemID;
+                    objDataRow["ServiceItemID"] = string.IsNullOrEmpty(item.ServiceItemID) ? DBNull.Value : (object)item.ServiceItemID;
                     objDataRow["Description"] = string.IsNullOrEmpty(item.Description) ? DBNull.Value : (object)item.Description;
                     objDataRow["DeliveryLocation"] = string.IsNullOrEmpty(item.DeliveryLocation) ? DBNull.Value : (object)item.DeliveryLocation;
                     objDataRow["DeliveryDate"] = string.IsNullOrEmpty(item.DeliveryDate) ? DBNull.Value : (object)item.DeliveryDate;
@@ -236,6 +253,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                     detailDataTable.Rows.Add(objDataRow);
                 }
             }
+
 
             // ################# Terms Detail Data ####################
 
@@ -264,6 +282,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                 db.AddInParameter(dbCommandWrapper, "@OBS_QtC_MasterType", SqlDbType.Structured, masterDataTable);
                 db.AddInParameter(dbCommandWrapper, "@OBS_QtC_DetailType", SqlDbType.Structured, detailDataTable);
                 db.AddInParameter(dbCommandWrapper, "@OBS_Qtc_TermsDtl", SqlDbType.Structured, TermsDtlTable);
+                db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.VarChar, MasterData[0].Operation);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 
