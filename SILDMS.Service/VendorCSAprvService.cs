@@ -72,9 +72,9 @@ namespace SILDMS.Service
             VendorCSAprvTermList = clientInfoDataService.GetVendorCSAprvTermList(VendorCSAprvID);
             return ValidationResult.Success;
         }
-        public string SaveVendorCSAprv(OBS_VendorCSAprv clientReq, List<OBS_VendorCSAprvItem> clientReqItem, List<OBS_VendorCSAprvTerms> clientReqTerm, List<OBS_VendorCSAprvVendors> vendorReqItemWise)
+        public string SaveVendorCSAprv(OBS_VendorCSAprv clientReq, List<OBS_VendorCSAprvItem> clientReqItem, List<OBS_VendorCSAprvTerms> clientReqTerm)
         {
-            return clientInfoDataService.SaveVendorCSAprv(clientReq, clientReqItem, clientReqTerm, vendorReqItemWise);
+            return clientInfoDataService.SaveVendorCSAprv(clientReq, clientReqItem, clientReqTerm);
         }
 
         public ValidationResult GetVendorCSAprvTermAgainstFormList(string TermsID, out List<OBS_VendorCSAprvTerms> VendorCSAprvTermList)
@@ -94,6 +94,24 @@ namespace SILDMS.Service
         public ValidationResult GetTermsConditionsList(out List<OBS_Terms> TermsConditionsList)
         {
             TermsConditionsList = clientInfoDataService.GetTermsConditionsList();
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult GetAllRequisition(string userID, out List<Invitation> invitationList)
+        {
+            invitationList = clientInfoDataService.GetAllRequisition(userID);
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult GetMaterialByRequisition(string vendorRequisitionNumber, out List<OBS_VendorCSAprvItem> reqWiseMaterialList)
+        {
+            reqWiseMaterialList = clientInfoDataService.GetMaterialByRequisition(vendorRequisitionNumber);
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult GetVendorByMaterialService(string vendorReqID, string serviceItemID, out List<OBS_VendorCSAprvItem> matWiseVendorList)
+        {
+            matWiseVendorList = clientInfoDataService.GetVendorByMaterialData(vendorReqID, serviceItemID);
             return ValidationResult.Success;
         }
     }

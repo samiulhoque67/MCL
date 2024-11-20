@@ -110,6 +110,8 @@ namespace SILDMS.DataAccess
                     ClientInfoList = dt1.AsEnumerable().Select(reader => new OBS_VendorQutn
                     {
                         ClientID = reader.GetString("ClientID"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        ClientReqNo = reader.GetString("ClientReqNo"),
                         VendorID = reader.GetString("VendorID"),
                         VendorReqID = reader.GetString("VendorReqID"),
                         ClientName = reader.GetString("ClientName"),
@@ -201,6 +203,8 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@VendorQutnID", SqlDbType.NVarChar, VendorQutn.VendorQutnID);
                     db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.NVarChar, VendorQutn.VendorReqID);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, VendorQutn.ClientID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, VendorQutn.ClientReqID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientReqNo", SqlDbType.NVarChar, VendorQutn.ClientReqNo);
                     db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.NVarChar, VendorQutn.VendorID);
                     db.AddInParameter(dbCommandWrapper, "@VendorQutnNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(VendorQutn.VendorQutnNo));
                     db.AddInParameter(dbCommandWrapper, "@QuotationDate", SqlDbType.NVarChar, VendorQutn.QuotationDate);

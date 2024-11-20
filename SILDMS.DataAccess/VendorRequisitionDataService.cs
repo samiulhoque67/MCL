@@ -229,6 +229,7 @@ namespace SILDMS.DataAccess
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.NVarChar, VendorReq.VendorReqID);
                     db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, VendorReq.ClientReqID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientReqNo", SqlDbType.NVarChar, VendorReq.ClientReqNo);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, VendorReq.ClientID);
 
                     db.AddInParameter(dbCommandWrapper, "@CsStatus", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(VendorReq.CsStatus));
@@ -244,7 +245,8 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@Action ", SqlDbType.NVarChar, VendorReq.Action);
                     db.AddInParameter(dbCommandWrapper, "@TolalItem", SqlDbType.Int, VendorReq.TolalItem);
                     db.AddInParameter(dbCommandWrapper, "@SelectedItem", SqlDbType.Int, VendorReq.SelectedItem);
-                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 50);
+                    //db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
                     // Getting output parameters and setting response details.
@@ -260,6 +262,23 @@ namespace SILDMS.DataAccess
                 errorNumber = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
             }
             return errorNumber;
+        }
+        public DataSet rptRequisitionToVendorReport(string VendorReqID, string action)
+        {
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("GetRptRequisitionToVendorReport"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.VarChar, VendorReqID);
+                //db.AddInParameter(dbCommandWrapper, "@FromDate", SqlDbType.VarChar, FromDate);
+                ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
+                //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
+                ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                //DataTable dt1 = ds.Tables[0];
+                return ds;
+            }
         }
 
         public List<OBS_VendorReq> GetVendorReqSearchList()
@@ -278,9 +297,10 @@ namespace SILDMS.DataAccess
                     VendorReqList = dt1.AsEnumerable().Select(reader => new OBS_VendorReq
                     {
                         VendorReqID = reader.GetString("VendorReqID"),
-                        VendorID = reader.GetString("VendorID"),
-                        VendorName = reader.GetString("VendorName"),
+                        //VendorID = reader.GetString("VendorID"),
+                        //VendorName = reader.GetString("VendorName"),
                         ClientID = reader.GetString("ClientID"),
+                        ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientName = reader.GetString("ClientName"),
                         RequisitionNo = reader.GetString("RequisitionNo"),
                         RequisitionDate = reader.GetString("RequisitionDate"),

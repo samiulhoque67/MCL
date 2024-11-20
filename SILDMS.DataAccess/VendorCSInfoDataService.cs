@@ -45,7 +45,7 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     servicesCategoryList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
-                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServiceSCategoryName"),
                         ServicesCategoryCount = reader.GetString("ServicesCategoryCount")
                     }).ToList();
@@ -212,7 +212,7 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
-                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
@@ -272,9 +272,9 @@ namespace SILDMS.DataAccess
         public string SaveVendorCSInfo(OBS_VendorCSRecm vendorCSInfo, List<OBS_VendorCSRecmItem> vendorCSInfoItem, List<OBS_VendorCSRecmTerms> vendorCSInfoTerm, List<OBS_VendorCSRecmVendors> vendorCSVendorsItemWise)
         {
             DataTable VendorCSItem = new DataTable();
-            VendorCSItem.Columns.Add("VendorReqID");
-            VendorCSItem.Columns.Add("ServiceCategoryID");
-            VendorCSItem.Columns.Add("ServiceItemID");
+            //VendorCSItem.Columns.Add("VendorReqID");
+            VendorCSItem.Columns.Add("VendorID");
+            VendorCSItem.Columns.Add("VendorQutnID");
             VendorCSItem.Columns.Add("ReqQnty");
             VendorCSItem.Columns.Add("ReqUnit");
             VendorCSItem.Columns.Add("QutnQnty");
@@ -283,20 +283,24 @@ namespace SILDMS.DataAccess
             VendorCSItem.Columns.Add("QutnAmt");
             VendorCSItem.Columns.Add("VatPerc");
             VendorCSItem.Columns.Add("VatAmt");
+           
+            VendorCSItem.Columns.Add("TolQnty");
+            VendorCSItem.Columns.Add("VendorName");
             foreach (var item in vendorCSInfoItem)
             {
                 DataRow objDataRow = VendorCSItem.NewRow();
-                objDataRow[0] = item.VendorReqID;
-                objDataRow[1] = item.ServiceCategoryID;
-                objDataRow[2] = item.ServiceItemID;
-                objDataRow[3] = item.ReqQnty;
-                objDataRow[4] = item.ReqUnit;
-                objDataRow[5] = item.QutnQnty;
-                objDataRow[6] = item.QutnPrice;
-                objDataRow[7] = item.QutnUnit;
-                objDataRow[8] = item.QutnAmt;
-                objDataRow[9] = item.VatPerc;
-                objDataRow[10] = item.VatAmt;
+                objDataRow[0] = item.VendorID;
+                objDataRow[1] = item.VendorQutnID;
+                objDataRow[2] = item.ReqQnty;
+                objDataRow[3] = item.ReqUnit;
+                objDataRow[4] = item.QutnQnty;
+                objDataRow[5] = item.QutnPrice;
+                objDataRow[6] = item.QutnUnit;
+                objDataRow[7] = item.QutnAmt;
+                objDataRow[8] = item.VatPerc;
+                objDataRow[9] = item.VatAmt;
+                objDataRow[10] = item.TolAmt;
+                objDataRow[11] = item.VendorName;
                 VendorCSItem.Rows.Add(objDataRow);
             }
 
@@ -490,6 +494,140 @@ namespace SILDMS.DataAccess
                 }
             }
             return TermsConditionsList;
+        }
+
+        public List<Invitation> GetAllRequisition(string userID)
+        {
+            var invitationList = new List<Invitation>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_VendorReqForCS"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@UserId", SqlDbType.VarChar, userID);
+                //db.AddOutParameter(dbCommandWrapper, "@p_Error", DbType.Int32, 10);
+                // Execute SP.
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+               
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+
+                        DataTable dt1 = new DataTable();
+                        dt1 = ds.Tables[0];
+
+                        invitationList = dt1.AsEnumerable().Select(reader => new Invitation
+                        {
+                            VendorRequisitionNumber = reader.GetString("VendorReqID"),
+                            ClientRequisitionNumber = reader.GetString("ClientReqNo"),
+                            ClientReqID = reader.GetString("ClientReqID"),
+                            ClientID = reader.GetString("ClientID"),
+                            ClientName = reader.GetString("ClientName"),
+                            RequisitionDate = reader.GetString("RequisitionDate"),
+                            LastDateofQuotation = reader.GetString("LastDateofQuotation")
+                          
+
+
+                        }).ToList();
+                    
+                }
+            }
+            return invitationList;
+        }
+
+        public List<OBS_VendorCSRecmItem> GetMaterialByRequisition(string vendorRequisitionNumber)
+        {
+            var ReqWiseMaterialList = new List<OBS_VendorCSRecmItem>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetMaterialByRequisition"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@vendorRequisitionNumber", SqlDbType.VarChar, vendorRequisitionNumber);
+              
+                // Execute SP.
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                    {
+
+                        DataTable dt1 = new DataTable();
+                        dt1 = ds.Tables[0];
+
+                    ReqWiseMaterialList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
+                    {
+                            VendorReqID = reader.GetString("VendorReqID"),
+                            ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
+                            ServiceCategoryName = reader.GetString("ServicesCategoryName"),
+                            ServiceItemID = reader.GetString("ServiceItemID"),
+                            ServiceItemName = reader.GetString("ServiceItemName"),
+                            Description = reader.GetString("Description"),
+                            DeliveryLocation = reader.GetString("DeliveryLocation"),
+                            DeliveryDate = reader.GetString("DeliveryDate"),
+                            DeliveryMode = reader.GetString("DeliveryMode"),
+                            ReqQnty = reader.GetString("ReqQnty"),
+                            ReqUnit = reader.GetString("ReqUnit"),
+                          
+
+
+                        }).ToList();
+                    }
+         
+            }
+            return ReqWiseMaterialList;
+        }
+
+        public List<OBS_VendorCSRecmItem> GetVendorByMaterialData(string vendorReqID, string serviceItemID)
+        {
+            List<OBS_VendorCSRecmItem> VendorCSInfoItemList = new List<OBS_VendorCSRecmItem>();
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_VendorDetailsForCS"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@vendorReqID", SqlDbType.VarChar, vendorReqID);
+                db.AddInParameter(dbCommandWrapper, "@serviceItemID", SqlDbType.VarChar, serviceItemID);
+           
+                // Execute SP. 
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt1 = ds.Tables[0];
+                    VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
+                    {
+                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
+                        ServiceCategoryName = reader.GetString("ServicesCategoryName"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        Description = reader.GetString("Description"),
+                        DeliveryLocation = reader.GetString("DeliveryLocation"),
+                        DeliveryDate = reader.GetString("DeliveryDate"),
+                        DeliveryMode = reader.GetString("DeliveryMode"),
+                        ReqQnty = reader.GetString("ReqQnty"),
+                        ReqUnit = reader.GetString("ReqUnit"),
+                        VendorQutnNo = reader.GetString("VendorQutnNo"),
+                        VendorQutnID = reader.GetString("VendorQutnID"),
+                        VendorID = reader.GetString("VendorID"),
+                        VendorName = reader.GetString("VendorName"),
+                        
+
+                        QutnQnty = reader.GetString("QutnQnty"),
+                        QutnPrice = reader.GetString("QutnPrice"),
+                        QutnUnit = reader.GetString("QutnUnit"),
+
+                        QutnAmt = reader.GetString("QutnAmt"),
+
+                        VatPerc = reader.GetString("VatPerc"),
+                        VatAmt = reader.GetString("VatAmt"),
+                        TolAmt = reader.GetString("TolAmt")
+                        // ,
+
+                        //Status = reader.GetString("Status")
+                    }).ToList();
+                }
+            }
+            return VendorCSInfoItemList;
         }
     }
 }

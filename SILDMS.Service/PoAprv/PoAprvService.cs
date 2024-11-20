@@ -22,9 +22,9 @@ namespace SILDMS.Service.PoAprv
             this.localizationService = localizationService;
         }
 
-        public ValidationResult GetPoAprvClientInfo(string serviceCategoryID, out List<OBS_ClientReq> cSClientList)
+        public ValidationResult GetPoAprvClientInfo( out List<OBS_ClientReq> cSClientList)
         {
-            cSClientList = poAprvData.GetPoAprvClientInfo(serviceCategoryID, out errorNumber);
+            cSClientList = poAprvData.GetPoAprvClientInfo( out errorNumber);
             if (errorNumber.Length > 0)
             {
                 return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
@@ -32,16 +32,7 @@ namespace SILDMS.Service.PoAprv
             return ValidationResult.Success;
         }
 
-        public ValidationResult GetPOAprvDashBordData(string userID, out List<OBS_VendorCSRecmItem> result)
-        {
-            result = poAprvData.GetPOAprvDashBordData(userID, out errorNumber);
-            if (errorNumber.Length > 0)
-            {
-                return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
-            }
-            return ValidationResult.Success;
-        }
-
+   
         public ValidationResult GetPOAprvInfoTermList(string PORecmID, out List<OBS_VendorCSRecmTerms> vendorCSInfoTermList)
         {
             vendorCSInfoTermList = poAprvData.GetPOAprvInfoTermList(PORecmID, out errorNumber);
@@ -52,9 +43,9 @@ namespace SILDMS.Service.PoAprv
             return ValidationResult.Success;
         }
 
-        public ValidationResult GetVendorPOAprvQuotationItem(string vendorID, string clientID, string serviceCategoryID, string PORecmID, out List<OBS_VendorCSRecmItem> venCSItemList)
+        public ValidationResult GetVendorPOAprvQuotationItem(string vendorID, string clientID, string PORecmID, out List<OBS_VendorCSRecmItem> venCSItemList)
         {
-            venCSItemList = poAprvData.GetVendorPOAprvQuotationItem(vendorID, clientID, serviceCategoryID, PORecmID, out errorNumber);
+            venCSItemList = poAprvData.GetVendorPOAprvQuotationItem(vendorID, clientID, PORecmID, out errorNumber);
             if (errorNumber.Length > 0)
             {
                 return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));

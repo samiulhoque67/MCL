@@ -185,6 +185,8 @@
                         <tbody>
                             <tr ng-repeat="row in VendorReqDisplayedCollection">
                                 <td class="hidden">{{row.ClientID}}</td>
+                                <td class="hidden">{{row.ClientReqID}}</td>
+                                <td class="hidden">{{row.ClientReqNo}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
                                 <td class="hidden">{{row.VendorID}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
@@ -231,7 +233,7 @@
                     <h3 class="modal-title">Vendor Quotation Information</h3>
                 </div>
                 <div class="table-responsive" data-ng-disabled="" ng-cloak>
-                    <table st-table="clientReqDisplayedCollection" st-safe-src="clientReqSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <table st-table="vendorQutnDisplayedCollection" st-safe-src="vendorQutnSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr>
                                 <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
@@ -248,7 +250,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="row in clientReqDisplayedCollection">
+                            <tr ng-repeat="row in vendorQutnDisplayedCollection">
                                 <td class="hidden">{{row.VendorQutnID}}</td>
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="hidden">{{row.VendorID}}</td>
@@ -752,8 +754,8 @@
 
     app.controller('VendorQuotationCtrl', ['$scope', '$http', function ($scope, $http) {
 
-        $scope.clientReqItemArray = [];
-        $scope.clientReqTermArray = [];
+        $scope.vendorQutnItemArray = [];
+        $scope.vendorQutnTermArray = [];
         $scope.itemsByPage = 10;
 
         $http.get('/VendorQuotation/GetServicesCategory')
@@ -921,7 +923,7 @@
             $scope.VendorQutnItem.Description = $('#Description').val();
             $scope.VendorQutnItem.ReqQnty = $('#ReqQnty').val();
 
-            $scope.clientReqItemArray.push($scope.VendorQutnItem);
+            $scope.vendorQutnItemArray.push($scope.VendorQutnItem);
 
             $scope.GridDisplayCollection = $scope.GridDisplayCollection.concat($scope.VendorQutnItem);
 
@@ -1036,7 +1038,7 @@
             $scope.VendorQutnItem.ReqUnit = tableRow.ReqUnit;
 
             $scope.GridDisplayCollection.splice($i, 1);
-            $scope.clientReqItemArray.splice($i, 1);
+            $scope.vendorQutnItemArray.splice($i, 1);
 
             $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + tableRow.ServiceCategoryID)
                 .success(function (response) {
@@ -1052,7 +1054,7 @@
             if (!tableRow.VendorQutnItemID) {
                 $scope.resetVendorQutnItem();
                 $scope.GridDisplayCollection.splice($i, 1);
-                $scope.clientReqItemArray.splice($i, 1);
+                $scope.vendorQutnItemArray.splice($i, 1);
                 toastr.success('Data Deleted Successsfully');
             }
             else {
@@ -1069,7 +1071,7 @@
                     if (response.status == "S203") {
                         $scope.resetVendorQutnItem();
                         $scope.GridDisplayCollection.splice($i, 1);
-                        $scope.clientReqItemArray.splice($i, 1);
+                        $scope.vendorQutnItemArray.splice($i, 1);
                         toastr.success('Data Deleted Successsfully');
                         return;
                     }
@@ -1080,6 +1082,10 @@
 
         $scope.toggleVendorReqSelect = function (row) {
             $scope.VendorQutn.ClientID = row.ClientID;
+
+            $scope.VendorQutn.ClientReqID = row.ClientReqID;
+            $scope.VendorQutn.ClientReqNo = row.ClientReqNo;
+
             $scope.VendorQutn.VendorID = row.VendorID;
             $scope.VendorQutn.VendorReqID = row.VendorReqID;
             $scope.VendorQutn.ClientName = row.ClientName;
@@ -1122,8 +1128,8 @@
         $scope.GetVendorQutnSearchList = function () {
             $http.post("/VendorQuotation/GetVendorQutnSearchList")
                 .success(function (response) {
-                    $scope.clientReqSearchList = response.clientReqSearchList;
-                    $scope.clientReqDisplayedCollection = [].concat($scope.clientReqSearchList);
+                    $scope.vendorQutnSearchList = response.vendorQutnSearchList;
+                    $scope.vendorQutnDisplayedCollection = [].concat($scope.vendorQutnSearchList);
                 })
                 .error(function () { });
         }
@@ -1254,7 +1260,7 @@
             $scope.VendorQutnTerm.TermsCode = $('#TermsCode').val();
             $scope.VendorQutnTerm.TermsName = $('#TermsName').val();
 
-            $scope.clientReqTermArray.push($scope.VendorQutnTerm);
+            $scope.vendorQutnTermArray.push($scope.VendorQutnTerm);
 
             $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection.concat($scope.VendorQutnTerm);
 
@@ -1282,7 +1288,7 @@
             $scope.VendorQutnTerm.TermsCode = tableRow.TermsCode;
             $scope.VendorQutnTerm.TermsName = tableRow.TermsName;
             $scope.ReqTermGridDisplayCollection.splice($i, 1);
-            $scope.clientReqTermArray.splice($i, 1);
+            $scope.vendorQutnTermArray.splice($i, 1);
             $("#btnAddReqTerm").html('Update');
         };
 
@@ -1290,7 +1296,7 @@
             if (!tableRow.VendorQutnTermID) {
                 $scope.resetVendorQutnTerm();
                 $scope.ReqTermGridDisplayCollection.splice($i, 1);
-                $scope.clientReqTermArray.splice($i, 1);
+                $scope.vendorQutnTermArray.splice($i, 1);
                 toastr.success('Data Deleted Successsfully');
             }
             else {
@@ -1307,7 +1313,7 @@
                     if (response.status == "S203") {
                         $scope.resetVendorQutnTerm();
                         $scope.ReqTermGridDisplayCollection.splice($i, 1);
-                        $scope.clientReqTermArray.splice($i, 1);
+                        $scope.vendorQutnTermArray.splice($i, 1);
                         toastr.success('Data Deleted Successsfully');
                         return;
                     }
@@ -1318,13 +1324,13 @@
 
         $scope.Post = function () {
 
-            if ($('#ClientName').val() == "") {
-                toastr.error("Client Name Required");
+            if ($('#VendorName').val() == "") {
+                toastr.error("Vendor Name Required");
                 return;
             }
 
             if ($('#VendorQutnNo').val() == "") {
-                toastr.error("Client ReqNo.  Required");
+                toastr.error("Vendor QutnNo.  Required");
                 return;
             }
 
@@ -1334,18 +1340,23 @@
             }
 
             if ($('#QuotationDate').val() == "") {
-                toastr.error("Requisition Date Date Required");
+                toastr.error("Quotation Date Required");
+                return;
+            }
+
+            if ($('#QutnReceivedDate').val() == "") {
+                toastr.error("Qutn. Received Date Required");
                 return;
             }
 
             $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
-            $scope.VendorQutn.ReceivedDate = $('#ReceivedDate').val();
+            $scope.VendorQutn.QutnReceivedDate = $('#QutnReceivedDate').val();
 
             $http.post('/VendorQuotation/SaveVendorQuotation',
                 {
-                    clientReq: $scope.VendorQutn,
-                    clientReqItem: $scope.GridDisplayCollection,//$scope.clientReqItemArray,
-                    clientReqTerm: $scope.ReqTermGridDisplayCollection
+                    vendorQutn: $scope.VendorQutn,
+                    vendorQutnItem: $scope.GridDisplayCollection,//$scope.vendorQutnItemArray,
+                    vendorQutnTerm: $scope.ReqTermGridDisplayCollection
                 })
                 .success(function (response) {
                     if (response.status == "S201") {

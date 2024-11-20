@@ -1,6 +1,7 @@
 ﻿using SILDMS.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace SILDMS.DataAccessInterface
         List<OBS_ClientReq> GetClientListForVendorRequisition();
         string SaveVendorRequisition(OBS_VendorReq clientReq, List<OBS_VendorReqItem> clientReqItem, List<OBS_VendorReqTerms> clientReqTerm, List<OBS_VendorReqItemWise> vendorReqItemWise);
         List<OBS_VendorReq> GetVendorReqSearchList();
+        DataSet rptRequisitionToVendorReport(string VendorReqID, string action);
         List<OBS_VendorInfo> GetVendorWiseItemList(string ServiceCategoryID);
         List<OBS_VendorReqItem> GetVendorReqItemList(string VendorReqID);
         List<OBS_VendorReqTerms> GetVendorReqTermList(string VendorReqID);

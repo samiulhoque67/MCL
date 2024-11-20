@@ -10,10 +10,10 @@ namespace SILDMS.Service.PoRecom
 {
     public interface IPoRecomService
     {
-        ValidationResult GetPoRecomClientInfo(string serviceCategoryID, out List<OBS_ClientReq> cSClientList);
-        ValidationResult GetPORecomDashBordData(string userID, out List<OBS_VendorCSRecmItem> result);
+        ValidationResult GetPoRecomClientInfo(out List<OBS_ClientReq> cSClientList);
+        
         ValidationResult GetPORecomInfoTermList(string pOPreparationID, out List<OBS_VendorCSRecmTerms> vendorCSInfoTermList);
-        ValidationResult GetVendorPORecomQuotationItem(string vendorID, string clientID, string serviceCategoryID, string pOPreparationID, out List<OBS_VendorCSRecmItem> venCSItemList);
+        ValidationResult GetVendorPORecomQuotationItem(string vendorID, string clientID, string pOPreparationID, out List<OBS_VendorCSRecmItem> venCSItemList);
     
         string SaveVendorPORecomInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm);
     }

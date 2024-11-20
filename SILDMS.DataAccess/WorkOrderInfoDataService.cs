@@ -27,8 +27,8 @@ namespace SILDMS.DataAccess
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetServicesCategory"))
             {
                 // Set parameters 
-                db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.VarChar, userID);
-                db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.VarChar, "");
+                //db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.VarChar, userID);
+                //db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.VarChar, "");
                 db.AddOutParameter(dbCommandWrapper, spStatusParam, DbType.String, 10);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -78,15 +78,12 @@ namespace SILDMS.DataAccess
                         ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
+                        ClientReqID = reader.GetString("ClientReqID"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         AprvNo = reader.GetString("AprvNo"),
                         AprvDate = reader.GetString("AprvDate"),
-                        //,
-                        //ContactPerson = reader.GetString("ContactPerson"),
-                        //ContactNumber = reader.GetString("ContactNumber"),
                         Address = reader.GetString("Address"),
-
                         Status = reader.GetString("Status")
                     }).ToList();
                 }
@@ -259,6 +256,11 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, woInfo.ClientID);
                     db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.NVarChar, woInfo.ClientQutnAprvID);
                     db.AddInParameter(dbCommandWrapper, "@WONo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.WONo));
+
+
+                    db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, woInfo.ClientReqID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientReqNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.ClientReqNo));
+
                     db.AddInParameter(dbCommandWrapper, "@WODate", SqlDbType.NVarChar, woInfo.WODate);
                     db.AddInParameter(dbCommandWrapper, "@WOAmt", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.WOAmt));
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.Remarks));

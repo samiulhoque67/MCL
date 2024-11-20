@@ -1104,45 +1104,46 @@
                 return;
             }
 
-            $scope.VendorCSInfo.CSRecDate = $('#CSRecDate').val();
-            $http.post('/VendorCSInfo/SaveVendorCSInfo',
-                {
-                    vendorCS: $scope.VendorCSInfo,
-                    vendorCSItem: $scope.VenCSItemGridDisplayCollection,
-                    vendorCSTerm: $scope.ReqTermGridDisplayCollection,
-                    vendorCSItemWise: $scope.SelectedVendorForBiddingDisplayedCollection
-                })
-                .success(function (response) {
-                    if (response.status == "S201") {
-                        toastr.success("Data Saved Successfully.");
-                        $scope.clearVendorCSInfo();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else if (response.status == "S202") {
-                        toastr.success("Data Updated Successfully.");
-                        $scope.clearVendorCSInfo();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else if (response.status == "S203") {
-                        toastr.success("Data Deleted Successfully.");
-                        $scope.clearVendorCSInfo();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else {
+                $scope.VendorCSInfo.CSRecDate = $('#CSRecDate').val();
+                $http.post('/VendorCSInfo/SaveVendorCSInfo',
+                    {
+                        vendorCS: $scope.VendorCSInfo,
+                        vendorCSItem: $scope.selectedVendors,
+                        vendorCSTerm: $scope.ReqTermGridDisplayCollection,
+                       
+                    })
+                    .success(function (response) {
+                        if (response.status == "S201") {
+                            toastr.success("Data Saved Successfully.");
+                            $scope.clearVendorCSInfo();
+                            $scope.toggleRefreshTable();
+                            $scope.loading = false;
+                            return;
+                        }
+                        else if (response.status == "S202") {
+                            toastr.success("Data Updated Successfully.");
+                            $scope.clearVendorCSInfo();
+                            $scope.loading = false;
+                            return;
+                        }
+                        else if (response.status == "S203") {
+                            toastr.success("Data Deleted Successfully.");
+                            $scope.clearVendorCSInfo();
+                            $scope.loading = false;
+                            return;
+                        }
+                        else {
+                            toastr.error("Data Save Failed.");
+                            $scope.loading = false;
+                            return;
+                        }
+                    })
+                    .error(function () {
                         toastr.error("Data Save Failed.");
                         $scope.loading = false;
                         return;
-                    }
-                })
-                .error(function () {
-                    toastr.error("Data Save Failed.");
-                    $scope.loading = false;
-                    return;
-                });
-        }
+                    });
+            }
 
         $scope.toggleRefreshTable = function () {
             window.location.reload();

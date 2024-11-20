@@ -64,11 +64,11 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> SaveVendorQuotation(OBS_VendorQutn clientReq, List<OBS_VendorQutnItem> clientReqItem, List<OBS_VendorQutnTerms> clientReqTerm)
+        public async Task<dynamic> SaveVendorQuotation(OBS_VendorQutn vendorQutn, List<OBS_VendorQutnItem> vendorQutnItem, List<OBS_VendorQutnTerms> vendorQutnTerm)
         {
-            clientReq.SetBy = UserID;
+            vendorQutn.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
-            status = _clientInfoService.SaveVendorQuotation(clientReq, clientReqItem, clientReqTerm);
+            status = _clientInfoService.SaveVendorQuotation(vendorQutn, vendorQutnItem, vendorQutnTerm);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 

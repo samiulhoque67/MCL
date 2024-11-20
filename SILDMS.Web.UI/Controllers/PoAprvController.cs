@@ -32,32 +32,32 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
-        public async Task<dynamic> GetPOAprvDashBordData()
-        {
-            List<OBS_VendorCSRecmItem> result = new List<OBS_VendorCSRecmItem>();
-            await Task.Run(() => poAprvService.GetPOAprvDashBordData(UserID, out result));
-            //var TotalPendingParking = pd.Count();
-            //var OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count();
-            //var WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count();
+        //public async Task<dynamic> GetPOAprvDashBordData()
+        //{
+        //    List<OBS_VendorCSRecmItem> result = new List<OBS_VendorCSRecmItem>();
+        //    await Task.Run(() => poAprvService.GetPOAprvDashBordData(UserID, out result));
+        //    //var TotalPendingParking = pd.Count();
+        //    //var OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count();
+        //    //var WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count();
 
-            //return Json(new { TotalPendingParking = pd.Count(), OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count(), WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count() }, JsonRequestBehavior.AllowGet);
-            return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
-        }
+        //    //return Json(new { TotalPendingParking = pd.Count(), OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count(), WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count() }, JsonRequestBehavior.AllowGet);
+        //    return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
+        //}
 
-        public async Task<dynamic> GetPoAprvClientInfo(string ServiceCategoryID)
+        public async Task<dynamic> GetPoAprvClientInfo()
         {
             var CSClientList = new List<OBS_ClientReq>();
-            await Task.Run(() => poAprvService.GetPoAprvClientInfo(ServiceCategoryID, out CSClientList));
+            await Task.Run(() => poAprvService.GetPoAprvClientInfo(out CSClientList));
             var result = Json(new { CSClientList, msg = "CSClientList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
 
 
-        public async Task<dynamic> GetVendorPOAprvQuotationItem(string VendorID, string ClientID, string ServiceCategoryID, string PORecmID)
+        public async Task<dynamic> GetVendorPOAprvQuotationItem(string VendorID, string ClientID, string PORecmID)
         {
             var VenCSItemList = new List<OBS_VendorCSRecmItem>();
-            await Task.Run(() => poAprvService.GetVendorPOAprvQuotationItem(VendorID, ClientID, ServiceCategoryID, PORecmID, out VenCSItemList));
+            await Task.Run(() => poAprvService.GetVendorPOAprvQuotationItem(VendorID, ClientID, PORecmID, out VenCSItemList));
             var result = Json(new { VenCSItemList, msg = "CSVendorList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
