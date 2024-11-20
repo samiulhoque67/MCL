@@ -524,7 +524,7 @@
 
 <script type="text/javascript">
 
-    app.controller('VendorFinalBillReceivedCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('VendorFinalBillReceivedCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
         $scope.clientReqItemArray = [];
         $scope.clientReqTermArray = [];
@@ -586,7 +586,8 @@
             Note: "",
             VendrFinalBilRcvdID: "",
             WOAmt: "",
-            WONo: ""
+            WONo: "",
+            WOInfoID:""
         }
 
         $scope.VendorQutnItem = {
@@ -904,7 +905,7 @@
             $scope.VendorQutn.RequisitionDate = row.PoAprvDate;
             $scope.VendorQutn.POAmount = row.POAmount;   
             $scope.VendorQutn.WONo = row.WONo;   
-            $scope.VendorQutn.WOAmt = row.WOAmt;   
+            $scope.VendorQutn.WOInfoID = row.WOInfoID;   
             $scope.VendorQutn.WOAmt = row.WOAmt;   
             
             
@@ -1211,12 +1212,14 @@
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
                         $scope.clearVendorQutn();
+                        $scope.toggleRefreshTable();
                         $scope.loading = false;
                         return;
                     }
                     else if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
                         $scope.clearVendorQutn();
+                        $scope.toggleRefreshTable();
                         $scope.loading = false;
                         return;
                     }
@@ -1240,7 +1243,12 @@
         }
 
         $scope.toggleRefreshTable = function () {
-            window.location.reload();
+
+            $timeout(function () {
+                // Reload the current page
+                window.location.reload();
+            }, 2000);
+
         };
     }])
 </script>

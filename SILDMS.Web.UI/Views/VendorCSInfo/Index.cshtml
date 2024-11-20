@@ -558,20 +558,20 @@
     </table>
 
 
-    <div class="row">
-        <div class="row">
-            <div class="col-sm-1 col-md-1 col-lg-1">
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>CS Date</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSInfo.CSRecDate" />
-                </div>
-            </div>
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-sm-1 col-md-1 col-lg-1">
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label>CS Date</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSInfo.CSRecDate" />
+                                </div>
+                            </div>
 
                             <div class="col-lg-2">
                                 <div class="form-group">
@@ -702,7 +702,7 @@
 
     <script type="text/javascript">
 
-        app.controller('VendorCSInfoCtrl', ['$scope', '$http', function ($scope, $http) {
+        app.controller('VendorCSInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
             $scope.vendorCSItemArray = [];
             $scope.vendorCSTermArray = [];
@@ -1654,7 +1654,12 @@
         }
 
             $scope.toggleRefreshTable = function () {
-                window.location.reload();
+
+                $timeout(function () {
+                    // Reload the current page
+                    window.location.reload();
+                }, 2000);
+
             };
 
             $scope.getRowStyle = function (row) {

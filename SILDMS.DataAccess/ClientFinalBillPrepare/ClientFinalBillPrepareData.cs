@@ -90,7 +90,8 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                         QuotationDate = reader.GetString("QuotationDate"),
                         AdvancClaimRcvAmt = reader.GetToDecimal("AdvancClaimRcvdAmt"),
                         RemainingAmnt= reader.GetToDecimal("RemainingAmt"),
-                        AdvancClaimRcvdDate = reader.GetString("AdvancClimRcvdDate")
+                        AdvancClaimRcvdDate = reader.GetString("AdvancClimRcvdDate"),
+                        ClientReqNo = reader.GetString("ClientReqNo")
 
 
 

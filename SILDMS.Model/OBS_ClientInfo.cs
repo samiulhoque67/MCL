@@ -52,12 +52,15 @@ namespace SILDMS.Model
         public string RequisitionDate { get; set; }
         public string ClientQutnID { get; set; }
         public string QuotationNo { get; set; }
-        public string QuotationDate { get; set; }
+        public string QuotationAprvDate { get; set; }
         public string QutnAmt { get; set; }
         public string ServiceCategoryID { get; set; }
         public string QutnPrice { get; set; }
         public string ProcessStatus { get; set; }
         public string ClientReqID { get; set; }
+        public string WOInfoID { get; set; }
+        public string WONo { get; set; }
+        public string ClientQutnAprvID { get; set; }
     }
 
 

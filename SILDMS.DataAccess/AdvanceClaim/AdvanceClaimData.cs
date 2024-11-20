@@ -28,7 +28,7 @@ namespace SILDMS.DataAccess.AdvanceClaim
 
             var factory = new DatabaseProviderFactory();
             var db = factory.CreateDefault() as SqlDatabase;
-            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetQuotationforAdvnClaim"))
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetWOforAdvnClaim"))
             {
                 db.AddInParameter(dbCommandWrapper, "@page", SqlDbType.Int, page);
                 db.AddInParameter(dbCommandWrapper, "@itemsPerPage", SqlDbType.Int, itemsPerPage);
@@ -50,14 +50,16 @@ namespace SILDMS.DataAccess.AdvanceClaim
                     var dt1 = ds.Tables[0];
                     AllAvailableClientsList = dt1.AsEnumerable().Select(reader => new OBS_ClientwithReqQoutn
                     {
+                        WOInfoID = reader.GetString("WOInfoID"),
+                        WONo = reader.GetString("WONo"),
                         ClientID = reader.GetString("ClientID"),
                         ClientCode = reader.GetString("ClientCode"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
+                        ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
-                        QuotationNo = reader.GetString("AutoQutnNo"),
-                        QuotationDate = reader.GetString("QuotationDate"),
-                        QutnPrice = reader.GetString("QutnPrice"),
+                        ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
+                        QuotationAprvDate = reader.GetString("QuotationAprvDate")
                     }).ToList();
 
                 }
@@ -66,7 +68,7 @@ namespace SILDMS.DataAccess.AdvanceClaim
             return AllAvailableClientsList;
         }
 
-        public List<AdvanClaimWo> WoQtforAdvanClaimDataService(string ClientID, /*string POAprvID,*/ out string _errorNumber)
+        public List<AdvanClaimWo> WoQtforAdvanClaimDataService(string ClientID, string WOInfoID, string WONo, out string _errorNumber)
         {
             _errorNumber = string.Empty;
             var WODetails = new List<AdvanClaimWo>();
@@ -76,7 +78,8 @@ namespace SILDMS.DataAccess.AdvanceClaim
             using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailQtforAdvanClaim"))
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientID", DbType.String, ClientID);
-               /* db.AddInParameter(dbCommandWrapper, "@POAprvID", DbType.String, POAprvID);*/
+                db.AddInParameter(dbCommandWrapper, "@WOInfoID", DbType.String, WOInfoID);
+                db.AddInParameter(dbCommandWrapper, "@WONo", DbType.String, WONo);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 10);
                 dbCommandWrapper.CommandTimeout = 300;
                 var ds = db.ExecuteDataSet(dbCommandWrapper);

@@ -57,7 +57,7 @@ namespace SILDMS.DataAccess.QuotationApproval
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         QuotationNo = reader.GetString("AutoQutnNo"),
-                        QuotationDate = reader.GetString("QuotationDate")
+                        QuotationAprvDate = reader.GetString("QuotationDate")
                     }).ToList();
 
                 }
@@ -281,7 +281,7 @@ namespace SILDMS.DataAccess.QuotationApproval
                 db.AddInParameter(dbCommandWrapper, "@OBS_QtC_MasterType", SqlDbType.Structured, masterDataTable);
                 db.AddInParameter(dbCommandWrapper, "@OBS_QtC_DetailType", SqlDbType.Structured, detailDataTable);
                 db.AddInParameter(dbCommandWrapper, "@OBS_Qtc_TermsDtl", SqlDbType.Structured, TermsDtlTable);
-                db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.Structured, MasterData[0].Operation);
+                db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.VarChar, MasterData[0].Operation);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 
