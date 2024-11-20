@@ -55,6 +55,29 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12">
 
+                <!-- WO No -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ClientName">Work Order No :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="WorkOrderNo" name="WorkOrderNo" type="text" data-ng-model="WorkOrder.WorkOrderNo" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1">
+                        <div class="form-group">
+                            <button type="button" data-ng-click="SearchAvailableClients()" class="form-control">Search</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-1"></div>
+                </div>
+
+
+
                 <!-- ClientName -->
                 <div class="row">
                     <div class="col-lg-2">
@@ -68,11 +91,11 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-1">
+                  @*  <div class="col-lg-1">
                         <div class="form-group">
                             <button type="button" data-ng-click="SearchAvailableClients()" class="form-control">Search</button>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="col-lg-1"></div>
                 </div>
 
@@ -212,13 +235,10 @@
                                     Requisition Date
                                 </th>
                                 <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Quotation No
+                                    Quotation Approve ID
                                 </th>
                                 <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Quotation Date
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Quotation Amount
+                                    Quotation Approve Date
                                 </th>
                                 <th class="col-lg-1 col-md-1 col-sm-1">
                                     Action
@@ -249,9 +269,8 @@
                                 <td class="text-center">{{row.ClientName}}</td>
                                 <td class="text-center">{{row.ClientReqNo}}</td>
                                 <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
-                                <td class="text-center">{{row.QuotationNo}}</td>
-                                <td class="text-center">{{row.QuotationDate | date:'dd/MM/yyyy'}}</td>
-                                <td class="text-center">{{row.QutnAmt | currency}}</td>
+                                <td class="text-center">{{row.ClientQutnAprvID}}</td>
+                                <td class="text-center">{{row.QuotationAprvDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row)">Select</a>
                                 </td>
@@ -279,7 +298,7 @@
         <div class="col-md-12">
             <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
                 <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
-                    <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">ADvance Claim Info</h2>
+                    <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Advance Claim Info</h2>
 
                 </div>
             </div>
@@ -465,6 +484,10 @@
             ContactAddress: "",
         }
 
+        $scope.WorkOrder = {
+            WorkOrderNo: ""
+        }
+
         $scope.AdvanceInformmation = {
             ClientID: "",
             ClientQutnAprvID: "",
@@ -555,8 +578,10 @@
             $('#QuotationForRecom').modal('hide');
             $scope.loading = true;
 
+            $scope.WorkOrder.WorkOrderNo = row.WONo;
+
             $http.post('/QuotationToClient/AvailableClientDetailInfo', {
-                ClientID: row.ClientID
+                ClientID: row.ClientID, ClientReqID: row.ClientReqID
             }).success(function (response) {
                 $scope.ClientDetails = response.ClientDetails;
 
@@ -570,16 +595,20 @@
                     ContactBIN: $scope.ClientDetails[0].ClientBinNo,
                     ContactAddress: $scope.ClientDetails[0].Address
                 };
-                $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID);
                 $scope.loading = false;
             }).error(function () {
                 $scope.loading = false;
             });
+
+            $scope.GetClientReqDataInfo(row.ClientID, row.WOInfoID, row.WONo);
+
         };
 
-        $scope.GetClientReqDataInfo = function (ClientID) {
+        $scope.GetClientReqDataInfo = function (ClientID, WOInfoID, WONo) {
             $http.post('/AdvanceClaim/WoQtforAdvanClaim', {
-                ClientID: ClientID
+                ClientID: ClientID,
+                WOInfoID: WOInfoID,
+                WONo: WONo
             }).success(function (response) {
                 $scope.WODetails = response.WODetails;
                 $scope.AdvanceInformmation = {

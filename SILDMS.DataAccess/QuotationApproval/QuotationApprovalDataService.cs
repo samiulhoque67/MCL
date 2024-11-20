@@ -57,7 +57,7 @@ namespace SILDMS.DataAccess.QuotationApproval
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         QuotationNo = reader.GetString("AutoQutnNo"),
-                        QuotationDate = reader.GetString("QuotationDate")
+                        QuotationAprvDate = reader.GetString("QuotationDate")
                     }).ToList();
 
                 }
