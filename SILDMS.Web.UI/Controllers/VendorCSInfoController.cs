@@ -15,7 +15,7 @@ namespace SILDMS.Web.UI.Controllers
 {
     public class VendorCSInfoController : Controller
     {
-        readonly IVendorCSInfoService _vendorCSInfoService; 
+        readonly IVendorCSInfoService _vendorCSInfoService;
         private readonly ILocalizationService _localizationService;
         private ValidationResult respStatus = new ValidationResult();
         private string outStatus = string.Empty;
@@ -54,7 +54,7 @@ namespace SILDMS.Web.UI.Controllers
 
             return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
         }
-        
+
         public async Task<dynamic> GetVendorCSClientInfo(string ServiceCategoryID)
         {
             var CSClientList = new List<OBS_ClientReq>();
@@ -91,11 +91,11 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> SaveVendorCSInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm, List<OBS_VendorCSRecmVendors> vendorCSItemWise)
+        public async Task<dynamic> SaveVendorCSInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm)
         {
             vendorCS.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
-            status = _vendorCSInfoService.SaveVendorCSInfo(vendorCS, vendorCSItem, vendorCSTerm, vendorCSItemWise);
+            status = _vendorCSInfoService.SaveVendorCSInfo(vendorCS, vendorCSItem, vendorCSTerm);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
@@ -135,5 +135,41 @@ namespace SILDMS.Web.UI.Controllers
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
+
+
+        [Authorize]
+        public async Task<dynamic> GetAllRequisition()
+        {
+            var InvitationList = new List<Invitation>();
+            await Task.Run(() => _vendorCSInfoService.GetAllRequisition(UserID, out InvitationList));
+            return Json(new { InvitationList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        [Authorize]
+        public async Task<dynamic> GetMaterialByRequisition(string VendorRequisitionNumber)
+        {
+            var ReqWiseMaterialList = new List<OBS_VendorCSRecmItem>();
+            await Task.Run(() => _vendorCSInfoService.GetMaterialByRequisition(VendorRequisitionNumber, out ReqWiseMaterialList));
+            return Json(new { ReqWiseMaterialList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [Authorize]
+        public async Task<dynamic> GetVendorByMaterial(string VendorReqID, string ServiceItemID)
+        {
+            var MatWiseVendorList = new List<OBS_VendorCSRecmItem>();
+            await Task.Run(() => _vendorCSInfoService.GetVendorByMaterialService(VendorReqID, ServiceItemID, out MatWiseVendorList));
+            return Json(new { MatWiseVendorList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
+
+
+
+
     }
 }

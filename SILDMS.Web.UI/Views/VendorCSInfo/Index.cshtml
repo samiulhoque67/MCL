@@ -109,27 +109,27 @@
     </div>
 
 
-    <div class="row" style="margin:1%;">
-        <div class="col-md-2" ng-repeat="item in dashBoardResult">
-            <div class="box box-primary box-solid">
-                <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
-                    <h3 class="box-title text-center" style="font-size: 110%;">{{item.ServiceCategoryName}}</h3>
-                </div>
-
-                <div class="dbody">
-                    <div class="row justify-content-center align-items-center" style="height: 100%;">
-                        <button id="{{item.ServiceCategoryID}}" ng-click="VendorSelect(item.ServiceCategoryID)" class="d-flex align-items-center justify-content-center w-100" style="border: none; background: none;">
-                           
-                                <h3 class="description-header font-weight-bold">{{item.ServicesCategoryCount}}</h3>
-                         </button>
+    @*<div class="row" style="margin:1%;">
+            <div class="col-md-2" ng-repeat="item in dashBoardResult">
+                <div class="box box-primary box-solid">
+                    <div class="box-header with-border" style="padding-top:5px;padding-bottom:5px">
+                        <h3 class="box-title text-center" style="font-size: 110%;">{{item.ServiceCategoryName}}</h3>
                     </div>
+
+                    <div class="dbody">
+                        <div class="row justify-content-center align-items-center" style="height: 100%;">
+                            <button id="{{item.ServiceCategoryID}}" ng-click="VendorSelect(item.ServiceCategoryID)" class="d-flex align-items-center justify-content-center w-100" style="border: none; background: none;">
+
+                                    <h3 class="description-header font-weight-bold">{{item.ServicesCategoryCount}}</h3>
+                             </button>
+                        </div>
+                        </div>
                     </div>
-                </div>
-        </div>
-    </div>
+            </div>
+        </div>*@
 
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+    <!--<div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
                 <table st-table="CSClientDisplayedCollection" st-safe-src="CSClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
@@ -140,22 +140,80 @@
                             <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
                             <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('NoOfVendor')">NoOfVendor</th>
                             <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                        </tr>-->
+    @*<tr>
+            <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+            <th><input st-search="ClientReqNo" placeholder="Client Req.No" class="input-sm form-control" type="search" /></th>
+        </tr>*@
+    <!--</thead>
+    <tbody>
+        <tr ng-repeat="row in CSClientDisplayedCollection" ng-class=" {'selected-row': row.selected}" ng-style="getRowStyle(row)">
+            <td class="hidden">{{row.ClientReqID}}</td>
+            <td class="hidden">{{row.ClientID}}</td>
+            <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
+            <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.ClientReqNo}}</td>
+            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.RequisitionDate}}</td>
+            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.NoOfVendor}}</td>
+            <td>
+                <a class="btn col-center btn-sm btn-flat btn-success" ng-click="ClientSelect(row)">Details</a>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>-->
+    @*<tr>
+            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+        </tr>*@
+    <!--</tfoot>
+                </table>
+            </div>
+        </div>
+    </div>-->
+
+
+
+
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-if="p===2">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+
+                <table st-table="GridDisplayCollection" st-safe-src="masterDataSetupGridData" style="width:100%;" class="tableVen table-condensed table-bordered  table-hover pnlView">
+
+                    <thead>
+                        <tr style="font-size: 15px;">
+                            <th colspan="11" style="text-align: left; color: white; font-weight: bold">Requisition To Vendor List</th>
+                        </tr>
+                        <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
+                            <th style="text-align: left;" st-sort="">Vendor Requisition No</th>
+                            <th style="text-align: left;" st-sort="">Requisition Date</th>
+                            <th style="text-align: left;" st-sort="">Client Name</th>
+                            <th style="text-align: left;" st-sort="">Client Requisition No</th>
+                            <th style="text-align: left;" st-sort="">Last Quotation Date</th>
+                            <th style="text-align: left;" st-sort="">Action</th>
+
                         </tr>
                         @*<tr>
-                                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="ClientReqNo" placeholder="Client Req.No" class="input-sm form-control" type="search" /></th>
+                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
                             </tr>*@
                     </thead>
                     <tbody>
-                        <tr ng-repeat="row in CSClientDisplayedCollection" ng-class=" {'selected-row': row.selected}" ng-style="getRowStyle(row)">
-                            <td class="hidden">{{row.ClientReqID}}</td>
-                            <td class="hidden">{{row.ClientID}}</td>
-                            <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.ClientReqNo}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.RequisitionDate}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.NoOfVendor}}</td>
-                            <td>
-                                <a class="btn col-center btn-sm btn-flat btn-success" ng-click="ClientSelect(row)">Details</a>
+                        <tr ng-repeat="row in GridDisplayCollection"
+                            ng-cloak
+                            style="height:20px; font-size:13px;"
+                            ng-class="{'selected-row': row.selected}"
+                            ng-style="getRowStyle(row)">
+
+                            <td class="hidden">{{row.Id}}</td>
+                            <td class="col-lg-2">{{ row.VendorRequisitionNumber }} </td>
+                            <td class="col-lg-2">{{row.RequisitionDate}}</td>
+                            <td class="col-lg-2">{{row.ClientName}}</td>
+                            <td class="col-lg-2">{{row.ClientRequisitionNumber}}</td>
+                            <td class="col-lg-2">{{row.LastDateofQuotation}}</td>
+
+                            <td class="col-lg-1 col-md-1 col-sm-1 text-center" style="font-weight:bold">
+                                <button type="button" ng-click="selectInvitation(row)" data-dismiss="modal" title="Select">
+                                    <i ng-show="!row.selected" class="fa fa-square-o"></i>
+                                    <i ng-show="row.selected" class="fa fa-check-square-o"></i>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -170,7 +228,290 @@
     </div>
 
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isRowSelected">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+
+
+                @*<div ng-if="flagToShow" style="text-align:center">
+                        <h4 style="color:red;">No data available!</h4>
+                    </div>*@
+                @* Master Table *@
+                @*<div id="PndRecomAndApprovalTable" class="table-responsive">*@
+                @*<h5 style="color:chocolate; font-weight:bold">No of Requisitions: {{prList[0].Row_count}}</h5>*@
+                <table id="tableId" st-table="ReqWiseMaterialListCollection" st-safe-src="InvWiseMaterialList" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
+                    <thead>
+                        <tr style="font-size: 15px;">
+                            <th colspan="9" style="text-align: left; color: #000000; font-weight: bold">Requisition of {{PRmasterData.MaterialType.Material_Type_Code}} Material</th>
+                        </tr>
+                        <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
+                            <th style="text-align: left;" st-sort="">Category Name</th>
+                            <th style="text-align: left;" st-sort="">Item Code</th>
+                            <th style="text-align: left;" st-sort="">Item Name</th>
+                            <th style="text-align: left;" st-sort="">ReqQnty</th>
+                            <th style="text-align: left;" st-sort="">ReqUnit</th>
+                            <th style="text-align: left;" st-sort="">Description</th>
+                            <th style="text-align: left;" st-sort="">DeliveryLocation</th>
+                            <th style="text-align: left;" st-sort="">DeliveryDate</th>
+
+
+                            <th>Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="rowID" ng-repeat="row in ReqWiseMaterialListCollection"
+                            style="height:20px; font-size:13px;"
+                            ng-class="{'selected-row': row.selected}"
+                            ng-style="getRowStyle(row)">
+
+                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.ServiceCategoryName}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.ServiceItemID}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.ServiceItemName}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.ReqQnty | number:3}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.ReqUnit}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.Description}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.DeliveryLocation}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.DeliveryDate}}</td>
+
+
+                            <td class="col-lg-1 col-md-1 col-sm-1 " style="font-weight:bold">
+                                @*<button type="button" class="button-detail" ng-click="showDetailsOfPR(row)" data-dismiss="modal" title="Show detail">Detail  <i class="fa fa-info"> </i> </button>*@
+                                <button type="button" ng-click="selectMaterial(row)" data-dismiss="modal" title="Select">
+                                    <i ng-show="!row.selected" class="fa fa-square-o"></i>
+                                    <i ng-show="row.selected" class="fa fa-check-square-o"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9" class="text-center">
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+
+                @*<div class="box-tools pull-right">
+                        <button type="button" id="btnRefresh" data-ng-click="fetchfromgoogle()" class="btn btn-warning btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Fetch from Google</button>
+                    </div>*@
+
+
+                @*</div>*@
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isMaterialRowSelected">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+
+
+
+                <table id="tableId" st-table="MatWiseVendorListCollection" st-safe-src="MatWiseVendorList" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
+                    <thead>
+                        <tr style="font-size: 15px;">
+                            <th colspan="9" style="text-align: left; color: #000000; font-weight: bold">Requisition of {{PRmasterData.MaterialType.Material_Type_Code}} Material</th>
+                        </tr>
+                        <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
+                            <th>Quotation No</th>
+                            <th>Vendor Name</th>
+                            <th>ProposeQty</th>
+                            <th>Unit</th>
+                            <th>Vat %</th>
+                            <th>Vat Amnt</th>
+                            <th>Total Price</th>
+                            <th>Delivery Date</th>
+
+                            <th>Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="rowID" ng-repeat="row in MatWiseVendorListCollection"
+                            style="height:20px; font-size:13px;"
+                            ng-class="{'selected-row': row.selected}"
+                            ng-style="getRowStyle(row)">
+
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VendorQutnNo}}</td>
+                            <td class="col-lg-3 col-md-3 col-sm-3">{{row.VendorName}}</td>
+
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.ReqUnit}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatPerc | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatAmt | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:3}}</td>
+
+                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.DeliveryDate}}</td>
+
+                            <td class="col-lg-1 col-md-1 col-sm-1 " style="font-weight:bold">
+                                @*<button type="button" class="button-detail" ng-click="showDetailsOfPR(row)" data-dismiss="modal" title="Show detail">Detail  <i class="fa fa-info"> </i> </button>*@
+                                <button type="button" ng-click="selectVendor(row)" data-dismiss="modal" title="Select">
+                                    <i ng-show="!row.selected" class="fa fa-square-o"></i>
+                                    <i ng-show="row.selected" class="fa fa-check-square-o"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9" class="text-center">
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+
+
+                <div class="row">
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>CS Date</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSInfo.CSRecDate" />
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>CS No:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSInfo.AutoCSNo" ng-readonly="true" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Operation:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <select data-ng-model="VendorCSInfo.Operation" class="form-control">
+                                <option value="">-- None --</option>
+                                <option value="Rec">Recommended</option>
+                                <option value="Bck">Back</option>
+                                <option value="Pst">Postponed</option>
+                                <option value="Can">Cancel</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="QuotationFor">Note:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--<div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;" st-sort="">Item Code</th>
+                            <th style="text-align: left;" st-sort="">Item Name</th>
+                            <th style="text-align: left;" st-sort="">ReqQnty</th>
+                            <th style="text-align: left;" st-sort="">ReqUnit</th>
+                            <th style="text-align: left;" st-sort="">QutnQnty</th>
+                            <th style="text-align: left;" st-sort="">QutnPrice</th>
+                            <th style="text-align: left;" st-sort="">QutnAmt</th>
+                            <th style="text-align: left;" st-sort="">VatPerc</th>
+                            <th style="text-align: left;" st-sort="">VatAmt</th>
+                            <th style="text-align: left;" st-sort="">TolAmt</th>-->
+    @*<th style="text-align: left;">Action</th>*@
+    <!--</tr>-->
+    @*<tr>
+            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+        </tr>*@
+    <!--</thead>
+    <tbody>
+        <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
+            <td class="hidden">{{row.index+1}}</td>
+            <td class="hidden">{{row.VendorCSInfoItemID}}</td>
+            <td class="hidden">{{row.VendorCSInfoID}}</td>
+            <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
+            <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
+            <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
+            <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
+            <td class="col-lg-1" style="width:6%;">{{row.QutnQnty}}</td>
+            <td class="col-lg-1" style="width:6%;">{{row.QutnPrice}}</td>
+            <td class="col-lg-1" style="width:6%;">{{row.QutnAmt}}</td>
+            <td class="col-lg-1" style="width:6%;">{{row.VatPerc}}</td>
+            <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
+            <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
+        </tr>
+    </tbody>
+    <tfoot>-->
+    @*<tr>
+            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+        </tr>*@
+    <!--</tfoot>
+                </table>
+            </div>
+        </div>
+    </div>-->
+    <!--<div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
                 <table st-table="CSVendorDisplayedCollection" st-safe-src="CSVendorList" class="table table-condensed table-bordered table-striped table-hover pnlView">
@@ -209,66 +550,13 @@
 
                         </tr>
                     </tbody>
-                    <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
+                    <tfoot>-->
+    @*<tr>
+            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+        </tr>*@
+    <!--</tfoot>
+    </table>
 
-
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-        <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;" st-sort="">Item Code</th>
-                            <th style="text-align: left;" st-sort="">Item Name</th>
-                            <th style="text-align: left;" st-sort="">ReqQnty</th>
-                            <th style="text-align: left;" st-sort="">ReqUnit</th>
-                            <th style="text-align: left;" st-sort="">QutnQnty</th>
-                            <th style="text-align: left;" st-sort="">QutnPrice</th>
-                            <th style="text-align: left;" st-sort="">QutnAmt</th>
-                            <th style="text-align: left;" st-sort="">VatPerc</th>
-                            <th style="text-align: left;" st-sort="">VatAmt</th>
-                            <th style="text-align: left;" st-sort="">TolAmt</th>
-
-                            @*<th style="text-align: left;">Action</th>*@
-                        </tr>
-                        @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
-                            <td class="hidden">{{row.index+1}}</td>
-                            <td class="hidden">{{row.VendorCSInfoItemID}}</td>
-                            <td class="hidden">{{row.VendorCSInfoID}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnQnty}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnPrice}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnAmt}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.VatPerc}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
 
     <div class="row">
         <div class="row">
@@ -323,37 +611,49 @@
                 <div class="form-group">
                     <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
                 </div>
+            </div>-->
+    @*<div class="col-lg-2">
+            <div class="form-group">
+                <label>Recommended by:</label>
             </div>
-
-            @*<div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Recommended by:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="RecommendedBy" name="RecommendedBy" type="text" value={{dashBoardResult[0].ServiceCategoryName}} class="form-control" placeholder="RecommendedBy" ng-model="VendorCSInfo.RecommendedBy" />
-                    </div>
-                </div>*@
-
         </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <input id="RecommendedBy" name="RecommendedBy" type="text" value={{dashBoardResult[0].ServiceCategoryName}} class="form-control" placeholder="RecommendedBy" ng-model="VendorCSInfo.RecommendedBy" />
+            </div>
+        </div>*@
 
-        @*<div class="row">
-                <div class="col-sm-1 col-md-1 col-lg-1">
+    <!--</div>-->
+    @*<div class="row">
+            <div class="col-sm-1 col-md-1 col-lg-1">
+            </div>
+            <div class="col-lg-3 ">
+                <div class="form-group">
+                    <label for="QuotationFor">Note:</label>
                 </div>
-                <div class="col-lg-3 ">
-                    <div class="form-group">
-                        <label for="QuotationFor">Note:</label>
-                    </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="form-group">
+                    <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
                 </div>
-                <div class="col-lg-8">
-                    <div class="form-group">
-                        <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
-                    </div>
-                </div>
-            </div>*@
+            </div>
+        </div>*@
 
-    </div>
+    <!--</div>
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>-->
+
+
+
+
+
 
     <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
         <div class="row">
@@ -405,11 +705,207 @@
 
         $scope.dashBoardResult = {};
 
-        $http.get('/VendorCSInfo/GetVendorCSInfoDashBordData')
+        //$http.get('/VendorCSInfo/GetVendorCSInfoDashBordData')
+        //    .success(function (response) {
+        //        $scope.loading = false;
+        //        $scope.dashBoardResult = response.result;
+        //    }).error(function () { });
+
+
+
+        $scope.masterDataSetupGridData = [];  // base collection
+        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+
+        $scope.p = 2;
+
+
+        $http.post('/VendorCSInfo/GetAllRequisition')
             .success(function (response) {
+                $scope.Invitation = response.InvitationList;
+                $scope.GridDisplayCollection = [].concat($scope.Invitation);
+                console.log($scope.GridDisplayCollection);
                 $scope.loading = false;
-                $scope.dashBoardResult = response.result;
-            }).error(function () { });
+            }).error(function () {
+                $scope.loading = false;
+            });
+
+
+
+        $scope.isRowSelected = false;
+
+        $scope.selectInvitation = function (row) {
+            // If the clicked row is already selected, toggle it off
+            if ($scope.selectedRow === row) {
+                row.selected = false;
+                $scope.selectedRow = null;
+                $scope.isRowSelected = false;
+            }
+            // If the clicked row is not selected, select it and unselect the previous one
+            else {
+                if ($scope.selectedRow) {
+
+
+                    $scope.selectedRow.selected = false; // Unselect the previous row
+                }
+
+
+                row.selected = true;  // Select the current row
+                $scope.selectedRow = row;
+                $scope.isRowSelected = true;  // Set the current row as the selected one
+
+                $scope.VendorCSInfo.VendorReqID = row.VendorRequisitionNumber;
+                $scope.VendorCSInfo.ClientReqNo = row.ClientRequisitionNumber;
+                $scope.VendorCSInfo.ClientReqID = row.ClientReqID;
+                $scope.VendorCSInfo.ClientID = row.ClientID;
+                $http.post('/VendorCSInfo/GetMaterialByRequisition',
+                    { VendorRequisitionNumber: row.VendorRequisitionNumber })
+                    .success(function (response) {
+                        $scope.ReqWiseMaterialList = response.ReqWiseMaterialList;
+                        $scope.ReqWiseMaterialListCollection = [].concat($scope.ReqWiseMaterialList);
+                        console.log($scope.ReqWiseMaterialListCollection);
+                        $scope.loading = false;
+                    }).error(function () {
+                        $scope.loading = false;
+                    });
+            }
+        };
+
+
+
+        $scope.selectedMaterialRow = null;  // Track the selected row for material list
+        $scope.isMaterialRowSelected = false;
+        $scope.selectMaterial = function (row) {
+            // If the clicked row is already selected, deselect it
+            if ($scope.selectedMaterialRow === row) {
+                row.selected = false;
+                $scope.selectedMaterialRow = null;
+                $scope.isMaterialRowSelected = false;// No row is selected
+            } else {
+                // If a different row was previously selected, deselect it
+                if ($scope.selectedMaterialRow) {
+                    $scope.selectedMaterialRow.selected = false;
+                }
+                // Select the current row
+                row.selected = true;
+                $scope.selectedMaterialRow = row;
+                $scope.isMaterialRowSelected = true;
+                $scope.VendorCSInfo.ServiceItemID = row.ServiceItemID;
+                $scope.VendorCSInfo.ServiceCategoryID = row.ServiceCategoryID;
+                $scope.VendorCSInfo.Description = row.Description;
+                $scope.VendorCSInfo.DeliveryDate = row.DeliveryDate;
+                $scope.VendorCSInfo.DeliveryLocation = row.DeliveryLocation;
+                $scope.VendorCSInfo.DeliveryMode = row.DeliveryMode;
+
+                /*            $scope.VendorCSInfo.ServiceItemName = row.ServiceItemName;*/
+
+
+
+                $http.post('/VendorCSInfo/GetVendorByMaterial',
+                    {
+                        VendorReqID: row.VendorReqID,
+                        ServiceItemID: row.ServiceItemID
+                    })
+                    .success(function (response) {
+                        $scope.MatWiseVendorList = response.MatWiseVendorList;
+                        $scope.MatWiseVendorListCollection = [].concat($scope.MatWiseVendorList);
+                        console.log($scope.MatWiseVendorListCollection);
+                        $scope.loading = false;
+                    }).error(function () {
+                        $scope.loading = false;
+                    });
+            }
+        };
+
+
+
+        $scope.selectedVendors = [];  // Array to hold selected vendor items
+
+        $scope.selectVendor = function (row) {
+            var selectedVendorItem = {
+                ServiceCategoryID: row.ServiceCategoryID,
+                ServiceCategoryName: row.ServiceCategoryName,
+                ServiceItemID: row.ServiceItemID,
+                ServiceItemName: row.ServiceItemName,
+                Description: row.Description,
+                DeliveryLocation: row.DeliveryLocation,
+                DeliveryDate: row.DeliveryDate,                // Date object
+                Delivery_DateString: row.DeliveryDateString,    // Formatted string (e.g., 'yyyy/MM/dd')
+                DeliveryMode: row.DeliveryMode,
+                ReqQnty: row.ReqQnty,
+                ReqUnit: row.ReqUnit,
+                VendorQutnNo: row.VendorQutnNo,
+                VendorQutnID: row.VendorQutnID,
+                VendorID: row.VendorID,
+                VendorName: row.VendorName,
+
+                QutnQnty: row.QutnQnty,
+                QutnPrice: row.QutnPrice,
+                QutnUnit: row.QutnUnit,
+                QutnAmt: row.QutnAmt,
+
+                VatPerc: row.VatPerc,
+                VatAmt: row.VatAmt,
+                TolAmt: row.TolAmt
+            };
+
+            // Check if this vendor is already selected
+            if (row.selected) {
+                // Deselect the vendor and remove it from the selected array
+                row.selected = false;
+                $scope.ReqTermGridDisplayCollection = [];
+                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                var index = $scope.selectedVendors.findIndex(function (vendor) {
+                    return vendor.VendorQutnID === row.VendorQutnID;
+                });
+                if (index !== -1) {
+                    $scope.selectedVendors.splice(index, 1);  // Remove from selected array
+                }
+            } else {
+                // Select the vendor and add it to the selected array
+                row.selected = true;
+
+                $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: row.VendorQutnID })
+                    .success(function (response) {
+                        $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
+                        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                        $scope.loading = false;
+                    }).error(function () {
+                        $scope.loading = false;
+                    });
+
+                $scope.selectedVendors.push(selectedVendorItem);  // Add to selected array
+            }
+        };
+
+
+
+
+
+
+
+
+
+
+        $scope.getRowStyle = function (row) {
+            if (row.selected) {
+                return { background: '#8bf5d2' }; // Change this to your desired color
+            } else {
+                return {}; // No additional styling
+            }
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         //client info
@@ -461,7 +957,7 @@
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
                 })
                 .error(function () { });
-                //need work here
+            //need work here
             $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: row.VendorQutnID })
                 .success(function (response) {
                     $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
@@ -474,6 +970,7 @@
 
         $scope.VendorCSInfo = {
             VendorCSRecmID: "",
+            ServiceItemID: "",
             ServiceCategoryID: "",
             VendorID: "",
             ClientReqID: "",
@@ -483,7 +980,13 @@
             Operation: "",
             RecommendedBy: "",
             Remarks: "",
-            Status: ""
+            Status: "",
+            VendorReqID: "",
+            ClientReqNo: "",
+            Description: "",
+            DeliveryLocation: "",
+            DeliveryDate: "",
+            DeliveryMode: ""
         }
 
         $scope.VendorCSInfoItem = {
@@ -1104,46 +1607,46 @@
                 return;
             }
 
-                $scope.VendorCSInfo.CSRecDate = $('#CSRecDate').val();
-                $http.post('/VendorCSInfo/SaveVendorCSInfo',
-                    {
-                        vendorCS: $scope.VendorCSInfo,
-                        vendorCSItem: $scope.selectedVendors,
-                        vendorCSTerm: $scope.ReqTermGridDisplayCollection,
-                       
-                    })
-                    .success(function (response) {
-                        if (response.status == "S201") {
-                            toastr.success("Data Saved Successfully.");
-                            $scope.clearVendorCSInfo();
-                            $scope.toggleRefreshTable();
-                            $scope.loading = false;
-                            return;
-                        }
-                        else if (response.status == "S202") {
-                            toastr.success("Data Updated Successfully.");
-                            $scope.clearVendorCSInfo();
-                            $scope.loading = false;
-                            return;
-                        }
-                        else if (response.status == "S203") {
-                            toastr.success("Data Deleted Successfully.");
-                            $scope.clearVendorCSInfo();
-                            $scope.loading = false;
-                            return;
-                        }
-                        else {
-                            toastr.error("Data Save Failed.");
-                            $scope.loading = false;
-                            return;
-                        }
-                    })
-                    .error(function () {
+            $scope.VendorCSInfo.CSRecDate = $('#CSRecDate').val();
+            $http.post('/VendorCSInfo/SaveVendorCSInfo',
+                {
+                    vendorCS: $scope.VendorCSInfo,
+                    vendorCSItem: $scope.selectedVendors,
+                    vendorCSTerm: $scope.ReqTermGridDisplayCollection,
+
+                })
+                .success(function (response) {
+                    if (response.status == "S201") {
+                        toastr.success("Data Saved Successfully.");
+                        $scope.clearVendorCSInfo();
+                        $scope.toggleRefreshTable();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "S202") {
+                        toastr.success("Data Updated Successfully.");
+                        $scope.clearVendorCSInfo();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "S203") {
+                        toastr.success("Data Deleted Successfully.");
+                        $scope.clearVendorCSInfo();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else {
                         toastr.error("Data Save Failed.");
                         $scope.loading = false;
                         return;
-                    });
-            }
+                    }
+                })
+                .error(function () {
+                    toastr.error("Data Save Failed.");
+                    $scope.loading = false;
+                    return;
+                });
+        }
 
         $scope.toggleRefreshTable = function () {
             window.location.reload();

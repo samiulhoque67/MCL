@@ -64,7 +64,7 @@ namespace SILDMS.Service
         }
         public ValidationResult GetVendorCSQuotationItem(string VendorID, string ClientID, string VendorCSRecmItemID, out List<OBS_VendorCSAprvItem> VendorCSAprvItemList)
         {
-            VendorCSAprvItemList = clientInfoDataService.GetVendorCSQuotationItem(VendorID,  ClientID, VendorCSRecmItemID);
+            VendorCSAprvItemList = clientInfoDataService.GetVendorCSQuotationItem(VendorID, ClientID, VendorCSRecmItemID);
             return ValidationResult.Success;
         }
         public ValidationResult GetVendorCSAprvTermList(string VendorCSAprvID, out List<OBS_VendorCSAprvTerms> VendorCSAprvTermList)

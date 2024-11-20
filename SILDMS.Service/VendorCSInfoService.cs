@@ -57,12 +57,12 @@ namespace SILDMS.Service
             VendorInfoList = clientInfoDataService.GetVendorCSClientInfo(ServiceItemCategoryID);
             return ValidationResult.Success;
         }
-        public ValidationResult OBS_GetVendorCSVendorsUsingClient(string ClientID,  out List<OBS_VendorCSRecm> VendorCSInfoSearchList)
+        public ValidationResult OBS_GetVendorCSVendorsUsingClient(string ClientID, out List<OBS_VendorCSRecm> VendorCSInfoSearchList)
         {
             VendorCSInfoSearchList = clientInfoDataService.OBS_GetVendorCSVendorsUsingClient(ClientID);
             return ValidationResult.Success;
         }
-        public ValidationResult OBS_GetVendorCSQuotationItem(string VendorID, string ClientID,string VendorQutnItemID, out List<OBS_VendorCSRecmItem> VendorCSInfoItemList)
+        public ValidationResult OBS_GetVendorCSQuotationItem(string VendorID, string ClientID, string VendorQutnItemID, out List<OBS_VendorCSRecmItem> VendorCSInfoItemList)
         {
             VendorCSInfoItemList = clientInfoDataService.OBS_GetVendorCSQuotationItem(VendorID, ClientID, VendorQutnItemID);
             return ValidationResult.Success;
@@ -72,9 +72,9 @@ namespace SILDMS.Service
             VendorCSInfoTermList = clientInfoDataService.GetVendorCSInfoTermList(VendorCSInfoID);
             return ValidationResult.Success;
         }
-        public string SaveVendorCSInfo(OBS_VendorCSRecm clientReq, List<OBS_VendorCSRecmItem> clientReqItem, List<OBS_VendorCSRecmTerms> clientReqTerm, List<OBS_VendorCSRecmVendors> vendorReqItemWise)
+        public string SaveVendorCSInfo(OBS_VendorCSRecm clientReq, List<OBS_VendorCSRecmItem> clientReqItem, List<OBS_VendorCSRecmTerms> clientReqTerm)
         {
-            return clientInfoDataService.SaveVendorCSInfo(clientReq, clientReqItem, clientReqTerm, vendorReqItemWise);
+            return clientInfoDataService.SaveVendorCSInfo(clientReq, clientReqItem, clientReqTerm);
         }
 
         public ValidationResult GetVendorCSInfoTermAgainstFormList(string TermsID, out List<OBS_VendorCSRecmTerms> VendorCSInfoTermList)
@@ -94,6 +94,25 @@ namespace SILDMS.Service
         public ValidationResult GetTermsConditionsList(out List<OBS_Terms> TermsConditionsList)
         {
             TermsConditionsList = clientInfoDataService.GetTermsConditionsList();
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult GetAllRequisition(string userID, out List<Invitation> invitationList)
+        {
+
+            invitationList = clientInfoDataService.GetAllRequisition(userID);
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult GetMaterialByRequisition(string vendorRequisitionNumber, out List<OBS_VendorCSRecmItem> reqWiseMaterialList)
+        {
+            reqWiseMaterialList = clientInfoDataService.GetMaterialByRequisition(vendorRequisitionNumber);
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult GetVendorByMaterialService(string vendorReqID, string serviceItemID, out List<OBS_VendorCSRecmItem> matWiseVendorList)
+        {
+            matWiseVendorList = clientInfoDataService.GetVendorByMaterialData(vendorReqID, serviceItemID);
             return ValidationResult.Success;
         }
     }

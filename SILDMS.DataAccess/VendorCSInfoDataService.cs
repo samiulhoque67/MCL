@@ -269,7 +269,7 @@ namespace SILDMS.DataAccess
         }
 
 
-        public string SaveVendorCSInfo(OBS_VendorCSRecm vendorCSInfo, List<OBS_VendorCSRecmItem> vendorCSInfoItem, List<OBS_VendorCSRecmTerms> vendorCSInfoTerm, List<OBS_VendorCSRecmVendors> vendorCSVendorsItemWise)
+        public string SaveVendorCSInfo(OBS_VendorCSRecm vendorCSInfo, List<OBS_VendorCSRecmItem> vendorCSInfoItem, List<OBS_VendorCSRecmTerms> vendorCSInfoTerm)
         {
             DataTable VendorCSItem = new DataTable();
             //VendorCSItem.Columns.Add("VendorReqID");
@@ -283,7 +283,7 @@ namespace SILDMS.DataAccess
             VendorCSItem.Columns.Add("QutnAmt");
             VendorCSItem.Columns.Add("VatPerc");
             VendorCSItem.Columns.Add("VatAmt");
-           
+
             VendorCSItem.Columns.Add("TolQnty");
             VendorCSItem.Columns.Add("VendorName");
             foreach (var item in vendorCSInfoItem)
@@ -317,18 +317,18 @@ namespace SILDMS.DataAccess
                 VendorCSTerm.Rows.Add(objDataRow);
             }
 
-            DataTable vendorCSVendors = new DataTable();
-            vendorCSVendors.Columns.Add("VendorID");
-            vendorCSVendors.Columns.Add("VendorQutnID");
-            vendorCSVendors.Columns.Add("TolQnty");
-            foreach (var item in vendorCSVendorsItemWise)
-            {
-                DataRow objDataRow = vendorCSVendors.NewRow();
-                objDataRow[0] = item.VendorID;
-                objDataRow[1] = item.VendorQutnID;
-                objDataRow[2] = item.TolQnty;
-                vendorCSVendors.Rows.Add(objDataRow);
-            }
+            //DataTable vendorCSVendors = new DataTable();
+            //vendorCSVendors.Columns.Add("VendorID");
+            //vendorCSVendors.Columns.Add("VendorQutnID");
+            //vendorCSVendors.Columns.Add("TolQnty");
+            //foreach (var item in vendorCSVendorsItemWise)
+            //{
+            //    DataRow objDataRow = vendorCSVendors.NewRow();
+            //    objDataRow[0] = item.VendorID;
+            //    objDataRow[1] = item.VendorQutnID;
+            //    objDataRow[2] = item.TolQnty;
+            //    vendorCSVendors.Rows.Add(objDataRow);
+            //}
 
             if (string.IsNullOrEmpty(vendorCSInfo.VendorCSInfoID))
                 vendorCSInfo.Action = "add";
@@ -343,9 +343,16 @@ namespace SILDMS.DataAccess
                 {
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@VendorCSRecmID", SqlDbType.NVarChar, vendorCSInfo.VendorCSInfoID);
-                    db.AddInParameter(dbCommandWrapper, "@ServiceCategoryID", SqlDbType.NVarChar, vendorCSInfo.ServiceCategoryID);
+                    db.AddInParameter(dbCommandWrapper, "@ServiceCategoryID", SqlDbType.BigInt, vendorCSInfo.ServiceCategoryID);
+                    db.AddInParameter(dbCommandWrapper, "@ServiceItemID", SqlDbType.BigInt, vendorCSInfo.ServiceItemID);
                     db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, vendorCSInfo.ClientReqID);
-                    db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, vendorCSInfo.ClientID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientReqNo", SqlDbType.NVarChar, vendorCSInfo.ClientReqNo);
+                    db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.NVarChar, vendorCSInfo.VendorReqID);
+                    db.AddInParameter(dbCommandWrapper, "@Description", SqlDbType.NVarChar, vendorCSInfo.Description);
+                    db.AddInParameter(dbCommandWrapper, "@DeliveryDate", SqlDbType.NVarChar, vendorCSInfo.DeliveryDate);
+                    db.AddInParameter(dbCommandWrapper, "@DeliveryLocation", SqlDbType.NVarChar, vendorCSInfo.DeliveryLocation);
+                    db.AddInParameter(dbCommandWrapper, "@DeliveryMode", SqlDbType.NVarChar, vendorCSInfo.DeliveryMode);
+                    db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.BigInt, vendorCSInfo.ClientID);
                     //db.AddInParameter(dbCommandWrapper, "@CSNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.CSNo));
                     db.AddInParameter(dbCommandWrapper, "@CSRecDate", SqlDbType.NVarChar, vendorCSInfo.CSRecDate);
                     db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Operation));
@@ -355,7 +362,7 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmItem", SqlDbType.Structured, VendorCSItem);
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmTerms", SqlDbType.Structured, VendorCSTerm);
-                    db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmVendors", SqlDbType.Structured, vendorCSVendors);
+                    //db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmVendors", SqlDbType.Structured, vendorCSVendors);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vendorCSInfo.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
 
@@ -510,27 +517,27 @@ namespace SILDMS.DataAccess
 
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
 
-               
-                    if (ds.Tables[0].Rows.Count > 0)
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+
+                    invitationList = dt1.AsEnumerable().Select(reader => new Invitation
                     {
-
-                        DataTable dt1 = new DataTable();
-                        dt1 = ds.Tables[0];
-
-                        invitationList = dt1.AsEnumerable().Select(reader => new Invitation
-                        {
-                            VendorRequisitionNumber = reader.GetString("VendorReqID"),
-                            ClientRequisitionNumber = reader.GetString("ClientReqNo"),
-                            ClientReqID = reader.GetString("ClientReqID"),
-                            ClientID = reader.GetString("ClientID"),
-                            ClientName = reader.GetString("ClientName"),
-                            RequisitionDate = reader.GetString("RequisitionDate"),
-                            LastDateofQuotation = reader.GetString("LastDateofQuotation")
-                          
+                        VendorRequisitionNumber = reader.GetString("VendorReqID"),
+                        ClientRequisitionNumber = reader.GetString("ClientReqNo"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        ClientID = reader.GetString("ClientID"),
+                        ClientName = reader.GetString("ClientName"),
+                        RequisitionDate = reader.GetString("RequisitionDate"),
+                        LastDateofQuotation = reader.GetString("LastDateofQuotation")
 
 
-                        }).ToList();
-                    
+
+                    }).ToList();
+
                 }
             }
             return invitationList;
@@ -545,36 +552,36 @@ namespace SILDMS.DataAccess
             using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetMaterialByRequisition"))
             {
                 db.AddInParameter(dbCommandWrapper, "@vendorRequisitionNumber", SqlDbType.VarChar, vendorRequisitionNumber);
-              
+
                 // Execute SP.
 
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
 
                 if (ds.Tables[0].Rows.Count > 0)
-                    {
+                {
 
-                        DataTable dt1 = new DataTable();
-                        dt1 = ds.Tables[0];
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
 
                     ReqWiseMaterialList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
-                            VendorReqID = reader.GetString("VendorReqID"),
-                            ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
-                            ServiceCategoryName = reader.GetString("ServicesCategoryName"),
-                            ServiceItemID = reader.GetString("ServiceItemID"),
-                            ServiceItemName = reader.GetString("ServiceItemName"),
-                            Description = reader.GetString("Description"),
-                            DeliveryLocation = reader.GetString("DeliveryLocation"),
-                            DeliveryDate = reader.GetString("DeliveryDate"),
-                            DeliveryMode = reader.GetString("DeliveryMode"),
-                            ReqQnty = reader.GetString("ReqQnty"),
-                            ReqUnit = reader.GetString("ReqUnit"),
-                          
+                        VendorReqID = reader.GetString("VendorReqID"),
+                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
+                        ServiceCategoryName = reader.GetString("ServicesCategoryName"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        Description = reader.GetString("Description"),
+                        DeliveryLocation = reader.GetString("DeliveryLocation"),
+                        DeliveryDate = reader.GetString("DeliveryDate"),
+                        DeliveryMode = reader.GetString("DeliveryMode"),
+                        ReqQnty = reader.GetString("ReqQnty"),
+                        ReqUnit = reader.GetString("ReqUnit"),
 
 
-                        }).ToList();
-                    }
-         
+
+                    }).ToList();
+                }
+
             }
             return ReqWiseMaterialList;
         }
@@ -588,7 +595,7 @@ namespace SILDMS.DataAccess
             {
                 db.AddInParameter(dbCommandWrapper, "@vendorReqID", SqlDbType.VarChar, vendorReqID);
                 db.AddInParameter(dbCommandWrapper, "@serviceItemID", SqlDbType.VarChar, serviceItemID);
-           
+
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -610,7 +617,7 @@ namespace SILDMS.DataAccess
                         VendorQutnID = reader.GetString("VendorQutnID"),
                         VendorID = reader.GetString("VendorID"),
                         VendorName = reader.GetString("VendorName"),
-                        
+
 
                         QutnQnty = reader.GetString("QutnQnty"),
                         QutnPrice = reader.GetString("QutnPrice"),
