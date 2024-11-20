@@ -44,10 +44,10 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<dynamic> WoQtforAdvanClaim(string ClientID /*, string POAprvID*/)
+        public async Task<dynamic> WoQtforAdvanClaim(string ClientID , string WOInfoID, string WONo)
         {
             var WODetails = new List<AdvanClaimWo>();  // Renamed to ClientDetails
-            await Task.Run(() => _advanceClaimService.WoQtforAdvanClaimService(ClientID,/* POAprvID,*/ out WODetails));
+            await Task.Run(() => _advanceClaimService.WoQtforAdvanClaimService(ClientID, WOInfoID, WONo, out WODetails));
             var result = Json(new { WODetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
             return result;
         }

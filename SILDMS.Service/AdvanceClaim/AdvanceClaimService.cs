@@ -36,9 +36,9 @@ namespace SILDMS.Service.AdvanceClaim
                 : ValidationResult.Success;
         }
 
-        ValidationResult IAdvanceClaimService.WoQtforAdvanClaimService(string ClientID, /*string POAprvID,*/ out List<AdvanClaimWo> WODetails)
+        ValidationResult IAdvanceClaimService.WoQtforAdvanClaimService(string ClientID, string WOInfoID, string WONo, out List<AdvanClaimWo> WODetails)
          {
-            WODetails = _advanceClaimData.WoQtforAdvanClaimDataService(ClientID, /*POAprvID,*/ out _errorNumber);
+            WODetails = _advanceClaimData.WoQtforAdvanClaimDataService(ClientID, WOInfoID, WONo, out _errorNumber);
 
              return _errorNumber.Length > 0
                  ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
