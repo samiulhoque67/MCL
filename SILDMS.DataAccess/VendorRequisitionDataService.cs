@@ -229,6 +229,7 @@ namespace SILDMS.DataAccess
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.NVarChar, VendorReq.VendorReqID);
                     db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, VendorReq.ClientReqID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientReqNo", SqlDbType.NVarChar, VendorReq.ClientReqNo);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, VendorReq.ClientID);
 
                     db.AddInParameter(dbCommandWrapper, "@CsStatus", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(VendorReq.CsStatus));
@@ -262,13 +263,13 @@ namespace SILDMS.DataAccess
             }
             return errorNumber;
         }
-        public DataSet rptRequisitionToVendorReport(string userID,string action)
+        public DataSet rptRequisitionToVendorReport(string VendorReqID, string action)
         {
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("GetRptRequisitionToVendorReport"))
             {
-                //db.AddInParameter(dbCommandWrapper, "@RptUserID", SqlDbType.VarChar, userID);
+                db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.VarChar, VendorReqID);
                 //db.AddInParameter(dbCommandWrapper, "@FromDate", SqlDbType.VarChar, FromDate);
                 ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
                 //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
@@ -296,9 +297,10 @@ namespace SILDMS.DataAccess
                     VendorReqList = dt1.AsEnumerable().Select(reader => new OBS_VendorReq
                     {
                         VendorReqID = reader.GetString("VendorReqID"),
-                        VendorID = reader.GetString("VendorID"),
-                        VendorName = reader.GetString("VendorName"),
+                        //VendorID = reader.GetString("VendorID"),
+                        //VendorName = reader.GetString("VendorName"),
                         ClientID = reader.GetString("ClientID"),
+                        ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientName = reader.GetString("ClientName"),
                         RequisitionNo = reader.GetString("RequisitionNo"),
                         RequisitionDate = reader.GetString("RequisitionDate"),

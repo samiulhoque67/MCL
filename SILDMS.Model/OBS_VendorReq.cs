@@ -11,6 +11,7 @@ namespace SILDMS.Model
     {
         public string VendorReqID { get; set; }
         public string ClientReqID { get; set; }
+        public string ClientReqNo { get; set; }
         public string ClientID { get; set; }
         [Required]
         public string ClientCode { get; set; }
@@ -18,6 +19,7 @@ namespace SILDMS.Model
         public string ClientName { get; set; }
         public string VendorID { get; set; }
         public string VendorName { get; set; }
+        public string SelectedItemName { get; set; }
         [Required]
         public string AutoVendorReqNo { get; set; }
         [Required]

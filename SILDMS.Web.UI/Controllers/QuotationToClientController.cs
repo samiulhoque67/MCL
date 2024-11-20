@@ -47,10 +47,10 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<dynamic> AvailableClientDetailInfo(string ClientID)
+        public async Task<dynamic> AvailableClientDetailInfo(string ClientID,string ClientReqID)
         {
             var ClientDetails = new List<OBS_ClientDetails>();  // Renamed to ClientDetails
-            await Task.Run(() => _quotationToClientService.AvailableClientDetailInfoService(ClientID, out ClientDetails));
+            await Task.Run(() => _quotationToClientService.AvailableClientDetailInfoService(ClientID, ClientReqID, out ClientDetails));
             var result = Json(new { ClientDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
             return result;
         }
@@ -75,7 +75,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> SaveQuotToClient(List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl)
+        public async Task<ActionResult> SaveQuotToClient(string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl)
         {
             if (MasterData == null || !MasterData.Any() || DetailData == null || !DetailData.Any())
             {
@@ -84,7 +84,7 @@ namespace SILDMS.Web.UI.Controllers
 
             try
             {
-                string status = _quotationToClientService.SaveQuotToClientService(UserID, MasterData, DetailData, AllTermsDtl);
+                string status = _quotationToClientService.SaveQuotToClientService(UserID,  action, MasterData, DetailData, AllTermsDtl);
                 return Json(new { status = status }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

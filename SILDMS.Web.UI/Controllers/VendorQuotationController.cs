@@ -47,7 +47,15 @@ namespace SILDMS.Web.UI.Controllers
 
             return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
         }
-        public async Task<dynamic> GetShowVendorReqForVenQutnList()
+        public async Task<dynamic> GetVendorReqItemListForVenQutn(string VendorReqID)
+        {
+            var VendorReqItemList = new List<OBS_VendorReqItem>();
+            await Task.Run(() => _clientInfoService.GetVendorReqItemListForVenQutn(VendorReqID, out VendorReqItemList));
+            var result = Json(new { VendorReqItemList, msg = "VendorReqItemList are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
+        }
+        public async Task<dynamic> GetShowVendorReqList()
         {
             var VendorReqList = new List<OBS_VendorQutn>();
             await Task.Run(() => _clientInfoService.GetShowVendorReqList(out VendorReqList));
@@ -56,20 +64,11 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> GetVendorReqItemListForVenQutn(string VendorID, string VendorReqID)
+        public async Task<dynamic> SaveVendorQuotation(OBS_VendorQutn vendorQutn, List<OBS_VendorQutnItem> vendorQutnItem, List<OBS_VendorQutnTerms> vendorQutnTerm)
         {
-            var VendorReqItemList = new List<OBS_VendorReqItem>();
-            await Task.Run(() => _clientInfoService.GetVendorReqItemListForVenQutn(VendorID, VendorReqID, out VendorReqItemList));
-            var result = Json(new { VendorReqItemList, msg = "VendorReqItemList are loaded in the table." }, JsonRequestBehavior.AllowGet);
-            result.MaxJsonLength = Int32.MaxValue;
-            return result;
-        }
-
-        public async Task<dynamic> SaveVendorQuotation(OBS_VendorQutn clientReq, List<OBS_VendorQutnItem> clientReqItem, List<OBS_VendorQutnTerms> clientReqTerm)
-        {
-            clientReq.SetBy = UserID;
+            vendorQutn.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
-            status = _clientInfoService.SaveVendorQuotation(clientReq, clientReqItem, clientReqTerm);
+            status = _clientInfoService.SaveVendorQuotation(vendorQutn, vendorQutnItem, vendorQutnTerm);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 

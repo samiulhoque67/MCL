@@ -25,6 +25,7 @@ namespace SILDMS.Model
         public string Action { get; set; }
         [Required]
         public string Status { get; set; }
+        public string ClientReqID { get; set; }
     }
 
     public class OBS_ClientDetails
@@ -86,8 +87,14 @@ namespace SILDMS.Model
         public string ClientReqID { get; set; }
         public string ClientQuotationID { get; set; }
         public string ClientQutnRecmID { get; set; }
+        public string ClientQutnAprvID { get; set; }
         public string VendorCSAprvID { get; set; }
         public string ClientReqNo { get; set; }
+        public string ClientQutnID { get; set; }
+        public string ClientQutnAmt { get; set; }
+        public string VendorCSAprvItemID { get; set; }
+        public string ClientQutnItemID { get; set; }
+        public string ClientQutnRecmItemID { get; set; }
     }
 
     public class OBS_QutntoClientMaster
@@ -96,9 +103,10 @@ namespace SILDMS.Model
         public string ClientID { get; set; }
         public string ClientReqID { get; set; }
         public string ClientQuotationID { get; set; }
-        public string ClientQutnRecmID { get; set; }
+        public string ClientQutnAprvID { get; set; }
         public string QuotationNote { get; set; }
         public string Operation { get; set; }
+        public string ClientQutnRecmID { get; set; }
     }
 
     public class AdvanClaimWo

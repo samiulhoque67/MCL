@@ -269,7 +269,7 @@ namespace SILDMS.DataAccess
         }
 
 
-        public string SaveVendorCSInfo(OBS_VendorCSRecm vendorCSInfo, List<OBS_VendorCSRecmItem> vendorCSInfoItem, List<OBS_VendorCSRecmTerms> vendorCSInfoTerm)
+        public string SaveVendorCSInfo(OBS_VendorCSRecm vendorCSInfo, List<OBS_VendorCSRecmItem> vendorCSInfoItem, List<OBS_VendorCSRecmTerms> vendorCSInfoTerm, List<OBS_VendorCSRecmVendors> vendorCSVendorsItemWise)
         {
             DataTable VendorCSItem = new DataTable();
             //VendorCSItem.Columns.Add("VendorReqID");
@@ -317,18 +317,18 @@ namespace SILDMS.DataAccess
                 VendorCSTerm.Rows.Add(objDataRow);
             }
 
-            //DataTable vendorCSVendors = new DataTable();
-            //vendorCSVendors.Columns.Add("VendorID");
-            //vendorCSVendors.Columns.Add("VendorQutnID");
-            //vendorCSVendors.Columns.Add("TolQnty");
-            //foreach (var item in vendorCSVendorsItemWise)
-            //{
-            //    DataRow objDataRow = vendorCSVendors.NewRow();
-            //    objDataRow[0] = item.VendorID;
-            //    objDataRow[1] = item.VendorQutnID;
-            //    objDataRow[2] = item.TolQnty;
-            //    vendorCSVendors.Rows.Add(objDataRow);
-            //}
+            DataTable vendorCSVendors = new DataTable();
+            vendorCSVendors.Columns.Add("VendorID");
+            vendorCSVendors.Columns.Add("VendorQutnID");
+            vendorCSVendors.Columns.Add("TolQnty");
+            foreach (var item in vendorCSVendorsItemWise)
+            {
+                DataRow objDataRow = vendorCSVendors.NewRow();
+                objDataRow[0] = item.VendorID;
+                objDataRow[1] = item.VendorQutnID;
+                objDataRow[2] = item.TolQnty;
+                vendorCSVendors.Rows.Add(objDataRow);
+            }
 
             if (string.IsNullOrEmpty(vendorCSInfo.VendorCSInfoID))
                 vendorCSInfo.Action = "add";
@@ -343,16 +343,9 @@ namespace SILDMS.DataAccess
                 {
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@VendorCSRecmID", SqlDbType.NVarChar, vendorCSInfo.VendorCSInfoID);
-                    db.AddInParameter(dbCommandWrapper, "@ServiceCategoryID", SqlDbType.BigInt, vendorCSInfo.ServiceCategoryID);
-                    db.AddInParameter(dbCommandWrapper, "@ServiceItemID", SqlDbType.BigInt, vendorCSInfo.ServiceItemID);
+                    db.AddInParameter(dbCommandWrapper, "@ServiceCategoryID", SqlDbType.NVarChar, vendorCSInfo.ServiceCategoryID);
                     db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, vendorCSInfo.ClientReqID);
-                    db.AddInParameter(dbCommandWrapper, "@ClientReqNo", SqlDbType.NVarChar, vendorCSInfo.ClientReqNo);
-                    db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.NVarChar, vendorCSInfo.VendorReqID);
-                    db.AddInParameter(dbCommandWrapper, "@Description", SqlDbType.NVarChar, vendorCSInfo.Description);
-                    db.AddInParameter(dbCommandWrapper, "@DeliveryDate", SqlDbType.NVarChar, vendorCSInfo.DeliveryDate);
-                    db.AddInParameter(dbCommandWrapper, "@DeliveryLocation", SqlDbType.NVarChar, vendorCSInfo.DeliveryLocation);
-                    db.AddInParameter(dbCommandWrapper, "@DeliveryMode", SqlDbType.NVarChar, vendorCSInfo.DeliveryMode);
-                    db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.BigInt, vendorCSInfo.ClientID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, vendorCSInfo.ClientID);
                     //db.AddInParameter(dbCommandWrapper, "@CSNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.CSNo));
                     db.AddInParameter(dbCommandWrapper, "@CSRecDate", SqlDbType.NVarChar, vendorCSInfo.CSRecDate);
                     db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Operation));
@@ -362,7 +355,7 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmItem", SqlDbType.Structured, VendorCSItem);
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmTerms", SqlDbType.Structured, VendorCSTerm);
-                    //db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmVendors", SqlDbType.Structured, vendorCSVendors);
+                    db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmVendors", SqlDbType.Structured, vendorCSVendors);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vendorCSInfo.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
 

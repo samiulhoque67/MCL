@@ -58,9 +58,9 @@ namespace SILDMS.Service
         {
             return clientInfoDataService.SaveVendorRequisition(clientReq, clientReqItem, clientReqTerm, vendorReqItemWise);
         }
-        public ValidationResult rptRequisitionToVendorReport(string UserRptID, string action, out DataSet dt)
+        public ValidationResult rptRequisitionToVendorReport(string VendorReqID, string action, out DataSet dt)
         {
-            dt = clientInfoDataService.rptRequisitionToVendorReport(UserRptID, action);
+            dt = clientInfoDataService.rptRequisitionToVendorReport(VendorReqID, action);
            
             return ValidationResult.Success;
         }

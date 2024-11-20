@@ -55,6 +55,7 @@
                 <div class="col-lg-3 ">
                     <div class="form-group">
                         <label for="ClientName">Client Name :</label>
+                        <label style="font-size: larger;color:red;">*</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -82,6 +83,7 @@
                 <div class="col-lg-3 ">
                     <div class="form-group">
                         <label for="RequisitionDate">Requisition Date:</label>
+                        <label style="font-size: larger;color:red;">*</label>
                     </div>
                 </div>
                 <div class="col-lg-2">
@@ -95,6 +97,7 @@
                 <div class="col-lg-3 ">
                     <div class="form-group">
                         <label for="SubmissionDate">Submission Date:</label>
+                        <label style="font-size: larger;color:red;">*</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -105,6 +108,7 @@
                 <div class="col-lg-3 ">
                     <div class="form-group">
                         <label for="LastDateofQuotation">Last Date of Quotation :</label>
+                        <label style="font-size: larger;color:red;">*</label>
                     </div>
                 </div>
                 <div class="col-lg-2">
@@ -631,30 +635,40 @@
         <div class="col-md-12">
             <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
                 <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
-                    <div class="col-lg-3 ">
+                    <div class="col-lg-1 ">
                         <div class="form-group">
-                            <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Vendor List:</h2>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorReq.VendorName" class="form-control" ng-readonly="true" />
-                        </div>
-                    </div>
-                    <div class="col-lg-1">
-                        <button type="button" data-ng-click="ShowVendorList()" class="form-control">Search</button>
-                    </div>
-
-                    <div class="col-lg-1">
-                    </div>
-                    <div class="col-lg-1">
-                        <div class="form-group">
-                            <label for="ReqQnty">CS Status</label>
+                            <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Item:</h2>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <select name="ss" style="background-color: #ffffff; width: 90px; height: 26px; font-size: 9px" class="form-control" ng-model="VendorReq.CsStatus">
+                            <input id="SelectedItemName" name="SelectedItemName" type="text" data-ng-model="VendorReq.SelectedItemName" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+                    <div class="col-lg-2 ">
+                        <div class="form-group">
+                            <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Vendor List:</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorReq.VendorName" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1">
+                        <button type="button" data-ng-click="ShowVendorList()" class="form-control">Search</button>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ReqQnty">CS Status</label>
+                            <label style="font-size: larger;color:red;">*</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                        <div class="form-group">
+                            <select id="CsStatus" name="CsStatus" style="background-color: #ffffff; width: 90px; height: 26px; font-size: 9px" class="form-control" ng-model="VendorReq.CsStatus">
                                 <option value="WCS">With CS</option>
                                 <option value="NCS">Without CS</option>
                             </select>
@@ -1087,6 +1101,7 @@
 
         $scope.toggleClientReqSelect = function (tableRow) {
             $scope.VendorReq.ClientReqID = tableRow.ClientReqID;
+            $scope.VendorReq.ClientReqNo = tableRow.ClientReqNo;
             $scope.VendorReq.ClientID = tableRow.ClientID;
             $scope.VendorReq.ClientName = tableRow.ClientName;
 
@@ -1284,6 +1299,8 @@
             $scope.VendorReq.VendorID = row.VendorID;
             $scope.VendorReq.VendorCode = row.VendorCode;
             $scope.VendorReq.VendorName = row.VendorName;
+
+            $scope.VendorReq.SelectedItemName = row.ServiceItemName;
 
             $scope.VendorWiseItemReq.ServiceItemID = row.ServiceItemID;
             $scope.VendorWiseItemReq.ServiceItemName = row.ServiceItemName;
@@ -1581,13 +1598,11 @@
 
         //////////////////    SAVE    /////////////////////////////
 
-        $scope.Post = function () {
-
-            if ($('#RequisitionNo').val() == "") {
-                toastr.error("Vendor ReqNo.  Required");
+        $scope.Post = function () {           
+            if ($('#ClientName').val() == "") {
+                toastr.error("Client Name Date Required.");
                 return;
             }
-
             if ($('#SubmissionDate').val() == "") {
                 toastr.error("Submission Date Required.");
                 return;
@@ -1597,9 +1612,18 @@
                 toastr.error("Requisition Date Date Required");
                 return;
             }
+            if ($('#LastDateofQuotation').val() == "") {
+                toastr.error("LastDateofQuotation Date Date Required");
+                return;
+            }
+            if ($('#CsStatus').val() == "") {
+                toastr.error("CS Status  Required");
+                return;
+            }
 
             $scope.VendorReq.RequisitionDate = $('#RequisitionDate').val();
             $scope.VendorReq.SubmissionDate = $('#SubmissionDate').val();
+            $scope.VendorReq.LastDateofQuotation = $('#LastDateofQuotation').val();
 
             $scope.VendorReq.TolalItem = $scope.GridDisplayCollection.length;
             $scope.VendorReq.SelectedItem = $scope.SelectedVendorForBiddingDisplayedCollection.length;

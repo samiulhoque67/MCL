@@ -7,7 +7,7 @@
     }
 
     .box-body, .form-group, .btn, .form-control, .box-header {
-        font-size: 12px;
+        font-size: 12px; 
     }
 
     .btn {
@@ -30,7 +30,7 @@
     /* Adjust icon size */
     .fa {
         font-size: 12px;
-        /* padding-right: 3px;*/
+       /* padding-right: 3px;*/
     }
 </style>
 
@@ -46,14 +46,6 @@
                     <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh">
                         <i class="fa fa-refresh" style="padding-right: 5px;"></i>Refresh
                     </button>
-                </div>
-                <div class="btn-group pull-right" style="margin: 3px">
-                    @using (Html.BeginForm("rptQuotationtoClient", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
-                    {
-                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="btn btn-sm btn-flat btn-success pull-right">
-                            <i class="fa fa-print"></i> Print
-                        </button>
-                    }
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="SearchSaveClients()" class="btn btn-primary btn-flat pull-right" ng-disabled="btnSearch">
@@ -280,7 +272,6 @@
             </div>
 
             <table st-table="GetClientReqDetailsCollection" st-safe-src="GetClientReqDetails" class="table table-condensed table-bordered table-striped table-hover pnlView">
-
                 <thead>
                     <tr style="background-color: #78bfd6; color: darkblue; font-size: 12px;">
                         <th style="text-align: left;">Item Code</th>
@@ -288,46 +279,49 @@
                         <th style="text-align: left;">Description</th>
                         <th style="text-align: left;">Delivery Location</th>
                         <th style="text-align: left;">Delivery Date</th>
-                        <th style="text-align: left;">ReqQnty</th>
-                        <th style="text-align: left;">ReqUnit</th>
-                        <th style="text-align: left;">Quoted Qnty</th>
-                        <th style="text-align: left;">Vendor Quoted Unit/Price</th>
-                        <th style="text-align: left;">Given Quoted Unit/Price</th>
-                        <th style="text-align: left;">Vendor Quoted Amt</th>
-                        <th style="text-align: left;">Given Quoted Amt</th>
-                        <th style="text-align: left;">Vat Rate</th>
-                        <th style="text-align: left;">VatAmt</th>
-                        <th style="text-align: left;">TolAmt</th>
-                        <th style="text-align: left;">Given TolAmt</th>
+                        <th style="text-align: left;">Req Qty</th>
+                        <th style="text-align: left;">Req Unit</th>
+                        <th style="text-align: left;">Quoted Qty</th>
+                        <th style="text-align: left;">Vendor Quoted Unit Price</th>
+                        <th style="text-align: left;">Given Quoted Unit Price</th>
+                        <th style="text-align: left;">Vendor Quoted Amount</th>
+                        <th style="text-align: left;">Given Quoted Amount</th>
+                        <th style="text-align: left;">VAT Rate</th>
+                        <th style="text-align: left;">VAT Amount</th>
+                        <th style="text-align: left;">Total Amount</th>
+                        <th style="text-align: left;">Given Total Amount</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="row in GetClientReqDetailsCollection" ng-cloak style="font-size:12px;">
-
-                        <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }}</td>
-                        <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.Description}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.DeliveryLocation}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.DeliveryDate}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
-                        <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.QutnQnty}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.QutnPrice}}</td>
-                        <td class="col-lg-1">
-                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0"
-                                   ng-model="row.givenQutnPrice" ng-keypress="checkEnter($event, row)" />
+                    <tr ng-repeat="row in GetClientReqDetailsCollection" ng-init="initializeDefaults(row)" ng-cloak style="font-size: 12px;">
+                        <td style="width: 5%;">{{ row.ServiceItemID }}</td>
+                        <td style="width: 5%;">{{ row.ServiceItemName }}</td>
+                        <td style="width: 6%;">{{ row.Description }}</td>
+                        <td style="width: 6%;">{{ row.DeliveryLocation }}</td>
+                        <td style="width: 6%;">{{ row.DeliveryDate }}</td>
+                        <td style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
+                        <td style="width: 5%;">{{ row.ReqUnit }}</td>
+                        <td style="width: 6%;">{{ row.QutnQnty }}</td>
+                        <td style="width: 6%;">{{ row.QutnPrice }}</td>
+                        <td style="width: 6%;">
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
+                                   ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"
+                                   ng-blur="validateInput('givenQutnPrice', row)" />
                         </td>
-                        <td class="col-lg-1" style="width:6%;">{{row.QutnAmt}}</td>
-                        <td class="col-lg-1" style="width: 6%; color: #126e0f">{{ row.givenQutnAmt}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.VatPerc}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
-                        <td class="col-lg-1" style="width: 6%; color: #126e0f">{{ row.givenTolAmt }}</td>
+                        <td style="width: 6%;">{{ row.QutnAmt }}</td>
+                        <td style="width: 6%; color: #126e0f;">{{ row.givenQutnAmt }}</td>
+                        <td style="width: 6%;">
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
+                                   ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
+                                   ng-blur="validateInput('GivenVatPerc', row)" />
+                        </td>
+                        <td style="width: 6%;">{{ row.TotGivenVatAmt }}</td>
+                        <td style="width: 6%;">{{ row.TolAmt }}</td>
+                        <td style="width: 6%; color: #126e0f;">{{ row.givenTolAmt }}</td>
                     </tr>
-
                 </tbody>
-                <tfoot></tfoot>
             </table>
+
 
         </div>
     </div>
@@ -352,10 +346,6 @@
                         <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                             <thead>
                                 <tr>
-                                    <th class="col-lg-1 col-md-1 col-sm-1">Form Code</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1">Form Name</th>
-
-                                    <th class="col-lg-1 col-md-1 col-sm-1">Status</th>
                                     <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>
                                     <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormName')">Form Name</th>
                                     <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
@@ -448,7 +438,6 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in TermsConditionsDisplayedCollection" ng-cloak style="font-size:12px;">
-
                                 <td class="hidden">{{row.ClientReqTermsID}}</td>
                                 <td class="hidden">{{row.ClientReqID}}</td>
                                 <td class="hidden">{{row.TermsID}}</td>
@@ -464,8 +453,8 @@
                         </tbody>
                         <tfoot>
                             @*<tr>
-                                    <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                                </tr>*@
+                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                            </tr>*@
                         </tfoot>
                     </table>
                 </div>
@@ -620,11 +609,19 @@
 
                     </div>
 
-                    <div ng-show="pagefunction !== 'viewmode'" class="col-lg-2">
+                    <div ng-show="pagefunction === 'savemode'" class="col-lg-2">
                         <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
-                                ng-click="openConfirmModal()" data-dismiss="modal" title="Save"
+                                ng-click="openConfirmModal('save')" data-dismiss="modal" title="Save"
                                 style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius: 5px;">
                             <i class="fa fa-check"></i> Submit
+                        </button>
+                    </div>
+
+                    <div ng-show="pagefunction === 'editmode'" class="col-lg-2">
+                        <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
+                                ng-click="openConfirmModal('edit')" data-dismiss="modal" title="Save"
+                                style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); background-color: #ac5604c2; border-radius: 5px; ">
+                            <i class="fa fa-check"></i> Update
                         </button>
                     </div>
 
@@ -798,14 +795,6 @@
         }
 
         $scope.Client = {
-            ClientName: "",
-            ClientRequisitionNo: "",
-            ClientRequisitionDate: "",
-            ContactPerson: "",
-            ContactNumber: "",
-            ContactTIN: "",
-            ContactBIN: "",
-            ContactAddress: "",
             ClientName :"",
             ClientRequisitionNo :"",
             ClientReqID :"",
@@ -820,12 +809,13 @@
         $scope.MasterData = {
             ClientID: "",
             ClientReqID: "",
+            ClientReqNo: "",
             BriefingDate: "",
             QuotationNote: ""
         }
 
         $('.DatePicker').datepicker({
-            format: "yyyy-mm-dd",
+            format: "dd/mm/yyyy", //"yyyy-mm-dd",
             autoclose: true
         }).on('changeDate', function (ev) {
             var selectedDate = $(this).val(); 
@@ -907,26 +897,10 @@
                 $scope.loading = true;
 
                 $http.post('/QuotationToClient/AvailableClientDetailInfo', {
-                    ClientID: row.ClientID
+                    ClientID: row.ClientID, ClientReqID: row.ClientReqID
                 }).success(function (response) {
                     $scope.ClientDetails = response.ClientDetails;
 
-                $scope.Client = {
-                    ClientName: $scope.ClientDetails[0].ClientName,
-                    ClientRequisitionNo: $scope.ClientDetails[0].ClientReqNo,
-                    ClientRequisitionDate: $scope.ClientDetails[0].RequisitionDate,
-                    ContactPerson: $scope.ClientDetails[0].ContactPerson,
-                    ContactNumber: $scope.ClientDetails[0].ContactNumber,
-                    ContactTIN: $scope.ClientDetails[0].ClientTinNo,
-                    ContactBIN: $scope.ClientDetails[0].ClientBinNo,
-                    ContactAddress: $scope.ClientDetails[0].Address
-                };
-                $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID);
-                $scope.loading = false;
-            }).error(function () {
-                $scope.loading = false;
-            });
-        };
                     $scope.Client = {
                         ClientName: $scope.ClientDetails[0].ClientName,
                         ClientRequisitionNo: $scope.ClientDetails[0].ClientReqNo,
@@ -956,7 +930,7 @@
                 $scope.loading = true;
 
                 $http.post('/QuotationToClient/AvailableClientDetailInfo', {
-                    ClientID: row.ClientID
+                    ClientID: row.ClientID, ClientReqID: row.ClientReqID
                 }).success(function (response) {
                     $scope.ClientDetails = response.ClientDetails;
 
@@ -987,9 +961,18 @@
                     $scope.GetClientReqDetails = response.GetClientReqDetails;
                     $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
                     $scope.loading = false;
-                    $scope.GetClientReqDetails.forEach(function (row) {
-                        $scope.selectEntity(row, action);
-                    });
+                    //$scope.GetClientReqDetails.forEach(function (row) {
+                    //    $scope.selectEntity(row, action);
+                    //});
+                    $scope.MasterData = {
+                        ClientID: $scope.GetClientReqDetailsCollection[0].ClientID,
+                        ClientReqID: $scope.GetClientReqDetailsCollection[0].ClientReqID,
+
+                    };
+
+
+                    $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].VendorCSAprvID, action);
+
                 }).error(function () {
                     $scope.loading = false;
                 });
@@ -1002,9 +985,10 @@
                     $scope.GetClientReqDetails = response.GetClientReqDetails;
                     $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
                     $scope.loading = false;
-                    $scope.GetClientReqDetails.forEach(function (row) {
-                        $scope.selectEntity(row, action);
-                    });
+                    //$scope.GetClientReqDetails.forEach(function (row) {
+                    //    $scope.selectEntity(row, action);
+                    //});
+                    $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQuotationID, action);
 
                 }).error(function () {
                     $scope.loading = false;
@@ -1012,18 +996,14 @@
             }
         };
 
-
+      
         $scope.showFlag = false;
         $scope.selectedRows = [];
         $scope.buttonChecked = false;
 
         $scope.selectEntity = function (row, action) {
             if (action === 'save') {
-                $scope.MasterData = {
-                    ClientID: row.ClientID,
-                    ClientReqID: row.ClientReqID
-                };
-
+              
                 var selecteditems = {
                     VendorCSAprvID: row.VendorCSAprvID,
                     ServiceCategoryID: row.ServiceCategoryID,
@@ -1038,20 +1018,22 @@
                     VenPrice: row.QutnPrice,
                     MclPrice: row.givenQutnPrice,
                     QutnAmt: row.QutnAmt,
-                    VatPerc: row.VatPerc,
-                    VatAmt: row.VatAmt,
+                    VatPerc: row.GivenVatPerc,
+                    VatAmt: row.TotGivenVatAmt,
                     TolAmt: row.givenTolAmt
                 };
 
-                $scope.selectedRows.push(selecteditems);
+                var existingItem = $scope.selectedRows.find(item => item.VendorCSAprvItemID === row.VendorCSAprvItemID);
 
-                if ($scope.selectedRows.length >= 1) {
-                    $scope.showTermsItem = true;
-                    $scope.GetTermsItemList(selecteditems.VendorCSAprvID, action);
+                if (existingItem) {
+                    existingItem.MclPrice = row.givenQutnPrice
+                    existingItem.VatPerc = row.GivenVatPerc;
+                    existingItem.VatAmt = row.TotGivenVatAmt;
+                    existingItem.TolAmt = row.givenTolAmt;
                 } else {
-                    $scope.showFlag = false;
-                    $scope.showTermsItem = false;
+                    $scope.selectedRows.push(selecteditems);
                 }
+                $scope.showTermsItem = $scope.selectedRows.length > 0;
             }
 
             else if (action === 'view' || 'edit') {
@@ -1062,6 +1044,7 @@
                 }
 
                 var selecteditems = {
+                    ClientQuotationID: row.ClientQuotationID,
                     ServiceCategoryID: row.ServiceCategoryID, 
                     TermsID: row.TermsID,
                     ServiceItemID: row.ServiceItemID,
@@ -1083,7 +1066,7 @@
 
                 if ($scope.selectedRows.length >= 1) {
                     $scope.showTermsItem = true;
-                    $scope.GetTermsItemList(row.ClientQuotationID, action);
+                 /*   $scope.GetTermsItemList(row.ClientQuotationID, action);*/
                 }
                 else {
                     $scope.showFlag = false;
@@ -1117,44 +1100,59 @@
             }
         }
 
+        $scope.initializeDefaults = function (row) {
+            row.givenQutnPrice = row.QutnPrice || 0;
+            row.GivenVatPerc = 15;
+
+            $scope.calculateRowFields(row);
+        };
+
+        $scope.calculateRowFields = function (row) {
+            row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
+            row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
+            row.givenQutnAmt = row.givenQutnPrice * (parseFloat(row.QutnQnty) || 0);
+            row.TotGivenVatAmt = row.givenQutnAmt * (row.GivenVatPerc / 100);
+            row.givenTolAmt = row.givenQutnAmt + row.TotGivenVatAmt;
+
+            $scope.selectEntity(row, 'save');
+        };
+
+        $scope.validateInput = function (field, row) {
+            const floatRegex = /^[0-9]*\.?[0-9]*$/; 
+            if (!floatRegex.test(row[field]) || row[field] === '') {
+                row[field] = 0;
+            }
+            $scope.calculateRowFields(row);
+        };
+
         $scope.checkEnter = function (event, row) {
-            if (event.keyCode === 13) {
-                row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
             if (event.keyCode === 13 || event.keyCode === 9) {
-                row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0; 
-                row.givenQutnAmt = row.givenQutnPrice * row.QutnQnty;
-                row.givenTolAmt = parseFloat(row.givenQutnAmt) + (parseFloat(row.VatAmt) || 0);
+                $scope.calculateRowFields(row);
             }
         };
 
-        ////////////////////////Requsition Terms & Conditions ///////////////////////
 
-        /*        $scope.ShowTermsConditionsList = function () {
-                    $http.get("/VendorRequisition/GetTermsConditionsList")
-                        .success(function (response) {
-                            $scope.TermsConditionsList = response.termsConditionsList;
-                            $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-                            $scope.loading = false;
-                        })
-                        .error(function () { });
         
-        $scope.openConfirmModal = function () {
+        $scope.openConfirmModal = function (action) {
             if (!$scope.MasterData.BriefingDate || $scope.MasterData.BriefingDate.trim() === '') {
                 toastr.error('Please enter a Briefing Date');
             } else {
                 // $('#ConfirmModal').modal('show');
-                $scope.SaveQuotToClient();
+                $scope.SaveQuotToClient(action);
             }
         };
 
         
-        $scope.SaveQuotToClient = function () {
+        $scope.SaveQuotToClient = function (action) {
 
             console.log($scope.MasterData);
             console.log($scope.selectedRows);
             console.log($scope.TermsConditionsDisplayedCollection);
 
+            $scope.MasterData.BriefingDate = $('#BriefingDate').val();
+
             $http.post('/QuotationToClient/SaveQuotToClient', {
+                action : action,
                 MasterData: [$scope.MasterData],
                 DetailData: $scope.selectedRows,
                 AllTermsDtl: $scope.TermsConditionsDisplayedCollection
@@ -1184,13 +1182,12 @@
                 window.location.reload();
             }, 2000);
         }
-        //utilities//
+
         $scope.getRowStyle = function (row) {
             if (row.selected) {
-                return { background: '#b9e7d8' }; // Change this to your desired color
+                return { background: '#b9e7d8' };
             } else {
-                return {}; // No additional styling
-            }
+                return {};            }
         };
 
         $scope.SearchSaveClients = function () {
@@ -1205,7 +1202,6 @@
                 search: $scope.PagingInfo.search,
                 type: "isBack"
             }).success(function (response) {
-                // Filter items where ProcessStatus is either null or an empty string
                 $scope.AllQuotationsList = response.AllAvailableClientsList;
                 $scope.AllQuotationsCollection = $scope.AllQuotationsList.filter(function (item) {
                     return item.ProcessStatus == null || item.ProcessStatus === '';
@@ -1255,27 +1251,13 @@
                 })
                 .error(function () { });
 
-                    $('#VendorReqTermsConditionsModal').modal('show');
-                };
             $('#ClientReqTermsConditionsModal').modal('show');
         };
 
-                $scope.toggleTermsConditionsSelect = function (row) {
-                    //$scope.VendorReq.TermsID = row.TermsID;
-                    //$scope.VendorReq.FormName = row.FormName;
         $scope.toggleTermsConditionsSelect = function (row) {
             $scope.ClientReq.TermsID = row.TermsID;
-            //$scope.ClientReq.FormCode = row.FormCode;
             $scope.ClientReq.FormName = row.FormName;
 
-                    $http.post('/QuotationToClient/GetVendorTermList', { TermsID: row.TermsID })
-                        .success(function (response) {
-                            $scope.ReqTermDataSetupGridData = response.VendorTermTermList;
-                            $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-                            $scope.loading = false;
-                        }).error(function () {
-                            $scope.loading = false;
-                        });
             $http.post('/ClientRequisition/GetClientReqTermAgainstFormList', { TermsID: row.TermsID })
                 .success(function (response) {
                     $scope.TermsConditionsList = response.ClientReqTermList;
@@ -1285,88 +1267,42 @@
                     $scope.loading = false;
                 });
 
-                    $('#VendorReqTermsConditionsModal').modal('hide');
-                };
             $('#ClientReqTermsConditionsModal').modal('hide');
         };
 
-                $scope.VendorReqTerm = {
-                    VendorReqTermsID: "",
-                    VendorReqID: "",
-                    TermsID: "",
-                    TermsCode: "",
-                    TermsName: ""
-                }
-
-                $scope.AddReqTermModal = function () {
-
-                    if ($('#RequisitionNo').val() == "") {
-                        toastr.error("Vendor ReqNo.  Required");
-                        return;
-                    }
-
-                    if ($('#SubmissionDate').val() == "") {
-                        toastr.error("Submission Date Required.");
-                        return;
-                    }
-
-                    if ($('#RequisitionDate').val() == "") {
-                        toastr.error("Requisition Date Date Required");
-                        return;
-                    }
-                    $('#RequisitionTermModal').modal('show');
-                };
         $scope.AddReqTermModal = function () {
          
             $('#RequisitionTermModal').modal('show');
         };
 
 
-                $scope.AddReqTerm = function () {
-        $scope.TermsConditionsList = [];  // base collection
+        $scope.TermsConditionsList = [];
         $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
 
         $scope.AddReqTerm = function () {
 
-                    if ($('#TermsCode').val() == "") {
-                        toastr.error("Terms Code Required");
-                        return;
-                    }
+            if ($('#TermsCode').val() == "") {
+                toastr.error("Terms Code Required");
+                return;
+            }
 
-                    if ($('#TermsName').val() == "") {
-                        toastr.error("Terms Name Required.");
-                        return;
-                    }
+            if ($('#TermsName').val() == "") {
+                toastr.error("Terms Name Required.");
+                return;
+            }
 
-                    $scope.VendorReqTerm.TermsCode = $('#TermsCode').val();
-                    $scope.VendorReqTerm.TermsName = $('#TermsName').val();
             $scope.ClientReqTerm.TermsCode = $('#TermsCode').val();
             $scope.ClientReqTerm.TermsName = $('#TermsName').val();
 
-                    $scope.vendorReqTermArray.push($scope.VendorReqTerm);
             $scope.clientReqTermArray.push($scope.ClientReqTerm);
 
-                    $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection.concat($scope.VendorReqTerm);
             $scope.TermsConditionsDisplayedCollection = $scope.TermsConditionsList.concat($scope.ClientReqTerm);
 
-                    $scope.resetVendorReqTerm();
-                    $("#btnAddReqTerm").html('Add');
-                    $('#RequisitionTermModal').modal('hide');
-                }
             $scope.resetClientReqTerm();
             $("#btnAddReqTerm").html('Add');
             $('#RequisitionTermModal').modal('hide');
         }
 
-                $scope.resetVendorReqTerm = function () {
-                    $scope.VendorReqTerm = {
-                        VendorReqTermsID: "",
-                        VendorReqID: "",
-                        TermsID: "",
-                        TermsCode: "",
-                        TermsName: ""
-                    }
-                }
         $scope.resetClientReqTerm = function () {
             $scope.ClientReqTerm = {
                 ClientReqTermsID: "",
@@ -1377,18 +1313,6 @@
             }
         }
 
-                $scope.toggleReqTermEdit = function (tableRow, $i) {
-                    $('#RequisitionTermModal').modal('show');
-                    $scope.resetVendorReqTerm();
-                    $scope.VendorReqTerm.VendorReqTermID = tableRow.VendorReqTermD;
-                    $scope.VendorReqTerm.VendorReqID = tableRow.VendorReqID;
-                    $scope.VendorReqTerm.TermsID = tableRow.TermsID;
-                    $scope.VendorReqTerm.TermsCode = tableRow.TermsCode;
-                    $scope.VendorReqTerm.TermsName = tableRow.TermsName;
-                    $scope.ReqTermGridDisplayCollection.splice($i, 1);
-                    $scope.vendorReqTermArray.splice($i, 1);
-                    $("#btnAddReqTerm").html('Update');
-                };
         $scope.toggleReqTermEdit = function (tableRow, $i) {
             $('#RequisitionTermModal').modal('show');
             $scope.resetClientReqTerm();
@@ -1402,19 +1326,6 @@
             $("#btnAddReqTerm").html('Update');
         };
 
-                $scope.toggleReqTermDelete = function (tableRow, $i) {
-                    if (!tableRow.VendorReqTermID) {
-                        $scope.resetVendorReqTerm();
-                        $scope.ReqTermGridDisplayCollection.splice($i, 1);
-                        $scope.vendorReqTermArray.splice($i, 1);
-                        toastr.success('Data Deleted Successsfully');
-                    }
-                    else {
-                        $scope.resetVendorReqTerm();
-                        $scope.VendorReqTerm.VendorReqTermID = tableRow.VendorReqTermID;
-                        $('#deleteReqTermModal').modal('show');
-                    }
-                };
         $scope.toggleReqTermDelete = function (tableRow, $i) {
             if (!tableRow.ClientReqTermID) {
                 $scope.resetClientReqTerm();
@@ -1429,19 +1340,6 @@
             }
         };
 
-                $scope.DeleteVendorReqTerm = function () {
-                    $http.post('/VendorRequisition/DeleteVendorReqItemAndTerm',
-                        { VendorReqItemID: $scope.VendorReqItem.VendorReqItemID, VendorReqTermID: $scope.VendorReqTerm.VendorReqTermID })
-                        .success(function (response) {
-                            if (response.status == "S203") {
-                                $scope.resetVendorReqTerm();
-                                $scope.ReqTermGridDisplayCollection.splice($i, 1);
-                                $scope.vendorReqTermArray.splice($i, 1);
-                                toastr.success('Data Deleted Successsfully');
-                                return;
-                            }
-                        });
-                }*/
         $scope.ClearEverything = function () {
             $scope.showTermsItem = false;
 
