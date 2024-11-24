@@ -52,7 +52,7 @@ namespace SILDMS.Model
         public string RequisitionDate { get; set; }
         public string ClientQutnID { get; set; }
         public string QuotationNo { get; set; }
-        public string QuotationAprvDate { get; set; }
+        public string ClientAdvanceClaimDate { get; set; }
         public string QutnAmt { get; set; }
         public string ServiceCategoryID { get; set; }
         public string QutnPrice { get; set; }
@@ -61,6 +61,9 @@ namespace SILDMS.Model
         public string WOInfoID { get; set; }
         public string WONo { get; set; }
         public string ClientQutnAprvID { get; set; }
+        public string AdvancClaimID { get; set; }
+        public string AdvancClaimRecmID { get; set; }
+        public string AdvancClaimAprvID { get; set; }
     }
 
 
@@ -118,7 +121,20 @@ namespace SILDMS.Model
         public string ClientQutnAprvID { get; set; }
         public string WOInfoID { get; set; }
         public string WOAmt { get; set; }
-                
+        public string AdvancClaimAmt { get; set; }
+        public string RemainingAmt { get; set; }
+        public string AdvancClaimDate { get; set; }
+        public string AdvancClaimNote { get; set; }
+        public string AdvancClaimID { get; set; }
+        public string AdvancClaimRecmID { get; set; }
+        public string AdvancClaimRecmAmt { get; set; }
+        public string RecomRemainingAmt { get; set; }
+        public string AdvancClimRecmDate { get; set; }
+        public string RecomNote { get; set; }
+        public string AdvancClaimAprvID { get; set; }
+        public string AdvancClaimAprvAmt { get; set; }
+        public string AdvancClimAprvDate { get; set; }
+        public string Note { get; set; }
     }
 
 }

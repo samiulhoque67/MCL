@@ -56,7 +56,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                         ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         QuotationNo = reader.GetString("AutoQutnNo"),
-                        QuotationAprvDate = reader.GetString("QuotationDate"),
+                        ClientAdvanceClaimDate = reader.GetString("QuotationDate"),
                         ClientQutnID = reader.GetString("ClientQutnID"),
                         ProcessStatus = reader.GetString("ProcessStatus")
                     }).ToList();
