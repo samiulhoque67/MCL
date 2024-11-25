@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using SILDMS.Utillity.Localization;
 using SILDMS.Utillity;
+using System.EnterpriseServices;
 
 namespace SILDMS.Web.UI.Controllers
 {
@@ -57,7 +58,7 @@ namespace SILDMS.Web.UI.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> SaveQuotToClient(List<AdvanceClaimMaster> MasterData, string Operation)
+        public async Task<ActionResult> SaveQuotToClient(List<AdvanceClaimMaster> MasterData, string TransactionMode, string ParticularNo, string MoneyReceiptNo)
         {
             if (MasterData == null || !MasterData.Any())
             {
@@ -66,7 +67,7 @@ namespace SILDMS.Web.UI.Controllers
 
             try
             {
-                string status = _claimReceivedService.SaveQuotToClientService(UserID, MasterData, Operation);
+                string status = _claimReceivedService.SaveQuotToClientService(UserID, MasterData, TransactionMode, ParticularNo, MoneyReceiptNo);
                 return Json(new { status = status }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

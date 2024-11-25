@@ -43,9 +43,9 @@ namespace SILDMS.Service.ClaimReceived
                 : ValidationResult.Success;
         }
 
-        public string SaveQuotToClientService(string UserID, List<AdvanceClaimMaster> MasterData, string Operation)
+        public string SaveQuotToClientService(string UserID, List<AdvanceClaimMaster> MasterData, string TransactionMode, string ParticularNo, string MoneyReceiptNo)
         {
-            return _claimReceivedDataService.SaveQuotToClientServiceData(UserID, MasterData, Operation, out _errorNumber);
+            return _claimReceivedDataService.SaveQuotToClientServiceData(UserID, MasterData, TransactionMode, ParticularNo, MoneyReceiptNo, out _errorNumber);
 
             throw new NotImplementedException();
         }

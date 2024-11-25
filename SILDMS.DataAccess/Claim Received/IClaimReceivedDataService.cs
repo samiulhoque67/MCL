@@ -12,7 +12,7 @@ namespace SILDMS.DataAccess.Claim_Received
         List<OBS_ClientwithReqQoutn> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
         List<AdvanClaimWo> WoQtforAdvanClaimDataService(string ClientID, string WOInfoID, string AdvancClaimAprvID, out string _errorNumber);
 
-        string SaveQuotToClientServiceData(string UserID, List<AdvanceClaimMaster> MasterData, string Operation, out string _errorNumber);
+        string SaveQuotToClientServiceData(string UserID, List<AdvanceClaimMaster> MasterData, string TransactionMode, string ParticularNo, string MoneyReceiptNo, out string _errorNumber);
 
     }
 }

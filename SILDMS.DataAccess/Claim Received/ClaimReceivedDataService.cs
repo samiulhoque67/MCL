@@ -115,7 +115,7 @@ namespace SILDMS.DataAccess.Claim_Received
         }
 
 
-        public string SaveQuotToClientServiceData(string UserID, List<AdvanceClaimMaster> MasterData, string Operation, out string errorNumber)
+        public string SaveQuotToClientServiceData(string UserID, List<AdvanceClaimMaster> MasterData, string TransactionMode, string ParticularNo, string MoneyReceiptNo, out string errorNumber)
         {
             errorNumber = string.Empty;
             string message = "";
@@ -151,10 +151,12 @@ namespace SILDMS.DataAccess.Claim_Received
 
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveClientAdvanceClaimAprv"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveClientAdvanceClaimRciv"))
             {
                 db.AddInParameter(dbCommandWrapper, "@OBS_AdvanceClaim_MasterType", SqlDbType.Structured, masterDataTable);
-                db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.VarChar, Operation);
+                db.AddInParameter(dbCommandWrapper, "@TransactionMode", SqlDbType.VarChar, TransactionMode);
+                db.AddInParameter(dbCommandWrapper, "@ParticularNo", SqlDbType.VarChar, ParticularNo);
+                db.AddInParameter(dbCommandWrapper, "@MoneyReceiptNo", SqlDbType.VarChar, MoneyReceiptNo);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 
