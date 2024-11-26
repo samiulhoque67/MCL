@@ -52,9 +52,9 @@ namespace SILDMS.Service
             WOInfoSearchList = clientInfoDataService.GetWOInfoSearchList();
             return ValidationResult.Success;
         }
-        public ValidationResult GetWOInfoItemList(string ClientID, out List<OBS_WOInfoItem> WOInfoItemList)
+        public ValidationResult GetWOInfoItemList(string ClientQutnAprvID, out List<OBS_WOInfoItem> WOInfoItemList)
         {
-            WOInfoItemList = clientInfoDataService.GetWOInfoItemList(ClientID);
+            WOInfoItemList = clientInfoDataService.GetWOInfoItemList(ClientQutnAprvID);
             return ValidationResult.Success;
         }
         public ValidationResult GetWOInfoTermList(string WOInfoID, out List<OBS_WOInfoTerms> WOInfoTermList)

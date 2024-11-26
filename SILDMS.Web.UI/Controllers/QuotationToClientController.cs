@@ -85,6 +85,8 @@ namespace SILDMS.Web.UI.Controllers
             try
             {
                 string status = _quotationToClientService.SaveQuotToClientService(UserID,  action, MasterData, DetailData, AllTermsDtl);
+
+                TempData["QuotationToClientReport"] = MasterData;
                 return Json(new { status = status }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
