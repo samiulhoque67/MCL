@@ -137,7 +137,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="WONumber" name="WONumber" type="text" @*data-ng-model="Client.ContactNumber"*@ class="form-control" ng-readonly="true" />
+                            <input id="WONumber" name="WONumber" type="text" ng-model="Client.WONumber" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                     <div class="col-lg-1"></div>
@@ -149,7 +149,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="WOAmount" name="WOAmount" type="text" @*data-ng-model="Client.ContactAddress"*@ class="form-control" ng-readonly="true" />
+                            <input id="WOAmount" name="WOAmount" type="text" ng-model="Client.WOAmount" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                 </div>
@@ -255,11 +255,30 @@
     </div>
 
 
-    <hr style="border: none; height: 3px; background-color: #8d8d8d; margin-top: 20px; margin-bottom: 20px; width: 100%; border-radius: 5px; " />
-    <label style="font-size: 14px; font-family: math;" class="box-title">Advance Demand Info</label>
-    <hr style="margin-top: 5px;" />
 
-    <div class="box-body">
+    @*</div>*@
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-info" style="border-bottom: 1px solid #d3e3e3;">
+                <div class="box-header with-border"
+                     style="height: 40px; border-bottom: 1px solid #d3e3e3; position: relative;">
+                    <h2 class="box-title"
+                        style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19; margin: 0;">
+                        Advance Demand Info
+                    </h2>
+
+                    <!-- Dropdown Icon -->
+                    <i class="fa fa-chevron-down dropdown-icon"
+                       ng-click="toggleBoxBody()"
+                       ng-class="{'fa-chevron-up': isBoxBodyVisible, 'fa-chevron-down': !isBoxBodyVisible}"
+                       style="cursor: pointer; font-size: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+                    </i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box-body" ng-show="isBoxBodyVisible === true" ng-style="{'max-height': isBoxBodyVisible ? '500px' : '0', 'overflow': 'hidden', 'transition': 'max-height 0.2s ease'}">
 
 
         <div class="row">
@@ -330,7 +349,7 @@
                     <div class="col-lg-2">
                         <div class="form-group">
                             <input id="ProposedAmount" name="ProposedAmount" type="text" readonly data-ng-model="AdvanceInformmation.ProposedAmount"
-                                   class="form-control"/>
+                                   class="form-control" />
                         </div>
                     </div>
 
@@ -343,7 +362,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="RemainingAmount" name="RemainingAmount" type="text"  data-ng-model="AdvanceInformmation.RemainingAmount"
+                            <input id="RemainingAmount" name="RemainingAmount" type="text" data-ng-model="AdvanceInformmation.RemainingAmount"
                                    readonly class="form-control" />
                         </div>
                     </div>
@@ -372,10 +391,16 @@
 
     </div>
 
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
+                <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
+                    <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Advance Recommendation Info</h2>
 
-    <hr style="border: none; height: 3px; background-color: #8d8d8d; margin-top: 20px; margin-bottom: 20px; width: 100%; border-radius: 5px; " />
-    <label style="font-size: 14px; font-family: math;" class="box-title">Advance Recommendation Info</label>
-    <hr style="margin-top: 5px;" />
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="box-body">
 
@@ -392,7 +417,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="RecommendationAmount" name="RecommendationAmount" type="text" data-ng-model="AdvanceRecom.RecommendationAmount"
+                            <input id="RecommendationAmount" name="RecommendationAmount" autocomplete="off" type="text" data-ng-model="AdvanceRecom.RecommendationAmount"
                                    class="form-control" ng-keydown="calculateRemainingAmount($event)" />
                         </div>
                     </div>
@@ -472,7 +497,7 @@
                     </div>
                     <div class="col-lg-3">
                         <div class="form-group">
-                            <input id="Note" name="Note" type="text" data-ng-model="AdvanceRecom.Note" class="form-control" />
+                            <input id="Note" name="Note" type="text" autocomplete="off" data-ng-model="AdvanceRecom.Note" class="form-control" />
                         </div>
                     </div>
 
@@ -555,7 +580,9 @@
             ClientName: "",
             VendorName: "",
             VendorQutnNo: "",
-            QuotationDate: ""
+            QuotationDate: "",
+            WONumber: "",
+            WOAmount: ""
         }
 
         $scope.AdvanceInformmation = {
@@ -672,10 +699,6 @@
             $scope.loading = true;
 
             $scope.PoNo = row.PoNo;
-            /*  $scope.AdvanceInformmation.PurchaseOrderAmount = row.POAprvAmnt;*/
-            $scope.AdvanceInformmation.ClientID = row.ClientID;
-            $scope.AdvanceInformmation.VendorID = row.VendorID;
-            $scope.AdvanceInformmation.POAprvID = row.POAprvID;
             $scope.AdvanceInformmation.VendorQutnID = row.VendorQutnID;
 
             $http.post('/AdvanceRecommendation/AvailableClientDetailInfo', {
@@ -690,7 +713,9 @@
                     ClientName: $scope.ClientDetails[0].ClientName,
                     VendorID: $scope.ClientDetails[0].VendorID,
                     VendorQutnNo: $scope.ClientDetails[0].VendorQutnNo,
-                    VendorName: $scope.ClientDetails[0].VendorName
+                    VendorName: $scope.ClientDetails[0].VendorName,
+                    WONumber: $scope.ClientDetails[0].WONo,
+                    WOAmount: $scope.ClientDetails[0].WOAmt,
                 };
 
                 $scope.AdvanceInformmation = {
@@ -704,7 +729,6 @@
                     ProposedAmount: $scope.ClientDetails[0].ProposedAmt,
                     RemainingAmount: $scope.ClientDetails[0].RemainingAmt,
                     AdvanceDemandDate: $scope.ClientDetails[0].AdvncDemnDate,
-                    POAprvID: $scope.ClientDetails[0].POAprvID,
                     ProposedBy: $scope.ClientDetails[0].UserFullName,
                    
                 };
@@ -714,12 +738,9 @@
                     AdvanceInvoiceNo: $scope.ClientDetails[0].VendrAdvncDemnID,
                     ProposedAmount: $scope.ClientDetails[0].ProposedAmt,
                     PurchaseOrderAmount: $scope.ClientDetails[0].POAprvAmnt,
-                   /* AdvanceDemandAmount: $scope.ClientDetails[0].AdvncDemnAmt,
-                    ProposedAmount: $scope.ClientDetails[0].ProposedAmt,
-                    RemainingAmount: $scope.ClientDetails[0].RemainingAmt,
-                    AdvanceDemandDate: $scope.ClientDetails[0].AdvncDemnDate,
+                    ClientReqID: $scope.ClientDetails[0].ClientReqID,
+                    WOInfoID: $scope.ClientDetails[0].WOInfoID,
                     POAprvID: $scope.ClientDetails[0].POAprvID,
-                    ProposedBy: $scope.ClientDetails[0].UserFullName,*/
 
                 };
 
@@ -736,6 +757,11 @@
         };
 
 
+        $scope.isBoxBodyVisible = false;
+
+        $scope.toggleBoxBody = function () {
+            $scope.isBoxBodyVisible = !$scope.isBoxBodyVisible;
+        };
 
         function performCalculation() {
             if ($scope.AdvanceRecom.PurchaseOrderAmount && $scope.AdvanceRecom.RecommendationAmount) {

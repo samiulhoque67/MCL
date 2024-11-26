@@ -36,9 +36,9 @@ namespace SILDMS.Service.AdvDemandVendor
                 : ValidationResult.Success;
         }
 
-        ValidationResult IAdvDemandVendorService.AvailableClientDetailInfoService(string ClientID, string POAprvID, out List<POinfo> ClientDetails)
+        ValidationResult IAdvDemandVendorService.AvailableClientDetailInfoService(string POAprvID, out List<POinfo> ClientDetails)
         {
-            ClientDetails = _advDemandVendorData.AvailableClientDetailInfoDataService(ClientID, POAprvID, out _errorNumber);
+            ClientDetails = _advDemandVendorData.AvailableClientDetailInfoDataService(POAprvID, out _errorNumber);
 
             return _errorNumber.Length > 0
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))

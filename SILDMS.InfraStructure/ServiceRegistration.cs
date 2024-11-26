@@ -147,6 +147,14 @@ using SILDMS.Service.ClientBillRcmd;
 using SILDMS.DataAccess.ClientBillRcmd;
 using SILDMS.Service.ClientAprvBill;
 using SILDMS.DataAccess.ClientAprvBill;
+using SILDMS.Service.AdvanceClaimRecomClient;
+using SILDMS.DataAccess.AdvanceClaimRecomClient;
+using SILDMS.Service.AdvanceClaimAprvClient;
+using SILDMS.DataAccess.AdvanceClaimAprvClient;
+using SILDMS.Service.ClaimReceived;
+using SILDMS.DataAccess.Claim_Received;
+using SILDMS.DataAccess.AdvancePayment;
+using SILDMS.Service.AdvancePayment;
 
 namespace SILDMS.InfraStructure
 {
@@ -331,6 +339,19 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IAdvanceClaimService>().To<AdvanceClaimService>();
             kernel.Bind<IAdvanceClaimData>().To<AdvanceClaimData>();
+
+            kernel.Bind<IAdvanceClaimRecomClientService>().To<AdvanceClaimRecomClientService>();
+            kernel.Bind<IAdvanceClaimRecomClientData>().To<AdvanceClaimRecomClientData>();
+
+            kernel.Bind<IAdvanceClaimAprvClientService>().To<AdvanceClaimAprvClientService>();
+            kernel.Bind<IAdvanceClaimAprvClientData>().To<AdvanceClaimAprvClientData>();
+            
+            kernel.Bind<IAdvancePaymentDataService>().To<AdvancePaymentDataService>();
+            kernel.Bind<IAdvancePaymentService>().To<AdvancePaymentService>();
+
+
+            kernel.Bind<IClaimReceivedService>().To<ClaimReceivedService>();
+            kernel.Bind<IClaimReceivedDataService>().To<ClaimReceivedDataService>();
 
 
             kernel.Bind<IQuotationToClientRevisedService>().To<QuotationToClientRevisedService>();

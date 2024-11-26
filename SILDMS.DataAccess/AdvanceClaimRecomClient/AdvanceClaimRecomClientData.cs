@@ -9,13 +9,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SILDMS.DataAccess.AdvanceClaim
+namespace SILDMS.DataAccess.AdvanceClaimRecomClient
 {
-    public class AdvanceClaimData : IAdvanceClaimData
+    public class AdvanceClaimRecomClientData : IAdvanceClaimRecomClientData
     {
         private readonly string _spStatusParam;
 
-        public AdvanceClaimData()
+        public AdvanceClaimRecomClientData()
         {
             _spStatusParam = "@p_Status";
         }
@@ -28,7 +28,7 @@ namespace SILDMS.DataAccess.AdvanceClaim
 
             var factory = new DatabaseProviderFactory();
             var db = factory.CreateDefault() as SqlDatabase;
-            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetWOforAdvnClaim"))
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetWOforAdvnClaimRecom"))
             {
                 db.AddInParameter(dbCommandWrapper, "@page", SqlDbType.Int, page);
                 db.AddInParameter(dbCommandWrapper, "@itemsPerPage", SqlDbType.Int, itemsPerPage);
@@ -50,6 +50,7 @@ namespace SILDMS.DataAccess.AdvanceClaim
                     var dt1 = ds.Tables[0];
                     AllAvailableClientsList = dt1.AsEnumerable().Select(reader => new OBS_ClientwithReqQoutn
                     {
+                        AdvancClaimID = reader.GetString("AdvancClaimID"),
                         WOInfoID = reader.GetString("WOInfoID"),
                         WONo = reader.GetString("WONo"),
                         ClientID = reader.GetString("ClientID"),
@@ -59,7 +60,7 @@ namespace SILDMS.DataAccess.AdvanceClaim
                         ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
-                        ClientAdvanceClaimDate = reader.GetString("QuotationAprvDate")
+                        ClientAdvanceClaimDate = reader.GetString("ClientAdvanceClaimDate")
                     }).ToList();
 
                 }
@@ -68,18 +69,18 @@ namespace SILDMS.DataAccess.AdvanceClaim
             return AllAvailableClientsList;
         }
 
-        public List<AdvanClaimWo> WoQtforAdvanClaimDataService(string ClientID, string WOInfoID, string WONo, out string _errorNumber)
+        public List<AdvanClaimWo> WoQtforAdvanClaimDataService(string ClientID, string WOInfoID, string AdvancClaimID, out string _errorNumber)
         {
             _errorNumber = string.Empty;
             var WODetails = new List<AdvanClaimWo>();
 
             var factory = new DatabaseProviderFactory();
             var db = factory.CreateDefault() as SqlDatabase;
-            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailQtforAdvanClaim"))
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailQtforAdvanClaimRecom"))
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientID", DbType.String, ClientID);
                 db.AddInParameter(dbCommandWrapper, "@WOInfoID", DbType.String, WOInfoID);
-                db.AddInParameter(dbCommandWrapper, "@WONo", DbType.String, WONo);
+                db.AddInParameter(dbCommandWrapper, "@AdvancClaimID", DbType.String, AdvancClaimID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 10);
                 dbCommandWrapper.CommandTimeout = 300;
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -97,7 +98,12 @@ namespace SILDMS.DataAccess.AdvanceClaim
                         ClientID = reader.GetString("ClientID"),
                         ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
                         WOInfoID = reader.GetString("WOInfoID"),
-                        WOAmt = reader.GetString("WOAmt")
+                        WOAmt = reader.GetString("WOAmt"),
+                        AdvancClaimAmt = reader.GetString("AdvancClaimAmt"),
+                        RemainingAmt = reader.GetString("RemainingAmt"),
+                        AdvancClaimID = reader.GetString("AdvancClaimID"),
+                        AdvancClaimDate = reader.GetString("AdvancClaimDate"),
+                        AdvancClaimNote = reader.GetString("Note"),
                     }).ToList();
 
                 }
@@ -107,7 +113,7 @@ namespace SILDMS.DataAccess.AdvanceClaim
         }
 
 
-        public string SaveQuotToClientServiceData(string UserID, List<AdvanceClaimMaster> MasterData, out string errorNumber)
+        public string SaveQuotToClientServiceData(string UserID, List<AdvanceClaimMaster> MasterData, string Operation, out string errorNumber)
         {
             errorNumber = string.Empty;
             string message = "";
@@ -143,9 +149,10 @@ namespace SILDMS.DataAccess.AdvanceClaim
 
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveClientAdvanceClaim"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveClientAdvanceClaimRecom"))
             {
                 db.AddInParameter(dbCommandWrapper, "@OBS_AdvanceClaim_MasterType", SqlDbType.Structured, masterDataTable);
+                db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.VarChar, Operation);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 

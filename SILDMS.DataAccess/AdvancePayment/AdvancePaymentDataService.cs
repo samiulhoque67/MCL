@@ -3,24 +3,22 @@ using Microsoft.Practices.EnterpriseLibrary.Data;
 using SILDMS.Model;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.Common;
 
-namespace SILDMS.DataAccess.AdvDemandVendor
+namespace SILDMS.DataAccess.AdvancePayment
 {
-    public class AdvDemandVendorData : IAdvDemandVendorData
+    public class AdvancePaymentDataService : IAdvancePaymentDataService
     {
-
         private readonly string _spStatusParam;
 
-        public AdvDemandVendorData()
+        public AdvancePaymentDataService()
         {
             _spStatusParam = "@p_Status";
         }
-
 
         public List<POinfo> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber)
         {
@@ -29,7 +27,7 @@ namespace SILDMS.DataAccess.AdvDemandVendor
 
             var factory = new DatabaseProviderFactory();
             var db = factory.CreateDefault() as SqlDatabase;
-            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailablePOInfo"))
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailablePOforRecom"))
             {
                 db.AddInParameter(dbCommandWrapper, "@page", SqlDbType.Int, page);
                 db.AddInParameter(dbCommandWrapper, "@itemsPerPage", SqlDbType.Int, itemsPerPage);
@@ -51,16 +49,17 @@ namespace SILDMS.DataAccess.AdvDemandVendor
                     var dt1 = ds.Tables[0];
                     AllAvailableClientsList = dt1.AsEnumerable().Select(reader => new POinfo
                     {
-                        VendorName = reader.GetString("VendorName"),
-                        PoNo = reader.GetString("PoNo"),
-                        PODate = reader.GetString("PODate"),
-                        POAprvAmnt = reader.GetString("AprvAmnt"),
-                        ClientID = reader.GetString("ClientID"),
                         VendorID = reader.GetString("VendorID"),
+                        VendorName = reader.GetString("VendorName"),
+                        ClientID = reader.GetString("ClientID"),
+                        ClientName = reader.GetString("ClientName"),
+                        PoNo = reader.GetString("PONo"),
+                        PODate = reader.GetString("PODate"),
+                        POAmt = reader.GetString("POAmt"),
+                        POAprvAmnt = reader.GetString("POAprvAmnt"),
+                        AdvncDemnAmt = reader.GetString("AdvncDemnAmt"),
                         POAprvID = reader.GetString("POAprvID"),
-                        VendorQutnID = reader.GetString("VendorQutnID"),
-                        VendorQutnNo = reader.GetString("VendorQutnNo"),
-                        QuotationDate = reader.GetString("QuotationDate"),
+                        VendrAdvncDemnID = reader.GetString("VendrAdvncDemnID")
                     }).ToList();
 
                 }
@@ -69,16 +68,17 @@ namespace SILDMS.DataAccess.AdvDemandVendor
             return AllAvailableClientsList;
         }
 
-        public List<POinfo> AvailableClientDetailInfoDataService(string POAprvID, out string _errorNumber)
+        public List<POinfo> AvailableClientDetailInfoDataService(string ClientID, string VendrAdvncDemnID, out string _errorNumber)
         {
             _errorNumber = string.Empty;
             var ClientDetails = new List<POinfo>();
 
             var factory = new DatabaseProviderFactory();
             var db = factory.CreateDefault() as SqlDatabase;
-            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailablePOforDemand"))
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailablePOforDemandRecom"))
             {
-                db.AddInParameter(dbCommandWrapper, "@POAprvID", DbType.String, POAprvID);
+                db.AddInParameter(dbCommandWrapper, "@ClientID", DbType.String, ClientID);
+                db.AddInParameter(dbCommandWrapper, "@VendrAdvncDemnID", DbType.String, VendrAdvncDemnID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 10);
                 dbCommandWrapper.CommandTimeout = 300;
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -93,20 +93,26 @@ namespace SILDMS.DataAccess.AdvDemandVendor
                     var dt1 = ds.Tables[0];
                     ClientDetails = dt1.AsEnumerable().Select(reader => new POinfo
                     {
-                        ClientName = reader.GetString("ClientName"),
                         ClientID = reader.GetString("ClientID"),
+                        ClientName = reader.GetString("ClientName"),
                         VendorName = reader.GetString("VendorName"),
                         VendorQutnNo = reader.GetString("VendorQutnNo"),
                         QuotationDate = reader.GetString("QuotationDate"),
+                        VendrAdvncDemnID = reader.GetString("VendrAdvncDemnID"),
+                        AdvncDemnAmt = reader.GetString("AdvncDemnAmt"),
+                        ProposedAmt = reader.GetString("ProposedAmt"),
+                        AdvncDemnDate = reader.GetString("AdvncDemnDate"),
+                        RemainingAmt = reader.GetString("RemainingAmt"),
+                        UserFullName = reader.GetString("UserFullName"),
                         PoNo = reader.GetString("PoNo"),
                         POAprvID = reader.GetString("POAprvID"),
                         VendorQutnID = reader.GetString("VendorQutnID"),
                         VendorID = reader.GetString("VendorID"),
-                        ClientReqID = reader.GetString("ClientReqID"),
                         POAprvAmnt = reader.GetString("POAprvAmnt"),
                         WONo = reader.GetString("WONo"),
+                        WOAmt = reader.GetString("WOAmt"),
+                        ClientReqID = reader.GetString("ClientReqID"),
                         WOInfoID = reader.GetString("WOInfoID"),
-                        WOAmt = reader.GetString("WOAmt")
                     }).ToList();
 
                 }
@@ -164,13 +170,15 @@ namespace SILDMS.DataAccess.AdvDemandVendor
             }
 
 
+
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveAdvanceDemand"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveAdvanceDemandRecom"))
             {
                 db.AddInParameter(dbCommandWrapper, "@OBS_AdvanceDemand_MasterType", SqlDbType.Structured, masterDataTable);
                 db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.VarChar, MasterData[0].WOInfoID);
                 db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, MasterData[0].ClientReqID);
+                db.AddInParameter(dbCommandWrapper, "@POAprvID", SqlDbType.VarChar, MasterData[0].POAprvID);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 
