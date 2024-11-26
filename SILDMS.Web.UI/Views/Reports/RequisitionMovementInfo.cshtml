@@ -1,0 +1,114 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+<title>User Activity Status</title>
+<div class="box box-primary box-body" ng-controller="RequisitionMovementInfoCtrl" data-ng-init="init()">
+
+    @using (Html.BeginForm("RequisitionMovementInfo", "../Reports", System.Web.Mvc.FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+    {
+        <!-- box-header -->
+        <div class="box-header with-border">
+            <i class="fa fa-user"></i>
+            <h3 class="box-title">Requisition Movement Status</h3>
+            <div class="box-tools pull-right">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ButtonType" value="Preview" class="btn btn-flat btn-success pull-right">
+                            <i class="fa fa-print"></i> Preview
+                        </button>
+                    </div>
+                    <div class="col-lg-4">
+                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ButtonType" value="Download" class="btn btn-flat btn-success pull-Left">
+                            <i class="fa fa-download"></i> Download
+                        </button>
+                    </div>
+                    <div class="col-lg-4">
+                        <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Refresh</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <label style="padding-left:130px;">Requisition No.</label>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <input id="txtRequisitionNo" name="RequisitionNo" type="text" autocomplete="off" class="form-control" placeholder="RequisitionNo"
+                               data-ng-model="RequisitionMovementInfoModel.RequisitionNo" style="background:#fff" />
+                    </div>
+                </div>
+
+                @*<div class="col-sm-2 col-md-2 col-lg-2">
+                    <label style="padding-left:130px;">Date</label>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <input id="txtRequisitionDate" name="RequisitionDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                               data-ng-model="RequisitionMovementInfoModel.RequisitionDate" style="background:#fff" />
+                    </div>
+                </div>*@
+
+
+                @*<div class="col-sm-4 col-md-4 col-lg-4">
+            <label style="padding-left:200px;">Download Type</label>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <input type="radio" name="ReportType" value="PDF" checked="checked" /> <label>PDF</label>
+            <input type="radio" name="ReportType" value="EXCEL" /> <label>EXCEL</label>
+            <input type="radio" name="ReportType" value="WORD" /> <label>WORD</label>
+        </div>*@
+            </div>
+        </div>
+
+    }
+</div>
+
+<script type="text/javascript">
+
+    $('.DatePicker').datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true
+    });
+
+    $('#txtRequisitionDate').datepicker()
+      .on('changeDate', function (ev) {
+          $('.datepicker').hide();
+      });
+
+    $('#txtRequisitionDate').datepicker().on('changeDate', function (ev) {
+        var EnteredDate = $('#txtRequisitionDate').val(); // For JQuery
+        var date = EnteredDate.substring(0, 2);
+        var month = EnteredDate.substring(3, 5);
+        var year = EnteredDate.substring(6, 10);
+        var myDate = new Date(year, month - 1, date);
+
+        var today = new Date();
+        if (myDate > today) {
+            $('#txtRequisitionDate').val('');
+            toastr.error("Date should not grater than system date.");
+        }
+
+        $('.datepicker').hide();
+    });
+
+    app.controller('RequisitionMovementInfoCtrl', function ($scope, $http) {
+
+        //////User End//////////
+        $scope.showPrint = false;
+        $scope.itemsByPage = 10;
+        $scope.RequisitionMovementInfoModel = {
+            RequisitionNo: "",
+            RequisitionDate: "",
+            UserRptID: "",
+            UserFullName: ""
+        };
+
+        $scope.toggleRefreshTable = function () {
+            $scope.RequisitionMovementInfoModel.RequisitionDate = "";
+            window.location.reload();
+        };
+    });
+</script>

@@ -337,7 +337,9 @@
     <Compile Include="Controllers\ClientFinalBillPrepareController.cs" />
     <Compile Include="Controllers\ClientInfoController.cs" />
     <Compile Include="Controllers\ClientRequisitionController.cs" />
+    <Compile Include="Controllers\ClientSettlementController.cs" />
     <Compile Include="Controllers\DashboardMCLController.cs" />
+    <Compile Include="Controllers\FinalSettlementController.cs" />
     <Compile Include="Controllers\PoAprvController.cs" />
     <Compile Include="Controllers\POCreationController.cs" />
     <Compile Include="Controllers\PoRecomController.cs" />
@@ -359,6 +361,7 @@
     <Compile Include="Controllers\VendorInfoController.cs" />
     <Compile Include="Controllers\VendorQuotationController.cs" />
     <Compile Include="Controllers\VendorRequisitionController.cs" />
+    <Compile Include="Controllers\VendorSettlementController.cs" />
     <Compile Include="Controllers\WorkOrderInfoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -376,11 +379,19 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>rptQuotationtoClient.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\rptQuotationtoClientTerms.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>rptQuotationtoClientTerms.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptRequisitionMovementInfo.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptRequisitionMovementInfo.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\rptRoleList.cs">
       <SubType>Component</SubType>
@@ -392,6 +403,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>rptVendorCSInfo.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptVendorCSRecmInfo.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptVendorCSRecmInfo.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\rptVendorRequisition.cs">
@@ -1584,6 +1601,10 @@
     <Content Include="Views\QuotationToClientRevised\Index.cshtml" />
     <Content Include="Views\VendorRequisition\RptRequisitionToVendorReport.cshtml" />
     <Content Include="Views\Reports\QuotationToClientReport.cshtml" />
+    <Content Include="Views\Reports\RequisitionMovementInfo.cshtml" />
+    <Content Include="Views\FinalSettlement\Index.cshtml" />
+    <Content Include="Views\ClientSettlement\Index.cshtml" />
+    <Content Include="Views\VendorSettlement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1623,9 +1644,17 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptQuotationtoClientTerms.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptRequisitionMovementInfo.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptRequisitionMovementInfo.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptVendorCSInfo.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptVendorCSInfo.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptVendorCSRecmInfo.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptVendorCSRecmInfo.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptVendorRequisition.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

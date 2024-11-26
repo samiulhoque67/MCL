@@ -86,7 +86,6 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
                 return "";
             }
 
-
             if (user.ToLower() == "superadmin" && StringEncription.Encrypt(password, true) != _adminPassword)
             {
                 return "E401";
@@ -103,6 +102,8 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
                  }, DefaultAuthenticationTypes.ApplicationCookie);
                 Session["UserID"] = (from temp in permissionMenu where temp.UserID != "" select temp.UserID).FirstOrDefault();  // permissionMenu[0].UserID.ToString().Trim();
                 Session["User"] = (from temp in permissionMenu where temp.UserName != "" select temp.UserName).FirstOrDefault();
+                Session["UserFullName"] = (from temp in permissionMenu where temp.UserFullName != "" select temp.UserFullName).FirstOrDefault();
+                Session["UserDesignation"] = (from temp in permissionMenu where temp.UserDesignation != "" select temp.UserDesignation).FirstOrDefault();
                 Session["OwnerLevelID"] = (from temp in permissionMenu where temp.OwnerLevelID != "" select temp.OwnerLevelID).FirstOrDefault();
                 Session["OwnerID"] = (from temp in permissionMenu where temp.OwnerID != "" select temp.OwnerID).FirstOrDefault();
                 //Session["DefaultServer"] = (from temp in permissionMenu where temp.DefaultServer != "" select temp.DefaultServer).FirstOrDefault();

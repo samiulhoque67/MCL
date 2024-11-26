@@ -39,5 +39,9 @@ namespace SILDMS.Service.ClientAprvBill
         {
             return _clientAprvBillData.SaveClientFinalBill(billRecv);
         }
+        public string SaveVendorFinalBillRcvd(VendorBillRecvd billRecv)
+        {
+            return _clientAprvBillData.SaveVendorFinalBillRcvd(billRecv);
+        }
     }
 }

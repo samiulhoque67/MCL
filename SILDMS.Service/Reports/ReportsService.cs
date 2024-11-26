@@ -54,9 +54,19 @@ namespace SILDMS.Service.Reports
             return ValidationResult.Success;
         }
 
-        public ValidationResult VendorCSApprevedReport(string UserRptID, string BillReceiveFromDate, string Status, string id, string action, out DataTable dt)
+        public ValidationResult RequisitionMovementInfo(string RequisitionNo, out DataTable dt)
         {
-            dt = _reportDataService.VendorCSApprevedReport(UserRptID, BillReceiveFromDate, Status, id, action, out _errorNumber);
+            dt = _reportDataService.RequisitionMovementInfo(RequisitionNo, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult VendorCSApprevedReport(string VendorReqID, string ServiceItemID, out DataTable dt)
+        {
+            dt = _reportDataService.VendorCSApprevedReport(VendorReqID, ServiceItemID, out _errorNumber);
             if (_errorNumber.Length > 0)
             {
                 return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
@@ -98,7 +108,7 @@ namespace SILDMS.Service.Reports
         {
             return _reportDataService.GetCompanyOrOwnerNameByUserID(UserID);
         }
-       
+
         public ValidationResult GetVendorNameAndAddress(string vendorID, out List<RptVendorWithAddress> RptAllEFTVendorList)
         {
             RptAllEFTVendorList = _reportDataService.GetVendorNameAndAddress(vendorID, out _errorNumber);

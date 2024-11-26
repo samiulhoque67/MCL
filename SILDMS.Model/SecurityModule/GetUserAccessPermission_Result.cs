@@ -16,6 +16,8 @@ namespace SILDMS.Model.SecurityModule
         public string RoleTitle { get; set; }
         public string UserID { get; set; }
         public string UserName { get; set; }
+        public string UserFullName { get; set; }
+        public string UserDesignation { get; set; }
         public string DefaultServer { get; set; }
         public virtual ICollection<SEC_Menu> AccessMenu { get; set; }       
 

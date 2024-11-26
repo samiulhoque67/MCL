@@ -338,7 +338,7 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IWorkOrderInfoService>().To<WorkOrderInfoService>();
             kernel.Bind<IWorkOrderInfoDataService>().To<WorkOrderInfoDataService>();
-            
+
             kernel.Bind<IClientFinalBillPrepareService>().To<ClientFinalBillPrepareService>();
             kernel.Bind<IClientFinalBillPrepareData>().To<ClientFinalBillPrepareData>();
 
@@ -348,8 +348,14 @@ namespace SILDMS.InfraStructure
             kernel.Bind<IClientAprvBillService>().To<ClientAprvBillService>();
             kernel.Bind<IClientAprvBillData>().To<ClientAprvBillData>();
 
-      
+            kernel.Bind<IFinalSettlementService>().To<FinalSettlementService>();
+            kernel.Bind<IFinalSettlementDataService>().To<FinalSettlementDataService>();
 
+            kernel.Bind<IClientSettlementService>().To<ClientSettlementService>();
+            kernel.Bind<IClientSettlementDataService>().To<ClientSettlementDataService>();
+
+            kernel.Bind<IVendorSettlementService>().To<VendorSettlementService>();
+            kernel.Bind<IVendorSettlementDataService>().To<VendorSettlementDataService>();
         }
     }
 }

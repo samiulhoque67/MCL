@@ -150,23 +150,23 @@ namespace SILDMS.Web.UI.Controllers
         {
             DataTable dt = new DataTable();
 
-            if (string.IsNullOrEmpty(model.BillReceiveFromDate))
-            {
-                if (string.IsNullOrEmpty(model.BillReceiveToDate))
-                {
-                    model.BillReceiveFromDate = model.BillReceiveFromDate;
-                    model.BillReceiveToDate = model.BillReceiveToDate;
-                }
-                else
-                    model.BillReceiveFromDate = model.BillReceiveToDate;
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(model.BillReceiveToDate))
-                    model.BillReceiveToDate = model.BillReceiveFromDate;
-            }
+            //if (string.IsNullOrEmpty(model.BillReceiveFromDate))
+            //{
+            //    if (string.IsNullOrEmpty(model.BillReceiveToDate))
+            //    {
+            //        model.BillReceiveFromDate = model.BillReceiveFromDate;
+            //        model.BillReceiveToDate = model.BillReceiveToDate;
+            //    }
+            //    else
+            //        model.BillReceiveFromDate = model.BillReceiveToDate;
+            //}
+            //else
+            //{
+            //    if (string.IsNullOrEmpty(model.BillReceiveToDate))
+            //        model.BillReceiveToDate = model.BillReceiveFromDate;
+            //}
 
-            await Task.Run(() => _reportService.GetRptUserActivityStatus(model.BillReceiveFromDate, model.BillReceiveToDate, model.UserRptID, "", UserID, out dt));
+            //await Task.Run(() => _reportService.GetRptUserActivityStatus(model.BillReceiveFromDate, model.BillReceiveToDate, model.UserRptID, "", UserID, out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
@@ -178,8 +178,8 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.SetParameterValue("rptName", "User Activity Status");
             reportDocument.SetParameterValue("ProcessBy", GetUserName(model.UserRptID));
             reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
-            reportDocument.SetParameterValue("fromDate", model.BillReceiveFromDate);
-            reportDocument.SetParameterValue("toDate", model.BillReceiveToDate);
+            //reportDocument.SetParameterValue("fromDate", model.BillReceiveFromDate);
+            //reportDocument.SetParameterValue("toDate", model.BillReceiveToDate);
 
             if (model.ButtonType == "Preview")
                 reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, "UserActivityStatus");
@@ -301,36 +301,47 @@ namespace SILDMS.Web.UI.Controllers
         [Authorize]
         [HttpPost]
         [SILLogAttribute]
-        public async Task<dynamic> VendorCSApprevedReport(OBS_VendorCSAprv model)
+        public async Task<dynamic> VendorCSApprevedReport(string ReportType)
         {
+            var tempdata = TempData["VendorCSRecmInfo"];
+            string VendorReqID = string.Empty, ServiceItemID = string.Empty;
+            ReportType = "PDF";
+            OBS_VendorCSAprv objVendorReq = new OBS_VendorCSAprv();
+
+            if (TempData["VendorCSRecmInfo"] == null)
+            {
+                ViewBag.Title = "No valid data.";
+                //return View();
+            }
+            else
+            {
+                objVendorReq = (OBS_VendorCSAprv)TempData["VendorCSRecmInfo"];
+                VendorReqID = objVendorReq.VendorReqID;
+                ServiceItemID = objVendorReq.ServiceItemID;
+            }
+
             DataTable dt = new DataTable();
 
-         //   await Task.Run(() => _reportService.VendorCSApprevedReport(model.UserRptID, model.BillReceiveFromDate, model.Status, "", UserID, out dt));
+            await Task.Run(() => _reportService.VendorCSApprevedReport(VendorReqID, ServiceItemID, out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
-            ReportPath = ReportPath + "/rptVendorCSInfo.rpt";
+            ReportPath = ReportPath + "/rptVendorCSRecmInfo.rpt";
             reportDocument.Load(ReportPath);
             reportDocument.SetDataSource(dt);
             reportDocument.Refresh();
+
+            reportDocument.SetParameterValue("RecmVendor", objVendorReq.CSRecmVendorName);
+            reportDocument.SetParameterValue("RecmBy", objVendorReq.RecommendedByName);
+            reportDocument.SetParameterValue("RecmDesig", objVendorReq.RecommendedByDesignation);
+
             //reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
-            //reportDocument.SetParameterValue("rptName", "User Details");
+            //reportDocument.SetParameterValue("RecmVendor", "Square Informatix Ltd.");
             //reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
 
 
             string reportName = "VendorCSApprevedReport";
             reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
-            //if (model.ButtonType == "Preview")
-            //    reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
-            //else
-            //{
-            //    if (model.ReportType == "PDF")
-            //        reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, true, reportName);
-            //    else if (model.ReportType == "EXCEL")
-            //        reportDocument.ExportToHttpResponse(ExportFormatType.ExcelRecord, System.Web.HttpContext.Current.Response, true, reportName);
-            //    else
-            //        reportDocument.ExportToHttpResponse(ExportFormatType.EditableRTF, System.Web.HttpContext.Current.Response, true, reportName);
-            //}
             reportDocument.Close();
             reportDocument.Dispose();
             return View();
@@ -348,7 +359,7 @@ namespace SILDMS.Web.UI.Controllers
         {
             DataTable dt = new DataTable();
 
-            await Task.Run(() => _reportService.GetRptUserDetails(model.UserRptID, model.BillReceiveFromDate, model.Status, "", UserID, out dt));
+            //await Task.Run(() => _reportService.GetRptUserDetails(model.UserRptID, model.BillReceiveFromDate, model.Status, "", UserID, out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
@@ -377,6 +388,50 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.Dispose();
             return View();
         }
+
+        [SILAuthorize]
+        public ActionResult RequisitionMovementInfo() 
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> RequisitionMovementInfo(ReportModel model)
+        {
+            DataTable dt = new DataTable();
+
+            await Task.Run(() => _reportService.RequisitionMovementInfo(model.RequisitionNo, out dt));
+
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports");
+            ReportPath = ReportPath + "/rptRequisitionMovementInfo.rpt";
+            reportDocument.Load(ReportPath);
+            reportDocument.SetDataSource(dt);
+            reportDocument.Refresh();
+
+            //reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
+            //reportDocument.SetParameterValue("rptName", "User Details");
+            //reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
+
+            string reportName = "RequisitionMovementInfo";
+            reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            //if (model.ButtonType == "Preview")
+            //    reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            //else
+            //{
+            //    if (model.ReportType == "PDF")
+            //        reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, true, reportName);
+            //    else if (model.ReportType == "EXCEL")
+            //        reportDocument.ExportToHttpResponse(ExportFormatType.ExcelRecord, System.Web.HttpContext.Current.Response, true, reportName);
+            //    else
+            //        reportDocument.ExportToHttpResponse(ExportFormatType.EditableRTF, System.Web.HttpContext.Current.Response, true, reportName);
+            //}
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
+
 
         public ActionResult Index()
         {
@@ -457,7 +512,7 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> OwnerList(ReportModel model)
         {
             DataTable dt = new DataTable();
-            await Task.Run(() => _reportService.GetRptOwnerList(model.OwnerLevelID, model.Company, model.ParentOwnerID, model.Status, "", UserID, out dt));
+            //await Task.Run(() => _reportService.GetRptOwnerList(model.OwnerLevelID, model.Company, model.ParentOwnerID, model.Status, "", UserID, out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
@@ -499,7 +554,7 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> DocumentsList(ReportModel model)
         {
             DataTable dt = new DataTable();
-            await Task.Run(() => _reportService.GetRptDocumentsList(model.OwnerLevelID, model.OwnerID, model.DocCategoryID, model.DocTypeID, model.DocPropertyID, model.Status, "", UserID, out dt));
+            //await Task.Run(() => _reportService.GetRptDocumentsList(model.OwnerLevelID, model.OwnerID, model.DocCategoryID, model.DocTypeID, model.DocPropertyID, model.Status, "", UserID, out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
@@ -541,7 +596,7 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> RoleList(ReportModel model)
         {
             DataTable dt = new DataTable();
-            await Task.Run(() => _reportService.GetRptRoleList(model.OwnerLevelID, model.OwnerID, model.RoleID, model.Status, "", UserID, out dt));
+            //await Task.Run(() => _reportService.GetRptRoleList(model.OwnerLevelID, model.OwnerID, model.RoleID, model.Status, "", UserID, out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
@@ -551,12 +606,12 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.Refresh();
             if (string.IsNullOrEmpty(model.Company))
                 reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
-            else
-                reportDocument.SetParameterValue("ComDiv", GetCompanyName(model.OwnerID));
+            //else
+            //reportDocument.SetParameterValue("ComDiv", GetCompanyName(model.OwnerID));
             reportDocument.SetParameterValue("rptName", "Role List");
             reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
 
-            string reportName = GetCompanyShortName(model.OwnerID) + "-" + "RoleList";
+            string reportName = string.Empty;//GetCompanyShortName(model.OwnerID) + "-" + "RoleList";
             if (model.ButtonType == "Preview")
                 reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
             else

@@ -11,11 +11,12 @@ using System.Threading.Tasks;
 namespace SILDMS.Service.ClientFinalBillPrepare
 {
     public class ClientFinalBillPrepareService : IClientFinalBillPrepareService
-    { private readonly IClientFinalBillPrepareData _clientFinalBillPrepareData;
+    {
+        private readonly IClientFinalBillPrepareData _clientFinalBillPrepareData;
         private readonly ILocalizationService _localizationService;
         private string errorNumber = "";
 
-        public ClientFinalBillPrepareService(IClientFinalBillPrepareData clientFinalBillPrepareData,ILocalizationService localizationService)
+        public ClientFinalBillPrepareService(IClientFinalBillPrepareData clientFinalBillPrepareData, ILocalizationService localizationService)
         {
             _clientFinalBillPrepareData = clientFinalBillPrepareData;
             _localizationService = localizationService;
