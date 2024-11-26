@@ -1,22 +1,21 @@
-﻿using SILDMS.Service.AdvDemandVendor;
+﻿using SILDMS.Model;
+using SILDMS.Service.AdvanceRecommendation;
+using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using SILDMS.Utillity;
 using SILDMS.Utillity.Localization;
-using SILDMS.Web.UI.Areas.SecurityModule.Models;
-using SILDMS.Service.QuotationToClient;
-using SILDMS.Model;
-using System.Threading.Tasks;
+using SILDMS.Service.AdvancePayment;
 
 namespace SILDMS.Web.UI.Controllers
 {
-    public class AdvDemandVendorController : Controller
+    public class AdvancePaymentController : Controller
     {
-
-        readonly IAdvDemandVendorService _advDemandVendorService;
+        readonly IAdvancePaymentService _advancePaymentService;
         private readonly ILocalizationService _localizationService;
         private ValidationResult respStatus = new ValidationResult();
         private string outStatus = string.Empty;
@@ -24,33 +23,35 @@ namespace SILDMS.Web.UI.Controllers
         private string action = string.Empty;
 
 
-        public AdvDemandVendorController(IAdvDemandVendorService repository, ILocalizationService localizationService)
+        public AdvancePaymentController(IAdvancePaymentService repository, ILocalizationService localizationService)
         {
-            this._advDemandVendorService = repository;
+            this._advancePaymentService = repository;
             this._localizationService = localizationService;
             UserID = SILAuthorization.GetUserID();
         }
-        // GET: AdvDemandVendor
+
+
+        // GET: AdvancePayment
         public ActionResult Index()
         {
             return View();
         }
 
-
         [HttpPost]
         public async Task<dynamic> AllAvailableClients(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
         {
             var AllAvailableClientsList = new List<POinfo>();
-            await Task.Run(() => _advDemandVendorService.AllAvailableCSVendorApprovalService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out AllAvailableClientsList));
+            await Task.Run(() => _advancePaymentService.AllAvailableCSVendorApprovalService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out AllAvailableClientsList));
             var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
             return result;
         }
 
+
         [HttpPost]
-        public async Task<dynamic> AvailableClientDetailInfo(string POAprvID)
+        public async Task<dynamic> AvailableClientDetailInfo(string ClientID, string VendrAdvncDemnID)
         {
             var ClientDetails = new List<POinfo>();  // Renamed to ClientDetails
-            await Task.Run(() => _advDemandVendorService.AvailableClientDetailInfoService(POAprvID, out ClientDetails));
+            await Task.Run(() => _advancePaymentService.AvailableClientDetailInfoService(ClientID, VendrAdvncDemnID, out ClientDetails));
             var result = Json(new { ClientDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
             return result;
         }
@@ -65,7 +66,7 @@ namespace SILDMS.Web.UI.Controllers
 
             try
             {
-                string status = _advDemandVendorService.SaveQuotToClientService(UserID, MasterData);
+                string status = _advancePaymentService.SaveQuotToClientService(UserID, MasterData);
                 return Json(new { status = status }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

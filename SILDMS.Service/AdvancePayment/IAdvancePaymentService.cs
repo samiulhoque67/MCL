@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace SILDMS.Service.AdvDemandVendor
+
+namespace SILDMS.Service.AdvancePayment
 {
-    public interface IAdvDemandVendorService
+    public interface IAdvancePaymentService
     {
         ValidationResult AllAvailableCSVendorApprovalService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out List<POinfo> AllAvailableClientsList);
-        ValidationResult AvailableClientDetailInfoService(string POAprvID, out List<POinfo> ClientDetails);
-
+        ValidationResult AvailableClientDetailInfoService(string ClientID, string VendrAdvncDemnID, out List<POinfo> ClientDetails);
         string SaveQuotToClientService(string UserID, List<AdvanceDemandMaster> MasterData);
 
     }

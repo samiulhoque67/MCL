@@ -153,6 +153,8 @@ using SILDMS.Service.AdvanceClaimAprvClient;
 using SILDMS.DataAccess.AdvanceClaimAprvClient;
 using SILDMS.Service.ClaimReceived;
 using SILDMS.DataAccess.Claim_Received;
+using SILDMS.DataAccess.AdvancePayment;
+using SILDMS.Service.AdvancePayment;
 
 namespace SILDMS.InfraStructure
 {
@@ -343,6 +345,9 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IAdvanceClaimAprvClientService>().To<AdvanceClaimAprvClientService>();
             kernel.Bind<IAdvanceClaimAprvClientData>().To<AdvanceClaimAprvClientData>();
+            
+            kernel.Bind<IAdvancePaymentDataService>().To<AdvancePaymentDataService>();
+            kernel.Bind<IAdvancePaymentService>().To<AdvancePaymentService>();
 
 
             kernel.Bind<IClaimReceivedService>().To<ClaimReceivedService>();

@@ -5,15 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SILDMS.DataAccess.AdvDemandVendor
+namespace SILDMS.DataAccess.AdvancePayment
 {
-    public interface IAdvDemandVendorData
+    public interface IAdvancePaymentDataService
     {
         List<POinfo> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
-        List<POinfo> AvailableClientDetailInfoDataService(string POAprvID, out string _errorNumber);
-
+        List<POinfo> AvailableClientDetailInfoDataService(string ClientID, string VendrAdvncDemnID, out string _errorNumber);
         string SaveQuotToClientServiceData(string UserID, List<AdvanceDemandMaster> MasterData, out string _errorNumber);
-
 
     }
 }
