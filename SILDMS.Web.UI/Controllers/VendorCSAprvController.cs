@@ -98,7 +98,7 @@ namespace SILDMS.Web.UI.Controllers
             vendorCS.RecommendedByName = SILAuthorization.GetUserFullName(); 
             vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
             string status = string.Empty;//, message = string.Empty;
-            //status = _vendorCSInfoService.SaveVendorCSAprv(vendorCS, vendorCSItem, vendorCSTerm);
+            status = _vendorCSInfoService.SaveVendorCSAprv(vendorCS, vendorCSItem, vendorCSTerm);
 
             TempData["VendorCSRecmInfo"] = vendorCS;
             return Json(new { status }, JsonRequestBehavior.AllowGet);
