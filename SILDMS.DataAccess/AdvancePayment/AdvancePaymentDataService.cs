@@ -27,7 +27,7 @@ namespace SILDMS.DataAccess.AdvancePayment
 
             var factory = new DatabaseProviderFactory();
             var db = factory.CreateDefault() as SqlDatabase;
-            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailablePOforRecom"))
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailablePOforVAP"))
             {
                 db.AddInParameter(dbCommandWrapper, "@page", SqlDbType.Int, page);
                 db.AddInParameter(dbCommandWrapper, "@itemsPerPage", SqlDbType.Int, itemsPerPage);
@@ -75,7 +75,7 @@ namespace SILDMS.DataAccess.AdvancePayment
 
             var factory = new DatabaseProviderFactory();
             var db = factory.CreateDefault() as SqlDatabase;
-            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailablePOforDemandRecom"))
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailablePOforVenAdPay"))
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientID", DbType.String, ClientID);
                 db.AddInParameter(dbCommandWrapper, "@VendrAdvncDemnID", DbType.String, VendrAdvncDemnID);
@@ -96,17 +96,16 @@ namespace SILDMS.DataAccess.AdvancePayment
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         VendorName = reader.GetString("VendorName"),
-                        VendorQutnNo = reader.GetString("VendorQutnNo"),
-                        QuotationDate = reader.GetString("QuotationDate"),
+                        //VendorQutnNo = reader.GetString("VendorQutnNo"),
+                        //QuotationDate = reader.GetString("QuotationDate"),
                         VendrAdvncDemnID = reader.GetString("VendrAdvncDemnID"),
                         AdvncDemnAmt = reader.GetString("AdvncDemnAmt"),
-                        ProposedAmt = reader.GetString("ProposedAmt"),
                         AdvncDemnDate = reader.GetString("AdvncDemnDate"),
                         RemainingAmt = reader.GetString("RemainingAmt"),
                         UserFullName = reader.GetString("UserFullName"),
                         PoNo = reader.GetString("PoNo"),
                         POAprvID = reader.GetString("POAprvID"),
-                        VendorQutnID = reader.GetString("VendorQutnID"),
+                        //VendorQutnID = reader.GetString("VendorQutnID"),
                         VendorID = reader.GetString("VendorID"),
                         POAprvAmnt = reader.GetString("POAprvAmnt"),
                         WONo = reader.GetString("WONo"),
@@ -122,7 +121,7 @@ namespace SILDMS.DataAccess.AdvancePayment
         }
 
 
-        public string SaveQuotToClientServiceData(string UserID, List<AdvanceDemandMaster> MasterData, out string errorNumber)
+        public string SaveQuotToClientServiceData(string UserID, List<AdvanceDemandMaster> MasterData, string TransactionMode, string ParticularNo, string MoneyReceiptNo, out string errorNumber)
         {
             errorNumber = string.Empty;
             string message = "";
@@ -153,7 +152,7 @@ namespace SILDMS.DataAccess.AdvancePayment
                     masterRow["ClientID"] = string.IsNullOrEmpty(masterItem.ClientID) ? DBNull.Value : (object)masterItem.ClientID;
                     masterRow["VendorID"] = string.IsNullOrEmpty(masterItem.VendorID) ? DBNull.Value : (object)masterItem.VendorID;
                     masterRow["VendorQutnID"] = string.IsNullOrEmpty(masterItem.VendorQutnID) ? DBNull.Value : (object)masterItem.VendorQutnID;
-                    masterRow["POAprvID"] = string.IsNullOrEmpty(masterItem.POAprvID) ? DBNull.Value : (object)masterItem.POAprvID;
+                    masterRow["POAprvID"] = string.IsNullOrEmpty(masterItem.MoneyReceiptNo) ? DBNull.Value : (object)masterItem.MoneyReceiptNo;
                     masterRow["PurchaseOrderAmount"] = string.IsNullOrEmpty(masterItem.PurchaseOrderAmount) ? DBNull.Value : (object)masterItem.PurchaseOrderAmount;
                     masterRow["AdvanceInvoiceNo"] = string.IsNullOrEmpty(masterItem.AdvanceInvoiceNo) ? DBNull.Value : (object)masterItem.AdvanceInvoiceNo;
                     masterRow["AdvanceDemandAmount"] = string.IsNullOrEmpty(masterItem.AdvanceDemandAmount) ? DBNull.Value : (object)masterItem.AdvanceDemandAmount;
@@ -173,12 +172,15 @@ namespace SILDMS.DataAccess.AdvancePayment
 
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveAdvanceDemandRecom"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveAdvanceDemandVAP"))
             {
                 db.AddInParameter(dbCommandWrapper, "@OBS_AdvanceDemand_MasterType", SqlDbType.Structured, masterDataTable);
                 db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.VarChar, MasterData[0].WOInfoID);
                 db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, MasterData[0].ClientReqID);
-                db.AddInParameter(dbCommandWrapper, "@POAprvID", SqlDbType.VarChar, MasterData[0].POAprvID);
+                db.AddInParameter(dbCommandWrapper, "@POAprvID", SqlDbType.VarChar, MasterData[0].MoneyReceiptNo);
+                db.AddInParameter(dbCommandWrapper, "@TransactionMode", SqlDbType.VarChar, MasterData[0].TransactionMode);
+                db.AddInParameter(dbCommandWrapper, "@ParticularNo", SqlDbType.VarChar, MasterData[0].ParticularNo);
+                db.AddInParameter(dbCommandWrapper, "@MoneyReceiptNo", SqlDbType.VarChar, MasterData[0].MoneyReceiptNo);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 

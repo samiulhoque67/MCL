@@ -11,7 +11,7 @@ namespace SILDMS.DataAccess.AdvancePayment
     {
         List<POinfo> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
         List<POinfo> AvailableClientDetailInfoDataService(string ClientID, string VendrAdvncDemnID, out string _errorNumber);
-        string SaveQuotToClientServiceData(string UserID, List<AdvanceDemandMaster> MasterData, out string _errorNumber);
+        string SaveQuotToClientServiceData(string UserID, List<AdvanceDemandMaster> MasterData, string TransactionMode, string ParticularNo, string MoneyReceiptNo, out string _errorNumber);
 
     }
 }
