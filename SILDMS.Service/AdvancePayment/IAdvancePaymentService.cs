@@ -12,7 +12,7 @@ namespace SILDMS.Service.AdvancePayment
     {
         ValidationResult AllAvailableCSVendorApprovalService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out List<POinfo> AllAvailableClientsList);
         ValidationResult AvailableClientDetailInfoService(string ClientID, string VendrAdvncDemnID, out List<POinfo> ClientDetails);
-        string SaveQuotToClientService(string UserID, List<AdvanceDemandMaster> MasterData);
+        string SaveQuotToClientService(string UserID, List<AdvanceDemandMaster> MasterData, string TransactionMode, string ParticularNo, string MoneyReceiptNo);
 
     }
 }

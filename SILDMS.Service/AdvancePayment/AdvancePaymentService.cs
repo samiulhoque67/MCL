@@ -44,9 +44,9 @@ namespace SILDMS.Service.AdvancePayment
                 : ValidationResult.Success;
         }
 
-        public string SaveQuotToClientService(string UserID, List<AdvanceDemandMaster> MasterData)
+        public string SaveQuotToClientService(string UserID, List<AdvanceDemandMaster> MasterData, string TransactionMode, string ParticularNo, string MoneyReceiptNo)
         {
-            return _advancePaymentDataService.SaveQuotToClientServiceData(UserID, MasterData, out _errorNumber);
+            return _advancePaymentDataService.SaveQuotToClientServiceData(UserID, MasterData, TransactionMode, ParticularNo, MoneyReceiptNo, out _errorNumber);
 
             throw new NotImplementedException();
         }
