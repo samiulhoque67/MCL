@@ -1254,28 +1254,29 @@
         $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
 
         $scope.AddReqTerm = function () {
-
-            if ($('#TermsCode').val() == "") {
-                toastr.error("Terms Code Required");
+            if ($('#TermsCode').val() === "") {
+                toastr.error("Terms Code is required.");
                 return;
             }
 
-            if ($('#TermsName').val() == "") {
-                toastr.error("Terms Name Required.");
+            if ($('#TermsName').val() === "") {
+                toastr.error("Terms Name is required.");
                 return;
             }
 
-            $scope.ClientReqTerm.TermsCode = $('#TermsCode').val();
-            $scope.ClientReqTerm.TermsName = $('#TermsName').val();
+            const newTerm = {
+                TermsCode: $('#TermsCode').val(),
+                TermsName: $('#TermsName').val(),
+            };
 
-            $scope.clientReqTermArray.push($scope.ClientReqTerm);
+            $scope.clientReqTermArray.push(newTerm);
 
-            $scope.TermsConditionsDisplayedCollection = $scope.TermsConditionsList.concat($scope.ClientReqTerm);
+            $scope.TermsConditionsDisplayedCollection = $scope.TermsConditionsList.concat(newTerm);
 
             $scope.resetClientReqTerm();
             $("#btnAddReqTerm").html('Add');
             $('#RequisitionTermModal').modal('hide');
-        }
+        };
 
         $scope.resetClientReqTerm = function () {
             $scope.ClientReqTerm = {
@@ -1284,32 +1285,29 @@
                 TermsID: "",
                 TermsCode: "",
                 TermsName: ""
-            }
-        }
+            };
+        };
 
-        $scope.toggleReqTermEdit = function (tableRow, $i) {
+        $scope.toggleReqTermEdit = function (tableRow, index) {
             $('#RequisitionTermModal').modal('show');
             $scope.resetClientReqTerm();
-            $scope.ClientReqTerm.ClientReqTermID = tableRow.ClientReqTermD;
-            $scope.ClientReqTerm.ClientReqID = tableRow.ClientReqID;
-            $scope.ClientReqTerm.TermsID = tableRow.TermsID;
-            $scope.ClientReqTerm.TermsCode = tableRow.TermsCode;
-            $scope.ClientReqTerm.TermsName = tableRow.TermsName;
-            $scope.TermsConditionsDisplayedCollection.splice($i, 1);
-            $scope.clientReqTermArray.splice($i, 1);
+
+            $scope.ClientReqTerm = angular.copy(tableRow);
+
+            $scope.TermsConditionsDisplayedCollection.splice(index, 1);
+            $scope.clientReqTermArray.splice(index, 1);
             $("#btnAddReqTerm").html('Update');
         };
 
-        $scope.toggleReqTermDelete = function (tableRow, $i) {
+        $scope.toggleReqTermDelete = function (tableRow, index) {
             if (!tableRow.ClientReqTermID) {
                 $scope.resetClientReqTerm();
-                $scope.TermsConditionsDisplayedCollection.splice($i, 1);
-                $scope.clientReqTermArray.splice($i, 1);
-                toastr.success('Data Deleted Successsfully');
-            }
-            else {
+                $scope.TermsConditionsDisplayedCollection.splice(index, 1);
+                $scope.clientReqTermArray.splice(index, 1);
+                toastr.success('Data deleted successfully.');
+            } else {
                 $scope.resetClientReqTerm();
-                $scope.ClientReqTerm.ClientReqTermID = tableRow.ClientReqTermID;
+                $scope.ClientReqTerm = angular.copy(tableRow);
                 $('#deleteReqTermModal').modal('show');
             }
         };
