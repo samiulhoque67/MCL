@@ -36,20 +36,27 @@
 
 <div class="box box-primary box-body" ng-controller="QuotationApproveCntrl">
     <!-- Upper buttons -->
-    <div class="box-header with-border">
+
+    <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
         <i class="fa fa-user"></i>
-        <h3 class="box-title">Advance Claim</h3>
+        <h3 style="font-family: Verdana" class="box-title">Advance Claim from Client</h3>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
-                <div class="btn-group pull-right">
-                    <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh">
-                        <i class="fa fa-refresh"></i>Refresh
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh">
+                        <i class="fa fa-refresh" style="padding-right: 5px;"></i>Refresh
+                    </button>
+                </div>
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" ng-click="SearchSaveClients()" class="btn btn-primary btn-flat pull-right" ng-disabled="btnSearch">
+                        <i class="fa fa-search" style="padding-right: 5px;"></i>Search
                     </button>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="box-body">
         <div class="row">
@@ -91,11 +98,6 @@
                         </div>
                     </div>
 
-                  @*  <div class="col-lg-1">
-                        <div class="form-group">
-                            <button type="button" data-ng-click="SearchAvailableClients()" class="form-control">Search</button>
-                        </div>
-                    </div>*@
                     <div class="col-lg-1"></div>
                 </div>
 
@@ -282,6 +284,11 @@
                     <div ng-if="PagingInfo.totalItems > 0" class="text-center">
                         <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" force-ellipses="true" ng-change="selectPageList()"></ul>
                     </div>
+
+                    <div ng-if="PagingInfo.totalItems > 0 && searchType==='MasterSearch'" class="text-center">
+                        <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" force-ellipses="true" ng-change="selectPageList()"></ul>
+                    </div>
+
                     <div ng-if="PagingInfo.totalItems <= 0" class="text-center">
                         NO ITEM
                     </div>
@@ -370,7 +377,7 @@
 
                 <!-- Quotation Note & Billing Date -->
                 <div class="row">
-                  
+
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label for="RemainingAmount">Remaining Amount :</label>
@@ -379,7 +386,7 @@
                     <div class="col-lg-2">
                         <div class="form-group">
                             <input id="RemainingAmount" name="RemainingAmount" type="text" data-ng-model="AdvanceInformmation.RemainingAmount"
-                                   readonly class="form-control" ng-keydown="calculateRemainingAmount($event)"/>
+                                   readonly class="form-control" ng-keydown="calculateRemainingAmount($event)" />
                         </div>
                     </div>
 
@@ -777,51 +784,51 @@
             }
         };
 
-        //$scope.getTotalTolAmt = function () {
-        //    let total = 0;
-        //    angular.forEach($scope.GetClientReqDetailsCollection, function (row) {
-        //        total += parseFloat(row.TolAmt) || 0;
-        //    });
-        //    $scope.totalAmountInWords = numberToWords(total);
-        //    return total;
-        //};
 
-        //// Function to convert number to words
-        //function numberToWords(number) {
-        //    const a = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-        //    const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-        //    const g = ['', 'thousand', 'million', 'billion', 'trillion'];
 
-        //    function chunk(n) {
-        //        const r = [];
-        //        while (n > 0) {
-        //            r.push(n % 1000);
-        //            n = Math.floor(n / 1000);
-        //        }
-        //        return r;
-        //    }
+        $scope.searchType = "";
+        //master search
+        $scope.SearchSaveClients = function () {
+            $scope.Client = "";
+            $scope.searchType = "MasterSearch";
+            $http.post('/AdvanceClaimRecom/AllAvailableClients', {
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack"
 
-        //    function inWords(n) {
-        //        if (n === 0) return 'zero';
-        //        const chunks = chunk(n);
-        //        const words = [];
-        //        for (let i = 0; i < chunks.length; i++) {
-        //            const chunkWords = [];
-        //            const num = chunks[i];
-        //            if (num > 99) chunkWords.push(a[Math.floor(num / 100)] + ' hundred');
-        //            const rest = num % 100;
-        //            if (rest > 19) chunkWords.push(b[Math.floor(rest / 10)] + (rest % 10 !== 0 ? '-' + a[rest % 10] : ''));
-        //            else if (rest > 0) chunkWords.push(a[rest]);
-        //            if (chunkWords.length > 0) words.unshift(chunkWords.join(' ') + ' ' + g[i]);
-        //        }
-        //        return words.join(' ');
-        //    }
+            }).success(function (response) {
+                $scope.AllQuotationsList = response.AllAvailableClientsList;
+                $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsList);
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+            });
+            $('#QuotationForRecom').modal('show');
+        };
 
-        //    return inWords(number) + ' Taka only';
-        //}
+        $scope.selectPageList2 = function () {
+            $http.post('/AdvanceClaimRecom/AllAvailableClients', {
 
-        //// Trigger the function to calculate total and convert to words
-        //$scope.getTotalTolAmt();
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack"
+
+            }).success(function (response) {
+                $scope.AllQuotationsList = response.AllAvailableClientsList;
+                $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsCollection);
+                $scope.loading = false;
+            })
+                .error(function () {
+                    $scope.loading = false;
+                });
+        }
+
 
 
     }

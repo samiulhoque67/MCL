@@ -25,9 +25,9 @@ namespace SILDMS.Service.QuotationApproval
             _localizationService = localizationService;
             _errorNumber = string.Empty;
         }
-        ValidationResult IQuotationApprovalService.AllAvailableCSVendorApprovalService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out List<OBS_ClientwithReqQoutn> AllAvailableClientsList)
+        ValidationResult IQuotationApprovalService.AllAvailableCSVendorApprovalService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action, out List<OBS_ClientwithReqQoutn> AllAvailableClientsList)
         {
-            AllAvailableClientsList = _quotationApprovalDataService.AllAvailableCSVendorApprovalDataService(UserId, page, itemsPerPage, sortBy, reverse, search, type, out _errorNumber);
+            AllAvailableClientsList = _quotationApprovalDataService.AllAvailableCSVendorApprovalDataService(UserId, page, itemsPerPage, sortBy, reverse, search, type, action, out _errorNumber);
 
             return _errorNumber.Length > 0
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))

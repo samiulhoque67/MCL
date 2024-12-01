@@ -11,7 +11,7 @@ namespace SILDMS.Service.QuotationApproval
     public interface IQuotationApprovalService
     {
 
-        ValidationResult AllAvailableCSVendorApprovalService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out List<OBS_ClientwithReqQoutn> AllAvailableClientsList);
+        ValidationResult AllAvailableCSVendorApprovalService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action, out List<OBS_ClientwithReqQoutn> AllAvailableClientsList);
         ValidationResult GetClientReqDataInfoService(string ClientID, string ClientReqID, out List<ClientReqData> GetClientReqDetails);
         ValidationResult GetVendorTermListService(string ClientQutnRecmID, out List<OBS_TermsItem> VendorTermTermList);
 

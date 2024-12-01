@@ -10,9 +10,9 @@ namespace SILDMS.DataAccess.QuotationToClientService
     public interface IQuotationToClientDataService
     {
         List<OBS_ClientInfo> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
-        List<OBS_ClientDetails> AvailableClientDetailInfoDataService(string ClientID, string ClientReqID, out string _errorNumber);
-        List<OBS_TermsItem> GetTermsConditionsListServiceData(string VendorCSAprvID, out string _errorNumber);
-        List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, string ClientReqID, out string _errorNumber);
+        List<OBS_ClientDetails> AvailableClientDetailInfoDataService(string ClientID, string ClientReqID,string ReqType, out string _errorNumber);
+        List<OBS_TermsItem> GetTermsConditionsListServiceData(string VendorCSAprvID, string ClientReqID, string ReqType, out string _errorNumber);
+        List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, string ClientReqID, string ReqType, out string _errorNumber);
         string SaveQuotToClientServiceData(string UserID,string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, out string _errorNumber);
 
     }

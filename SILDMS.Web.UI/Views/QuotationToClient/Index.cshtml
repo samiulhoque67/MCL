@@ -32,6 +32,16 @@
         font-size: 12px;
        /* padding-right: 3px;*/
     }
+    .text-success {
+        color: green;
+        font-size: 14px;
+    }
+
+    .text-primary {
+        color: blue;
+        font-size: 14px;
+    }
+
 </style>
 
 <div class="box box-primary box-body" ng-controller="WorkOrderInfoCntrl">
@@ -60,16 +70,6 @@
                         <i class="fa fa-search" style="padding-right: 5px;"></i>Search
                     </button>
                 </div>
-                @*   <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-            <button type="button" data-ng-click="Post()" class="btn btn-primary btn-flat pull-right" ng-disabled="btnSave">
-                <i class="fa fa-save" style="padding-right: 5px;"></i>{{ ClientReq.ClientReqID ? 'Update' : 'Save' }}
-            </button>
-        </div>
-        <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-            <button type="button" data-ng-click="Cancel()" class="btn btn-primary btn-flat pull-right" ng-disabled="btnSave">
-                <i class="fa fa-save" style="padding-right: 5px;"></i>Cancel
-            </button>
-        </div>*@
             </div>
         </div>
     </div>
@@ -208,7 +208,7 @@
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Available Clients</h3>
+                    <h3 class="modal-title">Available Clients for Quotation</h3>
                 </div>
 
                 <!-- Modal Body -->
@@ -227,6 +227,10 @@
                                     <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
                                     <span ng-show="PagingInfo.sortBy == 'ClientName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
                                 </th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">
+                                    Qoutation Type
+                                </th>
+
                                 <th class="col-lg-1 col-md-1 col-sm-1">
                                     Action
                                 </th>
@@ -247,6 +251,12 @@
                             <tr ng-repeat="row in AllAvailableClientsList | orderBy:'IsBack':true">
                                 <td class="text-center">{{row.ClientCode}}</td>
                                 <td class="text-center">{{row.ClientName}}</td>
+
+                                <td class="text-center"
+                                    ng-class="{'text-success': row.ReqType === 'QV', 'text-primary': row.ReqType === 'QC'}">
+                                    {{row.ReqType === 'QV' ? 'Quotations already given by Vendor' : (row.ReqType === 'QC' ? 'Quotations to be given by MCL' : row.ReqType)}}
+                                </td>
+                                
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectAvailableClient(row, 'save')">Select</a>
                                 </td>
@@ -290,13 +300,13 @@
                         <th style="text-align: left;">Req Qty</th>
                         <th style="text-align: left;">Req Unit</th>
                         <th style="text-align: left;">Quoted Qty</th>
-                        <th style="text-align: left;">Vendor Quoted Unit Price</th>
+                        <th ng-show="ReqType === 'QV'" style="text-align: left;">Vendor Quoted Unit Price</th>
                         <th style="text-align: left;">Given Quoted Unit Price</th>
-                        <th style="text-align: left;">Vendor Quoted Amount</th>
+                        <th ng-show="ReqType === 'QV'" style="text-align: left;">Vendor Quoted Amount</th>
                         <th style="text-align: left;">Given Quoted Amount</th>
                         <th style="text-align: left;">VAT Rate</th>
                         <th style="text-align: left;">VAT Amount</th>
-                        <th style="text-align: left;">Total Amount</th>
+                        <th ng-show="ReqType === 'QV'" style="text-align: left;">Total Amount</th>
                         <th style="text-align: left;">Given Total Amount</th>
                     </tr>
                 </thead>
@@ -310,13 +320,13 @@
                         <td style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
                         <td style="width: 5%;">{{ row.ReqUnit }}</td>
                         <td style="width: 6%;">{{ row.QutnQnty }}</td>
-                        <td style="width: 6%;">{{ row.QutnPrice }}</td>
+                        <td ng-show="ReqType === 'QV'" style="width: 6%;">{{ row.QutnPrice }}</td>
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
                                    ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('givenQutnPrice', row)" />
                         </td>
-                        <td style="width: 6%;">{{ row.QutnAmt }}</td>
+                        <td ng-show="ReqType === 'QV'"  style="width: 6%;">{{ row.QutnAmt }}</td>
                         <td style="width: 6%; color: #126e0f;">{{ row.givenQutnAmt }}</td>
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
@@ -324,7 +334,7 @@
                                    ng-blur="validateInput('GivenVatPerc', row)" />
                         </td>
                         <td style="width: 6%;">{{ row.TotGivenVatAmt }}</td>
-                        <td style="width: 6%;">{{ row.TolAmt }}</td>
+                        <td ng-show="ReqType === 'QV'"  style="width: 6%;">{{ row.TolAmt }}</td>
                         <td style="width: 6%; color: #126e0f;">{{ row.givenTolAmt }}</td>
                     </tr>
                 </tbody>
@@ -590,7 +600,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="QuotationNote" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
+                            <input id="QuotationNote" autocomplete="off" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
                         </div>
                     </div>
 
@@ -710,7 +720,7 @@
                                 <td class="text-center">{{row.ClientReqNo}}</td>
                                 <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="text-center">{{row.QuotationNo}}</td>
-                                <td class="text-center">{{row.QuotationDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">{{row.ClientAdvanceClaimDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="col-lg-2 text-center">
                                     <button type="button" id="btnSelect" ng-click="selectAvailableClient(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
                                         <span class="fa fa-search-plus"> View</span>
@@ -895,17 +905,19 @@
             $scope.Search();
         };
         $scope.pagefunction = '';
+        $scope.ReqType = '';
 
         $scope.selectAvailableClient = function (row, action) {
 
             if (action === 'save') {
                 $scope.pagefunction = 'savemode';
+                $scope.ReqType = row.ReqType;
 
                 $('#AvailableClients').modal('hide');
                 $scope.loading = true;
 
                 $http.post('/QuotationToClient/AvailableClientDetailInfo', {
-                    ClientID: row.ClientID, ClientReqID: row.ClientReqID
+                    ClientID: row.ClientID, ClientReqID: row.ClientReqID, ReqType: row.ReqType
                 }).success(function (response) {
                     $scope.ClientDetails = response.ClientDetails;
 
@@ -938,7 +950,7 @@
                 $scope.loading = true;
 
                 $http.post('/QuotationToClient/AvailableClientDetailInfo', {
-                    ClientID: row.ClientID, ClientReqID: row.ClientReqID
+                    ClientID: row.ClientID, ClientReqID: row.ClientReqID, ReqType: $scope.ReqType
                 }).success(function (response) {
                     $scope.ClientDetails = response.ClientDetails;
 
@@ -964,7 +976,7 @@
         $scope.GetClientReqDataInfo = function (ClientID, ClientReqID, action) {
             if (action === 'save') {
                 $http.post('/QuotationToClient/GetClientReqDataInfo', {
-                    ClientID: ClientID, ClientReqID
+                    ClientID: ClientID, ClientReqID, ReqType: $scope.ReqType
                 }).success(function (response) {
                     $scope.GetClientReqDetails = response.GetClientReqDetails;
                     $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
@@ -979,7 +991,7 @@
                     };
 
 
-                    $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].VendorCSAprvID, action);
+                    $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].VendorCSAprvID, ClientReqID, action);
 
                 }).error(function () {
                     $scope.loading = false;
@@ -988,7 +1000,7 @@
 
             else if (action === 'view' || 'edit') {
                 $http.post('/QuotationRecommendation/GetClientReqDataInfo', {
-                    ClientID: ClientID, ClientReqID: ClientReqID
+                    ClientID: ClientID, ClientReqID: ClientReqID, ReqType: $scope.ReqType
                 }).success(function (response) {
                     $scope.GetClientReqDetails = response.GetClientReqDetails;
                     $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
@@ -996,7 +1008,7 @@
                     //$scope.GetClientReqDetails.forEach(function (row) {
                     //    $scope.selectEntity(row, action);
                     //});
-                    $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQuotationID, action);
+                    $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQuotationID, ClientReqID, action);
 
                 }).error(function () {
                     $scope.loading = false;
@@ -1085,10 +1097,12 @@
             }
         };
 
-        $scope.GetTermsItemList = function (TempID, action) {
+        $scope.GetTermsItemList = function (TempID, ClientReqID, action) {
+
+
             if (action === 'save') {
                 $http.post('/QuotationToClient/GetVendorTermList',
-                    { VendorCSAprvID: TempID })
+                    { VendorCSAprvID: TempID, ClientReqID: ClientReqID, ReqType: $scope.ReqType })
                     .success(function (response) {
                         $scope.TermsConditionsList = response.VendorTermTermList;
                         $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
@@ -1099,7 +1113,7 @@
 
             else if (action === 'view' || 'edit') {
                 $http.post('/QuotationRecommendation/GetVendorTermList',
-                    { ClientQuotationID: TempID })
+                    { ClientQuotationID: TempID, ClientReqID: ClientReqID, ReqType: $scope.ReqType })
                     .success(function (response) {
                         $scope.TermsConditionsList = response.VendorTermTermList;
                         $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
@@ -1351,7 +1365,7 @@
 
         $scope.ClearEverything = function () {
             $scope.showTermsItem = false;
-
+            $scope.ReqType = "";
             $scope.clientReqTermArray = [];
             $scope.Client = "";
             $scope.ClientReq = {

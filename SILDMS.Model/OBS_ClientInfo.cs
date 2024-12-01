@@ -26,6 +26,7 @@ namespace SILDMS.Model
         [Required]
         public string Status { get; set; }
         public string ClientReqID { get; set; }
+        public string ReqType { get; set; }
     }
 
     public class OBS_ClientDetails
