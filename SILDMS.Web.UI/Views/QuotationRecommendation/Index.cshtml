@@ -38,7 +38,7 @@
     <!-- Upper buttons -->
     <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
         <i class="fa fa-user"></i>
-        <h3 style="font-family: Verdana" class="box-title">Quotation to Client</h3>
+        <h3 style="font-family: Verdana" class="box-title">Client Quotation Recommendation</h3>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
@@ -263,7 +263,7 @@
                                 <td class="text-center">{{row.ClientReqNo}}</td>
                                 <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="text-center">{{row.QuotationNo}}</td>
-                                <td class="text-center">{{row.QuotationDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">{{row.ClientAdvanceClaimDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row,'save')">Select</a>
                                 </td>
@@ -609,7 +609,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="QuotationNote" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
+                            <input id="QuotationNote" autocomplete="off" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
                         </div>
                     </div>
 
@@ -713,7 +713,7 @@
                                 <td class="text-center">{{row.ClientReqNo}}</td>
                                 <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="text-center">{{row.QuotationNo}}</td>
-                                <td class="text-center">{{row.QuotationDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">{{row.ClientAdvanceClaimDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="col-lg-2 text-center">
                                     <button type="button" id="btnSelect" ng-click="selectAvailableClient(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
                                         <span class="fa fa-search-plus"> View</span>
@@ -1178,7 +1178,7 @@
 
             $scope.ClearEverything();
 
-            $http.post('/QuotationRecommendation/AllAvailableClients', {
+            $http.post('/QuotationApproval/AllAvailableClients', {
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
                 sortBy: $scope.PagingInfo.sortBy,
@@ -1199,7 +1199,7 @@
 
 
         $scope.selectSavePageList = function () {
-            $http.post('/QuotationRecommendation/AllAvailableClients', {
+            $http.post('/QuotationApproval/AllAvailableClients', {
 
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
@@ -1264,28 +1264,29 @@
         $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
 
         $scope.AddReqTerm = function () {
-
-            if ($('#TermsCode').val() == "") {
-                toastr.error("Terms Code Required");
+            if ($('#TermsCode').val() === "") {
+                toastr.error("Terms Code is required.");
                 return;
             }
 
-            if ($('#TermsName').val() == "") {
-                toastr.error("Terms Name Required.");
+            if ($('#TermsName').val() === "") {
+                toastr.error("Terms Name is required.");
                 return;
             }
 
-            $scope.ClientReqTerm.TermsCode = $('#TermsCode').val();
-            $scope.ClientReqTerm.TermsName = $('#TermsName').val();
+            const newTerm = {
+                TermsCode: $('#TermsCode').val(),
+                TermsName: $('#TermsName').val(),
+            };
 
-            $scope.clientReqTermArray.push($scope.ClientReqTerm);
+            $scope.clientReqTermArray.push(newTerm);
 
-            $scope.TermsConditionsDisplayedCollection = $scope.TermsConditionsList.concat($scope.ClientReqTerm);
+            $scope.TermsConditionsDisplayedCollection = $scope.TermsConditionsList.concat(newTerm);
 
             $scope.resetClientReqTerm();
             $("#btnAddReqTerm").html('Add');
             $('#RequisitionTermModal').modal('hide');
-        }
+        };
 
         $scope.resetClientReqTerm = function () {
             $scope.ClientReqTerm = {
@@ -1294,32 +1295,29 @@
                 TermsID: "",
                 TermsCode: "",
                 TermsName: ""
-            }
-        }
+            };
+        };
 
-        $scope.toggleReqTermEdit = function (tableRow, $i) {
+        $scope.toggleReqTermEdit = function (tableRow, index) {
             $('#RequisitionTermModal').modal('show');
             $scope.resetClientReqTerm();
-            $scope.ClientReqTerm.ClientReqTermID = tableRow.ClientReqTermD;
-            $scope.ClientReqTerm.ClientReqID = tableRow.ClientReqID;
-            $scope.ClientReqTerm.TermsID = tableRow.TermsID;
-            $scope.ClientReqTerm.TermsCode = tableRow.TermsCode;
-            $scope.ClientReqTerm.TermsName = tableRow.TermsName;
-            $scope.TermsConditionsDisplayedCollection.splice($i, 1);
-            $scope.clientReqTermArray.splice($i, 1);
+
+            $scope.ClientReqTerm = angular.copy(tableRow);
+
+            $scope.TermsConditionsDisplayedCollection.splice(index, 1);
+            $scope.clientReqTermArray.splice(index, 1);
             $("#btnAddReqTerm").html('Update');
         };
 
-        $scope.toggleReqTermDelete = function (tableRow, $i) {
+        $scope.toggleReqTermDelete = function (tableRow, index) {
             if (!tableRow.ClientReqTermID) {
                 $scope.resetClientReqTerm();
-                $scope.TermsConditionsDisplayedCollection.splice($i, 1);
-                $scope.clientReqTermArray.splice($i, 1);
-                toastr.success('Data Deleted Successsfully');
-            }
-            else {
+                $scope.TermsConditionsDisplayedCollection.splice(index, 1);
+                $scope.clientReqTermArray.splice(index, 1);
+                toastr.success('Data deleted successfully.');
+            } else {
                 $scope.resetClientReqTerm();
-                $scope.ClientReqTerm.ClientReqTermID = tableRow.ClientReqTermID;
+                $scope.ClientReqTerm = angular.copy(tableRow);
                 $('#deleteReqTermModal').modal('show');
             }
         };

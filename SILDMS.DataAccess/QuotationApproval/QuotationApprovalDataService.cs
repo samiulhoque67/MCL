@@ -21,7 +21,7 @@ namespace SILDMS.DataAccess.QuotationApproval
             _spStatusParam = "@p_Status";
         }
 
-        public List<OBS_ClientwithReqQoutn> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber)
+        public List<OBS_ClientwithReqQoutn> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action, out string _errorNumber)
         {
             _errorNumber = string.Empty;
             var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
@@ -36,6 +36,7 @@ namespace SILDMS.DataAccess.QuotationApproval
                 db.AddInParameter(dbCommandWrapper, "@reverse", SqlDbType.Int, reverse ? 1 : 0);
                 db.AddInParameter(dbCommandWrapper, "@search", SqlDbType.NVarChar, search);
                 db.AddInParameter(dbCommandWrapper, "@type", SqlDbType.NVarChar, type.ToString());
+                db.AddInParameter(dbCommandWrapper, "@action", SqlDbType.NVarChar, action.ToString());
                 db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
                 dbCommandWrapper.CommandTimeout = 300;
                 var ds = db.ExecuteDataSet(dbCommandWrapper);

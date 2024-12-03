@@ -9,7 +9,7 @@ namespace SILDMS.DataAccess.QuotationApproval
 {
     public interface IQuotationApprovalDataService
     {
-        List<OBS_ClientwithReqQoutn> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
+        List<OBS_ClientwithReqQoutn> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action, out string _errorNumber);
         List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, string ClientReqID, out string _errorNumber);
         List<OBS_TermsItem> GetVendorTermListServiceData(string ClientQutnRecmID, out string _errorNumber);
 

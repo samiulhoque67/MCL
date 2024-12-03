@@ -33,26 +33,26 @@ namespace SILDMS.Service.QuotationToClient
                 : ValidationResult.Success;
         }
         
-        ValidationResult IQuotationToClientService.AvailableClientDetailInfoService(string ClientID, string ClientReqID, out List<OBS_ClientDetails> ClientDetails)
+        ValidationResult IQuotationToClientService.AvailableClientDetailInfoService(string ClientID, string ClientReqID, string ReqType, out List<OBS_ClientDetails> ClientDetails)
         {
-            ClientDetails = _iQuotationToClientDataService.AvailableClientDetailInfoDataService(ClientID, ClientReqID, out _errorNumber);
+            ClientDetails = _iQuotationToClientDataService.AvailableClientDetailInfoDataService(ClientID, ClientReqID, ReqType, out _errorNumber);
 
             return _errorNumber.Length > 0
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
                 : ValidationResult.Success;
         }
-        public ValidationResult GetTermsConditionsListService(string VendorCSAprvID, out List<OBS_TermsItem> VendorTermTermList)
+        public ValidationResult GetTermsConditionsListService(string VendorCSAprvID, string ClientReqID, string ReqType, out List<OBS_TermsItem> VendorTermTermList)
         {
-            VendorTermTermList = _iQuotationToClientDataService.GetTermsConditionsListServiceData(VendorCSAprvID, out _errorNumber);
+            VendorTermTermList = _iQuotationToClientDataService.GetTermsConditionsListServiceData(VendorCSAprvID, ClientReqID, ReqType, out _errorNumber);
 
             return _errorNumber.Length > 0
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
                 : ValidationResult.Success;
         }
 
-        ValidationResult IQuotationToClientService.GetClientReqDataInfoService(string ClientID, string ClientReqID, out List<ClientReqData> GetClientReqDetails)
+        ValidationResult IQuotationToClientService.GetClientReqDataInfoService(string ClientID, string ClientReqID, string ReqType, out List<ClientReqData> GetClientReqDetails)
         {
-            GetClientReqDetails = _iQuotationToClientDataService.GetClientReqDataInfoDataService(ClientID, ClientReqID, out _errorNumber);
+            GetClientReqDetails = _iQuotationToClientDataService.GetClientReqDataInfoDataService(ClientID, ClientReqID, ReqType, out _errorNumber);
 
             return _errorNumber.Length > 0
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
