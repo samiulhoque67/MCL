@@ -102,6 +102,10 @@ namespace SILDMS.Model
         public string VendorCSAprvItemID { get; set; }
         public string ClientQutnItemID { get; set; }
         public string ClientQutnRecmItemID { get; set; }
+        public string Remarks { get; set; }
+        public string BriefingDate { get; set; }
+        public string QutnNo { get; set; }
+        public string QuotationDate { get; set; }
     }
 
     public class OBS_QutntoClientMaster

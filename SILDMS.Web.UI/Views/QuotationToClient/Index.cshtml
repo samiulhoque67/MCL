@@ -297,9 +297,10 @@
                         <th style="text-align: left;">Description</th>
                         <th style="text-align: left;">Delivery Location</th>
                         <th style="text-align: left;">Delivery Date</th>
-                        <th style="text-align: left;">Req Qty</th>
+                        <th ng-hide="pagefunction === 'viewmode'" style="text-align: left;">Req Qty</th>
                         <th style="text-align: left;">Req Unit</th>
-                        <th style="text-align: left;">Quoted Qty</th>
+                        <th ng-hide="pagefunction === 'viewmode'" style="text-align: left;">Req Qty</th>
+                        <th ng-hide="pagefunction === 'viewmode'" style="text-align: left;">Quoted Qty</th>
                         <th ng-show="ReqType === 'QV'" style="text-align: left;">Vendor Quoted Unit Price</th>
                         <th style="text-align: left;">Given Quoted Unit Price</th>
                         <th ng-show="ReqType === 'QV'" style="text-align: left;">Vendor Quoted Amount</th>
@@ -317,20 +318,20 @@
                         <td style="width: 6%;">{{ row.Description }}</td>
                         <td style="width: 6%;">{{ row.DeliveryLocation }}</td>
                         <td style="width: 6%;">{{ row.DeliveryDate }}</td>
-                        <td style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
+                        <td ng-hide="pagefunction === 'viewmode'" style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
                         <td style="width: 5%;">{{ row.ReqUnit }}</td>
                         <td style="width: 6%;">{{ row.QutnQnty }}</td>
                         <td ng-show="ReqType === 'QV'" style="width: 6%;">{{ row.QutnPrice }}</td>
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
-                                   ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"
+                            ng-readonly="pagefunction === 'viewmode'" ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('givenQutnPrice', row)" />
                         </td>
                         <td ng-show="ReqType === 'QV'"  style="width: 6%;">{{ row.QutnAmt }}</td>
                         <td style="width: 6%; color: #126e0f;">{{ row.givenQutnAmt }}</td>
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
-                                   ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
+                            ng-readonly="pagefunction === 'viewmode'" ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('GivenVatPerc', row)" />
                         </td>
                         <td style="width: 6%;">{{ row.TotGivenVatAmt }}</td>
@@ -565,7 +566,7 @@
             <div class="col-sm-10 col-md-10 col-lg-10">
 
                 <!-- Quotation No & Date -->
-                <div class="row">
+                <div  class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label for="QuotationNo">Quotation No :</label>
@@ -573,7 +574,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="QuotationNo" name="QuotationNo" type="text" data-ng-model="Quotation.QuotationNo" readonly class="form-control" />
+                            <input id="QuotationNo" name="QuotationNo" type="text" ng-model="MasterData.QuotationNo" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -589,6 +590,13 @@
                             <input id="QuotationDate" name="QuotationDate" type="text" class="form-control" style="background-color:#ffffff;" readonly />
                         </div>
                     </div>
+
+                    <div ng-show="pagefunction === 'savemode' && 'viewnode'" class="col-lg-2">
+                        <div class="form-group">
+                            <input ng-model="MasterData.QuotationDate" type="text" class="form-control" style="background-color:#ffffff;" readonly />
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- Quotation Note & Billing Date -->
@@ -600,7 +608,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="QuotationNote" autocomplete="off" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
+                            <input id="QuotationNote" ng-readonly="pagefunction === 'viewmode'" autocomplete="off" name="QuotationNote" type="text" ng-model="MasterData.QuotationNote" class="form-control" />
                         </div>
                     </div>
 
@@ -613,11 +621,18 @@
                     </div>
 
                     <div class="col-lg-2" @*style="width: 12.50%;*@>
-                        <div class="form-group">
+                        <div ng-show="pagefunction != 'viewmode'" class="form-group">
 
                             <input id="BriefingDate" name="BriefingDate" readonly type="datetime" class="DatePicker form-control" placeholder="DD/MM/YYYY"
-                                   data-ng-model="MasterData.BriefingDate" style="height: 25px; background-color:#ffffff;" />
+                                   ng-model="MasterData.BriefingDate" style="height: 25px; background-color:#ffffff;" />
                         </div>
+
+                        <div ng-show="pagefunction === 'viewmode'" class="form-group">
+
+                            <input name="BriefingDate" readonly type="datetime"  placeholder="DD/MM/YYYY"
+                                   ng-model="MasterData.BriefingDate" style="height: 25px; background-color:#ffffff;" />
+                        </div>
+
                     </div>
 
                 </div>
@@ -646,6 +661,7 @@
                 </div>
 
             </div>
+
         </div>
 
     </div>
@@ -829,7 +845,8 @@
             ClientReqID: "",
             ClientReqNo: "",
             BriefingDate: "",
-            QuotationNote: ""
+            QuotationNote: "",
+            QuotationNo: ""
         }
 
         $('.DatePicker').datepicker({
@@ -1008,6 +1025,14 @@
                     //$scope.GetClientReqDetails.forEach(function (row) {
                     //    $scope.selectEntity(row, action);
                     //});
+
+                    $scope.MasterData = {
+                        QuotationNo: $scope.GetClientReqDetailsCollection[0].QutnNo,
+                        QuotationNote: $scope.GetClientReqDetailsCollection[0].Remarks,
+                        BriefingDate: $scope.GetClientReqDetailsCollection[0].BriefingDate,
+                        QuotationDate: $scope.GetClientReqDetailsCollection[0].QuotationDate
+                    };
+
                     $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQuotationID, ClientReqID, action);
 
                 }).error(function () {
