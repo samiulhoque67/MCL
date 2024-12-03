@@ -30,6 +30,10 @@ namespace SILDMS.Model
         public string AdvncDemnDate { get; set; }
         public string RemainingAmt { get; set; }
         public string UserFullName { get; set; }
+        public string ClientReqID { get; set; }
+        public string WONo { get; set; }
+        public string WOInfoID { get; set; }
+        public string WOAmt { get; set; }
     }
 
 
@@ -38,7 +42,7 @@ namespace SILDMS.Model
         public string ClientID { get; set; }
         public string VendorID { get; set; }
         public string VendorQutnID { get; set; }
-        public string POAprvID { get; set; }
+        public string MoneyReceiptNo { get; set; }
         public string PurchaseOrderAmount { get; set; }
         public string AdvanceInvoiceNo { get; set; }
         public string AdvanceDemandAmount { get; set; }
@@ -52,7 +56,10 @@ namespace SILDMS.Model
         public string RecommendationAmount { get; set; }
         public string RecommendedDate { get; set; }
         public string VendorAdvancID { get; set; }
-
+        public string WOInfoID { get; set; }
+        public string ClientReqID { get; set; }
+        public object TransactionMode { get; set; }
+        public object ParticularNo { get; set; }
     }
 
     public class AdvanceClaimMaster

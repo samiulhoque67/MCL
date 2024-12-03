@@ -38,10 +38,10 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<dynamic> AllAvailableClients(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
+        public async Task<dynamic> AllAvailableClients(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action)
         {
             var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
-            await Task.Run(() => _quotationApprovalService.AllAvailableCSVendorApprovalService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out AllAvailableClientsList));
+            await Task.Run(() => _quotationApprovalService.AllAvailableCSVendorApprovalService(UserID, page, itemsPerPage, sortBy, reverse, search, type, action, out AllAvailableClientsList));
             var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
             return result;
         }

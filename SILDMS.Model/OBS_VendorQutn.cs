@@ -81,6 +81,10 @@ namespace SILDMS.Model
         public decimal? VATAmount { get; set; }
         public decimal? CommissionPercentage { get; set; }
         public decimal? CommissionAmount { get; set; }
+        public decimal? TDSPercentage { get; set; }
+        public decimal? TDSAmount { get; set; }
+        public decimal? VDSPercentage { get; set; }
+        public decimal? VDSAmount { get; set; }
         public decimal? TotalBillAmount { get; set; }
         public decimal? NetPayableAmount { get; set; }
         public string Note { get; set; }
@@ -117,11 +121,4 @@ namespace SILDMS.Model
         public string AdvancePaidID { get; set; }
        
     }
-
-
-
-
-
-
-
 }

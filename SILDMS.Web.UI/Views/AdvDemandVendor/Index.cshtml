@@ -94,6 +94,9 @@
                         </div>
                     </div>
 
+                    <div class="col-lg-1">
+                    </div>
+
                     <!-- Vendor Quotation No -->
                     <div class="col-lg-2">
                         <div class="form-group">
@@ -135,11 +138,12 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="WONumber" name="WONumber" type="text" @*data-ng-model="Client.ContactNumber"*@ class="form-control" ng-readonly="true" />
+                            <input id="WONumber" name="WONumber" type="text" ng-model="Client.WONumber" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
 
-
+                    <div class="col-lg-1">
+                    </div>
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label for="WOAmount">WO Amount :</label>
@@ -147,7 +151,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="WOAmount" name="WOAmount" type="text" @*data-ng-model="Client.ContactAddress"*@ class="form-control" ng-readonly="true" />
+                            <input id="WOAmount" name="WOAmount" type="text" ng-model="Client.WOAmount" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                 </div>
@@ -250,9 +254,17 @@
         </div>
     </div>
 
-    <hr style="border: none; height: 3px; background-color: #8d8d8d; margin-top: 20px; margin-bottom: 20px; width: 100%; border-radius: 5px; " />
-    <label style="font-size: 14px; font-family: math;" class="box-title">Advance Demand Info</label>
-    <hr style="margin-top: 5px;" />
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
+                <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
+                    <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Advance Claim Info</h2>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="box-body">
 
@@ -295,7 +307,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceDemandAmount" name="AdvanceDemandAmount" type="text" data-ng-model="AdvanceInformmation.AdvanceDemandAmount" class="form-control" />
+                            <input id="AdvanceDemandAmount" name="AdvanceDemandAmount" autocomplete="off" type="text" data-ng-model="AdvanceInformmation.AdvanceDemandAmount" class="form-control" />
                         </div>
                     </div>
 
@@ -325,7 +337,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ProposedAmount" name="ProposedAmount" type="text" data-ng-model="AdvanceInformmation.ProposedAmount"
+                            <input id="ProposedAmount" name="ProposedAmount" autocomplete="off" type="text" data-ng-model="AdvanceInformmation.ProposedAmount"
                                    class="form-control" ng-keydown="calculateRemainingAmount($event)" />
                         </div>
                     </div>
@@ -355,7 +367,7 @@
                     </div>
                     <div class="col-lg-5">
                         <div class="form-group">
-                            <input id="Note" name="Note" type="text" data-ng-model="AdvanceInformmation.Note" class="form-control" />
+                            <input id="Note" name="Note" autocomplete="off" type="text" data-ng-model="AdvanceInformmation.Note" class="form-control" />
                         </div>
                     </div>
 
@@ -437,7 +449,9 @@
             ClientName: "",
             VendorName: "",
             VendorQutnNo: "",
-            QuotationDate: ""
+            QuotationDate: "",
+            WONumber: "",
+            WOAmount: ""
         }
 
         $scope.AdvanceInformmation = {
@@ -451,7 +465,9 @@
             AdvanceDemandDate: "",
             ProposedAmount: "",
             RemainingAmount: "",
-            Note: ""
+            Note: "",
+            WOInfoID: "",
+            ClientReqID: ""
         }
 
         $('.DatePicker').datepicker({
@@ -540,19 +556,23 @@
             $scope.AdvanceInformmation.VendorQutnID = row.VendorQutnID;
 
             $http.post('/AdvDemandVendor/AvailableClientDetailInfo', {
-                ClientID: row.ClientID, 
-                POAprvID: row.POAprvID, 
+                POAprvID: row.POAprvID
 
             }).success(function (response) {
                 $scope.ClientDetails = response.ClientDetails;
 
                 $scope.AdvanceInformmation.PurchaseOrderAmount = $scope.ClientDetails[0].POAprvAmnt;
+                $scope.AdvanceInformmation.WOInfoID = $scope.ClientDetails[0].WOInfoID;
+                $scope.AdvanceInformmation.ClientReqID = $scope.ClientDetails[0].ClientReqID;
+
       
                 $scope.Client = {
                     ClientName: $scope.ClientDetails[0].ClientName,
                     VendorQutnNo: $scope.ClientDetails[0].VendorQutnNo,
                     QuotationDate: $scope.ClientDetails[0].QuotationDate,
                     VendorName: $scope.ClientDetails[0].VendorName,
+                    WONumber: $scope.ClientDetails[0].WONo,
+                    WOAmount: $scope.ClientDetails[0].WOAmt,
                 };
             /*    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID);*/
                 $scope.loading = false;

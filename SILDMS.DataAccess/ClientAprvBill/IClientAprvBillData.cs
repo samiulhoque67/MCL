@@ -12,5 +12,6 @@ namespace SILDMS.DataAccess.ClientAprvBill
         List<VendorBillRecvd> GetQutnSearchList();
         List<VendorBillRecvd> GetShowClientReqList();
         string SaveClientFinalBill(VendorBillRecvd billRecv);
+        string SaveVendorFinalBillRcvd(VendorBillRecvd billRecv);
     }
 }

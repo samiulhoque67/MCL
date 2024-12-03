@@ -56,7 +56,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                         ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         QuotationNo = reader.GetString("AutoQutnNo"),
-                        QuotationAprvDate = reader.GetString("QuotationDate"),
+                        ClientAdvanceClaimDate = reader.GetString("QuotationDate"),
                         ClientQutnID = reader.GetString("ClientQutnID"),
                         ProcessStatus = reader.GetString("ProcessStatus")
                     }).ToList();
@@ -153,7 +153,11 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                         ClientQutnAmt = reader.GetString("ClientQutnAmt"),
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
-                        TolAmt = reader.GetString("TolAmt")
+                        TolAmt = reader.GetString("TolAmt"),
+                        Remarks = reader.GetString("Remarks"),
+                        BriefingDate = reader.GetString("BriefingDate"),
+                        QutnNo = reader.GetString("QutnNo"),
+                        QuotationDate = reader.GetString("QuotationDate"),
                     }).ToList();
 
                 }

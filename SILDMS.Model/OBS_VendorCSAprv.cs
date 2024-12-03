@@ -13,6 +13,7 @@ namespace SILDMS.Model
         public string VendorCSRecmID { get; set; }
         public string ServiceCategoryID { get; set; }
         public string ClientReqID { get; set; }
+        public string VendorReqID { get; set; }
         public string ClientID { get; set; }
         [Required]
         public string ClientCode { get; set; }
@@ -43,7 +44,9 @@ namespace SILDMS.Model
         [Required]
         public string Status { get; set; }
         public string VendorCSRecmItemID { get; set; }
+        public string CSRecmVendorName { get; set; }
         public string ServiceItemID { get; set; }
-        public object VendorReqID { get; set; }
+        public string RecommendedByName { get; set; }
+        public string RecommendedByDesignation { get; set; }
     }
 }

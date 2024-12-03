@@ -14,6 +14,18 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Models
             try { return Convert.ToString(HttpContext.Current.Session["UserID"]); }
             catch (Exception) { return ""; }
         }
+        public static string GetUserFullName()
+        {
+            try { return Convert.ToString(HttpContext.Current.Session["UserFullName"]); }
+            catch (Exception) { return ""; }
+        }
+
+        public static string GetUserDesignation()
+        {
+            try { return Convert.ToString(HttpContext.Current.Session["UserDesignation"]); }
+            catch (Exception) { return ""; }
+        }
+
 
         public static string GetOwnerLevelID()
         {

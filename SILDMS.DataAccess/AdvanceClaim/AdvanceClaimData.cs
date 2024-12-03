@@ -59,7 +59,7 @@ namespace SILDMS.DataAccess.AdvanceClaim
                         ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
-                        QuotationAprvDate = reader.GetString("QuotationAprvDate")
+                        ClientAdvanceClaimDate = reader.GetString("QuotationAprvDate")
                     }).ToList();
 
                 }

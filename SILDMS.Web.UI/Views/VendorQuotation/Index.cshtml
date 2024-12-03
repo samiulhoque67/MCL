@@ -1095,7 +1095,7 @@
             $scope.VendorQutn.SubmissionDate = row.SubmissionDate;
             $scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;
 
-            $http.post('/VendorQuotation/GetVendorReqItemListForVenQutn', { VendorReqID: row.VendorReqID })
+            $http.post('/VendorQuotation/GetVendorReqItemListForVenQutn', { VendorID: row.VendorID, VendorReqID: row.VendorReqID })
                 .success(function (response) {
                     $scope.masterDataSetupGridData = response.VendorReqItemList;
                     $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);

@@ -15,7 +15,8 @@ namespace SILDMS.DataAccessInterface.Reports
     {
         DataTable GetRptUserActivityStatus(string FromDate, string ToDate, string userID, string id, string action, out string errorNumber);
         DataTable GetRptUserDetails(string UserRptID, string BillReceiveFromDate, string Status, string id, string action, out string errorNumber);
-        DataTable VendorCSApprevedReport(string UserRptID, string BillReceiveFromDate, string Status, string id, string action, out string errorNumber);
+        DataTable RequisitionMovementInfo(string RequisitionNo, out string errorNumber);
+        DataTable VendorCSApprevedReport(string VendorReqID, string ServiceItemID, out string errorNumber);
         DataTable GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out string errorNumber);
         DataTable GetRptDocumentsList(string OwnerLevelID, string OwnerID, string DocCategoryID, string DocTypeID, string DocPropertyID, string Status, string id, string action, out string errorNumber);
         DataTable GetRptRoleList(string OwnerLevelID, string OwnerID, string RoleID, string Status, string id, string action, out string errorNumber);

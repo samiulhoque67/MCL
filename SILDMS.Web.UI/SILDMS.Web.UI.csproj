@@ -327,17 +327,23 @@
     <Compile Include="Areas\Test77\Test77AreaRegistration.cs" />
     <Compile Include="Controllers\ActivityCategoryController.cs" />
     <Compile Include="Controllers\AdvanceApprovalController.cs" />
+    <Compile Include="Controllers\AdvanceClaimAprvController.cs" />
     <Compile Include="Controllers\AdvanceClaimController.cs" />
+    <Compile Include="Controllers\AdvanceClaimRecomController.cs" />
+    <Compile Include="Controllers\AdvancePaymentController.cs" />
     <Compile Include="Controllers\AdvanceRecommendationController.cs" />
     <Compile Include="Controllers\AdvDemandVendorController.cs" />
     <Compile Include="Controllers\apiLcEmailScheduleController.cs" />
     <Compile Include="Controllers\AprvFinalBillRcvdController.cs" />
+    <Compile Include="Controllers\ClaimReceivedController.cs" />
     <Compile Include="Controllers\ClientAprvBillController.cs" />
     <Compile Include="Controllers\ClientBillRcmdController.cs" />
     <Compile Include="Controllers\ClientFinalBillPrepareController.cs" />
     <Compile Include="Controllers\ClientInfoController.cs" />
     <Compile Include="Controllers\ClientRequisitionController.cs" />
+    <Compile Include="Controllers\ClientSettlementController.cs" />
     <Compile Include="Controllers\DashboardMCLController.cs" />
+    <Compile Include="Controllers\FinalSettlementController.cs" />
     <Compile Include="Controllers\PoAprvController.cs" />
     <Compile Include="Controllers\POCreationController.cs" />
     <Compile Include="Controllers\PoRecomController.cs" />
@@ -356,9 +362,11 @@
     <Compile Include="Controllers\VendorCSAprvController.cs" />
     <Compile Include="Controllers\VendorCSInfoController.cs" />
     <Compile Include="Controllers\VendorFinalBillReceivedController.cs" />
+    <Compile Include="Controllers\VendorFinalBilPaymentController.cs" />
     <Compile Include="Controllers\VendorInfoController.cs" />
     <Compile Include="Controllers\VendorQuotationController.cs" />
     <Compile Include="Controllers\VendorRequisitionController.cs" />
+    <Compile Include="Controllers\VendorSettlementController.cs" />
     <Compile Include="Controllers\WorkOrderInfoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -372,6 +380,27 @@
     <Compile Include="Models\EmailMessageFormater.cs" />
     <Compile Include="Models\FullOuterJoin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\rptQuotationtoClient.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptQuotationtoClient.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Reports\rptQuotationtoClientTerms.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptQuotationtoClientTerms.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Reports\rptRequisitionMovementInfo.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptRequisitionMovementInfo.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Reports\rptRoleList.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -383,24 +412,35 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>rptVendorCSInfo.rpt</DependentUpon>
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Reports\rptVendorCSRecmInfo.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptVendorCSRecmInfo.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Reports\rptVendorRequisition.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>rptVendorRequisition.rpt</DependentUpon>
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Reports\rptVendorRequisitionTerms.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>rptVendorRequisitionTerms.rpt</DependentUpon>
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Reports\rptVendorRequisitionVendors.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>rptVendorRequisitionVendors.rpt</DependentUpon>
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Schedular\EmailNotificationSchedule.cs" />
     <Compile Include="Startup.cs">
@@ -1570,9 +1610,18 @@
     <Content Include="Views\Reports\VendorCSApprevedReport.cshtml" />
     <Content Include="Views\ClientAprvBill\Index.cshtml" />
     <Content Include="Views\ReceivedFinalPayment\Index.cshtml" />
-    <Content Include="Views\Reports\rptQuotationtoClient.cshtml" />
     <Content Include="Views\QuotationToClientRevised\Index.cshtml" />
     <Content Include="Views\VendorRequisition\RptRequisitionToVendorReport.cshtml" />
+    <Content Include="Views\Reports\QuotationToClientReport.cshtml" />
+    <Content Include="Views\Reports\RequisitionMovementInfo.cshtml" />
+    <Content Include="Views\FinalSettlement\Index.cshtml" />
+    <Content Include="Views\ClientSettlement\Index.cshtml" />
+    <Content Include="Views\VendorSettlement\Index.cshtml" />
+    <Content Include="Views\AdvanceClaimRecom\Index.cshtml" />
+    <Content Include="Views\AdvanceClaimAprv\Index.cshtml" />
+    <Content Include="Views\ClaimReceived\Index.cshtml" />
+    <Content Include="Views\AdvancePayment\Index.cshtml" />
+    <Content Include="Views\VendorFinalBilPayment\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1604,22 +1653,46 @@
     <EmbeddedResource Include="Migrations\201511160838195_Init.resx">
       <DependentUpon>201511160838195_Init.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptVendorCSInfo.rpt">
+    <Content Include="Reports\rptQuotationtoClient.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptQuotationtoClient.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\rptQuotationtoClientTerms.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptQuotationtoClientTerms.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\rptRequisitionMovementInfo.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptRequisitionMovementInfo.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\rptVendorCSInfo.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptVendorCSInfo.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptVendorRequisition.rpt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\rptVendorCSRecmInfo.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptVendorCSRecmInfo.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\rptVendorRequisition.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptVendorRequisition.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptVendorRequisitionTerms.rpt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\rptVendorRequisitionTerms.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptVendorRequisitionTerms.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptVendorRequisitionVendors.rpt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\rptVendorRequisitionVendors.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptVendorRequisitionVendors.cs</LastGenOutput>
-    </EmbeddedResource>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

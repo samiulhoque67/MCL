@@ -19,6 +19,7 @@ namespace SILDMS.Web.UI.Controllers
         private ValidationResult respStatus = new ValidationResult();
         private string outStatus = string.Empty;
         private readonly string UserID = string.Empty;
+        private readonly string UserName = string.Empty;
         private string action = string.Empty;
 
         public VendorCSAprvController(IVendorCSAprvService repository, ILocalizationService localizationService)
@@ -26,6 +27,7 @@ namespace SILDMS.Web.UI.Controllers
             this._vendorCSInfoService = repository;
             this._localizationService = localizationService;
             UserID = SILAuthorization.GetUserID();
+            UserName = SILAuthorization.GetUserFullName();
         }
         // GET: /VendorCSAprv/Index
         public ActionResult Index()
@@ -93,8 +95,12 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> SaveVendorCSAprv(OBS_VendorCSAprv vendorCS, List<OBS_VendorCSAprvItem> vendorCSItem, List<OBS_VendorCSAprvTerms> vendorCSTerm)
         {
             vendorCS.SetBy = UserID;
+            vendorCS.RecommendedByName = SILAuthorization.GetUserFullName(); 
+            vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
             string status = string.Empty;//, message = string.Empty;
             status = _vendorCSInfoService.SaveVendorCSAprv(vendorCS, vendorCSItem, vendorCSTerm);
+
+            TempData["VendorCSRecmInfo"] = vendorCS;
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
@@ -143,8 +149,6 @@ namespace SILDMS.Web.UI.Controllers
             return Json(new { InvitationList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
 
-
-
         [Authorize]
         public async Task<dynamic> GetMaterialByRequisition(string VendorRequisitionNumber)
         {
@@ -153,7 +157,6 @@ namespace SILDMS.Web.UI.Controllers
             return Json(new { ReqWiseMaterialList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
 
-
         [Authorize]
         public async Task<dynamic> GetVendorByMaterial(string VendorReqID, string ServiceItemID)
         {
@@ -161,10 +164,5 @@ namespace SILDMS.Web.UI.Controllers
             await Task.Run(() => _vendorCSInfoService.GetVendorByMaterialService(VendorReqID, ServiceItemID, out MatWiseVendorList));
             return Json(new { MatWiseVendorList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
-
-
-
-
-
     }
 }

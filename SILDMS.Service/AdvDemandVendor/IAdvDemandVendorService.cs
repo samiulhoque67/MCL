@@ -10,7 +10,7 @@ namespace SILDMS.Service.AdvDemandVendor
     public interface IAdvDemandVendorService
     {
         ValidationResult AllAvailableCSVendorApprovalService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out List<POinfo> AllAvailableClientsList);
-        ValidationResult AvailableClientDetailInfoService(string ClientID, string POAprvID, out List<POinfo> ClientDetails);
+        ValidationResult AvailableClientDetailInfoService(string POAprvID, out List<POinfo> ClientDetails);
 
         string SaveQuotToClientService(string UserID, List<AdvanceDemandMaster> MasterData);
 

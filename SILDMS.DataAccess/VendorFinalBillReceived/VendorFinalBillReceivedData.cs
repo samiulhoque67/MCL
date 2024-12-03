@@ -123,12 +123,12 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                     db.AddInParameter(dbCommandWrapper, "@VendrFinalBilRcvdID", SqlDbType.Int, billRecv.VendrFinalBilRcvdID);
                     db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.NVarChar, billRecv.VendorID);
                     db.AddInParameter(dbCommandWrapper, "@PoNo", SqlDbType.NVarChar, billRecv.RequisitionNo);
-                    db.AddInParameter(dbCommandWrapper, "@VendorName", SqlDbType.NVarChar, billRecv.VendorName);
+                    //db.AddInParameter(dbCommandWrapper, "@VendorName", SqlDbType.NVarChar, billRecv.VendorName);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, billRecv.ClientID);
-                    db.AddInParameter(dbCommandWrapper, "@ClientName", SqlDbType.NVarChar, billRecv.ClientName);
+                    //db.AddInParameter(dbCommandWrapper, "@ClientName", SqlDbType.NVarChar, billRecv.ClientName);
                     db.AddInParameter(dbCommandWrapper, "@WONo", SqlDbType.NVarChar, billRecv.WONo);
                     db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.NVarChar, billRecv.WOInfoID);
-                    db.AddInParameter(dbCommandWrapper, "@WOAmt", SqlDbType.NVarChar, billRecv.WOAmt);
+                    db.AddInParameter(dbCommandWrapper, "@WOAmt", SqlDbType.Decimal, billRecv.WOAmt);
                     //db.AddInParameter(dbCommandWrapper, "@VendorQutnNo", SqlDbType.NVarChar, (billRecv.VendorQutnNo));
                     db.AddInParameter(dbCommandWrapper, "@PoDate", SqlDbType.NVarChar, billRecv.RequisitionDate);
                     //db.AddInParameter(dbCommandWrapper, "@QuotationDate", SqlDbType.DateTime, billRecv.QuotationDate);

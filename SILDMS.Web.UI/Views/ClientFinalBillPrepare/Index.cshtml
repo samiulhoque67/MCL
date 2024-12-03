@@ -40,23 +40,43 @@
             </div>
         </div>
     </div>
-.
 
-
+    <div class="box-body " style="margin: 1%; padding: 5px 5px 5px 5px;" data-ng-disabled="">
+        <div class="row">
 
 
             <div class="row">
-                @*<div class="col-lg-3 ">
-                <div class="form-group">
-                    <label for="VendorName"> Vendor Name :</label>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Requisition No:</label>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <input id="RequisitionNo" name="RequisitionNo" type="text" class="form-control" placeholder="Client Requisition No" ng-model="VendorQutn.RequisitionNo" ng-readonly="true" />
+                    </div>
+                </div>
+
+
+                <div class="col-lg-1">
+                    <button type="button" data-ng-click="ShowVendorReqList()" class="form-control">Search</button>
+                </div>
+
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Requisition Date:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="RequisitionDate" name="RequisitionDate" readonly type="text" class="form-control" placeholder="Requisition Date" ng-model="VendorQutn.RequisitionDate" ng-readonly="true" />
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorQutn.VendorName" class="form-control" ng-readonly="true" />
-                </div>
-            </div>*@
 
+            <div class="row">
                 <div class="col-lg-3 ">
                     <div class="form-group">
                         <label for="ClientName">Client Name :</label>
@@ -67,27 +87,8 @@
                         <input id="ClientName" name="ClientName" type="text" data-ng-model="VendorQutn.ClientName" class="form-control" placeholder="ClientName" ng-readonly="true" />
                     </div>
                 </div>
-
             </div>
-
-
-
-
-            @*<div class="row">
-            <div class="col-lg-3 ">
-                <div class="form-group">
-                    <label for="ClientName">Client Name :</label>
-                </div>
-            </div>
-            <div class="col-lg-8">
-                <div class="form-group">
-                    <input id="ClientName" name="ClientName" type="text" data-ng-model="VendorQutn.ClientName" class="form-control" placeholder="ClientName" ng-readonly="true" />
-                </div>
-            </div>
-        </div>*@
             <div class="row">
-
-
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Quotation No:</label>
@@ -98,7 +99,6 @@
                         <input id="AutoVendorQutnNo" name="AutoVendorQutnNo" type="text" class="form-control" placeholder="Quotation No" ng-model="VendorQutn.VendorQutnNo" ng-readonly="true" />
                     </div>
                 </div>
-
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label>Quotation Date</label>
@@ -109,23 +109,7 @@
                         <input id="QuotationDate" name="QuotationDate" type="text" class="DatePicker form-control" placeholder="Quotation Date" ng-model="VendorQutn.QuotationDate" />
                     </div>
                 </div>
-
             </div>
-            @*<div class="row">
-
-
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>WO Date:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="WODate" name="WODate" type="text" class="DatePicker form-control" placeholder="WO Date" ng-model="VendorQutn.WODate" />
-                </div>
-            </div>
-        </div>*@
-
             <div class="row">
                 <div class="col-lg-3 ">
                     <div class="form-group">
@@ -137,9 +121,6 @@
                         <input id="WONo" name="WONo" type="text" data-ng-model="VendorQutn.WONo" class="form-control" placeholder="Wo No" />
                     </div>
                 </div>
-
-
-
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label>WO Date:</label>
@@ -150,12 +131,7 @@
                         <input id="WODate" name="WODate" type="text" class="DatePicker form-control" placeholder="WO Date" ng-model="VendorQutn.WODate" />
                     </div>
                 </div>
-
-
-
-
             </div>
-
 
             <div class="row">
                 <div class="col-lg-3">
@@ -212,7 +188,8 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="RemainingAmnt" name="RemainingAmnt" type="text" class="form-control" placeholder="Remaining Amount" ng-model="VendorQutn.RemainingAmnt" ng-readonly="true" ng-change="calculateAmounts()" />
+                        @*<input id="RemainingAmnt" name="RemainingAmnt" type="text" class="form-control" placeholder="Remaining Amount" ng-model="VendorQutn.RemainingAmnt" ng-readonly="true" ng-change="calculateAmounts()" />*@
+                        <input id="RemainingAmnt" name="RemainingAmnt" type="text" class="form-control" placeholder="Remaining Amount" ng-model="VendorQutn.RemainingAmnt" ng-readonly="true" />
                     </div>
                 </div>
 
@@ -455,13 +432,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
     <div class="modal fade" id="deleteReqItemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
         <div class="modal-dialog" role="document">
             <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
@@ -479,14 +449,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
 </div>
 
 <script type="text/javascript">
@@ -878,7 +840,8 @@
             $scope.VendorQutn.WONo = row.WONo;
             $scope.VendorQutn.WOAmt = row.WOAmt;
             $scope.VendorQutn.WODate = row.WODate;
-            $scope.VendorQutn.RemainingAmnt = row.RemainingAmnt;
+            $scope.VendorQutn.RemainingAmnt = row.WOAmt;
+            //$scope.VendorQutn.RemainingAmnt = row.RemainingAmnt;
             $scope.VendorQutn.AdvancClaimRcvAmt = row.AdvancClaimRcvAmt;
             $scope.VendorQutn.VendorQutnNo = row.VendorQutnNo;
             $scope.VendorQutn.QuotationDate = row.QuotationDate;

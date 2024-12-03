@@ -50,6 +50,14 @@ namespace SILDMS.Web.UI.Controllers
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<dynamic> SaveVendorFinalBillRcvd(VendorBillRecvd BillRecv)
+        {
+            BillRecv.SetBy = UserID;
+            string status = string.Empty;//, message = string.Empty;
+            status = _clientAprvBillService.SaveVendorFinalBillRcvd(BillRecv);
+            return Json(new { status }, JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<dynamic> GetQutnSearchList()
         {
             var PoSearchList = new List<VendorBillRecvd>();

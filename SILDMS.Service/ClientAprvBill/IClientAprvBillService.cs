@@ -13,5 +13,6 @@ namespace SILDMS.Service.ClientAprvBill
         ValidationResult GetQutnSearchList(out List<VendorBillRecvd> poSearchList);
         ValidationResult GetShowClientReqList(out List<VendorBillRecvd> vendorReqList);
         string SaveClientFinalBill(VendorBillRecvd billRecv);
+        string SaveVendorFinalBillRcvd(VendorBillRecvd billRecv);
     }
 }

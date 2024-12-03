@@ -47,29 +47,29 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<dynamic> AvailableClientDetailInfo(string ClientID,string ClientReqID)
+        public async Task<dynamic> AvailableClientDetailInfo(string ClientID, string ClientReqID, string ReqType)
         {
             var ClientDetails = new List<OBS_ClientDetails>();  // Renamed to ClientDetails
-            await Task.Run(() => _quotationToClientService.AvailableClientDetailInfoService(ClientID, ClientReqID, out ClientDetails));
+            await Task.Run(() => _quotationToClientService.AvailableClientDetailInfoService(ClientID, ClientReqID, ReqType, out ClientDetails));
             var result = Json(new { ClientDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
             return result;
         }
 
 
         [HttpPost]
-        public async Task<dynamic> GetVendorTermList(string VendorCSAprvID)
+        public async Task<dynamic> GetVendorTermList(string VendorCSAprvID, string ClientReqID, string ReqType)
         {
             var VendorTermTermList = new List<OBS_TermsItem>();  // Renamed to ClientDetails
-            await Task.Run(() => _quotationToClientService.GetTermsConditionsListService(VendorCSAprvID, out VendorTermTermList));
+            await Task.Run(() => _quotationToClientService.GetTermsConditionsListService(VendorCSAprvID, ClientReqID, ReqType, out VendorTermTermList));
             var result = Json(new { VendorTermTermList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
             return result;
         }
 
         [HttpPost]
-        public async Task<dynamic> GetClientReqDataInfo(string ClientID, string ClientReqID)
+        public async Task<dynamic> GetClientReqDataInfo(string ClientID, string ClientReqID, string ReqType)
         {
             var GetClientReqDetails = new List<ClientReqData>();  // Renamed to ClientDetails
-            await Task.Run(() => _quotationToClientService.GetClientReqDataInfoService(ClientID, ClientReqID, out GetClientReqDetails));
+            await Task.Run(() => _quotationToClientService.GetClientReqDataInfoService(ClientID, ClientReqID, ReqType, out GetClientReqDetails));
             var result = Json(new { GetClientReqDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
             return result;
         }
@@ -85,6 +85,8 @@ namespace SILDMS.Web.UI.Controllers
             try
             {
                 string status = _quotationToClientService.SaveQuotToClientService(UserID,  action, MasterData, DetailData, AllTermsDtl);
+
+                TempData["QuotationToClientReport"] = MasterData;
                 return Json(new { status = status }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

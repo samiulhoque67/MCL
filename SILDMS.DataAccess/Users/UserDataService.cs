@@ -196,6 +196,8 @@ namespace SILDMS.DataAccess.Users
                     {
                         UserID = reader.GetString("UserID"),
                         UserName = reader.GetString("UserName"),
+                        UserFullName = reader.GetString("UserFullName"),
+                        UserDesignation = reader.GetString("UserDesignation"),
                         OwnerLevelID = reader.GetString("OwnerLevelID"),
                         LevelName = reader.GetString("LevelName"),                      
                         OwnerID = reader.GetString("OwnerID"),

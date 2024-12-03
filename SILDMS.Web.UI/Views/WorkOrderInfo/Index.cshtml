@@ -140,7 +140,6 @@
                     <table st-table="ClientDisplayedCollection" st-safe-src="ClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr>
-                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCode')">Client Code</th>*@
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientName')">Client Name</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientQutnAprvID')">AprvNo</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactPerson')">AprvDate</th>
@@ -158,13 +157,12 @@
                             <tr ng-repeat="row in ClientDisplayedCollection">
                                 <td class="hidden">{{row.ClientQutnAprvID}}</td>
                                 <td class="hidden">{{row.ClientID}}</td>
-                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientCode}}</td>*@
+                                <td class="hidden">{{row.ClientReqID}}</td>
+                                <td class="hidden">{{row.ClientReqNo}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
-                                @*<td class="hidden">{{row.ClientCategoryID}}</td>*@
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.AprvNo}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.AprvDate}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactNumber}}</td>
-                                @*<td class="hidden">{{row.ClientAddressID}}</td>*@
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.Address}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">
                                     <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
@@ -1038,13 +1036,13 @@
         ////////////////////////Select for Update from Search grid ///////////////////////
 
         $scope.toggleClientSelect = function (row) {
+            $scope.WOInfo.ClientReqID = row.ClientReqID;
+            $scope.WOInfo.ClientReqNo = row.ClientReqNo;
             $scope.WOInfo.ClientID = row.ClientID;
             $scope.WOInfo.ClientCode = row.ClientCode;
             $scope.WOInfo.ClientName = row.ClientName;
-            alert(row.ClientQutnAprvID);
+            //alert(row.ClientQutnAprvID);
             $scope.WOInfo.ClientQutnAprvID = row.ClientQutnAprvID;
-            $scope.WOInfo.ClientReqID = row.ClientReqID;
-            $scope.WOInfo.ClientReqNo = row.ClientReqNo;
 
             //alert(row.ClientQutnAprvID);
             $http.post('/WorkOrderInfo/GetWOInfoItemList', { ClientQutnAprvID: row.ClientQutnAprvID })

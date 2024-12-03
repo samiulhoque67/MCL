@@ -69,7 +69,7 @@ namespace SILDMS.DataAccess.AdvDemandVendor
             return AllAvailableClientsList;
         }
 
-        public List<POinfo> AvailableClientDetailInfoDataService(string ClientID, string POAprvID, out string _errorNumber)
+        public List<POinfo> AvailableClientDetailInfoDataService(string POAprvID, out string _errorNumber)
         {
             _errorNumber = string.Empty;
             var ClientDetails = new List<POinfo>();
@@ -78,7 +78,6 @@ namespace SILDMS.DataAccess.AdvDemandVendor
             var db = factory.CreateDefault() as SqlDatabase;
             using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAvailablePOforDemand"))
             {
-                db.AddInParameter(dbCommandWrapper, "@ClientID", DbType.String, ClientID);
                 db.AddInParameter(dbCommandWrapper, "@POAprvID", DbType.String, POAprvID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 10);
                 dbCommandWrapper.CommandTimeout = 300;
@@ -94,16 +93,20 @@ namespace SILDMS.DataAccess.AdvDemandVendor
                     var dt1 = ds.Tables[0];
                     ClientDetails = dt1.AsEnumerable().Select(reader => new POinfo
                     {
-                        ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
+                        ClientID = reader.GetString("ClientID"),
                         VendorName = reader.GetString("VendorName"),
                         VendorQutnNo = reader.GetString("VendorQutnNo"),
                         QuotationDate = reader.GetString("QuotationDate"),
                         PoNo = reader.GetString("PoNo"),
                         POAprvID = reader.GetString("POAprvID"),
-                        POAprvAmnt = reader.GetString("POAprvAmnt"),
                         VendorQutnID = reader.GetString("VendorQutnID"),
-                        VendorID = reader.GetString("VendorID")
+                        VendorID = reader.GetString("VendorID"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        POAprvAmnt = reader.GetString("POAprvAmnt"),
+                        WONo = reader.GetString("WONo"),
+                        WOInfoID = reader.GetString("WOInfoID"),
+                        WOAmt = reader.GetString("WOAmt")
                     }).ToList();
 
                 }
@@ -144,7 +147,7 @@ namespace SILDMS.DataAccess.AdvDemandVendor
                     masterRow["ClientID"] = string.IsNullOrEmpty(masterItem.ClientID) ? DBNull.Value : (object)masterItem.ClientID;
                     masterRow["VendorID"] = string.IsNullOrEmpty(masterItem.VendorID) ? DBNull.Value : (object)masterItem.VendorID;
                     masterRow["VendorQutnID"] = string.IsNullOrEmpty(masterItem.VendorQutnID) ? DBNull.Value : (object)masterItem.VendorQutnID;
-                    masterRow["POAprvID"] = string.IsNullOrEmpty(masterItem.POAprvID) ? DBNull.Value : (object)masterItem.POAprvID;
+                    masterRow["POAprvID"] = string.IsNullOrEmpty(masterItem.MoneyReceiptNo) ? DBNull.Value : (object)masterItem.MoneyReceiptNo;
                     masterRow["PurchaseOrderAmount"] = string.IsNullOrEmpty(masterItem.PurchaseOrderAmount) ? DBNull.Value : (object)masterItem.PurchaseOrderAmount;
                     masterRow["AdvanceInvoiceNo"] = string.IsNullOrEmpty(masterItem.AdvanceInvoiceNo) ? DBNull.Value : (object)masterItem.AdvanceInvoiceNo;
                     masterRow["AdvanceDemandAmount"] = string.IsNullOrEmpty(masterItem.AdvanceDemandAmount) ? DBNull.Value : (object)masterItem.AdvanceDemandAmount;
@@ -166,6 +169,8 @@ namespace SILDMS.DataAccess.AdvDemandVendor
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveAdvanceDemand"))
             {
                 db.AddInParameter(dbCommandWrapper, "@OBS_AdvanceDemand_MasterType", SqlDbType.Structured, masterDataTable);
+                db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.VarChar, MasterData[0].WOInfoID);
+                db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, MasterData[0].ClientReqID);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 

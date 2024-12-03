@@ -99,7 +99,6 @@ namespace SILDMS.DataAccess.AdvanceApproval
                         QuotationDate = reader.GetString("QuotationDate"),
                         VendrAdvncDemnID = reader.GetString("VendrAdvncDemnID"),
                         AdvncDemnAmt = reader.GetString("AdvncDemnAmt"),
-                        ProposedAmt = reader.GetString("ProposedAmt"),
                         AdvncDemnDate = reader.GetString("AdvncDemnDate"),
                         RemainingAmt = reader.GetString("RemainingAmt"),
                         UserFullName = reader.GetString("UserFullName"),
@@ -107,7 +106,11 @@ namespace SILDMS.DataAccess.AdvanceApproval
                         POAprvID = reader.GetString("POAprvID"),
                         VendorQutnID = reader.GetString("VendorQutnID"),
                         VendorID = reader.GetString("VendorID"),
-                        POAprvAmnt = reader.GetString("POAprvAmnt")
+                        POAprvAmnt = reader.GetString("POAprvAmnt"),
+                        WONo = reader.GetString("WONo"),
+                        WOAmt = reader.GetString("WOAmt"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        WOInfoID = reader.GetString("WOInfoID"),
                     }).ToList();
 
                 }
@@ -148,7 +151,7 @@ namespace SILDMS.DataAccess.AdvanceApproval
                     masterRow["ClientID"] = string.IsNullOrEmpty(masterItem.ClientID) ? DBNull.Value : (object)masterItem.ClientID;
                     masterRow["VendorID"] = string.IsNullOrEmpty(masterItem.VendorID) ? DBNull.Value : (object)masterItem.VendorID;
                     masterRow["VendorQutnID"] = string.IsNullOrEmpty(masterItem.VendorQutnID) ? DBNull.Value : (object)masterItem.VendorQutnID;
-                    masterRow["POAprvID"] = string.IsNullOrEmpty(masterItem.POAprvID) ? DBNull.Value : (object)masterItem.POAprvID;
+                    masterRow["POAprvID"] = string.IsNullOrEmpty(masterItem.MoneyReceiptNo) ? DBNull.Value : (object)masterItem.MoneyReceiptNo;
                     masterRow["PurchaseOrderAmount"] = string.IsNullOrEmpty(masterItem.PurchaseOrderAmount) ? DBNull.Value : (object)masterItem.PurchaseOrderAmount;
                     masterRow["AdvanceInvoiceNo"] = string.IsNullOrEmpty(masterItem.AdvanceInvoiceNo) ? DBNull.Value : (object)masterItem.AdvanceInvoiceNo;
                     masterRow["AdvanceDemandAmount"] = string.IsNullOrEmpty(masterItem.AdvanceDemandAmount) ? DBNull.Value : (object)masterItem.AdvanceDemandAmount;
@@ -171,6 +174,9 @@ namespace SILDMS.DataAccess.AdvanceApproval
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveAdvanceDemandAprv"))
             {
                 db.AddInParameter(dbCommandWrapper, "@OBS_AdvanceDemand_MasterType", SqlDbType.Structured, masterDataTable);
+                db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.VarChar, MasterData[0].WOInfoID);
+                db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, MasterData[0].ClientReqID);
+                db.AddInParameter(dbCommandWrapper, "@POAprvID", SqlDbType.VarChar, MasterData[0].MoneyReceiptNo);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 
