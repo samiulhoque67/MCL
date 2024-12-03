@@ -88,10 +88,8 @@ namespace SILDMS.DataAccess
                         WONo = reader.GetString("WONo"),
                         WODate = reader.GetString("WODate"),
                         WOAmt = reader.GetToDecimal("WOAmt"),
-
                         PONo = reader.GetString("PONo"),
                         POAmt = reader.GetToDecimal("POAmt"),
-
                         ClientReqID = reader.GetString("ClientReqID"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         //RequisitionDate = reader.GetString("RequisitionDate"),

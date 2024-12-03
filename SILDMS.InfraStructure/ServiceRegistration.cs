@@ -377,6 +377,9 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IVendorSettlementService>().To<VendorSettlementService>();
             kernel.Bind<IVendorSettlementDataService>().To<VendorSettlementDataService>();
+
+            kernel.Bind<IVendorFinalBilPaymentService>().To<VendorFinalBilPaymentService>();
+            kernel.Bind<IVendorFinalBilPaymentDataService>().To<VendorFinalBilPaymentDataService>();
         }
     }
 }

@@ -49,7 +49,7 @@ namespace SILDMS.Web.UI.Controllers
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
-
+        [HttpPost]
         public async Task<dynamic> SaveClientSettlement(OBS_ClientSettlement BillRecv)
         {
             BillRecv.SetBy = UserID;

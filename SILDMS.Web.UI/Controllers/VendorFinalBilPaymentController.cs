@@ -12,19 +12,19 @@ using System.Web.Mvc;
 
 namespace SILDMS.Web.UI.Controllers
 {
-    public class VendorSettlementController : Controller
+    public class VendorFinalBilPaymentController : Controller
     {
-        // GET: VendorSettlement
-        readonly IVendorSettlementService _clientFinalBillPrepareService;
+        // GET: VendorFinalBilPayment
+        readonly IVendorFinalBilPaymentService _aprvFinalBillRcvdService;
         private readonly ILocalizationService _localizationService;
         private ValidationResult respStatus = new ValidationResult();
         private string outStatus = string.Empty;
         private readonly string UserID = string.Empty;
         private string action = string.Empty;
 
-        public VendorSettlementController(IVendorSettlementService clientFinalBillPrepareService, ILocalizationService localizationService)
+        public VendorFinalBilPaymentController(IVendorFinalBilPaymentService aprvFinalBillRcvdService, ILocalizationService localizationService)
         {
-            _clientFinalBillPrepareService = clientFinalBillPrepareService;
+            _aprvFinalBillRcvdService = aprvFinalBillRcvdService;
             _localizationService = localizationService;
             UserID = SILAuthorization.GetUserID();
         }
@@ -35,26 +35,25 @@ namespace SILDMS.Web.UI.Controllers
 
         public async Task<dynamic> GetShowVendorReqList()
         {
-            var VendorReqList = new List<OBS_VendorSettlement>();
-            await Task.Run(() => _clientFinalBillPrepareService.GetShowClientReqList(out VendorReqList));
+            var VendorReqList = new List<OBS_VendorFinalBilPayment>();
+            await Task.Run(() => _aprvFinalBillRcvdService.GetShowVendorReqList(out VendorReqList));
             var result = Json(new { VendorReqList, msg = "Client Info List are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
-        [HttpPost]
-        public async Task<dynamic> SaveVendorSettlement(OBS_VendorSettlement BillRecv)
-        //public async Task<dynamic> SaveVendorSettlement(string TDSChallanDate)
+
+        public async Task<dynamic> SaveVendorFinalBill(OBS_VendorFinalBilPayment BillRecv)
         {
             BillRecv.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
-            status = _clientFinalBillPrepareService.SaveVendorSettlement(BillRecv);
+            status = _aprvFinalBillRcvdService.SaveVendorFinalBill(BillRecv);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<dynamic> GetQutnSearchList()
+        public async Task<dynamic> GetPOSearchList()
         {
-            var PoSearchList = new List<VendorBillRecvd>();
-            await Task.Run(() => _clientFinalBillPrepareService.GetQutnSearchList(out PoSearchList));
+            var PoSearchList = new List<OBS_VendorFinalBilPayment>();
+            await Task.Run(() => _aprvFinalBillRcvdService.GetPOSearchList(out PoSearchList));
             var result = Json(new { PoSearchList, msg = "clientReqSearchList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
