@@ -47,7 +47,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<dynamic> AvailableClientDetailInfo(string ClientID, string ClientReqID, string ReqType)
+        public async Task<dynamic> AvailableClientDetailInfo(string ClientID, string ClientReqID, string ReqType = null)
         {
             var ClientDetails = new List<OBS_ClientDetails>();  // Renamed to ClientDetails
             await Task.Run(() => _quotationToClientService.AvailableClientDetailInfoService(ClientID, ClientReqID, ReqType, out ClientDetails));
