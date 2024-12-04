@@ -297,10 +297,13 @@
                         <th style="text-align: left;">Description</th>
                         <th style="text-align: left;">Delivery Location</th>
                         <th style="text-align: left;">Delivery Date</th>
-                        <th ng-hide="pagefunction === 'viewmode'" style="text-align: left;">Req Qty</th>
+
+                        <th style="text-align: left;">Req Qty</th>
                         <th style="text-align: left;">Req Unit</th>
-                        <th ng-hide="pagefunction === 'viewmode'" style="text-align: left;">Req Qty</th>
-                        <th ng-hide="pagefunction === 'viewmode'" style="text-align: left;">Quoted Qty</th>
+                        @*<th ng-hide="pagefunction === 'viewmode'" style="text-align: left;">Req Qty</th>*@
+
+                        <th ng-hide="pagefunction === 'savemode' && ReqType === 'QC' || pagefunction === 'viewmode' && ReqType === 'QC'" style="text-align: left;">Vendor Quoted Qty</th>
+
                         <th ng-show="ReqType === 'QV'" style="text-align: left;">Vendor Quoted Unit Price</th>
                         <th style="text-align: left;">Given Quoted Unit Price</th>
                         <th ng-show="ReqType === 'QV'" style="text-align: left;">Vendor Quoted Amount</th>
@@ -318,24 +321,29 @@
                         <td style="width: 6%;">{{ row.Description }}</td>
                         <td style="width: 6%;">{{ row.DeliveryLocation }}</td>
                         <td style="width: 6%;">{{ row.DeliveryDate }}</td>
+
+                        <td ng-show="pagefunction === 'viewmode' && ReqType === 'QC'" style="width: 6%;">{{ row.QutnQnty }}</td>
                         <td ng-hide="pagefunction === 'viewmode'" style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
+                        <td ng-show="pagefunction === 'viewmode' && ReqType === 'QV'" style="width: 6%;">{{ row.QutnQnty | number: 2 }}</td>
                         <td style="width: 5%;">{{ row.ReqUnit }}</td>
-                        <td style="width: 6%;">{{ row.QutnQnty }}</td>
+
+                        <td ng-hide="pagefunction === 'savemode' && ReqType === 'QC' || pagefunction === 'viewmode' && ReqType === 'QC'" style="width: 6%;">{{ row.QutnQnty }}</td>
+
                         <td ng-show="ReqType === 'QV'" style="width: 6%;">{{ row.QutnPrice }}</td>
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
-                            ng-readonly="pagefunction === 'viewmode'" ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"
+                                   ng-readonly="pagefunction === 'viewmode'" ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('givenQutnPrice', row)" />
                         </td>
-                        <td ng-show="ReqType === 'QV'"  style="width: 6%;">{{ row.QutnAmt }}</td>
+                        <td ng-show="ReqType === 'QV'" style="width: 6%;">{{ row.QutnAmt }}</td>
                         <td style="width: 6%; color: #126e0f;">{{ row.givenQutnAmt }}</td>
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
-                            ng-readonly="pagefunction === 'viewmode'" ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
+                                   ng-readonly="pagefunction === 'viewmode'" ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('GivenVatPerc', row)" />
                         </td>
                         <td style="width: 6%;">{{ row.TotGivenVatAmt }}</td>
-                        <td ng-show="ReqType === 'QV'"  style="width: 6%;">{{ row.TolAmt }}</td>
+                        <td ng-show="ReqType === 'QV'" style="width: 6%;">{{ row.TolAmt }}</td>
                         <td style="width: 6%; color: #126e0f;">{{ row.givenTolAmt }}</td>
                     </tr>
                 </tbody>
@@ -591,7 +599,7 @@
                         </div>
                     </div>
 
-                    <div ng-show="pagefunction === 'savemode' && 'viewnode'" class="col-lg-2">
+                    <div ng-show="pagefunction ==='viewnode'" class="col-lg-2">
                         <div class="form-group">
                             <input ng-model="MasterData.QuotationDate" type="text" class="form-control" style="background-color:#ffffff;" readonly />
                         </div>
@@ -693,19 +701,22 @@
                                     <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
                                     <span ng-show="PagingInfo.sortBy == 'ClientName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
                                 </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientReqNo')">
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('ClientReqNo')">
                                     Requisition No
                                     <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
                                     <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
                                 </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                <th class="col-lg-1 col-md-1 col-sm-1">
                                     Requisition Date
                                 </th>
                                 <th class="col-lg-1 col-md-1 col-sm-1">
                                     Quotation No
                                 </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                <th class="col-lg-1 col-md-1 col-sm-1">
                                     Quotation Date
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Quotation Type
                                 </th>
                                 <th class="col-lg-2 col-md-2 col-sm-2">
                                     Action
@@ -737,6 +748,12 @@
                                 <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="text-center">{{row.QuotationNo}}</td>
                                 <td class="text-center">{{row.ClientAdvanceClaimDate | date:'dd/MM/yyyy'}}</td>
+
+                                <td class="text-center"
+                                    ng-class="{'text-success': row.ReqType === 'QV', 'text-primary': row.ReqType === 'QC'}">
+                                    {{row.ReqType === 'QV' ? 'Quotations by Vendor' : (row.ReqType === 'QC' ? 'Quotations by MCL' : row.ReqType)}}
+                                </td>
+
                                 <td class="col-lg-2 text-center">
                                     <button type="button" id="btnSelect" ng-click="selectAvailableClient(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
                                         <span class="fa fa-search-plus"> View</span>
@@ -927,6 +944,7 @@
         $scope.selectAvailableClient = function (row, action) {
 
             if (action === 'save') {
+
                 $scope.pagefunction = 'savemode';
                 $scope.ReqType = row.ReqType;
 
@@ -957,6 +975,9 @@
             }
 
             else if (action === 'view' || 'edit') {
+
+                $scope.ReqType = row.ReqType;
+
                 if (action === 'view') {
                     $scope.pagefunction = 'viewmode';
                 }
@@ -998,9 +1019,6 @@
                     $scope.GetClientReqDetails = response.GetClientReqDetails;
                     $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
                     $scope.loading = false;
-                    //$scope.GetClientReqDetails.forEach(function (row) {
-                    //    $scope.selectEntity(row, action);
-                    //});
                     $scope.MasterData = {
                         ClientID: $scope.GetClientReqDetailsCollection[0].ClientID,
                         ClientReqID: $scope.GetClientReqDetailsCollection[0].ClientReqID,
@@ -1022,10 +1040,6 @@
                     $scope.GetClientReqDetails = response.GetClientReqDetails;
                     $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
                     $scope.loading = false;
-                    //$scope.GetClientReqDetails.forEach(function (row) {
-                    //    $scope.selectEntity(row, action);
-                    //});
-
                     $scope.MasterData = {
                         QuotationNo: $scope.GetClientReqDetailsCollection[0].QutnNo,
                         QuotationNote: $scope.GetClientReqDetailsCollection[0].Remarks,
@@ -1047,6 +1061,9 @@
         $scope.buttonChecked = false;
 
         $scope.selectEntity = function (row, action) {
+            console.log($scope.pagefunction);
+            console.log($scope.ReqType);
+
             if (action === 'save') {
               
                 var selecteditems = {
@@ -1387,8 +1404,11 @@
         };
 
         $scope.ClearEverything = function () {
+
             $scope.showTermsItem = false;
-            $scope.ReqType = "";
+            $scope.ReqType = '';
+            $scope.pagefunction = '';
+
             $scope.clientReqTermArray = [];
             $scope.Client = "";
             $scope.ClientReq = {

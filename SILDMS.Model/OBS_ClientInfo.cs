@@ -65,6 +65,7 @@ namespace SILDMS.Model
         public string AdvancClaimID { get; set; }
         public string AdvancClaimRecmID { get; set; }
         public string AdvancClaimAprvID { get; set; }
+        public string ReqType { get; set; }
     }
 
 
