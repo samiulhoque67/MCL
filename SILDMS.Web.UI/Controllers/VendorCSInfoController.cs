@@ -164,9 +164,23 @@ namespace SILDMS.Web.UI.Controllers
             return Json(new { MatWiseVendorList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize]
+        public async Task<dynamic> SearchCS()
+        {
+            var SearchCSList = new List<Invitation>();
+            await Task.Run(() => _vendorCSInfoService.SearchCSService(UserID, out SearchCSList));
+            return Json(new { SearchCSList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
 
 
 
+        [Authorize]
+        public async Task<dynamic> CSVendor(string CSNumber)
+        {
+            var VendorCSList = new List<OBS_VendorCSRecmItem>();
+            await Task.Run(() => _vendorCSInfoService.CSVendorService(UserID, CSNumber, out VendorCSList));
+            return Json(new { VendorCSList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
 
 
 

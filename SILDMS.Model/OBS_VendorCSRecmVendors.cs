@@ -53,22 +53,23 @@ namespace SILDMS.Model
 
         public string RequisitionDate { get; set; }
 
-
+        public string CSRecDate {  get; set; }
 
         public string LastDateofQuotation { get; set; }
 
 
 
-        public string Mat_Code { get; set; }
-        public string Mat_Name { get; set; }
+        public string ServiceItemID { get; set; }
+        public string ServiceItemName { get; set; }
 
         public string QuotationNo { get; set; }
 
         public string VendorName { get; set; }
 
         public string VendorID { get; set; }
-
-
+        public string Operation { get; set; }
+        public string RecommendedBy { get; set; }
+        public string Remarks { get; set; }
     }
 
 

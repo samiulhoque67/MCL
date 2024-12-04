@@ -155,6 +155,8 @@ using SILDMS.Service.ClaimReceived;
 using SILDMS.DataAccess.Claim_Received;
 using SILDMS.DataAccess.AdvancePayment;
 using SILDMS.Service.AdvancePayment;
+using SILDMS.Service.VendorCSActualAprv;
+using SILDMS.DataAccess.VendorCSActualAprv;
 
 namespace SILDMS.InfraStructure
 {
@@ -380,6 +382,9 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IVendorFinalBilPaymentService>().To<VendorFinalBilPaymentService>();
             kernel.Bind<IVendorFinalBilPaymentDataService>().To<VendorFinalBilPaymentDataService>();
+
+            kernel.Bind<IVendorCSActualAprvService>().To<VendorCSActualAprvService>();
+            kernel.Bind<IVendorCSActualAprvDataService>().To<VendorCSActualAprvDataService>();
         }
     }
 }

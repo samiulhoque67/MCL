@@ -96,10 +96,10 @@
                     <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="SearchVendorReqModal()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
+                    <button type="button" data-ng-click="SearchCS()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>   {{ VendorReq.VendorReqID ? 'Update' : 'Save' }}</button>
+                    <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>   {{ VendorCSInfo.AutoCSNo ? 'Update' : 'Save' }}</button>
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="Cancel()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>Cancel</button>
@@ -310,142 +310,7 @@
 
 
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isMaterialRowSelected">
-        <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
 
-
-
-                <table id="tableId" st-table="MatWiseVendorListCollection" st-safe-src="MatWiseVendorList" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
-                    <thead>
-                        <tr style="font-size: 15px;">
-                            <th colspan="10" style="text-align: left; color: #000000; font-weight: bold">Requisition of {{PRmasterData.MaterialType.Material_Type_Code}} Material</th>
-                        </tr>
-                        <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
-                            <th>Quotation No</th>
-                            <th>Vendor Name</th>
-                            <th>ProposeQty</th>
-                            <th>Unit</th>
-                            <th>QutnPrice</th>
-                            
-                            <th>Vat %</th>
-                            <th>Vat Amnt</th>
-                            <th>Total Price</th>
-                            <th>Delivery Date</th>
-
-                            <th>Action</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr id="rowID" ng-repeat="row in MatWiseVendorListCollection"
-                            style="height:20px; font-size:13px;"
-                            ng-class="{'selected-row': row.selected}"
-                            ng-style="getRowStyle(row)">
-
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VendorQutnNo}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorName}}</td>
-
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.ReqUnit}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnPrice | number:2}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatPerc | number:2}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatAmt | number:2}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:3}}</td>
-
-                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.DeliveryDate}}</td>
-
-                            <td class="col-lg-1 col-md-1 col-sm-1 " style="font-weight:bold">
-                                @*<button type="button" class="button-detail" ng-click="showDetailsOfPR(row)" data-dismiss="modal" title="Show detail">Detail  <i class="fa fa-info"> </i> </button>*@
-                                <button type="button" ng-click="selectVendor(row)" data-dismiss="modal" title="Select">
-                                    <i ng-show="!row.selected" class="fa fa-square-o"></i>
-                                    <i ng-show="row.selected" class="fa fa-check-square-o"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="9" class="text-center">
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-
-
-
-
-                <div class="row">
-                    <div class="row">
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>CS Date</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSInfo.CSRecDate" />
-                            </div>
-
-
-
-                        </div>
-
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>CS No:</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSInfo.AutoCSNo" ng-readonly="true" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>Operation:</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <select data-ng-model="VendorCSInfo.Operation" class="form-control">
-                                <option value="">-- None --</option>
-                                <option value="Rec">Recommended</option>
-                                <option value="Bck">Back</option>
-                                <option value="Pst">Postponed</option>
-                                <option value="Can">Cancel</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="QuotationFor">Note:</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-
-
-            </div>
-
-
-
-
-
-        </div>
-        </div>
 
 
 
@@ -654,54 +519,379 @@
     </div>-->
 
 
-
-
-
-
-
-
-
-  
-
-        <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-            <div class="row">
-                <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                    <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
+    <div id="SearchModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Material List</h3>
+                </div>
+                <div class="table-responsive" data-ng-disabled="" ng-cloak>
+                    <table st-table="SearchCSListCollection" st-safe-src="SearchCSList" style="width:100%" class="tableVen table-condensed table-bordered  table-hover pnlView">
                         <thead>
-                            <tr>
-                                <th style="text-align: left;" st-sort="">Terms Code</th>
-                                <th style="text-align: left;" st-sort="">Terms & Conditions</th>
-                                <th style="text-align: left;">Action</th>
+                            <tr style="font-size: 15px;">
+                                <th colspan="11" style="text-align: left; color: white; font-weight: bold">Comparative Statement list</th>
                             </tr>
-                            @*<tr>
-                                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                                </tr>*@
+                            <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
+                                <th class="col-lg-1 col-md-1 col-sm-1"> Number</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">CS Number</th>
+                                <th class="col-lg-3 col-md-3 col-sm-2">Vendor Requisition Number</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">Item Code</th>
+                                <th class="col-lg-3 col-md-3 col-sm-3">Item Name</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">CS Date</th>
+
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th><input st-search="Material_Name" placeholder="Material Name" class="input-sm form-control" type="search" /></th>
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-                                <td class="hidden">{{row.VendorCSInfoTermsID}}</td>
-                                <td class="hidden">{{row.VendorCSInfoID}}</td>
-                                <td class="hidden">{{row.TermsID}}</td>
-                                <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-                                <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
 
-                                <td class="col-lg-1" style="width:5%;">
-                                    <button type="button" ng-if="row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                    <button type="button" ng-if="!row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                    <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                            <tr ng-repeat="row in SearchCSListCollection">
+                                <td class="text-center">{{$index+1}}</td>
+                                <td class="text-center">{{row.VendorCSNumber}}</td>
+                                <td class="">{{row.VendorRequisitionNumber}}</td>
+                                <td class="">{{row.ServiceItemID}}</td>
+                                <td class="">{{row.ServiceItemName}}</td>
+                                <td class="">{{row.CSRecDate}}</td>
+
+                                <td class="text-center">
+                                    <a class="btn col-center btn-sm btn-flat btn-success" data-ng-click="toggleCSSelect(row)">Select</a>
                                 </td>
                             </tr>
                         </tbody>
                         <tfoot>
-                            @*<tr>
-                                    <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                                </tr>*@
+                            <tr>
+                                <td colspan="9" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                            </tr>
                         </tfoot>
+
                     </table>
+                </div>
+                <div class="modal-footer">
                 </div>
             </div>
         </div>
     </div>
+
+
+
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="p===1">
+        <div class="col-lg-12">
+
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+
+
+                @*<div ng-if="flagToShow" style="text-align:center">
+            <h4 style="color:red;">No data available!</h4>
+        </div>*@
+                @* Master Table *@
+                @*<div id="PndRecomAndApprovalTable" class="table-responsive">*@
+                @*<h5 style="color:chocolate; font-weight:bold">No of Requisitions: {{prList[0].Row_count}}</h5>*@
+                <table st-table="VendorCSListCollection" st-safe-src="VendorCSList" style="width:100%" class="tableVen table-condensed table-bordered  table-hover pnlView">
+
+                    <thead>
+                        <tr style="font-size: 15px;">
+                            <th colspan="7" style="text-align: left; color: #000000; font-weight: bold">Selected Vendor for CS of {{CSMaterial_Name}} Material</th>
+                        </tr>
+                        <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
+                            <th class="col-lg-2 col-md-2 col-sm-2">CS Number</th>
+                            <th class="col-lg-2 col-md-2 col-sm-2">Quotation No</th>
+                            <th class="col-lg-2 col-md-2 col-sm-2">Vendor Name</th>
+                            <th class="col-lg-2 col-md-2 col-sm-2">RequestQty</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1">ProposeQty</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1">Total Price</th>
+                            <th class="col-lg-2 col-md-2 col-sm-2">Delivery Date</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="rowID" ng-repeat="row in VendorCSListCollection"
+                            style="height:20px; font-size:13px;">
+
+                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorCSInfoID}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorQutnID}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorName}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{rrow.ReqQnty | number:3}}</td>
+
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:3}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.TolAmt | number:3}}</td>
+
+                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.DeliveryDate}}</td>
+
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9" class="text-center">
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <br/>
+                <br/>
+                <div class="row">
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>CS Date</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSInfo.CSRecDate" ng-readonly="true" />
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>CS No:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSInfo.AutoCSNo" ng-readonly="true" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Operation:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <select data-ng-model="VendorCSInfo.Operation" class="form-control">
+                                <option value="">-- None --</option>
+                                <option value="Rec">Recommended</option>
+                                <option value="Bck">Back</option>
+                                <option value="Pst">Postponed</option>
+                                <option value="Can">Cancel</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="QuotationFor">Note:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isMaterialRowSelected">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+
+
+
+                <table id="tableId" st-table="MatWiseVendorListCollection" st-safe-src="MatWiseVendorList" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
+                    <thead>
+                        <tr style="font-size: 15px;">
+                            <th colspan="10" style="text-align: left; color: #000000; font-weight: bold">Requisition of {{PRmasterData.MaterialType.Material_Type_Code}} Material</th>
+                        </tr>
+                        <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
+                            <th>Quotation No</th>
+                            <th>Vendor Name</th>
+                            <th>ProposeQty</th>
+                            <th>Unit</th>
+                            <th>QutnPrice</th>
+
+                            <th>Vat %</th>
+                            <th>Vat Amnt</th>
+                            <th>Total Price</th>
+                            <th>Delivery Date</th>
+
+                            <th>Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="rowID" ng-repeat="row in MatWiseVendorListCollection"
+                            style="height:20px; font-size:13px;"
+                            ng-class="{'selected-row': row.selected}"
+                            ng-style="getRowStyle(row)">
+
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VendorQutnNo}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorName}}</td>
+
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.ReqUnit}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnPrice | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatPerc | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatAmt | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:3}}</td>
+
+                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.DeliveryDate}}</td>
+
+                            <td class="col-lg-1 col-md-1 col-sm-1 " style="font-weight:bold">
+                                @*<button type="button" class="button-detail" ng-click="showDetailsOfPR(row)" data-dismiss="modal" title="Show detail">Detail  <i class="fa fa-info"> </i> </button>*@
+                                <button type="button" ng-click="selectVendor(row)" data-dismiss="modal" title="Select">
+                                    <i ng-show="!row.selected" class="fa fa-square-o"></i>
+                                    <i ng-show="row.selected" class="fa fa-check-square-o"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9" class="text-center">
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+
+
+                <div class="row">
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>CS Date</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSInfo.CSRecDate" />
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>CS No:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSInfo.AutoCSNo" ng-readonly="true" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Operation:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <select data-ng-model="VendorCSInfo.Operation" class="form-control">
+                                <option value="">-- None --</option>
+                                <option value="Rec">Recommended</option>
+                                <option value="Bck">Back</option>
+                                <option value="Pst">Postponed</option>
+                                <option value="Can">Cancel</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="QuotationFor">Note:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;" st-sort="">Terms Code</th>
+                            <th style="text-align: left;" st-sort="">Terms & Conditions</th>
+                            <th style="text-align: left;">Action</th>
+                        </tr>
+                        @*<tr>
+                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                            </tr>*@
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td class="hidden">{{row.VendorCSInfoTermsID}}</td>
+                            <td class="hidden">{{row.VendorCSInfoID}}</td>
+                            <td class="hidden">{{row.TermsID}}</td>
+                            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
+
+                            <td class="col-lg-1" style="width:5%;">
+                                <button type="button" ng-if="row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" ng-if="!row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        @*<tr>
+                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                            </tr>*@
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
     <script type="text/javascript">
 
@@ -713,194 +903,282 @@
 
             $scope.dashBoardResult = {};
 
-        //$http.get('/VendorCSInfo/GetVendorCSInfoDashBordData')
-        //    .success(function (response) {
-        //        $scope.loading = false;
-        //        $scope.dashBoardResult = response.result;
-        //    }).error(function () { });
+            //$http.get('/VendorCSInfo/GetVendorCSInfoDashBordData')
+            //    .success(function (response) {
+            //        $scope.loading = false;
+            //        $scope.dashBoardResult = response.result;
+            //    }).error(function () { });
 
 
 
-        $scope.masterDataSetupGridData = [];  // base collection
-        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+            $scope.masterDataSetupGridData = [];  // base collection
+            $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
 
-        $scope.p = 2;
-
-
-        $http.post('/VendorCSInfo/GetAllRequisition')
-            .success(function (response) {
-                $scope.Invitation = response.InvitationList;
-                $scope.GridDisplayCollection = [].concat($scope.Invitation);
-                console.log($scope.GridDisplayCollection);
-                $scope.loading = false;
-            }).error(function () {
-                $scope.loading = false;
-            });
+            $scope.p = 2;
 
 
-
-        $scope.isRowSelected = false;
-
-        $scope.selectInvitation = function (row) {
-            // If the clicked row is already selected, toggle it off
-            if ($scope.selectedRow === row) {
-                row.selected = false;
-                $scope.selectedRow = null;
-                $scope.isRowSelected = false;
-            }
-            // If the clicked row is not selected, select it and unselect the previous one
-            else {
-                if ($scope.selectedRow) {
+            $http.post('/VendorCSInfo/GetAllRequisition')
+                .success(function (response) {
+                    $scope.Invitation = response.InvitationList;
+                    $scope.GridDisplayCollection = [].concat($scope.Invitation);
+                    console.log($scope.GridDisplayCollection);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
 
 
-                    $scope.selectedRow.selected = false; // Unselect the previous row
+
+            $scope.isRowSelected = false;
+
+            $scope.selectInvitation = function (row) {
+                // If the clicked row is already selected, toggle it off
+                if ($scope.selectedRow === row) {
+                    row.selected = false;
+                    $scope.selectedRow = null;
+                    $scope.isRowSelected = false;
                 }
+                // If the clicked row is not selected, select it and unselect the previous one
+                else {
+                    if ($scope.selectedRow) {
 
 
-                row.selected = true;  // Select the current row
-                $scope.selectedRow = row;
-                $scope.isRowSelected = true;  // Set the current row as the selected one
-
-                $scope.VendorCSInfo.VendorReqID = row.VendorRequisitionNumber;
-                $scope.VendorCSInfo.ClientReqNo = row.ClientRequisitionNumber;
-                $scope.VendorCSInfo.ClientReqID = row.ClientReqID;
-                $scope.VendorCSInfo.ClientID = row.ClientID;
-                $http.post('/VendorCSInfo/GetMaterialByRequisition',
-                    { VendorRequisitionNumber: row.VendorRequisitionNumber })
-                    .success(function (response) {
-                        $scope.ReqWiseMaterialList = response.ReqWiseMaterialList;
-                        $scope.ReqWiseMaterialListCollection = [].concat($scope.ReqWiseMaterialList);
-                        console.log($scope.ReqWiseMaterialListCollection);
-                        $scope.loading = false;
-                    }).error(function () {
-                        $scope.loading = false;
-                    });
-            }
-        };
+                        $scope.selectedRow.selected = false; // Unselect the previous row
+                    }
 
 
+                    row.selected = true;  // Select the current row
+                    $scope.selectedRow = row;
+                    $scope.isRowSelected = true;  // Set the current row as the selected one
 
-        $scope.selectedMaterialRow = null;  // Track the selected row for material list
-        $scope.isMaterialRowSelected = false;
-        $scope.selectMaterial = function (row) {
-            // If the clicked row is already selected, deselect it
-            if ($scope.selectedMaterialRow === row) {
-                row.selected = false;
-                $scope.selectedMaterialRow = null;
-                $scope.isMaterialRowSelected = false;// No row is selected
-            } else {
-                // If a different row was previously selected, deselect it
-                if ($scope.selectedMaterialRow) {
-                    $scope.selectedMaterialRow.selected = false;
+                    $scope.VendorCSInfo.VendorReqID = row.VendorRequisitionNumber;
+                    $scope.VendorCSInfo.ClientReqNo = row.ClientRequisitionNumber;
+                    $scope.VendorCSInfo.ClientReqID = row.ClientReqID;
+                    $scope.VendorCSInfo.ClientID = row.ClientID;
+                    $http.post('/VendorCSInfo/GetMaterialByRequisition',
+                        { VendorRequisitionNumber: row.VendorRequisitionNumber })
+                        .success(function (response) {
+                            $scope.ReqWiseMaterialList = response.ReqWiseMaterialList;
+                            $scope.ReqWiseMaterialListCollection = [].concat($scope.ReqWiseMaterialList);
+                            console.log($scope.ReqWiseMaterialListCollection);
+                            $scope.loading = false;
+                        }).error(function () {
+                            $scope.loading = false;
+                        });
                 }
-                // Select the current row
-                row.selected = true;
-                $scope.selectedMaterialRow = row;
-                $scope.isMaterialRowSelected = true;
-                $scope.VendorCSInfo.ServiceItemID = row.ServiceItemID;
-                $scope.VendorCSInfo.ServiceCategoryID = row.ServiceCategoryID;
-                $scope.VendorCSInfo.Description = row.Description;
-                $scope.VendorCSInfo.DeliveryDate = row.DeliveryDate;
-                $scope.VendorCSInfo.DeliveryLocation = row.DeliveryLocation;
-                $scope.VendorCSInfo.DeliveryMode = row.DeliveryMode;
-
-                /*            $scope.VendorCSInfo.ServiceItemName = row.ServiceItemName;*/
-
-
-
-                $http.post('/VendorCSInfo/GetVendorByMaterial',
-                    {
-                        VendorReqID: row.VendorReqID,
-                        ServiceItemID: row.ServiceItemID
-                    })
-                    .success(function (response) {
-                        $scope.MatWiseVendorList = response.MatWiseVendorList;
-                        $scope.MatWiseVendorListCollection = [].concat($scope.MatWiseVendorList);
-                        console.log($scope.MatWiseVendorListCollection);
-                        $scope.loading = false;
-                    }).error(function () {
-                        $scope.loading = false;
-                    });
-            }
-        };
-
-
-
-        $scope.selectedVendors = [];  // Array to hold selected vendor items
-
-        $scope.selectVendor = function (row) {
-            var selectedVendorItem = {
-                ServiceCategoryID: row.ServiceCategoryID,
-                ServiceCategoryName: row.ServiceCategoryName,
-                ServiceItemID: row.ServiceItemID,
-                ServiceItemName: row.ServiceItemName,
-                Description: row.Description,
-                DeliveryLocation: row.DeliveryLocation,
-                DeliveryDate: row.DeliveryDate,                // Date object
-                Delivery_DateString: row.DeliveryDateString,    // Formatted string (e.g., 'yyyy/MM/dd')
-                DeliveryMode: row.DeliveryMode,
-                ReqQnty: row.ReqQnty,
-                ReqUnit: row.ReqUnit,
-                VendorQutnNo: row.VendorQutnNo,
-                VendorQutnID: row.VendorQutnID,
-                VendorID: row.VendorID,
-                VendorName: row.VendorName,
-
-                QutnQnty: row.QutnQnty,
-                QutnPrice: row.QutnPrice,
-                QutnUnit: row.QutnUnit,
-                QutnAmt: row.QutnAmt,
-
-                VatPerc: row.VatPerc,
-                VatAmt: row.VatAmt,
-                TolAmt: row.TolAmt
             };
 
-            // Check if this vendor is already selected
-            if (row.selected) {
-                // Deselect the vendor and remove it from the selected array
-                row.selected = false;
-                $scope.ReqTermGridDisplayCollection = [];
-                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-                var index = $scope.selectedVendors.findIndex(function (vendor) {
-                    return vendor.VendorQutnID === row.VendorQutnID;
-                });
-                if (index !== -1) {
-                    $scope.selectedVendors.splice(index, 1);  // Remove from selected array
-                }
-            } else {
-                // Select the vendor and add it to the selected array
-                row.selected = true;
+            $scope.VendorCSInfo = {
+                VendorCSRecmID: "",
+                ServiceItemID: "",
+                ServiceCategoryID: "",
+                VendorID: "",
+                ClientReqID: "",
+                ClientID: "",
+                AutoCSNo: "",
+                CSRecDate: "",
+                Operation: "",
+                RecommendedBy: "",
+                Remarks: "",
+                Status: "",
+                VendorReqID: "",
+                ClientReqNo: "",
+                Description: "",
+                DeliveryLocation: "",
+                DeliveryDate: "",
+                DeliveryMode: "",
+                VendorCSInfoID:""
+            }
 
-                $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: row.VendorQutnID })
+            $scope.VendorCSInfoItem = {
+                VendorCSRecmItemID: "",
+                VendorCSRecmID: "",
+                //ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
+                ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
+                ReqQnty: "",
+                ReqUnit: "",
+                QutnQnty: "",
+                QutnPrice: "",
+                QutnUnit: "",
+                QutnAmt: "",
+                VatPerc: "",
+                VatAmt: "",
+                TolAmt: ""
+            }
+
+            $scope.toggleCSSelect = function (row) {
+
+                $scope.VendorCSNumber = row.VendorCSNumber;
+
+                $scope.VendorCSInfo.AutoCSNo = row.VendorCSNumber;
+                $scope.VendorCSInfo.VendorCSInfoID = row.VendorCSNumber;
+                $scope.VendorCSInfo.VendorCSRecmID = row.VendorCSNumber;
+                $scope.VendorCSInfo.Operation = row.Operation;
+                $scope.VendorCSInfo.CSRecDate = row.CSRecDate;
+                $scope.VendorCSInfo.RecommendedBy = row.RecommendedBy;
+                $scope.VendorCSInfo.Remarks = row.Remarks;
+                $scope.CSMaterial_Name = row.ServiceItemName;
+                $scope.p = 1;
+
+                $http.post('/VendorCSInfo/CSVendor', {
+                    CSNumber: $scope.VendorCSNumber
+                })
                     .success(function (response) {
-                        $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
-                        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                        $scope.VendorCSList = response.VendorCSList;
+                        $scope.VendorCSListCollection = [].concat($scope.VendorCSList);
+                        console.log($scope.SearchCSListCollection);
                         $scope.loading = false;
                     }).error(function () {
                         $scope.loading = false;
                     });
 
-                $scope.selectedVendors.push(selectedVendorItem);  // Add to selected array
+
+
+
+                $('#SearchModal').modal('hide');
             }
-        };
+
+
+            $scope.SearchCS = function () {
+                $http.post('/VendorCSInfo/SearchCS',
 
 
 
+                )
 
+                    .success(function (response) {
+                        $scope.SearchCSList = response.SearchCSList;
+                        $scope.SearchCSListCollection = [].concat($scope.SearchCSList);
+                        console.log($scope.SearchCSListCollection);
+                        $scope.loading = false;
+                    }).error(function () {
+                        $scope.loading = false;
+                    });
 
-
-
-
-
-
-        $scope.getRowStyle = function (row) {
-            if (row.selected) {
-                return { background: '#8bf5d2' }; // Change this to your desired color
-            } else {
-                return {}; // No additional styling
+                $('#SearchModal').modal('show');
             }
-        };
+
+            $scope.selectedMaterialRow = null;  // Track the selected row for material list
+            $scope.isMaterialRowSelected = false;
+            $scope.selectMaterial = function (row) {
+                // If the clicked row is already selected, deselect it
+                if ($scope.selectedMaterialRow === row) {
+                    row.selected = false;
+                    $scope.selectedMaterialRow = null;
+                    $scope.isMaterialRowSelected = false;// No row is selected
+                } else {
+                    // If a different row was previously selected, deselect it
+                    if ($scope.selectedMaterialRow) {
+                        $scope.selectedMaterialRow.selected = false;
+                    }
+                    // Select the current row
+                    row.selected = true;
+                    $scope.selectedMaterialRow = row;
+                    $scope.isMaterialRowSelected = true;
+                    $scope.VendorCSInfo.ServiceItemID = row.ServiceItemID;
+                    $scope.VendorCSInfo.ServiceCategoryID = row.ServiceCategoryID;
+                    $scope.VendorCSInfo.Description = row.Description;
+                    $scope.VendorCSInfo.DeliveryDate = row.DeliveryDate;
+                    $scope.VendorCSInfo.DeliveryLocation = row.DeliveryLocation;
+                    $scope.VendorCSInfo.DeliveryMode = row.DeliveryMode;
+
+                    /*            $scope.VendorCSInfo.ServiceItemName = row.ServiceItemName;*/
+
+
+
+                    $http.post('/VendorCSInfo/GetVendorByMaterial',
+                        {
+                            VendorReqID: row.VendorReqID,
+                            ServiceItemID: row.ServiceItemID
+                        })
+                        .success(function (response) {
+                            $scope.MatWiseVendorList = response.MatWiseVendorList;
+                            $scope.MatWiseVendorListCollection = [].concat($scope.MatWiseVendorList);
+                            console.log($scope.MatWiseVendorListCollection);
+                            $scope.loading = false;
+                        }).error(function () {
+                            $scope.loading = false;
+                        });
+                }
+            };
+
+
+
+            $scope.selectedVendors = [];  // Array to hold selected vendor items
+
+            $scope.selectVendor = function (row) {
+                var selectedVendorItem = {
+                    ServiceCategoryID: row.ServiceCategoryID,
+                    ServiceCategoryName: row.ServiceCategoryName,
+                    ServiceItemID: row.ServiceItemID,
+                    ServiceItemName: row.ServiceItemName,
+                    Description: row.Description,
+                    DeliveryLocation: row.DeliveryLocation,
+                    DeliveryDate: row.DeliveryDate,                // Date object
+                    Delivery_DateString: row.DeliveryDateString,    // Formatted string (e.g., 'yyyy/MM/dd')
+                    DeliveryMode: row.DeliveryMode,
+                    ReqQnty: row.ReqQnty,
+                    ReqUnit: row.ReqUnit,
+                    VendorQutnNo: row.VendorQutnNo,
+                    VendorQutnID: row.VendorQutnID,
+                    VendorID: row.VendorID,
+                    VendorName: row.VendorName,
+
+                    QutnQnty: row.QutnQnty,
+                    QutnPrice: row.QutnPrice,
+                    QutnUnit: row.QutnUnit,
+                    QutnAmt: row.QutnAmt,
+
+                    VatPerc: row.VatPerc,
+                    VatAmt: row.VatAmt,
+                    TolAmt: row.TolAmt
+                };
+
+                // Check if this vendor is already selected
+                if (row.selected) {
+                    // Deselect the vendor and remove it from the selected array
+                    row.selected = false;
+                    $scope.ReqTermGridDisplayCollection = [];
+                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                    var index = $scope.selectedVendors.findIndex(function (vendor) {
+                        return vendor.VendorQutnID === row.VendorQutnID;
+                    });
+                    if (index !== -1) {
+                        $scope.selectedVendors.splice(index, 1);  // Remove from selected array
+                    }
+                } else {
+                    // Select the vendor and add it to the selected array
+                    row.selected = true;
+
+                    $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: row.VendorQutnID })
+                        .success(function (response) {
+                            $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
+                            $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                            $scope.loading = false;
+                        }).error(function () {
+                            $scope.loading = false;
+                        });
+
+                    $scope.selectedVendors.push(selectedVendorItem);  // Add to selected array
+                }
+            };
+
+
+
+
+
+
+
+
+
+
+            $scope.getRowStyle = function (row) {
+                if (row.selected) {
+                    return { background: '#8bf5d2' }; // Change this to your desired color
+                } else {
+                    return {}; // No additional styling
+                }
+            };
 
 
 
@@ -955,63 +1233,28 @@
 
             $scope.ItemSelect = function (row) {
 
-            $http.post('/VendorCSInfo/GetVendorCSQuotationItem', {
-                VendorID: row.VendorID,
-                ClientID: $scope.VendorCSInfo.ClientID,
-                VendorQutnItemID: row.VendorQutnItemID
-            })
-                .success(function (response) {
-                    $scope.VenCSItemList = response.VenCSItemList;
-                    $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
+                $http.post('/VendorCSInfo/GetVendorCSQuotationItem', {
+                    VendorID: row.VendorID,
+                    ClientID: $scope.VendorCSInfo.ClientID,
+                    VendorQutnItemID: row.VendorQutnItemID
                 })
-                .error(function () { });
-            //need work here
-            $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: row.VendorQutnID })
-                .success(function (response) {
-                    $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
-                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-                    $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
-        };
+                    .success(function (response) {
+                        $scope.VenCSItemList = response.VenCSItemList;
+                        $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
+                    })
+                    .error(function () { });
+                //need work here
+                $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: row.VendorQutnID })
+                    .success(function (response) {
+                        $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
+                        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                        $scope.loading = false;
+                    }).error(function () {
+                        $scope.loading = false;
+                    });
+            };
 
-        $scope.VendorCSInfo = {
-            VendorCSRecmID: "",
-            ServiceItemID: "",
-            ServiceCategoryID: "",
-            VendorID: "",
-            ClientReqID: "",
-            ClientID: "",
-            AutoCSNo: "",
-            CSRecDate: "",
-            Operation: "",
-            RecommendedBy: "",
-            Remarks: "",
-            Status: "",
-            VendorReqID: "",
-            ClientReqNo: "",
-            Description: "",
-            DeliveryLocation: "",
-            DeliveryDate: "",
-            DeliveryMode: ""
-        }
-
-            $scope.VendorCSInfoItem = {
-                VendorCSRecmItemID: "",
-                VendorCSRecmID: "",
-                //ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
-                ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
-                ReqQnty: "",
-                ReqUnit: "",
-                QutnQnty: "",
-                QutnPrice: "",
-                QutnUnit: "",
-                QutnAmt: "",
-                VatPerc: "",
-                VatAmt: "",
-                TolAmt: ""
-            }
+          
 
             $scope.VendorCSVendorsItemWise = {
                 VendorCSVendorsItemWiseID: "",
@@ -1615,46 +1858,47 @@
                     return;
                 }
 
-            $scope.VendorCSInfo.CSRecDate = $('#CSRecDate').val();
-            $http.post('/VendorCSInfo/SaveVendorCSInfo',
-                {
-                    vendorCS: $scope.VendorCSInfo,
-                    vendorCSItem: $scope.selectedVendors,
-                    vendorCSTerm: $scope.ReqTermGridDisplayCollection,
+                $scope.VendorCSInfo.CSRecDate = $('#CSRecDate').val();
+                $http.post('/VendorCSInfo/SaveVendorCSInfo',
+                    {
+                        vendorCS: $scope.VendorCSInfo,
+                        vendorCSItem: $scope.selectedVendors,
+                        vendorCSTerm: $scope.ReqTermGridDisplayCollection,
 
-                })
-                .success(function (response) {
-                    if (response.status == "S201") {
-                        toastr.success("Data Saved Successfully.");
-                        $scope.clearVendorCSInfo();
-                        $scope.toggleRefreshTable();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else if (response.status == "S202") {
-                        toastr.success("Data Updated Successfully.");
-                        $scope.clearVendorCSInfo();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else if (response.status == "S203") {
-                        toastr.success("Data Deleted Successfully.");
-                        $scope.clearVendorCSInfo();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else {
+                    })
+                    .success(function (response) {
+                        if (response.status == "S201") {
+                            toastr.success("Data Saved Successfully.");
+                            $scope.clearVendorCSInfo();
+                            $scope.toggleRefreshTable();
+                            $scope.loading = false;
+                            return;
+                        }
+                        else if (response.status == "S202") {
+                            toastr.success("Data Updated Successfully.");
+                            $scope.clearVendorCSInfo();
+                            $scope.toggleRefreshTable();
+                            $scope.loading = false;
+                            return;
+                        }
+                        else if (response.status == "S203") {
+                            toastr.success("Data Deleted Successfully.");
+                            $scope.clearVendorCSInfo();
+                            $scope.loading = false;
+                            return;
+                        }
+                        else {
+                            toastr.error("Data Save Failed.");
+                            $scope.loading = false;
+                            return;
+                        }
+                    })
+                    .error(function () {
                         toastr.error("Data Save Failed.");
                         $scope.loading = false;
                         return;
-                    }
-                })
-                .error(function () {
-                    toastr.error("Data Save Failed.");
-                    $scope.loading = false;
-                    return;
-                });
-        }
+                    });
+            }
 
             $scope.toggleRefreshTable = function () {
 
