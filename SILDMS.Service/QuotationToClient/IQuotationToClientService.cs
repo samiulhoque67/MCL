@@ -14,7 +14,7 @@ namespace SILDMS.Service.QuotationToClient
         ValidationResult AvailableClientDetailInfoService(string ClientID, string ClientReqID,string ReqType, out List<OBS_ClientDetails> ClientDetails);
         ValidationResult GetTermsConditionsListService(string VendorCSAprvID, string ClientReqID, string ReqType, out List<OBS_TermsItem> VendorTermTermList);
         ValidationResult GetClientReqDataInfoService(string ClientID,string ClientReqID, string ReqType, out List<ClientReqData> GetClientReqDetails);
-        string SaveQuotToClientService(string UserID, string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl);
+        string SaveQuotToClientService(string UserID, string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, string ReqType);
        
     }
 }

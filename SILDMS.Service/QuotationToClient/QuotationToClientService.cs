@@ -59,9 +59,9 @@ namespace SILDMS.Service.QuotationToClient
                 : ValidationResult.Success;
         }
 
-        public string SaveQuotToClientService(string UserID, string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl)
+        public string SaveQuotToClientService(string UserID, string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, string ReqType)
         {
-            return _iQuotationToClientDataService.SaveQuotToClientServiceData(UserID, action, MasterData, DetailData, AllTermsDtl, out _errorNumber);
+            return _iQuotationToClientDataService.SaveQuotToClientServiceData(UserID, action, MasterData, DetailData, AllTermsDtl, ReqType, out _errorNumber);
 
             throw new NotImplementedException();
         }

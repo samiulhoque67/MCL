@@ -75,7 +75,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> SaveQuotToClient(string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl)
+        public async Task<ActionResult> SaveQuotToClient(string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, string ReqType = null)
         {
             if (MasterData == null || !MasterData.Any() || DetailData == null || !DetailData.Any())
             {
@@ -84,7 +84,7 @@ namespace SILDMS.Web.UI.Controllers
 
             try
             {
-                string status = _quotationToClientService.SaveQuotToClientService(UserID,  action, MasterData, DetailData, AllTermsDtl);
+                string status = _quotationToClientService.SaveQuotToClientService(UserID,  action, MasterData, DetailData, AllTermsDtl, ReqType);
 
                 TempData["QuotationToClientReport"] = MasterData;
                 return Json(new { status = status }, JsonRequestBehavior.AllowGet);
