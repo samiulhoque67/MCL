@@ -205,7 +205,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
             return VendorTermTermList;
         }
 
-        public string SaveQuotToClientServiceData(string UserID, string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, out string errorNumber)
+        public string SaveQuotToClientServiceData(string UserID, string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, string ReqType, out string errorNumber)
         {
             errorNumber = string.Empty;
             string message = "";
@@ -331,6 +331,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                 db.AddInParameter(dbCommandWrapper, "@OBS_Qtc_TermsDtl", SqlDbType.Structured, TermsDtlTable);
                 db.AddInParameter(dbCommandWrapper, "@BriefingDate", SqlDbType.NVarChar, MasterData[0].BriefingDate);
                 db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, MasterData[0].ClientReqID);
+                db.AddInParameter(dbCommandWrapper, "@ReqType", SqlDbType.NVarChar, ReqType);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 

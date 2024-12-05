@@ -787,7 +787,7 @@
                         </div>
                         <div class="col-lg-3">
                             <div class="form-group">
-                                <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSInfo.CSRecDate" />
+                                <input id="CSRecDate1" name="CSRecDate1" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSInfo.CSRecDate" />
                             </div>
 
 
@@ -1853,12 +1853,16 @@
                 //    return;
                 //}
 
-                if ($('#CSRecDate').val() == "") {
+                if ($('#CSRecDate1').val() == "") {
                     toastr.error("CSRecDate Date Required");
                     return;
                 }
-
-                $scope.VendorCSInfo.CSRecDate = $('#CSRecDate').val();
+                if ($scope.VendorCSInfo.AutoCSNo != "") {
+                    $scope.VendorCSInfo.CSRecDate = $('#CSRecDate1').val();
+                }
+                else{
+                    $scope.VendorCSInfo.CSRecDate = $('#CSRecDate').val();
+                }
                 $http.post('/VendorCSInfo/SaveVendorCSInfo',
                     {
                         vendorCS: $scope.VendorCSInfo,
