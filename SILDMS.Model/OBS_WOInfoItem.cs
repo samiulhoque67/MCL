@@ -11,6 +11,10 @@ namespace SILDMS.Model
     {
         public string WOInfoItemID { get; set; }
         public string WOInfoID { get; set; }
+
+        public string ClientQutnAprvItemID { get; set; }
+        public string ClientQutnAprvID { get; set; }
+
         public string ServiceCategoryID { get; set; }
         public string ServiceCategoryName { get; set; }
         public string ServiceItemID { get; set; }

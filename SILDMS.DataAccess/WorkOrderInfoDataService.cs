@@ -106,10 +106,8 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     WOInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_WOInfoItem
                     {
-                        //CQAI.ClientQutnAprvItemID,CQAI.ClientQutnAprvID,CQAI.VendorQutnID,
-
-                        //ClientQutnAprvItemID = reader.GetString("ClientQutnAprvItemID"),
-                        //ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
+                        ClientQutnAprvItemID = reader.GetString("ClientQutnAprvItemID"),
+                        ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
 
                         ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
@@ -168,7 +166,7 @@ namespace SILDMS.DataAccess
         public string SaveWorkOrderInfo(OBS_WOInfo woInfo, List<OBS_WOInfoItem> woInfoItem, List<OBS_WOInfoTerms> woInfoTerm)
         {
             DataTable dtReqItem = new DataTable();
-            //dtReqItem.Columns.Add("WOInfoItemID");
+            //dtReqItem.Columns.Add("WOInfoItemID");ClientQutnAprvItemID
             dtReqItem.Columns.Add("WOInfoID");
             dtReqItem.Columns.Add("ServiceCategoryID");
             dtReqItem.Columns.Add("ServiceItemID");
@@ -178,16 +176,14 @@ namespace SILDMS.DataAccess
             dtReqItem.Columns.Add("DeliveryMode");
             dtReqItem.Columns.Add("ReqQnty");
             dtReqItem.Columns.Add("ReqUnit");
-
             dtReqItem.Columns.Add("QutnQnty");
             dtReqItem.Columns.Add("QutnPrice");
             dtReqItem.Columns.Add("QutnUnit");
-
             dtReqItem.Columns.Add("QutnAmt");
             dtReqItem.Columns.Add("VatPerc");
             dtReqItem.Columns.Add("VatAmt");
-
             dtReqItem.Columns.Add("TolAmt");
+            dtReqItem.Columns.Add("ClientQutnAprvItemID");
 
             foreach (var item in woInfoItem)
             {
@@ -202,16 +198,14 @@ namespace SILDMS.DataAccess
                 objDataRow[6] = item.DeliveryMode;
                 objDataRow[7] = item.ReqQnty;
                 objDataRow[8] = item.ReqUnit;
-
                 objDataRow[9] = item.QutnQnty;
                 objDataRow[10] = item.QutnPrice;
                 objDataRow[11] = item.QutnUnit;
-
                 objDataRow[12] = item.QutnAmt;
                 objDataRow[13] = item.VatPerc;
                 objDataRow[14] = item.VatAmt;
-
                 objDataRow[15] = item.TolAmt;
+                objDataRow[16] = item.ClientQutnAprvItemID;
 
                 dtReqItem.Rows.Add(objDataRow);
             }
@@ -251,11 +245,8 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, woInfo.ClientID);
                     db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.NVarChar, woInfo.ClientQutnAprvID);
                     db.AddInParameter(dbCommandWrapper, "@WONo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.WONo));
-
-
                     db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, woInfo.ClientReqID);
                     db.AddInParameter(dbCommandWrapper, "@ClientReqNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.ClientReqNo));
-
                     db.AddInParameter(dbCommandWrapper, "@WODate", SqlDbType.NVarChar, woInfo.WODate);
                     db.AddInParameter(dbCommandWrapper, "@WOAmt", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.WOAmt));
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.Remarks));
@@ -263,6 +254,8 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@OBS_WOInfoItem", SqlDbType.Structured, dtReqItem);
                     db.AddInParameter(dbCommandWrapper, "@OBS_WOInfoTerm", SqlDbType.Structured, dtReqTerm);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, woInfo.Action);
+                    db.AddInParameter(dbCommandWrapper, "@TolalItem", SqlDbType.Int, woInfo.TolalItem);
+                    db.AddInParameter(dbCommandWrapper, "@SelectedItem", SqlDbType.Int, woInfo.SelectedItem);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
