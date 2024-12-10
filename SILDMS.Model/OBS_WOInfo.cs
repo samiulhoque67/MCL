@@ -27,6 +27,8 @@ namespace SILDMS.Model
         public string AprvNo { get; set; }
         public string AprvDate { get; set; } 
         public string Remarks { get; set; }
+        public string TolalItem { get; set; }
+        public string SelectedItem { get; set; }
         public string SetOn { get; set; }
         public string SetBy { get; set; }
         public string ModifiedOn { get; set; }
