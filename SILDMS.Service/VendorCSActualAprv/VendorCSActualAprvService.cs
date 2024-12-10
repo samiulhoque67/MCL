@@ -65,9 +65,9 @@ namespace SILDMS.Service.VendorCSActualAprv
             VendorCSAprvItemList = vendorCSActualAprvData.GetVendorCSQuotationItem(VendorID, ClientID, VendorCSRecmItemID);
             return ValidationResult.Success;
         }
-        public ValidationResult GetVendorCSAprvTermList(string VendorCSAprvID, out List<OBS_VendorCSAprvTerms> VendorCSAprvTermList)
+        public ValidationResult GetVendorCSAprvTermList(string VendorCSAprvID,string VendorID, out List<OBS_VendorCSAprvTerms> VendorCSAprvTermList)
         {
-            VendorCSAprvTermList = vendorCSActualAprvData.GetVendorCSAprvTermList(VendorCSAprvID);
+            VendorCSAprvTermList = vendorCSActualAprvData.GetVendorCSAprvTermList(VendorCSAprvID,VendorID);
             return ValidationResult.Success;
         }
         public string SaveVendorCSAprv(OBS_VendorCSAprv clientReq, List<OBS_VendorCSAprvItem> clientReqItem, List<OBS_VendorCSAprvTerms> clientReqTerm)

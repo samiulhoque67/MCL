@@ -16,7 +16,7 @@ namespace SILDMS.Service.VendorCSActualAprv
         ValidationResult GetVendorCSClientInfo(string ServiceItemCategoryID, out List<OBS_ClientReq> VendorInfoSearchList);
         ValidationResult GetVendorCSVendorsUsingClient(string ClientID, string VendorCSRecmID, out List<OBS_VendorCSAprv> VendorCSAprvSearchList);
         ValidationResult GetVendorCSQuotationItem(string VendorID, string ClientID, string VendorCSRecmItemID, out List<OBS_VendorCSAprvItem> VendorCSAprvItemList);
-        ValidationResult GetVendorCSAprvTermList(string VendorCSAprvID, out List<OBS_VendorCSAprvTerms> VendorCSAprvTermList);
+        ValidationResult GetVendorCSAprvTermList(string VendorCSAprvID,string VendorID, out List<OBS_VendorCSAprvTerms> VendorCSAprvTermList);
         string SaveVendorCSAprv(OBS_VendorCSAprv clientReq, List<OBS_VendorCSAprvItem> clientReqItem, List<OBS_VendorCSAprvTerms> clientReqTerm);
         ValidationResult GetVendorCSAprvTermAgainstFormList(string TermsID, out List<OBS_VendorCSAprvTerms> VendorCSAprvTermList);
         ValidationResult GetReqWiseVendorList(string VendorCSAprvID, out List<OBS_VendorCSAprvVendors> VendorCSAprvTermList);

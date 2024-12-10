@@ -86,10 +86,10 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> GetVendorCSAprvTermList(string VendorCSRecmID)
+        public async Task<dynamic> GetVendorCSAprvTermList(string VendorCSRecmID, string VendorID)
         {
             var VendorCSAprvTermList = new List<OBS_VendorCSAprvTerms>();
-            await Task.Run(() => _vendorCSActualAprvService.GetVendorCSAprvTermList(VendorCSRecmID, out VendorCSAprvTermList));
+            await Task.Run(() => _vendorCSActualAprvService.GetVendorCSAprvTermList(VendorCSRecmID, VendorID, out VendorCSAprvTermList));
             var result = Json(new { VendorCSAprvTermList, msg = "VendorCSAprvTermList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;

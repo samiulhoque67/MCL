@@ -376,6 +376,7 @@
                             <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
                                 <thead>
                                     <tr>
+                                        <th style="text-align: left;" st-sort="">Vendor Name</th>
                                         <th style="text-align: left;" st-sort="">Terms Code</th>
                                         <th style="text-align: left;" st-sort="">Terms & Conditions</th>
                                         <th style="text-align: left;">Action</th>
@@ -388,9 +389,11 @@
                                     <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
                                         <td class="hidden">{{row.VendorCSAprvTermsID}}</td>
                                         <td class="hidden">{{row.VendorCSAprvID}}</td>
+                                
+                                        <td class="col-lg-1" style="width:10%;">{{row.VendorName}}</td>
                                         <td class="hidden">{{row.TermsID}}</td>
                                         <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-                                        <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
+                                        <td class="col-lg-1" style="width:60%;">{{row.TermsName}}</td>
 
                                         <td class="col-lg-1" style="width:5%;">
                                             <button type="button" ng-if="row.VendorCSAprvTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
@@ -601,14 +604,19 @@
                 if (index !== -1) {
                     $scope.selectedVendors.splice(index, 1);  // Remove from selected array
                 }
+                $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.filter(function (term) {
+                    return term.VendorID !== row.VendorID;
+                });
+                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
             } else {
                 // Select the vendor and add it to the selected array
                 row.selected = true;
+
                 console.log($scope.VendorCSAprv.VendorCSRecmID);
                 $scope.VendorCSAprv.CSRecmVendorName = row.VendorName;
-                $http.post('/VendorCSRecm/GetVendorCSAprvTermList', { VendorCSRecmID: $scope.VendorCSAprv.VendorCSRecmID })
+                $http.post('/VendorCSRecm/GetVendorCSAprvTermList', { VendorCSRecmID: $scope.VendorCSAprv.VendorCSRecmID, VendorID: row.VendorID })
                     .success(function (response) {
-                        $scope.ReqTermDataSetupGridData = response.VendorCSAprvTermList;
+                        $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.concat(response.VendorCSAprvTermList);
                         $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                         $scope.loading = false;
                     }).error(function () {

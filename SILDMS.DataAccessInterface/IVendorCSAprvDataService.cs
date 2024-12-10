@@ -15,7 +15,7 @@ namespace SILDMS.DataAccessInterface
         List<OBS_ClientReq> GetVendorCSClientInfo(string ServiceItemCategoryID);
         List<OBS_VendorCSAprv> GetVendorCSVendorsUsingClient(string ClientID, string VendorCSRecmID);
         List<OBS_VendorCSAprvItem> GetVendorCSQuotationItem(string VendorID, string ClientID, string VendorCSRecmItemID);
-        List<OBS_VendorCSAprvTerms> GetVendorCSAprvTermList(string VendorCSAprvID);
+        List<OBS_VendorCSAprvTerms> GetVendorCSAprvTermList(string VendorCSAprvID, string VendorID);
         string SaveVendorCSAprv(OBS_VendorCSAprv clientReq, List<OBS_VendorCSAprvItem> clientReqItem, List<OBS_VendorCSAprvTerms> clientReqTerm);
         List<OBS_VendorCSAprvTerms> GetVendorCSAprvTermAgainstFormList(string TermsID);
         List<OBS_VendorCSAprvVendors> GetReqWiseVendorList(string VendorCSAprvID);
