@@ -90,7 +90,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="SubmissionDate" name="SubmissionDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.SubmissionDate" />
+                        <input id="SubmissionDate" name="SubmissionDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.SubmissionDate" />
                     </div>
                 </div>
                 <div class="col-lg-3 ">
@@ -100,7 +100,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="RequisitionDate" name="RequisitionDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.RequisitionDate" />
+                        <input id="RequisitionDate" name="RequisitionDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.RequisitionDate" />
                     </div>
                 </div>
             </div>
@@ -447,10 +447,9 @@
                             </div>
                         </div>
                         <div class="col-lg-3">
-                            <select data-ng-model="ClientReqItem.ReqType" class="form-control">
-                                <option value="">-- None --</option>
-                                <option value="QC">Qutn to Client</option>
-                                <option value="QV">Qutn to Vendor</option>
+                            <select id="ReqType" ng-model="ClientReqItem.ReqType" class="form-control">
+                                <option value="QV">Quotation from Vendor</option>
+                                <option value="QC">Quotation to Client</option>
                             </select>
                         </div>
                     </div>
@@ -731,7 +730,7 @@
         $scope.clientReqItemArray = [];
         $scope.clientReqTermArray = [];
         $scope.itemsByPage = 10;
-
+        
         $http.get('/ClientRequisition/GetServicesCategory')
             .success(function (response) {
                 $scope.loading = false;
@@ -817,6 +816,7 @@
                 toastr.error("Client ReqNo.  Required");
                 return;
             }
+           
 
             if ($('#SubmissionDate').val() == "") {
                 toastr.error("Submission Date Required.");
@@ -830,8 +830,15 @@
             $('#RequisitionItemModal').modal('show');
         };
 
+
+
         $scope.masterDataSetupGridData = [];  // base collection
         $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+
+
+        $scope.ClientReqItem = {
+            ReqType: "QV" // Default value set to "Quotation from Vendor"
+        };
 
         $scope.AddReqItem = function () {
 
@@ -839,39 +846,42 @@
                 toastr.error("Service Category Required");
                 return;
             }
-
+            if ($scope.ClientReqItem.ReqType == "" || $('#ReqType').val() == "") {
+                toastr.error("ReqType  Required");
+                return;
+            }
             if ($scope.ClientReqItem.ServiceItem.ServiceItemID == "") {
                 toastr.error("Service Item  Required");
                 return;
             }
 
             if ($scope.ClientReqItem.DeliveryMode == "") {
-                toastr.error("Submission Date Required.");
+                toastr.error("Delivery Mode Required.");
                 return;
             }
 
             if ($scope.ClientReqItem.ReqUnit == "") {
-                toastr.error("Requisition Date Date Required");
+                toastr.error("Req Unit Required");
                 return;
             }
 
             if ($('#DeliveryLocation').val() == "") {
-                toastr.error("Service Category Required");
+                toastr.error("Delivery Location Required");
                 return;
             }
 
             if ($('#DeliveryDate').val() == "") {
-                toastr.error("Service Item  Required");
+                toastr.error("Delivery Date  Required");
                 return;
             }
 
             if ($('#Description').val() == "") {
-                toastr.error("Submission Date Required.");
+                toastr.error("Description Required.");
                 return;
             }
 
             if ($('#ReqQnty').val() == "") {
-                toastr.error("Requisition Date Date Required");
+                toastr.error("Requisition Qnty Required");
                 return;
             }
 
@@ -906,6 +916,7 @@
                 ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
                 Description: "",
                 DeliveryLocation: "",
+                ReqType: "QV",
                 DeliveryDate: "",
                 DeliveryMode: "",
                 ReqQnty: "",

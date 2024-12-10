@@ -49,6 +49,7 @@ namespace SILDMS.Model
         public string AdvanceDemandDate { get; set; }
         public string ProposedAmount { get; set; }
         public string RemainingAmount { get; set; }
+        public string POAprvID { get; set; }
         public string Note { get; set; }
 
         //----
