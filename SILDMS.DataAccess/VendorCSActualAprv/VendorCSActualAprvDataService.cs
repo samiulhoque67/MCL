@@ -230,15 +230,16 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
             return VendorCSAprvItemList;
         }
 
-        public List<OBS_VendorCSAprvTerms> GetVendorCSAprvTermList(string VendorCSRecmID)
+        public List<OBS_VendorCSAprvTerms> GetVendorCSAprvTermList(string VendorCSRecmID, string VendorID)
         {
             string errorNumber = string.Empty;
             List<OBS_VendorCSAprvTerms> VendorCSAprvItemList = new List<OBS_VendorCSAprvTerms>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSTermList"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSActualTermList"))
             {
                 db.AddInParameter(dbCommandWrapper, "@VendorCSRecmID", SqlDbType.VarChar, VendorCSRecmID);
+                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -250,7 +251,9 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                         //VendorCSAprvID = reader.GetString("VendorCSAprvID"),
                         TermsID = reader.GetString("TermsID"),
                         TermsCode = reader.GetString("TermsCode"),
-                        TermsName = reader.GetString("TermsName")
+                        TermsName = reader.GetString("TermsName"),
+                        VendorID= reader.GetString("VendorID"),
+                        VendorName= reader.GetString("VendorName")
                     }).ToList();
                 }
             }
@@ -313,18 +316,20 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                 VendorCSItem.Rows.Add(objDataRow);
             }
 
-            //DataTable VendorCSTerm = new DataTable();
-            //VendorCSTerm.Columns.Add("TermsID");
-            //VendorCSTerm.Columns.Add("TermsCode");
-            //VendorCSTerm.Columns.Add("TermsName");
-            //foreach (var item in vendorCSInfoTerm)
-            //{
-            //    DataRow objDataRow = VendorCSTerm.NewRow();
-            //    objDataRow[0] = item.TermsID;
-            //    objDataRow[1] = item.TermsCode;
-            //    objDataRow[2] = item.TermsName;
-            //    VendorCSTerm.Rows.Add(objDataRow);
-            //}
+            DataTable VendorCSTerm = new DataTable();
+            VendorCSTerm.Columns.Add("TermsID");
+            VendorCSTerm.Columns.Add("TermsCode");
+            VendorCSTerm.Columns.Add("TermsName");
+            VendorCSTerm.Columns.Add("VendorID");
+            foreach (var item in vendorCSInfoTerm)
+            {
+                DataRow objDataRow = VendorCSTerm.NewRow();
+                objDataRow[0] = item.TermsID;
+                objDataRow[1] = item.TermsCode;
+                objDataRow[2] = item.TermsName;
+                objDataRow[3] = item.VendorID;
+                VendorCSTerm.Rows.Add(objDataRow);
+            }
 
             //DataTable vendorCSVendors = new DataTable();
             //vendorCSVendors.Columns.Add("VendorID");

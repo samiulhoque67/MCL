@@ -261,7 +261,10 @@ namespace SILDMS.DataAccess
                         //VendorCSInfoID = reader.GetString("VendorCSInfoID"),
                         TermsID = reader.GetString("TermsID"),
                         TermsCode = reader.GetString("TermsCode"),
-                        TermsName = reader.GetString("TermsName")
+                        TermsName = reader.GetString("TermsName"),
+                        VendorID = reader.GetString("VendorID"),
+                        VendorName= reader.GetString("VendorName"),
+                        VendorQutnID = reader.GetString("VendorQutnID"),
                     }).ToList();
                 }
             }
@@ -311,6 +314,7 @@ namespace SILDMS.DataAccess
             VendorCSTerm.Columns.Add("TermsID");
             VendorCSTerm.Columns.Add("TermsCode");
             VendorCSTerm.Columns.Add("TermsName");
+            VendorCSTerm.Columns.Add("VendorID");
 
             if (vendorCSInfoTerm != null && vendorCSInfoTerm.Any()) // Check for null and non-empty
             {
@@ -319,7 +323,9 @@ namespace SILDMS.DataAccess
                     DataRow objDataRow = VendorCSTerm.NewRow();
                     objDataRow[0] = item.TermsID;
                     objDataRow[1] = item.TermsCode;
-                    objDataRow[2] = item.TermsName;
+                    objDataRow[2] = item.TermsName;               
+                    objDataRow[3] = item.VendorID;
+
                     VendorCSTerm.Rows.Add(objDataRow);
                 }
             }

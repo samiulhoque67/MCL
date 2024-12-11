@@ -81,29 +81,6 @@
                 </div>
             </div>
 
-            @*<div class="row">
-                    <div class="col-lg-3 ">
-                        <div class="form-group">
-                            <label for="WOAmt">Work Order Amount:</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <input id="WOAmt" name="WOAmt" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="WOInfo.WOAmt" />
-                        </div>
-                    </div>
-                    <div class="col-lg-3 ">
-                        <div class="form-group">
-                            <label for="WODate">Work Order Date::</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <input id="WODate" name="WODate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="WOInfo.WODate" />
-                        </div>
-                    </div>
-                </div>*@
-
             <div class="row">
                 <div class="col-lg-2 ">
                     <div class="form-group">
@@ -286,20 +263,13 @@
                             <th style="text-align: left;" st-sort="">Delivery Location</th>
                             <th style="text-align: left;" st-sort="">Delivery Date</th>
                             <th style="text-align: left;" st-sort="">Delivery Mode</th>
-                            @*<th style="text-align: left;" st-sort="">ReqQnty</th>
-                                <th style="text-align: left;" st-sort="">ReqUnit</th>*@
-
                             <th style="text-align: left;" st-sort="">QutnUnit</th>
-
                             <th style="text-align: left;" st-sort="">QutnQnty</th>
                             <th style="text-align: left;" st-sort="">QutnPrice</th>
                             <th style="text-align: left;" st-sort="">QutnAmt</th>
-
                             <th style="text-align: left;" st-sort="">VatPerc</th>
                             <th style="text-align: left;" st-sort="">VatAmt</th>
-
                             <th style="text-align: left;" st-sort="">TolAmt</th>
-
                             <th style="text-align: left;">Action</th>
                         </tr>
                         @*<tr>
@@ -308,6 +278,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td class="hidden">{{row.ClientQutnAprvItemID}}</td>
                             <td class="hidden">{{row.WOInfoItemID}}</td>
                             <td class="hidden">{{row.WOInfoID}}</td>
                             <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
@@ -317,21 +288,20 @@
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryLocation}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryDate}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryMode}}</td>
-                            @*<td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
-                                <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>*@
-
                             <td class="col-lg-1" style="width:5%;">{{row.QutnUnit}}</td>
-
                             <td class="col-lg-1" style="width:6%;">{{row.QutnQnty | number:2}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.QutnPrice}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.QutnAmt | number:2}}</td>
-
                             <td class="col-lg-1" style="width:5%;">{{row.VatPerc}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.VatAmt | number:2}}</td>
-
                             <td class="col-lg-1" style="width:5%;">{{row.TolAmt}}</td>
-
-                            <td class="col-lg-1" style="width:5%;">
+                            <td class="col-lg-1">
+                                <button type="button" ng-click="selectWoItem(row)" data-dismiss="modal" title="Select">
+                                    <i ng-show="!row.selected" class="fa fa-square-o"></i>
+                                    <i ng-show="row.selected" class="fa fa-check-square-o"></i>
+                                </button>
+                                @*</td>
+                                    <td class="col-lg-1" style="width:5%;">*@
                                 <button type="button" ng-if="row.WOInfoItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                 <button type="button" ng-if="!row.WOInfoItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                 <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqItemDelete(row,$index)"><i class="fa fa-remove"></i> </button>
@@ -745,6 +715,8 @@
             WOAmt: "",
             WODate: "",
             Remarks: "",
+            TolalItem: "",
+            SelectedItem: "",
             Status: ""
         }
 
@@ -1263,6 +1235,54 @@
 
         ///////////////////////////////////////////////
 
+        $scope.selectedWoItems = [];  // Array to hold selected vendor items
+
+        $scope.selectWoItem = function (row) {
+            var selectedWoItem = {
+                ClientQutnAprvItemID: row.ClientQutnAprvItemID,
+                ServiceItemID: row.ServiceItemID,
+                ServiceItemName: row.ServiceItemName,
+                ServiceCategoryID: row.ServiceCategoryID,
+                ServiceCategoryName: row.ServiceCategoryName,
+                Description: row.Description,
+                DeliveryLocation: row.DeliveryLocation,
+                DeliveryDate: row.DeliveryDate,                // Date object
+                DeliveryMode: row.DeliveryMode,
+                //ReqQnty: row.ReqQnty,
+                //ReqUnit: row.ReqUnit,
+                //VendorQutnNo: row.VendorQutnNo,
+                //VendorID: row.VendorID,
+                //VendorName: row.VendorName,
+                QutnUnit: row.QutnUnit,
+                QutnQnty: row.QutnQnty,
+                QutnPrice: row.QutnPrice,
+                QutnAmt: row.QutnAmt,
+                VatPerc: row.VatPerc,
+                VatAmt: row.VatAmt,
+                TolAmt: row.TolAmt
+            };
+
+            // Check if this vendor is already selected
+            if (row.selected) {
+                // Deselect the vendor and remove it from the selected array
+                row.selected = false;
+
+                var index = $scope.selectedWoItems.findIndex(function (vendor) {
+                    return vendor.ClientQutnAprvItemID === row.ClientQutnAprvItemID;
+                });
+                if (index !== -1) {
+                    $scope.selectedWoItems.splice(index, 1);  // Remove from selected array
+                }
+            } else {
+                // Select the vendor and add it to the selected array
+                row.selected = true;
+
+                $scope.selectedWoItems.push(selectedWoItem);  // Add to selected array
+            }
+        };
+
+        ///////////////////////////////////////////////
+
         $scope.Post = function () {
 
             if ($('#ClientName').val() == "") {
@@ -1288,10 +1308,14 @@
             $scope.WOInfo.WODate = $('#WODate').val();
             $scope.WOInfo.WOAmt = $('#WOAmt').val();
 
+            $scope.WOInfo.TolalItem = $scope.GridDisplayCollection.length;
+            $scope.WOInfo.SelectedItem = $scope.selectedWoItems.length;
+
             $http.post('/WorkOrderInfo/SaveWorkOrderInfo',
                 {
                     woInfo: $scope.WOInfo,
-                    woInfoItem: $scope.GridDisplayCollection,//$scope.clientReqItemArray,
+                    //woInfoItem: $scope.GridDisplayCollection,//selectedWoItems
+                    woInfoItem: $scope.selectedWoItems,//selectedWoItems
                     woInfoTerm: $scope.ReqTermGridDisplayCollection
                 })
                 .success(function (response) {

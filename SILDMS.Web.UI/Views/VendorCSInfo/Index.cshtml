@@ -859,6 +859,8 @@
                 <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
                     <thead>
                         <tr>
+                        
+                            <th style="text-align: left;" st-sort="">Vendor Name</th>
                             <th style="text-align: left;" st-sort="">Terms Code</th>
                             <th style="text-align: left;" st-sort="">Terms & Conditions</th>
                             <th style="text-align: left;">Action</th>
@@ -871,9 +873,10 @@
                         <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
                             <td class="hidden">{{row.VendorCSInfoTermsID}}</td>
                             <td class="hidden">{{row.VendorCSInfoID}}</td>
+                            <td class="col-lg-1" style="width:10%;">{{row.VendorName}}</td>
                             <td class="hidden">{{row.TermsID}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
+                            <td class="col-lg-1" style="width:60%;">{{row.TermsName}}</td>
 
                             <td class="col-lg-1" style="width:5%;">
                                 <button type="button" ng-if="row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
@@ -1139,6 +1142,7 @@
                     // Deselect the vendor and remove it from the selected array
                     row.selected = false;
                     $scope.ReqTermGridDisplayCollection = [];
+                    
                     $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                     var index = $scope.selectedVendors.findIndex(function (vendor) {
                         return vendor.VendorQutnID === row.VendorQutnID;
@@ -1146,13 +1150,18 @@
                     if (index !== -1) {
                         $scope.selectedVendors.splice(index, 1);  // Remove from selected array
                     }
+                    $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.filter(function (term) {
+                        return term.VendorQutnID !== row.VendorQutnID;
+                    });
+                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                 } else {
                     // Select the vendor and add it to the selected array
                     row.selected = true;
 
                     $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: row.VendorQutnID })
                         .success(function (response) {
-                            $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
+                            // Concatenate the new data with the existing data
+                            $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.concat(response.VendorCSInfoTermList);
                             $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                             $scope.loading = false;
                         }).error(function () {
