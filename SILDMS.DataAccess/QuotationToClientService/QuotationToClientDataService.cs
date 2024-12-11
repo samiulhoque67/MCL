@@ -56,7 +56,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                         ClientCode = reader.GetString("ClientCode"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqID = reader.GetString("ClientReqID"),
-                        ReqType = reader.GetString("ReqType"),
+                        ReqType = reader.GetString("ReqTypeSummary"),
                     }).ToList();
 
                 }
@@ -141,6 +141,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                         ClientID = reader.GetString("ClientID"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
+                        ReqType = reader.GetString("ReqType"),
                         TermsID = reader.GetString("TermsID"),
                         ServiceItemCode = reader.GetString("ServiceItemCode"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
@@ -196,7 +197,8 @@ namespace SILDMS.DataAccess.QuotationToClientService
                         TermsItemID = reader.GetString("TermsItemID"),
                         TermsID = reader.GetString("TermsID"),
                         TermsCode = reader.GetString("TermsCode"),
-                        TermsName = reader.GetString("TermsName")
+                        TermsName = reader.GetString("TermsName"),
+                        ReqType = reader.GetString("ReqType")
                     }).ToList();
 
                 }

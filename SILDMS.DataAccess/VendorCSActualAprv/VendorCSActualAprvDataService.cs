@@ -313,18 +313,18 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                 VendorCSItem.Rows.Add(objDataRow);
             }
 
-            DataTable VendorCSTerm = new DataTable();
-            VendorCSTerm.Columns.Add("TermsID");
-            VendorCSTerm.Columns.Add("TermsCode");
-            VendorCSTerm.Columns.Add("TermsName");
-            foreach (var item in vendorCSInfoTerm)
-            {
-                DataRow objDataRow = VendorCSTerm.NewRow();
-                objDataRow[0] = item.TermsID;
-                objDataRow[1] = item.TermsCode;
-                objDataRow[2] = item.TermsName;
-                VendorCSTerm.Rows.Add(objDataRow);
-            }
+            //DataTable VendorCSTerm = new DataTable();
+            //VendorCSTerm.Columns.Add("TermsID");
+            //VendorCSTerm.Columns.Add("TermsCode");
+            //VendorCSTerm.Columns.Add("TermsName");
+            //foreach (var item in vendorCSInfoTerm)
+            //{
+            //    DataRow objDataRow = VendorCSTerm.NewRow();
+            //    objDataRow[0] = item.TermsID;
+            //    objDataRow[1] = item.TermsCode;
+            //    objDataRow[2] = item.TermsName;
+            //    VendorCSTerm.Rows.Add(objDataRow);
+            //}
 
             //DataTable vendorCSVendors = new DataTable();
             //vendorCSVendors.Columns.Add("VendorID");
@@ -366,7 +366,7 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSAprvItem", SqlDbType.Structured, VendorCSItem);
-                    db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSAprvTerms", SqlDbType.Structured, VendorCSTerm);
+                    //db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSAprvTerms", SqlDbType.Structured, VendorCSTerm);
                     //db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSAprvVendors", SqlDbType.Structured, vendorCSVendors);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vendorCSInfo.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
