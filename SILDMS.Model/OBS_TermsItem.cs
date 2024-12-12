@@ -28,5 +28,6 @@ namespace SILDMS.Model
         public string ClientQutnID { get; set; }
         public string ClientQutnRecmID { get; set; }
         public string ClientQutnAprvID { get; set; }
+        public string ReqType { get; set; }
     }
 }

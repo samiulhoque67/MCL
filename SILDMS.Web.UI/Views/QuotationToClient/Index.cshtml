@@ -252,10 +252,7 @@
                                 <td class="text-center">{{row.ClientCode}}</td>
                                 <td class="text-center">{{row.ClientName}}</td>
 
-                                <td class="text-center"
-                                    ng-class="{'text-success': row.ReqType === 'QV', 'text-primary': row.ReqType === 'QC'}">
-                                    {{row.ReqType === 'QV' ? 'Quotations already given by Vendor' : (row.ReqType === 'QC' ? 'Quotations to be given by MCL' : row.ReqType)}}
-                                </td>
+                                <td class="text-center">{{row.ReqType}}</td>
                                 
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectAvailableClient(row, 'save')">Select</a>
@@ -300,50 +297,54 @@
 
                         <th style="text-align: left;">Req Qty</th>
                         <th style="text-align: left;">Req Unit</th>
-                        @*<th ng-hide="pagefunction === 'viewmode'" style="text-align: left;">Req Qty</th>*@
 
-                        <th ng-hide="pagefunction === 'savemode' && ReqType === 'QC' || pagefunction === 'viewmode' && ReqType === 'QC'" style="text-align: left;">Vendor Quoted Qty</th>
-
-                        <th ng-show="ReqType === 'QV'" style="text-align: left;">Vendor Quoted Unit Price</th>
+                        <th style="text-align: left;">Vendor Quoted Unit Price</th>
                         <th style="text-align: left;">Given Quoted Unit Price</th>
-                        <th ng-show="ReqType === 'QV'" style="text-align: left;">Vendor Quoted Amount</th>
+                        <th style="text-align: left;">Vendor Quoted Amount</th>
                         <th style="text-align: left;">Given Quoted Amount</th>
                         <th style="text-align: left;">VAT Rate</th>
                         <th style="text-align: left;">VAT Amount</th>
-                        <th ng-show="ReqType === 'QV'" style="text-align: left;">Total Amount</th>
+                        <th style="text-align: left;">Total Amount</th>
                         <th style="text-align: left;">Given Total Amount</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="row in GetClientReqDetailsCollection" ng-init="initializeDefaults(row)" ng-cloak style="font-size: 12px;">
+                    <tr ng-repeat="row in GetClientReqDetailsCollection"
+                        ng-init="initializeDefaults(row)" ng-cloak ng-style="{'background-color': row.ReqType === 'QC' ? '#a9c7f8' : ''}"
+                        style="font-size: 12px;">
                         <td style="width: 5%;">{{ row.ServiceItemID }}</td>
                         <td style="width: 5%;">{{ row.ServiceItemName }}</td>
                         <td style="width: 6%;">{{ row.Description }}</td>
                         <td style="width: 6%;">{{ row.DeliveryLocation }}</td>
-                        <td style="width: 6%;">{{ row.DeliveryDate }}</td>
+                        <td style="width: 6%;">{{ formatDate(row.DeliveryDate) }}</td>
 
-                        <td ng-show="pagefunction === 'viewmode' && ReqType === 'QC'" style="width: 6%;">{{ row.QutnQnty }}</td>
-                        <td ng-hide="pagefunction === 'viewmode'" style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
-                        <td ng-show="pagefunction === 'viewmode' && ReqType === 'QV'" style="width: 6%;">{{ row.QutnQnty | number: 2 }}</td>
+                        <td style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
                         <td style="width: 5%;">{{ row.ReqUnit }}</td>
 
-                        <td ng-hide="pagefunction === 'savemode' && ReqType === 'QC' || pagefunction === 'viewmode' && ReqType === 'QC'" style="width: 6%;">{{ row.QutnQnty }}</td>
+                        <td style="width: 6%;">{{ row.QutnQnty }}</td>
 
-                        <td ng-show="ReqType === 'QV'" style="width: 6%;">{{ row.QutnPrice }}</td>
+                        <td style="width: 6%;">{{ row.QutnPrice }}</td>
                         <td style="width: 6%;">
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
-                                   ng-readonly="pagefunction === 'viewmode'" ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"
-                                   ng-blur="validateInput('givenQutnPrice', row)" />
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
+                                   type="number"
+                                   ng-readonly="pagefunction === 'viewmode'"
+                                   ng-model="row.givenQutnPrice"
+                                   ng-change="calculateRowFields(row)"
+                                   ng-blur="validateInput0('givenQutnPrice', row)" />
                         </td>
-                        <td ng-show="ReqType === 'QV'" style="width: 6%;">{{ row.QutnAmt }}</td>
+
+                        <td style="width: 6%;">{{ row.QutnAmt }}</td>
                         <td style="width: 6%; color: #126e0f;">{{ row.givenQutnAmt }}</td>
                         <td style="width: 6%;">
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
-                                   ng-readonly="pagefunction === 'viewmode'" ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
+                                   type="number"
+                                   ng-readonly="pagefunction === 'viewmode'"
+                                   ng-model="row.GivenVatPerc"
+                                   ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('GivenVatPerc', row)" />
                         </td>
                         <td style="width: 6%;">{{ row.TotGivenVatAmt }}</td>
-                        <td ng-show="ReqType === 'QV'" style="width: 6%;">{{ row.TolAmt }}</td>
+                        <td style="width: 6%;">{{ row.TolAmt }}</td>
                         <td style="width: 6%; color: #126e0f;">{{ row.givenTolAmt }}</td>
                     </tr>
                 </tbody>
@@ -1250,6 +1251,24 @@
             }, 2000);
         }
 
+        $scope.formatDate = function (dateString) {
+            if (!dateString) return '';
+
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const year = date.getFullYear();
+
+            return `${day}/${month}/${year}`;
+        };
+
+        $scope.validateInput0 = function (field, row) {
+            if (field === 'givenQutnPrice' && row.givenQutnPrice <= 0) {
+                alert('Given Quotation Price must be greater than 0.');
+                row.givenQutnPrice = null; // Reset the value
+            }
+        };
+
         $scope.getRowStyle = function (row) {
             if (row.selected) {
                 return { background: '#b9e7d8' };
@@ -1457,6 +1476,8 @@
 
     }
     )
+
+
 
 
 </script>

@@ -107,6 +107,7 @@ namespace SILDMS.Model
         public string BriefingDate { get; set; }
         public string QutnNo { get; set; }
         public string QuotationDate { get; set; }
+        public string ReqType { get; set; }
     }
 
     public class OBS_QutntoClientMaster
