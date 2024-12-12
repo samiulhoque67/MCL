@@ -288,6 +288,13 @@ namespace SILDMS.DataAccess
             VendorCSItem.Columns.Add("VendorName");
             VendorCSItem.Columns.Add("VendorCSRecmID");
             VendorCSItem.Columns.Add("VendorCSRecmItemID");
+            VendorCSItem.Columns.Add("NegoQty");
+            VendorCSItem.Columns.Add("NegoPrice");
+            VendorCSItem.Columns.Add("NegoVatAmt");
+            VendorCSItem.Columns.Add("NegoAmt");
+            VendorCSItem.Columns.Add("NegoTolAmt");
+
+
 
             foreach (var item in vendorCSInfoItem)
             {
@@ -314,6 +321,12 @@ namespace SILDMS.DataAccess
                 objDataRow[17] = item.VendorName;
                 objDataRow[18] = item.VendorCSInfoID;
                 objDataRow[19] = item.VendorCSInfoItemID;
+                objDataRow[20] = item.NegoQty;
+                objDataRow[21] = item.NegoPrice;
+                objDataRow[22] = item.NegoVatAmt;
+                objDataRow[23] = item.NegoAmt;
+                objDataRow[24] = item.NegoTolAmt;
+
 
                 VendorCSItem.Rows.Add(objDataRow);
             }
@@ -644,7 +657,13 @@ namespace SILDMS.DataAccess
 
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
-                        TolAmt = reader.GetString("TolAmt")
+                        TolAmt = reader.GetString("TolAmt"),
+                        NegoQty = reader.GetString("NegoQty"),
+                        NegoPrice = reader.GetString("NegoPrice"),
+                        NegoAmt = reader.GetString("NegoAmt"),
+                        NegoVatAmt = reader.GetString("NegoVatAmt"),
+                        NegoTolAmt = reader.GetString("NegoTolAmt")
+
                         // ,
 
                         //Status = reader.GetString("Status")

@@ -54,9 +54,9 @@ namespace SILDMS.Service.PoCreation
             return ValidationResult.Success;
         }
 
-        public ValidationResult GetVendorPOQuotationItem(string vendorID, string ClientReqID, out List<OBS_VendorCSRecmItem> cSVendorList)
+        public ValidationResult GetVendorPOQuotationItem(string vendorID, string ClientReqID,string WIInfoID, out List<OBS_VendorCSRecmItem> cSVendorList)
         {
-            cSVendorList = _pOCreationData.GetVendorPOQuotationItem(vendorID, ClientReqID, out errorNumber);
+            cSVendorList = _pOCreationData.GetVendorPOQuotationItem(vendorID, ClientReqID, WIInfoID, out errorNumber);
             if (errorNumber.Length > 0)
             {
                 return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
@@ -64,9 +64,9 @@ namespace SILDMS.Service.PoCreation
             return ValidationResult.Success;
         }
 
-        public ValidationResult OBS_GetPOVendorsUsingClient(string ClientReqID, out List<OBS_VendorCSRecm> cSVendorList)
+        public ValidationResult OBS_GetPOVendorsUsingClient(string ClientReqID,string WIInfoID, out List<OBS_VendorCSRecm> cSVendorList)
         {
-            cSVendorList = _pOCreationData.OBS_GetPOVendorsUsingClient(ClientReqID,out errorNumber);
+            cSVendorList = _pOCreationData.OBS_GetPOVendorsUsingClient(ClientReqID, WIInfoID,out errorNumber);
             if (errorNumber.Length > 0)
             {
                 return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));

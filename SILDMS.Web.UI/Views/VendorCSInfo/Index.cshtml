@@ -720,18 +720,22 @@
                 <table id="tableId" st-table="MatWiseVendorListCollection" st-safe-src="MatWiseVendorList" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
                     <thead>
                         <tr style="font-size: 15px;">
-                            <th colspan="10" style="text-align: left; color: #000000; font-weight: bold">Requisition of {{PRmasterData.MaterialType.Material_Type_Code}} Material</th>
+                            <th colspan="14" style="text-align: left; color: #000000; font-weight: bold">Requisition of {{PRmasterData.MaterialType.Material_Type_Code}} Material</th>
                         </tr>
                         <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
                             <th>Quotation No</th>
                             <th>Vendor Name</th>
                             <th>ProposeQty</th>
+                            <th>Nego Qty</th>
                             <th>Unit</th>
                             <th>QutnPrice</th>
+                            <th>Propose Price</th>
 
                             <th>Vat %</th>
                             <th>Vat Amnt</th>
+                            <th>Propose Vat Amnt</th>
                             <th>Total Price</th>
+                            <th>Propose Total Price</th>
                             <th>Delivery Date</th>
 
                             <th>Action</th>
@@ -745,16 +749,27 @@
                             ng-style="getRowStyle(row)">
 
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.VendorQutnNo}}</td>
-                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorName}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VendorName}}</td>
 
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoQty" ng-blur="checkUnitPrice(row)" ng-value="0" />
+                            </td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.ReqUnit}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnPrice | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoPrice" ng-blur="checkUnitPrice(row)" ng-value="0" />
+                            </td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatPerc | number:2}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatAmt | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoVatAmt"  ng-value="0" ng-readonly="true" />
+                            </td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:3}}</td>
-
-                            <td class="col-lg-2 col-md-2 col-sm-2">{{row.DeliveryDate}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoTolAmt" ng-value="0" ng-readonly="true" />
+                            </td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.DeliveryDate}}</td>
 
                             <td class="col-lg-1 col-md-1 col-sm-1 " style="font-weight:bold">
                                 @*<button type="button" class="button-detail" ng-click="showDetailsOfPR(row)" data-dismiss="modal" title="Show detail">Detail  <i class="fa fa-info"> </i> </button>*@
@@ -1128,13 +1143,18 @@
                     VendorName: row.VendorName,
 
                     QutnQnty: row.QutnQnty,
+                    NegoQty: row.NegoQty,
                     QutnPrice: row.QutnPrice,
+                    NegoPrice: row.NegoPrice,
                     QutnUnit: row.QutnUnit,
                     QutnAmt: row.QutnAmt,
+                    NegoAmt: row.NegoAmt,
 
                     VatPerc: row.VatPerc,
                     VatAmt: row.VatAmt,
-                    TolAmt: row.TolAmt
+                    NegoVatAmt: row.NegoVatAmt,
+                    TolAmt: row.TolAmt,
+                    NegoTolAmt: row.NegoTolAmt
                 };
 
                 // Check if this vendor is already selected
@@ -1921,6 +1941,24 @@
                 }, 2000);
 
             };
+
+
+            $scope.checkUnitPrice = function (row) {
+                var QutnAmt = 0;
+                QutnAmt = (row.NegoQty * row.QutnPrice);
+                row.NegoAmt = QutnAmt;
+                $scope.checkVatPerc(row);
+            };
+
+            $scope.checkVatPerc = function (row) {
+                var VatAmt = 0;
+                VatAmt = (row.VatPerc * row.NegoAmt) / 100;
+                row.NegoVatAmt = VatAmt;
+
+                row.NegoTolAmt = row.NegoAmt + row.NegoVatAmt;
+            };
+
+
 
             $scope.getRowStyle = function (row) {
                 if (row.selected) {

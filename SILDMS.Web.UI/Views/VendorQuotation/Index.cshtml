@@ -350,7 +350,10 @@
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryMode}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnQnty | number:2}}</td>
+                            @*<td class="col-lg-1" style="width:6%;">{{row.QutnQnty | number:2}}</td>*@
+                            <td class="col-lg-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.QutnQnty" ng-blur="checkUnitPrice(row)" ng-value="0" />
+                            </td>
                             <td class="col-lg-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.QutnPrice" ng-value="0" ng-blur="checkUnitPrice(row)" />
                             </td>
@@ -831,9 +834,10 @@
         });
         $scope.checkUnitPrice = function (row) {
             var QutnAmt = 0;
-            QutnAmt = (row.ReqQnty * row.QutnPrice);
+            QutnAmt = (row.QutnQnty * row.QutnPrice);
             row.QutnAmt = QutnAmt;
         };
+       
         $scope.checkVatPerc = function (row) {
             var VatAmt = 0;
             VatAmt = (row.VatPerc * row.QutnAmt) / 100;

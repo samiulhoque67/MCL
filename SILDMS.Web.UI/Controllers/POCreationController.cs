@@ -54,19 +54,19 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> OBS_GetPOVendorsUsingClient(string ClientReqID)
+        public async Task<dynamic> OBS_GetPOVendorsUsingClient(string ClientReqID,string WIInfoID)
         {
             var CSVendorList = new List<OBS_VendorCSRecm>();
-            await Task.Run(() => pOCreationService.OBS_GetPOVendorsUsingClient(ClientReqID,out CSVendorList));
+            await Task.Run(() => pOCreationService.OBS_GetPOVendorsUsingClient(ClientReqID, WIInfoID,out CSVendorList));
             var result = Json(new { CSVendorList, msg = "CSVendorList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         } 
         
-        public async Task<dynamic> GetVendorPOQuotationItem(string VendorID, string ClientReqID)
+        public async Task<dynamic> GetVendorPOQuotationItem(string VendorID, string ClientReqID,string WIInfoID)
         {
             var VenCSItemList = new List<OBS_VendorCSRecmItem>();
-            await Task.Run(() => pOCreationService.GetVendorPOQuotationItem(VendorID, ClientReqID, out VenCSItemList));
+            await Task.Run(() => pOCreationService.GetVendorPOQuotationItem(VendorID, ClientReqID, WIInfoID, out VenCSItemList));
             var result = Json(new { VenCSItemList, msg = "CSVendorList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;

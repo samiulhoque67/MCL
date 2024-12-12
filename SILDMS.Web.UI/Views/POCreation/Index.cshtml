@@ -251,6 +251,7 @@
                             @*<th data-ng-click="sort('ClientName')">Approve ID</th>*@
                             <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
                             <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientReqNo')">Requisition ID</th>
+                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('WIInfoID')">WorkOrder ID</th>
                             <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
                        
                             <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
@@ -269,6 +270,7 @@
                             @*<td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.VendorCSAprvID}}</td>*@
                             <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
                             <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.ClientReqID}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.WIInfoID}}</td>
                             <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.RequisitionDate}}</td>
           
                             <td>
@@ -643,6 +645,7 @@
 
                 $scope.CSVendorList = [];
                 $scope.CSVendorDisplayedCollection = []; 
+                $scope.VenCSItemGridDisplayCollection = [];
                 row.selected = false;
                 $scope.selectedRow = null;
             } else {
@@ -659,12 +662,14 @@
                 // Update the VendorCSInfo fields
                 $scope.VendorCSInfo.ClientID = row.ClientID;
                 $scope.VendorCSInfo.ClientReqID = row.ClientReqID;
+        
                 //$scope.VendorCSInfo.ServiceCategoryID = $scope.ServiceCategoryID;
                 //$scope.VendorCSInfo.VendorCSAprvID = row.VendorCSAprvID;
 
                 // Perform the HTTP request
                 $http.post("/POCreation/OBS_GetPOVendorsUsingClient", {
-                    ClientReqID: row.ClientReqID
+                    ClientReqID: row.ClientReqID,
+                    WIInfoID: row.WIInfoID
                     //VendorCSAprvID: row.VendorCSAprvID,
                     //ServiceCategoryID: $scope.ServiceCategoryID
                 })
@@ -726,7 +731,8 @@
             Status: "",
             PoAmount: "",
             ServiceCategoryID: "",
-            ClientReqID:""
+            ClientReqID: "",
+            WIInfoID:""
         }
 
         $scope.VendorCSInfoItem = {
@@ -1117,10 +1123,11 @@
             row.selected = true;
             row.buttonCheckedforVendor = true;
             $scope.showVendorforBiddingArea = true;
-
+            $scope.VendorCSInfo.WIInfoID = row.WIInfoID;
             $http.post("/POCreation/GetVendorPOQuotationItem", {
                 VendorID: row.VendorID,
-                ClientReqID: row.ClientReqID
+                ClientReqID: row.ClientReqID,
+                WIInfoID:row.WIInfoID
             })
                 .success(function (response) {
                     $scope.VenCSItemList = response.VenCSItemList;

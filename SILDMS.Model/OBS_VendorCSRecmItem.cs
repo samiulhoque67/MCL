@@ -51,5 +51,10 @@ namespace SILDMS.Model
         public string PONo { get; set; }
         public string Remarks { get; set; }
         public string VendorCSAprvID { get; set; }
+        public string NegoQty { get; set; }
+        public string NegoAmt { get; set; }
+        public string NegoTolAmt { get; set; }
+        public string NegoVatAmt { get; set; }
+        public string NegoPrice { get; set; }
     }
 }

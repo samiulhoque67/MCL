@@ -65,5 +65,6 @@ namespace SILDMS.Model
         public string ItemCount { get; set; }
         public string Email { get; set; }
         public string CurrentAddress { get; set; }
+        public string WIInfoID { get; set; }
     }
 }
