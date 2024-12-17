@@ -118,32 +118,29 @@
                 </div>
             </div>
 
-            <!--<div class="row">-->
-                @*implementing pdf here*@
-                
-                        <!--<div class="col-sm-12 col-md-12 col-lg-12">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                </div>
-                            </div>
+            <div class="row">
+                @* implementing pdf here*@
 
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label for="upload_documents">
-                                            Upload Documents <br>
-                                            (<span style="color:#ff4900;"> PDF Only, Max Size 2MB </span>)
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1"--> @*ng-disabled="Plan.plan_status === 'CNF'"*@ <!--accept=".pdf" />
-                                    </div>
-                                </div>
-                        </div>-->
-                @*ends implementing pdf here*@
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="upload_documents">
+                            Upload Documents <br>
+                            (<span style="color:#ff4900;"> PDF Only, Max Size 2MB </span>)
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1" accept=".pdf" />
+                    </div>
+                </div>
+                <div class="col-lg-1">
+                             <button id="" ng-click="SaveDocument()" class="btn button-custom" style="margin-right: -13px;"><i class="fa fa-check"></i> Save </button>
+                </div>
 
-            <!--</div>-->
+                @* ends implementing pdf here*@
+
+            </div>
         </div>
     </div>
 
@@ -1356,5 +1353,129 @@
         $scope.toggleRefreshTable = function () {
             window.location.reload();
         };
-    }])
+
+
+
+
+        /*document save function by naim*/
+
+        $scope.document_title = "";
+        $scope.document_code = 0;
+
+
+
+        $scope.DocCrudStatus = "";
+        //Add Supporting Document
+        $scope.SaveDocument = function () {
+            $scope.DocCrudStatus = "I";
+
+            // Validate document title
+            if (!$scope.Document || !$scope.Document.document_title) {
+                toastr.error("Please fill document title field!");
+                return;
+            }
+
+            // Validate file input
+            var fileUpload = document.getElementById("FileUpload1");
+            var files = fileUpload.files;
+
+            if (files.length === 0) {
+                toastr.error("Please select a file to upload.");
+                return;
+            }
+
+            var file = files[0];
+            var ext = file.name.split('.').pop().toLowerCase();
+
+            // Validate file size
+            var maxSizeInMB = 2;
+            if (file.size > maxSizeInMB * 1024 * 1024) {
+                toastr.error("File size must be 2 MB or less.");
+                return;
+            }
+
+            // Validate file extension
+            if (ext !== "pdf") {
+                toastr.error("Please upload PDF files only.");
+                return;
+            }
+
+            $scope.loading = true; // Show loading indicator
+
+            // Helper function to handle file upload
+            function uploadFileToServer(file, documentCode, ext) {
+                var formData = new FormData();
+                formData.append("documentCode", documentCode);
+                formData.append("ext", "." + ext);
+                formData.append("file", file);
+
+                $.ajax({
+                    url: '/ClientRequisition/SaveDocument',
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (result) {
+                        toastr.success("Document uploaded successfully.");
+                        resetFileInput();
+                        $scope.GetDocumentList();
+                        clearDocumentForm();
+                    },
+                    error: function (err) {
+                        toastr.error("Document upload failed. Please try again.");
+                        console.error(err);
+                    },
+                    complete: function () {
+                        $scope.loading = false;
+                    }
+                });
+            }
+
+            // Helper to reset file input field
+            function resetFileInput() {
+                var fileInput = document.getElementById("FileUpload1");
+                fileInput.value = "";
+            }
+
+            // Helper to clear form fields
+            function clearDocumentForm() {
+                $scope.Document = { document_title: "", note: "" };
+            }
+
+        }
+
+
+
+        $scope.viewPdf = function (row) {
+
+            var documentID = "1";
+            var ext = ".pdf";
+            $scope.document_title = row.plan_doc_title.slice(0, 20) + "..";
+            $scope.document_code = row.plan_doc_code;
+            var url = `/MPP/ViewPdfFromFtp?documentID=${row.plan_doc_code}&ext=${ext}`;
+
+            $http({
+                method: 'GET',
+                url: url,
+                responseType: 'arraybuffer'
+            }).then(function (response) {
+                var file = new Blob([response.data], { type: 'application/pdf' });
+                var fileURL = URL.createObjectURL(file);
+                let zoomParam = "#zoom=100";
+                // Set the file URL to the iframe src
+                $("#pdfViewer").attr("src", fileURL + zoomParam);
+                //  $("#pdfViewer").attr("src", fileURL);
+                $('#ShowPDFModal').modal('show');
+            }, function (error) {
+                toastr.error("Failed to load the PDF.");
+            });
+        };
+
+      
+            
+       
+        
+
+
+    }]);
 </script>
