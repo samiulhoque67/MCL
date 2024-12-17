@@ -13,6 +13,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
         List<OBS_ClientDetails> AvailableClientDetailInfoDataService(string ClientID, string ClientReqID,string ReqType, out string _errorNumber);
         List<OBS_TermsItem> GetTermsConditionsListServiceData(string VendorCSAprvID, string ClientReqID, string ReqType, out string _errorNumber);
         List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, string ClientReqID, string ReqType, out string _errorNumber);
+        List<ClientReqData>  GetClientReqDataItemPopupDataService(string VendorCSAprvID, string ServiceItemID, out string _errorNumber);
         string SaveQuotToClientServiceData(string UserID,string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl,string ReqType, out string _errorNumber);
 
     }
