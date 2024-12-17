@@ -56,7 +56,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                         ClientCode = reader.GetString("ClientCode"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqID = reader.GetString("ClientReqID"),
-                        ReqType = reader.GetString("ReqType"),
+                        ReqType = reader.GetString("ReqTypeSummary"),
                     }).ToList();
 
                 }
@@ -141,6 +141,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                         ClientID = reader.GetString("ClientID"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
+                        ReqType = reader.GetString("ReqType"),
                         TermsID = reader.GetString("TermsID"),
                         ServiceItemCode = reader.GetString("ServiceItemCode"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
@@ -164,6 +165,63 @@ namespace SILDMS.DataAccess.QuotationToClientService
             }
 
             return GetClientReqDetails;
+        }
+
+        public List<ClientReqData> GetClientReqDataItemPopupDataService(string VendorCSAprvID, string ServiceItemID, out string _errorNumber)
+        {
+            _errorNumber = string.Empty;
+            var GetClientReqDataItemPopup = new List<ClientReqData>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("GetClientReqDataItemPopup"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@VendorCSAprvID", DbType.String, VendorCSAprvID);
+                db.AddInParameter(dbCommandWrapper, "@ServiceItemID", DbType.String, ServiceItemID);/*
+                db.AddInParameter(dbCommandWrapper, "@ReqType", SqlDbType.NVarChar, ReqType);*/
+                db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
+                dbCommandWrapper.CommandTimeout = 300;
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (!db.GetParameterValue(dbCommandWrapper, _spStatusParam).IsNullOrZero())
+                {
+                    _errorNumber = db.GetParameterValue(dbCommandWrapper, _spStatusParam).PrefixErrorCode();
+                }
+                else
+                {
+                    if (ds.Tables[0].Rows.Count <= 0) return GetClientReqDataItemPopup;
+                    var dt1 = ds.Tables[0];
+                    GetClientReqDataItemPopup = dt1.AsEnumerable().Select(reader => new ClientReqData
+                    {
+                        VendorCSAprvItemID = reader.GetString("VendorCSAprvID"),
+                        VendorCSAprvID = reader.GetString("VendorCSAprvID"),
+                        ClientID = reader.GetString("ClientID"),
+                        VendorName = reader.GetString("VendorName"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        TermsID = reader.GetString("TermsID"),
+                        ServiceItemCode = reader.GetString("ServiceItemCode"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        Description = reader.GetString("Description"),
+                        DeliveryLocation = reader.GetString("DeliveryLocation"),
+                        DeliveryDate = reader.GetString("DeliveryDate"),
+                        DeliveryMode = reader.GetString("DeliveryMode"),
+                        ReqQnty = reader.GetString("ReqQnty"),
+                        ReqUnit = reader.GetString("ReqUnit"),
+                        QutnQnty = reader.GetString("QutnQnty"),
+                        QutnPrice = reader.GetString("QutnPrice"),
+                        QutnUnit = reader.GetString("QutnUnit"),
+                        QutnAmt = reader.GetString("QutnAmt"),
+                        VatPerc = reader.GetString("VatPerc"),
+                        VatAmt = reader.GetString("VatAmt"),
+                        TolAmt = reader.GetString("TolAmt")
+                    }).ToList();
+
+                }
+            }
+
+            return GetClientReqDataItemPopup;
         }
 
         public List<OBS_TermsItem> GetTermsConditionsListServiceData(string VendorCSAprvID, string ClientReqID, string ReqType, out string _errorNumber)
@@ -196,7 +254,8 @@ namespace SILDMS.DataAccess.QuotationToClientService
                         TermsItemID = reader.GetString("TermsItemID"),
                         TermsID = reader.GetString("TermsID"),
                         TermsCode = reader.GetString("TermsCode"),
-                        TermsName = reader.GetString("TermsName")
+                        TermsName = reader.GetString("TermsName"),
+                        ReqType = reader.GetString("ReqType")
                     }).ToList();
 
                 }

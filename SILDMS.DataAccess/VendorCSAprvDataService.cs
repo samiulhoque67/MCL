@@ -231,7 +231,7 @@ namespace SILDMS.DataAccess
             return VendorCSAprvItemList;
         }
 
-        public List<OBS_VendorCSAprvTerms> GetVendorCSAprvTermList(string VendorCSRecmID)
+        public List<OBS_VendorCSAprvTerms> GetVendorCSAprvTermList(string VendorCSRecmID, string VendorID)
         {
             string errorNumber = string.Empty;
             List<OBS_VendorCSAprvTerms> VendorCSAprvItemList = new List<OBS_VendorCSAprvTerms>();
@@ -240,6 +240,7 @@ namespace SILDMS.DataAccess
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSTermList"))
             {
                 db.AddInParameter(dbCommandWrapper, "@VendorCSRecmID", SqlDbType.VarChar, VendorCSRecmID);
+                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -251,7 +252,10 @@ namespace SILDMS.DataAccess
                         //VendorCSAprvID = reader.GetString("VendorCSAprvID"),
                         TermsID = reader.GetString("TermsID"),
                         TermsCode = reader.GetString("TermsCode"),
-                        TermsName = reader.GetString("TermsName")
+                        TermsName = reader.GetString("TermsName"),
+                        VendorID = reader.GetString("VendorID"),
+                        VendorName = reader.GetString("VendorName"),
+                     
                     }).ToList();
                 }
             }
@@ -284,6 +288,13 @@ namespace SILDMS.DataAccess
             VendorCSItem.Columns.Add("VendorName");
             VendorCSItem.Columns.Add("VendorCSRecmID");
             VendorCSItem.Columns.Add("VendorCSRecmItemID");
+            VendorCSItem.Columns.Add("NegoQty");
+            VendorCSItem.Columns.Add("NegoPrice");
+            VendorCSItem.Columns.Add("NegoVatAmt");
+            VendorCSItem.Columns.Add("NegoAmt");
+            VendorCSItem.Columns.Add("NegoTolAmt");
+
+
 
             foreach (var item in vendorCSInfoItem)
             {
@@ -310,6 +321,12 @@ namespace SILDMS.DataAccess
                 objDataRow[17] = item.VendorName;
                 objDataRow[18] = item.VendorCSInfoID;
                 objDataRow[19] = item.VendorCSInfoItemID;
+                objDataRow[20] = item.NegoQty;
+                objDataRow[21] = item.NegoPrice;
+                objDataRow[22] = item.NegoVatAmt;
+                objDataRow[23] = item.NegoAmt;
+                objDataRow[24] = item.NegoTolAmt;
+
 
                 VendorCSItem.Rows.Add(objDataRow);
             }
@@ -318,12 +335,14 @@ namespace SILDMS.DataAccess
             VendorCSTerm.Columns.Add("TermsID");
             VendorCSTerm.Columns.Add("TermsCode");
             VendorCSTerm.Columns.Add("TermsName");
+            VendorCSTerm.Columns.Add("VendorID");
             foreach (var item in vendorCSInfoTerm)
             {
                 DataRow objDataRow = VendorCSTerm.NewRow();
                 objDataRow[0] = item.TermsID;
                 objDataRow[1] = item.TermsCode;
                 objDataRow[2] = item.TermsName;
+                objDataRow[3] = item.VendorID;
                 VendorCSTerm.Rows.Add(objDataRow);
             }
 
@@ -638,7 +657,13 @@ namespace SILDMS.DataAccess
 
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
-                        TolAmt = reader.GetString("TolAmt")
+                        TolAmt = reader.GetString("TolAmt"),
+                        NegoQty = reader.GetString("NegoQty"),
+                        NegoPrice = reader.GetString("NegoPrice"),
+                        NegoAmt = reader.GetString("NegoAmt"),
+                        NegoVatAmt = reader.GetString("NegoVatAmt"),
+                        NegoTolAmt = reader.GetString("NegoTolAmt")
+
                         // ,
 
                         //Status = reader.GetString("Status")

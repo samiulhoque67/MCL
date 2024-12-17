@@ -261,7 +261,10 @@ namespace SILDMS.DataAccess
                         //VendorCSInfoID = reader.GetString("VendorCSInfoID"),
                         TermsID = reader.GetString("TermsID"),
                         TermsCode = reader.GetString("TermsCode"),
-                        TermsName = reader.GetString("TermsName")
+                        TermsName = reader.GetString("TermsName"),
+                        VendorID = reader.GetString("VendorID"),
+                        VendorName= reader.GetString("VendorName"),
+                        VendorQutnID = reader.GetString("VendorQutnID"),
                     }).ToList();
                 }
             }
@@ -284,6 +287,14 @@ namespace SILDMS.DataAccess
             VendorCSItem.Columns.Add("VatAmt");
             VendorCSItem.Columns.Add("TolQnty");
             VendorCSItem.Columns.Add("VendorName");
+            VendorCSItem.Columns.Add("NegoQty");
+            VendorCSItem.Columns.Add("NegoPrice");
+            VendorCSItem.Columns.Add("NegoVatAmt");
+            VendorCSItem.Columns.Add("NegoAmt");
+            VendorCSItem.Columns.Add("NegoTolAmt");
+        
+            
+
 
             if (vendorCSInfoItem != null && vendorCSInfoItem.Any()) // Check for null and non-empty
             {
@@ -302,6 +313,12 @@ namespace SILDMS.DataAccess
                     objDataRow[9] = item.VatAmt;
                     objDataRow[10] = item.TolAmt;
                     objDataRow[11] = item.VendorName;
+                    objDataRow[12] = item.NegoQty;
+                    objDataRow[13] = item.NegoPrice;
+                    objDataRow[14] = item.NegoVatAmt;
+                    objDataRow[15] = item.NegoAmt;
+                    objDataRow[16] = item.NegoTolAmt;
+              
                     VendorCSItem.Rows.Add(objDataRow);
                 }
             }
@@ -311,6 +328,7 @@ namespace SILDMS.DataAccess
             VendorCSTerm.Columns.Add("TermsID");
             VendorCSTerm.Columns.Add("TermsCode");
             VendorCSTerm.Columns.Add("TermsName");
+            VendorCSTerm.Columns.Add("VendorID");
 
             if (vendorCSInfoTerm != null && vendorCSInfoTerm.Any()) // Check for null and non-empty
             {
@@ -319,7 +337,9 @@ namespace SILDMS.DataAccess
                     DataRow objDataRow = VendorCSTerm.NewRow();
                     objDataRow[0] = item.TermsID;
                     objDataRow[1] = item.TermsCode;
-                    objDataRow[2] = item.TermsName;
+                    objDataRow[2] = item.TermsName;               
+                    objDataRow[3] = item.VendorID;
+
                     VendorCSTerm.Rows.Add(objDataRow);
                 }
             }
@@ -627,14 +647,19 @@ namespace SILDMS.DataAccess
 
 
                         QutnQnty = reader.GetString("QutnQnty"),
+                        NegoQty = reader.GetString("QutnQnty"),
                         QutnPrice = reader.GetString("QutnPrice"),
+                        NegoPrice = reader.GetString("QutnPrice"),
                         QutnUnit = reader.GetString("QutnUnit"),
 
                         QutnAmt = reader.GetString("QutnAmt"),
+                        NegoAmt = reader.GetString("QutnAmt"),
 
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
-                        TolAmt = reader.GetString("TolAmt")
+                        NegoVatAmt = reader.GetString("VatAmt"),
+                        TolAmt = reader.GetString("TolAmt"),
+                        NegoTolAmt = reader.GetString("TolAmt")
                         // ,
 
                         //Status = reader.GetString("Status")

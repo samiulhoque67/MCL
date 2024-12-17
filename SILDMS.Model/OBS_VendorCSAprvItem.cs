@@ -44,5 +44,10 @@ namespace SILDMS.Model
         public string VendorQutnNo { get; set; }
         public string VendorID { get; set; }
         public string VendorName { get; set; }
+        public string NegoQty { get; set; }
+        public string NegoPrice { get; set; }
+        public string NegoVatAmt { get; set; }
+        public string NegoAmt { get; set; }
+        public string NegoTolAmt { get; set; }
     }
 }

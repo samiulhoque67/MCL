@@ -161,7 +161,12 @@ namespace SILDMS.DataAccess.PoAprv
 
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
-                        TolAmt = reader.GetString("TolAmt")
+                        TolAmt = reader.GetString("TolAmt"),
+                        NegoQty = reader.GetString("NegoQty"),
+                        NegoPrice = reader.GetString("NegoPrice"),
+                        NegoAmt = reader.GetString("NegoAmt"),
+                        NegoVatAmt = reader.GetString("NegoVatAmt"),
+                        NegoTolAmt = reader.GetString("NegoTolAmt"),
                         // ,
 
                         //Status = reader.GetString("Status")
@@ -195,7 +200,11 @@ namespace SILDMS.DataAccess.PoAprv
             VendorPOItem.Columns.Add("ServiceCategoryID", typeof(int)); // Assuming ServiceItemID is an integer
             VendorPOItem.Columns.Add("VendorReqID", typeof(string)); // Assuming ServiceItemID is an integer
             VendorPOItem.Columns.Add("VendorCSAprvID", typeof(string)); // Assuming ServiceItemID is an integer
-                                                                        // Assuming ServiceItemID is an integer
+            VendorPOItem.Columns.Add("NegoQty");
+            VendorPOItem.Columns.Add("NegoPrice");
+            VendorPOItem.Columns.Add("NegoVatAmt");
+            VendorPOItem.Columns.Add("NegoAmt");
+            VendorPOItem.Columns.Add("NegoTolAmt");                                                           // Assuming ServiceItemID is an integer
 
             foreach (var item in vendorCSItem)
             {
@@ -217,7 +226,11 @@ namespace SILDMS.DataAccess.PoAprv
                 objDataRow[14] = item.ServiceCategoryID;
                 objDataRow[15] = item.VendorReqID;
                 objDataRow[16] = item.VendorCSAprvID;
-
+                objDataRow[17] = item.NegoQty;
+                objDataRow[18] = item.NegoPrice;
+                objDataRow[19] = item.NegoVatAmt;
+                objDataRow[20] = item.NegoAmt;
+                objDataRow[21] = item.NegoTolAmt;
 
                 VendorPOItem.Rows.Add(objDataRow);
             }

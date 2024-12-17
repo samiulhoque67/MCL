@@ -87,7 +87,7 @@ namespace SILDMS.DataAccess.POCreation
 
         
 
-        public List<OBS_VendorCSRecm> OBS_GetPOVendorsUsingClient(string ClientReqId, out string errorNumber)
+        public List<OBS_VendorCSRecm> OBS_GetPOVendorsUsingClient(string ClientReqId,string WIInfoID, out string errorNumber)
         {
              errorNumber = string.Empty;
             List<OBS_VendorCSRecm> VendorCSInfoList = new List<OBS_VendorCSRecm>();
@@ -96,6 +96,7 @@ namespace SILDMS.DataAccess.POCreation
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetPOVendorsUsingClient"))
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, ClientReqId);
+                db.AddInParameter(dbCommandWrapper, "@WIInfoID", SqlDbType.VarChar, WIInfoID);
        
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -113,7 +114,9 @@ namespace SILDMS.DataAccess.POCreation
                         ContactPerson = reader.GetString("ContactPerson"),
                         Email = reader.GetString("Email"),
                         CurrentAddress = reader.GetString("CurrentAddress"),
-                        ItemCount=reader.GetString("ServiceItemCount")
+                        ItemCount=reader.GetString("ServiceItemCount"),
+                        WIInfoID=reader.GetString("WOInfoID"),
+
 
                         //,
                         //LastDateofQuotation = reader.GetString("LastDateofQuotation"),
@@ -125,7 +128,7 @@ namespace SILDMS.DataAccess.POCreation
             return VendorCSInfoList;
         }
 
-        public List<OBS_VendorCSRecmItem> GetVendorPOQuotationItem(string vendorID, string ClientReqID, out string errorNumber)
+        public List<OBS_VendorCSRecmItem> GetVendorPOQuotationItem(string vendorID, string ClientReqID,string WIInfoID, out string errorNumber)
         {
             errorNumber = string.Empty;
             List<OBS_VendorCSRecmItem> VendorCSInfoItemList = new List<OBS_VendorCSRecmItem>();
@@ -135,6 +138,7 @@ namespace SILDMS.DataAccess.POCreation
             {
                 db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, vendorID);
                 db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, ClientReqID);
+                db.AddInParameter(dbCommandWrapper, "@WIInfoID", SqlDbType.VarChar, WIInfoID);
 
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -167,7 +171,13 @@ namespace SILDMS.DataAccess.POCreation
 
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
-                        TolAmt = reader.GetString("TolAmt")
+                        TolAmt = reader.GetString("TolAmt"),
+                        NegoQty = reader.GetString("QutnQnty"),
+                        NegoPrice = reader.GetString("QutnPrice"),
+                        NegoAmt = reader.GetString("QutnAmt"),
+                        NegoVatAmt = reader.GetString("VatAmt"),
+                        NegoTolAmt = reader.GetString("TolAmt"),
+                        RemainingQty = reader.GetString("RemainingQty")
                         // ,
 
                         //Status = reader.GetString("Status")
@@ -225,8 +235,14 @@ namespace SILDMS.DataAccess.POCreation
             VendorPOItem.Columns.Add("DeliveryDate", typeof(string)); // Assuming ServiceItemID is an integer
             VendorPOItem.Columns.Add("ServiceCategoryID", typeof(int)); // Assuming ServiceItemID is an integer
             VendorPOItem.Columns.Add("VendorReqID", typeof(string)); // Assuming ServiceItemID is an integer
-            VendorPOItem.Columns.Add("VendorCSAprvID", typeof(string)); // Assuming ServiceItemID is an integer
-       // Assuming ServiceItemID is an integer
+            VendorPOItem.Columns.Add("VendorCSAprvID", typeof(string));
+            VendorPOItem.Columns.Add("NegoQty");
+            VendorPOItem.Columns.Add("NegoPrice");
+            VendorPOItem.Columns.Add("NegoVatAmt");
+            VendorPOItem.Columns.Add("NegoAmt");
+            VendorPOItem.Columns.Add("NegoTolAmt");
+            // Assuming ServiceItemID is an integer
+            // Assuming ServiceItemID is an integer
 
             foreach (var item in vendorCSInfoItem)
             {
@@ -248,7 +264,11 @@ namespace SILDMS.DataAccess.POCreation
                 objDataRow[14] = item.ServiceCategoryID;
                 objDataRow[15] = item.VendorReqID;
                 objDataRow[16] = item.VendorCSAprvID;
-             
+                objDataRow[17] = item.NegoQty;
+                objDataRow[18] = item.NegoPrice;
+                objDataRow[19] = item.NegoVatAmt;
+                objDataRow[20] = item.NegoAmt;
+                objDataRow[21] = item.NegoTolAmt;
 
                 VendorPOItem.Rows.Add(objDataRow);
             }
@@ -295,6 +315,7 @@ namespace SILDMS.DataAccess.POCreation
                     //db.AddInParameter(dbCommandWrapper, "@ServiceCategoryID", SqlDbType.BigInt, vendorCSInfo.ServiceCategoryID);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.BigInt, vendorCSInfo.ClientID);
                     db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, vendorCSInfo.ClientReqID);
+                    db.AddInParameter(dbCommandWrapper, "@WIInfoID", SqlDbType.NVarChar, vendorCSInfo.WIInfoID);
                     //db.AddInParameter(dbCommandWrapper, "@TolAmt", SqlDbType.NVarChar, vendorCSVendorsItemWise[0].TolAmt);
                     db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.NVarChar, vendorCSVendorsItemWise[0].VendorID);
                     //db.AddInParameter(dbCommandWrapper, "@VendorQutnID", SqlDbType.NVarChar, vendorCSVendorsItemWise[0].VendorQutnID);

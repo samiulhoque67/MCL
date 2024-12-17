@@ -66,6 +66,13 @@ namespace SILDMS.Service.QuotationToClient
             throw new NotImplementedException();
         }
 
-        
+        public ValidationResult GetClientReqDataItemPopupService(string VendorCSAprvID, string ServiceItemID, out List<ClientReqData> GetClientReqDataItemPopup)
+        {
+            GetClientReqDataItemPopup = _iQuotationToClientDataService.GetClientReqDataItemPopupDataService(VendorCSAprvID, ServiceItemID, out _errorNumber);
+
+            return _errorNumber.Length > 0
+                ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
+                : ValidationResult.Success;
+        }
     }
 }
