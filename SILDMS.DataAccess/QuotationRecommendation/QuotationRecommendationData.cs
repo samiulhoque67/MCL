@@ -107,7 +107,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
         }
 
 
-        public List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, string ClientReqID, out string _errorNumber)
+        public List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, string ClientReqID, string ClientQutnID, out string _errorNumber)
         {
             _errorNumber = string.Empty;
             var GetClientReqDetails = new List<ClientReqData>();
@@ -118,6 +118,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientID", DbType.String, ClientID);
                 db.AddInParameter(dbCommandWrapper, "@ClientReqID", DbType.String, ClientReqID);
+                db.AddInParameter(dbCommandWrapper, "@ClientQutnID", DbType.String, ClientQutnID);
                 db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
                 dbCommandWrapper.CommandTimeout = 300;
                 var ds = db.ExecuteDataSet(dbCommandWrapper);

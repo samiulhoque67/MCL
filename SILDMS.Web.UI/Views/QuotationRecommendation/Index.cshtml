@@ -827,6 +827,8 @@
         const year = currentDate.getFullYear();
         document.getElementById("QuotationDate").value = `${day}/${month}/${year}`;
 
+        $scope.ClientQutnID = '';
+
     $scope.SearchAvailableClients = function () {
         $scope.ClearEverything();
 
@@ -886,6 +888,7 @@
                 $scope.pagefunction = 'savemode';
                 $('#QuotationForRecom').modal('hide');
                 $scope.loading = true;
+                $scope.ClientQutnID = row.ClientQutnID;
 
                 $http.post('/QuotationToClient/AvailableClientDetailInfo', {
                     ClientID: row.ClientID, ClientReqID: row.ClientReqID
@@ -943,7 +946,7 @@
 
                 $http.post('/QuotationRecommendation/GetClientReqDataInfo', {
                     ClientID: ClientID,
-                    ClientReqID: ClientReqID
+                    ClientReqID: ClientReqID, ClientQutnID: $scope.ClientQutnID
                 }).success(function (response) {
                     $scope.GetClientReqDetails = response.GetClientReqDetails;
                     $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
@@ -1331,6 +1334,7 @@
                 TermsID: "",
                 FormName: "",
             }
+            $scope.ClientQutnID = "";
 
             $scope.ClientReqTerm = {
                 ClientReqTermsID: "",

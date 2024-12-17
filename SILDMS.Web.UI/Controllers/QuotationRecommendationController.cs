@@ -55,10 +55,10 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<dynamic> GetClientReqDataInfo(string ClientID, string ClientReqID)
+        public async Task<dynamic> GetClientReqDataInfo(string ClientID, string ClientReqID, string ClientQutnID)
         {
             var GetClientReqDetails = new List<ClientReqData>();  // Renamed to ClientDetails
-            await Task.Run(() => _quotationRecommendationService.GetClientReqDataInfoService(ClientID, ClientReqID, out GetClientReqDetails));
+            await Task.Run(() => _quotationRecommendationService.GetClientReqDataInfoService(ClientID, ClientReqID, ClientQutnID, out GetClientReqDetails));
             var result = Json(new { GetClientReqDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
             return result;
         }
