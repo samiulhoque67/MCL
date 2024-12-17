@@ -24,22 +24,22 @@
         </div>
         <div class="box-body">
             <div class="row">
-                <div class="col-sm-2 col-md-2 col-lg-2">
-                    <div class="form-group">
-                        <label>Form Code</label>
-                        <label style="font-size: larger;color:red;">*</label>
+                @*<div class="col-sm-2 col-md-2 col-lg-2">
+                        <div class="form-group">
+                            <label>Form Code</label>
+                            <label style="font-size: larger;color:red;">*</label>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-2 col-md-2 col-lg-2">
-                    <input id="FormCode" name="FormCode" type="text" autocomplete="off" class="form-control" placeholder="Form Code" required data-ng-model="vmTermsMst.FormCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
-                </div>
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                        <input id="FormCode" name="FormCode" type="text" autocomplete="off" class="form-control" placeholder="Form Code" required data-ng-model="vmTermsMst.FormCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                    </div>*@
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
                         <label for="FormName">Form Name</label>
                         <label style="font-size: larger;color:red;">*</label>
                     </div>
                 </div>
-                <div class="col-sm-5 col-md-5 col-lg-5">
+                <div class="col-sm-7 col-md-7 col-lg-7">
                     <div class="form-group">
                         <input id="FormName" type="text" name="FormName" required class="form-control" autofocus ng-model="vmTermsMst.FormName" placeholder="Form Name" style="height: 25px; font-size: smaller" />
                         <p ng-show="Terms.FormName.$error.required && !Terms.FormName.$pristine" class="help-block" style="height:10px;">Terms Name is required.</p>
@@ -82,17 +82,17 @@
                     </div>
                     <div ng-cloak>
                         <div class="row" style="position:relative;top:5px;">
-                            <div class="col-sm-1 col-md-1 col-lg-1">
-                            </div>
-                            <div class="col-sm-2 col-md-2 col-lg-2">
-                                <div class="form-group">
-                                    <label for="TermsCode">Terms Code</label>
-                                    <label style="font-size: larger;color:red;">*</label>
+                            @*<div class="col-sm-1 col-md-1 col-lg-1">
                                 </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2 col-lg-2">
-                                <input id="TermsCode" type="text" name="TermsCode" required class="form-control" autofocus ng-model="vmTermsItem.TermsCode" placeholder="TermsCode" style="height: 25px; font-size: smaller" />
-                            </div>
+                                <div class="col-sm-2 col-md-2 col-lg-2">
+                                    <div class="form-group">
+                                        <label for="TermsCode">Terms Code</label>
+                                        <label style="font-size: larger;color:red;">*</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-md-2 col-lg-2">
+                                    <input id="TermsCode" type="text" name="TermsCode" required class="form-control" autofocus ng-model="vmTermsItem.TermsCode" placeholder="TermsCode" style="height: 25px; font-size: smaller" />
+                                </div>*@
 
                             <div class="col-sm-1 col-md-1 col-lg-1">
                             </div>
@@ -103,8 +103,8 @@
                                     <label style="font-size:larger;color:red;">*</label>
                                 </div>
                             </div>
-                            <div class="col-sm-2 col-md-2 col-lg-2">
-                                <input id="TermsName" name="TermsName" type="text" class="form-control" placeholder="Contact Number"
+                            <div class="col-sm-8 col-md-8 col-lg-8">
+                                <input id="TermsName" name="TermsName" type="text" class="form-control" placeholder="Terms & Conditions"
                                        ng-model="vmTermsItem.TermsName" style="height: 25px; background-color:#ffffff; font-size: smaller" />
                             </div>
                         </div>
@@ -145,8 +145,8 @@
             <thead>
                 <tr style="color: darkblue;">
                     <th class="col-lg-1 col-md-1 col-sm-1" st-sort="TermsItemID">SL.</th>
-                    <th class="col-lg-2 col-md-2 col-sm-2" st-sort="TermCode">Terms Code</th>
-                    <th class="col-lg-1 col-md-1 col-sm-1" st-sort="TermName">Terms Name</th>
+                    @*<th class="col-lg-2 col-md-2 col-sm-2" st-sort="TermCode">Terms Code</th>*@
+                    <th class="col-lg-5 col-md-5 col-sm-5" st-sort="TermName">Terms Name</th>
                     <th class="col-lg-1 col-md-1 col-sm-1" st-sort="ItemStatus">Status</th>
                     <th class="col-lg-2 col-md-2 col-sm-2">Action</th>
                 </tr>
@@ -160,8 +160,8 @@
                 <tr ng-repeat="row in displayedCollection" style="height:20px;">
                     @*<td class="hidden">{{row.TermsItemID}}</td>*@
                     <td class="col-lg-1 col-md-1 col-sm-1">{{row.TermsItemID}}</td>
-                    <td class="col-lg-2 col-md-2 col-sm-2">{{row.TermsCode}}</td>
-                    <td class="col-lg-1 col-md-1 col-sm-1">{{row.TermsName}}</td>
+                    @*<td class="col-lg-2 col-md-2 col-sm-2">{{row.TermsCode}}</td>*@
+                    <td class="col-lg-5 col-md-5 col-sm-5">{{row.TermsName}}</td>
                     <td class="col-lg-1 col-md-1 col-sm-1 text-center">
                         <span ng-attr-class="{{row.ItemStatus =='1'? 'label label-success' : 'label label-danger' }}">
                             {{row.ItemStatus == '1'? 'Active':'InActive'}}
@@ -183,7 +183,7 @@
         </table>
     </div>
 
-  
+
 
     <div id="SearchTermsModal" class="modal fade">
         <div class="modal-dialog">
@@ -196,21 +196,21 @@
                     <table st-table="TermsDisplayedCollection" st-safe-src="TermsSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>*@
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormName')">Form Name</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('Status')">Status</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
                             <tr>
-                                <th><input st-search="TermsCode" placeholder="Terms Code" class="input-sm form-control" type="search" /></th>
+                                @*<th><input st-search="TermsCode" placeholder="Terms Code" class="input-sm form-control" type="search" /></th>*@
                                 <th><input st-search="TermsName" placeholder="TermsName" class="input-sm form-control" type="search" /></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in TermsDisplayedCollection">
                                 <td class="hidden">{{row.TermsID}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.FormCode}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.FormCode}}</td>
+                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.FormCode}}</td>*@
+                            <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.FormName}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">
                                     <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
                                         {{row.Status == '1'? 'Active':'InActive'}}
@@ -374,18 +374,13 @@
 
         $scope.Post = function () {
 
-            if ($("#FormCode").val() == "") {
-                toastr.error("Terms Code is required");
-                return;
-            }
-
             if ($("#FormName").val() == "") {
                 toastr.error("Terms Name is required");
                 return;
             }
-            
+
             $scope.loading = true;
-            $scope.vmTermsMst.TermsCode = $('#FormCode').val();
+            /*    $scope.vmTermsMst.TermsCode = $('#FormCode').val();*/
             $scope.vmTermsMst.TermsName = $('#FormName').val();
             $scope.vmTermsMst.Status = $scope.vmTermsMst.Status;
 
@@ -428,80 +423,23 @@
         $scope.displayedCollection = [];
         $scope.AddUpdateDtl = function () {
 
-            if ($("#TermsCode").val() == "") {
-                toastr.error("Contact Person required");
-                return;
-            }
-
             if ($("#TermsName").val() == "") {
                 toastr.error("Contact Number Date required");
                 return;
             }
 
-            if ($("#Address").val() == "") {
-                toastr.error("Address required");
-                return;
-            }
 
             $scope.loading = true;
-            //$scope.vmTermsItem.TermsItemID = $scope.vmTermsItem.TermsItemID;// $('#TermsItemID').val();
-            //$scope.vmTermsItem.TermsID = $scope.vmTermsMst.TermsID;// $('#TermsID').val();
-            //$scope.vmTermsItem.TermsCode = $('#TermsCode').val();
-            //$scope.vmTermsItem.TermsName = $('#TermsName').val();
-            //$scope.vmTermsItem.ItemStatus = $scope.vmTermsItem.ItemStatus;
+
             ////////////////////////////////
             $scope.getAllTermsDtl.push($scope.vmTermsItem);
             $scope.loading = false;
             $('#TermsDtlModal').modal('hide');
             //$scope.displayedCollection = $scope.displayedCollection.concat($scope.vmTermsItem);
             $scope.displayedCollection = $scope.displayedCollection.concat($scope.vmTermsItem);
-            
+
             /*$scope.ClearTermsItem();*/
             ////////////////////////////////////////////////
-
-
-            //$http.post('/Terms/SaveTermsItem', { _modelTermsItem: $scope.vmTermsItem })
-            //    .success(function (response) {
-            //        if (response.status == "S201") {
-            //            toastr.success("Data Saved Successfully.");
-            //            $scope.ClearTermsItem();
-            //            $scope.loading = false;
-
-            //            $('#TermsDtlModal').modal('hide');
-            //            $scope.GetTermsItemList();
-            //            return;
-            //        }
-            //        else if (response.status == "S202") {
-            //            toastr.success("Data Updated Successfully.");
-            //            $scope.ClearTermsItem();
-            //            $scope.loading = false;
-
-            //            $('#TermsDtlModal').modal('hide');
-
-            //            $scope.GetTermsItemList();
-            //            return;
-            //        }
-            //        else if (response.status == "S203") {
-            //            toastr.success("Data Deleted Successfully.");
-            //            $scope.ClearTermsItem();
-            //            $scope.loading = false;
-            //            $('#TermsDtlModal').modal('hide');
-            //            $scope.GetTermsItemList();
-            //            return;
-            //        }
-            //        else {
-            //            toastr.error("Data Save Failed.");
-            //            $scope.loading = false;
-            //            return;
-            //        }
-            //        $scope.loading = false;
-            //        return;
-            //    })
-            //    .error(function () {
-            //        toastr.error("Data Save Failed");
-            //        $scope.loading = false;
-            //        return;
-            //    });
         };
 
         $scope.GetTermsItemList = function () {
@@ -520,7 +458,7 @@
         $scope.AddDtlModal = function () {
 
             $scope.ClearTermsItem();
-            
+
             $('#TermsDtlModal').modal('show');
             $scope.vmTermsItem.ItemStatus = "1";
             $("#btnDtlSaveUpdate").html('Add');

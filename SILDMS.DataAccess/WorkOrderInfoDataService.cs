@@ -123,10 +123,15 @@ namespace SILDMS.DataAccess
                         QutnPrice = reader.GetString("QutnPrice"),
                         QutnAmt = reader.GetString("QutnAmt"),
 
+
+                        WOQnty = reader.GetString("QutnQnty"),
+                        WOPrice = reader.GetString("QutnPrice"),
+                        WOAmt = reader.GetString("QutnAmt"),
+
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
-
                         TolAmt = reader.GetString("TolAmt")
+
                         //,
 
                         //Status = reader.GetString("Status")
@@ -180,6 +185,9 @@ namespace SILDMS.DataAccess
             dtReqItem.Columns.Add("QutnPrice");
             dtReqItem.Columns.Add("QutnUnit");
             dtReqItem.Columns.Add("QutnAmt");
+            dtReqItem.Columns.Add("WOQnty");
+            dtReqItem.Columns.Add("WOPrice");
+            dtReqItem.Columns.Add("WOAmt");
             dtReqItem.Columns.Add("VatPerc");
             dtReqItem.Columns.Add("VatAmt");
             dtReqItem.Columns.Add("TolAmt");
@@ -202,10 +210,15 @@ namespace SILDMS.DataAccess
                 objDataRow[10] = item.QutnPrice;
                 objDataRow[11] = item.QutnUnit;
                 objDataRow[12] = item.QutnAmt;
-                objDataRow[13] = item.VatPerc;
-                objDataRow[14] = item.VatAmt;
-                objDataRow[15] = item.TolAmt;
-                objDataRow[16] = item.ClientQutnAprvItemID;
+
+                objDataRow[13] = item.WOQnty;
+                objDataRow[14] = item.WOPrice;
+                objDataRow[15] = item.WOAmt;
+
+                objDataRow[16] = item.VatPerc;
+                objDataRow[17] = item.VatAmt;
+                objDataRow[18] = item.TolAmt;
+                objDataRow[19] = item.ClientQutnAprvItemID;
 
                 dtReqItem.Rows.Add(objDataRow);
             }

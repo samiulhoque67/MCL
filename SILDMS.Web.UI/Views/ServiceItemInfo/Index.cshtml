@@ -53,7 +53,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-2 col-md-2 col-lg-2">
+                @*<div class="col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
                         <label>Item Code</label>
                         <label style="font-size: larger;color:red;">*</label>
@@ -61,14 +61,14 @@
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <input id="ServiceItemCode" name="ServiceItemCode" type="text" autocomplete="off" class="form-control" placeholder="Service Item Code" required data-ng-model="vmServiceItemInfo.ServiceItemCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
-                </div>
+                </div>*@
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
                         <label for="ServiceItemName">Item Name</label>
                         <label style="font-size: larger;color:red;">*</label>
                     </div>
                 </div>
-                <div class="col-sm-5 col-md-5 col-lg-5">
+                <div class="col-sm-7 col-md-7 col-lg-7">
                     <div class="form-group">
                         <input id="ServiceItemName" type="text" name="ServiceItemName" required class="form-control" autofocus ng-model="vmServiceItemInfo.ServiceItemName" placeholder="Service Item Name" style="height: 25px; font-size: smaller" />
                         <p ng-show="ServiceItemInfo.ServiceItemName.$error.required && !ServiceItemInfo.ServiceItemName.$pristine" class="help-block" style="height:10px;">ServiceItem Name is required.</p>
@@ -92,21 +92,21 @@
         <table st-table="ServiceItemInfoDisplayedCollection" st-safe-src="ServiceItemInfoSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
             <thead>
                 <tr style="color: darkblue;">
-                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ServiceItemCode')">Item Code</th>
+                    @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ServiceItemCode')">Item Code</th>*@
                     <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ServiceItemName')">Item Name</th>
                     <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ServiceItemCategoryName')">Service Category</th>
                     <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('Status')">Status</th>
                     <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                 </tr>
                 <tr>
-                    <th><input st-search="ItemCode" placeholder="Item Code" class="input-sm form-control" type="search" /></th>
                     <th><input st-search="ServiceItemName" placeholder="Item Name" class="input-sm form-control" type="search" /></th>
+                    <th><input st-search="ServiceItemCategoryName" placeholder="Category Name" class="input-sm form-control" type="search" /></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="row in ServiceItemInfoDisplayedCollection">
                     <td class="hidden">{{row.ServiceItemID}}</td>
-                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ServiceItemCode}}</td>
+                    @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ServiceItemCode}}</td>*@
                     <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ServiceItemName}}</td>
                     <td class="hidden">{{row.ServiceItemCategoryID}}</td>
                     <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ServiceItemCategoryName}}</td>
@@ -202,7 +202,7 @@
         $scope.vmServiceItemInfo =
         {
             ServiceItemID: "",
-            ServiceItemCode: "",
+            //ServiceItemCode: "",
             ServiceItemName: "",
             ServiceItemCategory: { ServiceItemCategoryID: "", ServiceItemCategoryName: "" },
             Status: ""
@@ -212,7 +212,7 @@
             $scope.vmServiceItemInfo =
             {
                 //ServiceItemID: "",
-                ServiceItemCode: "",
+                //ServiceItemCode: "",
                 ServiceItemName: "",
                 //ServiceItemCategory: { ServiceItemCategoryID: "", ServiceItemCategoryName: "" },
                 //Status: ""
@@ -243,7 +243,7 @@
             }
 
             $scope.loading = true;
-            $scope.vmServiceItemInfo.ServiceItemCode = $('#ServiceItemCode').val();
+            //$scope.vmServiceItemInfo.ServiceItemCode = $('#ServiceItemCode').val();
             $scope.vmServiceItemInfo.ServiceItemName = $('#ServiceItemName').val();
             $scope.vmServiceItemInfo.ServiceItemCategoryID = $scope.vmServiceItemInfo.ServiceItemCategory.ServiceItemCategoryID;
             $scope.vmServiceItemInfo.Status = $scope.vmServiceItemInfo.Status;
@@ -305,7 +305,7 @@
         $scope.toggleEdit = function (row) {
             console.log(row);
             $scope.vmServiceItemInfo.ServiceItemID = row.ServiceItemID;
-            $scope.vmServiceItemInfo.ServiceItemCode = row.ServiceItemCode;
+            //$scope.vmServiceItemInfo.ServiceItemCode = row.ServiceItemCode;
             $scope.vmServiceItemInfo.ServiceItemName = row.ServiceItemName;
             $scope.vmServiceItemInfo.ServiceItemCategory.ServiceItemCategoryID = row.ServiceItemCategoryID;
             $scope.vmServiceItemInfo.Status = row.Status;

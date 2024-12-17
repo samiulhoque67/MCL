@@ -73,11 +73,11 @@ namespace SILDMS.DataAccess
                 {
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.NVarChar, servicesCategory.ServicesCategoryID);
-                    db.AddInParameter(dbCommandWrapper, "@ServicesCategoryCode", SqlDbType.NVarChar, servicesCategory.ServicesCategoryCode.Trim());
+                    //db.AddInParameter(dbCommandWrapper, "@ServicesCategoryCode", SqlDbType.NVarChar, servicesCategory.ServicesCategoryCode.Trim());
                     db.AddInParameter(dbCommandWrapper, "@ServicesCategoryName", SqlDbType.NVarChar, servicesCategory.ServicesCategoryName.Trim());
                     //db.AddInParameter(dbCommandWrapper, "@LevelSL", SqlDbType.NVarChar, servicesCategory.LevelSL);
                     db.AddInParameter(dbCommandWrapper, "@SetBy ", SqlDbType.NVarChar, servicesCategory.SetBy);
-                    db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, servicesCategory.ModifiedBy);
+                    //db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, servicesCategory.ModifiedBy);
                     db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.Int, servicesCategory.Status);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);

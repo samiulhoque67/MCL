@@ -34,10 +34,10 @@ namespace SILDMS.DataAccess
                 {
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.NVarChar, modelTermsInfoMst.TermsID);
-                    db.AddInParameter(dbCommandWrapper, "@FormCode", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelTermsInfoMst.FormCode));
+                    //db.AddInParameter(dbCommandWrapper, "@FormCode", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelTermsInfoMst.FormCode));
                     db.AddInParameter(dbCommandWrapper, "@FormName", SqlDbType.NVarChar, modelTermsInfoMst.FormName);
                     db.AddInParameter(dbCommandWrapper, "@SetBy ", SqlDbType.NVarChar, modelTermsInfoMst.SetBy);
-                    db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelTermsInfoMst.ModifiedBy);
+                    //db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelTermsInfoMst.ModifiedBy);
                     db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.Int, modelTermsInfoMst.Status);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, modelTermsInfoMst.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
@@ -79,10 +79,10 @@ namespace SILDMS.DataAccess
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@TermsItemID", SqlDbType.NVarChar, modelTermsItem.TermsItemID);
                     db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.NVarChar, modelTermsItem.TermsID);
-                    db.AddInParameter(dbCommandWrapper, "@TermsCode", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelTermsItem.TermsCode));
+                    //db.AddInParameter(dbCommandWrapper, "@TermsCode", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelTermsItem.TermsCode));
                     db.AddInParameter(dbCommandWrapper, "@TermsName", SqlDbType.NVarChar, modelTermsItem.TermsName);
                     db.AddInParameter(dbCommandWrapper, "@SetBy ", SqlDbType.NVarChar, modelTermsItem.SetBy);
-                    db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelTermsItem.ModifiedBy);
+                    //db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelTermsItem.ModifiedBy);
                     db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.Int, modelTermsItem.ItemStatus);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, modelTermsItem.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);

@@ -16,8 +16,7 @@ namespace SILDMS.Model
         public string ClientName { get; set; }
         public string ClientCategoryID { get; set; }
         public string ClientCategoryName { get; set; }
-        public string ClientTinNo { get; set; }
-        public string ClientBinNo { get; set; }
+        public string ClientType { get; set; }
         public string SetOn { get; set; }
         public string SetBy { get; set; }
         public string ModifiedOn { get; set; }
@@ -36,6 +35,7 @@ namespace SILDMS.Model
         public string ClientTinNo { get; set; }
         public string ClientBinNo { get; set; }
         public string ContactNumber { get; set; }
+       
         public string Address { get; set; }
         public string ContactPerson { get; set; }
         public string ClientReqNo { get; set; }
