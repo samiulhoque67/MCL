@@ -315,47 +315,72 @@
 <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="VenCSItemGridDisplayCollection.length > 0">
     <div class="row">
         <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-            <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+            <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" style="width:100%;" class="table table-condensed table-bordered table-striped table-hover pnlView">
                 <thead>
+
                     <tr>
-                        <th style="text-align: left;" st-sort="">Item Code</th>
+
                         <th style="text-align: left;" st-sort="">Item Name</th>
                         <th style="text-align: left;" st-sort="">ReqQnty</th>
+             
                         <th style="text-align: left;" st-sort="">ReqUnit</th>
                         <th style="text-align: left;" st-sort="">QutnQnty</th>
+                        <th style="text-align: left;" st-sort="">POQnty</th>
+
                         <th style="text-align: left;" st-sort="">QutnPrice</th>
+                        <th style="text-align: left;" st-sort="">PoPrice</th>
                         <th style="text-align: left;" st-sort="">QutnAmt</th>
+                        <th style="text-align: left;" st-sort="">PoAmt</th>
                         <th style="text-align: left;" st-sort="">VatPerc</th>
                         <th style="text-align: left;" st-sort="">VatAmt</th>
+                        <th style="text-align: left;" st-sort="">PoVatAmt</th>
                         <th style="text-align: left;" st-sort="">TolAmt</th>
-
+                        <th style="text-align: left;" st-sort="">PoTotalAmt</th>
                         @*<th style="text-align: left;">Action</th>*@
                     </tr>
                     @*<tr>
-                            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                        </tr>*@
+                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                </tr>*@
                 </thead>
                 <tbody>
                     <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
                         <td class="hidden">{{row.index+1}}</td>
                         <td class="hidden">{{row.VendorCSInfoItemID}}</td>
                         <td class="hidden">{{row.VendorCSInfoID}}</td>
-                        <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
-                        <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
-                        <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.QutnQnty}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.QutnPrice}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.QutnAmt}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.VatPerc}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
-                        <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
+                        @*<td class="col-lg-1">{{ row.ServiceItemID }} </td>*@
+                        <td class="col-lg-1">{{row.ServiceItemName}}</td>
+
+                        <td class="col-lg-1">{{row.ReqQnty | number:2}}</td>
+                 
+                        <td class="col-lg-1">{{row.ReqUnit}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1">
+                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoQty" ng-value="0" ng-readonly="true" />
+                        </td>
+
+                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnPrice | number:2}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1">
+                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoPrice" ng-value="0" ng-readonly="true" />
+                        </td>
+                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnAmt| number:2}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1">
+                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoAmt" ng-value="0" ng-readonly="true" />
+                        </td>
+                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatPerc | number:2}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatAmt | number:2}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1">
+                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoVatAmt" ng-value="0" ng-readonly="true" />
+                        </td>
+                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:1}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1">
+                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoTolAmt" ng-value="0" ng-readonly="true" />
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
-                    @*<tr>
-                            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                        </tr>*@
+                    <tr>
+                        <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                    </tr>
                 </tfoot>
             </table>
         </div>

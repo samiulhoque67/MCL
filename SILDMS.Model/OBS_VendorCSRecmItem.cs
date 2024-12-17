@@ -56,5 +56,6 @@ namespace SILDMS.Model
         public string NegoTolAmt { get; set; }
         public string NegoVatAmt { get; set; }
         public string NegoPrice { get; set; }
+        public string RemainingQty { get; set; }
     }
 }

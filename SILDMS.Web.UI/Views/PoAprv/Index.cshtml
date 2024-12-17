@@ -84,169 +84,76 @@
                         <br />
 
                         <div class="row" id="masterRow" style="position:relative; padding-right: 100px;padding-left: 60px">
-                            <div class="col-lg-8 col-lg-offset-2">
-                                <div class="row">
-                                    <table id="VendorSlipTable" border="0">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="2" style="text-align:center">Bill Acknowledgement Slip (Vendor Copy)</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr>
-                                                <td style="font-size:smaller">Tracking Number</td>
-                                                <td>
-                                                    <div class="btnBarcode"></div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size:smaller">Invoicing Party</td>
-                                                <td style="font-size:smaller">{{SlipModel.InvoicingParty}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size:smaller">PO Number</td>
-                                                <td style="font-size:smaller">{{SlipModel.PONo}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size:smaller">Company Name</td>
-                                                <td style="font-size:smaller">{{SlipModel.OwnerName}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size:smaller">Vendor Invoice Number</td>
-                                                <td style="font-size:smaller">{{SlipModel.InvoiceNo}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size:smaller">Vendor Invoice Date</td>
-                                                <td style="font-size:smaller">{{SlipModel.InvoiceDate}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size:smaller">Invoice Amount</td>
-                                                <td style="font-size:smaller">
-                                                    {{SlipModel.InvoiceCurrency}}
-                                                    {{SlipModel.InvoiceAmt | number: 2 }}
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td style="font-size:smaller">Documents Received</td>
-                                                <td style="font-size:smaller">
-                                                    <div ng-repeat="docProperty in docList">
-                                                        {{$index + 1}}. {{docProperty.DocPropertyName}}
-
-                                                    </div>
-                                                    <br />
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td style="font-size:smaller">Receive Date, Time, Place & Received By</td>
-                                                <td style="font-size:smaller">
-                                                    {{SlipModel.BillSubmitDate}},
-                                                    {{SlipModel.BillReceivedAt}},
-                                                    {{SlipModel.BillReceivedBy}}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-
-                                        <tfoot>
-                                            <tr>
-                                                <td style="font-size:x-small">System Generated Copy, No Signature Needed.</td>
-                                                <td style="font-size:x-small; text-align:right">Powered By: Square InformatiX Ltd.</td>
-                                            </tr>
-                                        </tfoot>
+                            <div class="col-md-5">
+                                <div>
+                                    <p style="font-weight: bold; margin: 0;">MEDIACOM LIMITED</p>
+                                    <p style="margin: 0;">SAMSON CENTER</p>
+                                    <p style="margin: 0;">Levels - 5 to 7</p>
+                                    <p style="margin: 0;">43 South Avenue, Road-126, Plot-CES (G) 5A,</p>
+                                    <p style="margin: 0;">Gulshan 1, Dhaka - 1212</p>
+                                    <p style="margin: 5px 0; color: orangered; font-weight: bold;">
+                                        IP No. 09610939393 extn: 1200/1205<br />
+                                        email: mediacombd.com, www.mediacombd.com
+                                    </p>
+                                </div>
+                                <br />
+                                <div>
+                                    <p style="font-weight: bold; margin: 0;">Corporate Headquarters</p>
+                                    <p style="margin: 0;">SQUARE CENTRE</p>
+                                    <p style="margin: 0;">48, Mohakhali C/A, Dhaka - 1212</p>
+                                </div>
+                                <br />
+                                <div>
+                                    <p style="font-weight: bold;">Prepare For</p>
+                                    <table>
+                                        <tr>
+                                            <td>Vendor Code:</td>
+                                            <td style="padding-left: 10px;">1300100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Name:</td>
+                                            <td style="padding-left: 10px;">******** ***</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address:</td>
+                                            <td style="padding-left: 10px;">
+                                                ************<br />
+                                                *****<br />
+                                                ****
+                                            </td>
+                                        </tr>
                                     </table>
                                 </div>
+                            </div>
 
-
-                                <div class="row" style="position:relative;padding-top:220px">
-                                    <table id="CompanySlipTable" border="0">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th><span><label style="border:solid; font-size: large; font-weight: bold ">Box No.-{{SlipModel.BoxNumber}}</label></span></th>
-
-                                            </tr>
-                                            <tr>
-                                                <th colspan="2" style="text-align:center"><label>Bill Acknowledgement Slip (In-house Copy) - {{SlipModel.VendorType}}</label></th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr>
-                                                <td style="font-size:smaller">Tracking Number</td>
-                                                <td>
-                                                    <div class="btnBarcode"></div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size:smaller">Purchasing Group</td>
-                                                <td style="font-size:smaller">{{SlipModel.PurchaseGroup}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size:smaller">Invoicing Party</td>
-                                                <td style="font-size:smaller">{{SlipModel.InvoicingParty}}</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td style="font-size:smaller">PO Number</td>
-                                                <td style="font-size:smaller">{{SlipModel.PONo}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size:smaller">Company Code & Name</td>
-                                                <td style="font-size:smaller">{{SlipModel.CompanyName}}</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td style="font-size:smaller">Vendor Invoice Number</td>
-                                                <td style="font-size:smaller">{{SlipModel.InvoiceNo}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size:smaller">Vendor Invoice Date</td>
-                                                <td style="font-size:smaller">{{SlipModel.InvoiceDate}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size:smaller">Invoice Amount</td>
-                                                <td style="font-size:smaller">
-                                                    {{SlipModel.InvoiceCurrency}}
-                                                    {{SlipModel.InvoiceAmt | number : 2 }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size:smaller">Payment Method Preference</td>
-                                                <td style="font-size:smaller">{{SlipModel.PreferedPayMode}}</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td style="font-size:smaller">Documents Received</td>
-                                                <td style="font-size:smaller">
-                                                    <div ng-repeat="docProperty in docList">
-                                                        {{$index + 1}}. {{docProperty.DocPropertyName}}
-                                                    </div>
-                                                    <br />
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td style="font-size:smaller">Receive Date, Time, Place & Received By</td>
-                                                <td style="font-size:smaller">
-                                                    {{SlipModel.BillSubmitDate}},
-                                                    {{SlipModel.BillReceivedAt}},
-                                                    {{SlipModel.BillReceivedBy}}
-                                                </td>
-                                            </tr>
-
-                                        </tbody>
-
-                                        <tfoot>
-                                            <tr>
-                                                <td style="font-size:x-small">System Generated Copy, No Signature Needed</td>
-                                                <td style="font-size: x-small; text-align: right">Powered By: Square InformatiX Ltd.</td>
-                                            </tr>
-                                        </tfoot>
-
-                                    </table>
-                                </div>
+                            <!-- Right Table -->
+                            <div class="col-md-4">
+                                <table style="width: 100%; border-collapse: collapse; font-size: smaller; margin-top: 10px;">
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Quotation Number:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">MCL/PO000</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">RFQ Date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Created by:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">PR No:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Briefing Date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Quotation submission date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -476,47 +383,72 @@
     <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="VenCSItemGridDisplayCollection.length > 0">
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" style="width:100%;" class="table table-condensed table-bordered table-striped table-hover pnlView">
                     <thead>
+
                         <tr>
-                            <th style="text-align: left;" st-sort="">Item Code</th>
+
                             <th style="text-align: left;" st-sort="">Item Name</th>
                             <th style="text-align: left;" st-sort="">ReqQnty</th>
+                            <th style="text-align: left;" st-sort="">RemainingQnty</th>
                             <th style="text-align: left;" st-sort="">ReqUnit</th>
                             <th style="text-align: left;" st-sort="">QutnQnty</th>
+                            <th style="text-align: left;" st-sort="">POQnty</th>
+
                             <th style="text-align: left;" st-sort="">QutnPrice</th>
+                            <th style="text-align: left;" st-sort="">PoPrice</th>
                             <th style="text-align: left;" st-sort="">QutnAmt</th>
+                            <th style="text-align: left;" st-sort="">PoAmt</th>
                             <th style="text-align: left;" st-sort="">VatPerc</th>
                             <th style="text-align: left;" st-sort="">VatAmt</th>
+                            <th style="text-align: left;" st-sort="">PoVatAmt</th>
                             <th style="text-align: left;" st-sort="">TolAmt</th>
-
+                            <th style="text-align: left;" st-sort="">PoTotalAmt</th>
                             @*<th style="text-align: left;">Action</th>*@
                         </tr>
                         @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
+                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                </tr>*@
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
                             <td class="hidden">{{row.index+1}}</td>
                             <td class="hidden">{{row.VendorCSInfoItemID}}</td>
                             <td class="hidden">{{row.VendorCSInfoID}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnQnty}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnPrice}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnAmt}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.VatPerc}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.VatAmt}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.TolAmt}}</td>
+                            @*<td class="col-lg-1">{{ row.ServiceItemID }} </td>*@
+                            <td class="col-lg-1">{{row.ServiceItemName}}</td>
+
+                            <td class="col-lg-1">{{row.ReqQnty | number:2}}</td>
+                            <td class="col-lg-1">{{row.RemainingQty}}</td>
+                            <td class="col-lg-1">{{row.ReqUnit}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoQty"  ng-value="0" ng-readonly="true" />
+                            </td>
+
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnPrice | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoPrice"  ng-value="0" ng-readonly="true" />
+                            </td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnAmt| number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoAmt" ng-value="0" ng-readonly="true" />
+                            </td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatPerc | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatAmt | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoVatAmt" ng-value="0" ng-readonly="true" />
+                            </td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:1}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoTolAmt" ng-value="0" ng-readonly="true" />
+                            </td>
                         </tr>
                     </tbody>
                     <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
+                        <tr>
+                            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                        </tr>
                     </tfoot>
                 </table>
             </div>
@@ -626,6 +558,233 @@
 
         </div>
     </div>
+
+
+    <div id="VendorSlipModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h3 class="modal-title"></h3>
+                </div>
+
+                <div class="modal-body">
+                    <div class="box-body">
+                        <div class="row">
+                            <input type="button" class="btn btn-primary pull-right" value="Re-print" ng-click="printData()" />
+                        </div>
+                        <br />
+
+                        <div class="row" id="masterRow" style="position: relative; padding-right: 100px; padding-left: 60px;">
+                            <div class="col-md-5">
+                                <div class="media">
+                                    <img src="../../Content/AdminLTE/img/mediacom-logomini.png" style="height: 20px; margin-bottom: 10px;margin-left:0px;" />
+                                </div>
+                                <div>
+                                    <p style="font-weight: bold; margin: 0;">MEDIACOM LIMITED</p>
+                                    <p style="margin: 0;">SAMSON CENTER</p>
+                                    <p style="margin: 0;">Levels - 5 to 7</p>
+                                    <p style="margin: 0;">43 South Avenue, Road-126, Plot-CES (G) 5A,</p>
+                                    <p style="margin: 0;">Gulshan 1, Dhaka - 1212</p>
+                                    <p style="margin: 5px 0; color: orangered; font-weight: bold;">
+                                        IP No. 09610939393 extn: 1200/1205<br />
+                                        email: mediacombd.com, www.mediacombd.com
+                                    </p>
+                                </div>
+                                <br />
+                                <div>
+                                    <p style="font-weight: bold; margin: 0;">Corporate Headquarters</p>
+                                    <p style="margin: 0;">SQUARE CENTRE</p>
+                                    <p style="margin: 0;">48, Mohakhali C/A, Dhaka - 1212</p>
+                                </div>
+                                <br />
+                                <div>
+                                    <p style="font-weight: bold;">Prepare For</p>
+                                    <table>
+                                        <tr>
+                                            <td>Vendor Code:</td>
+                                            <td style="padding-left: 10px;">
+                                                {{VendorCSInfo.VendorID}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Name:</td>
+                                            <td style="padding-left: 10px;">
+                                                {{VendorCSInfo.VendorName}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address:</td>
+                                            <td style="padding-left: 10px;">
+                                                ************<br />
+                                                *****<br />
+                                                ****
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Right Table -->
+                            <div class="col-md-4">
+                                <table style="width: 100%; border-collapse: collapse; font-size: smaller; margin-top: 10px;">
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Quotation Number:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">MCL/PO000</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">RFQ Date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Created by:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">PR No:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Briefing Date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Quotation submission date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <div id="VendorSlipModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h3 class="modal-title"></h3>
+                </div>
+
+                <div class="modal-body">
+                    <div class="box-body">
+                        <div class="row">
+                            <input type="button" class="btn btn-primary pull-right" value="Re-print" ng-click="printData()" />
+                        </div>
+                        <br />
+
+                        <div class="row" id="masterRow" style="position: relative; padding-right: 100px; padding-left: 60px;">
+                            <div class="col-md-5">
+                                <div class="media">
+                                    <img src="../../Content/AdminLTE/img/mediacom-logomini.png" style="height: 20px; margin-bottom: 10px;margin-left:0px;" />
+                                </div>
+                                <div>
+                                    <p style="font-weight: bold; margin: 0;">MEDIACOM LIMITED</p>
+                                    <p style="margin: 0;">SAMSON CENTER</p>
+                                    <p style="margin: 0;">Levels - 5 to 7</p>
+                                    <p style="margin: 0;">43 South Avenue, Road-126, Plot-CES (G) 5A,</p>
+                                    <p style="margin: 0;">Gulshan 1, Dhaka - 1212</p>
+                                    <p style="margin: 5px 0; color: orangered; font-weight: bold;">
+                                        IP No. 09610939393 extn: 1200/1205<br />
+                                        email: mediacombd.com, www.mediacombd.com
+                                    </p>
+                                </div>
+                                <br />
+                                <div>
+                                    <p style="font-weight: bold; margin: 0;">Corporate Headquarters</p>
+                                    <p style="margin: 0;">SQUARE CENTRE</p>
+                                    <p style="margin: 0;">48, Mohakhali C/A, Dhaka - 1212</p>
+                                </div>
+                                <br />
+                                <div>
+                                    <p style="font-weight: bold;">Prepare For</p>
+                                    <table>
+                                        <tr>
+                                            <td>Vendor Code:</td>
+                                            <td style="padding-left: 10px;">
+                                                {{VendorCSInfo.VendorID}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Name:</td>
+                                            <td style="padding-left: 10px;">
+                                                {{VendorCSInfo.VendorName}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address:</td>
+                                            <td style="padding-left: 10px;">
+                                                ************<br />
+                                                *****<br />
+                                                ****
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Right Table -->
+                            <div class="col-md-4">
+                                <table style="width: 100%; border-collapse: collapse; font-size: smaller; margin-top: 10px;">
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Quotation Number:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">MCL/PO000</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">RFQ Date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Created by:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">PR No:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Briefing Date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Quotation submission date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 
@@ -1455,11 +1614,55 @@
 
         $scope.printData = function () {
             var VendorSlip = document.getElementById("masterRow");
-            newWin = window.open("");
-            newWin.document.write(VendorSlip.outerHTML);
-            $timeout(newWin.print(), 0);
-            newWin.close();
-        };
+
+            // Create an iframe dynamically
+            var iframe = document.createElement('iframe');
+            iframe.style.position = 'absolute';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = 'none';
+            document.body.appendChild(iframe);
+
+            // Write the content to the iframe document
+            var doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write('<html><head><title>Print</title>');
+
+            // Add custom styles for printing
+            doc.write('<style>' +
+                'body { font-family: Arial, sans-serif; margin: 0; padding: 0; }' +
+                'table { width: 100%; border-collapse: collapse; }' +
+                'td, th { padding: 8px; text-align: left; border: 1px solid #ddd; }' +
+                'p { margin: 0; font-size: 14px; }' + // Adjust as needed
+                '.row { display: flex; justify-content: space-between; padding: 20px; }' +
+                '.col-md-5, .col-md-4 { flex: 1; margin: 10px; }' + // Flex layout for columns
+                'table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }' +
+                '</style>');
+
+            doc.write('</head><body>');
+
+            // Copy content from the original div and write it into the iframe
+            doc.write(VendorSlip.outerHTML);
+
+            doc.write('</body></html>');
+            doc.close();
+
+            // Trigger print on the iframe content
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+
+            // Remove the iframe from the DOM after printing
+            document.body.removeChild(iframe);
+        }
+
+
+
+
+
+        $scope.Cancel = function () {
+
+            $scope.printData();
+        }
 
 
         $scope.toggleRefreshTable = function () {
