@@ -6,6 +6,7 @@ using SILDMS.Utillity.Localization;
 using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -62,6 +63,14 @@ namespace SILDMS.Web.UI.Controllers
             var GetClientReqDetails = new List<ClientReqData>();  // Renamed to ClientDetails
             await Task.Run(() => _quotationToClientService.GetClientReqDataInfoService(ClientID, ClientReqID, ReqType, out GetClientReqDetails));
             var result = Json(new { GetClientReqDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
+            return result;
+        }
+        [HttpPost]
+        public async Task<dynamic> GetClientReqDataItemPopup(/*string ClientID, string ClientReqID,*/ string VendorCSAprvID,string ServiceItemID)
+        {
+            var GetClientReqDataItemPopup = new List<ClientReqData>();  // Renamed to ClientDetails
+            await Task.Run(() => _quotationToClientService.GetClientReqDataItemPopupService(VendorCSAprvID, ServiceItemID, out GetClientReqDataItemPopup));
+            var result = Json(new { GetClientReqDataItemPopup, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
             return result;
         }
 

@@ -253,7 +253,7 @@
                                 <td class="text-center">{{row.ClientName}}</td>
 
                                 <td class="text-center">{{row.ReqType}}</td>
-                                
+
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectAvailableClient(row, 'save')">Select</a>
                                 </td>
@@ -295,16 +295,12 @@
                         <th style="text-align: left;">Delivery Location</th>
                         <th style="text-align: left;">Delivery Date</th>
 
-                        <th style="text-align: left;">Req Qty</th>
+                        <th style="text-align: left;">Requested Qty</th>
                         <th style="text-align: left;">Req Unit</th>
-
-                        <th style="text-align: left;">Vendor Quoted Unit Price</th>
-                        <th style="text-align: left;">Given Quoted Unit Price</th>
-                        <th style="text-align: left;">Vendor Quoted Amount</th>
-                        <th style="text-align: left;">Given Quoted Amount</th>
-                        <th style="text-align: left;">VAT Rate</th>
-                        <th style="text-align: left;">VAT Amount</th>
-                        <th style="text-align: left;">Total Amount</th>
+                        <th style="text-align: left;">Quotation Amount</th>
+                        <th style="text-align: left;">Given Quotation Amount</th>
+                        <th style="text-align: left;">Vat (%) Rate</th>
+                        <th style="text-align: left;">Vat Amount</th>
                         <th style="text-align: left;">Given Total Amount</th>
                     </tr>
                 </thead>
@@ -321,9 +317,6 @@
                         <td style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
                         <td style="width: 5%;">{{ row.ReqUnit }}</td>
 
-                        <td style="width: 6%;">{{ row.QutnQnty }}</td>
-
-                        <td style="width: 6%;">{{ row.QutnPrice }}</td>
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
                                    type="number"
@@ -333,8 +326,10 @@
                                    ng-blur="validateInput0('givenQutnPrice', row)" />
                         </td>
 
-                        <td style="width: 6%;">{{ row.QutnAmt }}</td>
-                        <td style="width: 6%; color: #126e0f;">{{ row.givenQutnAmt }}</td>
+                        <td style="width: 6%;" color: #126e0f;">
+                            {{ row.givenQutnAmt }}
+                        </td>
+
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
                                    type="number"
@@ -344,8 +339,13 @@
                                    ng-blur="validateInput('GivenVatPerc', row)" />
                         </td>
                         <td style="width: 6%;">{{ row.TotGivenVatAmt }}</td>
-                        <td style="width: 6%;">{{ row.TolAmt }}</td>
-                        <td style="width: 6%; color: #126e0f;">{{ row.givenTolAmt }}</td>
+                        <td style="width: 6%; color: #126e0f;">
+                            {{ row.givenTolAmt }}
+
+                            <button type="button" class="button-detail pull-right" ng-hide="row.ReqType === 'QC' " ng-click="detailVendorCS(row)" data-dismiss="modal" title="Show detail">
+                                <i class="fa fa-info"> </i>
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -354,6 +354,65 @@
         </div>
     </div>
 
+    <div class="modal fade" id="detailVendorCSModal" tabindex="-1" role="dialog" aria-labelledby="detailVendorCSModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailVendorCSModalLabel" style="font-family: Verdana; font-size: 15px; font-weight: bold; color: #166e19;">Vendor Quotation Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Your existing table goes here -->
+                    <table st-table="GetClientReqDataItemPopupCollection" st-safe-src="GetClientReqDataItemPopup" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr style="background-color: #78bfd6; color: darkblue; font-size: 12px;">
+                                <th style="text-align: left;">Item Name</th>
+                                <th style="text-align: left;">Description</th>
+                                <th style="text-align: left;">Delivery Location</th>
+                                <th style="text-align: left;">Delivery Date</th>
+
+                                <th style="text-align: left;">Requested Qty</th>
+                                <th style="text-align: left;">Quotated Qty</th>
+                                <th style="text-align: left;">Req Unit</th>
+                                <th style="text-align: left;">Vendor Name</th>
+
+                                <th style="text-align: left;">Quotated Per Unit Price</th>
+                                <th style="text-align: left;">Vendor Quoted Amount</th>
+                                <th style="text-align: left;">VAT (%) Rate</th>
+                                <th style="text-align: left;">VAT Amount</th>
+                                <th style="text-align: left;">Quotated Total Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in GetClientReqDataItemPopupCollection"
+                                ng-cloak style="font-size: 12px;">
+                                <td style="width: 5%;">{{ row.ServiceItemName }}</td>
+                                <td style="width: 6%;">{{ row.Description }}</td>
+                                <td style="width: 6%;">{{ row.DeliveryLocation }}</td>
+                                <td style="width: 6%;">{{ formatDate(row.DeliveryDate) }}</td>
+
+                                <td style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
+                                <td style="width: 6%;">{{ row.QutnQnty | number: 2 }}</td>
+                                <td style="width: 5%;">{{ row.ReqUnit }}</td>
+                                <td style="width: 6%;">{{ row.VendorName}}</td>
+
+                                <td style="width: 6%;">{{ row.QutnPrice}}</td>
+                                <td style="width: 6%;">{{ row.QutnAmt }}</td>
+                                <td style="width: 6%;">{{ row.VatPerc }}</td>
+                                <td style="width: 6%;">{{ row.VatAmt }}</td>
+                                <td style="width: 6%;">{{ row.TolAmt }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -447,8 +506,8 @@
                                 </div>
                             </div>
 
-                            </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -461,7 +520,7 @@
                             <tr>
                                 <th style="text-align: left;" st-sort="">Terms Code</th>
                                 <th style="text-align: left;" st-sort="">Terms & Conditions</th>
-                                <th  ng-show="pagefunction !== 'viewmode'" style="text-align: left;">Action</th>
+                                <th ng-show="pagefunction !== 'viewmode'" style="text-align: left;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -472,7 +531,7 @@
                                 <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
                                 <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
 
-                                <td  ng-show="pagefunction !== 'viewmode'" class="col-lg-1" style="width:5%;">
+                                <td ng-show="pagefunction !== 'viewmode'" class="col-lg-1" style="width:5%;">
                                     <button type="button" ng-if="row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                     <button type="button" ng-if="!row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                     <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
@@ -481,8 +540,8 @@
                         </tbody>
                         <tfoot>
                             @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
+                                    <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                                </tr>*@
                         </tfoot>
                     </table>
                 </div>
@@ -568,14 +627,14 @@
         @*terms and conditons ends*@
 
 
-    <div class="row">
-        <div class="col-sm-1 col-md-1 col-lg-1">
+        <div class="row">
+            <div class="col-sm-1 col-md-1 col-lg-1">
             </div>
 
             <div class="col-sm-10 col-md-10 col-lg-10">
 
                 <!-- Quotation No & Date -->
-                <div  class="row">
+                <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label for="QuotationNo">Quotation No :</label>
@@ -638,7 +697,7 @@
 
                         <div ng-show="pagefunction === 'viewmode'" class="form-group">
 
-                            <input name="BriefingDate" readonly type="datetime"  placeholder="DD/MM/YYYY"
+                            <input name="BriefingDate" readonly type="datetime" placeholder="DD/MM/YYYY"
                                    ng-model="MasterData.BriefingDate" style="height: 25px; background-color:#ffffff;" />
                         </div>
 
@@ -1056,6 +1115,27 @@
             }
         };
 
+        $scope.detailVendorCS = function (row) {
+
+            $http.post('/QuotationToClient/GetClientReqDataItemPopup', {
+                //ClientID: row.ClientID, ClientReqID: row.ClientReqID,
+                VendorCSAprvID: row.VendorCSAprvID, ServiceItemID: row.ServiceItemID
+            }).success(function (response) {
+                $scope.GetClientReqDataItemPopup = response.GetClientReqDataItemPopup;
+                $scope.GetClientReqDataItemPopupCollection = [].concat($scope.GetClientReqDataItemPopup);
+                $('#detailVendorCSModal').modal('show');
+                $scope.showdetailVendorCSModal();
+                $scope.loading = false;
+               
+            }).error(function () {
+                $scope.loading = false;
+            });
+        }
+
+        $scope.showdetailVendorCSModal = function(){
+            $('#detailVendorCSModal').modal('show');
+        }
+
       
         $scope.showFlag = false;
         $scope.selectedRows = [];
@@ -1080,7 +1160,7 @@
                     QutnQnty: row.QutnQnty,
                     QutnUnit: row.ReqUnit,
                     VenPrice: row.QutnPrice,
-                    MclPrice: row.givenQutnPrice,
+                    MclPrice: row.givenQutnPrice, //<--
                     QutnAmt: row.QutnAmt,
                     VatPerc: row.GivenVatPerc,
                     VatAmt: row.TotGivenVatAmt,
@@ -1140,6 +1220,7 @@
             }
         };
 
+       
         $scope.GetTermsItemList = function (TempID, ClientReqID, action) {
 
 
@@ -1176,7 +1257,7 @@
         $scope.calculateRowFields = function (row) {
             row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
             row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
-            row.givenQutnAmt = row.givenQutnPrice * (parseFloat(row.QutnQnty) || 0);
+            row.givenQutnAmt = row.givenQutnPrice * (parseFloat(row.ReqQnty) || 0);
             row.TotGivenVatAmt = row.givenQutnAmt * (row.GivenVatPerc / 100);
             row.givenTolAmt = row.givenQutnAmt + row.TotGivenVatAmt;
 
@@ -1202,7 +1283,12 @@
         $scope.openConfirmModal = function (action) {
             if (!$scope.MasterData.BriefingDate || $scope.MasterData.BriefingDate.trim() === '') {
                 toastr.error('Please enter a Briefing Date');
-            } else {
+            }
+            else if (!$scope.selectedRows.MclPrice <= 0) {
+                toastr.error('Given Quotation Price must be greater than 0.');
+            }
+
+            else {
                 // $('#ConfirmModal').modal('show');
                 $scope.SaveQuotToClient(action);
             }
