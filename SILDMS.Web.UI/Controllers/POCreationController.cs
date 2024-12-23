@@ -72,21 +72,30 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> GetVendorPOInfoTermList(string VendorCSAprvID)
+        public async Task<dynamic> GetVendorPOInfoTermList(string VendorID, string ClientReqID, string WIInfoID)
         {
             var VendorCSInfoTermList = new List<OBS_VendorCSRecmTerms>();
-            await Task.Run(() => pOCreationService.GetVendorPOInfoTermList(VendorCSAprvID, out VendorCSInfoTermList));
+            await Task.Run(() => pOCreationService.GetVendorPOInfoTermList(VendorID, ClientReqID, WIInfoID, out VendorCSInfoTermList));
             var result = Json(new { VendorCSInfoTermList, msg = "VendorCSInfoTermList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
 
-        public async Task<dynamic> SaveVendorPOInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem,List<OBS_VendorCSRecmVendors> vendorCSItemWise)
+        public async Task<dynamic> SaveVendorPOInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem,List<OBS_VendorCSRecmTerms> vendorCSTerm, List<OBS_VendorCSRecmVendors> vendorCSItemWise)
         {
             vendorCS.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
-            status = pOCreationService.SaveVendorPOInfo(vendorCS, vendorCSItem, vendorCSItemWise);
+            status = pOCreationService.SaveVendorPOInfo(vendorCS, vendorCSItem, vendorCSTerm, vendorCSItemWise);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
+        }
+
+        
+        [Authorize]
+        public async Task<dynamic> SearchPO()
+        {
+            var SearchCSList = new List<Invitation>();
+            await Task.Run(() => pOCreationService.SearchPOService(UserID, out SearchCSList));
+            return Json(new { SearchCSList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
 
     }
