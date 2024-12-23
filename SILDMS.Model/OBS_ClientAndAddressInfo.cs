@@ -18,6 +18,7 @@ namespace SILDMS.Model
         public string ClientCategoryName { get; set; }
         public string ClientTinNo { get; set; }
         public string ClientBinNo { get; set; }
+        public string ClientType { get; set; }
         public string SetOn { get; set; }
         public string SetBy { get; set; }
         public string ModifiedOn { get; set; }

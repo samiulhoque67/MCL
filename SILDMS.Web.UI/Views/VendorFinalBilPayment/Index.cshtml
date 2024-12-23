@@ -284,7 +284,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="VATPercentage" name="VATPercentage" type="text" class="form-control" placeholder="VAT Percentage" ng-model="VendorQutn.VATPercentage" ng-change="calculateAmounts()" />
+                        <input id="VATPercentage" name="VATPercentage" type="text" class="form-control" placeholder="VAT Percentage" ng-model="VendorQutn.VATPercentage" ng-change="calculateVatAmounts()" />
                     </div>
                 </div>
 
@@ -344,7 +344,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="VDSPercentage" name="VDSPercentage" type="text" class="form-control" placeholder="VDS Percentage" ng-model="VendorQutn.VDSPercentage" ng-change="calculateVDSAmounts()" />
+                        <input id="VDSPercentage" name="VDSPercentage" type="text" class="form-control" placeholder="VDS Percentage" ng-model="VendorQutn.VDSPercentage" ng-blur="calculateVDSAmounts()" />
                     </div>
                 </div>
             </div>
@@ -529,8 +529,8 @@
 
         $scope.VendorQutn = {
             VendorQutnID: "",
-            VendorID:"",
-            VendorName:"",
+            VendorID: "",
+            VendorName: "",
             ClientID: "",
             ClientName: "",
             TermsID: "",
@@ -564,7 +564,7 @@
             Note: "",
             VendrFinalBilRcvdID: "",
             VendorFinalBilRecmID: "",
-            VendrFinalBilAprvID:"",
+            VendrFinalBilAprvID: "",
             RecommendedAmnt: "",
             RecommendDate: "",
             AprvAmnt: "",
@@ -620,14 +620,14 @@
         };
 
         $http.get("/VendorFinalBilPayment/GetShowVendorReqList")
-                .success(function (response) {
-                    console.log(response);
-                    $scope.VendorReqList = response.VendorReqList;
-                    $scope.VendorReqDisplayedCollection = [].concat($scope.VendorReqList);
-                    console.log($scope.VendorReqDisplayedCollection);
-                    $scope.loading = false;
-                })
-                .error(function () { });
+            .success(function (response) {
+                console.log(response);
+                $scope.VendorReqList = response.VendorReqList;
+                $scope.VendorReqDisplayedCollection = [].concat($scope.VendorReqList);
+                console.log($scope.VendorReqDisplayedCollection);
+                $scope.loading = false;
+            })
+            .error(function () { });
 
         $scope.clearVendorQutn = function () {
             $scope.VendorQutn = {
@@ -645,7 +645,7 @@
                 QuotationDate: "",
                 Remarks: ""
             }
-           
+
             $("#DeliveryDate").val('');
         }
 
@@ -702,7 +702,7 @@
         };
 
 
-        $scope.calculateAmounts = function () {
+        $scope.calculateVatAmounts = function () {
             var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
             var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
 
@@ -726,43 +726,42 @@
             $scope.VendorQutn.NetPayableAmount = totalbillAmount - $scope.VendorQutn.CommissionAmount;
         };
 
-
         $scope.calculateTDSAmounts = function () {
             var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
-            var vatPercentage = parseFloat($scope.VendorQutn.TDSPercentage) || 0;
+            var tdsPercentage = parseFloat($scope.VendorQutn.TDSPercentage) || 0;
 
-            // Calculate the VAT amount
-            $scope.VendorQutn.TDSAmount = (billAmount * vatPercentage) / 100;
+            // Calculate the TDS amount
+            $scope.VendorQutn.TDSAmount = (billAmount * tdsPercentage) / 100;
 
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.TDSAmount;
-            $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount - $scope.VendorQutn.VDSAmount;
+            // Calculate the total bill amount (bill amount - TDS amount)
+            var NetPayAmnt = $scope.VendorQutn.TotalBillAmount - $scope.VendorQutn.TDSAmount;
+            $scope.VendorQutn.NetPayableAmount = NetPayAmnt;
         };
 
         $scope.calculateVDSAmounts = function () {
-            var totalbillAmount = parseFloat($scope.VendorQutn.TotalBillAmount) || 0;
-            var poAmount = parseFloat($scope.VendorQutn.POAmount) || 0;
-            var cmsnPercentage = parseFloat($scope.VendorQutn.VDSPercentage) || 0;
+            var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
+            var vdsPercentage = parseFloat($scope.VendorQutn.VDSPercentage) || 0;
 
-            // Calculate the VAT amount
-            $scope.VendorQutn.VDSAmount = (poAmount * cmsnPercentage) / 100;
+            // Calculate the VDS amount
+            $scope.VendorQutn.VDSAmount = (billAmount * vdsPercentage) / 100;
 
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorQutn.NetPayableAmount = totalbillAmount - $scope.VendorQutn.VDSAmount;
+            // Calculate the total bill amount (bill amount - VDS amount)
+            var NetPayAmnt = $scope.VendorQutn.NetPayableAmount - $scope.VendorQutn.VDSAmount;
+            alert(NetPayAmnt);
+            $scope.VendorQutn.NetPayableAmount = NetPayAmnt;
         };
 
+        //$scope.calculateBillAmounts = function () {
+        //    var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
+        //    var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
 
-        $scope.calculateBillAmounts = function () {
-            var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
-            var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
+        //    // Calculate the VAT amount
+        //    $scope.VendorQutn.VATAmount = (billAmount * vatPercentage) / 100;
 
-            // Calculate the VAT amount
-            $scope.VendorQutn.VATAmount = (billAmount * vatPercentage) / 100;
-
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.VATAmount;
-            $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount - $scope.VendorQutn.CommissionAmount;
-        };        
+        //    // Calculate the total bill amount (bill amount + VAT amount)
+        //    $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.VATAmount;
+        //    $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount - $scope.VendorQutn.CommissionAmount;
+        //};
 
         ///////////////////////Save/Update Master///////////////////////
 

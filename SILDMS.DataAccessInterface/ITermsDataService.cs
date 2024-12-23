@@ -10,6 +10,7 @@ namespace SILDMS.DataAccessInterface
 {
     public interface ITermsDataService
     {
+        string SaveTermsAndConditions(OBS_Terms vmTerms, List<OBS_TermsItem> vmTermsItem);
         string SaveTermsMst(OBS_Terms _modelTermsMst);
         string SaveTermsItem(OBS_TermsItem _modelTermsMst);
         List<OBS_ServicesCategory> GetServicesCategory(string action, out string errorNumber);
