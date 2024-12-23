@@ -63,16 +63,19 @@ namespace SILDMS.Web.UI.Controllers
         {
             clientReq.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
+            string ClientReqID = string.Empty;//, message = string.Empty;
+
             status = _clientInfoService.SaveClientRequisition(clientReq, clientReqItem, clientReqTerm);
 
             if (status != string.Empty)
             {
                 string[] statusarr = status.Split(',');
-                clientReq.ClientReqID = statusarr[1];
+                ClientReqID = statusarr[1];
+                /*clientReq.ClientReqID = statusarr[1];*/
                 status = statusarr[0];
             }
-            TempData["ClientRequisition"] = clientReq;
-            return Json(new { status }, JsonRequestBehavior.AllowGet);
+            /*TempData["ClientRequisition"] = clientReq;*/
+            return Json(new { status, ClientReqID }, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<dynamic> GetClientReqSearchList()
@@ -186,7 +189,7 @@ namespace SILDMS.Web.UI.Controllers
 
         //view pdf/
         [HttpGet]
-        public ActionResult ViewDocument()
+        public ActionResult ViewDocument(string DocID)
         {
             try
             {
@@ -196,7 +199,7 @@ namespace SILDMS.Web.UI.Controllers
                 string ftpUserName = "silsoft";
                 string ftpPassword = "s!L@123";
                 string serverUrl = "/MCL/Client_Requisition/";
-                string documentCode = "Naim";
+                string documentCode = DocID;
                 string ext = ".pdf";
 
                 // Build the FTP URL
