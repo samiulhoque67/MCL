@@ -10,11 +10,45 @@
         font-size: 12px;
     }
 
-    .form-control {
-        height: 25px;
-        font-size: smaller;
-        padding: 3px 6px 3px;
+    .modal-fullscreen {
+        width: 80%;
+        height: 80%;
+        margin: 0;
+        padding: 0;
+        top: 10%;
+        left: 10%;
+        position: fixed;
+        overflow: hidden;
+        z-index: 1050;
     }
+
+        .modal-fullscreen .modal-content {
+            height: 100%;
+            border: none;
+            border-radius: 0;
+        }
+
+
+/*    .modal-fullscreen {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: fixed;
+        overflow: hidden;
+        z-index: 1050;
+    }
+
+        .modal-fullscreen .modal-content {
+            height: 100%;
+            border: none;
+            border-radius: 0;
+        }
+*/
+
 </style>
 
 <div class="box box-primary box-body" ng-controller="ClientRequisitionCtrl">
@@ -135,7 +169,8 @@
                     </div>
                 </div>
                 <div class="col-lg-1">
-                             <button id="" ng-click="SaveDocument()" class="btn button-custom" style="margin-right: -13px;"><i class="fa fa-check"></i> Save </button>
+                    <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
+
                 </div>
 
                 @* ends implementing pdf here*@
@@ -746,6 +781,24 @@
             </div>
         </div>
     </div>
+
+    @*view pdf modal*@
+    <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="padding: 0; margin: 0;">
+                    <iframe id="pdfViewer"
+                            style="width: 100%; height: 100vh; border: none;"
+                            title="PDF Viewer">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 </div>
 
 <script type="text/javascript">
@@ -1321,6 +1374,7 @@
                 .success(function (response) {
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
+                        $scope.SaveDocument();
                         $scope.clearClientReq();
                         $scope.loading = false;
                         return;
@@ -1359,8 +1413,8 @@
 
         /*document save function by naim*/
 
-        $scope.document_title = "";
-        $scope.document_code = 0;
+        //$scope.document_title = "";
+        //$scope.document_code = 0;
 
 
 
@@ -1370,10 +1424,10 @@
             $scope.DocCrudStatus = "I";
 
             // Validate document title
-            if (!$scope.Document || !$scope.Document.document_title) {
-                toastr.error("Please fill document title field!");
-                return;
-            }
+            //if (!$scope.Document || !$scope.Document.document_title) {
+            //    toastr.error("Please fill document title field!");
+            //    return;
+            //}
 
             // Validate file input
             var fileUpload = document.getElementById("FileUpload1");
@@ -1402,12 +1456,29 @@
 
             $scope.loading = true; // Show loading indicator
 
+            // FTP details
+            var ftpDetails = {
+
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "silsoft",
+                ftpPassword: "s!L@123",
+                serverUrl: "MCL/Client_Requisition",
+                documentID: "Naim",
+                ext: "pdf"
+            };
+
             // Helper function to handle file upload
-            function uploadFileToServer(file, documentCode, ext) {
+            function uploadFileToServer(file, ftpDetails) {
                 var formData = new FormData();
-                formData.append("documentCode", documentCode);
-                formData.append("ext", "." + ext);
                 formData.append("file", file);
+                formData.append("serverIP", ftpDetails.serverIP);
+                formData.append("ftpPort", ftpDetails.ftpPort);
+                formData.append("ftpUserName", ftpDetails.ftpUserName);
+                formData.append("ftpPassword", ftpDetails.ftpPassword);
+                formData.append("serverUrl", ftpDetails.serverUrl);
+                formData.append("documentID", ftpDetails.documentID);
+                formData.append("ext", ftpDetails.ext);
 
                 $.ajax({
                     url: '/ClientRequisition/SaveDocument',
@@ -1418,8 +1489,8 @@
                     success: function (result) {
                         toastr.success("Document uploaded successfully.");
                         resetFileInput();
-                        $scope.GetDocumentList();
-                        clearDocumentForm();
+                       /* $scope.GetDocumentList();*/
+                       /* clearDocumentForm();*/
                     },
                     error: function (err) {
                         toastr.error("Document upload failed. Please try again.");
@@ -1431,6 +1502,8 @@
                 });
             }
 
+            uploadFileToServer(file, ftpDetails);
+
             // Helper to reset file input field
             function resetFileInput() {
                 var fileInput = document.getElementById("FileUpload1");
@@ -1438,40 +1511,40 @@
             }
 
             // Helper to clear form fields
-            function clearDocumentForm() {
-                $scope.Document = { document_title: "", note: "" };
-            }
-
-        }
-
-
-
-        $scope.viewPdf = function (row) {
-
-            var documentID = "1";
-            var ext = ".pdf";
-            $scope.document_title = row.plan_doc_title.slice(0, 20) + "..";
-            $scope.document_code = row.plan_doc_code;
-            var url = `/MPP/ViewPdfFromFtp?documentID=${row.plan_doc_code}&ext=${ext}`;
-
-            $http({
-                method: 'GET',
-                url: url,
-                responseType: 'arraybuffer'
-            }).then(function (response) {
-                var file = new Blob([response.data], { type: 'application/pdf' });
-                var fileURL = URL.createObjectURL(file);
-                let zoomParam = "#zoom=100";
-                // Set the file URL to the iframe src
-                $("#pdfViewer").attr("src", fileURL + zoomParam);
-                //  $("#pdfViewer").attr("src", fileURL);
-                $('#ShowPDFModal').modal('show');
-            }, function (error) {
-                toastr.error("Failed to load the PDF.");
-            });
+            //function clearDocumentForm() {
+            //    $scope.Document = { document_title: "", note: "" };
+            //}
         };
 
-      
+
+        $scope.ViewDocument = function () {
+            $scope.loading = true; // Show loading indicator
+
+            $http.get("/ClientRequisition/ViewDocument", { responseType: 'arraybuffer' })
+                .then(function (response) {
+                    // Create a Blob from the response data
+                    var file = new Blob([response.data], { type: 'application/pdf' });
+                    var fileURL = URL.createObjectURL(file);
+
+                    // Ensure the full PDF page is displayed
+                    let zoomParam = "#view=Fit";
+
+                    // Set the file URL to the iframe src
+                    $("#pdfViewer").attr("src", fileURL + zoomParam);
+
+                    // Show the modal
+                    $('#ShowPDFModal').modal('show');
+                })
+                .catch(function (error) {
+                    toastr.error("Failed to load the PDF.");
+                    console.error(error);
+                })
+                .finally(function () {
+                    $scope.loading = false; // Hide the loading indicator
+                });
+        };
+
+    
             
        
         

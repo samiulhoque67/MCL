@@ -64,6 +64,14 @@ namespace SILDMS.Web.UI.Controllers
             clientReq.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
             status = _clientInfoService.SaveClientRequisition(clientReq, clientReqItem, clientReqTerm);
+
+            if (status != string.Empty)
+            {
+                string[] statusarr = status.Split(',');
+                clientReq.ClientReqID = statusarr[1];
+                status = statusarr[0];
+            }
+            TempData["ClientRequisition"] = clientReq;
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
@@ -125,7 +133,8 @@ namespace SILDMS.Web.UI.Controllers
 
 
         [HttpPost]
-        public ActionResult SaveDocument(int documentCode, string ext, HttpPostedFileBase file)
+        /*string serverIP, string ftpPort, string ftpUserName, string ftpPassword, string serverURL, string documentID, string Ext*/
+        public ActionResult SaveDocument(string serverIP, string ftpPort, string ftpUserName, string ftpPassword, string serverUrl, string documentID, string ext, HttpPostedFileBase file)
         {
             if (file == null || file.ContentLength == 0)
             {
@@ -134,15 +143,8 @@ namespace SILDMS.Web.UI.Controllers
 
             try
             {
-                // Create the FTP URL for the file
-                string serverIP = "ftp.example.com";
-                string ftpPort = "21";
-                string ftpUserName = "ftpUser";
-                string ftpPassword = "ftpPassword";
-                string serverUrl = "/uploads/";
-
-                // Build FTP URL
-                string ftpUrl = $"ftp://{serverIP}:{ftpPort}{serverUrl}{documentCode}{ext}";
+                // Build FTP URL dynamically
+                string ftpUrl = $"ftp://{serverIP}:{ftpPort}/{serverUrl}/{documentID}.{ext}";
 
                 // Create an FTP request
                 FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpUrl);
@@ -181,6 +183,57 @@ namespace SILDMS.Web.UI.Controllers
                 return Json(new { Message = "Error uploading file.", Exception = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        //view pdf/
+        [HttpGet]
+        public ActionResult ViewDocument()
+        {
+            try
+            {
+                // FTP Server details
+                string serverIP = "172.16.189.34";
+                string ftpPort = "21";
+                string ftpUserName = "silsoft";
+                string ftpPassword = "s!L@123";
+                string serverUrl = "/MCL/Client_Requisition/";
+                string documentCode = "Naim";
+                string ext = ".pdf";
+
+                // Build the FTP URL
+                string ftpUrl = $"ftp://{serverIP}:{ftpPort}{serverUrl}{documentCode}{ext}";
+
+                // Create an FTP request to download the file
+                FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpUrl);
+                ftpRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
+                ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+                ftpRequest.UseBinary = true;
+                ftpRequest.KeepAlive = false;
+
+                // Retrieve the file data
+                using (FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse())
+                using (Stream responseStream = ftpResponse.GetResponseStream())
+                {
+                    if (responseStream == null)
+                        return new HttpStatusCodeResult(404, "File not found on the FTP server.");
+
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+                        responseStream.CopyTo(memoryStream);
+                        byte[] fileData = memoryStream.ToArray();
+
+                        // Return the file as a response
+                        return File(fileData, "application/pdf");
+                    }
+                }
+            }
+          
+            catch (Exception ex)
+            {
+                // Handle generic exceptions
+                return new HttpStatusCodeResult(500, $"Error viewing the document: {ex.Message}");
+            }
+        }
+
 
 
     }
