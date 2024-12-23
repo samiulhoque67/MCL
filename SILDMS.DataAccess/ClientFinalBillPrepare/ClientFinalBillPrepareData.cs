@@ -31,16 +31,17 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                     vendorBillRecvdList = dt1.AsEnumerable().Select(reader => new VendorBillRecvd
                     {
                         ClientFinalBilPreprID = reader.IsNull("ClientFinalBilPreprID") ? 0 : Convert.ToInt32(reader["ClientFinalBilPreprID"]),
-                        AdvancRecvID = reader.IsNull("AdvancClaimRcvdID") ? string.Empty : reader.GetString("AdvancClaimRcvdID"),
+                        //AdvancRecvID = reader.IsNull("AdvancClaimRcvdID") ? string.Empty : reader.GetString("AdvancClaimRcvdID"),
                         ClientID = reader.IsNull("ClientID") ? string.Empty : reader.GetString("ClientID"),
                         WOInfoID = reader.IsNull("WOInfoID") ? string.Empty : reader.GetString("WOInfoID"),
                         WONo = reader.IsNull("WOInfoNo") ? string.Empty : reader.GetString("WOInfoNo"),
                         WODate = reader.IsNull("WODate") ? string.Empty : reader.GetString("WODate"),
-                        VendorQutnID = reader.IsNull("ClientQuotationID") ? string.Empty : reader.GetString("ClientQuotationID"),
+                        VendorQutnNo =  reader.GetString("ClientQuotationID"),
+                        QuotationDate = reader.GetDateTime("AprvDate").ToString("dd/MM/yyyy"),
                         RequisitionNo = reader.IsNull("ClientReqID") ? string.Empty : reader.GetString("ClientReqID"),
                         WOAmt = reader.GetToDecimal("WOAmount"),
                         AdvancClaimRcvAmt = reader.GetToDecimal("AdvancReceivedAmt"),
-                        AdvancClaimRcvdDate = reader.IsNull("AdvancReceivedDate") ? string.Empty : reader.GetString("AdvancReceivedDate"),
+                        //AdvancClaimRcvdDate = reader.IsNull("AdvancReceivedDate") ? string.Empty : reader.GetString("AdvancReceivedDate"),
                         VendorBillNo = reader.IsNull("BillRefNoNo") ? string.Empty : reader.GetString("BillRefNoNo"),
                         VendorBillDate = reader.IsNull("BillDate") ? string.Empty : reader.GetString("BillDate"),
                         BillReceiveDate = reader.IsNull("BillSubmitOn") ? string.Empty : reader.GetString("BillSubmitOn"),
@@ -53,7 +54,7 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                         NetPayableAmount = reader.GetToDecimal("NetReceivableAmount"),
                         Note = reader.IsNull("Note") ? string.Empty : reader.GetString("Note"),
                         ClientName = reader.IsNull("ClientName") ? string.Empty : reader.GetString("ClientName"),
-                        QuotatDate = reader.IsNull("QuotationDate") ? string.Empty : reader.GetString("QuotationDate"),
+                        QuotatDate = reader.GetDateTime("AprvDate").ToString("dd/MM/yyyy"),
                         RequiDate = reader.IsNull("RequisitionDate") ? string.Empty : reader.GetString("RequisitionDate")
                     }).ToList();
                 }
@@ -79,23 +80,17 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         WOInfoID = reader.GetString("WOInfoID"),
-                        WONo = reader.GetString("WONo"),
-                        AdvancRecvID = reader.GetString("AdvancClaimRcvdID"),
+                        WONo = reader.GetString("WONo"),                   
                         WODate = reader.GetString("WODate"),
                         WOAmt = reader.GetToDecimal("WOAmt"),
                         RequisitionNo = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         Address = reader.GetString("Address"),
-                        VendorQutnNo = reader.GetString("AutoQutnNo"),
-                        QuotationDate = reader.GetString("QuotationDate"),
+                        VendorQutnNo = reader.GetString("ClientQutnAprvID"),
+                        QuotationDate = reader.GetDateTime("AprvDate").ToString("dd/MM/yyyy"),
+                       
                         AdvancClaimRcvAmt = reader.GetToDecimal("AdvancClaimRcvdAmt"),
-                        RemainingAmnt= reader.GetToDecimal("RemainingAmt"),
-                        AdvancClaimRcvdDate = reader.GetString("AdvancClimRcvdDate"),
-                        ClientReqNo = reader.GetString("ClientReqNo")
-
-
-
-
+             
 
                     }).ToList();
                 }
@@ -123,7 +118,7 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                 {
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@ClientFinalBilPreprID", SqlDbType.Int, billRecv.ClientFinalBilPreprID);
-                    db.AddInParameter(dbCommandWrapper, "@AdvancRecvID", SqlDbType.NVarChar, billRecv.AdvancRecvID);
+                    //db.AddInParameter(dbCommandWrapper, "@AdvancRecvID", SqlDbType.NVarChar, billRecv.AdvancRecvID);
                     //db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.NVarChar, billRecv.VendorID);
                     db.AddInParameter(dbCommandWrapper, "@RequisitionNo", SqlDbType.NVarChar, billRecv.RequisitionNo);
                     //db.AddInParameter(dbCommandWrapper, "@VendorName", SqlDbType.NVarChar, billRecv.VendorName);
@@ -133,7 +128,7 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                     //db.AddInParameter(dbCommandWrapper, "@FormName", SqlDbType.NVarChar, billRecv.FormName);
                     db.AddInParameter(dbCommandWrapper, "@ClientQutnNo", SqlDbType.NVarChar, (billRecv.VendorQutnNo));
                     db.AddInParameter(dbCommandWrapper, "@RequisitionDate", SqlDbType.NVarChar, billRecv.RequisitionDate);
-                    db.AddInParameter(dbCommandWrapper, "@QuotationDate", SqlDbType.DateTime, billRecv.QuotationDate);
+                    //db.AddInParameter(dbCommandWrapper, "@QuotationDate", SqlDbType.DateTime, billRecv.QuotationDate);
                     //db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(billRecv.Remarks));
                     //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.NVarChar, billRecv.Status);
                     db.AddInParameter(dbCommandWrapper, "@WONo", SqlDbType.NVarChar, billRecv.WONo);
@@ -141,7 +136,7 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                     db.AddInParameter(dbCommandWrapper, "@WOAmt", SqlDbType.Decimal, billRecv.WOAmt);
                     db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.Decimal, billRecv.WOInfoID);
                     db.AddInParameter(dbCommandWrapper, "@AdvanceRecvAmount", SqlDbType.Decimal, billRecv.AdvancClaimRcvAmt);
-                    db.AddInParameter(dbCommandWrapper, "@AdvancClaimRcvdDate", SqlDbType.NVarChar, billRecv.AdvancClaimRcvdDate);
+                    //db.AddInParameter(dbCommandWrapper, "@AdvancClaimRcvdDate", SqlDbType.NVarChar, billRecv.AdvancClaimRcvdDate);
                     db.AddInParameter(dbCommandWrapper, "@RemainingAmnt", SqlDbType.Decimal, billRecv.RemainingAmnt);
                     db.AddInParameter(dbCommandWrapper, "@VendorBillNo", SqlDbType.NVarChar, billRecv.VendorBillNo);
                     db.AddInParameter(dbCommandWrapper, "@BillDate", SqlDbType.NVarChar, billRecv.VendorBillDate);

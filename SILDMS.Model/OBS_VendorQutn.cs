@@ -68,7 +68,7 @@ namespace SILDMS.Model
         public string FormName { get; set; }
         public string VendorQutnNo { get; set; }
         public DateTime? RequisitionDate { get; set; }
-        public DateTime? QuotationDate { get; set; }
+        public string QuotationDate { get; set; }
         public string Remarks { get; set; }
         public string Status { get; set; }
         public decimal? POAmount { get; set; }

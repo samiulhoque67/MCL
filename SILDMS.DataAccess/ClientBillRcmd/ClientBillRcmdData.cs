@@ -87,7 +87,7 @@ namespace SILDMS.DataAccess.ClientBillRcmd
                         WOInfoID = reader.IsNull("WOInfoID") ? string.Empty : reader.GetString("WOInfoID"),
                         WONo = reader.IsNull("WOInfoNo") ? string.Empty : reader.GetString("WOInfoNo"),
                         WODate = reader.IsNull("WODate") ? string.Empty : reader.GetString("WODate"),
-                        VendorQutnID = reader.IsNull("ClientQuotationID") ? string.Empty : reader.GetString("ClientQuotationID"),
+                        VendorQutnNo = reader.IsNull("ClientQuotationID") ? string.Empty : reader.GetString("ClientQuotationID"),
                         RequisitionNo = reader.IsNull("ClientReqID") ? string.Empty : reader.GetString("ClientReqID"),
                         WOAmt = reader.GetToDecimal("WOAmount"),
                         AdvancClaimRcvAmt = reader.GetToDecimal("AdvancReceivedAmt"),

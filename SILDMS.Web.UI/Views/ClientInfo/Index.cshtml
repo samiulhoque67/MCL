@@ -47,40 +47,45 @@
                 </div>
             </div>
 
+            @*<div class="row" style="position: relative; top: -6px; margin-bottom: 5px;">
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                        <div class="form-group">
+                            <label>Client Tin No</label>
+                            <label style="font-size: smaller;color:red;">*</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                        <input id="ClientTinNo" name="ClientTinNo" type="text" autocomplete="off" class="form-control" placeholder="Client Tin No" required ng-model="vmClientInfoMst.ClientTinNo" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                        <div class="form-group">
+                            <label for="ContactNumber">Client Bin No<span style="font-size:larger;color:red;"> *</span></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                        <input id="ClientBinNo" name="ClientBinNo" type="text" class="form-control" placeholder="Client Bin No"
+                               ng-model="vmClientInfoMst.ClientBinNo" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                    </div>
+                </div>*@
+
             <div class="row" style="position: relative; top: -6px; margin-bottom: 5px;">
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
-                        <label>Client Tin No</label>
-                        <label style="font-size: smaller;color:red;">*</label>
-                    </div>
-                </div>
-                <div class="col-sm-2 col-md-2 col-lg-2">
-                    <input id="ClientTinNo" name="ClientTinNo" type="text" autocomplete="off" class="form-control" placeholder="Client Tin No" required ng-model="vmClientInfoMst.ClientTinNo" style="height: 25px; background-color:#ffffff; font-size: smaller" />
-                </div>
-                <div class="col-sm-2 col-md-2 col-lg-2">
-                    <div class="form-group">
-                        <label for="ContactNumber">Client Bin No<span style="font-size:larger;color:red;"> *</span></label>
-                    </div>
-                </div>
-                <div class="col-sm-2 col-md-2 col-lg-2">
-                    <input id="ClientBinNo" name="ClientBinNo" type="text" class="form-control" placeholder="Client Bin No"
-                           ng-model="vmClientInfoMst.ClientBinNo" style="height: 25px; background-color:#ffffff; font-size: smaller" />
-                </div>
-            </div>
-
-            <div class="row" style="position: relative; top: -17px; margin-bottom: 5px;">
-                <div class="col-sm-2 col-md-2 col-lg-2">
-                    <div class="form-group">
-                        <label for="ClientCategory">Client Category</label>
+                        <label for="ClientType">Client Type</label>
                         <label style="font-size: larger;color:red;">*</label>
                     </div>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
-                        <select id="ClientCategory" name="clientCategory" class="form-control" ng-model="vmClientInfoMst.ClientCategory"
-                                ng-options="clientCategory as clientCategory.ClientCategoryName for clientCategory in clientCategorys track by clientCategory.ClientCategoryID" required="required">
-                            <option value="" style="display: none">-- Select--</option>
+                        <select data-ng-model="vmClientInfoMst.ClientType" class="form-control">
+                            <option value="">-- None --</option>
+                            <option value="Internal">Internal</option>
+                            <option value="External">External</option>
                         </select>
+                        @*<select id="ClientCategory" name="clientCategory" class="form-control" ng-model="vmClientInfoMst.ClientCategory"
+                                    ng-options="clientCategory as clientCategory.ClientCategoryName for clientCategory in clientCategorys track by clientCategory.ClientCategoryID" required="required">
+                                <option value="" style="display: none">-- Select--</option>
+                            </select>*@
                     </div>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
@@ -292,9 +297,9 @@
                             <tr>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCode')">Client Code</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientName')">Client Name</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCategoryName')">Client Category</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientTinNo')">Tin No</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientBinNo')">Bin No</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientType')">Client Type</th>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientTinNo')">Tin No</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientBinNo')">Bin No</th>*@
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('Status')">Status</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
@@ -308,10 +313,9 @@
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientCode}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
-                                <td class="hidden">{{row.ClientCategoryID}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientCategoryName}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientTinNo}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientBinNo}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientType}}</td>
+                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientTinNo}}</td>
+                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientBinNo}}</td>*@
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">
                                     <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
                                         {{row.Status == '1'? 'Active':'InActive'}}
@@ -399,9 +403,10 @@
             ClientID: "",
             ClientCode: "",
             ClientName: "",
-            ClientCategory: { ClientCategoryID: "", ClientCategoryName: "" },
-            ClientTinNo: "",
-            ClientBinNo: "",
+            ClientType: "",
+            //ClientCategory: { ClientCategoryID: "", ClientCategoryName: "" },
+            //ClientTinNo: "",
+            //ClientBinNo: "",
             Status: ""
         };
 
@@ -471,9 +476,9 @@
             $scope.vmClientInfoMst.ClientID = tableRow.ClientID;
             $scope.vmClientInfoMst.ClientCode = tableRow.ClientCode;
             $scope.vmClientInfoMst.ClientName = tableRow.ClientName;
-            $scope.vmClientInfoMst.ClientCategory.ClientCategoryID = tableRow.ClientCategoryID;
-            $scope.vmClientInfoMst.ClientTinNo = tableRow.ClientTinNo;
-            $scope.vmClientInfoMst.ClientBinNo = tableRow.ClientBinNo;
+            //$scope.vmClientInfoMst.ClientCategory.ClientCategoryID = tableRow.ClientCategoryID;
+            $scope.vmClientInfoMst.ClientType = tableRow.ClientType;
+            //$scope.vmClientInfoMst.ClientBinNo = tableRow.ClientBinNo;
             $scope.vmClientInfoMst.Status = tableRow.Status;
 
             $http.post('/ClientInfo/GetClientAddressList', { ClientID: tableRow.ClientID })

@@ -39,11 +39,11 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, modelClientInfoMst.ClientID);
                     db.AddInParameter(dbCommandWrapper, "@ClientCode", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelClientInfoMst.ClientCode));
                     db.AddInParameter(dbCommandWrapper, "@ClientName", SqlDbType.NVarChar, modelClientInfoMst.ClientName);
-                    db.AddInParameter(dbCommandWrapper, "@ServicesCategoryID", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelClientInfoMst.ClientCategoryID));
-                    db.AddInParameter(dbCommandWrapper, "@ClientTinNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelClientInfoMst.ClientTinNo));
-                    db.AddInParameter(dbCommandWrapper, "@ClientBinNo", SqlDbType.NVarChar, modelClientInfoMst.ClientBinNo);
+                    db.AddInParameter(dbCommandWrapper, "@ClientType", SqlDbType.NVarChar,modelClientInfoMst.ClientType);
+                    //db.AddInParameter(dbCommandWrapper, "@ClientTinNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelClientInfoMst.ClientTinNo));
+                    //db.AddInParameter(dbCommandWrapper, "@ClientBinNo", SqlDbType.NVarChar, modelClientInfoMst.ClientBinNo);
                     db.AddInParameter(dbCommandWrapper, "@SetBy ", SqlDbType.NVarChar, modelClientInfoMst.SetBy);
-                    db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelClientInfoMst.ModifiedBy);
+                    //db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelClientInfoMst.ModifiedBy);
                     db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.Int, modelClientInfoMst.Status);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, modelClientInfoMst.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
@@ -88,10 +88,13 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@ContactPerson", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelClientAddress.ContactPerson));
                     db.AddInParameter(dbCommandWrapper, "@ContactNumber", SqlDbType.NVarChar, modelClientAddress.ContactNumber);
                     db.AddInParameter(dbCommandWrapper, "@PhoneNumber", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelClientAddress.PhoneNumber));
+
+                    db.AddInParameter(dbCommandWrapper, "@ClientTinNo", SqlDbType.NVarChar, modelClientAddress.ClientTinNo);
+                    db.AddInParameter(dbCommandWrapper, "@ClientBinNo", SqlDbType.NVarChar, modelClientAddress.ClientBinNo);
+
                     db.AddInParameter(dbCommandWrapper, "@Address", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelClientAddress.Address));
                     db.AddInParameter(dbCommandWrapper, "@Email", SqlDbType.NVarChar, modelClientAddress.Email);
                     db.AddInParameter(dbCommandWrapper, "@SetBy ", SqlDbType.NVarChar, modelClientAddress.SetBy);
-                    db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelClientAddress.ModifiedBy);
                     db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.Int, modelClientAddress.AddressStatus);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, modelClientAddress.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
@@ -185,10 +188,10 @@ namespace SILDMS.DataAccess
                         ClientID = reader.GetString("ClientID"),
                         ClientCode = reader.GetString("ClientCode"),
                         ClientName = reader.GetString("ClientName"),
-                        ClientCategoryID = reader.GetString("ServicesCategoryID"),
-                        ClientCategoryName = reader.GetString("ServicesCategoryName"),
-                        ClientTinNo = reader.GetString("ClientTinNo"),
-                        ClientBinNo = reader.GetString("ClientBinNo"),
+                        //ClientCategoryID = reader.GetString("ServicesCategoryID"),
+                        ClientType = reader.GetString("ClientType"),
+                        //ClientTinNo = reader.GetString("ClientTinNo"),
+                        //ClientBinNo = reader.GetString("ClientBinNo"),
                         Status = reader.GetString("Status")
                         //SetOn = reader.GetString("SetOn"),
                         //SetBy = reader.GetString("SetBy"),

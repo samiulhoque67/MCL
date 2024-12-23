@@ -53,6 +53,16 @@ namespace SILDMS.Service.PoAprv
             return ValidationResult.Success;
         }
 
+        public ValidationResult PoPrint(string pORecmID, out List<OBS_VendorCSRecmItem> poPrintList)
+        {
+            poPrintList = poAprvData.PoPrint(pORecmID, out errorNumber);
+            if (errorNumber.Length > 0)
+            {
+                return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
         public string SaveVendorPOAprvInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm)
         {
             return poAprvData.SaveVendorPOAprvInfo(vendorCS, vendorCSItem, vendorCSTerm);

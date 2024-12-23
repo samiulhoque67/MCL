@@ -18,15 +18,13 @@
         <table st-table="displayedCollection" st-safe-src="getAllServiceCategory" class="pnlView table table-condensed table-bordered table-striped table-hover">
             <thead>
                 <tr>
-                    <th st-sort="ServicesCategoryCode">Service Category Code</th>
+                    @*<th st-sort="ServicesCategoryCode">Service Category Code</th>*@
                     <th st-sort="ServicesCategoryName">Service Category Name</th>
                     @*<th st-sort="LevelAccess">Access Level</th>*@
                     <th st-sort="Status">Status</th>
                     <th>Action</th>
                 </tr>
                 <tr>
-                    <th>
-                    </th>
                     <th>
                         <input st-search="ServicesCategoryName" placeholder="Service Category" class="input-sm form-control" type="search" alt="Search" />
                     </th>
@@ -38,7 +36,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="row in displayedCollection">
-                    <td class="col-lg-2 col-md-2 col-sm-2">{{row.ServicesCategoryCode | uppercase}}</td>
+                    @*<td class="col-lg-2 col-md-2 col-sm-2">{{row.ServicesCategoryCode | uppercase}}</td>*@
                     <td>{{row.ServicesCategoryName | uppercase}}</td>
                     <td class="col-lg-2 col-md-2 col-sm-2 text-center">
                         <span ng-attr-class="{{row.Status ==true? 'label label-success' : 'label label-danger' }}">
@@ -84,7 +82,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            @*<div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
                                         <label>Service Category Code</label>
@@ -92,7 +90,7 @@
                                                id="ServicesCategoryCode" placeholder="Service Category Code" />
                                     </div>
                                 </div>
-                            </div>
+                            </div>*@
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
@@ -106,7 +104,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
@@ -185,7 +183,7 @@
 
         $scope.vmServiceCategory = {
             ServicesCategoryID: "",
-            ServicesCategoryCode: "",
+            //ServicesCategoryCode: "",
             ServicesCategoryName: "",
             //LevelSL: "",
             //LevelAccess: "",
@@ -266,7 +264,7 @@
         // ################# Edit Modal ####################
         $scope.toggleEdit = function (row) {
             $scope.vmServiceCategory.ServicesCategoryID = row.ServicesCategoryID;
-            $scope.vmServiceCategory.ServicesCategoryCode = row.ServicesCategoryCode;
+            //$scope.vmServiceCategory.ServicesCategoryCode = row.ServicesCategoryCode;
             $scope.vmServiceCategory.ServicesCategoryName = row.ServicesCategoryName;
             //$scope.vmServiceCategory.LevelSL = row.LevelSL;
             //$scope.vmServiceCategory.LevelAccess = (row.LevelAccess-0);

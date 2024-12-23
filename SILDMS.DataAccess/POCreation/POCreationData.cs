@@ -187,15 +187,17 @@ namespace SILDMS.DataAccess.POCreation
             return VendorCSInfoItemList;
         }
 
-        public List<OBS_VendorCSRecmTerms> GetVendorPOInfoTermList(string vendorCSAprvID, out string errorNumber)
+        public List<OBS_VendorCSRecmTerms> GetVendorPOInfoTermList(string vendorID, string ClientReqID, string WIInfoID, out string errorNumber)
         {
              errorNumber = string.Empty;
             List<OBS_VendorCSRecmTerms> VendorCSInfoItemList = new List<OBS_VendorCSRecmTerms>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorAprvTermList"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorActualAprvTermList"))
             {
-                db.AddInParameter(dbCommandWrapper, "@VendorCSAprvID", SqlDbType.VarChar, vendorCSAprvID);
+                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, vendorID);
+                db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, ClientReqID);
+                db.AddInParameter(dbCommandWrapper, "@WIInfoID", SqlDbType.VarChar, WIInfoID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -207,7 +209,10 @@ namespace SILDMS.DataAccess.POCreation
                         //VendorCSInfoID = reader.GetString("VendorCSInfoID"),
                         TermsID = reader.GetString("TermsID"),
                         TermsCode = reader.GetString("TermsCode"),
-                        TermsName = reader.GetString("TermsName")
+                        TermsName = reader.GetString("TermsName"),
+                        VendorID = reader.GetString("VendorID"),
+                        VendorName = reader.GetString("VendorName"),
+
                     }).ToList();
                 }
             }
@@ -215,7 +220,7 @@ namespace SILDMS.DataAccess.POCreation
         }
 
 
-        public string SaveVendorPOInfo(OBS_VendorCSRecm vendorCSInfo, List<OBS_VendorCSRecmItem> vendorCSInfoItem, List<OBS_VendorCSRecmVendors> vendorCSVendorsItemWise)
+        public string SaveVendorPOInfo(OBS_VendorCSRecm vendorCSInfo, List<OBS_VendorCSRecmItem> vendorCSInfoItem, List<OBS_VendorCSRecmTerms> vendorCSRecmTerms, List<OBS_VendorCSRecmVendors> vendorCSVendorsItemWise)
         {
             DataTable VendorPOItem = new DataTable();
             VendorPOItem.Columns.Add("VendorQutnID", typeof(string)); // Assuming VendorID is an integer
@@ -273,18 +278,22 @@ namespace SILDMS.DataAccess.POCreation
                 VendorPOItem.Rows.Add(objDataRow);
             }
 
-            //DataTable VendorCSTerm = new DataTable();
-            //VendorCSTerm.Columns.Add("TermsID");
-            //VendorCSTerm.Columns.Add("TermsCode");
-            //VendorCSTerm.Columns.Add("TermsName");
-            //foreach (var item in vendorCSInfoTerm)
-            //{
-            //    DataRow objDataRow = VendorCSTerm.NewRow();
-            //    objDataRow[0] = item.TermsID;
-            //    objDataRow[1] = item.TermsCode;
-            //    objDataRow[2] = item.TermsName;
-            //    VendorCSTerm.Rows.Add(objDataRow);
-            //}
+            DataTable VendorCSTerm = new DataTable();
+          
+            VendorCSTerm.Columns.Add("TermsID");
+            VendorCSTerm.Columns.Add("TermsCode");
+            VendorCSTerm.Columns.Add("TermsName");
+           
+            foreach (var item in vendorCSRecmTerms)
+            {
+                DataRow objDataRow = VendorCSTerm.NewRow();
+           
+                objDataRow[0] = item.TermsID;
+                objDataRow[1] = item.TermsCode;
+                objDataRow[2] = item.TermsName;
+             
+                VendorCSTerm.Rows.Add(objDataRow);
+            }
 
             //DataTable vendorCSVendors = new DataTable();
             //vendorCSVendors.Columns.Add("VendorID");
@@ -327,7 +336,7 @@ namespace SILDMS.DataAccess.POCreation
                     db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@VendorPOItemType", SqlDbType.Structured, VendorPOItem);
-                    //db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSAprvTerms", SqlDbType.Structured, VendorCSTerm);
+                    db.AddInParameter(dbCommandWrapper, "@OBS_VendorPoAprvTerms", SqlDbType.Structured, VendorCSTerm);
                     //db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmVendors", SqlDbType.Structured, vendorCSVendors);
                     //db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vendorCSInfo.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
@@ -348,6 +357,49 @@ namespace SILDMS.DataAccess.POCreation
                 errorNumber = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
             }
             return errorNumber;
+        }
+
+        public List<Invitation> SearchPOData(string userID)
+        {
+            var invitationList = new List<Invitation>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_SearchForPO"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@UserId", SqlDbType.VarChar, userID);
+
+                // Execute SP.
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+
+                    invitationList = dt1.AsEnumerable().Select(reader => new Invitation
+                    {
+                        //Invitation_Number = reader.GetString("InvitationNumber"),
+                        PoPreparationID = reader.GetString("PoPreparationID"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        VendorID = reader.GetString("VendorID"),
+                        VendorName = reader.GetString("VendorName"),
+                        PoDate= reader.GetString("PoDate")
+
+
+
+
+
+
+                    }).ToList();
+
+                }
+            }
+            return invitationList;
         }
 
 

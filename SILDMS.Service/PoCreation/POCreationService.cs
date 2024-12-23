@@ -44,9 +44,9 @@ namespace SILDMS.Service.PoCreation
             return ValidationResult.Success;
         }
 
-        public ValidationResult GetVendorPOInfoTermList(string vendorCSAprvID, out List<OBS_VendorCSRecmTerms> vendorCSInfoTermList)
+        public ValidationResult GetVendorPOInfoTermList(string vendorID, string ClientReqID, string WIInfoID, out List<OBS_VendorCSRecmTerms> vendorCSInfoTermList)
         {
-            vendorCSInfoTermList = _pOCreationData.GetVendorPOInfoTermList(vendorCSAprvID, out errorNumber);
+            vendorCSInfoTermList = _pOCreationData.GetVendorPOInfoTermList(vendorID, ClientReqID, WIInfoID, out errorNumber);
             if (errorNumber.Length > 0)
             {
                 return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
@@ -74,9 +74,15 @@ namespace SILDMS.Service.PoCreation
             return ValidationResult.Success;
         }
 
-        public string SaveVendorPOInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmVendors> vendorCSItemWise)
+        public string SaveVendorPOInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem,List<OBS_VendorCSRecmTerms>vendorCSRecmTerms, List<OBS_VendorCSRecmVendors> vendorCSItemWise)
         {
-            return _pOCreationData.SaveVendorPOInfo(vendorCS, vendorCSItem, vendorCSItemWise);
+            return _pOCreationData.SaveVendorPOInfo(vendorCS, vendorCSItem, vendorCSRecmTerms, vendorCSItemWise);
+        }
+
+        public ValidationResult SearchPOService(string userID, out List<Invitation> searchCSList)
+        {
+            searchCSList = _pOCreationData.SearchPOData(userID);
+            return ValidationResult.Success;
         }
     }
 }
