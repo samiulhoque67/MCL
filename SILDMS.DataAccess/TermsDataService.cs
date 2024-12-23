@@ -17,6 +17,56 @@ namespace SILDMS.DataAccess
     public class TermsDataService: ITermsDataService
     {
         private readonly string spStatusParam = "@p_Status";
+        public string SaveTermsAndConditions(OBS_Terms vmTerms, List<OBS_TermsItem> vmTermsItem)
+        {
+            DataTable dtTermsItem = new DataTable();
+            dtTermsItem.Columns.Add("TermsID");
+            dtTermsItem.Columns.Add("TermsCode");
+            dtTermsItem.Columns.Add("TermsName");
+            foreach (var item in vmTermsItem)
+            {
+                DataRow objDataRow = dtTermsItem.NewRow();
+                objDataRow[0] = item.TermsID;
+                objDataRow[1] = item.TermsCode;
+                objDataRow[2] = item.TermsName;
+
+                dtTermsItem.Rows.Add(objDataRow);
+            }
+
+            if (string.IsNullOrEmpty(vmTerms.TermsID))
+                vmTerms.Action = "add";
+            else
+                vmTerms.Action = "edit";
+            string errorNumber = String.Empty;
+            try
+            {
+
+                DatabaseProviderFactory factory = new DatabaseProviderFactory();
+                SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetClientRequisition"))
+                {
+                    // Set parameters 
+                    db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.NVarChar, vmTerms.TermsID);
+                    db.AddInParameter(dbCommandWrapper, "@FormName", SqlDbType.NVarChar, vmTerms.FormName);
+                    db.AddInParameter(dbCommandWrapper, "@OBS_TermsAndConditions", SqlDbType.Structured, dtTermsItem);
+                    db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vmTerms.Action);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+                    // Execute SP.
+                    db.ExecuteNonQuery(dbCommandWrapper);
+                    // Getting output parameters and setting response details.
+                    if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
+                    {
+                        // Get the error number, if error occurred.
+                        errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errorNumber = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
+            }
+            return errorNumber;
+        }
 
         public string SaveTermsMst(OBS_Terms modelTermsInfoMst)
         {
@@ -34,10 +84,10 @@ namespace SILDMS.DataAccess
                 {
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.NVarChar, modelTermsInfoMst.TermsID);
-                    db.AddInParameter(dbCommandWrapper, "@FormCode", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelTermsInfoMst.FormCode));
+                    //db.AddInParameter(dbCommandWrapper, "@FormCode", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelTermsInfoMst.FormCode));
                     db.AddInParameter(dbCommandWrapper, "@FormName", SqlDbType.NVarChar, modelTermsInfoMst.FormName);
                     db.AddInParameter(dbCommandWrapper, "@SetBy ", SqlDbType.NVarChar, modelTermsInfoMst.SetBy);
-                    db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelTermsInfoMst.ModifiedBy);
+                    //db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelTermsInfoMst.ModifiedBy);
                     db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.Int, modelTermsInfoMst.Status);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, modelTermsInfoMst.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
@@ -79,10 +129,10 @@ namespace SILDMS.DataAccess
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@TermsItemID", SqlDbType.NVarChar, modelTermsItem.TermsItemID);
                     db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.NVarChar, modelTermsItem.TermsID);
-                    db.AddInParameter(dbCommandWrapper, "@TermsCode", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelTermsItem.TermsCode));
+                    //db.AddInParameter(dbCommandWrapper, "@TermsCode", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelTermsItem.TermsCode));
                     db.AddInParameter(dbCommandWrapper, "@TermsName", SqlDbType.NVarChar, modelTermsItem.TermsName);
                     db.AddInParameter(dbCommandWrapper, "@SetBy ", SqlDbType.NVarChar, modelTermsItem.SetBy);
-                    db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelTermsItem.ModifiedBy);
+                    //db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelTermsItem.ModifiedBy);
                     db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.Int, modelTermsItem.ItemStatus);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, modelTermsItem.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);

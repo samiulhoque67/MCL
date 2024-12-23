@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SILDMS.DataAccess;
 
 namespace SILDMS.Service
 {
@@ -30,6 +31,11 @@ namespace SILDMS.Service
         }
 
         #endregion
+
+        public string SaveTermsAndConditions(OBS_Terms vmTerms, List<OBS_TermsItem> vmTermsItem)
+        {
+            return termsDataService.SaveTermsAndConditions(vmTerms, vmTermsItem);
+        }
 
         public string SaveTermsMst(OBS_Terms modelTermsMst)
         {

@@ -28,21 +28,17 @@ namespace SILDMS.Model
         public string DeliveryMode { get; set; }
         public string ReqQnty { get; set; }
         public string ReqUnit { get; set; }
-
-
         public string QutnQnty { get; set; }
         public string QutnPrice { get; set; }
-
         public string QutnUnit { get; set; }
         public string QutnAmt { get; set; }
+        public string WOQnty { get; set; }
+        public string WOPrice { get; set; }
+        public string WOAmt { get; set; }
         public string Amt { get; set; } 
-
-
         public string VatPerc { get; set; }
         public string VatAmt { get; set; }
-
         public string TolAmt { get; set; }
-
         public string SetOn { get; set; }
         public string SetBy { get; set; }
         public string ModifiedOn { get; set; }

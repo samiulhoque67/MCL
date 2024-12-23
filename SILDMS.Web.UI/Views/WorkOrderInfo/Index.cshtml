@@ -260,13 +260,18 @@
                             <th style="text-align: left;" st-sort="">Item Name</th>
                             <th style="text-align: left;" st-sort="">Service Category</th>
                             <th style="text-align: left;" st-sort="">Description</th>
-                            <th style="text-align: left;" st-sort="">Delivery Location</th>
+                            @*<th style="text-align: left;" st-sort="">Delivery Location</th>*@
                             <th style="text-align: left;" st-sort="">Delivery Date</th>
-                            <th style="text-align: left;" st-sort="">Delivery Mode</th>
+                            @*<th style="text-align: left;" st-sort="">Delivery Mode</th>*@
                             <th style="text-align: left;" st-sort="">QutnUnit</th>
                             <th style="text-align: left;" st-sort="">QutnQnty</th>
                             <th style="text-align: left;" st-sort="">QutnPrice</th>
                             <th style="text-align: left;" st-sort="">QutnAmt</th>
+
+                            <th style="text-align: left;" st-sort="">WOQnty</th>
+                            <th style="text-align: left;" st-sort="">WOPrice</th>
+                            <th style="text-align: left;" st-sort="">WOAmt</th>
+
                             <th style="text-align: left;" st-sort="">VatPerc</th>
                             <th style="text-align: left;" st-sort="">VatAmt</th>
                             <th style="text-align: left;" st-sort="">TolAmt</th>
@@ -285,14 +290,25 @@
                             <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.ServiceCategoryName}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.Description}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.DeliveryLocation}}</td>
+                            @*<td class="col-lg-1" style="width:6%;">{{row.DeliveryLocation}}</td>*@
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryDate}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.DeliveryMode}}</td>
+                            @*<td class="col-lg-1" style="width:6%;">{{row.DeliveryMode}}</td>*@
                             <td class="col-lg-1" style="width:5%;">{{row.QutnUnit}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.QutnQnty | number:2}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.QutnPrice}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.QutnAmt | number:2}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.VatPerc}}</td>
+
+                            <td class="col-lg-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.WOQnty" ng-blur="checkWOPrice(row)" />
+                            </td>
+                            <td class="col-lg-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.WOPrice" ng-blur="checkWOPrice(row)" />
+                            </td>
+                            <td class="col-lg-1" style="width:6%;">{{row.WOAmt | number:2}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.VatPerc | number:2}}</td>
+                            @*<td class="col-lg-1">
+                                    <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.VatPerc" ng-value="0" ng-blur="checkVatPerc(row)" />
+                                </td>*@
                             <td class="col-lg-1" style="width:6%;">{{row.VatAmt | number:2}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.TolAmt}}</td>
                             <td class="col-lg-1">
@@ -729,7 +745,20 @@
             ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
             DeliveryMode: "",
             ReqQnty: "",
-            ReqUnit: ""
+            ReqUnit: "",
+
+            QutnUnit: "",
+            QutnQnty: "",
+            QutnPrice: "",
+            QutnAmt: "",
+
+            WOQnty: "",
+            WOPrice: "",
+            WOAmt: "",
+
+            VatPerc: "",
+            VatAmt: "",
+            TolAmt: ""
         }
 
         $('.DatePicker').datepicker({
@@ -1235,6 +1264,26 @@
 
         ///////////////////////////////////////////////
 
+        $scope.checkWOPrice = function (row) {
+            var WOAmt = 0;
+            WOAmt = (row.WOQnty * row.WOPrice);
+            row.WOAmt = WOAmt;
+
+            $scope.checkVatPerc(row);
+        };
+
+        $scope.checkVatPerc = function (row) {
+            var VatAmt = 0;
+            var TolAmt = 0;
+
+            VatAmt = (row.VatPerc * row.WOAmt) / 100;
+
+            row.VatAmt = VatAmt;
+
+            TolAmt = row.WOAmt + VatAmt;
+            row.TolAmt = TolAmt;
+        };
+
         $scope.selectedWoItems = [];  // Array to hold selected vendor items
 
         $scope.selectWoItem = function (row) {
@@ -1257,6 +1306,11 @@
                 QutnQnty: row.QutnQnty,
                 QutnPrice: row.QutnPrice,
                 QutnAmt: row.QutnAmt,
+
+                WOQnty: row.WOQnty,
+                WOPrice: row.WOPrice,
+                WOAmt: row.WOAmt,
+
                 VatPerc: row.VatPerc,
                 VatAmt: row.VatAmt,
                 TolAmt: row.TolAmt
