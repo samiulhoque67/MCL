@@ -312,7 +312,7 @@
                         <td style="width: 5%;">{{ row.ServiceItemName }}</td>
                         <td style="width: 6%;">{{ row.Description }}</td>
                         <td style="width: 6%;">{{ row.DeliveryLocation }}</td>
-                        <td style="width: 6%;">{{ formatDate(row.DeliveryDate) }}</td>
+                        <td style="width: 6%;">{{ row.DeliveryDate }}</td>
 
                         <td style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
                         <td style="width: 5%;">{{ row.ReqUnit }}</td>
@@ -391,7 +391,7 @@
                                 <td style="width: 5%;">{{ row.ServiceItemName }}</td>
                                 <td style="width: 6%;">{{ row.Description }}</td>
                                 <td style="width: 6%;">{{ row.DeliveryLocation }}</td>
-                                <td style="width: 6%;">{{ formatDate(row.DeliveryDate) }}</td>
+                                <td style="width: 6%;">{{ row.DeliveryDate }}</td>
 
                                 <td style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
                                 <td style="width: 6%;">{{ row.QutnQnty | number: 2 }}</td>
@@ -1157,11 +1157,11 @@
                     DeliveryLocation: row.DeliveryLocation,
                     DeliveryDate: row.DeliveryDate,
                     DeliveryMode: row.DeliveryMode,
-                    QutnQnty: row.QutnQnty,
+                    QutnQnty: row.ReqQnty,
                     QutnUnit: row.ReqUnit,
                     VenPrice: row.QutnPrice,
                     MclPrice: row.givenQutnPrice, //<--
-                    QutnAmt: row.QutnAmt,
+                    QutnAmt: row.givenQutnAmt,
                     VatPerc: row.GivenVatPerc,
                     VatAmt: row.TotGivenVatAmt,
                     TolAmt: row.givenTolAmt

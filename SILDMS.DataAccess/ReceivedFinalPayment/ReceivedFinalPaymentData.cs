@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SILDMS.DataAccess.ClientBillRcmd
+namespace SILDMS.DataAccess.ReceivedFinalPayment
 {
-    public class ClientBillRcmdData : IClientBillRcmdData
+    public class ReceivedFinalPaymentData : IReceivedFinalPaymentData
     {
         private readonly string spStatusParam = "@p_Status";
 
@@ -21,7 +21,7 @@ namespace SILDMS.DataAccess.ClientBillRcmd
             List<VendorBillRecvd> vendorBillRecvdList = new List<VendorBillRecvd>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientBillRecmList"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientBillAprvList"))
             {
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -30,14 +30,15 @@ namespace SILDMS.DataAccess.ClientBillRcmd
                     DataTable dt1 = ds.Tables[0];
                     vendorBillRecvdList = dt1.AsEnumerable().Select(reader => new VendorBillRecvd
                     {
+                        ClientFinalBilAprvID = reader.IsNull("ClientFinalBilAprvID") ? 0 : Convert.ToInt32(reader["ClientFinalBilAprvID"]),
                         ClientFinalBilRecmID = reader.IsNull("ClientFinalBilRecmID") ? 0 : Convert.ToInt32(reader["ClientFinalBilRecmID"]),
-                        ClientFinalBilPreprID = reader.IsNull("ClientFinalBilPreprID") ? 0 : Convert.ToInt32(reader["ClientFinalBilPreprID"]),
+                        //ClientFinalBilPreprID = reader.IsNull("ClientFinalBilPreprID") ? 0 : Convert.ToInt32(reader["ClientFinalBilPreprID"]),
                         AdvancRecvID = reader.IsNull("AdvancClaimRcvdID") ? string.Empty : reader.GetString("AdvancClaimRcvdID"),
                         ClientID = reader.IsNull("ClientID") ? string.Empty : reader.GetString("ClientID"),
                         WOInfoID = reader.IsNull("WOInfoID") ? string.Empty : reader.GetString("WOInfoID"),
                         WONo = reader.IsNull("WOInfoNo") ? string.Empty : reader.GetString("WOInfoNo"),
                         WODate = reader.IsNull("WODate") ? string.Empty : reader.GetString("WODate"),
-                        VendorQutnID = reader.IsNull("ClientQuotationID") ? string.Empty : reader.GetString("ClientQuotationID"),
+                        VendorQutnNo = reader.IsNull("ClientQuotationID") ? string.Empty : reader.GetString("ClientQuotationID"),
                         RequisitionNo = reader.IsNull("ClientReqID") ? string.Empty : reader.GetString("ClientReqID"),
                         WOAmt = reader.GetToDecimal("WOAmount"),
                         AdvancClaimRcvAmt = reader.GetToDecimal("AdvancReceivedAmt"),
@@ -47,7 +48,9 @@ namespace SILDMS.DataAccess.ClientBillRcmd
                         BillReceiveDate = reader.IsNull("BillSubmitOn") ? string.Empty : reader.GetString("BillSubmitOn"),
                         RemainingAmnt = reader.GetToDecimal("DueAmountToBill"),
                         RecommendedAmnt = reader.GetToDecimal("RecommendationAmt"),
+                        AprvAmnt = reader.GetToDecimal("ApprovalAmt"),
                         RecommendDate = reader.GetString("RecommendationDate"),
+                        AprvDate = reader.GetString("ApprovalDate"),
                         Operation = reader.GetString("Operation"),
 
                         VATPercentage = reader.GetToDecimal("VatPercnt"),
@@ -72,7 +75,7 @@ namespace SILDMS.DataAccess.ClientBillRcmd
             List<VendorBillRecvd> vendorBillRecvdList = new List<VendorBillRecvd>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientRecmWorkOrderList"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientAprvWorkOrderList"))
             {
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -81,6 +84,7 @@ namespace SILDMS.DataAccess.ClientBillRcmd
                     DataTable dt1 = ds.Tables[0];
                     vendorBillRecvdList = dt1.AsEnumerable().Select(reader => new VendorBillRecvd
                     {
+                        ClientFinalBilRecmID = reader.IsNull("ClientFinalBilRecmID") ? 0 : Convert.ToInt32(reader["ClientFinalBilRecmID"]),
                         ClientFinalBilPreprID = reader.IsNull("ClientFinalBilPreprID") ? 0 : Convert.ToInt32(reader["ClientFinalBilPreprID"]),
                         AdvancRecvID = reader.IsNull("AdvancClaimRcvdID") ? string.Empty : reader.GetString("AdvancClaimRcvdID"),
                         ClientID = reader.IsNull("ClientID") ? string.Empty : reader.GetString("ClientID"),
@@ -96,6 +100,10 @@ namespace SILDMS.DataAccess.ClientBillRcmd
                         VendorBillDate = reader.IsNull("BillDate") ? string.Empty : reader.GetString("BillDate"),
                         BillReceiveDate = reader.IsNull("BillSubmitOn") ? string.Empty : reader.GetString("BillSubmitOn"),
                         RemainingAmnt = reader.GetToDecimal("DueAmountToBill"),
+                        RecommendedAmnt = reader.GetToDecimal("RecommendationAmt"),
+                        RecommendDate = reader.GetString("RecommendationDate"),
+                        Operation = reader.GetString("Operation"),
+
                         VATPercentage = reader.GetToDecimal("VatPercnt"),
                         VATAmount = reader.GetToDecimal("VatAmount"),
                         CommissionPercentage = reader.GetToDecimal("CommissionPercnt"),
@@ -128,9 +136,10 @@ namespace SILDMS.DataAccess.ClientBillRcmd
                 else
                     billRecv.Action = "edit";
 
-                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetClientFinalBillRecm"))
+                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetClientFinalBillAprv"))
                 {
                     // Set parameters 
+                    db.AddInParameter(dbCommandWrapper, "@ClientFinalBilAprvID", SqlDbType.Int, billRecv.ClientFinalBilAprvID);
                     db.AddInParameter(dbCommandWrapper, "@ClientFinalBilRecmID", SqlDbType.Int, billRecv.ClientFinalBilRecmID);
                     db.AddInParameter(dbCommandWrapper, "@ClientFinalBilPreprID", SqlDbType.Int, billRecv.ClientFinalBilPreprID);
                     db.AddInParameter(dbCommandWrapper, "@AdvancRecvID", SqlDbType.NVarChar, billRecv.AdvancRecvID);
@@ -153,6 +162,8 @@ namespace SILDMS.DataAccess.ClientBillRcmd
                     db.AddInParameter(dbCommandWrapper, "@AdvanceRecvAmount", SqlDbType.Decimal, billRecv.AdvancClaimRcvAmt);
                     db.AddInParameter(dbCommandWrapper, "@AdvancClaimRcvdDate", SqlDbType.NVarChar, billRecv.AdvancClaimRcvdDate);
                     db.AddInParameter(dbCommandWrapper, "@RemainingAmnt", SqlDbType.Decimal, billRecv.RemainingAmnt);
+                    db.AddInParameter(dbCommandWrapper, "@AprvAmnt", SqlDbType.Decimal, billRecv.AprvAmnt);
+                    db.AddInParameter(dbCommandWrapper, "@AprvDate", SqlDbType.Decimal, billRecv.AprvDate);
                     db.AddInParameter(dbCommandWrapper, "@RecommendationAmt", SqlDbType.Decimal, billRecv.RecommendedAmnt);
                     db.AddInParameter(dbCommandWrapper, "@VendorBillNo", SqlDbType.NVarChar, billRecv.VendorBillNo);
                     db.AddInParameter(dbCommandWrapper, "@BillDate", SqlDbType.NVarChar, billRecv.VendorBillDate);
@@ -162,6 +173,83 @@ namespace SILDMS.DataAccess.ClientBillRcmd
                     db.AddInParameter(dbCommandWrapper, "@VATAmount", SqlDbType.Decimal, billRecv.VATAmount);
                     db.AddInParameter(dbCommandWrapper, "@CommissionPercentage", SqlDbType.Decimal, billRecv.CommissionPercentage);
                     db.AddInParameter(dbCommandWrapper, "@CommissionAmount", SqlDbType.Decimal, billRecv.CommissionAmount);
+                    db.AddInParameter(dbCommandWrapper, "@TotalBillAmount", SqlDbType.Decimal, billRecv.TotalBillAmount);
+                    db.AddInParameter(dbCommandWrapper, "@NetPayableAmount", SqlDbType.Decimal, billRecv.NetPayableAmount);
+                    db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, billRecv.Note);
+                    db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.NVarChar, billRecv.Operation);
+                    db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.NVarChar, billRecv.SetBy);
+                    db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, billRecv.Action);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+                    // Execute SP.
+                    db.ExecuteNonQuery(dbCommandWrapper);
+                    // Getting output parameters and setting response details.
+                    if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
+                    {
+                        // Get the error number, if error occurred.
+                        errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errorNumber = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
+            }
+            return errorNumber;
+        }
+
+        public string SaveVendorFinalBillRcvd(VendorBillRecvd billRecv)
+        {
+            DataTable dtVendorQutnItem = new DataTable();
+            //dtVendorQutnItem.Columns.Add("VendorQutnItemID");
+
+            string errorNumber = String.Empty;
+            try
+            {
+                DatabaseProviderFactory factory = new DatabaseProviderFactory();
+                SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+
+                if ((billRecv.ClientFinalBilRecmID) == 0)
+                    billRecv.Action = "add";
+                else
+                    billRecv.Action = "edit";
+
+                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetClientFinalBillRcvd"))
+                {
+                    // Set parameters 
+                    db.AddInParameter(dbCommandWrapper, "@ClientFinalBilAprvID", SqlDbType.Int, billRecv.ClientFinalBilAprvID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientFinalBilRecmID", SqlDbType.Int, billRecv.ClientFinalBilRecmID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientFinalBilPreprID", SqlDbType.Int, billRecv.ClientFinalBilPreprID);
+                    db.AddInParameter(dbCommandWrapper, "@AdvancRecvID", SqlDbType.NVarChar, billRecv.AdvancRecvID);
+                    db.AddInParameter(dbCommandWrapper, "@RequisitionNo", SqlDbType.NVarChar, billRecv.RequisitionNo);
+                    db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, billRecv.ClientID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientName", SqlDbType.NVarChar, billRecv.ClientName);
+                    db.AddInParameter(dbCommandWrapper, "@ClientQutnNo", SqlDbType.NVarChar, (billRecv.VendorQutnNo));
+                    db.AddInParameter(dbCommandWrapper, "@RequisitionDate", SqlDbType.NVarChar, billRecv.RequisitionDate);
+                    db.AddInParameter(dbCommandWrapper, "@QuotationDate", SqlDbType.DateTime, billRecv.QuotationDate);
+                    db.AddInParameter(dbCommandWrapper, "@WONo", SqlDbType.NVarChar, billRecv.WONo);
+                    db.AddInParameter(dbCommandWrapper, "@WODate", SqlDbType.NVarChar, billRecv.WODate);
+                    db.AddInParameter(dbCommandWrapper, "@WOAmt", SqlDbType.Decimal, billRecv.WOAmt);
+                    db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.Decimal, billRecv.WOInfoID);
+                    db.AddInParameter(dbCommandWrapper, "@AdvanceRecvAmount", SqlDbType.Decimal, billRecv.AdvancClaimRcvAmt);
+                    db.AddInParameter(dbCommandWrapper, "@AdvancClaimRcvdDate", SqlDbType.NVarChar, billRecv.AdvancClaimRcvdDate);
+                    db.AddInParameter(dbCommandWrapper, "@RemainingAmnt", SqlDbType.Decimal, billRecv.RemainingAmnt);
+                    db.AddInParameter(dbCommandWrapper, "@AprvAmnt", SqlDbType.Decimal, billRecv.AprvAmnt);
+                    db.AddInParameter(dbCommandWrapper, "@AprvDate", SqlDbType.Decimal, billRecv.AprvDate);
+                    db.AddInParameter(dbCommandWrapper, "@RecommendationAmt", SqlDbType.Decimal, billRecv.RecommendedAmnt);
+                    db.AddInParameter(dbCommandWrapper, "@VendorBillNo", SqlDbType.NVarChar, billRecv.VendorBillNo);
+                    db.AddInParameter(dbCommandWrapper, "@BillDate", SqlDbType.NVarChar, billRecv.VendorBillDate);
+                    db.AddInParameter(dbCommandWrapper, "@BillSubmitDate", SqlDbType.NVarChar, billRecv.BillReceiveDate);
+                    db.AddInParameter(dbCommandWrapper, "@RecommendationDate", SqlDbType.NVarChar, billRecv.RecommendDate);
+                    db.AddInParameter(dbCommandWrapper, "@VATPercentage", SqlDbType.Decimal, billRecv.VATPercentage);
+                    db.AddInParameter(dbCommandWrapper, "@VATAmount", SqlDbType.Decimal, billRecv.VATAmount);
+                    db.AddInParameter(dbCommandWrapper, "@CommissionPercentage", SqlDbType.Decimal, billRecv.CommissionPercentage);
+                    db.AddInParameter(dbCommandWrapper, "@CommissionAmount", SqlDbType.Decimal, billRecv.CommissionAmount);
+
+                    db.AddInParameter(dbCommandWrapper, "@TDSPercentage", SqlDbType.Decimal, billRecv.VATPercentage);
+                    db.AddInParameter(dbCommandWrapper, "@TDSAmount", SqlDbType.Decimal, billRecv.VATAmount);
+                    db.AddInParameter(dbCommandWrapper, "@VDSPercentage", SqlDbType.Decimal, billRecv.CommissionPercentage);
+                    db.AddInParameter(dbCommandWrapper, "@VDSAmount", SqlDbType.Decimal, billRecv.CommissionAmount);
+
                     db.AddInParameter(dbCommandWrapper, "@TotalBillAmount", SqlDbType.Decimal, billRecv.TotalBillAmount);
                     db.AddInParameter(dbCommandWrapper, "@NetPayableAmount", SqlDbType.Decimal, billRecv.NetPayableAmount);
                     db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, billRecv.Note);

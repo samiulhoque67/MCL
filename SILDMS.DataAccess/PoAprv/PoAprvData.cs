@@ -176,7 +176,67 @@ namespace SILDMS.DataAccess.PoAprv
             return VendorCSInfoItemList;
         }
 
-   
+        public List<OBS_VendorCSRecmItem> PoPrint(string pORecmID, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            List<OBS_VendorCSRecmItem> VendorCSInfoItemList = new List<OBS_VendorCSRecmItem>();
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_PoPrintItem"))
+            {
+            
+
+                db.AddInParameter(dbCommandWrapper, "@PORecmID", SqlDbType.VarChar, pORecmID);
+                // Execute SP. 
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt1 = ds.Tables[0];
+                    VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
+                    {
+                        VendorID = reader.GetString("VendorID"),
+                        WIInfoID = reader.GetString("WOInfoID"),
+                        VendorReqID = reader.GetString("VendorReqID"),
+                        VendorAddress = reader.GetString("CurrentAddress"),
+                        VendorCSAprvID = reader.GetString("VendorCSAprvID"),
+                        VendorName = reader.GetString("VendorName"),
+                        POAmt = reader.GetString("AprvAmnt"),
+                        POCreatedBy = reader.GetString("RecommendedBy"),
+                        PODate = reader.GetString("PoAprvDate"),
+                        PONo = reader.GetString("PONo"),
+                        Remarks = reader.GetString("Remarks"),
+
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        //ServiceItemCode = reader.GetString("ServiceItemCode"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
+                        ServiceCategoryName = reader.GetString("ServicesCategoryName"),
+                        Description = reader.GetString("Description"),
+                        DeliveryLocation = reader.GetString("DeliveryLocation"),
+                        DeliveryDate = reader.GetString("DeliveryDate"),
+                        DeliveryMode = reader.GetString("DeliveryMode"),
+                        ReqUnit = reader.GetString("QutnUnit"),
+                        QutnQnty = reader.GetString("QutnQnty"),
+                        QutnPrice = reader.GetString("QutnPrice"),
+                        QutnUnit = reader.GetString("QutnUnit"),
+                        QutnAmt = reader.GetString("QutnAmt"),
+
+                        VatPerc = reader.GetString("VatPerc"),
+                        VatAmt = reader.GetString("VatAmt"),
+                        TolAmt = reader.GetString("TolAmt"),
+                        NegoQty = reader.GetString("NegoQty"),
+                        NegoPrice = reader.GetString("NegoPrice"),
+                        NegoAmt = reader.GetString("NegoAmt"),
+                        NegoVatAmt = reader.GetString("NegoVatAmt"),
+                        NegoTolAmt = reader.GetString("NegoTolAmt"),
+                        // ,
+
+                        //Status = reader.GetString("Status")
+                    }).ToList();
+                }
+            }
+            return VendorCSInfoItemList;
+        }
 
         public string SaveVendorPOAprvInfo(OBS_VendorCSRecm vendorCSInfo, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm)
         {
@@ -235,18 +295,18 @@ namespace SILDMS.DataAccess.PoAprv
                 VendorPOItem.Rows.Add(objDataRow);
             }
 
-            //DataTable VendorCSTerm = new DataTable();
-            //VendorCSTerm.Columns.Add("TermsID");
-            //VendorCSTerm.Columns.Add("TermsCode");
-            //VendorCSTerm.Columns.Add("TermsName");
-            //foreach (var item in vendorCSTerm)
-            //{
-            //    DataRow objDataRow = VendorCSTerm.NewRow();
-            //    objDataRow[0] = item.TermsID;
-            //    objDataRow[1] = item.TermsCode;
-            //    objDataRow[2] = item.TermsName;
-            //    VendorCSTerm.Rows.Add(objDataRow);
-            //}
+            DataTable VendorCSTerm = new DataTable();
+            VendorCSTerm.Columns.Add("TermsID");
+            VendorCSTerm.Columns.Add("TermsCode");
+            VendorCSTerm.Columns.Add("TermsName");
+            foreach (var item in vendorCSTerm)
+            {
+                DataRow objDataRow = VendorCSTerm.NewRow();
+                objDataRow[0] = item.TermsID;
+                objDataRow[1] = item.TermsCode;
+                objDataRow[2] = item.TermsName;
+                VendorCSTerm.Rows.Add(objDataRow);
+            }
 
             //DataTable vendorCSVendors = new DataTable();
             //vendorCSVendors.Columns.Add("VendorID");
@@ -289,7 +349,7 @@ namespace SILDMS.DataAccess.PoAprv
                     db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@VendorPOItemType", SqlDbType.Structured, VendorPOItem);
-                    //db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSAprvTerms", SqlDbType.Structured, VendorCSTerm);
+                    db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSAprvTerms", SqlDbType.Structured, VendorCSTerm);
                     //db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmVendors", SqlDbType.Structured, vendorCSVendors);
                     //db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vendorCSInfo.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);

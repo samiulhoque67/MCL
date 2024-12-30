@@ -70,6 +70,8 @@ namespace SILDMS.Model
         public string Operation { get; set; }
         public string RecommendedBy { get; set; }
         public string Remarks { get; set; }
+        public string PoPreparationID { get; set; }
+        public string PoDate { get; set; }
     }
 
 

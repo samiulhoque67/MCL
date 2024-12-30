@@ -17,7 +17,7 @@
     }
 </style>
 
-<div class="box box-primary box-body" ng-controller="ClientAprvBillCtrl">
+<div class="box box-primary box-body" ng-controller="ReceivedFinalPaymentCtrl">
 
     <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
         <i class="fa fa-user"></i>
@@ -532,7 +532,7 @@
 
 <script type="text/javascript">
 
-    app.controller('ClientAprvBillCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('ReceivedFinalPaymentCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $scope.clientReqItemArray = [];
         $scope.clientReqTermArray = [];
@@ -684,7 +684,7 @@
             }
         }
 
-        $http.get("/ClientAprvBill/GetShowVendorReqList")
+        $http.get("/ReceivedFinalPayment/GetShowVendorReqList")
             .success(function (response) {
                 console.log(response);
                 $scope.VendorReqList = response.VendorReqList;
@@ -895,7 +895,7 @@
         };
 
         $scope.GetVendorQutnSearchList = function () {
-            $http.post("/ClientAprvBill/GetQutnSearchList")
+            $http.post("/ReceivedFinalPayment/GetQutnSearchList")
                 .success(function (response) {
                     $scope.clientReqSearchList = response.PoSearchList;
                     $scope.clientReqDisplayedCollection = [].concat($scope.clientReqSearchList);
@@ -1110,7 +1110,7 @@
             $scope.VendorQutn.BillReceiveDate = $('#BillReceiveDate').val();
 
 
-            $http.post('/ClientAprvBill/SaveVendorFinalBillRcvd',
+            $http.post('/ReceivedFinalPayment/SaveVendorFinalBillRcvd',
                 {
                     BillRecv: $scope.VendorQutn,
 

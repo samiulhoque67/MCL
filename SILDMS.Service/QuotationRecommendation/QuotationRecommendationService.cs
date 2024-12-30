@@ -45,9 +45,9 @@ namespace SILDMS.Service.QuotationRecommendation
         }
 
 
-        ValidationResult IQuotationRecommendationService.GetClientReqDataInfoService(string ClientID, string ClientReqID, out List<ClientReqData> GetClientReqDetails)
+        ValidationResult IQuotationRecommendationService.GetClientReqDataInfoService(string ClientID, string ClientReqID, string ClientQutnID, out List<ClientReqData> GetClientReqDetails)
         {
-            GetClientReqDetails = _quotationRecommendationData.GetClientReqDataInfoDataService(ClientID, ClientReqID, out _errorNumber);
+            GetClientReqDetails = _quotationRecommendationData.GetClientReqDataInfoDataService(ClientID, ClientReqID, ClientQutnID, out _errorNumber);
 
             return _errorNumber.Length > 0
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))

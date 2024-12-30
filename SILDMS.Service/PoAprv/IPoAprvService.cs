@@ -14,7 +14,7 @@ namespace SILDMS.Service.PoAprv
     
         ValidationResult GetPOAprvInfoTermList(string PORecmID, out List<OBS_VendorCSRecmTerms> vendorCSInfoTermList);
         ValidationResult GetVendorPOAprvQuotationItem(string vendorID, string clientID,string PORecmID, out List<OBS_VendorCSRecmItem> venCSItemList);
-
+        ValidationResult PoPrint(string pORecmID, out List<OBS_VendorCSRecmItem> poPrintList);
         string SaveVendorPOAprvInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm);
 
     }
