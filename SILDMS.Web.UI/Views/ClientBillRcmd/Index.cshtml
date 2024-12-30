@@ -969,10 +969,11 @@
 
         $scope.calculateAmounts = function () {
             var billAmount = parseFloat($scope.VendorQutn.RemainingAmnt) || 0;
+            var poAmount = parseFloat($scope.VendorQutn.WOAmt) || 0;
             var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
 
             // Calculate the VAT amount
-            $scope.VendorQutn.VATAmount = (billAmount * vatPercentage) / 100;
+            $scope.VendorQutn.VATAmount = (poAmount * vatPercentage) / 100;
 
             // Calculate the total bill amount (bill amount + VAT amount)
             $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.VATAmount;
@@ -982,10 +983,12 @@
 
         $scope.calculateBillAmounts = function () {
             var billAmount = parseFloat($scope.VendorQutn.RecommendedAmnt) || 0;
+     
+            var poAmount = parseFloat($scope.VendorQutn.WOAmt) || 0;
             var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
 
             // Calculate the VAT amount
-            $scope.VendorQutn.VATAmount = (billAmount * vatPercentage) / 100;
+            $scope.VendorQutn.VATAmount = (poAmount * vatPercentage) / 100;
 
             // Calculate the total bill amount (bill amount + VAT amount)
             $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.VATAmount;
