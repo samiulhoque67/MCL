@@ -10,11 +10,45 @@
         font-size: 12px;
     }
 
-    .form-control {
-        height: 25px;
-        font-size: smaller;
-        padding: 3px 6px 3px;
+    .modal-fullscreen {
+        width: 80%;
+        height: 80%;
+        margin: 0;
+        padding: 0;
+        top: 10%;
+        left: 10%;
+        position: fixed;
+        overflow: hidden;
+        z-index: 1050;
     }
+
+        .modal-fullscreen .modal-content {
+            height: 100%;
+            border: none;
+            border-radius: 0;
+        }
+
+
+/*    .modal-fullscreen {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: fixed;
+        overflow: hidden;
+        z-index: 1050;
+    }
+
+        .modal-fullscreen .modal-content {
+            height: 100%;
+            border: none;
+            border-radius: 0;
+        }
+*/
+
 </style>
 
 <div class="box box-primary box-body" ng-controller="ClientRequisitionCtrl">
@@ -118,32 +152,30 @@
                 </div>
             </div>
 
-            <!--<div class="row">-->
-                @*implementing pdf here*@
-                
-                        <!--<div class="col-sm-12 col-md-12 col-lg-12">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                </div>
-                            </div>
+            <div class="row">
+                @* implementing pdf here*@
 
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label for="upload_documents">
-                                            Upload Documents <br>
-                                            (<span style="color:#ff4900;"> PDF Only, Max Size 2MB </span>)
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1"--> @*ng-disabled="Plan.plan_status === 'CNF'"*@ <!--accept=".pdf" />
-                                    </div>
-                                </div>
-                        </div>-->
-                @*ends implementing pdf here*@
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="upload_documents">
+                            Upload Documents <br>
+                            (<span style="color:#ff4900;"> PDF Only, Max Size 2MB </span>)
+                        </label>
+                    </div>
+                </div>
+                <div ng-show="GridDisplayCollection.length <= 0" class="col-lg-3">
+                    <div class="form-group">
+                        <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1" accept=".pdf" />
+                    </div>
+                </div>
+                <div ng-show="GridDisplayCollection.length > 0" class="col-lg-1">
+                    <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
 
-            <!--</div>-->
+                </div>
+
+                @* ends implementing pdf here*@
+
+            </div>
         </div>
     </div>
 
@@ -749,6 +781,24 @@
             </div>
         </div>
     </div>
+
+    @*view pdf modal*@
+    <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="padding: 0; margin: 0;">
+                    <iframe id="pdfViewer"
+                            style="width: 100%; height: 100vh; border: none;"
+                            title="PDF Viewer">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 </div>
 
 <script type="text/javascript">
@@ -1324,6 +1374,7 @@
                 .success(function (response) {
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
+                        $scope.SaveDocument(response.ClientReqID);
                         $scope.clearClientReq();
                         $scope.loading = false;
                         return;
@@ -1356,5 +1407,126 @@
         $scope.toggleRefreshTable = function () {
             window.location.reload();
         };
-    }])
+
+
+
+
+        $scope.DocCrudStatus = "";
+        $scope.SaveDocument = function (ClientReqID) {
+            $scope.DocCrudStatus = "I";
+
+            var fileUpload = document.getElementById("FileUpload1");
+            var files = fileUpload.files;
+
+            if (files.length === 0) {
+                toastr.error("Please select a file to upload.");
+                return;
+            }
+
+            var file = files[0];
+            var ext = file.name.split('.').pop().toLowerCase();
+
+            var maxSizeInMB = 2;
+            if (file.size > maxSizeInMB * 1024 * 1024) {
+                toastr.error("File size must be 2 MB or less.");
+                return;
+            }
+
+            // Validate file extension
+            if (ext !== "pdf") {
+                toastr.error("Please upload PDF files only.");
+                return;
+            }
+
+            $scope.loading = true; // Show loading indicator
+
+            // FTP details
+            var ftpDetails = {
+
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "silsoft",
+                ftpPassword: "s!L@123",
+                serverUrl: "MCL/Client_Requisition",
+                documentID: "CR_" + ClientReqID,
+                ext: "pdf"
+            };
+
+            // Helper function to handle file upload
+            function uploadFileToServer(file, ftpDetails) {
+                var formData = new FormData();
+                formData.append("file", file);
+                formData.append("serverIP", ftpDetails.serverIP);
+                formData.append("ftpPort", ftpDetails.ftpPort);
+                formData.append("ftpUserName", ftpDetails.ftpUserName);
+                formData.append("ftpPassword", ftpDetails.ftpPassword);
+                formData.append("serverUrl", ftpDetails.serverUrl);
+                formData.append("documentID", ftpDetails.documentID);
+                formData.append("ext", ftpDetails.ext);
+
+                $.ajax({
+                    url: '/ClientRequisition/SaveDocument',
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (result) {
+                        toastr.success("Document uploaded successfully.");
+                        resetFileInput();
+                       /* $scope.GetDocumentList();*/
+                       /* clearDocumentForm();*/
+                    },
+                    error: function (err) {
+                        toastr.error("Document upload failed. Please try again.");
+                        console.error(err);
+                    },
+                    complete: function () {
+                        $scope.loading = false;
+                    }
+                });
+            }
+
+            uploadFileToServer(file, ftpDetails);
+
+            // Helper to reset file input field
+            function resetFileInput() {
+                var fileInput = document.getElementById("FileUpload1");
+                fileInput.value = "";
+            }
+
+        };
+
+        $scope.ViewDocument = function () {
+            $scope.loading = true; // Show loading indicator
+
+            // Build the GET request URL with the DocID parameter
+            const requestUrl = "/ClientRequisition/ViewDocument?DocID=" + encodeURIComponent("CR_" + $scope.ClientReq.ClientReqID);
+
+            $http.get(requestUrl, { responseType: 'arraybuffer' })
+                .then(function (response) {
+                    var file = new Blob([response.data], { type: 'application/pdf' });
+                    var fileURL = URL.createObjectURL(file);
+                    let zoomParam = "#view=Fit";
+
+                    $("#pdfViewer").attr("src", fileURL + zoomParam);
+
+                    $('#ShowPDFModal').modal('show');
+                })
+                .catch(function (error) {
+                    toastr.error("Failed to load the PDF.");
+                    console.error(error);
+                })
+                .finally(function () {
+                    $scope.loading = false; // Hide the loading indicator
+                });
+        };
+
+
+    
+            
+       
+        
+
+
+    }]);
 </script>

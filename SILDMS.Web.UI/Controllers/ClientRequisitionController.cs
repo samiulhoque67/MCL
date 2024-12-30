@@ -1,11 +1,14 @@
-﻿using SILDMS.Model;
+﻿
+using SILDMS.Model;
 using SILDMS.Service;
 using SILDMS.Utillity;
 using SILDMS.Utillity.Localization;
 using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -60,8 +63,19 @@ namespace SILDMS.Web.UI.Controllers
         {
             clientReq.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
+            string ClientReqID = string.Empty;//, message = string.Empty;
+
             status = _clientInfoService.SaveClientRequisition(clientReq, clientReqItem, clientReqTerm);
-            return Json(new { status }, JsonRequestBehavior.AllowGet);
+
+            if (status != string.Empty)
+            {
+                string[] statusarr = status.Split(',');
+                ClientReqID = statusarr[1];
+                /*clientReq.ClientReqID = statusarr[1];*/
+                status = statusarr[0];
+            }
+            /*TempData["ClientRequisition"] = clientReq;*/
+            return Json(new { status, ClientReqID }, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<dynamic> GetClientReqSearchList()
@@ -73,7 +87,7 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> GetClientReqItemList(string ClientReqID,string ReqType)
+        public async Task<dynamic> GetClientReqItemList(string ClientReqID, string ReqType)
         {
             var ClientReqItemList = new List<OBS_ClientReqItem>();
             await Task.Run(() => _clientInfoService.GetClientReqItemList(ClientReqID, ReqType, out ClientReqItemList));
@@ -118,6 +132,112 @@ namespace SILDMS.Web.UI.Controllers
             var result = Json(new { ClientReqTermList, msg = "ClientReqTermList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
-        }       
+        }
+
+
+        [HttpPost]
+        /*string serverIP, string ftpPort, string ftpUserName, string ftpPassword, string serverURL, string documentID, string Ext*/
+        public ActionResult SaveDocument(string serverIP, string ftpPort, string ftpUserName, string ftpPassword, string serverUrl, string documentID, string ext, HttpPostedFileBase file)
+        {
+            if (file == null || file.ContentLength == 0)
+            {
+                return Json(new { Message = "No file uploaded." }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                // Build FTP URL dynamically
+                string ftpUrl = $"ftp://{serverIP}:{ftpPort}/{serverUrl}/{documentID}.{ext}";
+
+                // Create an FTP request
+                FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpUrl);
+                ftpRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
+                ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
+                ftpRequest.UseBinary = true;
+                ftpRequest.KeepAlive = false;
+
+                // Read file data
+                byte[] fileData;
+                using (var binaryReader = new BinaryReader(file.InputStream))
+                {
+                    fileData = binaryReader.ReadBytes(file.ContentLength);
+                }
+
+                // Upload file data to the FTP server
+                using (Stream requestStream = ftpRequest.GetRequestStream())
+                {
+                    requestStream.Write(fileData, 0, fileData.Length);
+                }
+
+                return Json(new { Message = "File uploaded successfully." }, JsonRequestBehavior.AllowGet);
+            }
+            catch (WebException webEx)
+            {
+                var response = (FtpWebResponse)webEx.Response;
+                return Json(new
+                {
+                    Message = "Error uploading file to FTP server.",
+                    Status = response?.StatusDescription,
+                    Exception = webEx.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Message = "Error uploading file.", Exception = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        //view pdf/
+        [HttpGet]
+        public ActionResult ViewDocument(string DocID)
+        {
+            try
+            {
+                // FTP Server details
+                string serverIP = "172.16.189.34";
+                string ftpPort = "21";
+                string ftpUserName = "silsoft";
+                string ftpPassword = "s!L@123";
+                string serverUrl = "/MCL/Client_Requisition/";
+                string documentCode = DocID;
+                string ext = ".pdf";
+
+                // Build the FTP URL
+                string ftpUrl = $"ftp://{serverIP}:{ftpPort}{serverUrl}{documentCode}{ext}";
+
+                // Create an FTP request to download the file
+                FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpUrl);
+                ftpRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
+                ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+                ftpRequest.UseBinary = true;
+                ftpRequest.KeepAlive = false;
+
+                // Retrieve the file data
+                using (FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse())
+                using (Stream responseStream = ftpResponse.GetResponseStream())
+                {
+                    if (responseStream == null)
+                        return new HttpStatusCodeResult(404, "File not found on the FTP server.");
+
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+                        responseStream.CopyTo(memoryStream);
+                        byte[] fileData = memoryStream.ToArray();
+
+                        // Return the file as a response
+                        return File(fileData, "application/pdf");
+                    }
+                }
+            }
+          
+            catch (Exception ex)
+            {
+                // Handle generic exceptions
+                return new HttpStatusCodeResult(500, $"Error viewing the document: {ex.Message}");
+            }
+        }
+
+
+
     }
 }
