@@ -122,7 +122,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                 db.AddInParameter(dbCommandWrapper, "@ClientID", DbType.String, ClientID);
                 db.AddInParameter(dbCommandWrapper, "@ClientReqID", DbType.String, ClientReqID);
                 db.AddInParameter(dbCommandWrapper, "@ReqType", SqlDbType.NVarChar, ReqType);
-                db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
+                db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 1000);
                 dbCommandWrapper.CommandTimeout = 300;
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
 

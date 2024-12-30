@@ -1504,15 +1504,12 @@
 
             $http.get(requestUrl, { responseType: 'arraybuffer' })
                 .then(function (response) {
-                    // Create a Blob from the response data
                     var file = new Blob([response.data], { type: 'application/pdf' });
                     var fileURL = URL.createObjectURL(file);
                     let zoomParam = "#view=Fit";
 
-                    // Set the file URL to the iframe src
                     $("#pdfViewer").attr("src", fileURL + zoomParam);
 
-                    // Show the modal
                     $('#ShowPDFModal').modal('show');
                 })
                 .catch(function (error) {
