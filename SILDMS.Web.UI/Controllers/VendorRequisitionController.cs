@@ -34,6 +34,7 @@ namespace SILDMS.Web.UI.Controllers
             this._localizationService = localizationService;
             UserID = SILAuthorization.GetUserID();
         }
+
         // GET: /VendorRequisition/Index
         public ActionResult Index()
         {
