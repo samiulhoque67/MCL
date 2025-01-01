@@ -99,7 +99,6 @@ namespace SILDMS.Web.UI.Controllers
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
-
         [SILAuthorize]
         public ActionResult RptRequisitionToVendorReport()
         {
@@ -144,7 +143,6 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
-
         public async Task<dynamic> GetVendorReqSearchList()
         {
             var vendorReqSearchList = new List<OBS_VendorReq>();
@@ -181,9 +179,6 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        //[HttpPost]
-        //[Authorize]
-        //[SILLogAttribute]
         public async Task<dynamic> DeleteVendorReqItemAndTerm(string VendorReqItemID, string VendorReqTermID)
         {
             string status = string.Empty;
@@ -217,24 +212,5 @@ namespace SILDMS.Web.UI.Controllers
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
-
-        //[Authorize]
-        //public async Task<dynamic> GetExistingVendor(string Mat_Code)
-        //{
-        //    var ExistingVendorlist = new List<GoogleSearch>();
-        //    if (!string.IsNullOrEmpty(SILAuthorization.GetUserID()))
-        //    {
-
-
-        //        await Task.Run(() => _clientInfoService.GetExistingVendorService(Mat_Code, out ExistingVendorlist));
-
-        //    }
-        //    return Json(new { ExistingVendorlist, Msg = "" }, JsonRequestBehavior.AllowGet);
-        //}
-
-
-
-
-
     }
 }
