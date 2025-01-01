@@ -172,12 +172,13 @@ namespace SILDMS.DataAccess.POCreation
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
                         TolAmt = reader.GetString("TolAmt"),
-                        NegoQty = reader.GetString("QutnQnty"),
+                        NegoQty = reader.GetString("RemainingVendorQty"),
                         NegoPrice = reader.GetString("QutnPrice"),
-                        NegoAmt = reader.GetString("QutnAmt"),
+                        NegoAmt = reader.GetString("VendorAmount"),
                         NegoVatAmt = reader.GetString("VatAmt"),
-                        NegoTolAmt = reader.GetString("TolAmt"),
-                        RemainingQty = reader.GetString("RemainingQty")
+                        NegoTolAmt = reader.GetString("VendorTotalAmount"),
+                        RemainingQty = reader.GetString("RemainingQty"),
+                        RemainingVendorQty= reader.GetString("RemainingVendorQty")
                         // ,
 
                         //Status = reader.GetString("Status")
