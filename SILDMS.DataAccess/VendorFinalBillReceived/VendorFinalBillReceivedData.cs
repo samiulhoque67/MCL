@@ -47,13 +47,19 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         AdvancePaidAmount = reader.GetToDecimal("AdvncPaidAmt"),
                         WOAmt = reader.GetToDecimal("WOAmount"),
                         AdvancePaidDate = reader.IsNull("AdvncPaidDate") ? string.Empty : reader.GetString("AdvncPaidDate"),
+                      
+                        WOInfoID = reader.IsNull("WOInfoID") ? string.Empty : reader.GetString("WOInfoID"),
                         WONo = reader.IsNull("WONo") ? string.Empty : reader.GetString("WONo"),
-                  
+                        POInstallmentNo = reader.GetInt32("POInstallmentNo"),
+                        POInstallmentID = reader.GetInt32("POInstallmentID"),
+                        POInstallmentAmt = reader.GetDouble("POInstallmentAmt"),
                         BillAmount = reader.GetToDecimal("VendorBillAmount"),
                         TotalBillAmount = reader.GetToDecimal("VendorTotalBillAmount"),
                         VATAmount = reader.GetToDecimal("VatAmount"),
                         VATPercentage = reader.GetToDecimal("VatPercnt"),
-                 
+                        BillType = reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
+
                         VendorBillDate = reader.IsNull("VendorBillDate") ? string.Empty : reader.GetString("VendorBillDate"),
                         Note= reader.IsNull("Note") ? string.Empty : reader.GetString("Note")
                     }).ToList();
