@@ -34,6 +34,11 @@ namespace SILDMS.Model
         public string WONo { get; set; }
         public string WOInfoID { get; set; }
         public string WOAmt { get; set; }
+        public string BillType { get; set; }
+        public string BillCategory { get; set; }
+        public string POInstallmentNo { get; set; }
+        public string POInstallmentID { get; set; }
+        public string POInstallmentAmt { get; set; }
     }
 
 

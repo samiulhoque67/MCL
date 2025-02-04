@@ -203,7 +203,7 @@ namespace SILDMS.Web.UI.Controllers
                 string ext = ".pdf";
 
                 // Build the FTP URL
-                string ftpUrl = $"ftp://{serverIP}:{ftpPort}{serverUrl}{documentCode}{ext}";
+                string ftpUrl = $"ftp://{serverIP}:{ftpPort}{serverUrl}/{documentCode}{ext}";
 
                 // Create an FTP request to download the file
                 FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpUrl);
