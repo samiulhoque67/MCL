@@ -116,7 +116,7 @@
                     </div>
                 </div>
                 <div class="col-lg-1">
-                  
+
                 </div>
 
                 <div class="col-lg-2">
@@ -372,7 +372,7 @@
                     </div>
                 </div>
 
-              
+
             </div>
 
             <div class="row">
@@ -415,14 +415,31 @@
 
 
 
+            <div class="row">
+                @* implementing pdf here*@
 
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="upload_documents">
+                            Upload Documents <br>
+                            (<span style="color:#ff4900;"> PDF Only, Max Size 2MB </span>)
+                        </label>
+                    </div>
+                </div>
+                <div @*ng-show="clientReqDisplayedCollection.length <= 0"*@ class="col-lg-3">
+                    <div class="form-group">
+                        <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1" accept=".pdf"
+                               ng-model="uploadedFile" onchange="angular.element(this).scope().fileSelected(this)" />
+                    </div>
+                </div>
+                <div @*ng-show="clientReqDisplayedCollection.length > 0"*@ class="col-lg-1">
+                    <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
 
+                </div>
 
+                @* ends implementing pdf here*@
 
-
-
-
-
+            </div>
 
 
         </div>
@@ -1265,6 +1282,16 @@
 
         ///////////////////////////////////////////////
 
+        $scope.uploadedFile = null;
+
+        $scope.fileSelected = function (element) {
+            $scope.$apply(function () {
+                $scope.uploadedFile = element.files.length > 0 ? element.files[0] : null;
+            });
+        };
+
+        ///////////////////////////////////////////////
+
         $scope.Post = function () {
 
             if ($('#ClientName').val() == "") {
@@ -1303,6 +1330,11 @@
 
                         console.log(response.VendrFinalBilRcvdID);
                         toastr.success("Data Saved Successfully.");
+
+                        if ($scope.uploadedFile) {
+                            $scope.SaveDocument(response.VendrFinalBilRcvdID); //
+                        }
+
                         $scope.clearVendorQutn();
                         $scope.toggleRefreshTable();
                         $scope.loading = false;
@@ -1333,6 +1365,122 @@
                     return;
                 });
         }
+
+
+        $scope.DocCrudStatus = "";
+        $scope.SaveDocument = function (VendrFinalBilRcvdID) {
+            $scope.DocCrudStatus = "I";
+
+            var fileUpload = document.getElementById("FileUpload1");
+            var files = fileUpload.files;
+
+            if (files.length === 0) {
+                toastr.error("Please select a file to upload.");
+                return;
+            }
+
+            var file = files[0];
+            var ext = file.name.split('.').pop().toLowerCase();
+
+            var maxSizeInMB = 2;
+            if (file.size > maxSizeInMB * 1024 * 1024) {
+                toastr.error("File size must be 2 MB or less.");
+                return;
+            }
+
+            // Validate file extension
+            if (ext !== "pdf") {
+                toastr.error("Please upload PDF files only.");
+                return;
+            }
+
+            $scope.loading = true; // Show loading indicator
+
+            // FTP details
+            var ftpDetails = {
+
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "silsoft",
+                ftpPassword: "s!L@123",
+                serverUrl: "MCL/Vendor_Final_BillReceived",
+                documentID: "VFBR_" + VendrFinalBilRcvdID,
+                ext: "pdf"
+            };
+
+            // Helper function to handle file upload
+            function uploadFileToServer(file, ftpDetails) {
+                var formData = new FormData();
+                formData.append("file", file);
+                formData.append("serverIP", ftpDetails.serverIP);
+                formData.append("ftpPort", ftpDetails.ftpPort);
+                formData.append("ftpUserName", ftpDetails.ftpUserName);
+                formData.append("ftpPassword", ftpDetails.ftpPassword);
+                formData.append("serverUrl", ftpDetails.serverUrl);
+                formData.append("documentID", ftpDetails.documentID);
+                formData.append("ext", ftpDetails.ext);
+
+                $.ajax({
+                    url: '/ClientRequisition/SaveDocument',
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (result) {
+                        toastr.success("Document uploaded successfully.");
+                        resetFileInput();
+                        /* $scope.GetDocumentList();*/
+                        /* clearDocumentForm();*/
+                    },
+                    error: function (err) {
+                        toastr.error("Document upload failed. Please try again.");
+                        console.error(err);
+                    },
+                    complete: function () {
+                        $scope.loading = false;
+                    }
+                });
+            }
+
+            uploadFileToServer(file, ftpDetails);
+
+            // Helper to reset file input field
+            function resetFileInput() {
+                var fileInput = document.getElementById("FileUpload1");
+                fileInput.value = "";
+            }
+
+        };
+
+        $scope.ViewDocument = function () {
+            $scope.loading = true; // Show loading indicator
+
+            // Build the GET request URL with the DocID parameter
+            const requestUrl = "/ClientRequisition/ViewDocument?DocID=" + encodeURIComponent("VFBR_" + $scope.VendorQutn.VendrFinalBilRcvdID);
+
+            $http.get(requestUrl, { responseType: 'arraybuffer' })
+                .then(function (response) {
+                    var file = new Blob([response.data], { type: 'application/pdf' });
+                    var fileURL = URL.createObjectURL(file);
+                    let zoomParam = "#view=Fit";
+
+                    $("#pdfViewer").attr("src", fileURL + zoomParam);
+
+                    $('#ShowPDFModal').modal('show');
+                })
+                .catch(function (error) {
+                    toastr.error("Failed to load the PDF.");
+                    console.error(error);
+                })
+                .finally(function () {
+                    $scope.loading = false; // Hide the loading indicator
+                });
+        };
+
+
+
+
+
 
         $scope.toggleRefreshTable = function () {
 
