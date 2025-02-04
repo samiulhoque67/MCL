@@ -49,7 +49,7 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         AdvancePaidDate = reader.IsNull("AdvncPaidDate") ? string.Empty : reader.GetString("AdvncPaidDate"),
                       
                         WOInfoID = reader.IsNull("WOInfoID") ? string.Empty : reader.GetString("WOInfoID"),
-                        WONo = reader.IsNull("WONo") ? string.Empty : reader.GetString("WONo"),
+                        WONo = reader.IsNull("WOInfoNo") ? string.Empty : reader.GetString("WOInfoNo"),
                         POInstallmentNo = reader.GetInt32("POInstallmentNo"),
                         POInstallmentID = reader.GetInt32("POInstallmentID"),
                         POInstallmentAmt = reader.GetDouble("POInstallmentAmt"),
