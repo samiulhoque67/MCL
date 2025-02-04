@@ -1455,9 +1455,28 @@
         $scope.ViewDocument = function () {
             $scope.loading = true; // Show loading indicator
 
-            // Build the GET request URL with the DocID parameter
-            const requestUrl = "/ClientRequisition/ViewDocument?DocID=" + encodeURIComponent("VFBR_" + $scope.VendorQutn.VendrFinalBilRcvdID);
+            // FTP details
+            var ftpDetails = {
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "silsoft",
+                ftpPassword: "s!L@123",
+                serverUrl: "MCL/Vendor_Final_BillReceived",
+                documentID: "VFBR_" + $scope.VendorQutn.VendrFinalBilRcvdID,
+                ext: "pdf"
+            };
 
+            // Construct URL with query parameters
+            var requestUrl = "/ClientRequisition/ViewDocument?" +
+                "serverIP=" + encodeURIComponent(ftpDetails.serverIP) +
+                "&ftpPort=" + encodeURIComponent(ftpDetails.ftpPort) +
+                "&ftpUserName=" + encodeURIComponent(ftpDetails.ftpUserName) +
+                "&ftpPassword=" + encodeURIComponent(ftpDetails.ftpPassword) +
+                "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
+                "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
+                "&ext=" + encodeURIComponent(ftpDetails.ext);
+
+            // Make GET request to fetch the PDF
             $http.get(requestUrl, { responseType: 'arraybuffer' })
                 .then(function (response) {
                     var file = new Blob([response.data], { type: 'application/pdf' });
@@ -1465,7 +1484,6 @@
                     let zoomParam = "#view=Fit";
 
                     $("#pdfViewer").attr("src", fileURL + zoomParam);
-
                     $('#ShowPDFModal').modal('show');
                 })
                 .catch(function (error) {

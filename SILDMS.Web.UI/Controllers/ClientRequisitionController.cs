@@ -189,21 +189,15 @@ namespace SILDMS.Web.UI.Controllers
 
         //view pdf/
         [HttpGet]
-        public ActionResult ViewDocument(string DocID)
+        public ActionResult ViewDocument(string serverIP, string ftpPort, string ftpUserName, string ftpPassword, string serverUrl, string DocID, string ext)
         {
             try
             {
-                // FTP Server details
-                string serverIP = "172.16.189.34";
-                string ftpPort = "21";
-                string ftpUserName = "silsoft";
-                string ftpPassword = "s!L@123";
-                string serverUrl = "/MCL/Client_Requisition/";
-                string documentCode = DocID;
-                string ext = ".pdf";
+                // Ensure the extension starts with a dot
+                if (!ext.StartsWith(".")) ext = "." + ext;
 
-                // Build the FTP URL
-                string ftpUrl = $"ftp://{serverIP}:{ftpPort}{serverUrl}/{documentCode}{ext}";
+                // Construct the FTP URL correctly
+                string ftpUrl = $"ftp://{serverIP}:{ftpPort}/{serverUrl}/{DocID}{ext}";
 
                 // Create an FTP request to download the file
                 FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpUrl);
@@ -212,7 +206,6 @@ namespace SILDMS.Web.UI.Controllers
                 ftpRequest.UseBinary = true;
                 ftpRequest.KeepAlive = false;
 
-                // Retrieve the file data
                 using (FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse())
                 using (Stream responseStream = ftpResponse.GetResponseStream())
                 {
@@ -224,19 +217,19 @@ namespace SILDMS.Web.UI.Controllers
                         responseStream.CopyTo(memoryStream);
                         byte[] fileData = memoryStream.ToArray();
 
-                        // Return the file as a response
                         return File(fileData, "application/pdf");
                     }
                 }
             }
-          
+            catch (WebException webEx)
+            {
+                return new HttpStatusCodeResult(500, $"FTP error: {webEx.Message}");
+            }
             catch (Exception ex)
             {
-                // Handle generic exceptions
-                return new HttpStatusCodeResult(500, $"Error viewing the document: {ex.Message}");
+                return new HttpStatusCodeResult(500, $"Error retrieving document: {ex.Message}");
             }
         }
-
 
 
     }
