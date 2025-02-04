@@ -387,6 +387,73 @@
     </div>
 
     <div class="row">
+
+
+        <div class="row">
+            <div class="col-sm-1 col-md-1 col-lg-1">
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label>Bill Category:</label>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group" >
+                    <label>
+                        <input type="radio" ng-model="VendorCSInfo.Category" value="Normal" ng-disabled="VendorCSInfo.Category" /> Normal
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="VendorCSInfo.Category" value="plusminus" ng-disabled="VendorCSInfo.Category" /> Plus Minus
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label>Bill Type:</label>
+                </div>
+            </div>
+            <div class="col-lg-3" ng-disabled="VendorCSInfo.BillType" >
+                <div class="form-group">
+                    <label>
+                        <input type="radio" ng-model="VendorCSInfo.BillType" value="Default" ng-disabled="VendorCSInfo.BillType" /> Default
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="VendorCSInfo.BillType" value="Installment"  ng-disabled="VendorCSInfo.BillType" /> Installment
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-1 col-md-1 col-lg-1">
+            </div>
+            <div class="col-lg-2" ng-show="VendorCSInfo.BillType === 'Installment'" >
+                <div class="form-group">
+                    <label>Installment:</label>
+                </div>
+            </div>
+            <div class="col-lg-3" ng-show="VendorCSInfo.BillType === 'Installment'" ng-readonly="true">
+                <div class="form-group">
+                    <input id="Installment" name="Installment" type="text" class="form-control" placeholder="Number of Installment" ng-model="VendorCSInfo.Installment"  />
+                </div>
+            </div>
+
+            <div class="col-lg-2" ng-show="VendorCSInfo.BillType === 'Installment'">
+                <div class="form-group">
+                    <label>Installment Amount:</label>
+                </div>
+            </div>
+            <div class="col-lg-3" ng-show="VendorCSInfo.BillType === 'Installment'" ng-readonly="true">
+                <div class="form-group">
+                    <input id="InstalledAmount" name="InstalledAmount" type="text" class="form-control" placeholder="Installed Amount" ng-model="VendorCSInfo.InstalledAmount" />
+                </div>
+            </div>
+        </div>
+
+
         <div class="row">
             <div class="col-sm-1 col-md-1 col-lg-1">
             </div>
@@ -448,13 +515,40 @@
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label>PO Date</label>
+                    <label>PO Recom Date</label>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
                     <input id="PORecDate" name="PORecDate" type="text" class="DatePicker form-control" placeholder="PO Date" ng-model="VendorCSInfo.PORecDate" />
                 </div>
+            </div>
+
+
+
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="QuotationFor">Note:</label>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+
+
+        @*<div class="row">
+            <div class="col-sm-1 col-md-1 col-lg-1">
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
@@ -467,7 +561,7 @@
                 </div>
             </div>
 
-        </div>
+        </div>*@
 
 
     </div>
@@ -602,6 +696,12 @@
                     $scope.VendorCSInfo.PoAmount = response.VenCSItemList[0].POAmt;
                     $scope.VendorCSInfo.Remarks = response.VenCSItemList[0].Remarks;
                     $scope.VendorCSInfo.RecommendedBy = response.VenCSItemList[0].POCreatedBy;
+
+                    $scope.VendorCSInfo.BillType = response.VenCSItemList[0].BillType;
+                    $scope.VendorCSInfo.Category = response.VenCSItemList[0].BillCategory;
+                    $scope.VendorCSInfo.Installment = response.VenCSItemList[0].Installment;
+                    $scope.VendorCSInfo.InstalledAmount = response.VenCSItemList[0].InstalledAmount;
+                    
                  
 
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
@@ -639,8 +739,15 @@
             RecommendedAmount:"",
             ServiceCategoryID: "",
             ClientReqID: "",
-            VendorQutnID:""
+            VendorQutnID: "",
+            BillType: "",
+            Installment: 1,
+            InstalledAmount: "",
+            Category: ""
         }
+
+        $scope.VendorCSInfo.Category = 'Normal';
+        $scope.VendorCSInfo.BillType = 'Default'; 
 
         $scope.VendorCSInfoItem = {
             VendorCSInfoItemID: "",
@@ -835,7 +942,10 @@
                 SubmissionDate: "",
                 RequisitionDate: "",
                 Remarks: "",
-                PoAmount:""
+                PoAmount: "",
+                BillType: "",
+                Installment: 1,
+                InstalledAmount: ""
             }
 
             $scope.VendorCSInfoItem = {

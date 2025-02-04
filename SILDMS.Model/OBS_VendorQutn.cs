@@ -53,7 +53,11 @@ namespace SILDMS.Model
         public string AdvancRecvID { get; set; }
         public string WOInfoID { get; set; }
         public string AdvancClaimRcvdDate { get; set; }
-
+        public int POInstallmentNo { get; set; }
+        public int POInstallmentID { get; set; }
+        public double POInstallmentAmt { get; set; }
+        public string BillType { get; set; }
+        public string BillCategory { get; set; }
     }
 
 
@@ -119,6 +123,10 @@ namespace SILDMS.Model
         public int ClientFinalBilAprvID { get; set; }
         public string AdvancePaidDate { get; set; }
         public string AdvancePaidID { get; set; }
-       
+        public object POInstallmentNo { get; set; }
+        public object POInstallmentID { get; set; }
+        public object POInstallmentAmt { get; set; }
+        public object BillType { get; set; }
+        public object BillCategory { get; set; }
     }
 }
