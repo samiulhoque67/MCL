@@ -47,13 +47,19 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         AdvancePaidAmount = reader.GetToDecimal("AdvncPaidAmt"),
                         WOAmt = reader.GetToDecimal("WOAmount"),
                         AdvancePaidDate = reader.IsNull("AdvncPaidDate") ? string.Empty : reader.GetString("AdvncPaidDate"),
+                      
+                        WOInfoID = reader.IsNull("WOInfoID") ? string.Empty : reader.GetString("WOInfoID"),
                         WONo = reader.IsNull("WONo") ? string.Empty : reader.GetString("WONo"),
-                  
+                        POInstallmentNo = reader.GetInt32("POInstallmentNo"),
+                        POInstallmentID = reader.GetInt32("POInstallmentID"),
+                        POInstallmentAmt = reader.GetDouble("POInstallmentAmt"),
                         BillAmount = reader.GetToDecimal("VendorBillAmount"),
                         TotalBillAmount = reader.GetToDecimal("VendorTotalBillAmount"),
                         VATAmount = reader.GetToDecimal("VatAmount"),
                         VATPercentage = reader.GetToDecimal("VatPercnt"),
-                 
+                        BillType = reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
+
                         VendorBillDate = reader.IsNull("VendorBillDate") ? string.Empty : reader.GetString("VendorBillDate"),
                         Note= reader.IsNull("Note") ? string.Empty : reader.GetString("Note")
                     }).ToList();
@@ -145,7 +151,7 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                     db.AddInParameter(dbCommandWrapper, "@POInstallmentAmt", SqlDbType.Decimal, billRecv.POInstallmentAmt);
                     db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, billRecv.BillType);
                     db.AddInParameter(dbCommandWrapper, "@BillCategory", SqlDbType.NVarChar, billRecv.BillCategory);
-                    db.AddInParameter(dbCommandWrapper, "@POAmount", SqlDbType.Decimal, billRecv.POAmount);
+            
                     db.AddInParameter(dbCommandWrapper, "@AdvancePaidAmount", SqlDbType.Decimal, billRecv.AdvancePaidAmount);
                     db.AddInParameter(dbCommandWrapper, "@AdvancePaidID", SqlDbType.NVarChar, billRecv.AdvancePaidID);
                     db.AddInParameter(dbCommandWrapper, "@AdvancePaidDate", SqlDbType.NVarChar, billRecv.AdvancePaidDate);
