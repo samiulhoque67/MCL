@@ -44,11 +44,19 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         public async Task<dynamic> SaveVendorFinalBill(VendorBillRecvd BillRecv)
-        {
+        { string BillRecvID= string.Empty; ;
             BillRecv.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
             status = _vendorFinalBillReceivedService.SaveVendorFinalBill(BillRecv);
-            return Json(new { status }, JsonRequestBehavior.AllowGet);
+
+            if (status != string.Empty)
+            {
+                string[] statusarr = status.Split(',');
+                BillRecvID = statusarr[1];
+                /*clientReq.ClientReqID = statusarr[1];*/
+                status = statusarr[0];
+            }
+            return Json(new { status, BillRecvID }, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<dynamic> GetPOSearchList()
