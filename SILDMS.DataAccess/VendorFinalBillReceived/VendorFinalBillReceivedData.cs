@@ -162,7 +162,7 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                     db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, billRecv.Note);
                     db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.NVarChar, billRecv.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, billRecv.Action);
-                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 25);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
                     // Getting output parameters and setting response details.
