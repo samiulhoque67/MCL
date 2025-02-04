@@ -57,7 +57,12 @@ namespace SILDMS.Model
         public string NegoVatAmt { get; set; }
         public string NegoPrice { get; set; }
         public string RemainingQty { get; set; }
-        public string WIInfoID { get; set; }
+        public string RemainingVendorQty { get; set; }
         public string VendorAddress { get; set; }
+        public string WIInfoID { get; set; }
+        public string BillType { get; set; }
+        public int Installment { get; set; }
+        public double InstalledAmount { get; set; }
+        public string BillCategory { get; set; }
     }
 }

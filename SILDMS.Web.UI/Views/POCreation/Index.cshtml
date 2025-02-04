@@ -355,6 +355,7 @@
                                 <th style="text-align: left;" st-sort="">Item Name</th>
                                 <th style="text-align: left;" st-sort="">ReqQnty</th>
                                 <th style="text-align: left;" st-sort="">RemainingQnty</th>
+                                <th style="text-align: left;" st-sort="">RemainingVendorQnty</th>
                                 <th style="text-align: left;" st-sort="">ReqUnit</th>
                                 <th style="text-align: left;" st-sort="">QutnQnty</th>
                                 <th style="text-align: left;" st-sort="">POQnty</th>
@@ -384,6 +385,7 @@
 
                                 <td class="col-lg-1">{{row.ReqQnty | number:2}}</td>
                                 <td class="col-lg-1">{{row.RemainingQty}}</td>
+                                <td class="col-lg-1">{{row.RemainingVendorQty}}</td>
                                 <td class="col-lg-1">{{row.ReqUnit}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1">
@@ -398,14 +400,18 @@
                                 <td class="col-lg-1 col-md-1 col-sm-1">
                                     <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoAmt" ng-value="0" ng-readonly="true" />
                                 </td>
-                                <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatPerc | number:2}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1" style="width:3%;">{{row.VatPerc | number:2}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatAmt | number:2}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1">
                                     <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoVatAmt" ng-value="0" ng-readonly="true" />
                                 </td>
-                                <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:1}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:2}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1">
-                                    <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoTolAmt" ng-value="0" ng-readonly="true" />
+                                    <input class="form-control" style="width:100%; height:18px;font-size:10px"
+                                           type="text" min="0"
+                                           ng-model="row.NegoTolAmt"
+                                           ng-readonly="true"
+                                         />
                                 </td>
                             </tr>
                         </tbody>
@@ -418,7 +424,17 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-sm-1 col-md-1 col-lg-1">
+            </div>
+            <div class="col-lg-2">
 
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+           
+        </div>
 
         <div class="row">
             <div class="col-sm-1 col-md-1 col-lg-1">
@@ -434,16 +450,29 @@
                 </div>
             </div>
 
-            @*<div class="col-lg-2">
-                    <div class="form-group">
-                        <label>PO No:</label>
-                    </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label>Bill Category:</label>
                 </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto PO  No" ng-model="VendorCSInfo.AutoCSNo" ng-readonly="true" />
-                    </div>
-                </div>*@
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>
+                        <input type="radio" ng-model="VendorCSInfo.Category" value="Normal" /> Normal
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="VendorCSInfo.Category" value="plusminus" /> Plus Minus
+                    </label>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
         </div>
 
         <div class="row">
@@ -456,20 +485,66 @@
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
-                    <input id="POAmount" name="POAmount" type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.PoAmount" />
+                    <input id="POAmount" name="POAmount" type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.PoAmount" ng-blur="calculateInstallmentAmount()" />
                 </div>
             </div>
 
+
+
+
             <div class="col-lg-2">
-                @*<div class="col-sm-1 col-md-1 col-lg-1">
-                    </div>*@
                 <div class="form-group">
-                    <label>PO Created by:</label>
+                    <label>Bill Type:</label>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
-                    <input id="RecommendedBy" name="RecommendedBy" type="text" class="form-control" placeholder="CreatedBy" ng-model="VendorCSInfo.RecommendedBy" />
+                    <label>
+                        <input type="radio" ng-model="VendorCSInfo.BillType" value="Default" /> Default
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="VendorCSInfo.BillType" value="Installment" /> Installment
+                    </label>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+        </div>
+        <div class="row">
+            <div class="col-sm-1 col-md-1 col-lg-1">
+            </div>
+            <div class="col-lg-2" ng-show="VendorCSInfo.BillType === 'Installment'">
+                <div class="form-group">
+                    <label>Installment:</label>
+                </div>
+            </div>
+            <div class="col-lg-3" ng-show="VendorCSInfo.BillType === 'Installment'">
+                <div class="form-group">
+                    <input id="Installment" name="Installment" type="text" class="form-control" placeholder="Number of Installment" ng-model="VendorCSInfo.Installment" ng-blur="calculateInstallmentAmount()" />
+                </div>
+            </div>
+
+            <div class="col-lg-2" ng-show="VendorCSInfo.BillType === 'Installment'">
+                <div class="form-group">
+                    <label>Installment Amount:</label>
+                </div>
+            </div>
+            <div class="col-lg-3" ng-show="VendorCSInfo.BillType === 'Installment'">
+                <div class="form-group">
+                    <input id="InstalledAmount" name="InstalledAmount" type="text" class="form-control" placeholder="Installed Amount" ng-model="VendorCSInfo.InstalledAmount" />
                 </div>
             </div>
         </div>
@@ -816,8 +891,15 @@
             PoAmount: "",
             ServiceCategoryID: "",
             ClientReqID: "",
-            WIInfoID:""
+            WIInfoID: "",
+            BillType: "",
+            Installment: 1,
+            InstalledAmount: "",
+            Category:""
         }
+
+        $scope.VendorCSInfo.Category = 'Normal'; 
+        $scope.VendorCSInfo.BillType = 'Default'; 
 
         $scope.VendorCSInfoItem = {
             VendorCSInfoItemID: "",
@@ -978,7 +1060,8 @@
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
                     $scope.VenCSItemGridDisplayCollection.forEach(function (item, index) {
                         // Add an index field to each object
-                        item.index = index; // Adding 1 to start index from 1
+                        item.index = index;
+                  // Adding 1 to start index from 1
                     });
                     $scope.loading = false;
                 }).error(function () {
@@ -1214,7 +1297,13 @@
                 WIInfoID:row.WIInfoID
             })
                 .success(function (response) {
-                    $scope.VenCSItemList = response.VenCSItemList;
+                    $scope.VenCSItemList = response.VenCSItemList.map(function (item) {
+                        item.NegoTolAmt = parseFloat(item.NegoTolAmt).toFixed(2);  // Format NegoTolAmt
+                        item.NegoAmt = parseFloat(item.NegoAmt).toFixed(2);
+                        item.QutnQnty = parseFloat(item.QutnQnty).toFixed(2);
+                      
+                        return item;
+                    });
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
                     console.log($scope.VenCSItemGridDisplayCollection);
                 })
@@ -1562,16 +1651,16 @@
         //};
 
 
-        $scope.validateNegoQty = function (row) {
-            if (row.NegoQty > row.RemainingQuantity) {
-                toastr.error('Negotiation Quantity cannot exceed Remaining Quantity.');
-                row.NegoQty = row.RemainingQty;
-            } else if (row.NegoQty > row.QutnQnty) {
-                alert('Negotiation Quantity cannot exceed Quotation Quantity.');
-                row.NegoQty = row.QutnQnty;
-            }
-            $scope.checkUnitPrice(row); // Call the existing function
-        };
+        //$scope.validateNegoQty = function (row) {
+        //    if (row.NegoQty > row.RemainingQuantity) {
+        //        toastr.error('Negotiation Quantity cannot exceed Remaining Quantity.');
+        //        row.NegoQty = row.RemainingQty;
+        //    } else if (row.NegoQty > row.QutnQnty) {
+        //        alert('Negotiation Quantity cannot exceed Quotation Quantity.');
+        //        row.NegoQty = row.QutnQnty;
+        //    }
+        //    $scope.checkUnitPrice(row); // Call the existing function
+        //};
 
 
 
@@ -1615,7 +1704,12 @@
 
 
 
-
+        $scope.calculateInstallmentAmount = function () {
+            if ($scope.VendorCSInfo.PoAmount && $scope.VendorCSInfo.Installment) {
+                // Calculate and set the InstalledAmount
+                $scope.VendorCSInfo.InstalledAmount = parseFloat($scope.VendorCSInfo.PoAmount) / parseInt($scope.VendorCSInfo.Installment);
+            }
+        };
 
 
 

@@ -172,12 +172,13 @@ namespace SILDMS.DataAccess.POCreation
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
                         TolAmt = reader.GetString("TolAmt"),
-                        NegoQty = reader.GetString("QutnQnty"),
+                        NegoQty = reader.GetString("RemainingVendorQty"),
                         NegoPrice = reader.GetString("QutnPrice"),
-                        NegoAmt = reader.GetString("QutnAmt"),
+                        NegoAmt = reader.GetString("VendorAmount"),
                         NegoVatAmt = reader.GetString("VatAmt"),
-                        NegoTolAmt = reader.GetString("TolAmt"),
-                        RemainingQty = reader.GetString("RemainingQty")
+                        NegoTolAmt = reader.GetString("VendorTotalAmount"),
+                        RemainingQty = reader.GetString("RemainingQty"),
+                        RemainingVendorQty= reader.GetString("RemainingVendorQty")
                         // ,
 
                         //Status = reader.GetString("Status")
@@ -331,10 +332,14 @@ namespace SILDMS.DataAccess.POCreation
                     //db.AddInParameter(dbCommandWrapper, "@CSNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.CSNo));
                     db.AddInParameter(dbCommandWrapper, "@PODate", SqlDbType.NVarChar, vendorCSInfo.CSRecDate);
                     db.AddInParameter(dbCommandWrapper, "@PoAmount", SqlDbType.Decimal, vendorCSInfo.PoAmount);
+                    db.AddInParameter(dbCommandWrapper, "@Installment", SqlDbType.Int, vendorCSInfo.Installment);
+                    db.AddInParameter(dbCommandWrapper, "@InstalledAmount", SqlDbType.Decimal, vendorCSInfo.InstalledAmount);
+                    db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, vendorCSInfo.BillType);
+                    db.AddInParameter(dbCommandWrapper, "@Category", SqlDbType.NVarChar, vendorCSInfo.Category);
                     db.AddInParameter(dbCommandWrapper, "@POCreatedBy", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.RecommendedBy));
 
                     db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
-                    db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
+                    //db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@VendorPOItemType", SqlDbType.Structured, VendorPOItem);
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorPoAprvTerms", SqlDbType.Structured, VendorCSTerm);
                     //db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmVendors", SqlDbType.Structured, vendorCSVendors);

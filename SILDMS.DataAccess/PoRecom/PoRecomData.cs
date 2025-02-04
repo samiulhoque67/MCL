@@ -143,7 +143,10 @@ namespace SILDMS.DataAccess.PoRecom
                         PODate = (reader.GetString("PODate")),
                         PONo = reader.GetString("PONo"),
                         Remarks = reader.GetString("Remarks"),
-
+                        BillType=reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
+                        Installment=reader.GetInt32("Installment"),
+                        InstalledAmount = reader.GetDouble("InstallmentAmt"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         //ServiceItemCode = reader.GetString("ServiceItemCode"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
@@ -281,6 +284,12 @@ namespace SILDMS.DataAccess.PoRecom
                     //db.AddInParameter(dbCommandWrapper, "@CSNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.CSNo));
                     db.AddInParameter(dbCommandWrapper, "@PODate", SqlDbType.NVarChar, vendorCSInfo.PORecDate);
                     db.AddInParameter(dbCommandWrapper, "@PoAmount", SqlDbType.Decimal, vendorCSInfo.RecommendedAmount);
+
+                    db.AddInParameter(dbCommandWrapper, "@Installment", SqlDbType.Int, vendorCSInfo.Installment);
+                    db.AddInParameter(dbCommandWrapper, "@InstalledAmount", SqlDbType.Decimal, vendorCSInfo.InstalledAmount);
+                    db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, vendorCSInfo.BillType);
+                    db.AddInParameter(dbCommandWrapper, "@Category", SqlDbType.NVarChar, vendorCSInfo.Category);
+
                     //db.AddInParameter(dbCommandWrapper, "@POCreatedBy", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.RecommendedBy));
 
                     db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));

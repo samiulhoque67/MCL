@@ -86,7 +86,7 @@
                         <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorQutn.VendorName" class="form-control" ng-readonly="true" />
                     </div>
                 </div>
-               
+
             </div>
 
 
@@ -102,41 +102,75 @@
                     </div>
                 </div>
             </div>
-            <!--<div class="row">-->
-                @*<div class="col-lg-3">
-                <div class="form-group">
-                    <label>Vendor Quotation No.:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="VendorQutnNo" name="VendorQutnNo" type="text" class="form-control" placeholder="Vendor Quotation No" ng-model="VendorQutn.VendorQutnNo" />
-                </div>
-            </div>*@
 
-                <!--<div class="col-lg-3">
-                    <div class="form-group">
-                        <label>Quotation No:</label>
-                    </div>
-                </div>
+
+            <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="AutoVendorQutnNo" name="AutoVendorQutnNo" type="text" class="form-control" placeholder="Quotation No" ng-model="VendorQutn.VendorQutnNo" ng-readonly="true" />
+                        <label>Installment No.</label>
                     </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <input id="Installment" name="Installment" type="text" class="form-control" placeholder="Po No" ng-model="VendorQutn.POInstallmentNo" ng-readonly="true" />
+                    </div>
+                </div>
+                <div class="col-lg-1">
+                  
                 </div>
 
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label>Quotation Date</label>
+                        <label>Installment Amount:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="QuotationDate" name="QuotationDate" type="text" class="DatePicker form-control" placeholder="Quotation Date" ng-model="VendorQutn.QuotationDate" />
+                        <input id="InstalledAmount" name="InstalledAmount" readonly type="text" class="form-control" ng-model="VendorQutn.POInstallmentAmt" ng-readonly="true" />
                     </div>
                 </div>
+            </div>
 
-            </div>-->
+
+
+
+
+
+            <!--<div class="row">-->
+            @*<div class="col-lg-3">
+            <div class="form-group">
+                <label>Vendor Quotation No.:</label>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <input id="VendorQutnNo" name="VendorQutnNo" type="text" class="form-control" placeholder="Vendor Quotation No" ng-model="VendorQutn.VendorQutnNo" />
+            </div>
+        </div>*@
+
+            <!--<div class="col-lg-3">
+            <div class="form-group">
+                <label>Quotation No:</label>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <input id="AutoVendorQutnNo" name="AutoVendorQutnNo" type="text" class="form-control" placeholder="Quotation No" ng-model="VendorQutn.VendorQutnNo" ng-readonly="true" />
+            </div>
+        </div>
+
+        <div class="col-lg-2">
+            <div class="form-group">
+                <label>Quotation Date</label>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <input id="QuotationDate" name="QuotationDate" type="text" class="DatePicker form-control" placeholder="Quotation Date" ng-model="VendorQutn.QuotationDate" />
+            </div>
+        </div>
+
+    </div>-->
             @*<div class="row">
 
 
@@ -160,7 +194,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="WONo" name="WONo" type="text" data-ng-model="VendorQutn.WONo" class="form-control" placeholder="Wo No"   ng-readonly="true"/>
+                        <input id="WONo" name="WONo" type="text" data-ng-model="VendorQutn.WONo" class="form-control" placeholder="Wo No" ng-readonly="true" />
                     </div>
                 </div>
 
@@ -172,7 +206,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="WOAmt" name="WOAmt" type="text" data-ng-model="VendorQutn.WOAmt" class="form-control" placeholder="Wo Amount"  ng-readonly="true" />
+                        <input id="WOAmt" name="WOAmt" type="text" data-ng-model="VendorQutn.WOAmt" class="form-control" placeholder="Wo Amount" ng-readonly="true" />
                     </div>
                 </div>
 
@@ -253,6 +287,66 @@
             </div>
 
             <div class="row">
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Commission (%):</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="CommissionPercentage" name="CommissionPercentage" type="text" class="form-control" placeholder="Commission Percentage" ng-model="VendorQutn.CommissionPercentage" ng-change="calculateCommission()" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Bill Category:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" ng-model="VendorQutn.BillCategory" value="Normal" ng-disabled="VendorQutn.BillCategory" /> Normal
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="VendorQutn.BillCategory" value="plusminus" ng-disabled="VendorQutn.BillCategory" /> Plus Minus
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Commission Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="CommissionAmount" name="CommissionAmount" type="text" class="form-control" placeholder="Commission Amount" ng-model="VendorQutn.CommissionAmount" ng-readonly="true" />
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Bill Type:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-disabled="VendorQutn.BillType">
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" ng-model="VendorQutn.BillType" value="Default" ng-disabled="VendorQutn.BillType" /> Default
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="VendorQutn.BillType" value="Installment" ng-disabled="VendorQutn.BillType" /> Installment
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>VAT (%):</label>
@@ -264,16 +358,6 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Commission (%):</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="CommissionPercentage" name="CommissionPercentage" type="text" class="form-control" placeholder="Commission Percentage" ng-model="VendorQutn.CommissionPercentage" ng-change="calculateCommission()" />
-                    </div>
-                </div>
             </div>
 
             <div class="row">
@@ -288,16 +372,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Commission Amount:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="CommissionAmount" name="CommissionAmount" type="text" class="form-control" placeholder="Commission Amount" ng-model="VendorQutn.CommissionAmount" ng-readonly="true" />
-                    </div>
-                </div>
+              
             </div>
 
             <div class="row">
@@ -587,7 +662,14 @@
             VendrFinalBilRcvdID: "",
             WOAmt: "",
             WONo: "",
-            WOInfoID:""
+            WOInfoID: "",
+            POInstallmentID: "",
+            POInstallmentNo: "",
+            POInstallmentAmt: "",
+            BillType: "",
+            BillCategory:""
+
+
         }
 
         $scope.VendorQutnItem = {
@@ -907,12 +989,17 @@
             $scope.VendorQutn.WONo = row.WONo;   
             $scope.VendorQutn.WOInfoID = row.WOInfoID;   
             $scope.VendorQutn.WOAmt = row.WOAmt;   
-            
-            
+            $scope.VendorQutn.POInstallmentID = row.POInstallmentID;
+            $scope.VendorQutn.POInstallmentNo = row.POInstallmentNo;   
+               
+            $scope.VendorQutn.POInstallmentAmt = row.POInstallmentAmt;   
+            $scope.VendorQutn.BillType = row.BillType;   
+            $scope.VendorQutn.BillCategory = row.BillCategory;   
             $scope.VendorQutn.AdvancePaidAmount = row.AdvancClaimRcvAmt;
             $scope.VendorQutn.AdvancePaidDate = row.AdvancClaimRcvdDate;
             $scope.VendorQutn.AdvancePaidID = row.AdvancRecvID;
-            $scope.VendorQutn.BillAmount = row.POAmount - row.AdvancClaimRcvAmt;
+            //$scope.VendorQutn.BillAmount = row.POInstallmentAmt - row.AdvancClaimRcvAmt;
+            $scope.VendorQutn.BillAmount = row.POInstallmentAmt;
 
             //$scope.VendorQutn.SubmissionDate = row.SubmissionDate;
             //$scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;
@@ -940,28 +1027,31 @@
 
 
         $scope.calculateAmounts = function () {
-            var billAmount = parseFloat($scope.VendorQutn.BillAmount) || 0;
+            var totalbillAmount = parseFloat($scope.VendorQutn.TotalBillAmount) || 0;
             var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
 
             // Calculate the VAT amount
-            $scope.VendorQutn.VATAmount = (billAmount * vatPercentage) / 100;
+           /* $scope.VendorQutn.VATAmount = (totalbillAmount * vatPercentage) / 100;*/
+            $scope.VendorQutn.VATAmount = parseFloat(((totalbillAmount * vatPercentage) / 100).toFixed(3));
 
             // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.VATAmount;
-            $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount - $scope.VendorQutn.CommissionAmount;
+            $scope.VendorQutn.TotalBillAmount = totalbillAmount + $scope.VendorQutn.VATAmount;
+         /* $scope.VendorQutn.TotalBillAmount = billAmount;*/
+          $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount;
         };
 
 
         $scope.calculateCommission = function () {
-            var totalbillAmount = parseFloat($scope.VendorQutn.TotalBillAmount) || 0;
-            var poAmount = parseFloat($scope.VendorQutn.POAmount) || 0;
+         
+            var billAmount = parseFloat($scope.VendorQutn.BillAmount) || 0;
+            var installmentAmount = parseFloat($scope.VendorQutn.POInstallmentAmt) || 0;
             var cmsnPercentage = parseFloat($scope.VendorQutn.CommissionPercentage) || 0;
 
             // Calculate the VAT amount
-            $scope.VendorQutn.CommissionAmount = (poAmount * cmsnPercentage) / 100;
-
+            $scope.VendorQutn.CommissionAmount = parseFloat(((installmentAmount * cmsnPercentage) / 100).toFixed(3));
+            $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.CommissionAmount;
             // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorQutn.NetPayableAmount = totalbillAmount - $scope.VendorQutn.CommissionAmount;
+            $scope.VendorQutn.NetPayableAmount = billAmount + $scope.VendorQutn.CommissionAmount;
         };
 
 

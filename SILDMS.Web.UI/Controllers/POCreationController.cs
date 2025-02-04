@@ -83,7 +83,7 @@ namespace SILDMS.Web.UI.Controllers
 
         public async Task<dynamic> SaveVendorPOInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem,List<OBS_VendorCSRecmTerms> vendorCSTerm, List<OBS_VendorCSRecmVendors> vendorCSItemWise)
         {
-            vendorCS.SetBy = UserID;
+            vendorCS.RecommendedBy = UserID;
             string status = string.Empty;//, message = string.Empty;
             status = pOCreationService.SaveVendorPOInfo(vendorCS, vendorCSItem, vendorCSTerm, vendorCSItemWise);
             return Json(new { status }, JsonRequestBehavior.AllowGet);

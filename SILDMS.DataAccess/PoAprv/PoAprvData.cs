@@ -143,6 +143,10 @@ namespace SILDMS.DataAccess.PoAprv
                         PODate =reader.GetString("PORecomDate"),
                         PONo = reader.GetString("PONo"),
                         Remarks = reader.GetString("Remarks"),
+                        BillType = reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
+                        Installment = reader.GetInt32("Installment"),
+                        InstalledAmount = reader.GetDouble("InstallmentAmt"),
 
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         //ServiceItemCode = reader.GetString("ServiceItemCode"),
@@ -345,6 +349,10 @@ namespace SILDMS.DataAccess.PoAprv
                     db.AddInParameter(dbCommandWrapper, "@PODate", SqlDbType.NVarChar, vendorCSInfo.PORecDate);
                     db.AddInParameter(dbCommandWrapper, "@PoAmount", SqlDbType.Decimal, vendorCSInfo.RecommendedAmount);
                     db.AddInParameter(dbCommandWrapper, "@RecommendedBy", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.RecommendedBy));
+                    db.AddInParameter(dbCommandWrapper, "@Installment", SqlDbType.Int, vendorCSInfo.Installment);
+                    db.AddInParameter(dbCommandWrapper, "@InstalledAmount", SqlDbType.Decimal, vendorCSInfo.InstalledAmount);
+                    db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, vendorCSInfo.BillType);
+                    db.AddInParameter(dbCommandWrapper, "@Category", SqlDbType.NVarChar, vendorCSInfo.Category);
 
                     db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
