@@ -426,13 +426,13 @@
                         </label>
                     </div>
                 </div>
-                <div ng-show="clientReqDisplayedCollection.length <= 0" class="col-lg-3">
+                <div @*ng-show="clientReqDisplayedCollection.length <= 0"*@ class="col-lg-3">
                     <div class="form-group">
                         <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1" accept=".pdf"
                                ng-model="uploadedFile" onchange="angular.element(this).scope().fileSelected(this)" />
                     </div>
                 </div>
-                <div ng-show="clientReqDisplayedCollection.length > 0" class="col-lg-1">
+                <div @*ng-show="clientReqDisplayedCollection.length > 0"*@ class="col-lg-1">
                     <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
 
                 </div>
@@ -1330,7 +1330,7 @@
                         toastr.success("Data Saved Successfully.");
 
                         if ($scope.uploadedFile) {
-                            $scope.SaveDocument(response.ClientReqID); //
+                            $scope.SaveDocument(response.VendrFinalBilRcvdID); //
                         }
 
                         $scope.clearVendorQutn();
@@ -1366,7 +1366,7 @@
 
 
         $scope.DocCrudStatus = "";
-        $scope.SaveDocument = function (ClientReqID) {
+        $scope.SaveDocument = function (VendrFinalBilRcvdID) {
             $scope.DocCrudStatus = "I";
 
             var fileUpload = document.getElementById("FileUpload1");
@@ -1402,7 +1402,7 @@
                 ftpUserName: "silsoft",
                 ftpPassword: "s!L@123",
                 serverUrl: "MCL/Vendor_Final_BillReceived",
-                documentID: "VFBR_" + ClientReqID,
+                documentID: "VFBR_" + VendrFinalBilRcvdID,
                 ext: "pdf"
             };
 
@@ -1454,7 +1454,7 @@
             $scope.loading = true; // Show loading indicator
 
             // Build the GET request URL with the DocID parameter
-            const requestUrl = "/ClientRequisition/ViewDocument?DocID=" + encodeURIComponent("CR_" + $scope.ClientReq.ClientReqID);
+            const requestUrl = "/ClientRequisition/ViewDocument?DocID=" + encodeURIComponent("VFBR_" + $scope.VendorQutn.VendrFinalBilRcvdID);
 
             $http.get(requestUrl, { responseType: 'arraybuffer' })
                 .then(function (response) {
