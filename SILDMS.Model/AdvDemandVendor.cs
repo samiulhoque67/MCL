@@ -55,6 +55,8 @@ namespace SILDMS.Model
         public string ProposedAmount { get; set; }
         public string RemainingAmount { get; set; }
         public string POAprvID { get; set; }
+        public string POInstallmentAmt { get; set; }
+        public string POInstallmentNo { get; set; }
         public string Note { get; set; }
 
         //----

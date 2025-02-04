@@ -177,6 +177,8 @@ namespace SILDMS.DataAccess.AdvDemandVendor
                 db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.VarChar, MasterData[0].WOInfoID);
                 db.AddInParameter(dbCommandWrapper, "@POAprvID", SqlDbType.VarChar, MasterData[0].POAprvID);
                 db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, MasterData[0].ClientReqID);
+                db.AddInParameter(dbCommandWrapper, "@InstallmentAmt", SqlDbType.VarChar, MasterData[0].POInstallmentAmt);
+                db.AddInParameter(dbCommandWrapper, "@InstallmentNo", SqlDbType.VarChar, MasterData[0].POInstallmentNo);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 
@@ -188,14 +190,7 @@ namespace SILDMS.DataAccess.AdvDemandVendor
                     var dt = ds.Tables[0];
                     var dr = dt.Rows[0];
 
-                    if (dr["Status"].ToString() == "Successfully Submitted")
-                    {
-                        message = "Operation Done";
-                    }
-                    else
-                    {
-                        message = "Error Found";
-                    }
+                    message = dr["Status"].ToString();
                 }
             }
 
