@@ -106,7 +106,12 @@ namespace SILDMS.DataAccess.AdvDemandVendor
                         POAprvAmnt = reader.GetString("POAprvAmnt"),
                         WONo = reader.GetString("WONo"),
                         WOInfoID = reader.GetString("WOInfoID"),
-                        WOAmt = reader.GetString("WOAmt")
+                        WOAmt = reader.GetString("WOAmt"),
+                        BillType = reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
+                        POInstallmentNo = reader.GetString("POInstallmentNo"),
+                        POInstallmentID = reader.GetString("POInstallmentID"),
+                        POInstallmentAmt = reader.GetString("POInstallmentAmt")
                     }).ToList();
 
                 }

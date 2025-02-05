@@ -60,5 +60,9 @@ namespace SILDMS.Model
         public string RemainingVendorQty { get; set; }
         public string VendorAddress { get; set; }
         public string WIInfoID { get; set; }
+        public string BillType { get; set; }
+        public int Installment { get; set; }
+        public double InstalledAmount { get; set; }
+        public string BillCategory { get; set; }
     }
 }

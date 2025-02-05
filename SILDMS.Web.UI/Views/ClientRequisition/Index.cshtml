@@ -163,12 +163,13 @@
                         </label>
                     </div>
                 </div>
-                <div ng-show="GridDisplayCollection.length <= 0" class="col-lg-3">
+                <div ng-show="clientReqDisplayedCollection.length <= 0" class="col-lg-3">
                     <div class="form-group">
-                        <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1" accept=".pdf" />
+                        <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1" accept=".pdf"
+                               ng-model="uploadedFile" onchange="angular.element(this).scope().fileSelected(this)" />
                     </div>
                 </div>
-                <div ng-show="GridDisplayCollection.length > 0" class="col-lg-1">
+                <div ng-show="clientReqDisplayedCollection.length > 0" class="col-lg-1">
                     <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
 
                 </div>
@@ -1340,6 +1341,16 @@
 
         ///////////////////////////////////////////////
 
+        $scope.uploadedFile = null;
+
+        $scope.fileSelected = function (element) {
+            $scope.$apply(function () {
+                $scope.uploadedFile = element.files.length > 0 ? element.files[0] : null;
+            });
+        };
+
+        /////////
+
         $scope.Post = function () {
 
             if ($('#ClientName').val() == "") {
@@ -1368,13 +1379,17 @@
             $http.post('/ClientRequisition/SaveClientRequisition',
                 {
                     clientReq: $scope.ClientReq,
-                    clientReqItem: $scope.GridDisplayCollection,//$scope.clientReqItemArray,
+                    clientReqItem: $scope.GridDisplayCollection,
                     clientReqTerm: $scope.ReqTermGridDisplayCollection
                 })
                 .success(function (response) {
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
-                        $scope.SaveDocument(response.ClientReqID);
+
+                        if ($scope.uploadedFile) {
+                            $scope.SaveDocument(response.ClientReqID);
+                        }
+
                         $scope.clearClientReq();
                         $scope.loading = false;
                         return;

@@ -86,7 +86,7 @@
                         <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorQutn.VendorName" class="form-control" ng-readonly="true" />
                     </div>
                 </div>
-               
+
             </div>
 
 
@@ -102,19 +102,53 @@
                     </div>
                 </div>
             </div>
-            <!--<div class="row">-->
-                @*<div class="col-lg-3">
-                <div class="form-group">
-                    <label>Vendor Quotation No.:</label>
+
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Installment No.</label>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <input id="Installment" name="Installment" type="text" class="form-control" placeholder="Po No" ng-model="VendorQutn.POInstallmentNo" ng-readonly="true" />
+                    </div>
+                </div>
+                <div class="col-lg-1">
+
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Installment Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="InstalledAmount" name="InstalledAmount" readonly type="text" class="form-control" ng-model="VendorQutn.POInstallmentAmt" ng-readonly="true" />
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="VendorQutnNo" name="VendorQutnNo" type="text" class="form-control" placeholder="Vendor Quotation No" ng-model="VendorQutn.VendorQutnNo" />
-                </div>
-            </div>*@
 
-                <!--<div class="col-lg-3">
+
+
+
+
+
+            <!--<div class="row">-->
+            @*<div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Vendor Quotation No.:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VendorQutnNo" name="VendorQutnNo" type="text" class="form-control" placeholder="Vendor Quotation No" ng-model="VendorQutn.VendorQutnNo" />
+                    </div>
+                </div>*@
+
+            <!--<div class="col-lg-3">
                     <div class="form-group">
                         <label>Quotation No:</label>
                     </div>
@@ -140,17 +174,17 @@
             @*<div class="row">
 
 
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>Quotation Received Date:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="QutnReceivedDate" name="QutnReceivedDate" type="text" class="DatePicker form-control" placeholder="Quotation Received Date" ng-model="VendorQutn.QutnReceivedDate" />
-                </div>
-            </div>
-        </div>*@
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label>Quotation Received Date:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="QutnReceivedDate" name="QutnReceivedDate" type="text" class="DatePicker form-control" placeholder="Quotation Received Date" ng-model="VendorQutn.QutnReceivedDate" />
+                        </div>
+                    </div>
+                </div>*@
 
             <div class="row">
                 <div class="col-lg-3 ">
@@ -160,7 +194,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="WONo" name="WONo" type="text" data-ng-model="VendorQutn.WONo" class="form-control" placeholder="Wo No"   ng-readonly="true"/>
+                        <input id="WONo" name="WONo" type="text" data-ng-model="VendorQutn.WONo" class="form-control" placeholder="Wo No" ng-readonly="true" />
                     </div>
                 </div>
 
@@ -172,7 +206,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="WOAmt" name="WOAmt" type="text" data-ng-model="VendorQutn.WOAmt" class="form-control" placeholder="Wo Amount"  ng-readonly="true" />
+                        <input id="WOAmt" name="WOAmt" type="text" data-ng-model="VendorQutn.WOAmt" class="form-control" placeholder="Wo Amount" ng-readonly="true" />
                     </div>
                 </div>
 
@@ -253,6 +287,66 @@
             </div>
 
             <div class="row">
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Commission (%):</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="CommissionPercentage" name="CommissionPercentage" type="text" class="form-control" placeholder="Commission Percentage" ng-model="VendorQutn.CommissionPercentage" ng-change="calculateCommission()" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Bill Category:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" ng-model="VendorQutn.BillCategory" value="Normal" ng-disabled="VendorQutn.BillCategory" /> Normal
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="VendorQutn.BillCategory" value="plusminus" ng-disabled="VendorQutn.BillCategory" /> Plus Minus
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Commission Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="CommissionAmount" name="CommissionAmount" type="text" class="form-control" placeholder="Commission Amount" ng-model="VendorQutn.CommissionAmount" ng-readonly="true" />
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Bill Type:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-disabled="VendorQutn.BillType">
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" ng-model="VendorQutn.BillType" value="Default" ng-disabled="VendorQutn.BillType" /> Default
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="VendorQutn.BillType" value="Installment" ng-disabled="VendorQutn.BillType" /> Installment
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>VAT (%):</label>
@@ -264,16 +358,6 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Commission (%):</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="CommissionPercentage" name="CommissionPercentage" type="text" class="form-control" placeholder="Commission Percentage" ng-model="VendorQutn.CommissionPercentage" ng-change="calculateCommission()" />
-                    </div>
-                </div>
             </div>
 
             <div class="row">
@@ -288,16 +372,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Commission Amount:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="CommissionAmount" name="CommissionAmount" type="text" class="form-control" placeholder="Commission Amount" ng-model="VendorQutn.CommissionAmount" ng-readonly="true" />
-                    </div>
-                </div>
+
             </div>
 
             <div class="row">
@@ -340,14 +415,31 @@
 
 
 
+            <div class="row">
+                @* implementing pdf here*@
 
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="upload_documents">
+                            Upload Documents <br>
+                            (<span style="color:#ff4900;"> PDF Only, Max Size 2MB </span>)
+                        </label>
+                    </div>
+                </div>
+                <div ng-show="clientReqDisplayedCollection.length <= 0" class="col-lg-3">
+                    <div class="form-group">
+                        <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1" accept=".pdf"
+                               ng-model="uploadedFile" onchange="angular.element(this).scope().fileSelected(this)" />
+                    </div>
+                </div>
+                <div ng-show="clientReqDisplayedCollection.length > 0" class="col-lg-1">
+                    <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
 
+                </div>
 
+                @* ends implementing pdf here*@
 
-
-
-
-
+            </div>
 
 
         </div>
@@ -381,7 +473,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in VendorReqDisplayedCollection">
-                     
+
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
                                 <td class="hidden">{{row.VendorID}}</td>
@@ -448,7 +540,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                  
+
                             <tr ng-repeat="row in clientReqDisplayedCollection">
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
@@ -489,11 +581,11 @@
         </div>
     </div>
 
- 
 
 
 
-    
+
+
 
     <div class="modal fade" id="deleteReqItemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
         <div class="modal-dialog" role="document">
@@ -513,13 +605,25 @@
         </div>
     </div>
 
-    
 
- 
+    @*view pdf modal*@
+    <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="padding: 0; margin: 0;">
+                    <iframe id="pdfViewer"
+                            style="width: 100%; height: 100vh; border: none;"
+                            title="PDF Viewer">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 
-   
 
-    
+
+
+
 </div>
 
 <script type="text/javascript">
@@ -587,7 +691,14 @@
             VendrFinalBilRcvdID: "",
             WOAmt: "",
             WONo: "",
-            WOInfoID:""
+            WOInfoID: "",
+            POInstallmentID: "",
+            POInstallmentNo: "",
+            POInstallmentAmt: "",
+            BillType: "",
+            BillCategory:""
+
+
         }
 
         $scope.VendorQutnItem = {
@@ -907,12 +1018,17 @@
             $scope.VendorQutn.WONo = row.WONo;   
             $scope.VendorQutn.WOInfoID = row.WOInfoID;   
             $scope.VendorQutn.WOAmt = row.WOAmt;   
-            
-            
+            $scope.VendorQutn.POInstallmentID = row.POInstallmentID;
+            $scope.VendorQutn.POInstallmentNo = row.POInstallmentNo;   
+               
+            $scope.VendorQutn.POInstallmentAmt = row.POInstallmentAmt;   
+            $scope.VendorQutn.BillType = row.BillType;   
+            $scope.VendorQutn.BillCategory = row.BillCategory;   
             $scope.VendorQutn.AdvancePaidAmount = row.AdvancClaimRcvAmt;
             $scope.VendorQutn.AdvancePaidDate = row.AdvancClaimRcvdDate;
             $scope.VendorQutn.AdvancePaidID = row.AdvancRecvID;
-            $scope.VendorQutn.BillAmount = row.POAmount - row.AdvancClaimRcvAmt;
+            //$scope.VendorQutn.BillAmount = row.POInstallmentAmt - row.AdvancClaimRcvAmt;
+            $scope.VendorQutn.BillAmount = row.POInstallmentAmt;
 
             //$scope.VendorQutn.SubmissionDate = row.SubmissionDate;
             //$scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;
@@ -940,28 +1056,31 @@
 
 
         $scope.calculateAmounts = function () {
-            var billAmount = parseFloat($scope.VendorQutn.BillAmount) || 0;
+            var totalbillAmount = parseFloat($scope.VendorQutn.TotalBillAmount) || 0;
             var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
 
             // Calculate the VAT amount
-            $scope.VendorQutn.VATAmount = (billAmount * vatPercentage) / 100;
+           /* $scope.VendorQutn.VATAmount = (totalbillAmount * vatPercentage) / 100;*/
+            $scope.VendorQutn.VATAmount = parseFloat(((totalbillAmount * vatPercentage) / 100).toFixed(3));
 
             // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.VATAmount;
-            $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount - $scope.VendorQutn.CommissionAmount;
+            $scope.VendorQutn.TotalBillAmount = totalbillAmount + $scope.VendorQutn.VATAmount;
+         /* $scope.VendorQutn.TotalBillAmount = billAmount;*/
+          $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount;
         };
 
 
         $scope.calculateCommission = function () {
-            var totalbillAmount = parseFloat($scope.VendorQutn.TotalBillAmount) || 0;
-            var poAmount = parseFloat($scope.VendorQutn.POAmount) || 0;
+         
+            var billAmount = parseFloat($scope.VendorQutn.BillAmount) || 0;
+            var installmentAmount = parseFloat($scope.VendorQutn.POInstallmentAmt) || 0;
             var cmsnPercentage = parseFloat($scope.VendorQutn.CommissionPercentage) || 0;
 
             // Calculate the VAT amount
-            $scope.VendorQutn.CommissionAmount = (poAmount * cmsnPercentage) / 100;
-
+            $scope.VendorQutn.CommissionAmount = parseFloat(((installmentAmount * cmsnPercentage) / 100).toFixed(3));
+            $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.CommissionAmount;
             // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorQutn.NetPayableAmount = totalbillAmount - $scope.VendorQutn.CommissionAmount;
+            $scope.VendorQutn.NetPayableAmount = billAmount + $scope.VendorQutn.CommissionAmount;
         };
 
 
@@ -1024,6 +1143,12 @@
             $scope.VendorQutn.Note = tableRow.Note;
             $scope.VendorQutn.WONo = tableRow.WONo;
             $scope.VendorQutn.WOAmt = tableRow.WOAmt;
+            $scope.VendorQutn.POInstallmentID = tableRow.POInstallmentID;
+            $scope.VendorQutn.POInstallmentNo = tableRow.POInstallmentNo;
+
+            $scope.VendorQutn.POInstallmentAmt = tableRow.POInstallmentAmt;
+            $scope.VendorQutn.BillType = tableRow.BillType;
+            $scope.VendorQutn.BillCategory = tableRow.BillCategory;
         
 
             $('#SearchVendorQutnModal').modal('hide');
@@ -1175,6 +1300,16 @@
 
         ///////////////////////////////////////////////
 
+        $scope.uploadedFile = null;
+
+        $scope.fileSelected = function (element) {
+            $scope.$apply(function () {
+                $scope.uploadedFile = element.files.length > 0 ? element.files[0] : null;
+            });
+        };
+
+        ///////////////////////////////////////////////
+
         $scope.Post = function () {
 
             if ($('#ClientName').val() == "") {
@@ -1210,7 +1345,14 @@
                 })
                 .success(function (response) {
                     if (response.status == "S201") {
+
+                        console.log(response.VendrFinalBilRcvdID);
                         toastr.success("Data Saved Successfully.");
+
+                        if ($scope.uploadedFile) {
+                            $scope.SaveDocument(response.VendrFinalBilRcvdID); //
+                        }
+
                         $scope.clearVendorQutn();
                         $scope.toggleRefreshTable();
                         $scope.loading = false;
@@ -1241,6 +1383,140 @@
                     return;
                 });
         }
+
+
+        $scope.DocCrudStatus = "";
+        $scope.SaveDocument = function (VendrFinalBilRcvdID) {
+            $scope.DocCrudStatus = "I";
+
+            var fileUpload = document.getElementById("FileUpload1");
+            var files = fileUpload.files;
+
+            if (files.length === 0) {
+                toastr.error("Please select a file to upload.");
+                return;
+            }
+
+            var file = files[0];
+            var ext = file.name.split('.').pop().toLowerCase();
+
+            var maxSizeInMB = 2;
+            if (file.size > maxSizeInMB * 1024 * 1024) {
+                toastr.error("File size must be 2 MB or less.");
+                return;
+            }
+
+            // Validate file extension
+            if (ext !== "pdf") {
+                toastr.error("Please upload PDF files only.");
+                return;
+            }
+
+            $scope.loading = true; // Show loading indicator
+
+            // FTP details
+            var ftpDetails = {
+
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "silsoft",
+                ftpPassword: "s!L@123",
+                serverUrl: "MCL/Vendor_Final_BillReceived",
+                documentID: "VFBR_" + VendrFinalBilRcvdID,
+                ext: "pdf"
+            };
+
+            // Helper function to handle file upload
+            function uploadFileToServer(file, ftpDetails) {
+                var formData = new FormData();
+                formData.append("file", file);
+                formData.append("serverIP", ftpDetails.serverIP);
+                formData.append("ftpPort", ftpDetails.ftpPort);
+                formData.append("ftpUserName", ftpDetails.ftpUserName);
+                formData.append("ftpPassword", ftpDetails.ftpPassword);
+                formData.append("serverUrl", ftpDetails.serverUrl);
+                formData.append("documentID", ftpDetails.documentID);
+                formData.append("ext", ftpDetails.ext);
+
+                $.ajax({
+                    url: '/ClientRequisition/SaveDocument',
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (result) {
+                        toastr.success("Document uploaded successfully.");
+                        resetFileInput();
+                        /* $scope.GetDocumentList();*/
+                        /* clearDocumentForm();*/
+                    },
+                    error: function (err) {
+                        toastr.error("Document upload failed. Please try again.");
+                        console.error(err);
+                    },
+                    complete: function () {
+                        $scope.loading = false;
+                    }
+                });
+            }
+
+            uploadFileToServer(file, ftpDetails);
+
+            // Helper to reset file input field
+            function resetFileInput() {
+                var fileInput = document.getElementById("FileUpload1");
+                fileInput.value = "";
+            }
+
+        };
+
+        $scope.ViewDocument = function () {
+            $scope.loading = true; // Show loading indicator
+
+            // FTP details
+            var ftpDetails = {
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "silsoft",
+                ftpPassword: "s!L@123",
+                serverUrl: "MCL/Vendor_Final_BillReceived",
+                documentID: "VFBR_" + $scope.VendorQutn.VendrFinalBilRcvdID,
+                ext: "pdf"
+            };
+
+            // Construct URL with query parameters
+            var requestUrl = "/ClientRequisition/ViewDocument?" +
+                "serverIP=" + encodeURIComponent(ftpDetails.serverIP) +
+                "&ftpPort=" + encodeURIComponent(ftpDetails.ftpPort) +
+                "&ftpUserName=" + encodeURIComponent(ftpDetails.ftpUserName) +
+                "&ftpPassword=" + encodeURIComponent(ftpDetails.ftpPassword) +
+                "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
+                "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
+                "&ext=" + encodeURIComponent(ftpDetails.ext);
+
+            // Make GET request to fetch the PDF
+            $http.get(requestUrl, { responseType: 'arraybuffer' })
+                .then(function (response) {
+                    var file = new Blob([response.data], { type: 'application/pdf' });
+                    var fileURL = URL.createObjectURL(file);
+                    let zoomParam = "#view=Fit";
+
+                    $("#pdfViewer").attr("src", fileURL + zoomParam);
+                    $('#ShowPDFModal').modal('show');
+                })
+                .catch(function (error) {
+                    toastr.error("Failed to load the PDF.");
+                    console.error(error);
+                })
+                .finally(function () {
+                    $scope.loading = false; // Hide the loading indicator
+                });
+        };
+
+
+
+
+
 
         $scope.toggleRefreshTable = function () {
 

@@ -66,5 +66,15 @@ namespace SILDMS.Model
         public string Email { get; set; }
         public string CurrentAddress { get; set; }
         public string WIInfoID { get; set; }
+
+        public int Installment { get; set; }
+
+         public string BillType { get; set; }
+
+        public double InstalledAmount { get; set; }
+
+        public string Category { get; set; }
+
+
     }
 }

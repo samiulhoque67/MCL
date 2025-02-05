@@ -276,7 +276,22 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="PurchaseOrderAmount">Purchase Order Amount :</label>
+                            <label for="PurchaseOrderAmount">Total PO Amount :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.PurchaseOrderAmount" readonly class="form-control" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Purchase Order Amount -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="PurchaseOrderAmount">Instrallment PO Amount :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
@@ -288,12 +303,12 @@
                     <div class="col-lg-1"></div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="AdvanceInvoiceNo">Advance Invoice No :</label>
+                            <label for="AdvanceInstallmentNo">Installment Number :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceInvoiceNo" name="AdvanceInvoiceNo" type="text" data-ng-model="AdvanceInformmation.AdvanceInvoiceNo" readonly class="form-control" />
+                            <input id="AdvanceInstallmentNo" name="AdvanceInstallmentNo" type="text" data-ng-model="AdvanceInformmation.AdvanceInstallmentNo" readonly class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -458,9 +473,10 @@
             ClientID: "",
             VendorID: "",
             POAprvID: "",
-            VendorQutnID : "",
+            VendorQutnID: "",
             PurchaseOrderAmount: "",
             AdvanceInvoiceNo: "",
+            AdvanceInstallmentNo: "",
             AdvanceDemandAmount: "",
             AdvanceDemandDate: "",
             ProposedAmount: "",
@@ -549,7 +565,7 @@
             $scope.loading = true;
 
             $scope.PoNo = row.PoNo;
-          /*  $scope.AdvanceInformmation.PurchaseOrderAmount = row.POAprvAmnt;*/
+            /*  $scope.AdvanceInformmation.PurchaseOrderAmount = row.POAprvAmnt;*/
             $scope.AdvanceInformmation.ClientID = row.ClientID;
             $scope.AdvanceInformmation.VendorID = row.VendorID;
             $scope.AdvanceInformmation.POAprvID = row.POAprvID;
@@ -565,7 +581,7 @@
                 $scope.AdvanceInformmation.WOInfoID = $scope.ClientDetails[0].WOInfoID;
                 $scope.AdvanceInformmation.ClientReqID = $scope.ClientDetails[0].ClientReqID;
 
-      
+
                 $scope.Client = {
                     ClientName: $scope.ClientDetails[0].ClientName,
                     VendorQutnNo: $scope.ClientDetails[0].VendorQutnNo,
@@ -574,7 +590,7 @@
                     WONumber: $scope.ClientDetails[0].WONo,
                     WOAmount: $scope.ClientDetails[0].WOAmt,
                 };
-            /*    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID);*/
+                /*    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID);*/
                 $scope.loading = false;
             }).error(function () {
                 $scope.loading = false;
@@ -608,7 +624,7 @@
         $scope.selectedRows = [];
         $scope.buttonChecked = false;
 
-   
+
         $scope.checkEnter = function (event, row) {
             if (event.keyCode === 13) {
                 row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
@@ -737,7 +753,7 @@
             }
         };
     }
-  )
+    )
 
 
 </script>

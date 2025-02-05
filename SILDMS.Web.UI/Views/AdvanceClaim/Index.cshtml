@@ -333,97 +333,118 @@
                     </div>
 
                     <div class="col-lg-1"></div>
+
+
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="AdvanceInvoiceNo">Claim No :</label>
+                            <label for="AdvanceAdjustment">Advance Adjustment :</label>
                         </div>
                     </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="AdvanceInvoiceNo" name="AdvanceInvoiceNo" type="text" data-ng-model="AdvanceInformmation.AdvanceInvoiceNo" readonly class="form-control" />
-                        </div>
+                    <div class="col-sm-1">
+                        <input type="radio" name="ReportType" value="PerBill" checked="checked" /> <label>Per Bill</label>
+
+                    </div>
+
+                    <div class="col-sm-2">
+                        <input type="radio" name="FinalBill" value="FinalBill" /> <label>Final Bill</label>
+
                     </div>
                 </div>
 
-                <!-- Quotation Note & Billing Date -->
-                <div class="row">
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="AdvanceClaimAmount">Advance Claim Amount :</label>
+                    <!-- Quotation Note & Billing Date -->
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="AdvanceClaimAmount">Advance Claim Amount :</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="AdvanceClaimAmount" name="AdvanceClaimAmount" type="text" data-ng-model="AdvanceInformmation.AdvanceClaimAmount" class="form-control" />
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <input id="AdvanceClaimAmount" name="AdvanceClaimAmount" type="text" data-ng-model="AdvanceInformmation.AdvanceClaimAmount" class="form-control" />
+                            </div>
                         </div>
+
+                        <div class="col-lg-1"></div>
+
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="AdvanceInvoiceNo">Claim No :</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <input id="AdvanceInvoiceNo" name="AdvanceInvoiceNo" type="text" data-ng-model="AdvanceInformmation.AdvanceInvoiceNo" readonly class="form-control" />
+                            </div>
+                        </div>
+
+
+
                     </div>
 
-                    <div class="col-lg-1"></div>
+                    <!-- Quotation Note & Billing Date -->
+                    <div class="row">
 
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="AdvanceClaimDate">Advance Claim Date :</label>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="RemainingAmount">Remaining Amount :</label>
+                            </div>
                         </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <input id="RemainingAmount" name="RemainingAmount" type="text" data-ng-model="AdvanceInformmation.RemainingAmount"
+                                       readonly class="form-control" ng-keydown="calculateRemainingAmount($event)" />
+                            </div>
+                        </div>
+
+                        <div class="col-lg-1"></div>
+
+
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="AdvanceClaimDate">Advance Claim Date :</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <input id="AdvanceClaimDate" name="AdvanceClaimDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                                       ng-model="AdvanceInformmation.AdvanceClaimDate" style=" background-color:#ffffff; " />
+
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="AdvanceClaimDate" name="AdvanceClaimDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
-                                   ng-model="AdvanceInformmation.AdvanceClaimDate" style=" background-color:#ffffff; " />
+
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="Note">Note :</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="form-group">
+                                <input id="Note" name="Note" type="text" data-ng-model="AdvanceInformmation.Note" class="form-control" />
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-9">
 
                         </div>
+
+                        <div class="col-lg-2">
+                            <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
+                                    ng-click="openConfirmModal()" data-dismiss="modal" title="Save"
+                                    style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius: 5px;">
+                                <i class="fa fa-check"></i> Submit
+                            </button>
+                        </div>
+
                     </div>
 
                 </div>
-
-                <!-- Quotation Note & Billing Date -->
-                <div class="row">
-
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="RemainingAmount">Remaining Amount :</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="RemainingAmount" name="RemainingAmount" type="text" data-ng-model="AdvanceInformmation.RemainingAmount"
-                                   readonly class="form-control" ng-keydown="calculateRemainingAmount($event)" />
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="Note">Note :</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-5">
-                        <div class="form-group">
-                            <input id="Note" name="Note" type="text" data-ng-model="AdvanceInformmation.Note" class="form-control" />
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-9">
-
-                    </div>
-
-                    <div class="col-lg-2">
-                        <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
-                                ng-click="openConfirmModal()" data-dismiss="modal" title="Save"
-                                style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius: 5px;">
-                            <i class="fa fa-check"></i> Submit
-                        </button>
-                    </div>
-
-                </div>
-
-            </div>
         </div>
 
     </div>
