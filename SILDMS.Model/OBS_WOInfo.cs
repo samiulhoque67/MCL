@@ -23,6 +23,10 @@ namespace SILDMS.Model
         [Required]
         public string WODate { get; set; }
         public string WOAmt { get; set; }
+        public string BillType { get; set; }
+        public string NoOfInstallment { get; set; }
+        public string InstallmentAmt { get; set; }
+
         public string RequisitionDate { get; set; }
         public string AprvNo { get; set; }
         public string AprvDate { get; set; } 
