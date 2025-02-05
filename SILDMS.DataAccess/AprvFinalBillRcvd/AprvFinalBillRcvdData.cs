@@ -51,6 +51,7 @@ namespace SILDMS.DataAccess.AprvFinalBillRcvd
                         VendorBillDate = reader.IsNull("VendorBillDate") ? string.Empty : reader.GetString("VendorBillDate"),
                         Note = reader.IsNull("Note") ? string.Empty : reader.GetString("Note"),
                         VendorFinalBilRecmID = reader.IsNull("VendrFinalBilRecmID") ? 0 : Convert.ToInt32(reader["VendrFinalBilRecmID"]),
+                        VendrFinalBilRcvdID = reader.IsNull("VendrFinalBilRcvdID") ? 0 : Convert.ToInt32(reader["VendrFinalBilRcvdID"]),
                         Operation = reader.IsNull("Operation") ? string.Empty : reader.GetString("Operation"),
                         RecommendedAmnt = reader.GetToDecimal("RecommendedAmnt"),
                         RecommendDate = reader.IsNull("RecommendDate") ? string.Empty : reader.GetString("RecommendDate"),
@@ -61,7 +62,12 @@ namespace SILDMS.DataAccess.AprvFinalBillRcvd
                         WOAmt = reader.GetToDecimal("WOAmount"),
                         AdvancePaidDate = reader.IsNull("AdvncPaidDate") ? string.Empty : reader.GetString("AdvncPaidDate"),
                         WONo = reader.IsNull("WOInfoNo") ? string.Empty : reader.GetString("WOInfoNo"),
-                        AdvancePaidID = reader.IsNull("VendrAdvncPaymntID") ? string.Empty : reader.GetString("VendrAdvncPaymntID")
+                        AdvancePaidID = reader.IsNull("VendrAdvncPaymntID") ? string.Empty : reader.GetString("VendrAdvncPaymntID"),
+                        POInstallmentNo = reader.GetInt32("POInstallmentNo"),
+                        POInstallmentID = reader.GetInt32("POInstallmentID"),
+                        POInstallmentAmt = reader.GetDouble("POInstallmentAmt"),
+                        BillType = reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
 
                     }).ToList();
                 }
@@ -85,6 +91,7 @@ namespace SILDMS.DataAccess.AprvFinalBillRcvd
                     vendorBillRecvdList = dt1.AsEnumerable().Select(reader => new VendorBillRecvd
                     {
                         VendorFinalBilRecmID = reader.IsNull("VendrFinalBilRecmID") ? 0 : Convert.ToInt32(reader["VendrFinalBilRecmID"]),
+                        VendrFinalBilRcvdID = reader.IsNull("VendrFinalBilRcvdID") ? 0 : Convert.ToInt32(reader["VendrFinalBilRcvdID"]),
                         VendorID = reader.IsNull("VendorID") ? string.Empty : reader.GetString("VendorID"),
                         VendorName = reader.IsNull("VendorName") ? string.Empty : reader.GetString("VendorName"),
                         ClientID = reader.IsNull("ClientID") ? string.Empty : reader.GetString("ClientID"),
@@ -110,7 +117,12 @@ namespace SILDMS.DataAccess.AprvFinalBillRcvd
                         AdvancePaidDate = reader.IsNull("AdvncPaidDate") ? string.Empty : reader.GetString("AdvncPaidDate"),
                         WONo = reader.IsNull("WOInfoNo") ? string.Empty : reader.GetString("WOInfoNo"),
                         WOInfoID = reader.IsNull("WOInfoID") ? string.Empty : reader.GetString("WOInfoID"),
-                        AdvancePaidID = reader.IsNull("VendrAdvncPaymntID") ? string.Empty : reader.GetString("VendrAdvncPaymntID")
+                        AdvancePaidID = reader.IsNull("VendrAdvncPaymntID") ? string.Empty : reader.GetString("VendrAdvncPaymntID"),
+                        POInstallmentNo = reader.GetInt32("POInstallmentNo"),
+                        POInstallmentID = reader.GetInt32("POInstallmentID"),
+                        POInstallmentAmt = reader.GetDouble("POInstallmentAmt"),
+                        BillType = reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
                     }).ToList();
                 }
             }
@@ -176,6 +188,12 @@ namespace SILDMS.DataAccess.AprvFinalBillRcvd
                     db.AddInParameter(dbCommandWrapper, "@WOAmt", SqlDbType.Decimal, billRecv.WOAmt);
                     db.AddInParameter(dbCommandWrapper, "@AdvancePaidID", SqlDbType.Decimal, billRecv.AdvancePaidID);
                     db.AddInParameter(dbCommandWrapper, "@AdvancePaidDate", SqlDbType.NVarChar, billRecv.AdvancePaidDate);
+                    db.AddInParameter(dbCommandWrapper, "@POInstallmentNo", SqlDbType.Int, billRecv.POInstallmentNo);
+                    db.AddInParameter(dbCommandWrapper, "@POInstallmentID", SqlDbType.Int, billRecv.POInstallmentID);
+                    db.AddInParameter(dbCommandWrapper, "@POInstallmentAmt", SqlDbType.Decimal, billRecv.POInstallmentAmt);
+                    db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, billRecv.BillType);
+                    db.AddInParameter(dbCommandWrapper, "@BillCategory", SqlDbType.NVarChar, billRecv.BillCategory);
+
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
