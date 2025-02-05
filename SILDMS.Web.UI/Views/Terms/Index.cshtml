@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
-                        <label for="FormName">Form Name</label>
+                        <label for="FormName">Form Name:</label>
                         <label style="font-size: larger;color:red;">*</label>
                     </div>
                 </div>
@@ -88,7 +88,6 @@
                                             {{row.Status == '1'? 'Active':'InActive'}}
                                         </span>
                                     </td>
-
                                     <td>
                                         <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleTermsSelect(row)">Select</a>
                                     </td>
@@ -136,19 +135,20 @@
                     <table st-table="GridDisplayCollection" st-safe-src="masterDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr>
-                                <th style="text-align: left;" st-sort="">Terms & Conditions :</th>
+                                <th style="text-align: left;" st-sort="">Terms & Conditions</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
                                 <th style="text-align: left;">Action</th>
                             </tr>
-                            @*<tr>
-                                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                                </tr>*@
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;">
                                 <td class="hidden">{{row.TermsItemID}}</td>
                                 <td class="col-lg-1" style="width:5%;">{{row.TermsName}}</td>
-                                @*<td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>*@
-
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                    <span ng-attr-class="{{row.ItemStatus =='1'? 'label label-success' : 'label label-danger' }}">
+                                        {{row.ItemStatus == '1'? 'Active':'InActive'}}
+                                    </span>
+                                </td>
                                 <td class="col-lg-1" style="width:5%;">
                                     <button type="button" ng-if="row.TermsItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleTermsItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                     <button type="button" ng-if="!row.TermsItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleTermsItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
@@ -204,7 +204,7 @@
                             </div>
                             <div class="col-sm-2 col-md-2 col-lg-2">
                                 <div class="form-group">
-                                    <label for="ItemStatus">Status</label>
+                                    <label for="ItemStatus">Status:</label>
                                 </div>
                             </div>
                             <div class="col-sm-2 col-md-2 col-lg-2">
@@ -215,7 +215,6 @@
                                 </select>
                             </div>
                         </div>
-
                     </div>
                     <div class="modal-footer">
                         <div class="col-sm-12 col-md-12 col-lg-12">
@@ -256,7 +255,7 @@
 
             $scope.termsItemArray = [];
             $scope.itemsByPage = 10;
-
+           
 
             $scope.vmTermsMst = {
                 TermsID: "",
@@ -267,9 +266,9 @@
             $scope.vmTermsItem = {
                 TermsItemID: "",
                 TermsName: "",
-                ReqUnit: ""
+                ItemStatus: ""
             }
-
+            $scope.vmTermsItem.ItemStatus = "1";
             // ################# Detail Add Modal ####################
             $scope.AddTermsModal = function () {
                 if ($('#FormName').val() == "") {
@@ -291,7 +290,8 @@
                 }
 
                 $scope.vmTermsItem.TermsName = $('#TermsName').val();
-
+                $scope.vmTermsItem.ItemStatus = $('#ItemStatus').val();
+                alert($('#ItemStatus').val());
                 $scope.termsItemArray.push($scope.vmTermsItem);
 
                 $scope.GridDisplayCollection = $scope.GridDisplayCollection.concat($scope.vmTermsItem);

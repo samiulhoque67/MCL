@@ -263,6 +263,11 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@WODate", SqlDbType.NVarChar, woInfo.WODate);
                     db.AddInParameter(dbCommandWrapper, "@WOAmt", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.WOAmt));
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.Remarks));
+
+                    db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, woInfo.BillType);
+                    db.AddInParameter(dbCommandWrapper, "@NoOfInstallment", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.NoOfInstallment));
+                    db.AddInParameter(dbCommandWrapper, "@InstallmentAmt", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.InstallmentAmt));
+
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, woInfo.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@OBS_WOInfoItem", SqlDbType.Structured, dtReqItem);
                     db.AddInParameter(dbCommandWrapper, "@OBS_WOInfoTerm", SqlDbType.Structured, dtReqTerm);
