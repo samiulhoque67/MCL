@@ -31,7 +31,7 @@ namespace SILDMS.Web.UI.Controllers
         // GET: /WorkOrderInfo/Index
         public ActionResult Index()
         {
-            return View();
+            return View();//
         }
         [HttpGet]
         //[Authorize]
