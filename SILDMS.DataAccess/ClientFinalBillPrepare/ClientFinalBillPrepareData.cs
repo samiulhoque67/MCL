@@ -55,7 +55,13 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                         Note = reader.IsNull("Note") ? string.Empty : reader.GetString("Note"),
                         ClientName = reader.IsNull("ClientName") ? string.Empty : reader.GetString("ClientName"),
                         QuotatDate = reader.GetDateTime("AprvDate").ToString("dd/MM/yyyy"),
-                        RequiDate = reader.IsNull("RequisitionDate") ? string.Empty : reader.GetString("RequisitionDate")
+                        RequiDate = reader.IsNull("RequisitionDate") ? string.Empty : reader.GetString("RequisitionDate"),
+                        WOInstallmentNo = reader.GetInt32("WOInstallmentNo"),
+                        WOInstallmentID = reader.GetInt64("WOInstallmentID"),
+                        WOInstallmentAmt = reader.GetToDecimal("WOInstallmentAmt"),
+                        BillType = reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
+                        BillAmount= reader.GetToDecimal("BillAmount")
                     }).ToList();
                 }
             }
@@ -88,9 +94,15 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                         Address = reader.GetString("Address"),
                         VendorQutnNo = reader.GetString("ClientQutnAprvID"),
                         QuotationDate = reader.GetDateTime("AprvDate").ToString("dd/MM/yyyy"),
-                       
+                        BaseAmount = reader.GetToDecimal("BaseAmount"),
+
                         AdvancClaimRcvAmt = reader.GetToDecimal("AdvancClaimRcvdAmt"),
-             
+                        WOInstallmentNo = reader.GetInt32("WOInstallmentNo"),
+                        WOInstallmentID = reader.GetInt64("WOInstallmentID"),
+                        WOInstallmentAmt = reader.GetDouble("WOInstallmentAmt"),
+                        BillType = reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
+
 
                     }).ToList();
                 }
@@ -138,6 +150,7 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                     db.AddInParameter(dbCommandWrapper, "@AdvanceRecvAmount", SqlDbType.Decimal, billRecv.AdvancClaimRcvAmt);
                     //db.AddInParameter(dbCommandWrapper, "@AdvancClaimRcvdDate", SqlDbType.NVarChar, billRecv.AdvancClaimRcvdDate);
                     db.AddInParameter(dbCommandWrapper, "@RemainingAmnt", SqlDbType.Decimal, billRecv.RemainingAmnt);
+                    db.AddInParameter(dbCommandWrapper, "@BillAmount", SqlDbType.Decimal, billRecv.BillAmount);
                     db.AddInParameter(dbCommandWrapper, "@VendorBillNo", SqlDbType.NVarChar, billRecv.VendorBillNo);
                     db.AddInParameter(dbCommandWrapper, "@BillDate", SqlDbType.NVarChar, billRecv.VendorBillDate);
                     db.AddInParameter(dbCommandWrapper, "@BillSubmitDate", SqlDbType.NVarChar, billRecv.BillReceiveDate);
@@ -147,6 +160,11 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                     db.AddInParameter(dbCommandWrapper, "@CommissionAmount", SqlDbType.Decimal, billRecv.CommissionAmount);
                     db.AddInParameter(dbCommandWrapper, "@TotalBillAmount", SqlDbType.Decimal, billRecv.TotalBillAmount);
                     db.AddInParameter(dbCommandWrapper, "@NetPayableAmount", SqlDbType.Decimal, billRecv.NetPayableAmount);
+                    db.AddInParameter(dbCommandWrapper, "@WOInstallmentAmt", SqlDbType.Decimal, billRecv.WOInstallmentAmt);
+                    db.AddInParameter(dbCommandWrapper, "@WOInstallmentID", SqlDbType.BigInt, billRecv.WOInstallmentID);
+                    db.AddInParameter(dbCommandWrapper, "@WOInstallmentNo", SqlDbType.Int, billRecv.WOInstallmentNo);
+                    db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, billRecv.BillType);
+                    db.AddInParameter(dbCommandWrapper, "@BillCategory", SqlDbType.NVarChar, billRecv.BillCategory);
                     db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, billRecv.Note);
                     db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.NVarChar, billRecv.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, billRecv.Action);

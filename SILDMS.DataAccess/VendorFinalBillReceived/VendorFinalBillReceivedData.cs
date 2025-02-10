@@ -41,7 +41,9 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         PoAprvDate = reader.IsNull("PoAprvDate") ? string.Empty : reader.GetString("PoAprvDate"),
                         POAmount = reader.GetToDecimal("PoAmount"),
                         CommissionPercentage = reader.GetToDecimal("CommissionPercnt"),
+                        CommissionPercentage1 = reader.GetToDecimal("ActualCommissionPercnt"),
                         CommissionAmount = reader.GetToDecimal("CommissionAmount"),
+                        CommissionAmount1 = reader.GetToDecimal("ActualCommissionAmount"),
                         VendorBillNo = reader.IsNull("VendorBillNo") ? string.Empty : reader.GetString("VendorBillNo"),
                         BillReceiveDate = reader.IsNull("BillReceiveDate") ? string.Empty : reader.GetString("BillReceiveDate"),
                         AdvancePaidAmount = reader.GetToDecimal("AdvncPaidAmt"),
@@ -94,6 +96,7 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         WONo = reader.GetString("WONo"),
                         WOAmt = reader.GetToDecimal("WOAmt"),
                         RemainingAmnt = reader.GetToDecimal("RemainingAmt"),
+                       
                         AdvancClaimRcvAmt = reader.GetToDecimal("VendorAdvncAprvAmt"),
                         AdvancRecvID = reader.GetString("VendorAdvancAprvID"),
                         AdvancClaimRcvdDate = reader.GetString("VendorAdvncAprvDate"),
@@ -162,7 +165,9 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                     db.AddInParameter(dbCommandWrapper, "@VATPercentage", SqlDbType.Decimal, billRecv.VATPercentage);
                     db.AddInParameter(dbCommandWrapper, "@VATAmount", SqlDbType.Decimal, billRecv.VATAmount);
                     db.AddInParameter(dbCommandWrapper, "@CommissionPercentage", SqlDbType.Decimal, billRecv.CommissionPercentage);
+                    db.AddInParameter(dbCommandWrapper, "@CommissionPercentage1", SqlDbType.Decimal, billRecv.CommissionPercentage1);
                     db.AddInParameter(dbCommandWrapper, "@CommissionAmount", SqlDbType.Decimal, billRecv.CommissionAmount);
+                    db.AddInParameter(dbCommandWrapper, "@CommissionAmount1", SqlDbType.Decimal, billRecv.CommissionAmount1);
                     db.AddInParameter(dbCommandWrapper, "@TotalBillAmount", SqlDbType.Decimal, billRecv.TotalBillAmount);
                     db.AddInParameter(dbCommandWrapper, "@NetPayableAmount", SqlDbType.Decimal, billRecv.NetPayableAmount);
                     db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, billRecv.Note);

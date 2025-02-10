@@ -68,5 +68,28 @@ namespace SILDMS.Model
         public int ClientFinalBilAprvID { get; set; }
         public string AdvancePaidDate { get; set; }
         public string AdvancePaidID { get; set; }
+        public decimal CommissionPercentage1 { get; set; }
+        public decimal CommissionAmount1 { get; set; }
+        public int POInstallmentNo { get; set; }
+        public int POInstallmentID { get; set; }
+        public double POInstallmentAmt { get; set; }
+        public string BillType { get; set; }
+        public string BillCategory { get; set; }
+        public string TDS { get; set; }
+        public string VDS { get; set; }
+        public string VenPayNo { get; set; }
+        public string MoneyRecNo { get; set; }
+        public string ChequeEftNo { get; set; }
+        public decimal PaymentAmount { get; set; }
+        public string PaymentMode { get; set; }
+        public string PayDate { get; set; }
+        public string PaymentID { get; set; }
+        public string ClientReqID { get; set; }
+        public string ClientReqNo { get; set; }
+        public Int64 WOInstallmentID { get; set; }
+        public int WOInstallmentNo { get; set; }
+        public double WOInstallmentAmt { get; set; }
+        public Int64 VendorFinalBilPaymentID { get; set; }
+        public object NetActualPayableAmount { get; set; }
     }
 }
