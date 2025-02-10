@@ -54,13 +54,11 @@ namespace SILDMS.DataAccess.AdvDemandVendor
                         VendorName = reader.GetString("VendorName"),
                         PoNo = reader.GetString("PoNo"),
                         PODate = reader.GetString("PODate"),
-                        POAprvAmnt = reader.GetString("AprvAmnt"),
                         ClientID = reader.GetString("ClientID"),
                         VendorID = reader.GetString("VendorID"),
                         POAprvID = reader.GetString("POAprvID"),
-                        VendorQutnID = reader.GetString("VendorQutnID"),
                         VendorQutnNo = reader.GetString("VendorQutnNo"),
-                        QuotationDate = reader.GetString("QuotationDate"),
+                        QuotationDate = reader.GetString("QuotationDate")
                     }).ToList();
 
                 }
@@ -177,8 +175,8 @@ namespace SILDMS.DataAccess.AdvDemandVendor
                 db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.VarChar, MasterData[0].WOInfoID);
                 db.AddInParameter(dbCommandWrapper, "@POAprvID", SqlDbType.VarChar, MasterData[0].POAprvID);
                 db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, MasterData[0].ClientReqID);
-                db.AddInParameter(dbCommandWrapper, "@InstallmentAmt", SqlDbType.VarChar, MasterData[0].POInstallmentAmt);
-                db.AddInParameter(dbCommandWrapper, "@InstallmentNo", SqlDbType.VarChar, MasterData[0].POInstallmentNo);
+                db.AddInParameter(dbCommandWrapper, "@POInstallmentAmt", SqlDbType.VarChar, MasterData[0].POInstallmentAmt);
+                db.AddInParameter(dbCommandWrapper, "@POInstallmentNo", SqlDbType.VarChar, MasterData[0].POInstallmentNo);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 

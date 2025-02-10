@@ -39,6 +39,14 @@ namespace SILDMS.Model
         public string POInstallmentNo { get; set; }
         public string POInstallmentID { get; set; }
         public string POInstallmentAmt { get; set; }
+        public string Note { get; set; }
+        public string AdvncDemnAmtPrev { get; set; }
+        public string AdvncDemnDatePrev { get; set; }
+        public string RecomNote { get; set; }
+        public string PrevProposedAmt { get; set; }
+        public string PrevRemainingAmt { get; set; }
+        public string RecomUserFullName { get; set; }
+        public string AdvanceDemandAmount { get; set; }
     }
 
 

@@ -96,7 +96,8 @@ namespace SILDMS.DataAccess.AdvancePayment
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         VendorName = reader.GetString("VendorName"),
-                        //VendorQutnNo = reader.GetString("VendorQutnNo"),
+                        VendorQutnNo = reader.GetString("VendorQutnNo"),
+                        AdvanceDemandAmount = reader.GetString("AdvanceDemandAmount"),
                         //QuotationDate = reader.GetString("QuotationDate"),
                         VendrAdvncDemnID = reader.GetString("VendrAdvncDemnID"),
                         AdvncDemnAmt = reader.GetString("AdvncDemnAmt"),
@@ -112,6 +113,12 @@ namespace SILDMS.DataAccess.AdvancePayment
                         WOAmt = reader.GetString("WOAmt"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         WOInfoID = reader.GetString("WOInfoID"),
+                        Note = reader.GetString("Note"),
+                        BillType = reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
+                        POInstallmentNo = reader.GetString("POInstallmentNo"),
+                        POInstallmentID = reader.GetString("POInstallmentID"),
+                        POInstallmentAmt = reader.GetString("POInstallmentAmt")
                     }).ToList();
 
                 }
@@ -177,7 +184,7 @@ namespace SILDMS.DataAccess.AdvancePayment
                 db.AddInParameter(dbCommandWrapper, "@OBS_AdvanceDemand_MasterType", SqlDbType.Structured, masterDataTable);
                 db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.VarChar, MasterData[0].WOInfoID);
                 db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, MasterData[0].ClientReqID);
-                db.AddInParameter(dbCommandWrapper, "@POAprvID", SqlDbType.VarChar, MasterData[0].MoneyReceiptNo);
+                db.AddInParameter(dbCommandWrapper, "@POAprvID", SqlDbType.VarChar, MasterData[0].POAprvID);
                 db.AddInParameter(dbCommandWrapper, "@TransactionMode", SqlDbType.VarChar, MasterData[0].TransactionMode);
                 db.AddInParameter(dbCommandWrapper, "@ParticularNo", SqlDbType.VarChar, MasterData[0].ParticularNo);
                 db.AddInParameter(dbCommandWrapper, "@MoneyReceiptNo", SqlDbType.VarChar, MasterData[0].MoneyReceiptNo);

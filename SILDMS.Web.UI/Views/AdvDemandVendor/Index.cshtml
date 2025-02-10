@@ -287,7 +287,7 @@
 
                 </div>
 
-                <!-- Purchase Order Amount -->
+                <!-- Instrallment Amount -->
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
@@ -490,21 +490,21 @@
             BillType: ""
         }
 
-        $scope.AdvanceInformmation.AdvanceDemandDate = new Date().toLocaleDateString('en-GB');
+        $scope.AdvanceInformmation.AdvanceDemandDate = new Date().toISOString().split('T')[0];
 
-        //$('.DatePicker').datepicker({
-        //    format: "yyyy-mm-dd",
-        //    autoclose: true
-        //}).on('changeDate', function (ev) {
-        //    var selectedDate = $(this).val(); // Get the selected date
-        //    $('.datepicker').hide();          // Hide the datepicker
+        $('.DatePicker').datepicker({
+            format: "yyyy-mm-dd",
+            autoclose: true
+        }).on('changeDate', function (ev) {
+            var selectedDate = $(this).val(); // Get the selected date
+            $('.datepicker').hide();          // Hide the datepicker
 
-        //    // Apply the selected date to AngularJS model
-        //    var scope = angular.element($(this)).scope();
-        //    scope.$apply(function () {
-        //        scope.AdvanceInformmation.AdvanceDemandDate = selectedDate;
-        //    });
-        //});
+            // Apply the selected date to AngularJS model
+            var scope = angular.element($(this)).scope();
+            scope.$apply(function () {
+                scope.AdvanceInformmation.AdvanceDemandDate = selectedDate;
+            });
+        });
 
 
 
