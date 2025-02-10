@@ -88,16 +88,10 @@ namespace SILDMS.DataAccess
                         ClientReqID = reader.GetString("ClientReqID"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
-                        //TDSChallanNo = reader.GetString("TDSChallanNo"),
-                        //TDSChallanDate = reader.GetString("TDSChallanDate"),
                         TDSAmount = reader.GetString("TDSAmount"),
-                        //VDSChallanNo = reader.GetString("TDSChallanNo"),
-                        //VDSChallanDate = reader.GetString("TDSChallanDate"),
                         VDSAmount = reader.GetString("VDSAmount"),
                         NetReceivableAmount = reader.GetString("NetReceivableAmount"),
-                        //,
-                        //AdvancClaimRcvdDate = reader.GetString("AdvancClimRcvdDate"),
-                        //ClientReqNo = reader.GetString("ClientReqNo")
+                        ReceivedDate = reader.GetString("ReceivedDate")
                     }).ToList();
                 }
             }
@@ -115,11 +109,6 @@ namespace SILDMS.DataAccess
                 DatabaseProviderFactory factory = new DatabaseProviderFactory();
                 SqlDatabase db = factory.CreateDefault() as SqlDatabase;
 
-                //if ((billRecv.ClientFinalPaymentRcvdID) == 0)
-                //    billRecv.Action = "add";
-                //else
-                //    billRecv.Action = "edit";
-
                 billRecv.Action = "add";
                 using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetClientSettlement"))
                 {
@@ -132,9 +121,9 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@TDSChallanDate", SqlDbType.NVarChar, billRecv.TDSChallanDate);
                     db.AddInParameter(dbCommandWrapper, "@TDSChallanAmt", SqlDbType.NVarChar, billRecv.TDSChallanAmt);
 
-                    db.AddInParameter(dbCommandWrapper, "@VDSChallanNo", SqlDbType.NVarChar, billRecv.TDSChallanNo);
-                    db.AddInParameter(dbCommandWrapper, "@VDSChallanDate", SqlDbType.NVarChar, billRecv.TDSChallanDate);
-                    db.AddInParameter(dbCommandWrapper, "@VDSChallanAmt", SqlDbType.NVarChar, billRecv.TDSChallanAmt);
+                    db.AddInParameter(dbCommandWrapper, "@VDSChallanNo", SqlDbType.NVarChar, billRecv.VDSChallanNo);
+                    db.AddInParameter(dbCommandWrapper, "@VDSChallanDate", SqlDbType.NVarChar, billRecv.VDSChallanDate);
+                    db.AddInParameter(dbCommandWrapper, "@VDSChallanAmt", SqlDbType.NVarChar, billRecv.VDSChallanAmt);
 
                     //db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, billRecv.Note);
                     db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.NVarChar, billRecv.SetBy);
