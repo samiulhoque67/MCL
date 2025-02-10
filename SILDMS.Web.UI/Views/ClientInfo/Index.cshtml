@@ -76,17 +76,11 @@
                     </div>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
-                    <div class="form-group">
-                        <select data-ng-model="vmClientInfoMst.ClientType" class="form-control">
-                            <option value="">-- None --</option>
-                            <option value="Internal">Internal</option>
-                            <option value="External">External</option>
-                        </select>
-                        @*<select id="ClientCategory" name="clientCategory" class="form-control" ng-model="vmClientInfoMst.ClientCategory"
-                                    ng-options="clientCategory as clientCategory.ClientCategoryName for clientCategory in clientCategorys track by clientCategory.ClientCategoryID" required="required">
-                                <option value="" style="display: none">-- Select--</option>
-                            </select>*@
-                    </div>
+                    <select data-ng-model="vmClientInfoMst.ClientType" class="form-control">
+                        <option value="">-- None --</option>
+                        <option value="Internal">Internal</option>
+                        <option value="External">External</option>
+                    </select>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
@@ -100,7 +94,6 @@
                         <option value="0">Inactive</option>
                     </select>
                 </div>
-
             </div>
 
             <div class="row" style="position:relative;top:2px;">
@@ -404,9 +397,6 @@
             ClientCode: "",
             ClientName: "",
             ClientType: "",
-            //ClientCategory: { ClientCategoryID: "", ClientCategoryName: "" },
-            //ClientTinNo: "",
-            //ClientBinNo: "",
             Status: ""
         };
 
@@ -448,6 +438,7 @@
 
         ///////////////////////Default Value////////////////////////
 
+        $scope.vmClientInfoMst.ClientType = "Internal";
         $scope.vmClientInfoMst.Status = "1";
         $scope.vmClientAddress.AddressStatus = "1";
 
@@ -476,9 +467,7 @@
             $scope.vmClientInfoMst.ClientID = tableRow.ClientID;
             $scope.vmClientInfoMst.ClientCode = tableRow.ClientCode;
             $scope.vmClientInfoMst.ClientName = tableRow.ClientName;
-            //$scope.vmClientInfoMst.ClientCategory.ClientCategoryID = tableRow.ClientCategoryID;
             $scope.vmClientInfoMst.ClientType = tableRow.ClientType;
-            //$scope.vmClientInfoMst.ClientBinNo = tableRow.ClientBinNo;
             $scope.vmClientInfoMst.Status = tableRow.Status;
 
             $http.post('/ClientInfo/GetClientAddressList', { ClientID: tableRow.ClientID })

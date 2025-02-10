@@ -288,7 +288,7 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="PurchaseOrderAmount">Purchase Order Amount :</label>
+                            <label for="PurchaseOrderAmount">Total PO Amount :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
@@ -306,6 +306,32 @@
                     <div class="col-lg-2">
                         <div class="form-group">
                             <input id="AdvanceInvoiceNo" name="AdvanceInvoiceNo" type="text" data-ng-model="AdvanceRecom.AdvanceInvoiceNo" readonly class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instrallment Amount -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="PurchaseOrderAmount">Instrallment PO Amount :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.POInstallmentAmt" readonly class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="AdvanceInstallmentNo">Installment Number :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="AdvanceInstallmentNo" name="AdvanceInstallmentNo" type="text" data-ng-model="AdvanceInformmation.POInstallmentNo" readonly class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -332,7 +358,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceDemandDate" name="AdvanceDemandDate" type="text" data-ng-model="AdvanceInformmation.AdvanceDemandDate" readonly class="form-control" />
+                            <input id="AdvanceDemandDate" name="AdvanceDemandDate" type="text" ng-model="formatDatetest(AdvanceInformmation.AdvanceDemandDate)" readonly class="form-control" />
 
                         </div>
                     </div>
@@ -376,12 +402,24 @@
                             <label for="ProposedBy">Proposed By :</label>
                         </div>
                     </div>
-                    <div class="col-lg-5">
+                    <div class="col-lg-2">
                         <div class="form-group">
                             <input id="ProposedBy" name="ProposedBy" type="text" readonly data-ng-model="AdvanceInformmation.ProposedBy" class="form-control" />
                         </div>
                     </div>
+                    
+                    <div class="col-lg-1"></div>
 
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ProposedNote">Proposed Note :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="ProposedNote" name="ProposedNote" type="text" readonly data-ng-model="AdvanceInformmation.Note" class="form-control" />
+                        </div>
+                    </div>
 
                 </div>
 
@@ -458,14 +496,14 @@
                             <label for="RecommendedDate">Recommended Date :</label>
                         </div>
                     </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="RecommendedDate" name="RecommendedDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
-                                   ng-model="AdvanceRecom.RecommendedDate" style=" background-color:#ffffff; " />
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <input id="RecommendedDate" name="RecommendedDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                                       ng-model="AdvanceRecom.RecommendedDate" style=" background-color:#ffffff; " />
 
+                            </div>
                         </div>
-                    </div>
-
+                    
                 </div>
 
                 <!-- Quotation Note & Billing Date -->
@@ -611,7 +649,7 @@
             RecommendationAmount:"",
             AdvanceDemandAmount: "",
             ProposedAmount: "",
-            AdvanceDemandDate: "",
+            /*AdvanceDemandDate: "",*/
             RecommendedDate: "",
             Operation: "",
             RemainingAmount: "",
@@ -619,6 +657,7 @@
             UserFullName: ""
         }
 
+        $scope.AdvanceRecom.RecommendedDate = new Date().toISOString().split('T')[0];
 
         $('.DatePicker').datepicker({
             format: "yyyy-mm-dd",
@@ -634,13 +673,18 @@
             });
         });
 
-
-
         const currentDate = new Date();
         const day = String(currentDate.getDate()).padStart(2, '0');
         const month = String(currentDate.getMonth() + 1).padStart(2, '0');
         const year = currentDate.getFullYear();
         document.getElementById("RecommendedDate").value = `${year}-${month}-${day}`;
+
+
+        /*const currentDate = new Date();
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const year = currentDate.getFullYear();
+        document.getElementById("RecommendedDate").value = `${year}-${month}-${day}`;*/
 
 
         $scope.SearchAvailableClients = function () {
@@ -730,6 +774,9 @@
                     RemainingAmount: $scope.ClientDetails[0].RemainingAmt,
                     AdvanceDemandDate: $scope.ClientDetails[0].AdvncDemnDate,
                     ProposedBy: $scope.ClientDetails[0].UserFullName,
+                    POInstallmentAmt: $scope.ClientDetails[0].POInstallmentAmt,
+                    POInstallmentNo: $scope.ClientDetails[0].POInstallmentNo,
+                    Note: $scope.ClientDetails[0].Note,
                    
                 };
 
@@ -737,11 +784,12 @@
                     ClientID: $scope.ClientDetails[0].ClientID,
                     AdvanceInvoiceNo: $scope.ClientDetails[0].VendrAdvncDemnID,
                     ProposedAmount: $scope.ClientDetails[0].ProposedAmt,
+                    RecommendationAmount: $scope.ClientDetails[0].ProposedAmt,
                     PurchaseOrderAmount: $scope.ClientDetails[0].POAprvAmnt,
-                    ClientReqID: $scope.ClientDetails[0].ClientReqID,
+                    ClientReqID: $scope.ClientDetails[0].ClientReqID,                 
                     WOInfoID: $scope.ClientDetails[0].WOInfoID,
                     POAprvID: $scope.ClientDetails[0].POAprvID,
-
+                    RecommendedDate: new Date().toISOString().split('T')[0]
                 };
 
                 $scope.loading = false;
@@ -764,8 +812,8 @@
         };
 
         function performCalculation() {
-            if ($scope.AdvanceRecom.PurchaseOrderAmount && $scope.AdvanceRecom.RecommendationAmount) {
-                $scope.AdvanceRecom.RemainingAmount = $scope.AdvanceRecom.PurchaseOrderAmount - $scope.AdvanceRecom.RecommendationAmount;
+            if ($scope.AdvanceInformmation.POInstallmentAmt && $scope.AdvanceRecom.RecommendationAmount) {
+                $scope.AdvanceRecom.RemainingAmount = $scope.AdvanceInformmation.POInstallmentAmt - $scope.AdvanceRecom.RecommendationAmount;
             } else {
                 $scope.AdvanceRecom.RemainingAmount = 0;
             }
@@ -806,8 +854,9 @@
 
             }).success(function (response) {
 
-                if (response.status === "Data Save Successfully" || "Operation Done") {
+                if (response.status === "Successfully Submitted" || "Operation Done") {
                     toastr.success('Data Saved Successfully');
+                    /* respose.VendorAdvancRecmID = $scope.VendorAdvancRecmID;*/
                     $scope.refreshPage();
                 }
                 else {
@@ -903,6 +952,13 @@
                 return {}; // No additional styling
             }
         };
+
+        // Function to format the date
+        //$scope.formatDatetest = function (dateString) {
+        //    var options = { day: 'numeric', month: 'long', year: 'numeric' };
+        //    var date = new Date(dateString);
+        //    return date.toLocaleDateString('en-US', options);
+        //};
     }
   )
 

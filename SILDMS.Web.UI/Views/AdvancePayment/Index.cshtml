@@ -105,7 +105,7 @@
 
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="VendorQuotationNo" name="VendorQuotationNo" type="text" data-ng-model="Client.VendorQutnNo" class="form-control" ng-readonly="true" />
+                            <input id="VendorQuotationNo" name="VendorQuotationNo" type="text" ng-model="Client.VendorQutnNo" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                 </div>
@@ -286,7 +286,7 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="PurchaseOrderAmount">Purchase Order Amount :</label>
+                            <label for="PurchaseOrderAmount">Total PO Amount :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
@@ -295,15 +295,29 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-1"></div>
+                </div>
+
+                <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="AdvanceInvoiceNo">Advance Aprrove No :</label>
+                            <label for="PurchaseOrderAmount">Installment  Amount :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceInvoiceNo" name="AdvanceInvoiceNo" type="text" data-ng-model="AdvanceRecom.AdvanceInvoiceNo" readonly class="form-control" />
+                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.POInstallmentAmt" readonly class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="AdvanceInstallmentNo">Installment Number :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="AdvanceInstallmentNo" name="AdvanceInstallmentNo" type="text" data-ng-model="AdvanceInformmation.POInstallmentNo" readonly class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -312,12 +326,12 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="AdvanceDemandAmount">Aprrove Demand Amount :</label>
+                            <label for="AdvanceDemand">Demand Amount :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceDemandAmount" name="AdvanceDemandAmount" type="text" data-ng-model="AdvanceInformmation.AdvanceDemandAmount" readonly class="form-control" />
+                            <input id="AdvanceDemand" name="AdvanceDemand" type="text" data-ng-model="AdvanceInformmation.AdvanceDemand" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -362,9 +376,21 @@
                             <label for="ProposedBy">Aprrove By :</label>
                         </div>
                     </div>
-                    <div class="col-lg-5">
+                    <div class="col-lg-2">
                         <div class="form-group">
                             <input id="ProposedBy" name="ProposedBy" type="text" readonly data-ng-model="AdvanceInformmation.ProposedBy" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ApproveNote">Approve Note :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="ApproveNote" name="ApproveNote" type="text" readonly data-ng-model="AdvanceInformmation.Note" class="form-control" />
                         </div>
                     </div>
 
@@ -399,26 +425,28 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="PurchaseOrderAmount">Purchase Order Amount :</label>
+                            <label for="AdvanceInvoiceNo">Advance Approve :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.PurchaseOrderAmount" readonly class="form-control" />
+                            <input id="AdvanceInvoiceNo" name="AdvanceInvoiceNo" type="text" data-ng-model="AdvanceInformmation.AdvanceDemandAmount" readonly class="form-control" />
                         </div>
                     </div>
 
                     <div class="col-lg-1"></div>
+
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="AdvanceInvoiceNo">Advance Payment No :</label>
+                            <label for="PurchaseOrderAmount">Advance agaist Claim :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceInvoiceNo" name="AdvanceInvoiceNo" type="text" data-ng-model="AdvanceRecom.AdvanceInvoiceNo" readonly class="form-control" />
+                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" @*data-ng-model="AdvanceInformmation.PurchaseOrderAmount"*@ readonly class="form-control" />
                         </div>
                     </div>
+
                 </div>
                 <!--Recommendation Amount -->
                 <div class="row">
@@ -731,7 +759,7 @@
                 $scope.Client = {
                     ClientName: $scope.ClientDetails[0].ClientName,
                     VendorID: $scope.ClientDetails[0].VendorID,
-                    /*VendorQutnNo: $scope.ClientDetails[0].VendorQutnNo,*/
+                    VendorQutnNo: $scope.ClientDetails[0].VendorQutnNo,
                     VendorName: $scope.ClientDetails[0].VendorName,
                     WONumber: $scope.ClientDetails[0].WONo,
                     WOAmount: $scope.ClientDetails[0].WOAmt
@@ -750,6 +778,11 @@
                     AdvanceDemandDate: $scope.ClientDetails[0].AdvncDemnDate,
                     POAprvID: $scope.ClientDetails[0].POAprvID,
                     ProposedBy: $scope.ClientDetails[0].UserFullName,
+
+                    AdvanceDemand: $scope.ClientDetails[0].AdvanceDemandAmount,
+                    POInstallmentNo: $scope.ClientDetails[0].POInstallmentNo,
+                    POInstallmentAmt: $scope.ClientDetails[0].POInstallmentAmt,
+                    Note: $scope.ClientDetails[0].Note,
 
                 };
 
@@ -786,8 +819,8 @@
         };
 
         function performCalculation() {
-            if ($scope.AdvanceRecom.PurchaseOrderAmount && $scope.AdvanceRecom.RecommendationAmount) {
-                $scope.AdvanceRecom.RemainingAmount = $scope.AdvanceRecom.PurchaseOrderAmount - $scope.AdvanceRecom.RecommendationAmount;
+            if ($scope.AdvanceInformmation.POInstallmentAmt && $scope.AdvanceRecom.RecommendationAmount) {
+                $scope.AdvanceRecom.RemainingAmount = $scope.AdvanceInformmation.POInstallmentAmt - $scope.AdvanceRecom.RecommendationAmount;
             } else {
                 $scope.AdvanceRecom.RemainingAmount = 0;
             }

@@ -287,7 +287,7 @@
 
                 </div>
 
-                <!-- Purchase Order Amount -->
+                <!-- Instrallment Amount -->
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
@@ -296,7 +296,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.PurchaseOrderAmount" readonly class="form-control" />
+                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.POInstallmentAmt" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -308,7 +308,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceInstallmentNo" name="AdvanceInstallmentNo" type="text" data-ng-model="AdvanceInformmation.AdvanceInstallmentNo" readonly class="form-control" />
+                            <input id="AdvanceInstallmentNo" name="AdvanceInstallmentNo" type="text" data-ng-model="AdvanceInformmation.POInstallmentNo" readonly class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -483,8 +483,14 @@
             RemainingAmount: "",
             Note: "",
             WOInfoID: "",
-            ClientReqID: ""
+            ClientReqID: "",
+            POInstallmentAmt: "",
+            POInstallmentNo: "",
+            BillCategory: "",
+            BillType: ""
         }
+
+        $scope.AdvanceInformmation.AdvanceDemandDate = new Date().toISOString().split('T')[0];
 
         $('.DatePicker').datepicker({
             format: "yyyy-mm-dd",
@@ -578,6 +584,12 @@
                 $scope.ClientDetails = response.ClientDetails;
 
                 $scope.AdvanceInformmation.PurchaseOrderAmount = $scope.ClientDetails[0].POAprvAmnt;
+
+                $scope.AdvanceInformmation.POInstallmentAmt = $scope.ClientDetails[0].POInstallmentAmt;
+                $scope.AdvanceInformmation.POInstallmentNo = $scope.ClientDetails[0].POInstallmentNo;
+                $scope.AdvanceInformmation.BillCategory = $scope.ClientDetails[0].BillCategory;
+                $scope.AdvanceInformmation.BillType = $scope.ClientDetails[0].BillType;
+
                 $scope.AdvanceInformmation.WOInfoID = $scope.ClientDetails[0].WOInfoID;
                 $scope.AdvanceInformmation.ClientReqID = $scope.ClientDetails[0].ClientReqID;
 
@@ -606,8 +618,8 @@
 
 
         function performCalculation() {
-            if ($scope.AdvanceInformmation.PurchaseOrderAmount && $scope.AdvanceInformmation.ProposedAmount) {
-                $scope.AdvanceInformmation.RemainingAmount = $scope.AdvanceInformmation.PurchaseOrderAmount - $scope.AdvanceInformmation.ProposedAmount;
+            if ($scope.AdvanceInformmation.POInstallmentAmt && $scope.AdvanceInformmation.ProposedAmount) {
+                $scope.AdvanceInformmation.RemainingAmount = $scope.AdvanceInformmation.POInstallmentAmt - $scope.AdvanceInformmation.ProposedAmount;
             } else {
                 $scope.AdvanceInformmation.RemainingAmount = 0;
             }
@@ -655,8 +667,9 @@
 
             }).success(function (response) {
 
-                if (response.status === "Data Save Successfully" || "Operation Done") {
+                if (response.status === "Successfully Submitted" || "Operation Done") {
                     toastr.success('Data Saved Successfully');
+                   /* respose.VendrAdvncDemnID = $scope.VendrAdvncDemnID;*/
                     $scope.refreshPage();
                 }
                 else {

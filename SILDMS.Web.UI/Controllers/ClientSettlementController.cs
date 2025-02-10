@@ -14,14 +14,6 @@ namespace SILDMS.Web.UI.Controllers
 {
     public class ClientSettlementController : Controller
     {
-        //        // GET: ClientSettlement
-        //        public ActionResult Index()
-        //        {
-        //            return View();
-        //        }
-        //    }
-        //}
-
         // GET: VendorFinalBillReceived
         readonly IClientSettlementService _clientFinalBillPrepareService;
         private readonly ILocalizationService _localizationService;

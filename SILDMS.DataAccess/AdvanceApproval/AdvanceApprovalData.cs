@@ -99,9 +99,12 @@ namespace SILDMS.DataAccess.AdvanceApproval
                         QuotationDate = reader.GetString("QuotationDate"),
                         VendrAdvncDemnID = reader.GetString("VendrAdvncDemnID"),
                         AdvncDemnAmt = reader.GetString("AdvncDemnAmt"),
+                        AdvncDemnAmtPrev = reader.GetString("AdvncDemnAmtPrev"),
                         AdvncDemnDate = reader.GetString("AdvncDemnDate"),
+                        AdvncDemnDatePrev = reader.GetString("AdvncDemnDatePrev"),
                         RemainingAmt = reader.GetString("RemainingAmt"),
                         UserFullName = reader.GetString("UserFullName"),
+                        RecomUserFullName = reader.GetString("RecomUserFullName"),
                         PoNo = reader.GetString("PoNo"),
                         POAprvID = reader.GetString("POAprvID"),
                         VendorQutnID = reader.GetString("VendorQutnID"),
@@ -111,6 +114,13 @@ namespace SILDMS.DataAccess.AdvanceApproval
                         WOAmt = reader.GetString("WOAmt"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         WOInfoID = reader.GetString("WOInfoID"),
+                        POInstallmentNo = reader.GetString("POInstallmentNo"),
+                        POInstallmentID = reader.GetString("POInstallmentID"),
+                        POInstallmentAmt = reader.GetString("POInstallmentAmt"),
+                        Note = reader.GetString("Note"),
+                        RecomNote = reader.GetString("RecomNote"),
+                        PrevProposedAmt = reader.GetString("PrevProposedAmt"),
+                        PrevRemainingAmt = reader.GetString("PrevRemainingAmt"),
                     }).ToList();
 
                 }
@@ -188,14 +198,7 @@ namespace SILDMS.DataAccess.AdvanceApproval
                     var dt = ds.Tables[0];
                     var dr = dt.Rows[0];
 
-                    if (dr["Status"].ToString() == "Successfully Submitted")
-                    {
-                        message = "Operation Done";
-                    }
-                    else
-                    {
-                        message = "Error Found";
-                    }
+                    message = dr["Status"].ToString();
                 }
             }
 

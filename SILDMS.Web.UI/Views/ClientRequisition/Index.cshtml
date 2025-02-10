@@ -809,7 +809,7 @@
         $scope.clientReqItemArray = [];
         $scope.clientReqTermArray = [];
         $scope.itemsByPage = 10;
-        
+
         $http.get('/ClientRequisition/GetServicesCategory')
             .success(function (response) {
                 $scope.loading = false;
@@ -895,7 +895,7 @@
                 toastr.error("Client ReqNo.  Required");
                 return;
             }
-           
+
 
             if ($('#SubmissionDate').val() == "") {
                 toastr.error("Submission Date Required.");
@@ -1488,8 +1488,8 @@
                     success: function (result) {
                         toastr.success("Document uploaded successfully.");
                         resetFileInput();
-                       /* $scope.GetDocumentList();*/
-                       /* clearDocumentForm();*/
+                        /* $scope.GetDocumentList();*/
+                        /* clearDocumentForm();*/
                     },
                     error: function (err) {
                         toastr.error("Document upload failed. Please try again.");
@@ -1514,9 +1514,28 @@
         $scope.ViewDocument = function () {
             $scope.loading = true; // Show loading indicator
 
-            // Build the GET request URL with the DocID parameter
-            const requestUrl = "/ClientRequisition/ViewDocument?DocID=" + encodeURIComponent("CR_" + $scope.ClientReq.ClientReqID);
+            // FTP details
+            var ftpDetails = {
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "silsoft",
+                ftpPassword: "s!L@123",
+                serverUrl: "MCL/Client_Requisition",
+                documentID: "CR_" + $scope.ClientReq.ClientReqID,
+                ext: "pdf"
+            };
 
+            // Construct URL with query parameters
+            var requestUrl = "/ClientRequisition/ViewDocument?" +
+                "serverIP=" + encodeURIComponent(ftpDetails.serverIP) +
+                "&ftpPort=" + encodeURIComponent(ftpDetails.ftpPort) +
+                "&ftpUserName=" + encodeURIComponent(ftpDetails.ftpUserName) +
+                "&ftpPassword=" + encodeURIComponent(ftpDetails.ftpPassword) +
+                "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
+                "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
+                "&ext=" + encodeURIComponent(ftpDetails.ext);
+
+            // Make GET request to fetch the PDF
             $http.get(requestUrl, { responseType: 'arraybuffer' })
                 .then(function (response) {
                     var file = new Blob([response.data], { type: 'application/pdf' });
@@ -1524,7 +1543,6 @@
                     let zoomParam = "#view=Fit";
 
                     $("#pdfViewer").attr("src", fileURL + zoomParam);
-
                     $('#ShowPDFModal').modal('show');
                 })
                 .catch(function (error) {
@@ -1537,10 +1555,9 @@
         };
 
 
-    
-            
-       
-        
+
+
+
 
 
     }]);

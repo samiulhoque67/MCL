@@ -58,6 +58,7 @@
                     <button type="button" data-ng-click="ShowClientList()" class="form-control">Search</button>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-lg-2">
                     <div class="form-group">
@@ -71,12 +72,13 @@
                 </div>
                 <div class="col-lg-2 ">
                     <div class="form-group">
-                        <label for="WODate">Work Order Date:</label>
+                        <label for="BillType">Bill Type:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="WODate" name="WODate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="WOInfo.WODate" />
+                        <input type="radio" ng-model="WOInfo.BillType" name="BillType" value="Default" checked="checked" /> <label>Default</label>
+                        <input type="radio" ng-model="WOInfo.BillType" name="BillType" value="Installment" /> <label>Installment  </label>
                     </div>
                 </div>
             </div>
@@ -92,12 +94,48 @@
                         <input id="WOAmt" name="WOAmt" type="text" class="form-control" placeholder="0.00" ng-model="WOInfo.WOAmt" />
                     </div>
                 </div>
+                <div class="col-lg-2" ng-show="WOInfo.BillType=='Installment'">
+                    <div class="form-group">
+                        <label for="NoOfInstallment">No of Installment:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-show="WOInfo.BillType=='Installment'">
+                    <div class="form-group">
+                        <input id="NoOfInstallment" name="NoOfInstallment" type="text" class="form-control" placeholder="No of Installment" ng-model="WOInfo.NoOfInstallment" ng-change="calculateAmounts()" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2 ">
+                    <div class="form-group">
+                        <label for="WODate">Work Order Date:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="WODate" name="WODate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="WOInfo.WODate" />
+                    </div>
+                </div>
+                <div class="col-lg-2" ng-show="WOInfo.BillType=='Installment'">
+                    <div class="form-group">
+                        <label for="InstallmentAmt">Installment Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-show="WOInfo.BillType=='Installment'" >
+                    <div class="form-group">
+                        <input id="InstallmentAmt" name="InstallmentAmt" type="text" class="form-control" placeholder="0.00" ng-readonly="true" ng-model="WOInfo.InstallmentAmt" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-lg-2 ">
                     <div class="form-group">
                         <label for="Remarks">Remarks:</label>
                     </div>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-8">
                     <div class="form-group">
                         <input id="Remarks" name="Remarks" type="text" data-ng-model="WOInfo.Remarks" class="form-control" placeholder="Remarks" />
                     </div>
@@ -715,6 +753,7 @@
         $scope.clientReqTermArray = [];
         $scope.itemsByPage = 10;
 
+
         $http.get('/WorkOrderInfo/GetServicesCategory')
             .success(function (response) {
                 $scope.loading = false;
@@ -729,12 +768,19 @@
             FormName: "",
             WONo: "",
             WOAmt: "",
+
+            BillType: "",
+            NoOfInstallment: "",
+            InstallmentAmt: "",
+
             WODate: "",
             Remarks: "",
             TolalItem: "",
             SelectedItem: "",
             Status: ""
         }
+        $scope.WOInfo.BillType = "Default";
+        $scope.WOInfo.WODate = new Date().toLocaleDateString('en-GB'); // 'dd/MM/yyyy' format
 
         $scope.WOInfoItem = {
             WOInfoItemID: "",
@@ -746,16 +792,13 @@
             DeliveryMode: "",
             ReqQnty: "",
             ReqUnit: "",
-
             QutnUnit: "",
             QutnQnty: "",
             QutnPrice: "",
             QutnAmt: "",
-
             WOQnty: "",
             WOPrice: "",
             WOAmt: "",
-
             VatPerc: "",
             VatAmt: "",
             TolAmt: ""
@@ -787,13 +830,18 @@
             var myDate = new Date(year, month - 1, date);
             myDate.setHours(0, 0, 0, 0);
 
-            //if (myDate < today) {
-            //    $('#DeliveryDate').val('');
-            //    toastr.error("Purchase date should not be less than system date.");
-            //}
-
             $('.datepicker').hide();
         });
+
+        $scope.calculateAmounts = function () {
+            if ($scope.WOInfo.BillType == "Installment") {
+                var woAmount = parseFloat($scope.WOInfo.WOAmt) || 0;
+                var noOfInstallment = parseFloat($scope.WOInfo.NoOfInstallment) || 0;
+
+                // Calculate Installment amount
+                $scope.WOInfo.InstallmentAmt = (woAmount) / noOfInstallment;
+            }
+        };
 
         // ################# Detail Add Modal ####################
         $scope.AddWoItemModal = function () {

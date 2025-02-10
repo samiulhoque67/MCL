@@ -114,6 +114,10 @@ namespace SILDMS.DataAccess.AdvanceRecommendation
                         WOAmt = reader.GetString("WOAmt"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         WOInfoID = reader.GetString("WOInfoID"),
+                        POInstallmentNo = reader.GetString("POInstallmentNo"),
+                        POInstallmentID = reader.GetString("POInstallmentID"),
+                        POInstallmentAmt = reader.GetString("POInstallmentAmt"),
+                        Note = reader.GetString("Note")
                     }).ToList();
 
                 }
@@ -191,14 +195,7 @@ namespace SILDMS.DataAccess.AdvanceRecommendation
                     var dt = ds.Tables[0];
                     var dr = dt.Rows[0];
 
-                    if (dr["Status"].ToString() == "Successfully Submitted")
-                    {
-                        message = "Operation Done";
-                    }
-                    else
-                    {
-                        message = "Error Found";
-                    }
+                    message = dr["Status"].ToString();
                 }
             }
 

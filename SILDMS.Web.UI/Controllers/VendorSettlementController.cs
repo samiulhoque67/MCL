@@ -43,7 +43,6 @@ namespace SILDMS.Web.UI.Controllers
         }
         [HttpPost]
         public async Task<dynamic> SaveVendorSettlement(OBS_VendorSettlement BillRecv)
-        //public async Task<dynamic> SaveVendorSettlement(string TDSChallanDate)
         {
             BillRecv.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;

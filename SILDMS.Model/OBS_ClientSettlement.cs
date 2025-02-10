@@ -26,22 +26,20 @@ namespace SILDMS.Model
         [Required]
         public string VendorQutnNo { get; set; }
         [Required]
-
         public string QuotationDate { get; set; }
-        public string QutnReceivedDate { get; set; }
-       
+        public string QutnReceivedDate { get; set; }       
         public string TDSChallanNo { get; set; }
         public string TDSChallanDate { get; set; }
         public string TDSAmount { get; set; }
         public string TDSPaidAmt { get; set; }
         public string TDSChallanAmt { get; set; }
-        public string VDSChallanNo { get; set; }
+        public string VDSChallanNo { get; set; }        
         public string VDSChallanDate { get; set; }
         public string VDSAmount { get; set; }
         public string VDSPaidAmt { get; set; }
         public string VDSChallanAmt { get; set; }
         public string NetReceivableAmount { get; set; }
-
+        public string ReceivedDate { get; set; }
         public string Remarks { get; set; }
         public string SetOn { get; set; }
         public string SetBy { get; set; }

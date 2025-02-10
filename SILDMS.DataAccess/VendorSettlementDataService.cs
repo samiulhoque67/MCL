@@ -77,7 +77,6 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     ClientInfoList = dt1.AsEnumerable().Select(reader => new OBS_VendorSettlement
                     {
-                        //VendorFinalBilPaymentID = reader.GetString("VendorFinalBilPaymentID"),
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         CAddress = reader.GetString("CAddress"),
@@ -92,17 +91,11 @@ namespace SILDMS.DataAccess
                         POAmt = reader.GetToDecimal("POAmt"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
-                        //RequisitionDate = reader.GetString("RequisitionDate"),
-                        //TDSChallanNo = reader.GetString("TDSChallanNo"),
-                        //TDSChallanDate = reader.GetString("TDSChallanDate"),
+                        TDSPercnt = reader.GetString("TDSPercnt"),
                         TDSAmount = reader.GetString("TDSAmount"),
-                        //VDSChallanNo = reader.GetString("TDSChallanNo"),
-                        //VDSChallanDate = reader.GetString("TDSChallanDate"),
-                        VDSAmount = reader.GetString("VDSAmount"),
-                        NetPayableAmount = reader.GetString("NetPayableAmount"),
-                        //,
-                        //AdvancClaimRcvdDate = reader.GetString("AdvancClimRcvdDate"),
-                        //ClientReqNo = reader.GetString("ClientReqNo")
+                        VatPercnt = reader.GetString("VatPercnt"),
+                        VDSAmount = reader.GetString("VatAmount"),
+                        NetPayableAmount = reader.GetString("NetPayableAmount")
                     }).ToList();
                 }
             }
@@ -134,14 +127,13 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.Decimal, billRecv.ClientReqID);
                     db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.Decimal, billRecv.WOInfoID);
                     db.AddInParameter(dbCommandWrapper, "@TDSChallanNo", SqlDbType.NVarChar, billRecv.TDSChallanNo);
-                    db.AddInParameter(dbCommandWrapper, "@TDSChallanDate", SqlDbType.NVarChar, billRecv.TDSChallanDate);
-                    db.AddInParameter(dbCommandWrapper, "@TDSChallanAmt", SqlDbType.NVarChar, billRecv.TDSChallanAmt);
+                    db.AddInParameter(dbCommandWrapper, "@TDSChallanDate", SqlDbType.NVarChar, billRecv.ChallanDate);
+                    db.AddInParameter(dbCommandWrapper, "@TDSChallanAmt", SqlDbType.NVarChar, billRecv.ChallanIssueAmount);
 
-                    db.AddInParameter(dbCommandWrapper, "@VDSChallanNo", SqlDbType.NVarChar, billRecv.TDSChallanNo);
-                    db.AddInParameter(dbCommandWrapper, "@VDSChallanDate", SqlDbType.NVarChar, billRecv.TDSChallanDate);
-                    db.AddInParameter(dbCommandWrapper, "@VDSChallanAmt", SqlDbType.NVarChar, billRecv.TDSChallanAmt);
+                    db.AddInParameter(dbCommandWrapper, "@VDSChallanNo", SqlDbType.NVarChar, billRecv.MushakNo);
+                    db.AddInParameter(dbCommandWrapper, "@VDSChallanDate", SqlDbType.NVarChar, billRecv.MushakDate);
+                    db.AddInParameter(dbCommandWrapper, "@VDSChallanAmt", SqlDbType.NVarChar, billRecv.MushakIssueAmount);
 
-                    //db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, billRecv.Note);
                     db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.NVarChar, billRecv.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, billRecv.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
