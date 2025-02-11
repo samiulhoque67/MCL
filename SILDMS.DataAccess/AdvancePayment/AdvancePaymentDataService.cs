@@ -188,6 +188,8 @@ namespace SILDMS.DataAccess.AdvancePayment
                 db.AddInParameter(dbCommandWrapper, "@TransactionMode", SqlDbType.VarChar, MasterData[0].TransactionMode);
                 db.AddInParameter(dbCommandWrapper, "@ParticularNo", SqlDbType.VarChar, MasterData[0].ParticularNo);
                 db.AddInParameter(dbCommandWrapper, "@MoneyReceiptNo", SqlDbType.VarChar, MasterData[0].MoneyReceiptNo);
+                db.AddInParameter(dbCommandWrapper, "@POInstallmentNo", SqlDbType.VarChar, MasterData[0].POInstallmentNo);
+                db.AddInParameter(dbCommandWrapper, "@POInstallmentAmt", SqlDbType.VarChar, MasterData[0].POInstallmentAmt);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 
@@ -199,14 +201,7 @@ namespace SILDMS.DataAccess.AdvancePayment
                     var dt = ds.Tables[0];
                     var dr = dt.Rows[0];
 
-                    if (dr["Status"].ToString() == "Successfully Submitted")
-                    {
-                        message = "Operation Done";
-                    }
-                    else
-                    {
-                        message = "Error Found";
-                    }
+                    message = dr["Status"].ToString();
                 }
             }
 

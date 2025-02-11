@@ -143,6 +143,13 @@ namespace SILDMS.Model
         public string AdvancClaimAprvAmt { get; set; }
         public string AdvancClimAprvDate { get; set; }
         public string Note { get; set; }
+        public string BillType { get; set; }
+        public string BillCategory { get; set; }
+        public string WOInstallmentNo { get; set; }
+        public string WOInstallmentID { get; set; }
+        public string WOInstallmentAmt { get; set; }
+        public string Receivedby { get; set; }
+        public string ReceivedbyClaim { get; set; }
     }
 
 }
