@@ -264,7 +264,14 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@WOAmt", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.WOAmt));
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.Remarks));
 
+                    db.AddInParameter(dbCommandWrapper, "@BillCategory", SqlDbType.NVarChar, woInfo.BillCategory);
                     db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, woInfo.BillType);
+                    if (woInfo.BillType == "Default")
+                    {
+                        woInfo.NoOfInstallment = "1";
+                        woInfo.InstallmentAmt = woInfo.WOAmt;
+                    }
+
                     db.AddInParameter(dbCommandWrapper, "@NoOfInstallment", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.NoOfInstallment));
                     db.AddInParameter(dbCommandWrapper, "@InstallmentAmt", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.InstallmentAmt));
 
