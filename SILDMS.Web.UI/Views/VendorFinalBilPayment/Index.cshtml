@@ -15,6 +15,15 @@
         font-size: smaller;
         padding: 3px 6px 3px;
     }
+
+ 
+    .custom-hr {
+        border: none;
+        height: 2px;
+        background-color: #007bff; /* Bootstrap primary color */
+        margin: 15px 0;
+    }
+
 </style>
 
 <div class="box box-primary box-body" ng-controller="VendorFinalBilPaymentCtrl">
@@ -32,7 +41,7 @@
                     <button type="button" data-ng-click="SearchVendorQutnModal()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>   {{ VendorQutn.VendrFinalBilAprvID ? 'Update' : 'Save' }}</button>
+                    <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>   {{ VendorQutn.VendorFinalBilPaymentID ? 'Update' : 'Save' }}</button>
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="Cancel()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>Cancel</button>
@@ -155,7 +164,31 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>WO Installment Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="WOInstalledAmount" name="InstalledAmount" readonly type="text" class="form-control" ng-model="VendorQutn.WOInstallmentAmt" ng-readonly="true" />
+                    </div>
+                </div>
 
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>WO Installment No.</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="WOInstallment" name="WOInstallment" type="text" class="form-control" ng-model="VendorQutn.WOInstallmentNo" ng-readonly="true" />
+                    </div>
+                </div>
+
+            </div>
+            <hr class="custom-hr">
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -202,6 +235,31 @@
                         <input id="VendorBillDate" name="VendorBillDate" type="text" class="DatePicker form-control" placeholder="Vendor Bill Date" ng-model="VendorQutn.VendorBillDate" readonly />
                     </div>
                 </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Installment Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="InstalledAmount" name="InstalledAmount" readonly type="text" class="form-control" ng-model="VendorQutn.POInstallmentAmt" ng-readonly="true" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Installment No.</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="Installment" name="Installment" type="text" class="form-control" placeholder="Po No" ng-model="VendorQutn.POInstallmentNo" ng-readonly="true" />
+                    </div>
+                </div>
+
             </div>
 
             <div class="row">
@@ -260,18 +318,121 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="AprvAmnt" name="AprvAmnt" type="text" class="form-control" ng-model="VendorQutn.AprvAmnt" ng-change="calculateBillAmounts()" />
+                        <input id="AprvAmnt" name="AprvAmnt" type="text" class="form-control" ng-model="VendorQutn.AprvAmnt" @*ng-change="calculateBillAmounts()"*@ ng-readonly="true" />
                     </div>
                 </div>
 
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label>Payment Date:</label>
+                        <label>GetToDecimal Date:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="AprvDate" name="AprvDate" type="text" class="DatePicker form-control" placeholder="Payment Date" ng-model="VendorQutn.AprvDate" />
+                        <input id="AprvDate" name="AprvDate" type="text" class="DatePicker form-control" placeholder="Payment Date" ng-model="VendorQutn.AprvDate" ng-disabled="VendorQutn.AprvDate" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Others Charge (%):</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="CommissionPercentage" name="CommissionPercentage" type="text" class="form-control" placeholder="Commission Percentage" ng-model="VendorQutn.CommissionPercentage" ng-readonly="true" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Bill Category:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" ng-model="VendorQutn.BillCategory" value="Normal" ng-disabled="VendorQutn.BillCategory" /> Normal
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="VendorQutn.BillCategory" value="plusminus" ng-disabled="VendorQutn.BillCategory" /> Plus Minus
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Other Charge ON Bill Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="CommissionAmount" name="CommissionAmount" type="text" class="form-control" placeholder="Commission Amount" ng-model="VendorQutn.CommissionAmount" ng-readonly="true" />
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Bill Type:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-disabled="VendorQutn.BillType">
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" ng-model="VendorQutn.BillType" value="Default" ng-disabled="VendorQutn.BillType" /> Default
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="VendorQutn.BillType" value="Installment" ng-disabled="VendorQutn.BillType" /> Installment
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+
+                </div>
+                <div class="col-lg-3">
+
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>TDS paid by</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="TDS" name="TDS" type="text" class="form-control" ng-model="VendorQutn.TDS" ng-readonly="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Base Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="BaseAmount" name="BaseAmount" type="text" class="form-control" placeholder="Base Amount" ng-model="VendorQutn.BaseAmount" ng-readonly="true" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>TDS (%):</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="TDSPercentage" name="TDSPercentage" type="text" class="form-control" placeholder="TDS Percentage" ng-model="VendorQutn.TDSPercentage" ng-change="calculateTDSAmounts()" />
                     </div>
                 </div>
             </div>
@@ -284,21 +445,25 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="VATPercentage" name="VATPercentage" type="text" class="form-control" placeholder="VAT Percentage" ng-model="VendorQutn.VATPercentage" ng-change="calculateVatAmounts()" />
+                        <input id="VATPercentage" name="VATPercentage" type="text" class="form-control" placeholder="VAT Percentage" ng-model="VendorQutn.VATPercentage" ng-readonly="true" />
                     </div>
                 </div>
 
+
+
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label>Commission (%):</label>
+                        <label>TDS Amount:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="CommissionPercentage" name="CommissionPercentage" type="text" class="form-control" placeholder="Commission Percentage" ng-model="VendorQutn.CommissionPercentage" ng-change="calculateCommission()" />
+                        <input id="TDSAmount" name="TDSAmount" type="text" class="form-control" placeholder="TDS Amount" ng-model="VendorQutn.TDSAmount" ng-readonly="true" />
                     </div>
                 </div>
+
             </div>
+
 
             <div class="row">
                 <div class="col-lg-3">
@@ -314,65 +479,72 @@
 
                 <div class="col-lg-2">
                     <div class="form-group">
+                        <label>Payment  Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="PaymentAmount" name="PaymentAmount" type="text" class="form-control" placeholder="Payment Amount" ng-model="VendorQutn.PaymentAmount" ng-readonly="true" />
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>VDS paid by</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+
+                    <select ng-model="VendorQutn.VDS" ng-change="handleVDSChange(VendorQutn.VDS)" class="form-control">
+                        <option value="Default">---</option>
+                        <option value="MCOM">MCOM</option>
+                        <option value="Vendor">Vendor</option>
+                    </select>
+
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Net Payable Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="NetActualPayableAmount" name="NetActualPayableAmount" type="text" class="form-control" placeholder="Net Payable Amount" ng-model="VendorQutn.NetActualPayableAmount" ng-readonly="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3" ng-show="VendorQutn.BillCategory === 'plusminus' ">
+                    <div class="form-group">
+                        <label>Commission (%):</label>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-show="VendorQutn.BillCategory === 'plusminus' ">
+                    <div class="form-group">
+                        <input id="CommissionPercentage1" name="CommissionPercentage1" type="text" class="form-control" placeholder="Commission Percentage" ng-model="VendorQutn.CommissionPercentage1" ng-readonly="true" />
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3" ng-show="VendorQutn.BillCategory === 'plusminus' ">
+                    <div class="form-group">
                         <label>Commission Amount:</label>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3" ng-show="VendorQutn.BillCategory === 'plusminus' ">
                     <div class="form-group">
-                        <input id="CommissionAmount" name="CommissionAmount" type="text" class="form-control" placeholder="Commission Amount" ng-model="VendorQutn.CommissionAmount" ng-readonly="true" />
+                        <input id="CommissionAmount1" name="CommissionAmount1" type="text" class="form-control" placeholder="" ng-model="VendorQutn.CommissionAmount1" ng-readonly="true" />
                     </div>
                 </div>
             </div>
-
-
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label>TDS (%):</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="TDSPercentage" name="TDSPercentage" type="text" class="form-control" placeholder="TDS Percentage" ng-model="VendorQutn.TDSPercentage" ng-change="calculateTDSAmounts()" />
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>VDS (%):</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="VDSPercentage" name="VDSPercentage" type="text" class="form-control" placeholder="VDS Percentage" ng-model="VendorQutn.VDSPercentage" ng-blur="calculateVDSAmounts()" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label>TDS Amount:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="TDSAmount" name="TDSAmount" type="text" class="form-control" placeholder="TDS Amount" ng-model="VendorQutn.TDSAmount" ng-readonly="true" />
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>VDS Amount:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="VDSAmount" name="VDSAmount" type="text" class="form-control" placeholder="VDS Amount" ng-model="VendorQutn.VDSAmount" ng-readonly="true" />
-                    </div>
-                </div>
-            </div>
-
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -385,9 +557,13 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2">
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
                     <div class="form-group">
-                        <label>Net Payable Amount:</label>
+                        <label>Net  Amount:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -396,6 +572,93 @@
                     </div>
                 </div>
             </div>
+
+
+            <hr class="custom-hr">
+
+
+
+            <div class="row">
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Vendor Payment No:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VenPayNo" name="VenPayNo" type="text" class="form-control" ng-model="VendorQutn.VendorFinalBilPaymentID" ng-readonly="true" />
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Money Receipt No:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="MoneyRecNo" name="MoneyRecNo" type="text" class="form-control" placeholder="Money Receipt No" ng-model="VendorQutn.MoneyRecNo" />
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Vendor Payment Date:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="PayDate" name="PayDate" type="text" class="DatePicker form-control" placeholder="Payment Date" ng-model="VendorQutn.PayDate" />
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Payment Mode</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+
+                    <select ng-model="VendorQutn.PaymentMode" class="form-control">
+                        <option value="Chq">Cheque</option>
+                        <option value="EFT">EFT</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Cheque/EFT No:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="ChequeEftNo" name="ChequeEftNo" type="text" class="form-control" placeholder="Ceheque/EFT No" ng-model="VendorQutn.ChequeEftNo" />
+                    </div>
+                </div>
+
+
+            </div>
+
+
 
             <div class="row">
                 <div class="col-lg-3">
@@ -558,6 +821,7 @@
             TDSAmount: "",
             VDSPercentage: "",
             VDSAmount: "",
+            VDS:"",
 
             TotalBillAmount: "",
             NetPayableAmount: "",
@@ -568,13 +832,32 @@
             RecommendedAmnt: "",
             RecommendDate: "",
             AprvAmnt: "",
-            AprvADate: "",
+            AprvDate: "",
             Operation: "",
             RAWO: "",
             WOAmt: "",
             WONo: "",
-            WOInfoID: ""
+            WOInfoID: "",
+            TDS: "",
+            VenPayNo:"",
+            MoneyRecNo: "",
+            PayDate: "",
+            PaymentMode: "",
+            PaymentAmount: "",
+            ChequeEftNo: "",
+            POInstallmentID: "",
+            WOInstallmentID: "",
+            POInstallmentNo: "",
+            WOInstallmentNo: "",
+            POInstallmentAmt: "",
+            WOInstallmentAmt: "",
+            BillType: "",
+            BillCategory: "",
+            ClientReqNo: "",
+            ClientReqID: "",
+            VendorFinalBilPaymentID:""
         }
+        $scope.VendorQutn.TDS = 'MCOM';
 
         $scope.VendorQutnItem = {
             VendorQutnItemID: "",
@@ -653,6 +936,8 @@
 
         $scope.toggleVendorReqSelect = function (tableRow) {
             $scope.VendorQutn.VendorFinalBilRecmID = tableRow.VendorFinalBilRecmID;
+            $scope.VendorQutn.VendrFinalBilRcvdID = tableRow.VendrFinalBilRcvdID;
+            $scope.VendorQutn.VendrFinalBilAprvID = tableRow.VendrFinalBilAprvID;
             $scope.VendorQutn.ClientID = tableRow.ClientID;
             $scope.VendorQutn.ClientName = tableRow.ClientName;
 
@@ -676,7 +961,8 @@
             $scope.VendorQutn.AdvancePaidDate = tableRow.AdvancePaidDate;
             $scope.VendorQutn.BillAmount = tableRow.BillAmount;
             $scope.VendorQutn.RecommendedAmnt = tableRow.RecommendedAmnt;
-            $scope.VendorQutn.AprvAmnt = tableRow.RecommendedAmnt;
+            $scope.VendorQutn.AprvAmnt = tableRow.AprvAmnt;
+            $scope.VendorQutn.AprvDate = tableRow.AprvDate;
             $scope.VendorQutn.RecommendDate = tableRow.RecommendDate;
             $scope.VendorQutn.VendorBillNo = tableRow.VendorBillNo;
             $scope.VendorQutn.VendorBillDate = tableRow.VendorBillDate;
@@ -684,10 +970,14 @@
             $scope.VendorQutn.VATPercentage = tableRow.VATPercentage;
             $scope.VendorQutn.VATAmount = tableRow.VATAmount;
             $scope.VendorQutn.CommissionPercentage = tableRow.CommissionPercentage;
+            $scope.VendorQutn.CommissionPercentage1 = tableRow.CommissionPercentage1;
             $scope.VendorQutn.CommissionAmount = tableRow.CommissionAmount;
+            $scope.VendorQutn.CommissionAmount1 = tableRow.CommissionAmount1;
             $scope.VendorQutn.BillAmount = tableRow.BillAmount;
+            $scope.VendorQutn.BaseAmount = tableRow.AprvAmnt + tableRow.CommissionAmount;
             $scope.VendorQutn.TotalBillAmount = tableRow.TotalBillAmount;
             $scope.VendorQutn.NetPayableAmount = tableRow.NetPayableAmount;
+            $scope.VendorQutn.PaymentAmount = tableRow.AprvAmnt + tableRow.CommissionAmount;
             $scope.VendorQutn.Note = tableRow.Note;
 
             $scope.VendorQutn.WONo = tableRow.WONo;
@@ -695,6 +985,15 @@
             $scope.VendorQutn.WOAmt = tableRow.WOAmt;
             $scope.VendorQutn.AdvancePaidID = tableRow.AdvancePaidID;
             $scope.VendorQutn.RAWO = tableRow.RAWO;
+            $scope.VendorQutn.POInstallmentID = tableRow.POInstallmentID;
+            $scope.VendorQutn.WOInstallmentID = tableRow.WOInstallmentID;
+            $scope.VendorQutn.POInstallmentNo = tableRow.POInstallmentNo;
+            $scope.VendorQutn.WOInstallmentNo = tableRow.WOInstallmentNo;
+
+            $scope.VendorQutn.POInstallmentAmt = tableRow.POInstallmentAmt;
+            $scope.VendorQutn.WOInstallmentAmt = tableRow.WOInstallmentAmt;
+            $scope.VendorQutn.BillType = tableRow.BillType;
+            $scope.VendorQutn.BillCategory = tableRow.BillCategory; 
 
             $scope.p = 1;
 
@@ -720,36 +1019,37 @@
             var cmsnPercentage = parseFloat($scope.VendorQutn.CommissionPercentage) || 0;
 
             // Calculate the VAT amount
-            $scope.VendorQutn.CommissionAmount = (poAmount * cmsnPercentage) / 100;
+            $scope.VendorQutn.CommissionAmount = parseFloat(((poAmount * cmsnPercentage) / 100).toFixed(3));
 
             // Calculate the total bill amount (bill amount + VAT amount)
             $scope.VendorQutn.NetPayableAmount = totalbillAmount - $scope.VendorQutn.CommissionAmount;
         };
 
         $scope.calculateTDSAmounts = function () {
-            var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
+            var totalbillAmount = parseFloat($scope.VendorQutn.BaseAmount) || 0;
             var tdsPercentage = parseFloat($scope.VendorQutn.TDSPercentage) || 0;
 
             // Calculate the TDS amount
-            $scope.VendorQutn.TDSAmount = (billAmount * tdsPercentage) / 100;
+            $scope.VendorQutn.TDSAmount = parseFloat(((totalbillAmount * tdsPercentage) / 100).toFixed(3));
 
             // Calculate the total bill amount (bill amount - TDS amount)
-            var NetPayAmnt = $scope.VendorQutn.TotalBillAmount - $scope.VendorQutn.TDSAmount;
-            $scope.VendorQutn.NetPayableAmount = NetPayAmnt;
+            var NetPayAmnt = parseFloat(($scope.VendorQutn.BaseAmount - $scope.VendorQutn.TDSAmount).toFixed(3));
+            $scope.VendorQutn.PaymentAmount = NetPayAmnt;
+            $scope.VendorQutn.NetActualPayableAmount = NetPayAmnt;
         };
 
-        $scope.calculateVDSAmounts = function () {
-            var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
-            var vdsPercentage = parseFloat($scope.VendorQutn.VDSPercentage) || 0;
+        //$scope.calculateVDSAmounts = function () {
+        //    var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
+        //    var vdsPercentage = parseFloat($scope.VendorQutn.VDSPercentage) || 0;
 
-            // Calculate the VDS amount
-            $scope.VendorQutn.VDSAmount = (billAmount * vdsPercentage) / 100;
+        //    // Calculate the VDS amount
+        //    $scope.VendorQutn.VDSAmount = (billAmount * vdsPercentage) / 100;
 
-            // Calculate the total bill amount (bill amount - VDS amount)
-            var NetPayAmnt = $scope.VendorQutn.NetPayableAmount - $scope.VendorQutn.VDSAmount;
-            alert(NetPayAmnt);
-            $scope.VendorQutn.NetPayableAmount = NetPayAmnt;
-        };
+        //    // Calculate the total bill amount (bill amount - VDS amount)
+        //    var NetPayAmnt = $scope.VendorQutn.NetPayableAmount - $scope.VendorQutn.VDSAmount;
+        //    alert(NetPayAmnt);
+        //    $scope.VendorQutn.NetPayableAmount = NetPayAmnt;
+        //};
 
         //$scope.calculateBillAmounts = function () {
         //    var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
@@ -814,8 +1114,10 @@
             $scope.VendorQutn.VATPercentage = tableRow.VATPercentage;
             $scope.VendorQutn.VATAmount = tableRow.VATAmount;
             $scope.VendorQutn.CommissionPercentage = tableRow.CommissionPercentage;
+            $scope.VendorQutn.CommissionPercentage1 = tableRow.CommissionPercentage1;
             $scope.VendorQutn.CommissionAmount = tableRow.CommissionAmount;
-            $scope.VendorQutn.BillAmount = tableRow.BillAmount;
+            $scope.VendorQutn.CommissionAmount1 = tableRow.CommissionAmount1;
+            $scope.VendorQutn.BaseAmount = tableRow.BillAmount + tableRow.CommissionAmount;
             $scope.VendorQutn.RecommendedAmnt = tableRow.RecommendedAmnt;
             $scope.VendorQutn.TotalBillAmount = tableRow.TotalBillAmount;
             $scope.VendorQutn.NetPayableAmount = tableRow.NetPayableAmount;
@@ -827,6 +1129,35 @@
             $scope.VendorQutn.WONo = tableRow.WONo;
             $scope.VendorQutn.WOAmt = tableRow.WOAmt;
             $scope.VendorQutn.AdvancePaidID = tableRow.AdvancePaidID;
+            $scope.VendorQutn.VenPayNo = tableRow.VenPayNo;
+            $scope.VendorQutn.MoneyRecNo = tableRow.MoneyRecNo;
+            $scope.VendorQutn.PayDate = tableRow.PayDate;
+            $scope.VendorQutn.PaymentMode = tableRow.PaymentMode;
+            $scope.VendorQutn.PaymentAmount = tableRow.PaymentAmount;
+            
+            $scope.VendorQutn.NetActualPayableAmount = tableRow.NetActualPayableAmount;
+            $scope.VendorQutn.ChequeEftNo = tableRow.ChequeEftNo;
+            $scope.VendorQutn.POInstallmentID = tableRow.POInstallmentID;
+            $scope.VendorQutn.WOInstallmentID = tableRow.WOInstallmentID;
+            $scope.VendorQutn.POInstallmentNo = tableRow.POInstallmentNo;
+            $scope.VendorQutn.WOInstallmentNo = tableRow.WOInstallmentNo;
+
+            $scope.VendorQutn.POInstallmentAmt = tableRow.POInstallmentAmt;
+            $scope.VendorQutn.WOInstallmentAmt = tableRow.WOInstallmentAmt;
+            $scope.VendorQutn.BillType = tableRow.BillType;
+            $scope.VendorQutn.BillCategory = tableRow.BillCategory; 
+            $scope.VendorQutn.ClientReqID = tableRow.ClientReqID; 
+            $scope.VendorQutn.ClientReqNo = tableRow.ClientReqNo; 
+            $scope.VendorQutn.TDSPercentage = tableRow.TDSPercentage; 
+            $scope.VendorQutn.TDSAmount = tableRow.TDSAmount; 
+            $scope.VendorQutn.ClientReqNo = tableRow.ClientReqNo; 
+            $scope.VendorQutn.VendorFinalBilPaymentID = tableRow.VendorFinalBilPaymentID; 
+            $scope.VendorQutn.TDS = tableRow.TDS; 
+            $scope.VendorQutn.VDS = tableRow.VDS; 
+
+           
+
+
 
             $scope.q = 2;
             $scope.p = 1;
@@ -852,6 +1183,7 @@
             $scope.VendorQutn.VendorBillDate = $('#VendorBillDate').val();
             $scope.VendorQutn.BillReceiveDate = $('#BillReceiveDate').val();
             $scope.VendorQutn.RecommendDate = $('#RecommendDate').val();
+            $scope.VendorQutn.PayDate = $('#PayDate').val();
             $scope.VendorQutn.AprvDate = $('#AprvDate').val();
 
             $http.post('/VendorFinalBilPayment/SaveVendorFinalBill',
@@ -892,6 +1224,34 @@
                     return;
                 });
         }
+
+
+     
+        $scope.VendorQutn.PaymentMode = "Chq";
+        $scope.VendorQutn.VDS = "Default";
+        $scope.handleVDSChange = function (value) {
+            if (value === "MCOM") {
+
+                $scope.VendorQutn.NetActualPayableAmount = $scope.VendorQutn.PaymentAmount - $scope.VendorQutn.VATAmount;
+               
+              
+            } else if (value === "Vendor") {
+                $scope.VendorQutn.NetActualPayableAmount = $scope.VendorQutn.PaymentAmount;
+             
+            }
+        };
+
+        //$scope.callMCOMFunction = function () {
+        //    console.log("MCOM function called");
+        ////     Add your logic here
+        ////};
+
+        ////$scope.callVendorFunction = function () {
+        ////    console.log("Vendor function called");
+        ////     Add your logic here
+        //};
+
+
 
         $scope.toggleRefreshTable = function () {
 

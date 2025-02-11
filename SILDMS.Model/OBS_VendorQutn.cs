@@ -58,11 +58,16 @@ namespace SILDMS.Model
         public double POInstallmentAmt { get; set; }
         public string BillType { get; set; }
         public string BillCategory { get; set; }
+        public int WOInstallmentNo { get; set; }
+        public Int64 WOInstallmentID { get; set; }
+        public double WOInstallmentAmt { get; set; }
+        public decimal BaseAmount { get; set; }
     }
 
 
     public class VendorBillRecvd
     {
+    
         public string VendorQutnID { get; set; }
         public string RequisitionNo { get; set; }
         public string VendorName { get; set; }
@@ -84,7 +89,9 @@ namespace SILDMS.Model
         public decimal? VATPercentage { get; set; }
         public decimal? VATAmount { get; set; }
         public decimal? CommissionPercentage { get; set; }
+        public decimal? CommissionPercentage1 { get; set; }
         public decimal? CommissionAmount { get; set; }
+        public decimal? CommissionAmount1 { get; set; }
         public decimal? TDSPercentage { get; set; }
         public decimal? TDSAmount { get; set; }
         public decimal? VDSPercentage { get; set; }
@@ -123,10 +130,24 @@ namespace SILDMS.Model
         public int ClientFinalBilAprvID { get; set; }
         public string AdvancePaidDate { get; set; }
         public string AdvancePaidID { get; set; }
-        public object POInstallmentNo { get; set; }
-        public object POInstallmentID { get; set; }
-        public object POInstallmentAmt { get; set; }
-        public object BillType { get; set; }
-        public object BillCategory { get; set; }
+        public int POInstallmentNo { get; set; }
+        public int POInstallmentID { get; set; }
+        public double POInstallmentAmt { get; set; }
+        public string BillType { get; set; }
+        public string BillCategory { get; set; }
+        public decimal WOInstallmentAmt { get; set; }
+        public Int64 WOInstallmentID { get; set; }
+        public int WOInstallmentNo { get; set; }
+        public string TDS { get; set; }
+        public string VDS { get; set; }
+        public decimal BaseAmount { get; set; }
+        public decimal ReceivableAmount { get; set; }
+        public decimal ReceivedAmount { get; set; }
+        public string ReceiveNo { get; set; }
+        public string MoneyRecNo { get; set; }
+        public string ReceiveDate { get; set; }
+        public string PaymentMode { get; set; }
+        public string ChequeEftNo { get; set; }
+        public decimal NetReceivableAmount { get; set; }
     }
 }
