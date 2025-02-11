@@ -57,6 +57,17 @@
                 <div class="col-lg-1">
                     <button type="button" data-ng-click="ShowClientList()" class="form-control">Search</button>
                 </div>
+                <div class="col-lg-2 ">
+                    <div class="form-group">
+                        <label for="BillCategory">Bill Category:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input type="radio" ng-model="WOInfo.BillCategory" name="BillCategory" value="Normal" checked="checked" /> <label>Normal</label>
+                        <input type="radio" ng-model="WOInfo.BillCategory" name="BillCategory" value="PlusMinus" /> <label>Plus-minus</label>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -122,7 +133,7 @@
                         <label for="InstallmentAmt">Installment Amount:</label>
                     </div>
                 </div>
-                <div class="col-lg-3" ng-show="WOInfo.BillType=='Installment'" >
+                <div class="col-lg-3" ng-show="WOInfo.BillType=='Installment'">
                     <div class="form-group">
                         <input id="InstallmentAmt" name="InstallmentAmt" type="text" class="form-control" placeholder="0.00" ng-readonly="true" ng-model="WOInfo.InstallmentAmt" />
                     </div>
@@ -753,7 +764,6 @@
         $scope.clientReqTermArray = [];
         $scope.itemsByPage = 10;
 
-
         $http.get('/WorkOrderInfo/GetServicesCategory')
             .success(function (response) {
                 $scope.loading = false;
@@ -768,7 +778,7 @@
             FormName: "",
             WONo: "",
             WOAmt: "",
-
+            BillCategory: "",
             BillType: "",
             NoOfInstallment: "",
             InstallmentAmt: "",
@@ -780,6 +790,7 @@
             Status: ""
         }
         $scope.WOInfo.BillType = "Default";
+        $scope.WOInfo.BillCategory = "Normal";
         $scope.WOInfo.WODate = new Date().toLocaleDateString('en-GB'); // 'dd/MM/yyyy' format
 
         $scope.WOInfoItem = {
