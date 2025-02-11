@@ -276,7 +276,7 @@ namespace SILDMS.Web.UI.Controllers
 
             string reportName = "rptQuotationtoClient";
             reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
-          
+
             reportDocument.Close();
             reportDocument.Dispose();
             return View();
@@ -352,17 +352,17 @@ namespace SILDMS.Web.UI.Controllers
             ReportType = "PDF";
             OBS_VendorCSAprv objVendorReq = new OBS_VendorCSAprv();
 
-            if (TempData["VendorCSRecmInfo"] == null)
-            {
-                ViewBag.Title = "No valid data.";
-                //return View();
-            }
-            else
-            {
-                objVendorReq = (OBS_VendorCSAprv)TempData["VendorCSRecmInfo"];
-                VendorReqID = objVendorReq.VendorReqID;
-                ServiceItemID = objVendorReq.ServiceItemID;
-            }
+            //if (TempData["VendorCSRecmInfo"] == null)
+            //{
+            //    ViewBag.Title = "No valid data.";
+            //    //return View();
+            //}
+            //else
+            //{
+            //    objVendorReq = (OBS_VendorCSAprv)TempData["VendorCSRecmInfo"];
+            //    VendorReqID = objVendorReq.VendorReqID;
+            //    ServiceItemID = objVendorReq.ServiceItemID;
+            //}
 
             DataTable dt = new DataTable();
 
@@ -434,7 +434,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [SILAuthorize]
-        public ActionResult RequisitionMovementInfo() 
+        public ActionResult RequisitionMovementInfo()
         {
             return View();
         }
