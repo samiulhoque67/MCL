@@ -59,6 +59,8 @@ namespace SILDMS.Web.UI.Controllers
         [HttpPost]
         public async Task<ActionResult> SaveQuotToClient(List<AdvanceDemandMaster> MasterData, string TransactionMode, string ParticularNo, string MoneyReceiptNo)
         {
+          string VendrAdvncPaymntID = string.Empty;//, message = string.Empty;
+
             if (MasterData == null || !MasterData.Any())
             {
                 return Json(new { status = "Error", message = "MasterList is empty or null." }, JsonRequestBehavior.AllowGet);
@@ -67,12 +69,21 @@ namespace SILDMS.Web.UI.Controllers
             try
             {
                 string status = _advancePaymentService.SaveQuotToClientService(UserID, MasterData, TransactionMode, ParticularNo, MoneyReceiptNo);
-                return Json(new { status = status }, JsonRequestBehavior.AllowGet);
+                if (status != string.Empty)
+                {
+                    string[] statusarr = status.Split(',');
+                    VendrAdvncPaymntID = statusarr[1];
+                    /*clientReq.ClientReqID = statusarr[1];*/
+                    status = statusarr[0];
+                }
+
+                return Json(new { status, VendrAdvncPaymntID }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 return Json(new { status = "Error", message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
+
         }
     }
 }

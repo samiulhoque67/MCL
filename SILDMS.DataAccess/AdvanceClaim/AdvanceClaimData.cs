@@ -97,7 +97,12 @@ namespace SILDMS.DataAccess.AdvanceClaim
                         ClientID = reader.GetString("ClientID"),
                         ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
                         WOInfoID = reader.GetString("WOInfoID"),
-                        WOAmt = reader.GetString("WOAmt")
+                        WOAmt = reader.GetString("WOAmt"),
+                        BillType = reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
+                        WOInstallmentNo = reader.GetString("WOInstallmentNo"),
+                        WOInstallmentID = reader.GetString("WOInstallmentID"),
+                        WOInstallmentAmt = reader.GetString("WOInstallmentAmt")
                     }).ToList();
 
                 }
@@ -146,6 +151,8 @@ namespace SILDMS.DataAccess.AdvanceClaim
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveClientAdvanceClaim"))
             {
                 db.AddInParameter(dbCommandWrapper, "@OBS_AdvanceClaim_MasterType", SqlDbType.Structured, masterDataTable);
+               db.AddInParameter(dbCommandWrapper, "@WOInstallmentNo", SqlDbType.VarChar, MasterData[0].WOInstallmentNo);
+                db.AddInParameter(dbCommandWrapper, "@WOInstallmentAmt", SqlDbType.VarChar, MasterData[0].WOInstallmentAmt);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 
@@ -157,14 +164,7 @@ namespace SILDMS.DataAccess.AdvanceClaim
                     var dt = ds.Tables[0];
                     var dr = dt.Rows[0];
 
-                    if (dr["Status"].ToString() == "Successfully Submitted")
-                    {
-                        message = "Operation Done";
-                    }
-                    else
-                    {
-                        message = "Error Found";
-                    }
+                    message = dr["Status"].ToString();
                 }
             }
 

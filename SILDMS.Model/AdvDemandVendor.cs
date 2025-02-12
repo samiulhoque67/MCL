@@ -88,6 +88,10 @@ namespace SILDMS.Model
         public string RemainingAmount { get; set; }
         public string AdvanceClaimDate { get; set; }
         public string Note { get; set; }
+        public string BillCategory { get; set; }
+        public string BillType { get; set; }
+        public string WOInstallmentNo { get; set; }
+        public string WOInstallmentAmt { get; set; }
     }
 
 }

@@ -276,7 +276,7 @@ namespace SILDMS.Web.UI.Controllers
 
             string reportName = "rptQuotationtoClient";
             reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
-          
+
             reportDocument.Close();
             reportDocument.Dispose();
             return View();
@@ -309,6 +309,60 @@ namespace SILDMS.Web.UI.Controllers
                 VendorReqID = objVendorReq.VendorReqID;
                 ServiceItemID = objVendorReq.ServiceItemID;
             }
+
+            DataTable dt = new DataTable();
+
+            await Task.Run(() => _reportService.VendorCSApprevedReport(VendorReqID, ServiceItemID, out dt));
+
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports");
+            ReportPath = ReportPath + "/rptVendorCSRecmInfo.rpt";
+            reportDocument.Load(ReportPath);
+            reportDocument.SetDataSource(dt);
+            reportDocument.Refresh();
+
+            reportDocument.SetParameterValue("RecmVendor", objVendorReq.CSRecmVendorName);
+            reportDocument.SetParameterValue("RecmBy", objVendorReq.RecommendedByName);
+            reportDocument.SetParameterValue("RecmDesig", objVendorReq.RecommendedByDesignation);
+
+            //reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
+            //reportDocument.SetParameterValue("RecmVendor", "Square Informatix Ltd.");
+            //reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
+
+
+            string reportName = "VendorCSApprevedReport";
+            reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
+
+        [SILAuthorize]
+        public ActionResult RequisitionToVendorReport()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> RequisitionToVendorReport(string ReportType)
+        {
+            var tempdata = TempData["VendorCSRecmInfo"];
+            string VendorReqID = string.Empty, ServiceItemID = string.Empty;
+            ReportType = "PDF";
+            OBS_VendorCSAprv objVendorReq = new OBS_VendorCSAprv();
+
+            //if (TempData["VendorCSRecmInfo"] == null)
+            //{
+            //    ViewBag.Title = "No valid data.";
+            //    //return View();
+            //}
+            //else
+            //{
+            //    objVendorReq = (OBS_VendorCSAprv)TempData["VendorCSRecmInfo"];
+            //    VendorReqID = objVendorReq.VendorReqID;
+            //    ServiceItemID = objVendorReq.ServiceItemID;
+            //}
 
             DataTable dt = new DataTable();
 
@@ -443,7 +497,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [SILAuthorize]
-        public ActionResult RequisitionMovementInfo() 
+        public ActionResult RequisitionMovementInfo()
         {
             return View();
         }

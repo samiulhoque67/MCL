@@ -105,7 +105,10 @@ namespace SILDMS.DataAccess.Claim_Received
                         AdvancClaimAprvAmt = reader.GetString("AdvancClaimAprvAmt"),
                         RemainingAmt = reader.GetString("RemainingAmt"),
                         AdvancClimAprvDate = reader.GetString("AdvancClimAprvDate"),
-                        Note = reader.GetString("Note")
+                        Note = reader.GetString("Note"),
+                        WOInstallmentNo = reader.GetString("WOInstallmentNo"),
+                        WOInstallmentAmt = reader.GetString("WOInstallmentAmt"),
+                        Receivedby = reader.GetString("UserFullName")
                     }).ToList();
 
                 }
@@ -157,6 +160,8 @@ namespace SILDMS.DataAccess.Claim_Received
                 db.AddInParameter(dbCommandWrapper, "@TransactionMode", SqlDbType.VarChar, TransactionMode);
                 db.AddInParameter(dbCommandWrapper, "@ParticularNo", SqlDbType.VarChar, ParticularNo);
                 db.AddInParameter(dbCommandWrapper, "@MoneyReceiptNo", SqlDbType.VarChar, MoneyReceiptNo);
+                db.AddInParameter(dbCommandWrapper, "@WOInstallmentNo", SqlDbType.VarChar, MasterData[0].WOInstallmentNo);
+                db.AddInParameter(dbCommandWrapper, "@WOInstallmentAmt", SqlDbType.VarChar, MasterData[0].WOInstallmentAmt);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 
@@ -168,14 +173,7 @@ namespace SILDMS.DataAccess.Claim_Received
                     var dt = ds.Tables[0];
                     var dr = dt.Rows[0];
 
-                    if (dr["Status"].ToString() == "Successfully Submitted")
-                    {
-                        message = "Operation Done";
-                    }
-                    else
-                    {
-                        message = "Error Found";
-                    }
+                    message = dr["Status"].ToString();
                 }
             }
 

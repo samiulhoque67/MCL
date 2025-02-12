@@ -793,8 +793,9 @@
                     PurchaseOrderAmount: $scope.ClientDetails[0].POAprvAmnt,
                     ClientReqID: $scope.ClientDetails[0].ClientReqID,
                     WOInfoID: $scope.ClientDetails[0].WOInfoID,
-
                     POAprvID: $scope.ClientDetails[0].POAprvID,
+                    POInstallmentNo: $scope.ClientDetails[0].POInstallmentNo,
+                    POInstallmentAmt: $scope.ClientDetails[0].POInstallmentAmt,
 
                 };
 
@@ -857,8 +858,9 @@
 
             }).success(function (response) {
 
-                if (response.status === "Data Save Successfully" || "Operation Done") {
+                if (response.status === "Successfully Submitted" || "Operation Done") {
                     toastr.success('Data Saved Successfully');
+                    /* respose.VendorAdvancRecmID = $scope.VendorAdvancRecmID;*/
                     $scope.refreshPage();
                 }
                 else {

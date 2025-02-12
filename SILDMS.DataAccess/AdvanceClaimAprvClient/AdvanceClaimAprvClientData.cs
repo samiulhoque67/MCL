@@ -112,8 +112,12 @@ namespace SILDMS.DataAccess.AdvanceClaimAprvClient
                         AdvancClaimRecmAmt = reader.GetString("AdvancClaimRecmAmt"),
                         RecomRemainingAmt = reader.GetString("RecomRemainingAmt"),
                         AdvancClimRecmDate = reader.GetString("AdvancClimRecmDate"),
-                        RecomNote = reader.GetString("RecomNote")
+                        RecomNote = reader.GetString("RecomNote"),
 
+                        WOInstallmentNo = reader.GetString("WOInstallmentNo"),
+                        WOInstallmentAmt = reader.GetString("WOInstallmentAmt"),
+                        Receivedby = reader.GetString("UserFullName"),
+                        ReceivedbyClaim = reader.GetString("UserFullNameClaim")
 
                     }).ToList();
 
