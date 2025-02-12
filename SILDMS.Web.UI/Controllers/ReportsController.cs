@@ -338,6 +338,69 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [SILAuthorize]
+        public ActionResult ClientAprvBillReport()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> ClientAprvBillReport(string ReportType)
+        {
+            var tempdata = TempData["ClientAprvBill"];
+            string WoinfoID = string.Empty;
+            int InstallmentNo=0;
+            ReportType = "PDF";
+            VendorBillRecvd BillRecv = new VendorBillRecvd();
+            int ClientBillAprvID = 0;
+
+            if (TempData["ClientAprvBill"] == null)
+            {
+                ViewBag.Title = "No valid data.";
+                //return View();
+            }
+            else
+            {
+                BillRecv = (VendorBillRecvd)TempData["ClientAprvBill"];
+                //BillRecv = (VendorBillRecvd)TempData["ClientAprvBill"];
+                ClientBillAprvID = Convert.ToInt32(TempData["ClientBillAprvID"]);
+
+                WoinfoID = BillRecv.WOInfoID;
+                InstallmentNo = BillRecv.WOInstallmentNo;
+            }
+
+            DataTable dt = new DataTable();
+
+            await Task.Run(() => _reportService.ClientAprvBillReport(WoinfoID, InstallmentNo, ClientBillAprvID, out dt));
+
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports");
+            ReportPath = ReportPath + "/rptClientAprvBill.rpt";
+            reportDocument.Load(ReportPath);
+            reportDocument.SetDataSource(dt);
+            reportDocument.Refresh();
+
+        
+            //reportDocument.SetParameterValue("RecmBy", BillRecv.RecommendedByName);
+            //reportDocument.SetParameterValue("RecmDesig", BillRecv.RecommendedByDesignation);
+
+            //reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
+            //reportDocument.SetParameterValue("RecmVendor", "Square Informatix Ltd.");
+            //reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
+
+
+            string reportName = "VendorCSApprevedReport";
+            reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
+
+
+
+
+
+        [SILAuthorize]
         public ActionResult UserDetails()
         {
             return View();

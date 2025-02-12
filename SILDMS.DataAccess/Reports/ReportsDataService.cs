@@ -236,5 +236,26 @@ namespace SILDMS.DataAccess.Reports
                 return RptAllEFTVendorList;
             }
         }
+
+        public DataTable ClientAprvBillReport(string woinfoID, int installmentNo,int clientBillAprvID, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientAprvBillReportData"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@WoInfoID", SqlDbType.VarChar, woinfoID);
+                db.AddInParameter(dbCommandWrapper, "@WOInstallmentNo", SqlDbType.VarChar, installmentNo);
+                db.AddInParameter(dbCommandWrapper, "@clientBillAprvID", SqlDbType.VarChar, clientBillAprvID);
+                ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
+                //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
+                ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
+
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+        }
     }
 }

@@ -149,5 +149,7 @@ namespace SILDMS.Model
         public string PaymentMode { get; set; }
         public string ChequeEftNo { get; set; }
         public decimal NetReceivableAmount { get; set; }
+        public string RecommendedByName { get; set; }
+        public string RecommendedByDesignation { get; set; }
     }
 }

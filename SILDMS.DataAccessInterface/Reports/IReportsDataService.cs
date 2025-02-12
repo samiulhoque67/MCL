@@ -23,5 +23,6 @@ namespace SILDMS.DataAccessInterface.Reports
         string GetCompanyOrOwnerNameByUserID(string UserID);
 
         List<RptVendorWithAddress> GetVendorNameAndAddress(string companyID, out string errorNumber);
+        DataTable ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID, out string errorNumber);
     }
 }

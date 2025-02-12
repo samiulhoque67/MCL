@@ -28,5 +28,6 @@ namespace SILDMS.Service.Reports
         string GetCompanyOrOwnerNameByUserID(string UserID);
 
         ValidationResult GetVendorNameAndAddress(string vendorID, out List<RptVendorWithAddress> RptAllEFTVendorList);
+        ValidationResult ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID, out DataTable dt);
     }
 }

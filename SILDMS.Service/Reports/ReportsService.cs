@@ -118,5 +118,15 @@ namespace SILDMS.Service.Reports
             }
             return ValidationResult.Success;
         }
+
+        public ValidationResult ClientAprvBillReport(string woinfoID, int installmentNo,int clientBillAprvID, out DataTable dt)
+        {
+            dt = _reportDataService.ClientAprvBillReport(woinfoID, installmentNo, clientBillAprvID, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
     }
 }

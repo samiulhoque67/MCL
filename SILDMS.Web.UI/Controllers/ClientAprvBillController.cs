@@ -45,8 +45,23 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> SaveVendorFinalBill(VendorBillRecvd BillRecv)
         {
             BillRecv.SetBy = UserID;
-            string status = string.Empty;//, message = string.Empty;
+
+            BillRecv.RecommendedByName = SILAuthorization.GetUserFullName();
+            BillRecv.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
+            string status = string.Empty;
+            int ClientBillAprvID = 0;//, message = string.Empty;
             status = _clientAprvBillService.SaveClientFinalBill(BillRecv);
+            if (status != string.Empty)
+            {
+                string[] statusarr = status.Split(',');
+                 ClientBillAprvID = Convert.ToInt32(statusarr[1]);
+
+                /*clientReq.ClientReqID = statusarr[1];*/
+                status = statusarr[0];
+            }
+            TempData["ClientAprvBill"] = BillRecv;
+            TempData["ClientBillAprvID"] = ClientBillAprvID;
+            return Json(new { status }, JsonRequestBehavior.AllowGet);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
