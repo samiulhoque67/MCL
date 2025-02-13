@@ -257,5 +257,21 @@ namespace SILDMS.DataAccess.Reports
                 return dt1;
             }
         }
+
+        public DataTable ClientQuotationApproveReport(string ClientQutnAprvID, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQuotationApproveReportData"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.VarChar, ClientQutnAprvID);
+               
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+        }
     }
 }

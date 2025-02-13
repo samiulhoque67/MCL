@@ -452,6 +452,55 @@ namespace SILDMS.Web.UI.Controllers
 
 
 
+        [SILAuthorize]
+        public ActionResult ClientQuotationApproveReport()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> ClientQuotationApproveReport(string ReportType)
+        {
+           /* TempData["ClientQutnAprv"] = MasterData;
+            TempData["ClientQutnAprvID"] = ClientQutnAprvID;*/
+
+            var tempdata = TempData["ClientQutnAprv"];
+            string WoinfoID = string.Empty;
+            int InstallmentNo = 0;
+            ReportType = "PDF";
+            OBS_QutntoClientMaster ClientQutnAprv = new OBS_QutntoClientMaster();
+            string ClientQutnAprvID = string.Empty;
+
+            if (TempData["ClientQutnAprv"] == null)
+            {
+                ViewBag.Title = "No valid data.";
+                //return View();
+            }
+            else
+            {
+                ClientQutnAprv = (OBS_QutntoClientMaster)TempData["ClientQutnAprv"];
+                ClientQutnAprvID = Convert.ToString(TempData["ClientQutnAprvID"]);
+            }
+
+            DataTable dt = new DataTable();
+
+            await Task.Run(() => _reportService.ClientQuotationApproveReport(ClientQutnAprvID, out dt));
+
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports");
+            ReportPath = ReportPath + "/rptClientQuotationApprove.rpt";
+            reportDocument.Load(ReportPath);
+            reportDocument.SetDataSource(dt);
+            reportDocument.Refresh();
+
+
+            string reportName = "ClientQuotationApproveReport";
+            reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
 
 
         [SILAuthorize]

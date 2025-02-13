@@ -29,5 +29,6 @@ namespace SILDMS.Service.Reports
 
         ValidationResult GetVendorNameAndAddress(string vendorID, out List<RptVendorWithAddress> RptAllEFTVendorList);
         ValidationResult ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID, out DataTable dt);
+        ValidationResult ClientQuotationApproveReport(string ClientQutnAprvID, out DataTable dt);
     }
 }
