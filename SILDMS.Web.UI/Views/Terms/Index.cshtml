@@ -145,8 +145,8 @@
                                 <td class="hidden">{{row.TermsItemID}}</td>
                                 <td class="col-lg-1" style="width:5%;">{{row.TermsName}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                    <span ng-attr-class="{{row.ItemStatus =='1'? 'label label-success' : 'label label-danger' }}">
-                                        {{row.ItemStatus == '1'? 'Active':'InActive'}}
+                                    <span ng-attr-class="{{ row.ItemStatus == "1" ? 'label label-success' : 'label label-danger' }}">
+                                        {{ row.ItemStatus == "1" ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
                                 <td class="col-lg-1" style="width:5%;">
@@ -209,7 +209,6 @@
                             </div>
                             <div class="col-sm-2 col-md-2 col-lg-2">
                                 <select data-ng-model="vmTermsItem.ItemStatus" class="form-control">
-                                    <option value="">-- None --</option>
                                     <option value="1">Active</option>
                                     <option value="0">Inactive</option>
                                 </select>
@@ -255,20 +254,21 @@
 
             $scope.termsItemArray = [];
             $scope.itemsByPage = 10;
-           
+
 
             $scope.vmTermsMst = {
                 TermsID: "",
                 FormName: "",
-                Status: ""
+                Status: "1"
             }
 
             $scope.vmTermsItem = {
                 TermsItemID: "",
                 TermsName: "",
-                ItemStatus: ""
-            }
-            $scope.vmTermsItem.ItemStatus = "1";
+                ItemStatus: "1"
+            };
+
+        //    $scope.vmTermsItem.ItemStatus = "1";
             // ################# Detail Add Modal ####################
             $scope.AddTermsModal = function () {
                 if ($('#FormName').val() == "") {
@@ -291,7 +291,6 @@
 
                 $scope.vmTermsItem.TermsName = $('#TermsName').val();
                 $scope.vmTermsItem.ItemStatus = $('#ItemStatus').val();
-                alert($('#ItemStatus').val());
                 $scope.termsItemArray.push($scope.vmTermsItem);
 
                 $scope.GridDisplayCollection = $scope.GridDisplayCollection.concat($scope.vmTermsItem);
@@ -304,19 +303,23 @@
             $scope.resetVmTermsItem = function () {
                 $scope.vmTermsItem = {
                     TermsItemID: "",
-                    TermsName: ""
+                    TermsName: "",
+                    ItemStatus: "1"
                 }
             }
 
             $scope.ClearVmTermsMst = function () {
                 $scope.vmTermsMst = {
                     TermsID: "",
-                    FormName: ""
+                    FormName: "",
+                    Status: "1"
                 }
 
                 $scope.vmTermsItem = {
                     TermsItemID: "",
-                    TermsName: ""
+                    TermsName: "",
+                    ItemStatus: "1"
+
                 }
 
                 $scope.masterDataSetupGridData = [];  // base collection
@@ -447,3 +450,5 @@
             };
         }])
     </script>
+
+
