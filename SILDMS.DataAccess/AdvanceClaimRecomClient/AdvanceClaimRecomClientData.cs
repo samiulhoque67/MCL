@@ -104,6 +104,10 @@ namespace SILDMS.DataAccess.AdvanceClaimRecomClient
                         AdvancClaimID = reader.GetString("AdvancClaimID"),
                         AdvancClaimDate = reader.GetString("AdvancClaimDate"),
                         AdvancClaimNote = reader.GetString("Note"),
+                        WOInstallmentNo = reader.GetString("WOInstallmentNo"),
+                        WOInstallmentAmt = reader.GetString("WOInstallmentAmt"),
+                        Receivedby = reader.GetString("UserFullName"),
+
                     }).ToList();
 
                 }
@@ -164,14 +168,7 @@ namespace SILDMS.DataAccess.AdvanceClaimRecomClient
                     var dt = ds.Tables[0];
                     var dr = dt.Rows[0];
 
-                    if (dr["Status"].ToString() == "Successfully Submitted")
-                    {
-                        message = "Operation Done";
-                    }
-                    else
-                    {
-                        message = "Error Found";
-                    }
+                    message = dr["Status"].ToString();
                 }
             }
 

@@ -20,15 +20,16 @@ namespace SILDMS.DataAccess
         public string SaveTermsAndConditions(OBS_Terms vmTerms, List<OBS_TermsItem> vmTermsItem)
         {
             DataTable dtTermsItem = new DataTable();
-            dtTermsItem.Columns.Add("TermsID");
-            dtTermsItem.Columns.Add("TermsCode");
+            //dtTermsItem.Columns.Add("TermsID");
+            //dtTermsItem.Columns.Add("TermsCode");
             dtTermsItem.Columns.Add("TermsName");
             foreach (var item in vmTermsItem)
             {
                 DataRow objDataRow = dtTermsItem.NewRow();
-                objDataRow[0] = item.TermsID;
-                objDataRow[1] = item.TermsCode;
-                objDataRow[2] = item.TermsName;
+                objDataRow[0] = item.TermsName;
+
+                //objDataRow[0] = item.TermsID;
+                //objDataRow[1] = item.TermsCode;
 
                 dtTermsItem.Rows.Add(objDataRow);
             }
@@ -43,14 +44,14 @@ namespace SILDMS.DataAccess
 
                 DatabaseProviderFactory factory = new DatabaseProviderFactory();
                 SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetClientRequisition"))
+                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetTermsAndItems"))
                 {
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.NVarChar, vmTerms.TermsID);
                     db.AddInParameter(dbCommandWrapper, "@FormName", SqlDbType.NVarChar, vmTerms.FormName);
-                    db.AddInParameter(dbCommandWrapper, "@OBS_TermsAndConditions", SqlDbType.Structured, dtTermsItem);
-                    db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vmTerms.Action);
-                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+                    db.AddInParameter(dbCommandWrapper, "@OBS_TermsAndConditionsNew", SqlDbType.Structured, dtTermsItem);
+                  //  db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vmTerms.Action);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 1200);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
                     // Getting output parameters and setting response details.

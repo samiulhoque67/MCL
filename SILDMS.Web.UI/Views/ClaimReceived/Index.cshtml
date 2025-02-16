@@ -333,26 +333,41 @@
 
                 <!-- Purchase Order Amount -->
                 <div class="row">
-                    <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="WorkOrderAmount">Work Order Amount :</label>
+                            <label for="AdvanceClaimAmount">Aprrove Claim Amount :</label>
                         </div>
                     </div>
-                    <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="WorkOrderAmount" name="WorkOrderAmount" type="text" ng-model="AdvanceAprv.WorkOrderAmount" readonly class="form-control" />
+                            <input id="AdvanceClaimAmount" name="AdvanceClaimAmount" type="text" ng-model="AdvanceAprv.AdvanceClaimAprvAmount" readonly class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Instrallment Amount -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="PurchaseOrderAmount">Instrallment PO Amount :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" ng-model="AdvanceAprv.WOInstallmentAmt" readonly class="form-control" />
                         </div>
                     </div>
 
                     <div class="col-lg-1"></div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="AdvanceInvoiceNo">Aprrove Claim No :</label>
+                            <label for="AdvanceInstallmentNo">Installment Number :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceInvoiceNo" name="AdvanceInvoiceNo" type="text" ng-model="AdvanceAprv.AdvancClaimAprvID" readonly class="form-control" />
+                            <input id="AdvanceInstallmentNo" name="AdvanceInstallmentNo" type="text" ng-model="AdvanceAprv.WOInstallmentNo" readonly class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -400,6 +415,23 @@
                                    readonly class="form-control" />
                         </div>
                     </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ProposedBy">Proposed By :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="ProposedBy" name="ProposedBy" type="text" readonly data-ng-model="AdvanceAprv.Receivedby" class="form-control" />
+                        </div>
+                    </div>
+
 
                     <div class="col-lg-1"></div>
 
@@ -451,12 +483,12 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="WorkOrderAmount">Work Order Amount :</label>
+                            <label for="AdvanceClaimAmount">Aprrove Claim Amount :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="WorkOrderAmount" name="WorkOrderAmount" type="text" ng-model="AdvanceAprv.WorkOrderAmount" readonly class="form-control" />
+                            <input id="AdvanceClaimAmount" name="AdvanceClaimAmount" type="text" ng-model="AdvanceAprv.AdvanceClaimAprvAmount" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -807,6 +839,11 @@
                     RemainingAmount: $scope.WODetails[0].RemainingAmt,
                     AdvancClimAprvDate: $scope.WODetails[0].AdvancClimAprvDate,
                     AdvancAprvNote: $scope.WODetails[0].Note,
+
+                    WOInstallmentNo: $scope.WODetails[0].WOInstallmentNo,
+                    WOInstallmentAmt: $scope.WODetails[0].WOInstallmentAmt,
+
+                    Receivedby: $scope.WODetails[0].Receivedby,
                 };
 
 
@@ -814,7 +851,9 @@
                     ClientID: $scope.WODetails[0].ClientID,
                     WOInfoID: $scope.WODetails[0].WOInfoID,
                     ClientQutnAprvID: $scope.WODetails[0].AdvancClaimAprvID,
-
+                    AdvanceClaimAmount: $scope.WODetails[0].AdvancClaimAprvAmt,
+                    WOInstallmentNo: $scope.WODetails[0].WOInstallmentNo,
+                    WOInstallmentAmt: $scope.WODetails[0].WOInstallmentAmt,
 
                 }
 
@@ -838,14 +877,14 @@
 
 
         function performCalculation() {
-            if ($scope.AdvanceAprv.WorkOrderAmount && $scope.AdvanceRciv.AdvanceClaimAmount) {
-                $scope.AdvanceRciv.RemainingAmount = $scope.AdvanceAprv.WorkOrderAmount - $scope.AdvanceRciv.AdvanceClaimAmount;
+            if ($scope.AdvanceAprv.WOInstallmentAmt && $scope.AdvanceRciv.AdvanceClaimAmount) {
+                $scope.AdvanceRciv.RemainingAmount = $scope.AdvanceAprv.WOInstallmentAmt - $scope.AdvanceRciv.AdvanceClaimAmount;
             } else {
                 $scope.AdvanceRciv.RemainingAmount = 0;
             }
         }
 
-        $scope.$watchGroup(['AdvanceAprv.WorkOrderAmount', 'AdvanceRciv.AdvanceClaimAmount'], function (newValues, oldValues) {
+        $scope.$watchGroup(['AdvanceAprv.WOInstallmentAmt', 'AdvanceRciv.AdvanceClaimAmount'], function (newValues, oldValues) {
             performCalculation();
         });
 
@@ -888,8 +927,9 @@
                 MoneyReceiptNo: $scope.AdvanceRciv.MoneyReceiptNo
             }).success(function (response) {
 
-                if (response.status === "Data Save Successfully" || "Operation Done") {
+                if (response.status === "Successfully Submitted" || "Operation Done") {
                     toastr.success('Data Saved Successfully');
+                    /* respose.VendrAdvncDemnID = $scope.VendrAdvncDemnID;*/
                     $scope.refreshPage();
                 }
                 else {

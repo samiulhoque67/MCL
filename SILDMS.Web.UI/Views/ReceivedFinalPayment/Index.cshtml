@@ -1099,7 +1099,7 @@
             $scope.VendorQutn.CommissionPercentage = tableRow.CommissionPercentage;
             $scope.VendorQutn.CommissionAmount = tableRow.CommissionAmount;
             $scope.VendorQutn.TotalBillAmount = tableRow.TotalBillAmount;
-            $scope.VendorQutn.NetPayableAmount = tableRow.NetPayableAmount;
+            $scope.VendorQutn.NetReceivableAmount = tableRow.NetReceivableAmount;
             $scope.VendorQutn.Note = tableRow.Note;
             $scope.VendorQutn.WONo = tableRow.WONo;
             $scope.VendorQutn.WODate = tableRow.WODate;
@@ -1116,6 +1116,8 @@
             $scope.VendorQutn.ClientFinalBilRecmID = tableRow.ClientFinalBilRecmID;
             $scope.VendorQutn.ClientFinalBilAprvID = tableRow.ClientFinalBilAprvID;
             $scope.VendorQutn.Operation = tableRow.Operation;
+            $scope.VendorQutn.ReceivableAmount = tableRow.ReceivableAmount;
+            $scope.VendorQutn.ReceivedAmount = tableRow.ReceivedAmount;
 
             $scope.q = 2;
             $scope.p = 1;
@@ -1385,11 +1387,11 @@
         $scope.handleVDSChange = function (value) {
             if (value === "MCOM") {
 
-                $scope.VendorQutn.ReceivedAmount = $scope.VendorQutn.ReceivableAmount ;
+                $scope.VendorQutn.ReceivedAmount = parseFloat(($scope.VendorQutn.NetReceivableAmount - $scope.VendorQutn.TDSAmount).toFixed(3)) ;
 
 
             } else if (value === "Client") {
-                $scope.VendorQutn.ReceivedAmount = parseFloat(($scope.VendorQutn.ReceivableAmount - $scope.VendorQutn.VATAmount).toFixed(3));
+                $scope.VendorQutn.ReceivedAmount = parseFloat(($scope.VendorQutn.NetReceivableAmount - $scope.VendorQutn.TDSAmount - $scope.VendorQutn.VATAmount).toFixed(3));
 
             }
         };

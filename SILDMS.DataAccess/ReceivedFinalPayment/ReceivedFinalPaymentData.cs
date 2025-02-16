@@ -58,11 +58,13 @@ namespace SILDMS.DataAccess.ReceivedFinalPayment
                         CommissionPercentage = reader.GetToDecimal("CommissionPercnt"),
                         CommissionAmount = reader.GetToDecimal("CommissionAmount"),
                         TotalBillAmount = reader.GetToDecimal("TotalBillAmount"),
-                        NetPayableAmount = reader.GetToDecimal("NetReceivableAmount"),
+                        NetReceivableAmount = reader.GetToDecimal("NetReceivableAmount"),
                         Note = reader.IsNull("Note") ? string.Empty : reader.GetString("Note"),
                         ClientName = reader.IsNull("ClientName") ? string.Empty : reader.GetString("ClientName"),
                         QuotatDate = reader.IsNull("QuotationDate") ? string.Empty : reader.GetString("QuotationDate"),
-                        RequiDate = reader.IsNull("RequisitionDate") ? string.Empty : reader.GetString("RequisitionDate")
+                        RequiDate = reader.IsNull("RequisitionDate") ? string.Empty : reader.GetString("RequisitionDate"),
+                        ReceivableAmount = reader.GetToDecimal("ReceivableAmount"),
+                        ReceivedAmount = reader.GetToDecimal("ReceivedAmount"),
                     }).ToList();
                 }
             }
@@ -84,6 +86,7 @@ namespace SILDMS.DataAccess.ReceivedFinalPayment
                     DataTable dt1 = ds.Tables[0];
                     vendorBillRecvdList = dt1.AsEnumerable().Select(reader => new VendorBillRecvd
                     {
+                        ClientFinalBilAprvID = reader.IsNull("ClientFinalBilAprvID") ? 0 : Convert.ToInt32(reader["ClientFinalBilAprvID"]),
                         ClientFinalBilRecmID = reader.IsNull("ClientFinalBilRecmID") ? 0 : Convert.ToInt32(reader["ClientFinalBilRecmID"]),
                         ClientFinalBilPreprID = reader.IsNull("ClientFinalBilPreprID") ? 0 : Convert.ToInt32(reader["ClientFinalBilPreprID"]),
                         AdvancRecvID = reader.IsNull("AdvancClaimRcvdID") ? string.Empty : reader.GetString("AdvancClaimRcvdID"),
@@ -121,6 +124,7 @@ namespace SILDMS.DataAccess.ReceivedFinalPayment
                         WOInstallmentAmt = reader.GetToDecimal("WOInstallmentAmt"),
                         BillType = reader.GetString("BillType"),
                         BillCategory = reader.GetString("BillCategory"),
+                       
                     }).ToList();
                 }
             }

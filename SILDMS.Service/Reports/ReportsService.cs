@@ -128,5 +128,45 @@ namespace SILDMS.Service.Reports
             }
             return ValidationResult.Success;
         }
+
+        public ValidationResult ClientAprvBillReport(string woinfoID, int installmentNo,int clientBillAprvID,string BillCategory, out DataTable dt)
+        {
+            dt = _reportDataService.ClientAprvBillReport(woinfoID, installmentNo, clientBillAprvID, BillCategory, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult FinalClientBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt)
+        {
+            dt = _reportDataService.FinalClientBillReport(clientID, billReceiveFromDate, billReceiveToDate,out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult FinalClientDueBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt)
+        {
+            dt = _reportDataService.FinalClientDueBillReport(clientID, billReceiveFromDate, billReceiveToDate, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult ClientQuotationApproveReport(string ClientQutnAprvID, out DataTable dt)
+        {
+            dt = _reportDataService.ClientQuotationApproveReport(ClientQutnAprvID, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
     }
 }

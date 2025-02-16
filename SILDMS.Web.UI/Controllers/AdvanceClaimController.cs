@@ -57,6 +57,9 @@ namespace SILDMS.Web.UI.Controllers
         [HttpPost]
         public async Task<ActionResult> SaveQuotToClient(List<AdvanceClaimMaster> MasterData)
         {
+           
+            string AdvancClaimID = string.Empty;//, message = string.Empty;
+
             if (MasterData == null || !MasterData.Any())
             {
                 return Json(new { status = "Error", message = "MasterList is empty or null." }, JsonRequestBehavior.AllowGet);
@@ -65,12 +68,21 @@ namespace SILDMS.Web.UI.Controllers
             try
             {
                 string status = _advanceClaimService.SaveQuotToClientService(UserID, MasterData);
-                return Json(new { status = status }, JsonRequestBehavior.AllowGet);
+                if (status != string.Empty)
+                {
+                    string[] statusarr = status.Split(',');
+                    AdvancClaimID = statusarr[1];
+                    /*clientReq.ClientReqID = statusarr[1];*/
+                    status = statusarr[0];
+                }
+
+                return Json(new { status, AdvancClaimID }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 return Json(new { status = "Error", message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
+
         }
     }
 }
