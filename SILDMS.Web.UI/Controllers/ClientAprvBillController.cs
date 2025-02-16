@@ -62,7 +62,7 @@ namespace SILDMS.Web.UI.Controllers
             TempData["ClientAprvBill"] = BillRecv;
             TempData["ClientBillAprvID"] = ClientBillAprvID;
             return Json(new { status }, JsonRequestBehavior.AllowGet);
-            return Json(new { status }, JsonRequestBehavior.AllowGet);
+ 
         }
 
         public async Task<dynamic> SaveVendorFinalBillRcvd(VendorBillRecvd BillRecv)

@@ -28,6 +28,8 @@ namespace SILDMS.Service.Reports
         string GetCompanyOrOwnerNameByUserID(string UserID);
 
         ValidationResult GetVendorNameAndAddress(string vendorID, out List<RptVendorWithAddress> RptAllEFTVendorList);
-        ValidationResult ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID, out DataTable dt);
+        ValidationResult ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID, string billCategory, out DataTable dt);
+        ValidationResult FinalClientBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
+        ValidationResult FinalClientDueBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
     }
 }

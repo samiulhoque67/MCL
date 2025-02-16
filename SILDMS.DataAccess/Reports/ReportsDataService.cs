@@ -237,7 +237,9 @@ namespace SILDMS.DataAccess.Reports
             }
         }
 
-        public DataTable ClientAprvBillReport(string woinfoID, int installmentNo,int clientBillAprvID, out string errorNumber)
+        
+
+        public DataTable ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID,string BillCategory, out string errorNumber)
         {
             errorNumber = string.Empty;
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
@@ -245,8 +247,9 @@ namespace SILDMS.DataAccess.Reports
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientAprvBillReportData"))
             {
                 db.AddInParameter(dbCommandWrapper, "@WoInfoID", SqlDbType.VarChar, woinfoID);
-                db.AddInParameter(dbCommandWrapper, "@WOInstallmentNo", SqlDbType.VarChar, installmentNo);
-                db.AddInParameter(dbCommandWrapper, "@clientBillAprvID", SqlDbType.VarChar, clientBillAprvID);
+                db.AddInParameter(dbCommandWrapper, "@WOInstallmentNo", SqlDbType.Int, installmentNo);
+                db.AddInParameter(dbCommandWrapper, "@clientBillAprvID", SqlDbType.Int, clientBillAprvID);
+                db.AddInParameter(dbCommandWrapper, "@BillCategory", SqlDbType.VarChar, BillCategory);
                 ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
                 //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
                 ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
@@ -257,5 +260,51 @@ namespace SILDMS.DataAccess.Reports
                 return dt1;
             }
         }
+
+        public DataTable FinalClientBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetFinalClientBillReportData"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@clientID", SqlDbType.VarChar, clientID);
+                db.AddInParameter(dbCommandWrapper, "@billReceiveFromDate", SqlDbType.VarChar, billReceiveFromDate);
+                db.AddInParameter(dbCommandWrapper, "@billReceiveToDate", SqlDbType.Int, billReceiveToDate);
+        
+                ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
+                //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
+                ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
+
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+        }
+
+
+        public DataTable FinalClientDueBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetFinalClientDueBillReportData"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@clientID", SqlDbType.VarChar, clientID);
+                db.AddInParameter(dbCommandWrapper, "@billReceiveFromDate", SqlDbType.VarChar, billReceiveFromDate);
+                db.AddInParameter(dbCommandWrapper, "@billReceiveToDate", SqlDbType.Int, billReceiveToDate);
+
+                ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
+                //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
+                ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
+
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+        }
+
     }
 }

@@ -403,6 +403,7 @@ namespace SILDMS.Web.UI.Controllers
         {
             var tempdata = TempData["ClientAprvBill"];
             string WoinfoID = string.Empty;
+            string BillCategory = string.Empty;
             int InstallmentNo=0;
             ReportType = "PDF";
             VendorBillRecvd BillRecv = new VendorBillRecvd();
@@ -421,11 +422,12 @@ namespace SILDMS.Web.UI.Controllers
 
                 WoinfoID = BillRecv.WOInfoID;
                 InstallmentNo = BillRecv.WOInstallmentNo;
+                BillCategory = BillRecv.BillCategory;
             }
 
             DataTable dt = new DataTable();
 
-            await Task.Run(() => _reportService.ClientAprvBillReport(WoinfoID, InstallmentNo, ClientBillAprvID, out dt));
+            await Task.Run(() => _reportService.ClientAprvBillReport(WoinfoID, InstallmentNo, ClientBillAprvID, BillCategory, out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
@@ -443,7 +445,7 @@ namespace SILDMS.Web.UI.Controllers
             //reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
 
 
-            string reportName = "VendorCSApprevedReport";
+            string reportName = "ClientAprvBill";
             reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
             reportDocument.Close();
             reportDocument.Dispose();
@@ -1011,5 +1013,123 @@ namespace SILDMS.Web.UI.Controllers
                 return null;
             }
         }
+
+
+     
+        public ActionResult FinalClientBillReport()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> FinalClientBillReport(ReportModel model)
+        {
+            DataTable dt = new DataTable();
+
+            await Task.Run(() => _reportService.FinalClientBillReport(model.ClientID,model.BillReceiveFromDate, model.BillReceiveToDate, out dt));
+
+           
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports");
+            ReportPath = ReportPath + "/rptClientFinalBillPayment.rpt";
+            reportDocument.Load(ReportPath);
+            reportDocument.SetDataSource(dt);
+            reportDocument.Refresh();
+
+            if (string.IsNullOrEmpty(model.ClientName))
+                reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
+            else
+                reportDocument.SetParameterValue("ComDiv", model.ClientName);
+            string rptHeaderName = "Client Wise Bill Receive.";
+            reportDocument.SetParameterValue("rptName", rptHeaderName);
+            reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
+            //string reportName = GetCompanyShortName(model.ClientName) + "-" + "ChequeOrEFTInfoVendorWise";
+            string reportName = "Bill Receive Report"+' '+ model.ClientName;
+
+            if (model.ButtonType == "Preview")
+                reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            else
+            {
+                if (model.ReportType == "PDF")
+                    reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, true, reportName);
+                else if (model.ReportType == "EXCEL")
+                    reportDocument.ExportToHttpResponse(ExportFormatType.ExcelRecord, System.Web.HttpContext.Current.Response, true, reportName);
+                else
+                    reportDocument.ExportToHttpResponse(ExportFormatType.EditableRTF, System.Web.HttpContext.Current.Response, true, reportName);
+            }
+
+            //reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
+
+        
+        public ActionResult FinalClientDueBillReport()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> FinalClientDueBillReport(ReportModel model)
+        {
+            DataTable dt = new DataTable();
+
+            await Task.Run(() => _reportService.FinalClientDueBillReport(model.ClientID, model.BillReceiveFromDate, model.BillReceiveToDate, out dt));
+
+
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports");
+            ReportPath = ReportPath + "/rptClientFinalDueBillPayment.rpt";
+            reportDocument.Load(ReportPath);
+            reportDocument.SetDataSource(dt);
+            reportDocument.Refresh();
+
+            if (string.IsNullOrEmpty(model.ClientName))
+                reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
+            else
+                reportDocument.SetParameterValue("ComDiv", model.ClientName);
+            string rptHeaderName = "Client Wise Bill Receive.";
+            reportDocument.SetParameterValue("rptName", rptHeaderName);
+            reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
+            //string reportName = GetCompanyShortName(model.ClientName) + "-" + "ChequeOrEFTInfoVendorWise";
+            string reportName = "Bill Receive Report" + ' ' + model.ClientName;
+
+            if (model.ButtonType == "Preview")
+                reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            else
+            {
+                if (model.ReportType == "PDF")
+                    reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, true, reportName);
+                else if (model.ReportType == "EXCEL")
+                    reportDocument.ExportToHttpResponse(ExportFormatType.ExcelRecord, System.Web.HttpContext.Current.Response, true, reportName);
+                else
+                    reportDocument.ExportToHttpResponse(ExportFormatType.EditableRTF, System.Web.HttpContext.Current.Response, true, reportName);
+            }
+
+            //reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
