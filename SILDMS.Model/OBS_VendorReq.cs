@@ -32,6 +32,8 @@ namespace SILDMS.Model
         public string CsStatus { get; set; }
         public string SetOn { get; set; }
         public string SetBy { get; set; }
+        public string Submittedby { get; set; }
+        public string SubmittedbyDesig { get; set; }
         public string ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
         public string Action { get; set; }
