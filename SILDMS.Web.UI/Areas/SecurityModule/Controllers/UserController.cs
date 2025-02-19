@@ -191,7 +191,7 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<dynamic> GetServers(string _OwnerID)
         {
             List<SEC_Server> obServer = null;
