@@ -39,7 +39,7 @@
                     @using (Html.BeginForm("ClientAprvBillReport", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
                     {
                         <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="btn btn-sm btn-flat btn-success pull-right">
-                            <i class="fa fa-print"></i> CS Print
+                            <i class="fa fa-print"></i> Bill Print
                         </button>
                     }
                 </div>
@@ -58,57 +58,9 @@
 
     <div class="box-body " style="margin: 1%; padding: 5px 5px 5px 5px;" data-ng-disabled="">
 
-        <div class="table-responsive" ng-if="q===1">
-            <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                <thead>
-                    <tr>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Name</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Work Order No</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">Work Order Amount</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('LastDateofQuotation')">Work Order Date</th>
-                        @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>*@
-                        <!--<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>-->
-                        <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
-                    </tr>
-                    <tr>
-                        <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                        <th><input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" /></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="row in VendorReqDisplayedCollection">
 
-                        <td class="hidden">{{row.ClientID}}</td>
-                        <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
-                        <td class="hidden">{{row.VendorID}}</td>
-                        @*<td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>*@
-                        <td class="hidden">{{row.VendorReqID}}</td>
-                        <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.WONo}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WOAmt}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WODate}}</td>
 
-                        @*<td class="hidden">{{row.ClientAddressID}}</td>*@
-                        @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                    {{row.Status == '1'? 'Active':'InActive'}}
-                                </span>
-                            </td>*@
-                        <td>
-                            <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorReqSelect(row)"><i class="fa fa-edit"></i> Select</button>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="7" class="text-center">
-                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-
-        <div class="row" ng-show="p==1">
+        <div class="row" >
 
 
             <div class="row">
@@ -126,9 +78,10 @@
                 </div>
 
 
-                <div class="col-lg-1">
+                <div class="col-lg-1" ng-if="!VendorQutn.ClientFinalBilAprvID">
                     <button type="button" data-ng-click="ShowVendorReqList()" class="form-control">Search</button>
                 </div>
+
             </div>
 
 
@@ -506,6 +459,93 @@
 
 
 
+    <div id="VendorReqInfoModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Client Work Order Information</h3>
+                </div>
+                <div class="modal-body table-responsive">
+                    <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Name</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Work Order No</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">Work Order Amount</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('LastDateofQuotation')">Work Order Date</th>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>*@
+                                <!--<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>-->
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+                            <tr>
+                                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" /></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in VendorReqDisplayedCollection">
+
+                                <td class="hidden">{{row.ClientID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
+                                <td class="hidden">{{row.VendorID}}</td>
+                                @*<td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>*@
+                                <td class="hidden">{{row.VendorReqID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.WONo}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WOAmt}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WODate}}</td>
+
+                                @*<td class="hidden">{{row.ClientAddressID}}</td>*@
+                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                                            {{row.Status == '1'? 'Active':'InActive'}}
+                                        </span>
+                                    </td>*@
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorReqSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div id="SearchVendorQutnModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -610,821 +650,833 @@
 
 </div>
 
-<script type="text/javascript">
+            <script type="text/javascript">
 
-    app.controller('ClientAprvBillCtrl', ['$scope', '$http', function ($scope, $http) {
+                app.controller('ClientAprvBillCtrl', ['$scope', '$http', function ($scope, $http) {
 
-        $scope.clientReqItemArray = [];
-        $scope.clientReqTermArray = [];
-        $scope.itemsByPage = 10;
-        $scope.p = 2;
-        $scope.q = 1;
-        //$http.get('/VendorQuotation/GetServicesCategory')
-        //    .success(function (response) {
-        //        $scope.loading = false;
-        //        $scope.serviceCategorys = response.result;
-        //    }).error(function () { });
-
-
-        $scope.vendor = {
-            name: '',
-            poNo: '',
-            poDate: '',
-            quotationNo: '',
-            quotationDate: '',
-            clientName: '',
-            woNo: '',
-            woAmount: '',
-            poAmount: '',
-            billNo: ''
-        };
+                    $scope.clientReqItemArray = [];
+                    $scope.clientReqTermArray = [];
+                    $scope.itemsByPage = 10;
+                    $scope.p = 2;
+                    $scope.q = 1;
+                    //$http.get('/VendorQuotation/GetServicesCategory')
+                    //    .success(function (response) {
+                    //        $scope.loading = false;
+                    //        $scope.serviceCategorys = response.result;
+                    //    }).error(function () { });
 
 
+                    $scope.vendor = {
+                        name: '',
+                        poNo: '',
+                        poDate: '',
+                        quotationNo: '',
+                        quotationDate: '',
+                        clientName: '',
+                        woNo: '',
+                        woAmount: '',
+                        poAmount: '',
+                        billNo: ''
+                    };
 
 
 
 
-        $scope.VendorQutn = {
-            VendorQutnID: "",
-            VendorID: "",
-            VendorName: "",
-            ClientID: "",
-            ClientName: "",
-            TermsID: "",
-            FormName: "",
-            VendorQutnNo: "",
-            RequisitionDate: "",
-            RequisitionNo: "",
-            QuotationDate: "",
-            Remarks: "",
-            Status: "",
-            POAmount: "",
-            AdvancePaidAmount: "",
-            BillAmount: "",
-            VendorBillNo: "",
-            VendorBillDate: "",
-            BillReceiveDate: "",
-            VATPercentage: "",
-            VATAmount: "",
-            CommissionPercentage: "",
-            CommissionAmount: "",
-            TotalBillAmount: "",
-            NetPayableAmount: "",
-            Note: "",
-            VendrFinalBilRcvdID: "",
-            WONo: "",               // Added field
-            WODate: "",             // Added field
-            WOAmt: "",
-            AdvancClaimRcvAmt: "",
-            RemainingAmnt: "",
-            AdvancRecvID: "",
-            WOInfoID: "",
-            AdvancClaimRcvdDate: "",
-            ClientFinalBilPreprID: "",
-            ClientFinalBilRecmID: "",
-            RecommendedAmnt: "",
-            RecommendDate: "",
-            Operation: "",
-            AprvAmnt: "",
-            AprvDate: "",
-            ClientFinalBilAprvID: "",
-            BillType: "",
-            BillCategory: "",
-            WOInstallmentNo: "",
-            WOInstallmentID: "",
-
-            WOInstallmentAmt: ""
 
 
-            // Added field
-        };
+                    $scope.VendorQutn = {
+                        VendorQutnID: "",
+                        VendorID: "",
+                        VendorName: "",
+                        ClientID: "",
+                        ClientName: "",
+                        TermsID: "",
+                        FormName: "",
+                        VendorQutnNo: "",
+                        RequisitionDate: "",
+                        RequisitionNo: "",
+                        QuotationDate: "",
+                        Remarks: "",
+                        Status: "",
+                        POAmount: "",
+                        AdvancePaidAmount: "",
+                        BillAmount: "",
+                        VendorBillNo: "",
+                        VendorBillDate: "",
+                        BillReceiveDate: "",
+                        VATPercentage: "",
+                        VATAmount: "",
+                        CommissionPercentage: "",
+                        CommissionAmount: "",
+                        TotalBillAmount: "",
+                        NetPayableAmount: "",
+                        Note: "",
+                        VendrFinalBilRcvdID: "",
+                        WONo: "",               // Added field
+                        WODate: "",             // Added field
+                        WOAmt: "",
+                        AdvancClaimRcvAmt: "",
+                        RemainingAmnt: "",
+                        AdvancRecvID: "",
+                        WOInfoID: "",
+                        AdvancClaimRcvdDate: "",
+                        ClientFinalBilPreprID: "",
+                        ClientFinalBilRecmID: "",
+                        RecommendedAmnt: "",
+                        RecommendDate: "",
+                        Operation: "",
+                        AprvAmnt: "",
+                        AprvDate: "",
+                        ClientFinalBilAprvID: "",
+                        BillType: "",
+                        BillCategory: "",
+                        WOInstallmentNo: "",
+                        WOInstallmentID: "",
 
-        $scope.VendorQutnItem = {
-            VendorQutnItemID: "",
-            Description: "",
-            DeliveryLocation: "",
-            DeliveryDate: "",
-            ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
-            ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
-            DeliveryMode: "",
-            ReqQnty: "",
-            ReqUnit: "",
-            QutnQnty: "",
-            QutnPrice: "",
-            QutnUnit: "",
-            QutnAmt: "",
-            VatPerc: "",
-            VatAmt: "",
-            TolAmt: ""
-        }
-
-        $('.DatePicker').datepicker({
-            format: "dd/mm/yyyy",
-            autoclose: true
-            // Set minDate to 0 to disable selecting previous dates
-        });
-
-        $('.DatePicker')
-            .on('changeDate', function (ev) {
-                $('.datepicker').hide();
-            });
-
-        //$('#DeliveryDate').datepicker({
-        //    format: "dd/mm/yyyy",
-        //    autoclose: false,
-        //    minDate: new Date() // Set minDate to the current date to disable selecting previous dates
-        //}).on('changeDate', function (ev) {
-        //    var EnteredDate = $('#DeliveryDate').val();
-        //    var today = new Date();
-        //    today.setHours(0, 0, 0, 0);
-
-        //    var date = EnteredDate.substring(0, 2);
-        //    var month = EnteredDate.substring(3, 5);
-        //    var year = EnteredDate.substring(6, 10);
-        //    var myDate = new Date(year, month - 1, date);
-        //    myDate.setHours(0, 0, 0, 0);
-
-        //    //if (myDate < today) {
-        //    //    $('#DeliveryDate').val('');
-        //    //    toastr.error("Purchase date should not be less than system date.");
-        //    //}
-
-        //    $('.datepicker').hide();
-        //});
-        $scope.checkUnitPrice = function (row) {
-            var QutnAmt = 0;
-            QutnAmt = (row.ReqQnty * row.QutnPrice);
-            row.QutnAmt = QutnAmt;
-        };
-        $scope.checkVatPerc = function (row) {
-            var VatAmt = 0;
-            VatAmt = (row.VatPerc * row.QutnAmt) / 100;
-            row.VatAmt = VatAmt;
-
-            row.TolAmt = row.QutnAmt + row.VatAmt;
-        };
-        // ################# Detail Add Modal ####################
-        $scope.AddReqItemModal = function () {
-            if ($('#ClientName').val() == "") {
-                toastr.error("Client Name Required");
-                return;
-            }
-
-            if ($('#VendorQutnNo').val() == "") {
-                toastr.error("Client ReqNo.  Required");
-                return;
-            }
-
-            if ($('#ReceivedDate').val() == "") {
-                toastr.error("Submission Date Required.");
-                return;
-            }
-
-            if ($('#QuotationDate').val() == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
-            }
-            $('#RequisitionItemModal').modal('show');
-        };
-
-        $scope.masterDataSetupGridData = [];  // base collection
-        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
-
-        $scope.AddReqItem = function () {
-
-            if ($scope.VendorQutnItem.ServiceCategory.ServiceCategoryID == "") {
-                toastr.error("Service Category Required");
-                return;
-            }
-
-            if ($scope.VendorQutnItem.ServiceItem.ServiceItemID == "") {
-                toastr.error("Service Item  Required");
-                return;
-            }
-
-            if ($scope.VendorQutnItem.DeliveryMode == "") {
-                toastr.error("Submission Date Required.");
-                return;
-            }
-
-            if ($scope.VendorQutnItem.ReqUnit == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
-            }
-
-            if ($('#DeliveryLocation').val() == "") {
-                toastr.error("Service Category Required");
-                return;
-            }
-
-            if ($('#DeliveryDate').val() == "") {
-                toastr.error("Service Item  Required");
-                return;
-            }
-
-            if ($('#Description').val() == "") {
-                toastr.error("Submission Date Required.");
-                return;
-            }
-
-            if ($('#ReqQnty').val() == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
-            }
-
-            $scope.VendorQutnItem.ServiceCategoryID = $scope.VendorQutnItem.ServiceCategory.ServiceCategoryID;
-            $scope.VendorQutnItem.ServiceCategoryName = $scope.VendorQutnItem.ServiceCategory.ServiceCategoryName;
-            $scope.VendorQutnItem.ServiceItemID = $scope.VendorQutnItem.ServiceItem.ServiceItemID;
-            $scope.VendorQutnItem.ServiceItemName = $scope.VendorQutnItem.ServiceItem.ServiceItemName;
-
-            $scope.VendorQutnItem.DeliveryMode = $scope.VendorQutnItem.DeliveryMode;
-            $scope.VendorQutnItem.ReqUnit = $scope.VendorQutnItem.ReqUnit;
-
-            $scope.VendorQutnItem.DeliveryLocation = $('#DeliveryLocation').val();
-            $scope.VendorQutnItem.DeliveryDate = $('#DeliveryDate').val();
-            $scope.VendorQutnItem.Description = $('#Description').val();
-            $scope.VendorQutnItem.ReqQnty = $('#ReqQnty').val();
-
-            $scope.clientReqItemArray.push($scope.VendorQutnItem);
-
-            $scope.GridDisplayCollection = $scope.GridDisplayCollection.concat($scope.VendorQutnItem);
-
-            $scope.resetVendorQutnItem();
-            $("#btnAddReqItem").html('Add');
-            $('#RequisitionItemModal').modal('hide');
-        }
-
-        $scope.resetVendorQutnItem = function () {
-            $('#DeliveryDate').val('');
-            $scope.VendorQutnItem = {
-                VendorQutnItemID: "",
-                VendorQutnID: "",
-                ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
-                ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
-                Description: "",
-                DeliveryLocation: "",
-                DeliveryDate: "",
-                DeliveryMode: "",
-                ReqQnty: "",
-                ReqUnit: ""
-            }
-        }
+                        WOInstallmentAmt: ""
 
 
-        $http.get("/ClientAprvBill/GetShowVendorReqList")
-                .success(function (response) {
-                    console.log(response);
-                    $scope.VendorReqList = response.VendorReqList;
-                    $scope.VendorReqDisplayedCollection = [].concat($scope.VendorReqList);
-                    console.log($scope.VendorReqDisplayedCollection);
-                    $scope.loading = false;
-                })
-                .error(function () { });
+                        // Added field
+                    };
 
+                    $scope.VendorQutnItem = {
+                        VendorQutnItemID: "",
+                        Description: "",
+                        DeliveryLocation: "",
+                        DeliveryDate: "",
+                        ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
+                        ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
+                        DeliveryMode: "",
+                        ReqQnty: "",
+                        ReqUnit: "",
+                        QutnQnty: "",
+                        QutnPrice: "",
+                        QutnUnit: "",
+                        QutnAmt: "",
+                        VatPerc: "",
+                        VatAmt: "",
+                        TolAmt: ""
+                    }
 
+                    $('.DatePicker').datepicker({
+                        format: "dd/mm/yyyy",
+                        autoclose: true
+                        // Set minDate to 0 to disable selecting previous dates
+                    });
 
+                    $('.DatePicker')
+                        .on('changeDate', function (ev) {
+                            $('.datepicker').hide();
+                        });
 
-        var ServiceCategoryID = "";
-        $scope.ServiceCategoryChange = function () {
-            ServiceCategoryID = $scope.VendorQutnItem.ServiceCategory.ServiceCategoryID;
-            $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + ServiceCategoryID)
-                .success(function (response) {
-                    $scope.loading = false;
-                    $scope.serviceItems = response.ServiceItemInfoSearchList;
-                })
-                .error(function () { });
-        };
+                    //$('#DeliveryDate').datepicker({
+                    //    format: "dd/mm/yyyy",
+                    //    autoclose: false,
+                    //    minDate: new Date() // Set minDate to the current date to disable selecting previous dates
+                    //}).on('changeDate', function (ev) {
+                    //    var EnteredDate = $('#DeliveryDate').val();
+                    //    var today = new Date();
+                    //    today.setHours(0, 0, 0, 0);
 
-        $scope.clearVendorQutn = function () {
-            $scope.VendorQutn = {
-                VendorQutnID: "",
-                ClientID: "",
-                ClientCode: "",
-                ClientName: "",
-                ContactPerson: "",
-                ContactNumber: "",
-                ClientTINNo: "",
-                ClientBINNo: "",
-                ClientAddress: "",
-                VendorQutnNo: "",
-                ReceivedDate: "",
-                QuotationDate: "",
-                Remarks: ""
-            }
+                    //    var date = EnteredDate.substring(0, 2);
+                    //    var month = EnteredDate.substring(3, 5);
+                    //    var year = EnteredDate.substring(6, 10);
+                    //    var myDate = new Date(year, month - 1, date);
+                    //    myDate.setHours(0, 0, 0, 0);
 
-            $scope.VendorQutnItem = {
-                VendorQutnItemID: "",
-                VendorQutnID: "",
-                Description: "",
-                DeliveryLocation: "",
-                DeliveryDate: "",
-                ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
-                ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
-                DeliveryMode: "",
-                ReqQnty: "",
-                ReqUnit: ""
-            }
-            $scope.VendorQutnTerm = {
-                VendorQutnTermsID: "",
-                VendorQutnID: "",
-                TermsID: "",
-                TermsCode: "",
-                TermsName: ""
-            }
-            $("#DeliveryDate").val('');
-            $scope.masterDataSetupGridData = [];  // base collection
-            $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+                    //    //if (myDate < today) {
+                    //    //    $('#DeliveryDate').val('');
+                    //    //    toastr.error("Purchase date should not be less than system date.");
+                    //    //}
 
-            $scope.ReqTermDataSetupGridData = [];  // base collection
-            $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-        }
+                    //    $('.datepicker').hide();
+                    //});
+                    $scope.checkUnitPrice = function (row) {
+                        var QutnAmt = 0;
+                        QutnAmt = (row.ReqQnty * row.QutnPrice);
+                        row.QutnAmt = QutnAmt;
+                    };
+                    $scope.checkVatPerc = function (row) {
+                        var VatAmt = 0;
+                        VatAmt = (row.VatPerc * row.QutnAmt) / 100;
+                        row.VatAmt = VatAmt;
 
-        $scope.toggleReqItemEdit = function (tableRow, $i) {
-            $('#RequisitionItemModal').modal('show');
-            $scope.resetVendorQutnItem();
+                        row.TolAmt = row.QutnAmt + row.VatAmt;
+                    };
+                    // ################# Detail Add Modal ####################
+                    $scope.AddReqItemModal = function () {
+                        if ($('#ClientName').val() == "") {
+                            toastr.error("Client Name Required");
+                            return;
+                        }
 
-            $scope.VendorQutnItem.VendorQutnItemID = tableRow.VendorQutnItemID;
+                        if ($('#VendorQutnNo').val() == "") {
+                            toastr.error("Client ReqNo.  Required");
+                            return;
+                        }
 
-            $scope.VendorQutnItem.ServiceCategory.ServiceCategoryID = tableRow.ServiceCategoryID;
-            $scope.VendorQutnItem.ServiceCategory.ServiceCategoryName = tableRow.ServiceCategoryName;
-            $scope.VendorQutnItem.ServiceItem.ServiceItemID = tableRow.ServiceItemID;
-            $scope.VendorQutnItem.ServiceItem.ServiceItemName = tableRow.ServiceItemName;
+                        if ($('#ReceivedDate').val() == "") {
+                            toastr.error("Submission Date Required.");
+                            return;
+                        }
 
-            $scope.VendorQutnItem.DeliveryMode = tableRow.DeliveryMode;
-            $scope.VendorQutnItem.DeliveryLocation = tableRow.DeliveryLocation;
-            $scope.VendorQutnItem.DeliveryDate = tableRow.DeliveryDate;
-            $scope.VendorQutnItem.Description = tableRow.Description;
+                        if ($('#QuotationDate').val() == "") {
+                            toastr.error("Requisition Date Date Required");
+                            return;
+                        }
+                        $('#RequisitionItemModal').modal('show');
+                    };
 
-            $scope.VendorQutnItem.ReqQnty = tableRow.ReqQnty;
-            $scope.VendorQutnItem.ReqUnit = tableRow.ReqUnit;
+                    $scope.masterDataSetupGridData = [];  // base collection
+                    $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
 
-            $scope.GridDisplayCollection.splice($i, 1);
-            $scope.clientReqItemArray.splice($i, 1);
+                    $scope.AddReqItem = function () {
 
-            $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + tableRow.ServiceCategoryID)
-                .success(function (response) {
-                    $scope.loading = false;
-                    $scope.serviceItems = response.ServiceItemInfoSearchList;
-                })
-                .error(function () { });
+                        if ($scope.VendorQutnItem.ServiceCategory.ServiceCategoryID == "") {
+                            toastr.error("Service Category Required");
+                            return;
+                        }
 
-            $("#btnAddReqItem").html('Update');
-        };
+                        if ($scope.VendorQutnItem.ServiceItem.ServiceItemID == "") {
+                            toastr.error("Service Item  Required");
+                            return;
+                        }
 
-        $scope.toggleReqItemDelete = function (tableRow, $i) {
-            if (!tableRow.VendorQutnItemID) {
-                $scope.resetVendorQutnItem();
-                $scope.GridDisplayCollection.splice($i, 1);
-                $scope.clientReqItemArray.splice($i, 1);
-                toastr.success('Data Deleted Successsfully');
-            }
-            else {
-                $scope.resetVendorQutnItem();
-                $scope.VendorQutnItem.VendorQutnItemID = tableRow.VendorQutnItemID;
-                $('#deleteReqItemModal').modal('show');
-            }
-        };
+                        if ($scope.VendorQutnItem.DeliveryMode == "") {
+                            toastr.error("Submission Date Required.");
+                            return;
+                        }
 
-        $scope.DeleteVendorQutnItem = function () {
-            $http.post('/VendorQuotation/DeleteVendorQutnItemAndTerm',
-                { VendorQutnItemID: $scope.VendorQutnItem.VendorQutnItemID, VendorQutnTermID: $scope.VendorQutnTerm.VendorQutnTermID })
-                .success(function (response) {
-                    if (response.status == "S203") {
+                        if ($scope.VendorQutnItem.ReqUnit == "") {
+                            toastr.error("Requisition Date Date Required");
+                            return;
+                        }
+
+                        if ($('#DeliveryLocation').val() == "") {
+                            toastr.error("Service Category Required");
+                            return;
+                        }
+
+                        if ($('#DeliveryDate').val() == "") {
+                            toastr.error("Service Item  Required");
+                            return;
+                        }
+
+                        if ($('#Description').val() == "") {
+                            toastr.error("Submission Date Required.");
+                            return;
+                        }
+
+                        if ($('#ReqQnty').val() == "") {
+                            toastr.error("Requisition Date Date Required");
+                            return;
+                        }
+
+                        $scope.VendorQutnItem.ServiceCategoryID = $scope.VendorQutnItem.ServiceCategory.ServiceCategoryID;
+                        $scope.VendorQutnItem.ServiceCategoryName = $scope.VendorQutnItem.ServiceCategory.ServiceCategoryName;
+                        $scope.VendorQutnItem.ServiceItemID = $scope.VendorQutnItem.ServiceItem.ServiceItemID;
+                        $scope.VendorQutnItem.ServiceItemName = $scope.VendorQutnItem.ServiceItem.ServiceItemName;
+
+                        $scope.VendorQutnItem.DeliveryMode = $scope.VendorQutnItem.DeliveryMode;
+                        $scope.VendorQutnItem.ReqUnit = $scope.VendorQutnItem.ReqUnit;
+
+                        $scope.VendorQutnItem.DeliveryLocation = $('#DeliveryLocation').val();
+                        $scope.VendorQutnItem.DeliveryDate = $('#DeliveryDate').val();
+                        $scope.VendorQutnItem.Description = $('#Description').val();
+                        $scope.VendorQutnItem.ReqQnty = $('#ReqQnty').val();
+
+                        $scope.clientReqItemArray.push($scope.VendorQutnItem);
+
+                        $scope.GridDisplayCollection = $scope.GridDisplayCollection.concat($scope.VendorQutnItem);
+
                         $scope.resetVendorQutnItem();
+                        $("#btnAddReqItem").html('Add');
+                        $('#RequisitionItemModal').modal('hide');
+                    }
+
+                    $scope.resetVendorQutnItem = function () {
+                        $('#DeliveryDate').val('');
+                        $scope.VendorQutnItem = {
+                            VendorQutnItemID: "",
+                            VendorQutnID: "",
+                            ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
+                            ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
+                            Description: "",
+                            DeliveryLocation: "",
+                            DeliveryDate: "",
+                            DeliveryMode: "",
+                            ReqQnty: "",
+                            ReqUnit: ""
+                        }
+                    }
+
+
+
+
+                    $scope.ShowVendorReqList = function () {
+                        $http.get("/ClientAprvBill/GetShowVendorReqList")
+                            .success(function (response) {
+                                console.log(response);
+                                $scope.VendorReqList = response.VendorReqList;
+                                $scope.VendorReqDisplayedCollection = [].concat($scope.VendorReqList);
+                                console.log($scope.VendorReqDisplayedCollection);
+                                $scope.loading = false;
+                            })
+                            .error(function () { });
+
+                        $('#VendorReqInfoModal').modal('show');
+                    };
+
+
+
+
+
+                   
+
+
+
+
+                    var ServiceCategoryID = "";
+                    $scope.ServiceCategoryChange = function () {
+                        ServiceCategoryID = $scope.VendorQutnItem.ServiceCategory.ServiceCategoryID;
+                        $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + ServiceCategoryID)
+                            .success(function (response) {
+                                $scope.loading = false;
+                                $scope.serviceItems = response.ServiceItemInfoSearchList;
+                            })
+                            .error(function () { });
+                    };
+
+                    $scope.clearVendorQutn = function () {
+                        $scope.VendorQutn = {
+                            VendorQutnID: "",
+                            ClientID: "",
+                            ClientCode: "",
+                            ClientName: "",
+                            ContactPerson: "",
+                            ContactNumber: "",
+                            ClientTINNo: "",
+                            ClientBINNo: "",
+                            ClientAddress: "",
+                            VendorQutnNo: "",
+                            ReceivedDate: "",
+                            QuotationDate: "",
+                            Remarks: ""
+                        }
+
+                        $scope.VendorQutnItem = {
+                            VendorQutnItemID: "",
+                            VendorQutnID: "",
+                            Description: "",
+                            DeliveryLocation: "",
+                            DeliveryDate: "",
+                            ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
+                            ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
+                            DeliveryMode: "",
+                            ReqQnty: "",
+                            ReqUnit: ""
+                        }
+                        $scope.VendorQutnTerm = {
+                            VendorQutnTermsID: "",
+                            VendorQutnID: "",
+                            TermsID: "",
+                            TermsCode: "",
+                            TermsName: ""
+                        }
+                        $("#DeliveryDate").val('');
+                        $scope.masterDataSetupGridData = [];  // base collection
+                        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+
+                        $scope.ReqTermDataSetupGridData = [];  // base collection
+                        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                    }
+
+                    $scope.toggleReqItemEdit = function (tableRow, $i) {
+                        $('#RequisitionItemModal').modal('show');
+                        $scope.resetVendorQutnItem();
+
+                        $scope.VendorQutnItem.VendorQutnItemID = tableRow.VendorQutnItemID;
+
+                        $scope.VendorQutnItem.ServiceCategory.ServiceCategoryID = tableRow.ServiceCategoryID;
+                        $scope.VendorQutnItem.ServiceCategory.ServiceCategoryName = tableRow.ServiceCategoryName;
+                        $scope.VendorQutnItem.ServiceItem.ServiceItemID = tableRow.ServiceItemID;
+                        $scope.VendorQutnItem.ServiceItem.ServiceItemName = tableRow.ServiceItemName;
+
+                        $scope.VendorQutnItem.DeliveryMode = tableRow.DeliveryMode;
+                        $scope.VendorQutnItem.DeliveryLocation = tableRow.DeliveryLocation;
+                        $scope.VendorQutnItem.DeliveryDate = tableRow.DeliveryDate;
+                        $scope.VendorQutnItem.Description = tableRow.Description;
+
+                        $scope.VendorQutnItem.ReqQnty = tableRow.ReqQnty;
+                        $scope.VendorQutnItem.ReqUnit = tableRow.ReqUnit;
+
                         $scope.GridDisplayCollection.splice($i, 1);
                         $scope.clientReqItemArray.splice($i, 1);
-                        toastr.success('Data Deleted Successsfully');
-                        return;
+
+                        $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + tableRow.ServiceCategoryID)
+                            .success(function (response) {
+                                $scope.loading = false;
+                                $scope.serviceItems = response.ServiceItemInfoSearchList;
+                            })
+                            .error(function () { });
+
+                        $("#btnAddReqItem").html('Update');
+                    };
+
+                    $scope.toggleReqItemDelete = function (tableRow, $i) {
+                        if (!tableRow.VendorQutnItemID) {
+                            $scope.resetVendorQutnItem();
+                            $scope.GridDisplayCollection.splice($i, 1);
+                            $scope.clientReqItemArray.splice($i, 1);
+                            toastr.success('Data Deleted Successsfully');
+                        }
+                        else {
+                            $scope.resetVendorQutnItem();
+                            $scope.VendorQutnItem.VendorQutnItemID = tableRow.VendorQutnItemID;
+                            $('#deleteReqItemModal').modal('show');
+                        }
+                    };
+
+                    $scope.DeleteVendorQutnItem = function () {
+                        $http.post('/VendorQuotation/DeleteVendorQutnItemAndTerm',
+                            { VendorQutnItemID: $scope.VendorQutnItem.VendorQutnItemID, VendorQutnTermID: $scope.VendorQutnTerm.VendorQutnTermID })
+                            .success(function (response) {
+                                if (response.status == "S203") {
+                                    $scope.resetVendorQutnItem();
+                                    $scope.GridDisplayCollection.splice($i, 1);
+                                    $scope.clientReqItemArray.splice($i, 1);
+                                    toastr.success('Data Deleted Successsfully');
+                                    return;
+                                }
+                            });
                     }
-                });
-        }
 
-        ////////////////////////Select for Update from Search grid ///////////////////////
+                    ////////////////////////Select for Update from Search grid ///////////////////////
 
-        $scope.toggleVendorReqSelect = function (tableRow) {
-            $scope.VendorQutn.VendorQutnID = tableRow.VendorQutnID;
-            //$scope.VendorQutn.VendorID = tableRow.VendorID;
-            //$scope.VendorQutn.VendorName = tableRow.VendorName;
-            $scope.VendorQutn.ClientID = tableRow.ClientID;
-            $scope.VendorQutn.ClientName = tableRow.ClientName;
-            //$scope.VendorQutn.TermsID = tableRow.TermsID;
-            //$scope.VendorQutn.FormName = tableRow.FormName;
-            $scope.VendorQutn.VendorQutnNo = tableRow.VendorQutnNo;
-            $scope.VendorQutn.RequisitionDate = tableRow.RequiDate;
-            $scope.VendorQutn.RequisitionNo = tableRow.RequisitionNo;
-            $scope.VendorQutn.QuotationDate = tableRow.QuotatDate;
-            $scope.VendorQutn.Remarks = tableRow.Remarks;
-            /*   $scope.VendorQutn.Status = tableRow.Status;*/
-            /*      $scope.VendorQutn.POAmount = tableRow.POAmount;*/
-            /*      $scope.VendorQutn.AdvancePaidAmount = tableRow.AdvancePaidAmount;*/
-            /*  $scope.VendorQutn.BillAmount = tableRow.BillAmount;*/
-            $scope.VendorQutn.VendorBillNo = tableRow.VendorBillNo;
-            $scope.VendorQutn.VendorBillDate = tableRow.VendorBillDate;
-            $scope.VendorQutn.BillReceiveDate = tableRow.BillReceiveDate;
-            $scope.VendorQutn.VATPercentage = tableRow.VATPercentage;
-            $scope.VendorQutn.VATAmount = tableRow.VATAmount;
-            $scope.VendorQutn.CommissionPercentage = tableRow.CommissionPercentage;
-            $scope.VendorQutn.CommissionAmount = tableRow.CommissionAmount;
-            $scope.VendorQutn.TotalBillAmount = tableRow.TotalBillAmount;
-            $scope.VendorQutn.NetPayableAmount = tableRow.NetPayableAmount;
-            $scope.VendorQutn.Note = tableRow.Note;
-            /*          $scope.VendorQutn.VendrFinalBilRcvdID = tableRow.VendrFinalBilRcvdID;*/
-            $scope.VendorQutn.WONo = tableRow.WONo;
-            $scope.VendorQutn.WODate = tableRow.WODate;
-            $scope.VendorQutn.WOAmt = tableRow.WOAmt;
-            $scope.VendorQutn.AdvancClaimRcvAmt = tableRow.AdvancClaimRcvAmt;
-            $scope.VendorQutn.RemainingAmnt = tableRow.RemainingAmnt;
-            $scope.VendorQutn.RecommendedAmnt = tableRow.RecommendedAmnt;
-            $scope.VendorQutn.RecommendDate = tableRow.RecommendDate;
-          
-            $scope.VendorQutn.AprvAmnt = tableRow.RecommendedAmnt;
-            $scope.VendorQutn.AdvancRecvID = tableRow.AdvancRecvID;
-            $scope.VendorQutn.WOInfoID = tableRow.WOInfoID;
-            $scope.VendorQutn.AdvancClaimRcvdDate = tableRow.AdvancClaimRcvdDate;
-            $scope.VendorQutn.ClientFinalBilPreprID = tableRow.ClientFinalBilPreprID;
-            $scope.VendorQutn.ClientFinalBilRecmID = tableRow.ClientFinalBilRecmID;
+                    $scope.toggleVendorReqSelect = function (tableRow) {
+                        $scope.VendorQutn.VendorQutnID = tableRow.VendorQutnID;
+                        //$scope.VendorQutn.VendorID = tableRow.VendorID;
+                        //$scope.VendorQutn.VendorName = tableRow.VendorName;
+                        $scope.VendorQutn.ClientID = tableRow.ClientID;
+                        $scope.VendorQutn.ClientName = tableRow.ClientName;
+                        //$scope.VendorQutn.TermsID = tableRow.TermsID;
+                        //$scope.VendorQutn.FormName = tableRow.FormName;
+                        $scope.VendorQutn.VendorQutnNo = tableRow.VendorQutnNo;
+                        $scope.VendorQutn.RequisitionDate = tableRow.RequiDate;
+                        $scope.VendorQutn.RequisitionNo = tableRow.RequisitionNo;
+                        $scope.VendorQutn.QuotationDate = tableRow.QuotatDate;
+                        $scope.VendorQutn.Remarks = tableRow.Remarks;
+                        /*   $scope.VendorQutn.Status = tableRow.Status;*/
+                        /*      $scope.VendorQutn.POAmount = tableRow.POAmount;*/
+                        /*      $scope.VendorQutn.AdvancePaidAmount = tableRow.AdvancePaidAmount;*/
+                        /*  $scope.VendorQutn.BillAmount = tableRow.BillAmount;*/
+                        $scope.VendorQutn.VendorBillNo = tableRow.VendorBillNo;
+                        $scope.VendorQutn.VendorBillDate = tableRow.VendorBillDate;
+                        $scope.VendorQutn.BillReceiveDate = tableRow.BillReceiveDate;
+                        $scope.VendorQutn.VATPercentage = tableRow.VATPercentage;
+                        $scope.VendorQutn.VATAmount = tableRow.VATAmount;
+                        $scope.VendorQutn.CommissionPercentage = tableRow.CommissionPercentage;
+                        $scope.VendorQutn.CommissionAmount = tableRow.CommissionAmount;
+                        $scope.VendorQutn.TotalBillAmount = tableRow.TotalBillAmount;
+                        $scope.VendorQutn.NetPayableAmount = tableRow.NetPayableAmount;
+                        $scope.VendorQutn.Note = tableRow.Note;
+                        /*          $scope.VendorQutn.VendrFinalBilRcvdID = tableRow.VendrFinalBilRcvdID;*/
+                        $scope.VendorQutn.WONo = tableRow.WONo;
+                        $scope.VendorQutn.WODate = tableRow.WODate;
+                        $scope.VendorQutn.WOAmt = tableRow.WOAmt;
+                        $scope.VendorQutn.AdvancClaimRcvAmt = tableRow.AdvancClaimRcvAmt;
+                        $scope.VendorQutn.RemainingAmnt = tableRow.RemainingAmnt;
+                        $scope.VendorQutn.RecommendedAmnt = tableRow.RecommendedAmnt;
+                        $scope.VendorQutn.RecommendDate = tableRow.RecommendDate;
 
-            $scope.VendorQutn.BillType = tableRow.BillType;
-            $scope.VendorQutn.BillCategory = tableRow.BillCategory;
-            $scope.VendorQutn.WOInstallmentNo = tableRow.WOInstallmentNo;
-            $scope.VendorQutn.WOInstallmentID = tableRow.WOInstallmentID;
-            $scope.VendorQutn.WOInstallmentAmt = tableRow.WOInstallmentAmt;
-            $scope.p = 1;
+                        $scope.VendorQutn.AprvAmnt = tableRow.RecommendedAmnt;
+                        $scope.VendorQutn.AdvancRecvID = tableRow.AdvancRecvID;
+                        $scope.VendorQutn.WOInfoID = tableRow.WOInfoID;
+                        $scope.VendorQutn.AdvancClaimRcvdDate = tableRow.AdvancClaimRcvdDate;
+                        $scope.VendorQutn.ClientFinalBilPreprID = tableRow.ClientFinalBilPreprID;
+                        $scope.VendorQutn.ClientFinalBilRecmID = tableRow.ClientFinalBilRecmID;
 
-      /*      $scope.VendorQutn.AdvancePaidAmount = 0;*/
-          /*  $scope.VendorQutn.BillAmount = row.POAmount - $scope.VendorQutn.AdvancePaidAmount;*/
+                        $scope.VendorQutn.BillType = tableRow.BillType;
+                        $scope.VendorQutn.BillCategory = tableRow.BillCategory;
+                        $scope.VendorQutn.WOInstallmentNo = tableRow.WOInstallmentNo;
+                        $scope.VendorQutn.WOInstallmentID = tableRow.WOInstallmentID;
+                        $scope.VendorQutn.WOInstallmentAmt = tableRow.WOInstallmentAmt;
+                        $scope.p = 1;
 
-            //$scope.VendorQutn.SubmissionDate = row.SubmissionDate;
-            //$scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;
+                        /*      $scope.VendorQutn.AdvancePaidAmount = 0;*/
+                        /*  $scope.VendorQutn.BillAmount = row.POAmount - $scope.VendorQutn.AdvancePaidAmount;*/
 
-            //$http.post('/VendorRequisition/GetVendorReqItemList', { VendorReqID: row.VendorReqID })
-            //    .success(function (response) {
-            //        $scope.masterDataSetupGridData = response.VendorReqItemList;
-            //        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
-            //        $scope.loading = false;
-            //    }).error(function () {
-            //        $scope.loading = false;
-            //    });
+                        //$scope.VendorQutn.SubmissionDate = row.SubmissionDate;
+                        //$scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;
 
-            //$http.post('/VendorRequisition/GetVendorReqTermList', { VendorReqID: row.VendorReqID })
-            //    .success(function (response) {
-            //        $scope.ReqTermDataSetupGridData = response.VendorReqTermList;
-            //        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-            //        $scope.loading = false;
-            //    }).error(function () {
-            //        $scope.loading = false;
-            //    });
+                        //$http.post('/VendorRequisition/GetVendorReqItemList', { VendorReqID: row.VendorReqID })
+                        //    .success(function (response) {
+                        //        $scope.masterDataSetupGridData = response.VendorReqItemList;
+                        //        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+                        //        $scope.loading = false;
+                        //    }).error(function () {
+                        //        $scope.loading = false;
+                        //    });
 
-            $('#VendorReqInfoModal').modal('hide');
-        };
+                        //$http.post('/VendorRequisition/GetVendorReqTermList', { VendorReqID: row.VendorReqID })
+                        //    .success(function (response) {
+                        //        $scope.ReqTermDataSetupGridData = response.VendorReqTermList;
+                        //        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                        //        $scope.loading = false;
+                        //    }).error(function () {
+                        //        $scope.loading = false;
+                        //    });
+
+                        $('#VendorReqInfoModal').modal('hide');
+                    };
 
 
-        $scope.calculateAmounts = function () {
-            var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
-            var poAmount = parseFloat($scope.VendorQutn.WOAmt) || 0;
-            var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
-            var totalbillAmount = billAmount + $scope.VendorQutn.CommissionAmount;
-            // Calculate the VAT amount
-            $scope.VendorQutn.VATAmount = parseFloat(((totalbillAmount * vatPercentage) / 100).toFixed(3));
+                    $scope.calculateAmounts = function () {
+                        var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
+                        var poAmount = parseFloat($scope.VendorQutn.WOAmt) || 0;
+                        var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
+                        var totalbillAmount = billAmount + $scope.VendorQutn.CommissionAmount;
+                        // Calculate the VAT amount
+                        $scope.VendorQutn.VATAmount = parseFloat(((totalbillAmount * vatPercentage) / 100).toFixed(3));
 
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorQutn.TotalBillAmount = parseFloat((totalbillAmount + $scope.VendorQutn.VATAmount).toFixed(3));
-            /*    $scope.VendorQutn.NetPayableAmount = parseFloat((totalbillAmount + $scope.VendorQutn.VATAmount).toFixed(3));*/
-            $scope.VendorQutn.NetPayableAmount = parseFloat(($scope.VendorQutn.TotalBillAmount - $scope.VendorQutn.AdvancClaimRcvAmt).toFixed(3));
-        };
+                        // Calculate the total bill amount (bill amount + VAT amount)
+                        $scope.VendorQutn.TotalBillAmount = parseFloat((totalbillAmount + $scope.VendorQutn.VATAmount).toFixed(3));
+                        /*    $scope.VendorQutn.NetPayableAmount = parseFloat((totalbillAmount + $scope.VendorQutn.VATAmount).toFixed(3));*/
+                        $scope.VendorQutn.NetPayableAmount = parseFloat(($scope.VendorQutn.TotalBillAmount - $scope.VendorQutn.AdvancClaimRcvAmt).toFixed(3));
+                    };
 
 
-        $scope.calculateBillAmounts = function () {
-            var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
-            var poAmount = parseFloat($scope.VendorQutn.WOAmt) || 0;
-            var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
+                    $scope.calculateBillAmounts = function () {
+                        var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
+                        var poAmount = parseFloat($scope.VendorQutn.WOAmt) || 0;
+                        var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
 
-            // Calculate the VAT amount
-            $scope.VendorQutn.VATAmount = (poAmount * vatPercentage) / 100;
+                        // Calculate the VAT amount
+                        $scope.VendorQutn.VATAmount = (poAmount * vatPercentage) / 100;
 
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.VATAmount;
-            $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount - $scope.VendorQutn.CommissionAmount;
-        };
+                        // Calculate the total bill amount (bill amount + VAT amount)
+                        $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.VATAmount;
+                        $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount - $scope.VendorQutn.CommissionAmount;
+                    };
 
 
 
 
 
 
-        $scope.calculateCommission = function () {
-            var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
-            var cmsnPercentage = parseFloat($scope.VendorQutn.CommissionPercentage) || 0;
+                    $scope.calculateCommission = function () {
+                        var billAmount = parseFloat($scope.VendorQutn.AprvAmnt) || 0;
+                        var cmsnPercentage = parseFloat($scope.VendorQutn.CommissionPercentage) || 0;
 
-            // Calculate the VAT amount
-            $scope.VendorQutn.CommissionAmount = (billAmount * cmsnPercentage) / 100;
+                        // Calculate the VAT amount
+                        $scope.VendorQutn.CommissionAmount = (billAmount * cmsnPercentage) / 100;
 
-            // Calculate the total bill amount (bill amount + VAT amount)
-            /*      $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.CommissionAmount;*/
-            $scope.VendorQutn.CommissionAmount = parseFloat(((billAmount * cmsnPercentage) / 100).toFixed(3));
-            $scope.VendorQutn.TotalBillAmount = parseFloat((billAmount + $scope.VendorQutn.CommissionAmount).toFixed(3));
-            $scope.calculateAmounts();
-        };
-
-
-
-
-        ///////////////////////Save/Update Master///////////////////////
-
-        //////////////////Search Grid List///////////////////////////////
-
-        $scope.SearchVendorQutnModal = function () {
-            $scope.GetVendorQutnSearchList();
-            $('#SearchVendorQutnModal').modal('show');
-        };
-
-        $scope.GetVendorQutnSearchList = function () {
-            $http.post("/ClientAprvBill/GetQutnSearchList")
-                .success(function (response) {
-                    $scope.clientReqSearchList = response.PoSearchList;
-                    $scope.clientReqDisplayedCollection = [].concat($scope.clientReqSearchList);
-                })
-                .error(function () { });
-        }
-
-        ////////////////////////Select for Update from Search grid ///////////////////////
-
-        $scope.toggleVendorQutnSelect = function (tableRow) {
-            $scope.VendorQutn.VendorQutnID = tableRow.VendorQutnID;
-            //$scope.VendorQutn.VendorID = tableRow.VendorID;
-            //$scope.VendorQutn.VendorName = tableRow.VendorName;
-            $scope.VendorQutn.ClientID = tableRow.ClientID;
-            $scope.VendorQutn.ClientName = tableRow.ClientName;
-            //$scope.VendorQutn.TermsID = tableRow.TermsID;
-            //$scope.VendorQutn.FormName = tableRow.FormName;
-            $scope.VendorQutn.VendorQutnNo = tableRow.VendorQutnNo;
-            $scope.VendorQutn.RequisitionDate = tableRow.RequiDate;
-            $scope.VendorQutn.RequisitionNo = tableRow.RequisitionNo;
-            $scope.VendorQutn.QuotationDate = tableRow.QuotatDate;
-            $scope.VendorQutn.Remarks = tableRow.Remarks;
-            /*   $scope.VendorQutn.Status = tableRow.Status;*/
-            /*      $scope.VendorQutn.POAmount = tableRow.POAmount;*/
-            /*      $scope.VendorQutn.AdvancePaidAmount = tableRow.AdvancePaidAmount;*/
-            /*  $scope.VendorQutn.BillAmount = tableRow.BillAmount;*/
-            $scope.VendorQutn.VendorBillNo = tableRow.VendorBillNo;
-            $scope.VendorQutn.VendorBillDate = tableRow.VendorBillDate;
-            $scope.VendorQutn.BillReceiveDate = tableRow.BillReceiveDate;
-            $scope.VendorQutn.VATPercentage = tableRow.VATPercentage;
-            $scope.VendorQutn.VATAmount = tableRow.VATAmount;
-            $scope.VendorQutn.CommissionPercentage = tableRow.CommissionPercentage;
-            $scope.VendorQutn.CommissionAmount = tableRow.CommissionAmount;
-            $scope.VendorQutn.TotalBillAmount = tableRow.TotalBillAmount;
-            $scope.VendorQutn.NetPayableAmount = tableRow.NetPayableAmount;
-            $scope.VendorQutn.Note = tableRow.Note;
-            /*          $scope.VendorQutn.VendrFinalBilRcvdID = tableRow.VendrFinalBilRcvdID;*/
-            $scope.VendorQutn.WONo = tableRow.WONo;
-            $scope.VendorQutn.WODate = tableRow.WODate;
-            $scope.VendorQutn.WOAmt = tableRow.WOAmt;
-            $scope.VendorQutn.AdvancClaimRcvAmt = tableRow.AdvancClaimRcvAmt;
-            $scope.VendorQutn.RemainingAmnt = tableRow.RemainingAmnt;
-            $scope.VendorQutn.RecommendedAmnt = tableRow.RecommendedAmnt;
-            $scope.VendorQutn.RecommendDate = tableRow.RecommendDate;
-            $scope.VendorQutn.AprvAmnt = tableRow.AprvAmnt;
-            $scope.VendorQutn.AprvDate = tableRow.AprvDate;
-            $scope.VendorQutn.AdvancRecvID = tableRow.AdvancRecvID;
-            $scope.VendorQutn.WOInfoID = tableRow.WOInfoID;
-            $scope.VendorQutn.AdvancClaimRcvdDate = tableRow.AdvancClaimRcvdDate;
-            //$scope.VendorQutn.ClientFinalBilPreprID = tableRow.ClientFinalBilPreprID;
-            $scope.VendorQutn.ClientFinalBilRecmID = tableRow.ClientFinalBilRecmID;
-            $scope.VendorQutn.ClientFinalBilAprvID = tableRow.ClientFinalBilAprvID;
-            $scope.VendorQutn.Operation = tableRow.Operation;
-
-
-            $scope.VendorQutn.BillType = tableRow.BillType;
-            $scope.VendorQutn.BillCategory = tableRow.BillCategory;
-            $scope.VendorQutn.WOInstallmentNo = tableRow.WOInstallmentNo;
-            $scope.VendorQutn.WOInstallmentID = tableRow.WOInstallmentID;
-            $scope.VendorQutn.WOInstallmentAmt = tableRow.WOInstallmentAmt;
+                        // Calculate the total bill amount (bill amount + VAT amount)
+                        /*      $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.CommissionAmount;*/
+                        $scope.VendorQutn.CommissionAmount = parseFloat(((billAmount * cmsnPercentage) / 100).toFixed(3));
+                        $scope.VendorQutn.TotalBillAmount = parseFloat((billAmount + $scope.VendorQutn.CommissionAmount).toFixed(3));
+                        $scope.calculateAmounts();
+                    };
 
 
 
-            $scope.q = 2;
-            $scope.p = 1;
-            $('#SearchVendorQutnModal').modal('hide');
-        };
 
-        ///////////////////////////////////////////////
+                    ///////////////////////Save/Update Master///////////////////////
 
-        ////////////////////////Requsition Terms & Conditions ///////////////////////
+                    //////////////////Search Grid List///////////////////////////////
 
-        $scope.ShowTermsConditionsList = function () {
-            $http.get("/VendorQuotation/GetTermsConditionsList")
-                .success(function (response) {
-                    console.log(response);
-                    $scope.TermsConditionsList = response.termsConditionsList;
-                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-                    console.log($scope.TermsConditionsDisplayedCollection);
-                    $scope.loading = false;
-                })
-                .error(function () { });
+                    $scope.SearchVendorQutnModal = function () {
+                        $scope.GetVendorQutnSearchList();
+                        $('#SearchVendorQutnModal').modal('show');
+                    };
 
-            $('#VendorQutnTermsConditionsModal').modal('show');
-        };
+                    $scope.GetVendorQutnSearchList = function () {
+                        $http.post("/ClientAprvBill/GetQutnSearchList")
+                            .success(function (response) {
+                                $scope.clientReqSearchList = response.PoSearchList;
+                                $scope.clientReqDisplayedCollection = [].concat($scope.clientReqSearchList);
+                            })
+                            .error(function () { });
+                    }
 
-        $scope.toggleTermsConditionsSelect = function (row) {
-            $scope.VendorQutn.TermsID = row.TermsID;
-            //$scope.VendorQutn.FormCode = row.FormCode;
-            $scope.VendorQutn.FormName = row.FormName;
+                    ////////////////////////Select for Update from Search grid ///////////////////////
 
-            $http.post('/VendorQuotation/GetVendorQutnTermAgainstFormList', { TermsID: row.TermsID })
-                .success(function (response) {
-                    $scope.ReqTermDataSetupGridData = response.VendorQutnTermList;
+                    $scope.toggleVendorQutnSelect = function (tableRow) {
+                        $scope.VendorQutn.VendorQutnID = tableRow.VendorQutnID;
+                        //$scope.VendorQutn.VendorID = tableRow.VendorID;
+                        //$scope.VendorQutn.VendorName = tableRow.VendorName;
+                        $scope.VendorQutn.ClientID = tableRow.ClientID;
+                        $scope.VendorQutn.ClientName = tableRow.ClientName;
+                        //$scope.VendorQutn.TermsID = tableRow.TermsID;
+                        //$scope.VendorQutn.FormName = tableRow.FormName;
+                        $scope.VendorQutn.VendorQutnNo = tableRow.VendorQutnNo;
+                        $scope.VendorQutn.RequisitionDate = tableRow.RequiDate;
+                        $scope.VendorQutn.RequisitionNo = tableRow.RequisitionNo;
+                        $scope.VendorQutn.QuotationDate = tableRow.QuotatDate;
+                        $scope.VendorQutn.Remarks = tableRow.Remarks;
+                        /*   $scope.VendorQutn.Status = tableRow.Status;*/
+                        /*      $scope.VendorQutn.POAmount = tableRow.POAmount;*/
+                        /*      $scope.VendorQutn.AdvancePaidAmount = tableRow.AdvancePaidAmount;*/
+                        /*  $scope.VendorQutn.BillAmount = tableRow.BillAmount;*/
+                        $scope.VendorQutn.VendorBillNo = tableRow.VendorBillNo;
+                        $scope.VendorQutn.VendorBillDate = tableRow.VendorBillDate;
+                        $scope.VendorQutn.BillReceiveDate = tableRow.BillReceiveDate;
+                        $scope.VendorQutn.VATPercentage = tableRow.VATPercentage;
+                        $scope.VendorQutn.VATAmount = tableRow.VATAmount;
+                        $scope.VendorQutn.CommissionPercentage = tableRow.CommissionPercentage;
+                        $scope.VendorQutn.CommissionAmount = tableRow.CommissionAmount;
+                        $scope.VendorQutn.TotalBillAmount = tableRow.TotalBillAmount;
+                        $scope.VendorQutn.NetPayableAmount = tableRow.NetPayableAmount;
+                        $scope.VendorQutn.Note = tableRow.Note;
+                        /*          $scope.VendorQutn.VendrFinalBilRcvdID = tableRow.VendrFinalBilRcvdID;*/
+                        $scope.VendorQutn.WONo = tableRow.WONo;
+                        $scope.VendorQutn.WODate = tableRow.WODate;
+                        $scope.VendorQutn.WOAmt = tableRow.WOAmt;
+                        $scope.VendorQutn.AdvancClaimRcvAmt = tableRow.AdvancClaimRcvAmt;
+                        $scope.VendorQutn.RemainingAmnt = tableRow.RemainingAmnt;
+                        $scope.VendorQutn.RecommendedAmnt = tableRow.RecommendedAmnt;
+                        $scope.VendorQutn.RecommendDate = tableRow.RecommendDate;
+                        $scope.VendorQutn.AprvAmnt = tableRow.AprvAmnt;
+                        $scope.VendorQutn.AprvDate = tableRow.AprvDate;
+                        $scope.VendorQutn.AdvancRecvID = tableRow.AdvancRecvID;
+                        $scope.VendorQutn.WOInfoID = tableRow.WOInfoID;
+                        $scope.VendorQutn.AdvancClaimRcvdDate = tableRow.AdvancClaimRcvdDate;
+                        //$scope.VendorQutn.ClientFinalBilPreprID = tableRow.ClientFinalBilPreprID;
+                        $scope.VendorQutn.ClientFinalBilRecmID = tableRow.ClientFinalBilRecmID;
+                        $scope.VendorQutn.ClientFinalBilAprvID = tableRow.ClientFinalBilAprvID;
+                        $scope.VendorQutn.Operation = tableRow.Operation;
+
+
+                        $scope.VendorQutn.BillType = tableRow.BillType;
+                        $scope.VendorQutn.BillCategory = tableRow.BillCategory;
+                        $scope.VendorQutn.WOInstallmentNo = tableRow.WOInstallmentNo;
+                        $scope.VendorQutn.WOInstallmentID = tableRow.WOInstallmentID;
+                        $scope.VendorQutn.WOInstallmentAmt = tableRow.WOInstallmentAmt;
+
+
+
+                        $scope.q = 2;
+                        $scope.p = 1;
+                        $('#SearchVendorQutnModal').modal('hide');
+                    };
+
+                    ///////////////////////////////////////////////
+
+                    ////////////////////////Requsition Terms & Conditions ///////////////////////
+
+                    $scope.ShowTermsConditionsList = function () {
+                        $http.get("/VendorQuotation/GetTermsConditionsList")
+                            .success(function (response) {
+                                console.log(response);
+                                $scope.TermsConditionsList = response.termsConditionsList;
+                                $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
+                                console.log($scope.TermsConditionsDisplayedCollection);
+                                $scope.loading = false;
+                            })
+                            .error(function () { });
+
+                        $('#VendorQutnTermsConditionsModal').modal('show');
+                    };
+
+                    $scope.toggleTermsConditionsSelect = function (row) {
+                        $scope.VendorQutn.TermsID = row.TermsID;
+                        //$scope.VendorQutn.FormCode = row.FormCode;
+                        $scope.VendorQutn.FormName = row.FormName;
+
+                        $http.post('/VendorQuotation/GetVendorQutnTermAgainstFormList', { TermsID: row.TermsID })
+                            .success(function (response) {
+                                $scope.ReqTermDataSetupGridData = response.VendorQutnTermList;
+                                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                                $scope.loading = false;
+                            }).error(function () {
+                                $scope.loading = false;
+                            });
+
+                        $('#VendorQutnTermsConditionsModal').modal('hide');
+                    };
+
+                    $scope.VendorQutnTerm = {
+                        VendorQutnTermsID: "",
+                        VendorQutnID: "",
+                        TermsID: "",
+                        TermsCode: "",
+                        TermsName: ""
+                    }
+
+                    $scope.AddReqTermModal = function () {
+                        if ($('#ClientName').val() == "") {
+                            toastr.error("Client Name Required");
+                            return;
+                        }
+
+                        if ($('#VendorQutnNo').val() == "") {
+                            toastr.error("Client ReqNo.  Required");
+                            return;
+                        }
+
+                        if ($('#ReceivedDate').val() == "") {
+                            toastr.error("Submission Date Required.");
+                            return;
+                        }
+
+                        if ($('#QuotationDate').val() == "") {
+                            toastr.error("Requisition Date Date Required");
+                            return;
+                        }
+                        $('#RequisitionTermModal').modal('show');
+                    };
+
+                    $scope.ReqTermDataSetupGridData = [];  // base collection
                     $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-                    $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
 
-            $('#VendorQutnTermsConditionsModal').modal('hide');
-        };
+                    $scope.AddReqTerm = function () {
 
-        $scope.VendorQutnTerm = {
-            VendorQutnTermsID: "",
-            VendorQutnID: "",
-            TermsID: "",
-            TermsCode: "",
-            TermsName: ""
-        }
+                        if ($('#TermsCode').val() == "") {
+                            toastr.error("Terms Code Required");
+                            return;
+                        }
 
-        $scope.AddReqTermModal = function () {
-            if ($('#ClientName').val() == "") {
-                toastr.error("Client Name Required");
-                return;
-            }
+                        if ($('#TermsName').val() == "") {
+                            toastr.error("Terms Name Required.");
+                            return;
+                        }
 
-            if ($('#VendorQutnNo').val() == "") {
-                toastr.error("Client ReqNo.  Required");
-                return;
-            }
+                        $scope.VendorQutnTerm.TermsCode = $('#TermsCode').val();
+                        $scope.VendorQutnTerm.TermsName = $('#TermsName').val();
 
-            if ($('#ReceivedDate').val() == "") {
-                toastr.error("Submission Date Required.");
-                return;
-            }
+                        $scope.clientReqTermArray.push($scope.VendorQutnTerm);
 
-            if ($('#QuotationDate').val() == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
-            }
-            $('#RequisitionTermModal').modal('show');
-        };
+                        $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection.concat($scope.VendorQutnTerm);
 
-        $scope.ReqTermDataSetupGridData = [];  // base collection
-        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-
-        $scope.AddReqTerm = function () {
-
-            if ($('#TermsCode').val() == "") {
-                toastr.error("Terms Code Required");
-                return;
-            }
-
-            if ($('#TermsName').val() == "") {
-                toastr.error("Terms Name Required.");
-                return;
-            }
-
-            $scope.VendorQutnTerm.TermsCode = $('#TermsCode').val();
-            $scope.VendorQutnTerm.TermsName = $('#TermsName').val();
-
-            $scope.clientReqTermArray.push($scope.VendorQutnTerm);
-
-            $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection.concat($scope.VendorQutnTerm);
-
-            $scope.resetVendorQutnTerm();
-            $("#btnAddReqTerm").html('Add');
-            $('#RequisitionTermModal').modal('hide');
-        }
-
-        $scope.resetVendorQutnTerm = function () {
-            $scope.VendorQutnTerm = {
-                VendorQutnTermsID: "",
-                VendorQutnID: "",
-                TermsID: "",
-                TermsCode: "",
-                TermsName: ""
-            }
-        }
-
-        $scope.toggleReqTermEdit = function (tableRow, $i) {
-            $('#RequisitionTermModal').modal('show');
-            $scope.resetVendorQutnTerm();
-            $scope.VendorQutnTerm.VendorQutnTermID = tableRow.VendorQutnTermD;
-            $scope.VendorQutnTerm.VendorQutnID = tableRow.VendorQutnID;
-            $scope.VendorQutnTerm.TermsID = tableRow.TermsID;
-            $scope.VendorQutnTerm.TermsCode = tableRow.TermsCode;
-            $scope.VendorQutnTerm.TermsName = tableRow.TermsName;
-            $scope.ReqTermGridDisplayCollection.splice($i, 1);
-            $scope.clientReqTermArray.splice($i, 1);
-            $("#btnAddReqTerm").html('Update');
-        };
-
-        $scope.toggleReqTermDelete = function (tableRow, $i) {
-            if (!tableRow.VendorQutnTermID) {
-                $scope.resetVendorQutnTerm();
-                $scope.ReqTermGridDisplayCollection.splice($i, 1);
-                $scope.clientReqTermArray.splice($i, 1);
-                toastr.success('Data Deleted Successsfully');
-            }
-            else {
-                $scope.resetVendorQutnTerm();
-                $scope.VendorQutnTerm.VendorQutnTermID = tableRow.VendorQutnTermID;
-                $('#deleteReqTermModal').modal('show');
-            }
-        };
-
-        $scope.DeleteVendorQutnTerm = function () {
-            $http.post('/VendorQuotation/DeleteVendorQutnItemAndTerm',
-                { VendorQutnItemID: $scope.VendorQutnItem.VendorQutnItemID, VendorQutnTermID: $scope.VendorQutnTerm.VendorQutnTermID })
-                .success(function (response) {
-                    if (response.status == "S203") {
                         $scope.resetVendorQutnTerm();
+                        $("#btnAddReqTerm").html('Add');
+                        $('#RequisitionTermModal').modal('hide');
+                    }
+
+                    $scope.resetVendorQutnTerm = function () {
+                        $scope.VendorQutnTerm = {
+                            VendorQutnTermsID: "",
+                            VendorQutnID: "",
+                            TermsID: "",
+                            TermsCode: "",
+                            TermsName: ""
+                        }
+                    }
+
+                    $scope.toggleReqTermEdit = function (tableRow, $i) {
+                        $('#RequisitionTermModal').modal('show');
+                        $scope.resetVendorQutnTerm();
+                        $scope.VendorQutnTerm.VendorQutnTermID = tableRow.VendorQutnTermD;
+                        $scope.VendorQutnTerm.VendorQutnID = tableRow.VendorQutnID;
+                        $scope.VendorQutnTerm.TermsID = tableRow.TermsID;
+                        $scope.VendorQutnTerm.TermsCode = tableRow.TermsCode;
+                        $scope.VendorQutnTerm.TermsName = tableRow.TermsName;
                         $scope.ReqTermGridDisplayCollection.splice($i, 1);
                         $scope.clientReqTermArray.splice($i, 1);
-                        toastr.success('Data Deleted Successsfully');
-                        return;
+                        $("#btnAddReqTerm").html('Update');
+                    };
+
+                    $scope.toggleReqTermDelete = function (tableRow, $i) {
+                        if (!tableRow.VendorQutnTermID) {
+                            $scope.resetVendorQutnTerm();
+                            $scope.ReqTermGridDisplayCollection.splice($i, 1);
+                            $scope.clientReqTermArray.splice($i, 1);
+                            toastr.success('Data Deleted Successsfully');
+                        }
+                        else {
+                            $scope.resetVendorQutnTerm();
+                            $scope.VendorQutnTerm.VendorQutnTermID = tableRow.VendorQutnTermID;
+                            $('#deleteReqTermModal').modal('show');
+                        }
+                    };
+
+                    $scope.DeleteVendorQutnTerm = function () {
+                        $http.post('/VendorQuotation/DeleteVendorQutnItemAndTerm',
+                            { VendorQutnItemID: $scope.VendorQutnItem.VendorQutnItemID, VendorQutnTermID: $scope.VendorQutnTerm.VendorQutnTermID })
+                            .success(function (response) {
+                                if (response.status == "S203") {
+                                    $scope.resetVendorQutnTerm();
+                                    $scope.ReqTermGridDisplayCollection.splice($i, 1);
+                                    $scope.clientReqTermArray.splice($i, 1);
+                                    toastr.success('Data Deleted Successsfully');
+                                    return;
+                                }
+                            });
                     }
-                });
-        }
 
-        ///////////////////////////////////////////////
+                    ///////////////////////////////////////////////
 
-        $scope.Post = function () {
+                    $scope.Post = function () {
 
-            if ($('#ClientName').val() == "") {
-                toastr.error("Client Name Required");
-                return;
-            }
+                        if ($('#ClientName').val() == "") {
+                            toastr.error("Client Name Required");
+                            return;
+                        }
 
-            if ($('#VendorQutnNo').val() == "") {
-                toastr.error("Client ReqNo.  Required");
-                return;
-            }
+                        if ($('#VendorQutnNo').val() == "") {
+                            toastr.error("Client ReqNo.  Required");
+                            return;
+                        }
 
-            //if ($('#ReceivedDate').val() == "") {
-            //    toastr.error("Submission Date Required.");
-            //    return;
-            //}
+                        //if ($('#ReceivedDate').val() == "") {
+                        //    toastr.error("Submission Date Required.");
+                        //    return;
+                        //}
 
-            //if ($('#QuotationDate').val() == "") {
-            //    toastr.error("Requisition Date Date Required");
-            //    return;
-            //}
+                        //if ($('#QuotationDate').val() == "") {
+                        //    toastr.error("Requisition Date Date Required");
+                        //    return;
+                        //}
 
-            $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
-       /*     $scope.VendorQutn.ReceivedDate = $('#ReceivedDate').val();*/
-            $scope.VendorQutn.VendorBillDate = $('#VendorBillDate').val();
-            $scope.VendorQutn.BillReceiveDate = $('#BillReceiveDate').val();
-            $scope.VendorQutn.AprvDate = $('#AprvDate').val();
+                        $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
+                        /*     $scope.VendorQutn.ReceivedDate = $('#ReceivedDate').val();*/
+                        $scope.VendorQutn.VendorBillDate = $('#VendorBillDate').val();
+                        $scope.VendorQutn.BillReceiveDate = $('#BillReceiveDate').val();
+                        $scope.VendorQutn.AprvDate = $('#AprvDate').val();
 
 
-            $http.post('/ClientAprvBill/SaveVendorFinalBill',
-                {
-                    BillRecv: $scope.VendorQutn,
+                        $http.post('/ClientAprvBill/SaveVendorFinalBill',
+                            {
+                                BillRecv: $scope.VendorQutn,
 
-                })
-                .success(function (response) {
-                    if (response.status == "S201") {
-                        toastr.success("Data Saved Successfully.");
-                        $scope.clearVendorQutn();
-                        $scope.loading = false;
-                        return;
+                            })
+                            .success(function (response) {
+                                if (response.status == "S201") {
+                                    toastr.success("Data Saved Successfully.");
+                                    $scope.clearVendorQutn();
+                                    $scope.loading = false;
+                                    return;
+                                }
+                                else if (response.status == "S202") {
+                                    toastr.success("Data Updated Successfully.");
+                                    $scope.clearVendorQutn();
+                                    $scope.loading = false;
+                                    return;
+                                }
+                                else if (response.status == "S203") {
+                                    toastr.success("Data Deleted Successfully.");
+                                    $scope.clearVendorQutn();
+                                    $scope.loading = false;
+                                    return;
+                                }
+                                else {
+                                    toastr.error("Data Save Failed.");
+                                    $scope.loading = false;
+                                    return;
+                                }
+                            })
+                            .error(function () {
+                                toastr.error("Data Save Failed.");
+                                $scope.loading = false;
+                                return;
+                            });
                     }
-                    else if (response.status == "S202") {
-                        toastr.success("Data Updated Successfully.");
-                        $scope.clearVendorQutn();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else if (response.status == "S203") {
-                        toastr.success("Data Deleted Successfully.");
-                        $scope.clearVendorQutn();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else {
-                        toastr.error("Data Save Failed.");
-                        $scope.loading = false;
-                        return;
-                    }
-                })
-                .error(function () {
-                    toastr.error("Data Save Failed.");
-                    $scope.loading = false;
-                    return;
-                });
-        }
 
-        $scope.toggleRefreshTable = function () {
-            window.location.reload();
-        };
-    }])
-</script>
+                    $scope.toggleRefreshTable = function () {
+                        window.location.reload();
+                    };
+                }])
+            </script>
 
 
 

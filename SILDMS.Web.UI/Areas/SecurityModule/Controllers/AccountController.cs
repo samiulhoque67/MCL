@@ -69,22 +69,90 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
             return View("Register");
         }
 
-        [HttpPost] 
+        //[HttpPost] 
+        //public async Task<string> SetAuthorization(string user, string password, string isRemeber)
+        //{
+        //    List<GetUserAccessPermission_Result> permissionMenu = null;
+        //    string roletitle = string.Empty;
+        //    string returnUrl = string.Empty;
+
+        //    //string returnUrl = ViewBag.ReturnUrl == null ? "/CBPSModule/DashboardV2" : ViewBag.ReturnUrl;
+        //    //string returnUrl = ViewBag.ReturnUrl == null ? "/DashboardMCL/Index" : ViewBag.ReturnUrl;
+        //    //string returnUrl = ViewBag.ReturnUrl == null ? "/ActivityCategory/Index" : ViewBag.ReturnUrl;
+        //    //string returnUrl = ViewBag.ReturnUrl == null ? "/WorkOrderInfo/Index" : ViewBag.ReturnUrl;
+
+        //    if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(password))
+        //    {
+        //        return "";
+        //    }
+
+        //    if (user.ToLower() == "superadmin" && StringEncription.Encrypt(password, true) != _adminPassword)
+        //    {
+        //        return "E401";
+        //    }
+
+        //    bool result = await Task.Run(() => _userService.IsValidUser(StringEncription.RemoveSpecialCharacters(user.Trim()), StringEncription.Encrypt(password.Trim(), true), Convert.ToString(this.Request.UserHostAddress), out permissionMenu));
+        //    if (result)
+        //    {
+        //        var ident = new ClaimsIdentity(
+        //         new[] 
+        //         { 
+        //              new Claim(ClaimTypes.Role,permissionMenu[0].RoleTitle)
+
+        //         }, DefaultAuthenticationTypes.ApplicationCookie);
+        //        Session["UserID"] = (from temp in permissionMenu where temp.UserID != "" select temp.UserID).FirstOrDefault();  // permissionMenu[0].UserID.ToString().Trim();
+        //        Session["User"] = (from temp in permissionMenu where temp.UserName != "" select temp.UserName).FirstOrDefault();
+        //        Session["UserFullName"] = (from temp in permissionMenu where temp.UserFullName != "" select temp.UserFullName).FirstOrDefault();
+        //        Session["UserDesignation"] = (from temp in permissionMenu where temp.UserDesignation != "" select temp.UserDesignation).FirstOrDefault();
+        //        Session["OwnerLevelID"] = (from temp in permissionMenu where temp.OwnerLevelID != "" select temp.OwnerLevelID).FirstOrDefault();
+        //        Session["OwnerID"] = (from temp in permissionMenu where temp.OwnerID != "" select temp.OwnerID).FirstOrDefault();
+        //        //Session["DefaultServer"] = (from temp in permissionMenu where temp.DefaultServer != "" select temp.DefaultServer).FirstOrDefault();
+        //        Session["SEC_Menu"] = (from temp in permissionMenu[0].AccessMenu select new SEC_Menu {
+        //            MenuID =temp.MenuID,
+        //            MenuTitle= temp.MenuTitle,
+        //            ParentMenuID =temp.ParentMenuID,
+        //            ParentMenu=temp.ParentMenu,
+        //            MenuUrl=temp.MenuUrl,
+        //            MenuIcon=temp.MenuIcon,
+        //            MenuOrder =temp.MenuOrder,
+        //            PermissionClass=temp.PermissionClass
+        //        }).ToList();
+
+        //        roletitle = (from temp in permissionMenu where temp.RoleTitle != "" select temp.RoleTitle).FirstOrDefault();
+        //        if (roletitle == "Max Role")
+        //        {
+        //            returnUrl = ViewBag.ReturnUrl == null ? "/DashboardMCL/Index" : ViewBag.ReturnUrl;
+        //        }
+
+        //        /*else
+        //        {
+        //            returnUrl = ViewBag.ReturnUrl == null ? "/CBPSModule/DashboardV2" : ViewBag.ReturnUrl;
+        //        }*/
+
+        //        HttpContext.GetOwinContext().Authentication.SignIn(
+        //        new AuthenticationProperties { IsPersistent = false }, ident);
+
+        //    }
+        //    else
+        //    {
+        //        return "E401";
+        //    }
+        //    return returnUrl;
+        //}
+
+
+
+        [HttpPost]
         public async Task<string> SetAuthorization(string user, string password, string isRemeber)
         {
             List<GetUserAccessPermission_Result> permissionMenu = null;
-            string roletitle = string.Empty;
-            string returnUrl = string.Empty;
-
-            //string returnUrl = ViewBag.ReturnUrl == null ? "/CBPSModule/DashboardV2" : ViewBag.ReturnUrl;
-            //string returnUrl = ViewBag.ReturnUrl == null ? "/DashboardMCL/Index" : ViewBag.ReturnUrl;
-            //string returnUrl = ViewBag.ReturnUrl == null ? "/ActivityCategory/Index" : ViewBag.ReturnUrl;
-            //string returnUrl = ViewBag.ReturnUrl == null ? "/WorkOrderInfo/Index" : ViewBag.ReturnUrl;
+            string returnUrl = ViewBag.ReturnUrl == null ? "/DashboardMCL/Index" : ViewBag.ReturnUrl;
 
             if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(password))
             {
                 return "";
             }
+
 
             if (user.ToLower() == "superadmin" && StringEncription.Encrypt(password, true) != _adminPassword)
             {
@@ -95,43 +163,31 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
             if (result)
             {
                 var ident = new ClaimsIdentity(
-                 new[] 
-                 { 
+                 new[]
+                 {
                       new Claim(ClaimTypes.Role,permissionMenu[0].RoleTitle)
-              
+
                  }, DefaultAuthenticationTypes.ApplicationCookie);
                 Session["UserID"] = (from temp in permissionMenu where temp.UserID != "" select temp.UserID).FirstOrDefault();  // permissionMenu[0].UserID.ToString().Trim();
                 Session["User"] = (from temp in permissionMenu where temp.UserName != "" select temp.UserName).FirstOrDefault();
-                Session["UserFullName"] = (from temp in permissionMenu where temp.UserFullName != "" select temp.UserFullName).FirstOrDefault();
-                Session["UserDesignation"] = (from temp in permissionMenu where temp.UserDesignation != "" select temp.UserDesignation).FirstOrDefault();
                 Session["OwnerLevelID"] = (from temp in permissionMenu where temp.OwnerLevelID != "" select temp.OwnerLevelID).FirstOrDefault();
                 Session["OwnerID"] = (from temp in permissionMenu where temp.OwnerID != "" select temp.OwnerID).FirstOrDefault();
                 //Session["DefaultServer"] = (from temp in permissionMenu where temp.DefaultServer != "" select temp.DefaultServer).FirstOrDefault();
-                Session["SEC_Menu"] = (from temp in permissionMenu[0].AccessMenu select new SEC_Menu {
-                    MenuID =temp.MenuID,
-                    MenuTitle= temp.MenuTitle,
-                    ParentMenuID =temp.ParentMenuID,
-                    ParentMenu=temp.ParentMenu,
-                    MenuUrl=temp.MenuUrl,
-                    MenuIcon=temp.MenuIcon,
-                    MenuOrder =temp.MenuOrder,
-                    PermissionClass=temp.PermissionClass
-                }).ToList();
-
-                roletitle = (from temp in permissionMenu where temp.RoleTitle != "" select temp.RoleTitle).FirstOrDefault();
-                if (roletitle == "Max Role")
-                {
-                    returnUrl = ViewBag.ReturnUrl == null ? "/DashboardMCL/Index" : ViewBag.ReturnUrl;
-                }
-                
-                /*else
-                {
-                    returnUrl = ViewBag.ReturnUrl == null ? "/CBPSModule/DashboardV2" : ViewBag.ReturnUrl;
-                }*/
-
+                Session["SEC_Menu"] = (from temp in permissionMenu[0].AccessMenu
+                                       select new SEC_Menu
+                                       {
+                                           MenuID = temp.MenuID,
+                                           MenuTitle = temp.MenuTitle,
+                                           ParentMenuID = temp.ParentMenuID,
+                                           ParentMenu = temp.ParentMenu,
+                                           MenuUrl = temp.MenuUrl,
+                                           MenuIcon = temp.MenuIcon,
+                                           MenuOrder = temp.MenuOrder,
+                                           PermissionClass = temp.PermissionClass
+                                       }).ToList();
                 HttpContext.GetOwinContext().Authentication.SignIn(
                 new AuthenticationProperties { IsPersistent = false }, ident);
-                
+
             }
             else
             {
@@ -139,6 +195,18 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
             }
             return returnUrl;
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpGet]
         [Authorize]
