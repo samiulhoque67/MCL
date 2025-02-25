@@ -77,20 +77,27 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     ClientInfoList = dt1.AsEnumerable().Select(reader => new OBS_VendorSettlement
                     {
+                        VendorFinalBilPaymentID = reader.GetString("VendorFinalBilPaymentID"),
+
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        ClientReqNo = reader.GetString("ClientReqNo"),
+
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         CAddress = reader.GetString("CAddress"),
-                        VendorID = reader.GetString("VendorID"),
-                        VendorName = reader.GetString("VendorName"),
-                        VAddress = reader.GetString("VAddress"),
                         WOInfoID = reader.GetString("WOInfoID"),
                         WONo = reader.GetString("WONo"),
                         WODate = reader.GetString("WODate"),
                         WOAmt = reader.GetToDecimal("WOAmt"),
+
+                        VendorID = reader.GetString("VendorID"),
+                        VendorName = reader.GetString("VendorName"),
+                        VAddress = reader.GetString("VAddress"),
+
+                        POAprvID = reader.GetString("POAprvID"),
                         PONo = reader.GetString("PONo"),
                         POAmt = reader.GetToDecimal("POAmt"),
-                        ClientReqID = reader.GetString("ClientReqID"),
-                        ClientReqNo = reader.GetString("ClientReqNo"),
+                       
                         TDSPercnt = reader.GetString("TDSPercnt"),
                         TDSAmount = reader.GetString("TDSAmount"),
                         VatPercnt = reader.GetString("VatPercnt"),
@@ -122,20 +129,24 @@ namespace SILDMS.DataAccess
                 using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetVendorSettlement"))
                 {
                     // Set parameters 
-                    //db.AddInParameter(dbCommandWrapper, "@ClientFinalPaymentRcvdID", SqlDbType.Int, billRecv.ClientFinalPaymentRcvdID);
+                    db.AddInParameter(dbCommandWrapper, "@VendorFinalBilPaymentID", SqlDbType.Int, billRecv.VendorFinalBilPaymentID);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, billRecv.ClientID);
                     db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.Decimal, billRecv.ClientReqID);
                     db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.Decimal, billRecv.WOInfoID);
 
+                    db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.NVarChar, billRecv.VendorID);
+                    db.AddInParameter(dbCommandWrapper, "@POAprvID", SqlDbType.Decimal, billRecv.POAprvID);
+                    db.AddInParameter(dbCommandWrapper, "@PONo", SqlDbType.Decimal, billRecv.PONo);
+
                     db.AddInParameter(dbCommandWrapper, "@TDSChallanNo", SqlDbType.NVarChar, billRecv.TDSChallanNo);
                     db.AddInParameter(dbCommandWrapper, "@TDSChallanDate", SqlDbType.NVarChar, billRecv.ChallanDate);
-                    db.AddInParameter(dbCommandWrapper, "@TDSChallanAmt", SqlDbType.NVarChar, billRecv.ChallanIssueAmount);
-                    db.AddInParameter(dbCommandWrapper, "@AITDepositedAmt", SqlDbType.NVarChar, billRecv.AITDepositedAmt);
+                    db.AddInParameter(dbCommandWrapper, "@TDSChallanAmt", SqlDbType.NVarChar, billRecv.TDSAmount);
+                    db.AddInParameter(dbCommandWrapper, "@AITDepositedAmt", SqlDbType.NVarChar, billRecv.ChallanIssueAmount);
 
                     db.AddInParameter(dbCommandWrapper, "@VDSChallanNo", SqlDbType.NVarChar, billRecv.MushakNo);
                     db.AddInParameter(dbCommandWrapper, "@VDSChallanDate", SqlDbType.NVarChar, billRecv.MushakDate);
-                    db.AddInParameter(dbCommandWrapper, "@VDSChallanAmt", SqlDbType.NVarChar, billRecv.MushakIssueAmount);
-                    db.AddInParameter(dbCommandWrapper, "@Mushak66Received", SqlDbType.NVarChar, billRecv.Mushak66Received);
+                    db.AddInParameter(dbCommandWrapper, "@VDSChallanAmt", SqlDbType.NVarChar, billRecv.VDSAmount);
+                    db.AddInParameter(dbCommandWrapper, "@Mushak66Received", SqlDbType.NVarChar, billRecv.MushakIssueAmount);
 
                     db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.NVarChar, billRecv.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, billRecv.Action);
