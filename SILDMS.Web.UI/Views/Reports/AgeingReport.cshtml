@@ -1,0 +1,462 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+<title>Vendor Ageing Report</title>
+<div class="box box-primary box-body" ng-controller="BeneficiaryDetailsCtrl" data-ng-init="init()">
+
+    @using (Html.BeginForm("VendorAgeingReport", "../Reports", System.Web.Mvc.FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+    {
+        <!-- box-header -->
+        <div class="box-header with-border">
+            <i class="fa fa-user"></i>
+            <h3 class="box-title">Vendor Ageing Report</h3>
+            <div class="box-tools pull-right">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" onclick="return displayReport();" name="ButtonType" value="Preview" class="btn btn-flat btn-success pull-right">
+                            <i class="fa fa-print"></i> Preview
+                        </button>
+                    </div>
+                    <div class="col-lg-4">
+                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" onclick="return displayReport();" name="ButtonType" value="Download" class="btn btn-flat btn-success pull-Left">
+                            <i class="fa fa-download"></i> Download
+                        </button>
+                    </div>
+                    <div class="col-lg-4">
+                        <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Refresh</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <label>Company</label>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <select id="ddCompany" name="Company" class="form-control"
+                                data-ng-model="CompanyName"
+                                data-ng-options="owner.OwnerID as owner.OwnerLevelID for owner in
+                            ownerList track by owner.OwnerID">
+                            <option value="">--Select--</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <label style="padding-left:30px;">Download Type</label>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <input type="radio" name="ReportType" value="PDF" checked="checked" /> <label>PDF</label>
+                    <input type="radio" name="ReportType" value="EXCEL" /> <label>EXCEL</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <label>Vendor Code</label>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <input type="text" id="VendorCode" maxlength="10" name="VendorCode" style="width:110px;" class="form-control" data-ng-model="vmBeneficiaryDetails.VendorCode" />
+                    </div>
+                </div>
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                    <input class="btn btn-flat btn-default" style="width:80px;" ng-click="ShowInvoicingPartyList()" value="Search">
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <label>Name</label>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <input type="text" id="txtVendorName" name="VendorNameDisplay" class="form-control" data-ng-model="vmBeneficiaryDetails.VendorNameDisplay" readonly placeholder="" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <label>Pending Days Sorted</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="number" id="First" required max="999" name="First" style="width:110px;" class="form-control" data-ng-model="vmBeneficiaryDetails.First" />
+                </div>
+                <div class="col-lg-2">
+                    <input type="number" id="Second" required max="999" min="{{vmBeneficiaryDetails.First + 1}}" name="Second" style="width:110px;" class="form-control" data-ng-model="vmBeneficiaryDetails.Second" />
+                </div>
+                <div class="col-lg-2">
+                    <input type="number" id="Third" required max="999" min="{{vmBeneficiaryDetails.Second + 1}}" name="Third" style="width:110px;" class="form-control" data-ng-model="vmBeneficiaryDetails.Third" />
+                </div>
+                <div class="col-lg-2">
+                    <input type="number" id="Four" required max="999" min="{{vmBeneficiaryDetails.Third + 1}}" name="Four" style="width:110px;" class="form-control" data-ng-model="vmBeneficiaryDetails.Four" />
+                </div>
+            </div>
+        </div>
+
+        <div id="InvoicingPartyModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
+                        <h3 class="modal-title">Vendor Information</h3>
+                    </div>
+                    <div class="table-responsive" data-ng-disabled="" ng-cloak>
+                        <table class="table table-condensed table-bordered table-striped table-hover pnlView">
+                            <thead>
+                                <tr>
+                                    <th class="col-lg-4 col-md-4 col-sm-4" data-ng-click="sort('VendorNameDisplay')">Name</th>
+                                    <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('TransAccountName')">Transaction Name</th>
+                                    <th class="col-lg-4 col-md-4 col-sm-4" data-ng-click="sort('OwnerName')">Company</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input placeholder="Search" class="input-sm form-control" data-ng-model="pagingInfo.search" data-ng-keyup="vendorWildSearch($event)" />
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="row in vendorDisplayedCollection">
+                                    <td class="hidden">{{row.VendorCode}}</td>
+                                    <td class="">{{row.VendorNameDisplay}}</td>
+                                    <td class="">{{row.TransAccountName}}</td>
+                                    <td class="">{{row.OwnerName}}</td>
+                                    <td>
+                                        <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleVendorSelect(row)">Select</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        <ul uib-pagination total-items="pagingInfo.totalItems" ng-model="pagingInfo.page" items-per-page="{{pagingInfo.itemsPerPage}}"
+                                            max-size="7" boundary-links="true" rotate="true" force-ellipses="true" data-ng-change="GetVendors()"></ul>
+                                    </td>
+                                </tr>
+                            </tfoot>
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="InvoicingPartyModal2" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
+                        <h3 class="modal-title">Vendor Information</h3>
+                    </div>
+                    <div class="table-responsive" data-ng-disabled="" ng-cloak>
+                        <table class="table table-condensed table-bordered table-striped table-hover pnlView">
+                            <thead>
+                                <tr>
+                                    <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('VendorNameDisplay')">Name</th>
+                                    <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('TransAccountName')">Transaction Name</th>
+                                    <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('OwnerName')">Company</th>
+                                    <th class="col-lg-2 col-md-2 col-sm-2">Action</th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input placeholder="Search" class="input-sm form-control" data-ng-model="pagingInfo.search" data-ng-keyup="vendorWildSearch($event)" />
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="row in vendorDisplayedCollection">
+                                    <td class="hidden">{{row.VendorCode}}</td>
+                                    <td class="">{{row.VendorNameDisplay}}</td>
+                                    <td class="">{{row.TransAccountName}}</td>
+                                    <td class="">{{row.OwnerName}}</td>
+                                    <td>
+                                        <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleVendorSelect2(row)">Select</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        <ul uib-pagination total-items="pagingInfo.totalItems" ng-model="pagingInfo.page" items-per-page="{{pagingInfo.itemsPerPage}}"
+                                            max-size="7" boundary-links="true" rotate="true" force-ellipses="true" data-ng-change="GetVendors()"></ul>
+                                    </td>
+                                </tr>
+                            </tfoot>
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="VendorCodeModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div style="padding-left:50px;">
+                        <table>
+                            <tr>
+                                <th>
+                                    Vendor Code
+                                </th>
+
+                            </tr>
+                            <tr ng-repeat="item in list">
+                                <td>
+                                    <input type="text" ng-model="item.VendorCode" class="form-control" />
+                                </td>
+                            </tr>
+                        </table>
+
+                        <button type="button" ng-click="getValues()">Done</button>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        UploadFile2.AddEventListenerForFileSelect();
+    });
+
+    /////file2///
+    function UploadFile2() { }
+
+    // file selection
+    UploadFile2.FileSelectHandler = function (e) {
+
+        //if from drag and drop then reset file select
+        if (e.dataTransfer != undefined &&
+            e.dataTransfer.files != undefined) {
+            UploadFile2.ResetFileSelect();
+        }
+
+        // fetch FileList object
+        var files = e.target.files || e.dataTransfer.files;
+
+        if (files != undefined && files.length > 0) {
+            UploadFile2.UploadFileToServer(files[0]);
+        }
+    }
+
+    UploadFile2.AddEventListenerForFileSelect = function () {
+        var fileselect = $("#fileselect2");
+        fileselect[0].addEventListener("change", UploadFile2.FileSelectHandler, false);
+    }
+
+    UploadFile2.ResetFileSelect = function () {
+        $("#fileselect").replaceWith('<input type="file" id="fileselect2" name="fileselect2[]" class="form-control" />');
+        UploadFile2.AddEventListenerForFileSelect();
+    }
+    //--------- Upload Functions ------- //
+    UploadFile2.UploadFileToServer = function (file) {
+        var formdata = new FormData();
+        formdata.append(file.name, file);
+        $.ajax({
+            url: '/Reports/UploadExcelFile',
+            type: 'POST',
+            data: formdata,
+            contentType: false,
+            processData: false,
+            async: true,
+            success: function (data) {
+                //alert(data);
+                if (data.Code == "1") {
+                    toastr.success('Data Uploaded Successfully.');
+                    $("#fileName").text("");
+                }
+                else {
+                    toastr.info("N.B: Please input valid excel file.");
+                    $("#fileName").text("");
+                }
+
+            },
+            error: function (error) {
+                toastr.error('Invalid Data stracture in Excel File');
+            }
+        });
+    }
+
+</script>
+<script type="text/javascript">
+
+    function displayReport() {
+        var vc1 = $("#VendorCode").val();
+        var vc2 = $("#VendorCode2").val();
+
+        if ((vc1 == '') && (vc2 != '')) {
+            $("#lbllevel").text('From Vendor Code should be smaller than To Vendor Code');
+            $("#lbllevel").css({ 'color': 'red', 'font-size': 'smaller', 'font-weight': 'bold', 'text-align': 'left' });
+            return false;
+        }
+
+        if ((vc1 != '') && (vc2 != '')) {
+            if ((vc2 - vc1) > 0) {
+                return true;
+            }
+            else {
+                $("#lbllevel").text('From Vendor Code should be smaller than To Vendor Code');
+                $("#lbllevel").css({ 'color': 'red', 'font-size': 'smaller', 'font-weight': 'bold', 'text-align': 'left' });
+                return false;
+            }
+        }
+        else
+            return true;
+    }
+    app.controller('BeneficiaryDetailsCtrl', function ($scope, $http) {
+
+        //$scope.list = [];
+
+        //for (var i = 1; i < 15; i++) {
+        //    $scope.list.push({ VendorCode: "" });
+        //}
+
+        $scope.getValues = function () {
+            var outPut = '';
+            angular.forEach($scope.list, function (item) {
+                if (item.VendorCode != '')
+                    outPut = outPut + item.VendorCode + ',';
+            });
+            //alert(outPut);
+            $scope.vmBeneficiaryDetails.SelectedVendorCode = outPut.slice(0, -1);
+            $('#VendorCodeModal').modal('hide');
+        }
+
+
+        $(function () {
+            GetOwners();
+        });
+
+        function GetOwners() {
+            $http.post('/CBPSModule/BillParkingAssmnt/GetOwners')
+                .success(function (response) {
+                    $scope.ownerList = response.owner;
+                    $scope.ownerList.splice(0, 1);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                    toastr.error('Data Loading Failed.');
+                });
+        }
+
+        $scope.pagingInfo = {
+            page: 1,
+            itemsPerPage: 10,
+            sortBy: null,
+            reverse: false,
+            search: null,
+            totalItems: 0
+        };
+
+        $scope.ShowInvoicingPartyList = function (model) {
+            $scope.GetVendors();
+            $('#InvoicingPartyModal').modal('show');
+        };
+
+        //alert($scope.vmBeneficiaryDetails.OwnerID);
+
+        $scope.GetVendors = function () {
+            $http.get("/CBPSModule/VendorSetup/GetAllVendors", {
+                params: {
+                    vendorId: "", ownerId: $scope.CompanyName, vendorType: "AllVendors",
+                    page: $scope.pagingInfo.page, itemsPerPage: $scope.pagingInfo.itemsPerPage, sortBy: $scope.pagingInfo.sortBy,
+                    reverse: $scope.pagingInfo.reverse, search: $scope.pagingInfo.search
+                }
+            })
+            .success(function (response) {
+                $scope.vendorList = response.vendors;
+                $scope.vendorDisplayedCollection = [].concat($scope.vendorList);
+                $scope.pagingInfo.totalItems = $scope.vendorList[0].TotalPages;
+            })
+            .error(function () { });
+        }
+
+        $scope.GetVendors();
+
+        $scope.sort = function (sortBy) {
+            if (sortBy === $scope.pagingInfo.sortBy) {
+                $scope.pagingInfo.reverse = !$scope.pagingInfo.reverse;
+            } else {
+                $scope.pagingInfo.sortBy = sortBy;
+                $scope.pagingInfo.reverse = false;
+            }
+            $scope.pagingInfo.page = 1;
+            $scope.GetVendors();
+        };
+
+        $scope.vendorWildSearch = function () {
+            if ($scope.pagingInfo.search.length > 2 || $scope.pagingInfo.search.length === 0) {
+                $scope.pagingInfo.page = 1;
+                $scope.pagingInfo.reverse = false;
+                $scope.pagingInfo.sortBy = null;
+                $scope.GetVendors();
+            }
+        }
+
+        $scope.ShowInvoicingPartyList2 = function (model) {
+            $scope.GetVendors();
+            $('#InvoicingPartyModal2').modal('show');
+        };
+
+        $scope.toggleVendorSelect = function (tableRow) {
+            $scope.vmBeneficiaryDetails.VendorCode = tableRow.VendorCode;
+            $scope.vmBeneficiaryDetails.VendorNameDisplay = tableRow.VendorNameDisplay;
+
+            $('#InvoicingPartyModal').modal('hide');
+        };
+        $scope.ShowVendoeList = function (model) {
+            $scope.list = [];
+
+            for (var i = 1; i < 15; i++) {
+                $scope.list.push({ VendorCode: "" });
+            }
+            $('#VendorCodeModal').modal('show');
+        };
+
+        $scope.toggleVendorSelect2 = function (tableRow) {
+            $scope.vmBeneficiaryDetails.VendorCode2 = tableRow.VendorCode;
+            $scope.vmBeneficiaryDetails.VendorNameDisplay2 = tableRow.VendorNameDisplay;
+
+            $('#InvoicingPartyModal2').modal('hide');
+        };
+
+        $scope.showPrint = false;
+        $scope.itemsByPage = 10;
+
+        $scope.vmBeneficiaryDetails = {
+            Owner: { OwnerID: "", OwnerName: "" },
+            First: 30,
+            Second: 60,
+            Third: 90,
+            Four: 120
+        };
+
+        $scope.toggleRefreshTable = function () {
+            window.location.reload();
+        };
+    });
+</script>

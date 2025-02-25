@@ -201,7 +201,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="TDSChallanAmt" name="TDSChallanAmt" type="text" class="form-control" placeholder="TDS Paid Amount" ng-model="ClientSettlement.TDSChallanAmt" ng-readonly="true" />
+                        <input id="TDSChallanAmt" ng-change="calculateTDSAmounts()" name="TDSChallanAmt" type="text" class="form-control" placeholder="TDS Paid Amount" ng-model="ClientSettlement.TDSChallanAmt" />
                     </div>
                 </div>
 
@@ -212,7 +212,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="VDSChallanAmt" name="VDSChallanAmt" type="text" class="form-control" placeholder="VDS Paid Amount" ng-model="ClientSettlement.VDSChallanAmt" ng-readonly="true" />
+                        <input id="VDSChallanAmt" ng-change="calculateVDSAmounts()" name="VDSChallanAmt" type="text" class="form-control" placeholder="VDS Paid Amount" ng-model="ClientSettlement.VDSChallanAmt" />
                     </div>
                 </div>
             </div>
@@ -225,7 +225,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="TDSDueAmt" name="TDSDueAmt" type="text" class="form-control" placeholder="TDS Amount" ng-model="ClientSettlement.TDSDueAmt" />
+                        <input id="TDSDueAmt" name="TDSDueAmt" type="text" class="form-control" placeholder="TDS Amount" ng-model="ClientSettlement.TDSDueAmt" ng-readonly="true" />
                     </div>
                 </div>
 
@@ -236,7 +236,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="VDSDueAmt" name="VDSDueAmt" type="text" class="form-control" placeholder="VDS Amount" ng-model="ClientSettlement.VDSDueAmt" />
+                        <input id="VDSDueAmt" name="VDSDueAmt" type="text" class="form-control" placeholder="VDS Amount" ng-model="ClientSettlement.VDSDueAmt" ng-readonly="true" />
                     </div>
                 </div>
             </div>
@@ -525,67 +525,16 @@
             $('#VendorReqInfoModal').modal('hide');
         };
 
-
-        $scope.calculateAmounts = function () {
-            var billAmount = parseFloat($scope.ClientSettlement.RemainingAmnt) || 0;
-            var vatPercentage = parseFloat($scope.ClientSettlement.VATPercentage) || 0;
-
-            // Calculate the VAT amount
-            $scope.ClientSettlement.VATAmount = (billAmount * vatPercentage) / 100;
-
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.ClientSettlement.TotalBillAmount = billAmount + $scope.ClientSettlement.VATAmount;
-            $scope.ClientSettlement.NetPayableAmount = $scope.ClientSettlement.TotalBillAmount - $scope.ClientSettlement.CommissionAmount;
-        };
-
-        $scope.calculateCommission = function () {
-            var totalbillAmount = parseFloat($scope.ClientSettlement.TotalBillAmount) || 0;
-            var poAmount = parseFloat($scope.ClientSettlement.WOAmt) || 0;
-            var cmsnPercentage = parseFloat($scope.ClientSettlement.CommissionPercentage) || 0;
-
-            // Calculate the VAT amount
-            $scope.ClientSettlement.CommissionAmount = (poAmount * cmsnPercentage) / 100;
-
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.ClientSettlement.NetPayableAmount = totalbillAmount - $scope.ClientSettlement.CommissionAmount;
-        };
-
-
         $scope.calculateTDSAmounts = function () {
-            var billAmount = parseFloat($scope.ClientSettlement.RemainingAmnt) || 0;
-            var vatPercentage = parseFloat($scope.ClientSettlement.TDSPercentage) || 0;
-
-            // Calculate the VAT amount
-            $scope.ClientSettlement.TDSAmount = (billAmount * vatPercentage) / 100;
-
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.ClientSettlement.TotalBillAmount = billAmount + $scope.ClientSettlement.TDSAmount;
-            $scope.ClientSettlement.NetPayableAmount = $scope.ClientSettlement.TotalBillAmount - $scope.ClientSettlement.TDSAmount;
+            alert("");
+            $scope.ClientSettlement.TDSDueAmt = ($scope.ClientSettlement.TDSAmount - $scope.ClientSettlement.TDSChallanAmt);
         };
 
         $scope.calculateVDSAmounts = function () {
-            var totalbillAmount = parseFloat($scope.ClientSettlement.TotalBillAmount) || 0;
-            var poAmount = parseFloat($scope.ClientSettlement.WOAmt) || 0;
-            var cmsnPercentage = parseFloat($scope.ClientSettlement.CommissionPercentage) || 0;
-
-            // Calculate the VAT amount
-            $scope.ClientSettlement.VDSAmount = (poAmount * cmsnPercentage) / 100;
-
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.ClientSettlement.NetPayableAmount = totalbillAmount - $scope.ClientSettlement.VDSAmount;
+            alert("");
+            $scope.ClientSettlement.VDSDueAmt = ($scope.ClientSettlement.VDSAmount - $scope.ClientSettlement.VDSChallanAmt);
         };
 
-        $scope.calculateBillAmounts = function () {
-            var billAmount = parseFloat($scope.ClientSettlement.AprvAmnt) || 0;
-            var vatPercentage = parseFloat($scope.ClientSettlement.VDSPercentage) || 0;
-
-            // Calculate the VAT amount
-            $scope.ClientSettlement.VDSAmount = (billAmount * vatPercentage) / 100;
-
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.ClientSettlement.TotalBillAmount = billAmount + $scope.ClientSettlement.VATAmount;
-            $scope.ClientSettlement.NetPayableAmount = $scope.ClientSettlement.TotalBillAmount - $scope.ClientSettlement.CommissionAmount;
-        };
 
         ///////////////////////Save/Update Master///////////////////////
 

@@ -126,13 +126,16 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, billRecv.ClientID);
                     db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.Decimal, billRecv.ClientReqID);
                     db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.Decimal, billRecv.WOInfoID);
+
                     db.AddInParameter(dbCommandWrapper, "@TDSChallanNo", SqlDbType.NVarChar, billRecv.TDSChallanNo);
                     db.AddInParameter(dbCommandWrapper, "@TDSChallanDate", SqlDbType.NVarChar, billRecv.ChallanDate);
                     db.AddInParameter(dbCommandWrapper, "@TDSChallanAmt", SqlDbType.NVarChar, billRecv.ChallanIssueAmount);
+                    db.AddInParameter(dbCommandWrapper, "@AITDepositedAmt", SqlDbType.NVarChar, billRecv.AITDepositedAmt);
 
                     db.AddInParameter(dbCommandWrapper, "@VDSChallanNo", SqlDbType.NVarChar, billRecv.MushakNo);
                     db.AddInParameter(dbCommandWrapper, "@VDSChallanDate", SqlDbType.NVarChar, billRecv.MushakDate);
                     db.AddInParameter(dbCommandWrapper, "@VDSChallanAmt", SqlDbType.NVarChar, billRecv.MushakIssueAmount);
+                    db.AddInParameter(dbCommandWrapper, "@Mushak66Received", SqlDbType.NVarChar, billRecv.Mushak66Received);
 
                     db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.NVarChar, billRecv.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, billRecv.Action);
