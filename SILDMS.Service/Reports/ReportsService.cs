@@ -74,6 +74,16 @@ namespace SILDMS.Service.Reports
             return ValidationResult.Success;
         }
 
+        public ValidationResult VendorRequisitionReport(string VendorReqID, string VendorID, out DataTable dt)
+        {
+            dt = _reportDataService.VendorRequisitionReport(VendorReqID, VendorID, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
         public ValidationResult GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out DataTable dt)
         {
             dt = _reportDataService.GetRptOwnerList(OwnerLevelID, OwnerID, ParentOwnerID, Status, id, action, out _errorNumber);

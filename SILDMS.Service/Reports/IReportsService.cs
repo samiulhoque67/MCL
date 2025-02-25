@@ -20,6 +20,8 @@ namespace SILDMS.Service.Reports
         ValidationResult RequisitionMovementInfo(string RequisitionNo, out DataTable RequisitionMovementInfo);
         ValidationResult VendorCSApprevedReport(string VendorReqID, string ServiceItemID, out DataTable dt);
 
+        ValidationResult VendorRequisitionReport(string VendorReqID, string VendorID, out DataTable dt);
+
         ValidationResult GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out DataTable OwnerList);
 
         ValidationResult GetRptDocumentsList(string OwnerLevelID, string OwnerID, string DocCategoryID, string DocTypeID, string DocPropertyID, string Status, string id, string action, out DataTable DocumentsList);

@@ -337,7 +337,7 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
-        [SILAuthorize]
+        //[SILAuthorize]
         public ActionResult RequisitionToVendorReport()
         {
             return View();
@@ -347,44 +347,89 @@ namespace SILDMS.Web.UI.Controllers
         [SILLogAttribute]
         public async Task<dynamic> RequisitionToVendorReport(string ReportType)
         {
-            var tempdata = TempData["VendorCSRecmInfo"];
-            string VendorReqID = string.Empty, ServiceItemID = string.Empty;
+            var tempdata = TempData["VendorRequisition"];
+            string VendorReqID = string.Empty, VendorID = string.Empty;
             ReportType = "PDF";
-            OBS_VendorCSAprv objVendorReq = new OBS_VendorCSAprv();
 
-            //if (TempData["VendorCSRecmInfo"] == null)
-            //{
-            //    ViewBag.Title = "No valid data.";
-            //    //return View();
-            //}
-            //else
-            //{
-            //    objVendorReq = (OBS_VendorCSAprv)TempData["VendorCSRecmInfo"];
-            //    VendorReqID = objVendorReq.VendorReqID;
-            //    ServiceItemID = objVendorReq.ServiceItemID;
-            //}
+            OBS_VendorReq objVendorReq = new OBS_VendorReq();
+
+            if (TempData["VendorRequisition"] == null)
+            {
+                ViewBag.Title = "No valid data.";
+                //return View();
+            }
+            else
+            {
+                objVendorReq = (OBS_VendorReq)TempData["VendorRequisition"];
+                VendorReqID = objVendorReq.VendorReqID;
+                VendorID = objVendorReq.VendorID;
+            }
 
             DataTable dt = new DataTable();
 
-            await Task.Run(() => _reportService.VendorCSApprevedReport(VendorReqID, ServiceItemID, out dt));
+            await Task.Run(() => _reportService.VendorRequisitionReport(VendorReqID, VendorID, out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
-            ReportPath = ReportPath + "/rptVendorCSRecmInfo.rpt";
+            ReportPath = ReportPath + "/rptVendorRequisition.rpt";
             reportDocument.Load(ReportPath);
             reportDocument.SetDataSource(dt);
             reportDocument.Refresh();
 
-            reportDocument.SetParameterValue("RecmVendor", objVendorReq.CSRecmVendorName);
-            reportDocument.SetParameterValue("RecmBy", objVendorReq.RecommendedByName);
-            reportDocument.SetParameterValue("RecmDesig", objVendorReq.RecommendedByDesignation);
+            //reportDocument.SetParameterValue("RequisitionNo", objVendorReq.RequisitionNo);
+            //reportDocument.SetParameterValue("RequisitionDate", objVendorReq.RequisitionDate);
 
-            //reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
-            //reportDocument.SetParameterValue("RecmVendor", "Square Informatix Ltd.");
-            //reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
+            //reportDocument.SetParameterValue("submittedby", objVendorReq.Submittedby);
+            //reportDocument.SetParameterValue("submittedbyDesig", objVendorReq.SubmittedbyDesig);
+
+            string reportName = "rptVendorRequisition";
+            reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
 
 
-            string reportName = "VendorCSApprevedReport";
+        //[SILAuthorize]
+        public ActionResult AgeingReport()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> AgeingReport(string ReportType)
+        {
+            var tempdata = TempData["VendorRequisition"];
+            string VendorReqID = string.Empty, VendorID = string.Empty;
+            ReportType = "PDF";
+
+            OBS_VendorReq objVendorReq = new OBS_VendorReq();
+
+            if (TempData["VendorRequisition"] == null)
+            {
+                ViewBag.Title = "No valid data.";
+                //return View();
+            }
+            else
+            {
+                objVendorReq = (OBS_VendorReq)TempData["VendorRequisition"];
+                VendorReqID = objVendorReq.VendorReqID;
+                VendorID = objVendorReq.VendorID;
+            }
+
+            DataTable dt = new DataTable();
+
+            await Task.Run(() => _reportService.VendorRequisitionReport(VendorReqID, VendorID, out dt));
+
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports");
+            ReportPath = ReportPath + "/rptVendorRequisition.rpt";
+            reportDocument.Load(ReportPath);
+            reportDocument.SetDataSource(dt);
+            reportDocument.Refresh();
+
+            string reportName = "rptVendorRequisition";
             reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
             reportDocument.Close();
             reportDocument.Dispose();
@@ -451,7 +496,6 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.Dispose();
             return View();
         }
-
 
 
         [SILAuthorize]
@@ -547,7 +591,7 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
-        [SILAuthorize]
+        //[SILAuthorize]
         public ActionResult RequisitionMovementInfo()
         {
             return View();
@@ -589,7 +633,6 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.Dispose();
             return View();
         }
-
 
         public ActionResult Index()
         {
@@ -1062,8 +1105,6 @@ namespace SILDMS.Web.UI.Controllers
                 return null;
             }
         }
-
-
      
         public ActionResult FinalClientBillReport()
         {
@@ -1114,7 +1155,6 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.Dispose();
             return View();
         }
-
         
         public ActionResult FinalClientDueBillReport()
         {
