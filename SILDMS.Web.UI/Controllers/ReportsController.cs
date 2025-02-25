@@ -1170,6 +1170,114 @@ namespace SILDMS.Web.UI.Controllers
 
 
 
+        public ActionResult OutputVatStatementReport()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> OutputVatStatementReport(ReportModel model)
+        {
+            DataTable dt = new DataTable();
+
+            await Task.Run(() => _reportService.OutputVatStatementReport(model.BillReceiveFromDate, model.BillReceiveToDate, out dt));
+
+
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports");
+            ReportPath = ReportPath + "/rptOutputVatStatement.rpt";
+            reportDocument.Load(ReportPath);
+            reportDocument.SetDataSource(dt);
+            reportDocument.Refresh();
+
+            if (string.IsNullOrEmpty(model.ClientName))
+                reportDocument.SetParameterValue("ComDiv", "MediaCom Limited");
+            else
+                reportDocument.SetParameterValue("ComDiv", "MediaCom Limited");
+            string rptHeaderName = "Output Vat Statement";
+            reportDocument.SetParameterValue("rptName", rptHeaderName);
+            reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
+            reportDocument.SetParameterValue("from", string.IsNullOrEmpty(model.BillReceiveFromDate) ? "" : model.BillReceiveFromDate);
+            reportDocument.SetParameterValue("to", string.IsNullOrEmpty(model.BillReceiveToDate) ? "" : model.BillReceiveToDate);
+
+
+            //string reportName = GetCompanyShortName(model.ClientName) + "-" + "ChequeOrEFTInfoVendorWise";
+            string reportName = "Output Vat Statement";
+
+            if (model.ButtonType == "Preview")
+                reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            else
+            {
+                if (model.ReportType == "PDF")
+                    reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, true, reportName);
+                else if (model.ReportType == "EXCEL")
+                    reportDocument.ExportToHttpResponse(ExportFormatType.ExcelRecord, System.Web.HttpContext.Current.Response, true, reportName);
+                else
+                    reportDocument.ExportToHttpResponse(ExportFormatType.EditableRTF, System.Web.HttpContext.Current.Response, true, reportName);
+            }
+
+            //reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
+
+
+        public ActionResult AITVDSReport()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> AITVDSReport(ReportModel model)
+        {
+            DataTable dt = new DataTable();
+
+            await Task.Run(() => _reportService.AITVDSReport(model.ClientID, model.BillReceiveFromDate, model.BillReceiveToDate, out dt));
+
+
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports");
+            ReportPath = ReportPath + "/rptAITVDS.rpt";
+            reportDocument.Load(ReportPath);
+            reportDocument.SetDataSource(dt);
+            reportDocument.Refresh();
+
+            if (string.IsNullOrEmpty(model.ClientName))
+                reportDocument.SetParameterValue("ComDiv", "MediaCom Limited");
+            else
+                reportDocument.SetParameterValue("ComDiv", "MediaCom Limited");
+            string rptHeaderName = "AIT and VDS Summary";
+            reportDocument.SetParameterValue("rptName", rptHeaderName);
+            reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
+            //reportDocument.SetParameterValue("from", string.IsNullOrEmpty(model.BillReceiveFromDate) ? "" : model.BillReceiveFromDate);
+            //reportDocument.SetParameterValue("to", string.IsNullOrEmpty(model.BillReceiveToDate) ? "" : model.BillReceiveToDate);
+
+
+            //string reportName = GetCompanyShortName(model.ClientName) + "-" + "ChequeOrEFTInfoVendorWise";
+            string reportName = "AIT and VDS Summary";
+
+            if (model.ButtonType == "Preview")
+                reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            else
+            {
+                if (model.ReportType == "PDF")
+                    reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, true, reportName);
+                else if (model.ReportType == "EXCEL")
+                    reportDocument.ExportToHttpResponse(ExportFormatType.ExcelRecord, System.Web.HttpContext.Current.Response, true, reportName);
+                else
+                    reportDocument.ExportToHttpResponse(ExportFormatType.EditableRTF, System.Web.HttpContext.Current.Response, true, reportName);
+            }
+
+            //reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
 
 
 

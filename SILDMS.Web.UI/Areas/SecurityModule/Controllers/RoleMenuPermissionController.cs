@@ -112,7 +112,7 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
 
                 var PermittedMenus = (from pm in roleMenuPermissionList
                     where pm.RoleID == roleInfo.RoleID & pm.Status == 1
-                    join m in resultNav on pm.MenuID equals m.MenuID into permittedmenus
+                    join m in resultNav on pm.MenuID equals m.MenuID  into permittedmenus
                     from r in permittedmenus.DefaultIfEmpty()
                     select new SEC_NavMenuOptSetup
                     {

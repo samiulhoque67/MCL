@@ -28,5 +28,7 @@ namespace SILDMS.DataAccessInterface.Reports
         DataTable ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID,  string BillCategory, out string _errorNumber);
         DataTable FinalClientBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber);
         DataTable FinalClientDueBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber);
+        DataTable OutputVatStatementReport(string billReceiveFromDate, string billReceiveToDate, out string errorNumber);
+        DataTable AITVDSReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber);
     }
 }

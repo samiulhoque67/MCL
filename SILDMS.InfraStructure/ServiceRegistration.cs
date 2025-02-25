@@ -159,6 +159,7 @@ using SILDMS.Service.VendorCSActualAprv;
 using SILDMS.DataAccess.VendorCSActualAprv;
 using SILDMS.Service.ReceivedFinalPayment;
 using SILDMS.DataAccess.ReceivedFinalPayment;
+using SILDMS.DataAccess.MasterDataSetup;
 
 namespace SILDMS.InfraStructure
 {
@@ -390,6 +391,10 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IReceivedFinalPaymentService>().To<ReceivedFinalPaymentService>();
             kernel.Bind<IReceivedFinalPaymentData>().To<ReceivedFinalPaymentData>();
+
+            kernel.Bind<IMasterSetupService>().To<MasterSetupService>();
+
+            kernel.Bind<IMasterDataSetupDataService>().To<MasterDataSetupDataService>();
         }
     }
 }

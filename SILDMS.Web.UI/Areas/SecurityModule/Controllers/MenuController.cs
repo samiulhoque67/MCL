@@ -46,7 +46,7 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
                 MenuTitle = x.MenuTitle,
                 MenuUrl = x.MenuUrl,
                 ParentMenuID = x.ParentMenuID,
-                MenuParentTitle = (x.ParentMenuID !="" ? ((from t in obMenu where t.MenuID == x.ParentMenuID select t.MenuTitle).FirstOrDefault()) : "Root"),
+                MenuParentTitle = (x.ParentMenuID != "" ? ((from t in obMenu where t.MenuID == x.ParentMenuID select t.MenuTitle).FirstOrDefault()) : "Root"),
                 MenuIcon = x.MenuIcon,
                 MenuOrder = x.MenuOrder,
                 Status = x.Status
@@ -55,7 +55,7 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
             return Json(new { Msg = "", result }, JsonRequestBehavior.AllowGet);
         }
 
-         
+
         [HttpPost]
         [Authorize]
         [SILLogAttribute]
@@ -64,7 +64,7 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
             if (ModelState.IsValid)
             {
                 action = "add";
-                objMenu.SetBy = UserID; 
+                objMenu.SetBy = UserID;
                 objMenu.ModifiedBy = objMenu.SetBy;
                 respStatus = await Task.Run(() => _menuService.AddMenu(objMenu, action, out outStatus));
 
@@ -80,7 +80,7 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
 
         }
 
-         
+
         [HttpPost]
         [Authorize]
         [SILLogAttribute]
@@ -96,8 +96,8 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
             }
             return "OK";
         }
-      
-         
+
+
         [HttpPost]
         [Authorize]
         [SILLogAttribute]
