@@ -197,17 +197,6 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
         [HttpGet]
         [Authorize]
         [ActionName("Logout")]
