@@ -1167,18 +1167,33 @@ namespace SILDMS.Web.UI.Controllers
         }
 
 
+        public ActionResult MonthWiseVendorFinalBillPayment()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> MonthWiseVendorFinalBillPayment(string VendorID, string CertificateFromDate)
+        {
+            DataTable dt = new DataTable();
+
+            await Task.Run(() => _reportService.MonthWiseVendorFinalBillPayment(VendorID, CertificateFromDate, out dt));
+
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports");
+            ReportPath = ReportPath + "/MonthWiseVendorFinalBillPayment.rpt";
+            reportDocument.Load(ReportPath);
+            reportDocument.SetDataSource(dt);
+            reportDocument.Refresh();
 
 
-
-
-
-
-
-
-
-
-
-
+            string reportName = "MonthWiseVendorFinalBillPayment";
+            reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
 
     }
 }

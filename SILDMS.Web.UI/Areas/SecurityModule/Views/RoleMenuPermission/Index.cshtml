@@ -102,7 +102,7 @@
 
 
 <script type="text/javascript">
-    
+
     app.controller('RoleSetupCtrl', function ($scope, $http) {
         applySecurity();
         $scope.roleSetupModel = {
@@ -116,7 +116,7 @@
         $scope.itemsByPage = 10;
         $scope.loading = true;
 
-        
+
         $http.get('/DocScanningModule/OwnerProperIdentity/GetOwnerLevel?_OwnerLevelID=')
             .success(function (response) {
                 $scope.ownerLevels = response.result;
@@ -128,7 +128,7 @@
                 $scope.loading = false;
             });
 
-        
+
         $scope.$watch('roleSetupModel.OwnerLevel', function (newVal) {
             if (newVal) {
                 $scope.roleSetupModel.Owner.OwnerID = "";
@@ -227,7 +227,7 @@
                 $http.post('/SecurityModule/RoleSetup/GetRole',
                     { _OwnerID: $scope.roleSetupModel.Owner.OwnerID })
                     .success(function (response) {
-                        
+
                         $scope.rolesForSpecificOwner = response.result;
                         $scope.loading = false;
                     }).error(function () {
@@ -237,24 +237,26 @@
         });
 
         //---------------------------------------------
-        
+
 
         $scope.$watch('roleSetupModel.Role', function (newVal) {
             if (newVal) {
                 //GenerateMenuTree();
                 $http.post('/SecurityModule/RoleMenuPermission/GetRolePermittedMenu',
-                    { _RoleID: $scope.roleSetupModel.Role.RoleID, 
-                      _OwnerID: $scope.roleSetupModel.Owner.OwnerID })
+                    {
+                        _RoleID: $scope.roleSetupModel.Role.RoleID,
+                        _OwnerID: $scope.roleSetupModel.Owner.OwnerID
+                    })
                     .success(function (response) {
-                        
+
                         $("#MenuTree").dynatree("getRoot").visit(function (node) {
                             node.select(false);
                         });
-                        
+
                         $.each(response, function (index, value) {
-                                $("#MenuTree").dynatree("getTree").selectKey(value);
+                            $("#MenuTree").dynatree("getTree").selectKey(value);
                         });
-                        
+
                         $scope.loading = false;
                     }).error(function () {
                         $scope.loading = false;
@@ -265,7 +267,7 @@
 
 
         //############## Save Modal ########################
-       
+
         $scope.Save = function () {
             //console.log(x);
             $scope.loading = true;

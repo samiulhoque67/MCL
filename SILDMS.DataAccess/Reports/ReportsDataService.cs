@@ -322,5 +322,24 @@ namespace SILDMS.DataAccess.Reports
                 return dt1;
             }
         }
+
+
+        public DataTable MonthWiseVendorFinalBillPayment(string VendorID, string CertificateFromDate, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_MonthWiseVendorFinalBillPayment"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
+                db.AddInParameter(dbCommandWrapper, "@CertificateFromDate", SqlDbType.VarChar, CertificateFromDate);
+
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+
+        }
     }
 }
