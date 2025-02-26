@@ -16,6 +16,7 @@ namespace SILDMS.DataAccessInterface
         List<OBS_ServicesCategory> GetServicesCategory(string action, out string errorNumber);
         List<OBS_Terms> GetTermsSearchList();
         List<OBS_TermsItem> GetTermsItemList(string ClientID);
+        List<OBS_Form> GetFormList(out string errorNumber);
         List<Sys_MasterData> GetJobLocation(string UserID, out string errorNumber);
     }
 }

@@ -132,5 +132,16 @@ namespace SILDMS.Web.UI.Controllers
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
+
+        public async Task<dynamic> GetFormList()
+        {
+            var FormList = new List<OBS_Form>();
+            await Task.Run(() => _termsService.GetFormList(out FormList));
+            var result = Json(new { FormList, msg = "FormList are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
+        }
+
+
     }
 }

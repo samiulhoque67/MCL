@@ -17,6 +17,7 @@ namespace SILDMS.Service
         string SaveTermsItem(OBS_TermsItem _modelTermsMst);
         ValidationResult GetTermsSearchList(out List<OBS_Terms> TermsSearchList);
         ValidationResult GetTermsItemList(string ClientID, out List<OBS_TermsItem> TermsSearchList);
+        ValidationResult GetFormList(out List <OBS_Form>FormList);
         ValidationResult GetJobLocation(string UserID, out List<Sys_MasterData> objMasterDatas);
     }
 }
