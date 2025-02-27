@@ -20,6 +20,7 @@ namespace SILDMS.Model
         public string VendorID { get; set; }
         public string VendorName { get; set; }
         public string VAddress { get; set; }
+        public string POAprvID { get; set; }
         public string PONo { get; set; }
         public string PODate { get; set; }
         public decimal POAmt { get; set; }
