@@ -44,16 +44,59 @@
     <div class="box-body " style="margin: 1%; padding: 5px 5px 5px 5px;" data-ng-disabled="">
         <div class="row">
             <div class="row">
+
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
                         <label for="FormName">Form Name:</label>
                         <label style="font-size: larger;color:red;">*</label>
                     </div>
                 </div>
-                <div class="col-sm-7 col-md-7 col-lg-7">
-                    <div class="form-group">
-                        <input id="FormName" type="text" name="FormName" required class="form-control" autofocus ng-model="vmTermsMst.FormName" placeholder="Form Name" style="height: 25px; font-size: smaller" />
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div style="position: relative;">
+                        <input id="FormName" type="text" name="FormName" required class="form-control" autocomplete="off" autofocus ng-model="vmTermsMst.FormName" readonly placeholder="Form Name" style="height: 25px; font-size: smaller" />
                         <p ng-show="Terms.FormName.$error.required && !Terms.FormName.$pristine" class="help-block" style="height:10px;">Terms Name is required.</p>
+
+                        <button class="btn-group pull-right" type="button" ng-click="GetFormList()"
+                                style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%); padding: 0px 10px; border: 2px solid black; background: transparent; ">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Form List Modal -->
+        <div class="modal fade" id="formListModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Form List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Form Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="form in FormListCollection">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{form.FormName}}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success" ng-click="selectForm(form)">
+                                            Select
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -247,15 +290,69 @@
         </div>
 
     </div>
+</div>
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        app.controller('TermsCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('TermsCtrl', ['$scope', '$http', function ($scope, $http) {
 
-            $scope.termsItemArray = [];
-            $scope.itemsByPage = 10;
+        $scope.termsItemArray = [];
+        $scope.itemsByPage = 10;
 
 
+        $scope.vmTermsMst = {
+            TermsID: "",
+            FormName: "",
+            Status: "1"
+        }
+
+        $scope.vmTermsItem = {
+            TermsItemID: "",
+            TermsName: "",
+            ItemStatus: "1"
+        };
+
+        //    $scope.vmTermsItem.ItemStatus = "1";
+        // ################# Detail Add Modal ####################
+        $scope.AddTermsModal = function () {
+            if ($('#FormName').val() == "") {
+                toastr.error("Form Name Required");
+                return;
+            }
+            $('#TermsItemModal').modal('show');
+        };
+
+        $scope.masterDataSetupGridData = [];  // base collection
+        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+
+
+        $scope.AddTermsItem = function () {
+
+            if ($('#TermsName').val() == "") {
+                toastr.error("TermsName Required.");
+                return;
+            }
+
+            $scope.vmTermsItem.TermsName = $('#TermsName').val();
+            $scope.vmTermsItem.ItemStatus = $('#ItemStatus').val();
+            $scope.termsItemArray.push($scope.vmTermsItem);
+
+            $scope.GridDisplayCollection = $scope.GridDisplayCollection.concat($scope.vmTermsItem);
+
+            $scope.resetVmTermsItem();
+            $("#btnTermsItem").html('Add');
+            $('#TermsItemModal').modal('hide');
+        }
+
+        $scope.resetVmTermsItem = function () {
+            $scope.vmTermsItem = {
+                TermsItemID: "",
+                TermsName: "",
+                ItemStatus: "1"
+            }
+        }
+
+        $scope.ClearVmTermsMst = function () {
             $scope.vmTermsMst = {
                 TermsID: "",
                 FormName: "",
@@ -266,189 +363,152 @@
                 TermsItemID: "",
                 TermsName: "",
                 ItemStatus: "1"
-            };
 
-        //    $scope.vmTermsItem.ItemStatus = "1";
-            // ################# Detail Add Modal ####################
-            $scope.AddTermsModal = function () {
-                if ($('#FormName').val() == "") {
-                    toastr.error("Form Name Required");
-                    return;
-                }
-                $('#TermsItemModal').modal('show');
-            };
+            }
 
             $scope.masterDataSetupGridData = [];  // base collection
             $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+        }
 
+        $scope.toggleTermsItemEdit = function (tableRow, $i) {
+            $('#TermsItemModal').modal('show');
+            $scope.resetVmTermsItem();
 
-            $scope.AddTermsItem = function () {
+            $scope.vmTermsItem.TermsName = tableRow.TermsName;
 
-                if ($('#TermsName').val() == "") {
-                    toastr.error("TermsName Required.");
-                    return;
-                }
+            $scope.GridDisplayCollection.splice($i, 1);
+            $scope.termsItemArray.splice($i, 1);
 
-                $scope.vmTermsItem.TermsName = $('#TermsName').val();
-                $scope.vmTermsItem.ItemStatus = $('#ItemStatus').val();
-                $scope.termsItemArray.push($scope.vmTermsItem);
+            $("#btnTermsItem").html('Update');
+        };
 
-                $scope.GridDisplayCollection = $scope.GridDisplayCollection.concat($scope.vmTermsItem);
-
+        $scope.toggleReqItemDelete = function (tableRow, $i) {
+            if (!tableRow.TermsItemID) {
                 $scope.resetVmTermsItem();
-                $("#btnTermsItem").html('Add');
-                $('#TermsItemModal').modal('hide');
-            }
-
-            $scope.resetVmTermsItem = function () {
-                $scope.vmTermsItem = {
-                    TermsItemID: "",
-                    TermsName: "",
-                    ItemStatus: "1"
-                }
-            }
-
-            $scope.ClearVmTermsMst = function () {
-                $scope.vmTermsMst = {
-                    TermsID: "",
-                    FormName: "",
-                    Status: "1"
-                }
-
-                $scope.vmTermsItem = {
-                    TermsItemID: "",
-                    TermsName: "",
-                    ItemStatus: "1"
-
-                }
-
-                $scope.masterDataSetupGridData = [];  // base collection
-                $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
-            }
-
-            $scope.toggleTermsItemEdit = function (tableRow, $i) {
-                $('#TermsItemModal').modal('show');
-                $scope.resetVmTermsItem();
-
-                $scope.vmTermsItem.TermsName = tableRow.TermsName;
-
                 $scope.GridDisplayCollection.splice($i, 1);
                 $scope.termsItemArray.splice($i, 1);
+                toastr.success('Data Deleted Successsfully');
+            }
+            else {
+                $scope.resetVmTermsItem();
+                $scope.vmTermsItem.TermsItemID = tableRow.TermsItemID;
+                $('#deleteTermsItemModal').modal('show');
+            }
+        };
 
-                $("#btnTermsItem").html('Update');
-            };
+        $scope.deleteTermsItem = function () {
+            $http.post('/Terms/DeleteClientReqItemAndTerm',
+                { TermsItemID: $scope.vmTermsItem.TermsItemID, ClientReqTermID: $scope.ClientReqTerm.ClientReqTermID })
+                .success(function (response) {
+                    if (response.status == "S203") {
+                        $scope.resetVmTermsItem();
+                        $scope.GridDisplayCollection.splice($i, 1);
+                        $scope.termsItemArray.splice($i, 1);
+                        toastr.success('Data Deleted Successsfully');
+                        return;
+                    }
+                });
+        }
 
-            $scope.toggleReqItemDelete = function (tableRow, $i) {
-                if (!tableRow.TermsItemID) {
-                    $scope.resetVmTermsItem();
-                    $scope.GridDisplayCollection.splice($i, 1);
-                    $scope.termsItemArray.splice($i, 1);
-                    toastr.success('Data Deleted Successsfully');
-                }
-                else {
-                    $scope.resetVmTermsItem();
-                    $scope.vmTermsItem.TermsItemID = tableRow.TermsItemID;
-                    $('#deleteTermsItemModal').modal('show');
-                }
-            };
+        //////////////////Search Grid List///////////////////////////////
 
-            $scope.deleteTermsItem = function () {
-                $http.post('/Terms/DeleteClientReqItemAndTerm',
-                    { TermsItemID: $scope.vmTermsItem.TermsItemID, ClientReqTermID: $scope.ClientReqTerm.ClientReqTermID })
-                    .success(function (response) {
-                        if (response.status == "S203") {
-                            $scope.resetVmTermsItem();
-                            $scope.GridDisplayCollection.splice($i, 1);
-                            $scope.termsItemArray.splice($i, 1);
-                            toastr.success('Data Deleted Successsfully');
-                            return;
-                        }
-                    });
+        $scope.SearchTermsModal = function () {
+            $scope.GetTermsAndConditionsSearchList();
+            $('#SearchTermsModal').modal('show');
+        };
+
+        $scope.GetTermsAndConditionsSearchList = function () {
+            $http.post("/Terms/GetTermsAndConditionsSearchList")
+                .success(function (response) {
+                    $scope.clientReqSearchList = response.clientReqSearchList;
+                    $scope.clientReqDisplayedCollection = [].concat($scope.clientReqSearchList);
+                })
+                .error(function () { });
+        }
+
+
+        $scope.GetFormList = function () {
+            $http.post("/Terms/GetFormList")
+                .success(function (response) {
+                    $scope.FormList = response.FormList;
+                    $scope.FormListCollection = [].concat($scope.FormList);
+                    $("#formListModal").modal("show")
+                })
+                .error(function () { });
+        }
+
+        $scope.selectForm = function (selectedForm) {
+            $scope.vmTermsMst.FormName = selectedForm.FormName;
+            $("#formListModal").modal("hide");
+        };
+
+
+
+        ////////////////////////Select for Update from Search grid ///////////////////////
+
+        $scope.toggleTermsSelect = function (tableRow) {
+            $scope.vmTermsMst.FormName = tableRow.FormName;
+
+            $http.post('/Terms/GetClientReqItemList', { TermsID: tableRow.TermsID })
+                .success(function (response) {
+                    $scope.masterDataSetupGridData = response.ClientReqItemList;
+                    $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+            $('#SearchTermsModal').modal('hide');
+        };
+
+        ///////////////////////////////////////////////
+
+        $scope.Post = function () {
+
+            if ($('#FormName').val() == "") {
+                toastr.error("Form Name Required");
+                return;
             }
 
-            //////////////////Search Grid List///////////////////////////////
-
-            $scope.SearchTermsModal = function () {
-                $scope.GetTermsAndConditionsSearchList();
-                $('#SearchTermsModal').modal('show');
-            };
-
-            $scope.GetTermsAndConditionsSearchList = function () {
-                $http.post("/Terms/GetTermsAndConditionsSearchList")
-                    .success(function (response) {
-                        $scope.clientReqSearchList = response.clientReqSearchList;
-                        $scope.clientReqDisplayedCollection = [].concat($scope.clientReqSearchList);
-                    })
-                    .error(function () { });
-            }
-
-            ////////////////////////Select for Update from Search grid ///////////////////////
-
-            $scope.toggleTermsSelect = function (tableRow) {
-                $scope.vmTermsMst.FormName = tableRow.FormName;
-
-                $http.post('/Terms/GetClientReqItemList', { TermsID: tableRow.TermsID })
-                    .success(function (response) {
-                        $scope.masterDataSetupGridData = response.ClientReqItemList;
-                        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+            $http.post('/Terms/SaveTermsAndConditions',
+                {
+                    vmTerms: $scope.vmTermsMst,
+                    vmTermsItem: $scope.GridDisplayCollection
+                })
+                .success(function (response) {
+                    if (response.status == "S201") {
+                        toastr.success("Data Saved Successfully.");
+                        $scope.ClearVmTermsMst();
                         $scope.loading = false;
-                    }).error(function () {
+                        return;
+                    }
+                    else if (response.status == "S202") {
+                        toastr.success("Data Updated Successfully.");
+                        $scope.ClearVmTermsMst();
                         $scope.loading = false;
-                    });
-
-                $('#SearchTermsModal').modal('hide');
-            };
-
-            ///////////////////////////////////////////////
-
-            $scope.Post = function () {
-
-                if ($('#FormName').val() == "") {
-                    toastr.error("Form Name Required");
-                    return;
-                }
-
-                $http.post('/Terms/SaveTermsAndConditions',
-                    {
-                        vmTerms: $scope.vmTermsMst,
-                        vmTermsItem: $scope.GridDisplayCollection
-                    })
-                    .success(function (response) {
-                        if (response.status == "S201") {
-                            toastr.success("Data Saved Successfully.");
-                            $scope.ClearVmTermsMst();
-                            $scope.loading = false;
-                            return;
-                        }
-                        else if (response.status == "S202") {
-                            toastr.success("Data Updated Successfully.");
-                            $scope.ClearVmTermsMst();
-                            $scope.loading = false;
-                            return;
-                        }
-                        else if (response.status == "S203") {
-                            toastr.success("Data Deleted Successfully.");
-                            $scope.ClearVmTermsMst();
-                            $scope.loading = false;
-                            return;
-                        }
-                        else {
-                            toastr.error("Data Save Failed.");
-                            $scope.loading = false;
-                            return;
-                        }
-                    })
-                    .error(function () {
+                        return;
+                    }
+                    else if (response.status == "S203") {
+                        toastr.success("Data Deleted Successfully.");
+                        $scope.ClearVmTermsMst();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else {
                         toastr.error("Data Save Failed.");
                         $scope.loading = false;
                         return;
-                    });
-            }
+                    }
+                })
+                .error(function () {
+                    toastr.error("Data Save Failed.");
+                    $scope.loading = false;
+                    return;
+                });
+        }
 
-            $scope.toggleRefreshTable = function () {
-                window.location.reload();
-            };
-        }])
-    </script>
-
-
+        $scope.toggleRefreshTable = function () {
+            window.location.reload();
+        };
+    }])
+</script>

@@ -319,6 +319,45 @@ namespace SILDMS.DataAccess
             }
             return masterDataList;
         }
+
+
+        public List<OBS_Form> GetFormList(out string errorNumber)
+        {
+            List<OBS_Form> FormList = new List<OBS_Form>();
+            errorNumber = string.Empty;
+
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAllForm"))
+            {
+                string spStatusParam = "@ErrorNumber";  // Define your stored procedure output parameter name
+                db.AddOutParameter(dbCommandWrapper, spStatusParam, DbType.String, 10);
+
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                // Get error code from stored procedure output parameter
+                var statusValue = db.GetParameterValue(dbCommandWrapper, spStatusParam);
+                if (statusValue != null && !string.IsNullOrWhiteSpace(statusValue.ToString()))
+                {
+                    errorNumber = statusValue.ToString().PrefixErrorCode();
+                }
+                else
+                {
+                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        DataTable dt1 = ds.Tables[0];
+                        FormList = dt1.AsEnumerable().Select(reader => new OBS_Form
+                        {
+                            FormID = reader.GetString("FormID"), // Fixed data type issue
+                            FormName = reader.GetString("FormName"),
+                            FormTable = reader.GetString("FormTable")
+                        }).ToList();
+                    }
+                }
+            }
+            return FormList;
+        }
     }
 }
 

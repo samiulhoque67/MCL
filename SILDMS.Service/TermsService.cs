@@ -78,5 +78,10 @@ namespace SILDMS.Service
             }
             return ValidationResult.Success;
         }
+        public ValidationResult GetFormList(out List<OBS_Form> FormList)
+        {
+            FormList = termsDataService.GetFormList(out errorNumber);
+            return ValidationResult.Success;
+        }
     }
 }
