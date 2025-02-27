@@ -11,10 +11,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SILDMS.DataAccessInterface;
+using System.Data.SqlClient;
 
 namespace SILDMS.DataAccess
 {
-    public class TermsDataService: ITermsDataService
+    public class TermsDataService : ITermsDataService
     {
         private readonly string spStatusParam = "@p_Status";
         public string SaveTermsAndConditions(OBS_Terms vmTerms, List<OBS_TermsItem> vmTermsItem)
@@ -50,7 +51,7 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.NVarChar, vmTerms.TermsID);
                     db.AddInParameter(dbCommandWrapper, "@FormName", SqlDbType.NVarChar, vmTerms.FormName);
                     db.AddInParameter(dbCommandWrapper, "@OBS_TermsAndConditionsNew", SqlDbType.Structured, dtTermsItem);
-                  //  db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vmTerms.Action);
+                    //  db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vmTerms.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 1200);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
