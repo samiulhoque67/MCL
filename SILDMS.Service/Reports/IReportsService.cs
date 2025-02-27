@@ -37,5 +37,6 @@ namespace SILDMS.Service.Reports
         ValidationResult FinalClientDueBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
         ValidationResult OutputVatStatementReport(string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
         ValidationResult AITVDSReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
+        ValidationResult TDSVDSReport(string VendorID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
     }
 }
