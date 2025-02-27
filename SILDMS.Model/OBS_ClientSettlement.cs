@@ -33,11 +33,13 @@ namespace SILDMS.Model
         public string TDSAmount { get; set; }
         public string TDSPaidAmt { get; set; }
         public string TDSChallanAmt { get; set; }
+        public string AITDepositedAmt { get; set; }
         public string VDSChallanNo { get; set; }        
         public string VDSChallanDate { get; set; }
         public string VDSAmount { get; set; }
         public string VDSPaidAmt { get; set; }
         public string VDSChallanAmt { get; set; }
+        public string Mushak66Received { get; set; }
         public string NetReceivableAmount { get; set; }
         public string ReceivedDate { get; set; }
         public string Remarks { get; set; }

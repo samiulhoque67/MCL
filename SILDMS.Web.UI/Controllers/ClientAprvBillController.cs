@@ -47,7 +47,7 @@ namespace SILDMS.Web.UI.Controllers
             BillRecv.SetBy = UserID;
 
             BillRecv.RecommendedByName = SILAuthorization.GetUserFullName();
-            BillRecv.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
+            //BillRecv.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
             string status = string.Empty;
             int ClientBillAprvID = 0;//, message = string.Empty;
             status = _clientAprvBillService.SaveClientFinalBill(BillRecv);

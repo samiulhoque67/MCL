@@ -126,6 +126,22 @@ namespace SILDMS.DataAccess.Reports
             }
         }
 
+        public DataTable VendorRequisitionReport(string VendorReqID, string VendorID, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("GetRptRequisitionToVendorReport"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.VarChar, VendorReqID);
+                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+        }
+
         public DataTable GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out string errorNumber)
         {
             errorNumber = string.Empty;
@@ -237,9 +253,9 @@ namespace SILDMS.DataAccess.Reports
             }
         }
 
-        
 
-        public DataTable ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID,string BillCategory, out string errorNumber)
+
+        public DataTable ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID, string BillCategory, out string errorNumber)
         {
             errorNumber = string.Empty;
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
@@ -270,8 +286,8 @@ namespace SILDMS.DataAccess.Reports
             {
                 db.AddInParameter(dbCommandWrapper, "@clientID", SqlDbType.VarChar, clientID);
                 db.AddInParameter(dbCommandWrapper, "@billReceiveFromDate", SqlDbType.VarChar, billReceiveFromDate);
-                db.AddInParameter(dbCommandWrapper, "@billReceiveToDate", SqlDbType.Int, billReceiveToDate);
-        
+                db.AddInParameter(dbCommandWrapper, "@billReceiveToDate", SqlDbType.VarChar, billReceiveToDate);
+
                 ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
                 //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
                 ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
@@ -293,7 +309,7 @@ namespace SILDMS.DataAccess.Reports
             {
                 db.AddInParameter(dbCommandWrapper, "@clientID", SqlDbType.VarChar, clientID);
                 db.AddInParameter(dbCommandWrapper, "@billReceiveFromDate", SqlDbType.VarChar, billReceiveFromDate);
-                db.AddInParameter(dbCommandWrapper, "@billReceiveToDate", SqlDbType.Int, billReceiveToDate);
+                db.AddInParameter(dbCommandWrapper, "@billReceiveToDate", SqlDbType.VarChar, billReceiveToDate);
 
                 ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
                 //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
@@ -315,11 +331,80 @@ namespace SILDMS.DataAccess.Reports
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQuotationApproveReportData"))
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.VarChar, ClientQutnAprvID);
-               
+
 
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
                 DataTable dt1 = ds.Tables[0];
                 return dt1;
+            }
+        }
+
+        public DataTable OutputVatStatementReport(string billReceiveFromDate, string billReceiveToDate, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_OutputVatStatementReportData"))
+            {
+
+                db.AddInParameter(dbCommandWrapper, "@billReceiveFromDate", SqlDbType.VarChar, billReceiveFromDate);
+                db.AddInParameter(dbCommandWrapper, "@billReceiveToDate", SqlDbType.VarChar, billReceiveToDate);
+
+
+                ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
+                //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
+                ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
+
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+        }
+
+        public DataTable AITVDSReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAITVDSReportData"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@clientID", SqlDbType.VarChar, clientID);
+                db.AddInParameter(dbCommandWrapper, "@billReceiveFromDate", SqlDbType.VarChar, billReceiveFromDate);
+                db.AddInParameter(dbCommandWrapper, "@billReceiveToDate", SqlDbType.VarChar, billReceiveToDate);
+
+                ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
+                //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
+                ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
+
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+
+            }
+        }
+
+        public DataTable TDSVDSReport(string VendorID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetTDSVDSReportData"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@vendorID", SqlDbType.VarChar, VendorID);
+                db.AddInParameter(dbCommandWrapper, "@billReceiveFromDate", SqlDbType.VarChar, billReceiveFromDate);
+                db.AddInParameter(dbCommandWrapper, "@billReceiveToDate", SqlDbType.VarChar, billReceiveToDate);
+
+                ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
+                //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
+                ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
+
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+
             }
         }
 

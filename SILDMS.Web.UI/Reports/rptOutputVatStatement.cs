@@ -16,14 +16,14 @@ namespace SILDMS.Web.UI.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class rptVendorRequisition : ReportClass {
+    public class rptOutputVatStatement : ReportClass {
         
-        public rptVendorRequisition() {
+        public rptOutputVatStatement() {
         }
         
         public override string ResourceName {
             get {
-                return "rptVendorRequisition.rpt";
+                return "rptOutputVatStatement.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace SILDMS.Web.UI.Reports {
         
         public override string FullResourceName {
             get {
-                return "SILDMS.Web.UI.Reports.rptVendorRequisition.rpt";
+                return "SILDMS.Web.UI.Reports.rptOutputVatStatement.rpt";
             }
             set {
                 // Do nothing
@@ -87,12 +87,52 @@ namespace SILDMS.Web.UI.Reports {
                 return this.ReportDefinition.Sections[4];
             }
         }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_ComDiv {
+            get {
+                return this.DataDefinition.ParameterFields[0];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_rptName {
+            get {
+                return this.DataDefinition.ParameterFields[1];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_rptUser {
+            get {
+                return this.DataDefinition.ParameterFields[2];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_from {
+            get {
+                return this.DataDefinition.ParameterFields[3];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_to {
+            get {
+                return this.DataDefinition.ParameterFields[4];
+            }
+        }
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedrptVendorRequisition : Component, ICachedReport {
+    public class CachedrptOutputVatStatement : Component, ICachedReport {
         
-        public CachedrptVendorRequisition() {
+        public CachedrptOutputVatStatement() {
         }
         
         [Browsable(false)]
@@ -129,7 +169,7 @@ namespace SILDMS.Web.UI.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            rptVendorRequisition rpt = new rptVendorRequisition();
+            rptOutputVatStatement rpt = new rptOutputVatStatement();
             rpt.Site = this.Site;
             return rpt;
         }

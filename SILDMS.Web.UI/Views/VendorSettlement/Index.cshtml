@@ -67,7 +67,7 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="row in VendorReqDisplayedCollection">
-                        <td class="hidden">{{row.ClientFinalPaymentRcvdID}}</td>
+                        <td class="hidden">{{row.VendorFinalBilPaymentID}}</td>
                         <td class="hidden">{{row.ClientID}}</td>
                         <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.ClientName}}</td>
                         <td class="hidden">{{row.VendorID}}</td>
@@ -212,7 +212,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="ChallanIssueAmount" name="ChallanIssueAmount" type="text" class="form-control" placeholder="TDS Paid Amount" ng-model="VendorSettlement.ChallanIssueAmount" ng-readonly="true" />
+                        <input id="ChallanIssueAmount" name="ChallanIssueAmount" type="text" class="form-control" placeholder="TDS Paid Amount" ng-model="VendorSettlement.ChallanIssueAmount" ng-change="calculateTDSAmounts()" />
                     </div>
                 </div>
 
@@ -223,7 +223,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="MushakIssueAmount" name="MushakIssueAmount" type="text" class="form-control" placeholder="VDS Paid Amount" ng-model="VendorSettlement.MushakIssueAmount" ng-readonly="true" />
+                        <input id="MushakIssueAmount" name="MushakIssueAmount" type="text" class="form-control" placeholder="VDS Paid Amount" ng-model="VendorSettlement.MushakIssueAmount" ng-change="calculateVDSAmounts()" />
                     </div>
                 </div>
             </div>
@@ -236,7 +236,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="TDSDueAmount" name="TDSDueAmount" type="text" class="form-control" placeholder="TDS Amount" ng-model="VendorSettlement.TDSDueAmount" />
+                        <input id="TDSDueAmount" name="TDSDueAmount" type="text" class="form-control" placeholder="TDS Amount" ng-model="VendorSettlement.TDSDueAmount" ng-readonly="true" />
                     </div>
                 </div>
 
@@ -247,7 +247,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="VDSDueAmount" name="VDSDueAmount" type="text" class="form-control" placeholder="VDS Amount" ng-model="VendorSettlement.VDSDueAmount" />
+                        <input id="VDSDueAmount" name="VDSDueAmount" type="text" class="form-control" placeholder="VDS Amount" ng-model="VendorSettlement.VDSDueAmount" ng-readonly="true" />
                     </div>
                 </div>
             </div>
@@ -496,23 +496,23 @@
         ////////////////////////Select for Update from Search grid ///////////////////////
 
         $scope.toggleVendorReqSelect = function (tableRow) {
-            $scope.VendorSettlement.ClientFinalPaymentRcvdID = tableRow.ClientFinalPaymentRcvdID;
 
-            $scope.VendorSettlement.ClientID = tableRow.ClientID;
-            $scope.VendorSettlement.ClientName = tableRow.ClientName;
-
-            $scope.VendorSettlement.VendorID = tableRow.VendorID;
-            $scope.VendorSettlement.VendorName = tableRow.VendorName;
+            $scope.VendorSettlement.VendorFinalBilPaymentID = tableRow.VendorFinalBilPaymentID;
 
             $scope.VendorSettlement.ClientReqID = tableRow.ClientReqID;
             $scope.VendorSettlement.ClientReqNo = tableRow.ClientReqNo;
-            $scope.VendorSettlement.RequisitionDate = tableRow.RequisitionDate;
+            //$scope.VendorSettlement.RequisitionDate = tableRow.RequisitionDate;
 
+            $scope.VendorSettlement.ClientID = tableRow.ClientID;
+            $scope.VendorSettlement.ClientName = tableRow.ClientName;
             $scope.VendorSettlement.WOInfoID = tableRow.WOInfoID;
             $scope.VendorSettlement.WONo = tableRow.WONo;
             $scope.VendorSettlement.WODate = tableRow.WODate;
             $scope.VendorSettlement.WOAmt = tableRow.WOAmt;
 
+            $scope.VendorSettlement.VendorID = tableRow.VendorID;
+            $scope.VendorSettlement.VendorName = tableRow.VendorName;
+            $scope.VendorSettlement.POAprvID = tableRow.POAprvID;
             $scope.VendorSettlement.PONo = tableRow.PONo;
             $scope.VendorSettlement.POAmt = tableRow.POAmt;
 
@@ -530,66 +530,12 @@
             $('#VendorReqInfoModal').modal('hide');
         };
 
-
-        $scope.calculateAmounts = function () {
-            var billAmount = parseFloat($scope.VendorSettlement.RemainingAmnt) || 0;
-            var vatPercentage = parseFloat($scope.VendorSettlement.VATPercentage) || 0;
-
-            // Calculate the VAT amount
-            $scope.VendorSettlement.VATAmount = (billAmount * vatPercentage) / 100;
-
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorSettlement.TotalBillAmount = billAmount + $scope.VendorSettlement.VATAmount;
-            $scope.VendorSettlement.NetPayableAmount = $scope.VendorSettlement.TotalBillAmount - $scope.VendorSettlement.CommissionAmount;
-        };
-
-        $scope.calculateCommission = function () {
-            var totalbillAmount = parseFloat($scope.VendorSettlement.TotalBillAmount) || 0;
-            var poAmount = parseFloat($scope.VendorSettlement.WOAmt) || 0;
-            var cmsnPercentage = parseFloat($scope.VendorSettlement.CommissionPercentage) || 0;
-
-            // Calculate the VAT amount
-            $scope.VendorSettlement.CommissionAmount = (poAmount * cmsnPercentage) / 100;
-
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorSettlement.NetPayableAmount = totalbillAmount - $scope.VendorSettlement.CommissionAmount;
-        };
-
-
         $scope.calculateTDSAmounts = function () {
-            var billAmount = parseFloat($scope.VendorSettlement.RemainingAmnt) || 0;
-            var vatPercentage = parseFloat($scope.VendorSettlement.TDSPercentage) || 0;
-
-            // Calculate the VAT amount
-            $scope.VendorSettlement.TDSAmount = (billAmount * vatPercentage) / 100;
-
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorSettlement.TotalBillAmount = billAmount + $scope.VendorSettlement.TDSAmount;
-            $scope.VendorSettlement.NetPayableAmount = $scope.VendorSettlement.TotalBillAmount - $scope.VendorSettlement.TDSAmount;
+            $scope.VendorSettlement.TDSDueAmount = ($scope.VendorSettlement.TDSAmount - $scope.VendorSettlement.ChallanIssueAmount);
         };
 
         $scope.calculateVDSAmounts = function () {
-            var totalbillAmount = parseFloat($scope.VendorSettlement.TotalBillAmount) || 0;
-            var poAmount = parseFloat($scope.VendorSettlement.WOAmt) || 0;
-            var cmsnPercentage = parseFloat($scope.VendorSettlement.CommissionPercentage) || 0;
-
-            // Calculate the VAT amount
-            $scope.VendorSettlement.VDSAmount = (poAmount * cmsnPercentage) / 100;
-
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorSettlement.NetPayableAmount = totalbillAmount - $scope.VendorSettlement.VDSAmount;
-        };
-
-        $scope.calculateBillAmounts = function () {
-            var billAmount = parseFloat($scope.VendorSettlement.AprvAmnt) || 0;
-            var vatPercentage = parseFloat($scope.VendorSettlement.VDSPercentage) || 0;
-
-            // Calculate the VAT amount
-            $scope.VendorSettlement.VDSAmount = (billAmount * vatPercentage) / 100;
-
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorSettlement.TotalBillAmount = billAmount + $scope.VendorSettlement.VATAmount;
-            $scope.VendorSettlement.NetPayableAmount = $scope.VendorSettlement.TotalBillAmount - $scope.VendorSettlement.CommissionAmount;
+            $scope.VendorSettlement.VDSDueAmount = ($scope.VendorSettlement.VDSAmount - $scope.VendorSettlement.MushakIssueAmount);
         };
 
         ///////////////////////Save/Update Master///////////////////////
@@ -669,7 +615,6 @@
 
             $scope.VendorSettlement.ChallanDate = $('#ChallanDate').val();
             $scope.VendorSettlement.MushakDate = $('#MushakDate').val();
-            alert('');
             $http.post('/VendorSettlement/SaveVendorSettlement',
                 {
                     //ChallanDate: $('#ChallanDate').val()

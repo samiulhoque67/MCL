@@ -5,7 +5,7 @@
     <!-- box-header -->
     <div class="box-header with-border">
         <i class="fa fa-user"></i>
-        <h3 class="box-title">Owner List</h3>
+        <h3 class="box-title">Department List</h3>
         <div class="box-tools pull-right">
             <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable(row)" class="btn btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Refresh</button>
             <button type="button" id="btnAdd" data-ng-click="toggleAdd(row)" class="btn btn-flat btn-primary pull-right btnSave" ng-disabled="loading"> <i class="fa fa-plus"></i> Add New</button>
@@ -19,9 +19,9 @@
                 <tr>
                     
                     @*<th st-sort="UDOwnerCode">Owner Code</th>*@
-                    <th st-sort="OwnerName">Owner Name</th>
+                    <th st-sort="OwnerName">Department Name</th>
                     <th st-sort="ParentName">Parent Owner</th>
-                    <th st-sort="LevelName">Owner Level</th>
+                    <th st-sort="LevelName">Company</th>
                     <th st-sort="">Status</th>
                     <th>Action</th>
                 </tr>
@@ -61,7 +61,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h3 class="modal-title">Owner Form</h3>
+                            <h3 class="modal-title">Department Form</h3>
                         </div>
                         <div class="modal-body">
                             <div class="box-body">
@@ -69,7 +69,7 @@
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="form-group">
                                             <!-- Text Box for Owner Code -->
-                                            <label for="OwnerID">Owner Code</label>
+                                            <label for="OwnerID">Deparment Code</label>
                                             <input type="text" data-ng-model="ownerModel.OwnerID" class="form-control" id="OwnerID"
                                                    placeholder="System Generated Owner Code" readonly="readonly" />
                                         </div><!-- Text Box for Owner Code end -->
@@ -77,13 +77,13 @@
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="form-group">
                                             <!-- Drop Down for Owner Level -->
-                                            <label for="OwnerLevel">Owner Level</label>
+                                            <label for="OwnerLevel">Company</label>
                                             <select id="OwnerLevel" name="ownerLevel" class="form-control" ng-model="ownerModel.OwnerLevel" ng-change="ownerLevelChange()"
                                                     ng-options="ownerLevel as ownerLevel.LevelName for ownerLevel in ownerLevels track by ownerLevel.OwnerLevelID" required="required">
-                                                <option value="" style="display: none">-- Select Owner's Level --</option>
+                                                <option value="" style="display: none">-- Select Company --</option>
                                             </select>
                                             <div ng-show="ownerFrm.$submitted || ownerFrm.OwnerLevel.$touched">
-                                                <span ng-show="!ownerFrm.ownerLevel.$dirty && ownerFrm.ownerLevel.$pristine" class="label label-danger">Please select an owner level</span>
+                                                <span ng-show="!ownerFrm.ownerLevel.$dirty && ownerFrm.ownerLevel.$pristine" class="label label-danger">Please select a Company</span>
                                             </div>
                                         </div><!-- Drop Down for Owner Level end -->
                                     </div>
@@ -92,18 +92,18 @@
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="form-group">
                                             <!-- Text Box for User Defined(UD) Owner Code -->
-                                            <label for="UDOwnerCode">UD Owner Code </label>
-                                            <input type="text" data-ng-model="ownerModel.UDOwnerCode" class="form-control" id="UDOwnerCode" placeholder="UD Owner Code" />
+                                            <label for="UDOwnerCode">UD Deparment Code </label>
+                                            <input type="text" data-ng-model="ownerModel.UDOwnerCode" class="form-control" id="UDOwnerCode" placeholder="UD Deparment Code" />
                                         </div><!-- Text Box for User Defined(UD) Owner Code end -->
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="form-group">
                                             <!-- Text Box for Owner Name -->
-                                            <label for="OwnerName">Owner Name </label>
+                                            <label for="OwnerName">Deparment Name </label>
                                             <input id="OwnerName" name="OwnerName" type="text" data-ng-model="ownerModel.OwnerName"
-                                                   class="form-control" placeholder="Owner Name" required/>
+                                                   class="form-control" placeholder="Deparment Name" required/>
                                             <div ng-show="ownerFrm.$submitted || ownerFrm.OwnerName.$touched">
-                                                <span ng-show="ownerFrm.OwnerName.$error.required" class="label label-danger">Please enter owner's name</span>
+                                                <span ng-show="ownerFrm.OwnerName.$error.required" class="label label-danger">Please enter company's name</span>
                                             </div>
                                         </div><!-- Text Box for Owner Name end -->
                                     </div>
@@ -113,13 +113,13 @@
                                         <div class="form-group">
                                             <!-- Text Box for Owner Short Name -->
                                             <label for="OwnerShortName">Short Name</label>
-                                            <input type="text" data-ng-model="ownerModel.OwnerShortName" class="form-control" id="OwnerShortName" placeholder="Owner Short Name" />
+                                            <input type="text" data-ng-model="ownerModel.OwnerShortName" class="form-control" id="OwnerShortName" placeholder="Department Short Name" />
                                         </div><!-- Text Box for Owner Short Name end -->
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="form-group">
                                             <!-- Drop Down for Parent Owner -->
-                                            <label for="ParentOwner">Parent Owner</label>
+                                            <label for="ParentOwner">Parent Deparment</label>
                                             <select id="ParentOwner" class="form-control" ng-model="ownerModel.Parent"
                                                     ng-options="ownerParent as ownerParent.ParentName for ownerParent in ownerParents track by ownerParent.ParentOwner">
                                                 <option value="">-- Select Owner's Parent --</option>

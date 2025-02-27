@@ -20,6 +20,7 @@ namespace SILDMS.Model
         public string VendorID { get; set; }
         public string VendorName { get; set; }
         public string VAddress { get; set; }
+        public string POAprvID { get; set; }
         public string PONo { get; set; }
         public string PODate { get; set; }
         public decimal POAmt { get; set; }
@@ -32,12 +33,14 @@ namespace SILDMS.Model
         public string TDSAmount { get; set; }
         public string TDSPercnt { get; set; }
         public string ChallanIssueAmount { get; set; }
+        public string AITDepositedAmt { get; set; }
         public string TDSDueAmount { get; set; }
         public string MushakNo { get; set; }
         public string MushakDate { get; set; }
         public string VatPercnt { get; set; }
         public string VDSAmount { get; set; }
         public string MushakIssueAmount { get; set; }
+        public string Mushak66Received { get; set; } 
         public string VDSDueAmount { get; set; }
         public string NetPayableAmount { get; set; }
         public string NetReceivableAmount { get; set; }

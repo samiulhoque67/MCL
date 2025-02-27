@@ -1232,11 +1232,11 @@
         $scope.handleVDSChange = function (value) {
             if (value === "MCOM") {
 
-                $scope.VendorQutn.NetActualPayableAmount = $scope.VendorQutn.PaymentAmount - $scope.VendorQutn.VATAmount;
+                $scope.VendorQutn.NetActualPayableAmount = $scope.VendorQutn.NetPayableAmount - $scope.VendorQutn.VATAmount - $scope.VendorQutn.TDSAmount;
                
               
             } else if (value === "Vendor") {
-                $scope.VendorQutn.NetActualPayableAmount = $scope.VendorQutn.PaymentAmount;
+                $scope.VendorQutn.NetActualPayableAmount = $scope.VendorQutn.NetPayableAmount - $scope.VendorQutn.TDSAmount;
              
             }
         };

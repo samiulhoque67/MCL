@@ -20,6 +20,8 @@ namespace SILDMS.Service.Reports
         ValidationResult RequisitionMovementInfo(string RequisitionNo, out DataTable RequisitionMovementInfo);
         ValidationResult VendorCSApprevedReport(string VendorReqID, string ServiceItemID, out DataTable dt);
 
+        ValidationResult VendorRequisitionReport(string VendorReqID, string VendorID, out DataTable dt);
+
         ValidationResult GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out DataTable OwnerList);
 
         ValidationResult GetRptDocumentsList(string OwnerLevelID, string OwnerID, string DocCategoryID, string DocTypeID, string DocPropertyID, string Status, string id, string action, out DataTable DocumentsList);
@@ -34,5 +36,8 @@ namespace SILDMS.Service.Reports
         ValidationResult ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID, string billCategory, out DataTable dt);
         ValidationResult FinalClientBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
         ValidationResult FinalClientDueBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
+        ValidationResult OutputVatStatementReport(string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
+        ValidationResult AITVDSReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
+        ValidationResult TDSVDSReport(string VendorID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
     }
 }

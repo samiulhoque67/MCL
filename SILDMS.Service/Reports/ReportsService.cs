@@ -74,6 +74,16 @@ namespace SILDMS.Service.Reports
             return ValidationResult.Success;
         }
 
+        public ValidationResult VendorRequisitionReport(string VendorReqID, string VendorID, out DataTable dt)
+        {
+            dt = _reportDataService.VendorRequisitionReport(VendorReqID, VendorID, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
         public ValidationResult GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out DataTable dt)
         {
             dt = _reportDataService.GetRptOwnerList(OwnerLevelID, OwnerID, ParentOwnerID, Status, id, action, out _errorNumber);
@@ -152,6 +162,36 @@ namespace SILDMS.Service.Reports
         public ValidationResult ClientQuotationApproveReport(string ClientQutnAprvID, out DataTable dt)
         {
             dt = _reportDataService.ClientQuotationApproveReport(ClientQutnAprvID, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult OutputVatStatementReport(string billReceiveFromDate, string billReceiveToDate, out DataTable dt)
+        {
+            dt = _reportDataService.OutputVatStatementReport( billReceiveFromDate, billReceiveToDate, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult AITVDSReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt)
+        {
+            dt = _reportDataService.AITVDSReport(clientID, billReceiveFromDate, billReceiveToDate, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult TDSVDSReport(string VendorID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt)
+        {
+            dt = _reportDataService.TDSVDSReport(VendorID, billReceiveFromDate, billReceiveToDate, out _errorNumber);
             if (_errorNumber.Length > 0)
             {
                 return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));

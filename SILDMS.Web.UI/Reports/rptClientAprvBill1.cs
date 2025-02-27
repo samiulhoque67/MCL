@@ -16,14 +16,14 @@ namespace SILDMS.Web.UI.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class rptVendorRequisition : ReportClass {
+    public class rptClientAprvBill : ReportClass {
         
-        public rptVendorRequisition() {
+        public rptClientAprvBill() {
         }
         
         public override string ResourceName {
             get {
-                return "rptVendorRequisition.rpt";
+                return "rptClientAprvBill.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace SILDMS.Web.UI.Reports {
         
         public override string FullResourceName {
             get {
-                return "SILDMS.Web.UI.Reports.rptVendorRequisition.rpt";
+                return "SILDMS.Web.UI.Reports.rptClientAprvBill.rpt";
             }
             set {
                 // Do nothing
@@ -90,9 +90,9 @@ namespace SILDMS.Web.UI.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedrptVendorRequisition : Component, ICachedReport {
+    public class CachedrptClientAprvBill : Component, ICachedReport {
         
-        public CachedrptVendorRequisition() {
+        public CachedrptClientAprvBill() {
         }
         
         [Browsable(false)]
@@ -129,7 +129,7 @@ namespace SILDMS.Web.UI.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            rptVendorRequisition rpt = new rptVendorRequisition();
+            rptClientAprvBill rpt = new rptClientAprvBill();
             rpt.Site = this.Site;
             return rpt;
         }

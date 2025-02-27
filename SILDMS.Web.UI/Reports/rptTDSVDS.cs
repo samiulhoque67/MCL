@@ -16,14 +16,14 @@ namespace SILDMS.Web.UI.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class rptVendorRequisition : ReportClass {
+    public class rptTDSVDS : ReportClass {
         
-        public rptVendorRequisition() {
+        public rptTDSVDS() {
         }
         
         public override string ResourceName {
             get {
-                return "rptVendorRequisition.rpt";
+                return "rptTDSVDS.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace SILDMS.Web.UI.Reports {
         
         public override string FullResourceName {
             get {
-                return "SILDMS.Web.UI.Reports.rptVendorRequisition.rpt";
+                return "SILDMS.Web.UI.Reports.rptTDSVDS.rpt";
             }
             set {
                 // Do nothing
@@ -87,12 +87,36 @@ namespace SILDMS.Web.UI.Reports {
                 return this.ReportDefinition.Sections[4];
             }
         }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_ComDiv {
+            get {
+                return this.DataDefinition.ParameterFields[0];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_rptName {
+            get {
+                return this.DataDefinition.ParameterFields[1];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_rptUser {
+            get {
+                return this.DataDefinition.ParameterFields[2];
+            }
+        }
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedrptVendorRequisition : Component, ICachedReport {
+    public class CachedrptTDSVDS : Component, ICachedReport {
         
-        public CachedrptVendorRequisition() {
+        public CachedrptTDSVDS() {
         }
         
         [Browsable(false)]
@@ -129,7 +153,7 @@ namespace SILDMS.Web.UI.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            rptVendorRequisition rpt = new rptVendorRequisition();
+            rptTDSVDS rpt = new rptTDSVDS();
             rpt.Site = this.Site;
             return rpt;
         }

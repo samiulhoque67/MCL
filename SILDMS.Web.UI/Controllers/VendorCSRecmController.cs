@@ -95,7 +95,7 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> SaveVendorCSAprv(OBS_VendorCSAprv vendorCS, List<OBS_VendorCSAprvItem> vendorCSItem, List<OBS_VendorCSAprvTerms> vendorCSTerm)
         {
             vendorCS.SetBy = UserID;
-            vendorCS.RecommendedByName = SILAuthorization.GetUserFullName(); 
+            vendorCS.RecommendedByName = SILAuthorization.GetUserFullName();
             vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
             string status = string.Empty;//, message = string.Empty;
             status = _vendorCSInfoService.SaveVendorCSAprv(vendorCS, vendorCSItem, vendorCSTerm);
