@@ -449,7 +449,7 @@ namespace SILDMS.Web.UI.Controllers
             var tempdata = TempData["ClientAprvBill"];
             string WoinfoID = string.Empty;
             string BillCategory = string.Empty;
-            int InstallmentNo=0;
+            int InstallmentNo = 0;
             ReportType = "PDF";
             VendorBillRecvd BillRecv = new VendorBillRecvd();
             int ClientBillAprvID = 0;
@@ -481,7 +481,7 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.SetDataSource(dt);
             reportDocument.Refresh();
 
-        
+
             //reportDocument.SetParameterValue("RecmBy", BillRecv.RecommendedByName);
             //reportDocument.SetParameterValue("RecmDesig", BillRecv.RecommendedByDesignation);
 
@@ -508,8 +508,8 @@ namespace SILDMS.Web.UI.Controllers
         [SILLogAttribute]
         public async Task<dynamic> ClientQuotationApproveReport(string ReportType)
         {
-           /* TempData["ClientQutnAprv"] = MasterData;
-            TempData["ClientQutnAprvID"] = ClientQutnAprvID;*/
+            /* TempData["ClientQutnAprv"] = MasterData;
+             TempData["ClientQutnAprvID"] = ClientQutnAprvID;*/
 
             var tempdata = TempData["ClientQutnAprv"];
             string WoinfoID = string.Empty;
@@ -1105,7 +1105,7 @@ namespace SILDMS.Web.UI.Controllers
                 return null;
             }
         }
-     
+
         public ActionResult FinalClientBillReport()
         {
             return View();
@@ -1117,9 +1117,9 @@ namespace SILDMS.Web.UI.Controllers
         {
             DataTable dt = new DataTable();
 
-            await Task.Run(() => _reportService.FinalClientBillReport(model.ClientID,model.BillReceiveFromDate, model.BillReceiveToDate, out dt));
+            await Task.Run(() => _reportService.FinalClientBillReport(model.ClientID, model.BillReceiveFromDate, model.BillReceiveToDate, out dt));
 
-           
+
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
             ReportPath = ReportPath + "/rptClientFinalBillPayment.rpt";
@@ -1135,7 +1135,7 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.SetParameterValue("rptName", rptHeaderName);
             reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
             //string reportName = GetCompanyShortName(model.ClientName) + "-" + "ChequeOrEFTInfoVendorWise";
-            string reportName = "Bill Receive Report"+' '+ model.ClientName;
+            string reportName = "Bill Receive Report" + ' ' + model.ClientName;
 
             if (model.ButtonType == "Preview")
                 reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
@@ -1155,7 +1155,7 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.Dispose();
             return View();
         }
-        
+
         public ActionResult FinalClientDueBillReport()
         {
             return View();
@@ -1223,16 +1223,6 @@ namespace SILDMS.Web.UI.Controllers
 
             await Task.Run(() => _reportService.OutputVatStatementReport(model.BillReceiveFromDate, model.BillReceiveToDate, out dt));
 
-        public ActionResult MonthWiseVendorFinalBillPayment()
-        {
-            return View();
-        }
-        [Authorize]
-        [HttpPost]
-        [SILLogAttribute]
-        public async Task<dynamic> MonthWiseVendorFinalBillPayment(string VendorID, string CertificateFromDate)
-        {
-            DataTable dt = new DataTable();
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
@@ -1250,7 +1240,6 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
             reportDocument.SetParameterValue("from", string.IsNullOrEmpty(model.BillReceiveFromDate) ? "" : model.BillReceiveFromDate);
             reportDocument.SetParameterValue("to", string.IsNullOrEmpty(model.BillReceiveToDate) ? "" : model.BillReceiveToDate);
-            await Task.Run(() => _reportService.MonthWiseVendorFinalBillPayment(VendorID, CertificateFromDate, out dt));
 
 
             //string reportName = GetCompanyShortName(model.ClientName) + "-" + "ChequeOrEFTInfoVendorWise";
@@ -1384,12 +1373,18 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
+        public ActionResult MonthWiseVendorFinalBillPayment()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> MonthWiseVendorFinalBillPayment(string VendorID, string CertificateFromDate)
+        {
+            DataTable dt = new DataTable();
 
-
-
-
-
-
+            await Task.Run(() => _reportService.MonthWiseVendorFinalBillPayment(VendorID, CertificateFromDate, out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
@@ -1405,6 +1400,14 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.Dispose();
             return View();
         }
+
+
+
+
+
+
+
+
 
     }
 }
