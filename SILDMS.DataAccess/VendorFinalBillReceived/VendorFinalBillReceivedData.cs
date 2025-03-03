@@ -61,6 +61,8 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         VATPercentage = reader.GetToDecimal("VatPercnt"),
                         BillType = reader.GetString("BillType"),
                         BillCategory = reader.GetString("BillCategory"),
+                        ContractNo = reader.GetString("ContractNo"),
+                        ContractDate = reader.GetString("ContractDate"),
 
                         VendorBillDate = reader.IsNull("VendorBillDate") ? string.Empty : reader.GetString("VendorBillDate"),
                         Note= reader.IsNull("Note") ? string.Empty : reader.GetString("Note")

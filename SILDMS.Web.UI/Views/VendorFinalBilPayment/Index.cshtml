@@ -52,45 +52,8 @@
 
     <div class="box-body " style="margin: 1%; padding: 5px 5px 5px 5px;" data-ng-disabled="">
 
-        <div class="modal-body table-responsive" ng-if="q===1">
-            <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                <thead>
-                    <tr>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Name</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Vendor Name</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">PONo</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">PO Date</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('LastDateofQuotation')">Po Amount</th>
-                        <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
-                    </tr>
-
-                </thead>
-                <tbody>
-                    <tr ng-repeat="row in VendorReqDisplayedCollection">
-
-                        <td class="hidden">{{row.ClientID}}</td>
-                        <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
-                        <td class="hidden">{{row.VendorID}}</td>
-                        <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
-                        <td class="hidden">{{row.VendorReqID}}</td>
-                        <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.PoNo}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.PoAprvDate}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.POAmount}}</td>
-                        <td>
-                            <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorReqSelect(row)"><i class="fa fa-edit"></i> Select</button>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="7" class="text-center">
-                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-        <div class="row" ng-show="p==1">
+       
+        <div class="row" >
             <div class="row">
                 <div class="col-lg-3 ">
                     <div class="form-group">
@@ -675,6 +638,72 @@
         </div>
     </div>
 
+
+    <div id="VendorReqInfoModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Vendor PO Information</h3>
+                </div>
+                <div class="modal-body table-responsive">
+                    <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Name</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Vendor Name</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">PONo</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">PO Date</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('LastDateofQuotation')">Po Amount</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in VendorReqDisplayedCollection">
+
+                                <td class="hidden">{{row.ClientID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
+                                <td class="hidden">{{row.VendorID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
+                                <td class="hidden">{{row.VendorReqID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.PoNo}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.PoAprvDate}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.POAmount}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorReqSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
     <div id="SearchVendorQutnModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -855,7 +884,9 @@
             BillCategory: "",
             ClientReqNo: "",
             ClientReqID: "",
-            VendorFinalBilPaymentID:""
+            VendorFinalBilPaymentID: "",
+            ContractDate: "",
+            ContractNo: "",
         }
         $scope.VendorQutn.TDS = 'MCOM';
 
@@ -994,8 +1025,9 @@
             $scope.VendorQutn.WOInstallmentAmt = tableRow.WOInstallmentAmt;
             $scope.VendorQutn.BillType = tableRow.BillType;
             $scope.VendorQutn.BillCategory = tableRow.BillCategory; 
+            $scope.VendorQutn.ContractDate = tableRow.ContractDate;
+            $scope.VendorQutn.ContractNo = tableRow.ContractNo;
 
-            $scope.p = 1;
 
             $('#VendorReqInfoModal').modal('hide');
         };
@@ -1155,12 +1187,13 @@
             $scope.VendorQutn.TDS = tableRow.TDS; 
             $scope.VendorQutn.VDS = tableRow.VDS; 
 
-           
+            $scope.VendorQutn.ContractDate = tableRow.ContractDate;
+            $scope.VendorQutn.ContractNo = tableRow.ContractNo;
 
 
 
             $scope.q = 2;
-            $scope.p = 1;
+      
 
             $('#SearchVendorQutnModal').modal('hide');
         };

@@ -68,6 +68,8 @@ namespace SILDMS.DataAccess.RcmdFinalBillRcvd
                         POInstallmentAmt = reader.GetDouble("POInstallmentAmt"),
                         BillType = reader.GetString("BillType"),
                         BillCategory = reader.GetString("BillCategory"),
+                        ContractNo = reader.GetString("ContractNo"),
+                        ContractDate = reader.GetString("ContractDate"),
 
 
 
@@ -124,6 +126,8 @@ namespace SILDMS.DataAccess.RcmdFinalBillRcvd
                         POInstallmentAmt = reader.GetDouble("POInstallmentAmt"),
                         BillType = reader.GetString("BillType"),
                         BillCategory = reader.GetString("BillCategory"),
+                        ContractNo = reader.GetString("ContractNo"),
+                        ContractDate = reader.GetString("ContractDate"),
 
 
                     }).ToList();
@@ -196,6 +200,8 @@ namespace SILDMS.DataAccess.RcmdFinalBillRcvd
                     db.AddInParameter(dbCommandWrapper, "@POInstallmentAmt", SqlDbType.Decimal, billRecv.POInstallmentAmt);
                     db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, billRecv.BillType);
                     db.AddInParameter(dbCommandWrapper, "@BillCategory", SqlDbType.NVarChar, billRecv.BillCategory);
+                    db.AddInParameter(dbCommandWrapper, "@ContractNo", SqlDbType.NVarChar, billRecv.ContractNo);
+                    db.AddInParameter(dbCommandWrapper, "@ContractDate", SqlDbType.NVarChar, billRecv.ContractDate);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);

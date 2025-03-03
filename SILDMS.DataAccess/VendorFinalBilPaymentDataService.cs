@@ -86,10 +86,14 @@ namespace SILDMS.DataAccess
                         PayDate=reader.GetString("PayDate"),
                         TDSPercentage=reader.GetToDecimal("TDSPercnt"),
                         TDSAmount = reader.GetToDecimal("TDSAmount"),
-                        TDS = reader.GetString("TDS"),
-                        VDS = reader.GetString("VDS")
-                      
                        
+                        TDS = reader.GetString("TDS"),
+                        VDS = reader.GetString("VDS"),
+                        ContractNo = reader.GetString("ContractNo"),
+                        ContractDate = reader.GetString("ContractDate"),
+
+
+
 
 
 
@@ -157,8 +161,10 @@ namespace SILDMS.DataAccess
                         BillCategory = reader.GetString("BillCategory"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
-                       
-                      
+                        ContractNo = reader.GetString("ContractNo"),
+                        ContractDate = reader.GetString("ContractDate"),
+
+
 
                     }).ToList();
                 }
@@ -254,7 +260,8 @@ namespace SILDMS.DataAccess
 
                     db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.NVarChar, billRecv.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, billRecv.Action);
-                    
+                    db.AddInParameter(dbCommandWrapper, "@ContractNo", SqlDbType.NVarChar, billRecv.ContractNo);
+                    db.AddInParameter(dbCommandWrapper, "@ContractDate", SqlDbType.NVarChar, billRecv.ContractDate);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
