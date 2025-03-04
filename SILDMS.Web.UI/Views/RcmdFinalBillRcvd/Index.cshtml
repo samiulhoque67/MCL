@@ -43,53 +43,8 @@
 
     <div class="box-body " style="margin: 1%; padding: 5px 5px 5px 5px;" data-ng-disabled="">
 
-        <div class="modal-body table-responsive" ng-if="q===1">
-            <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                <thead>
-                    <tr>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Name</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Vendor Name</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">PONo</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">PO Date</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('LastDateofQuotation')">Po Amount</th>
-                        @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>*@
-                        @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>*@
-                        <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
-                    </tr>
-
-                </thead>
-                <tbody>
-                    <tr ng-repeat="row in VendorReqDisplayedCollection">
-
-                        <td class="hidden">{{row.ClientID}}</td>
-                        <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
-                        <td class="hidden">{{row.VendorID}}</td>
-                        <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
-                        <td class="hidden">{{row.VendorReqID}}</td>
-                        <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.PoNo}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.PoAprvDate}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.POAmount}}</td>
-                        @*<td class="hidden">{{row.ClientAddressID}}</td>*@
-                        @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                            <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                {{row.Status == '1'? 'Active':'InActive'}}
-                            </span>
-                        </td>*@
-                        <td>
-                            <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorReqSelect(row)"><i class="fa fa-edit"></i> Select</button>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="7" class="text-center">
-                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-        <div class="row" ng-show="p==1">
+     
+        <div class="row" >
             <div class="row">
                 <div class="col-lg-3 ">
                     <div class="form-group">
@@ -102,8 +57,8 @@
                     </div>
                 </div>
                 @*<div class="col-lg-1">
-                    <button type="button" data-ng-click="ShowVendorReqList()" class="form-control">Search</button>
-                </div>*@
+                        <button type="button" data-ng-click="ShowVendorReqList()" class="form-control">Search</button>
+                    </div>*@
             </div>
 
             <div class="row">
@@ -173,53 +128,53 @@
             </div>
             <!--<div class="row">-->
             @*<div class="col-lg-3">
-            <div class="form-group">
-                <label>Vendor Quotation No.:</label>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="form-group">
-                <input id="VendorQutnNo" name="VendorQutnNo" type="text" class="form-control" placeholder="Vendor Quotation No" ng-model="VendorQutn.VendorQutnNo" />
-            </div>
-        </div>*@
+                    <div class="form-group">
+                        <label>Vendor Quotation No.:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VendorQutnNo" name="VendorQutnNo" type="text" class="form-control" placeholder="Vendor Quotation No" ng-model="VendorQutn.VendorQutnNo" />
+                    </div>
+                </div>*@
 
             <!--<div class="col-lg-3">
-            <div class="form-group">
-                <label>Quotation No:</label>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="form-group">
-                <input id="AutoVendorQutnNo" name="AutoVendorQutnNo" type="text" class="form-control" placeholder="Quotation No" ng-model="VendorQutn.VendorQutnNo" ng-readonly="true" />
-            </div>
-        </div>
+                    <div class="form-group">
+                        <label>Quotation No:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="AutoVendorQutnNo" name="AutoVendorQutnNo" type="text" class="form-control" placeholder="Quotation No" ng-model="VendorQutn.VendorQutnNo" ng-readonly="true" />
+                    </div>
+                </div>
 
-        <div class="col-lg-2">
-            <div class="form-group">
-                <label>Quotation Date</label>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="form-group">
-                <input id="QuotationDate" name="QuotationDate" type="text" class="DatePicker form-control" placeholder="Quotation Date" ng-model="VendorQutn.QuotationDate" />
-            </div>
-        </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Quotation Date</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="QuotationDate" name="QuotationDate" type="text" class="DatePicker form-control" placeholder="Quotation Date" ng-model="VendorQutn.QuotationDate" />
+                    </div>
+                </div>
 
-    </div>-->
+            </div>-->
             @*<div class="row">
 
 
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>Quotation Received Date:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="QutnReceivedDate" name="QutnReceivedDate" type="text" class="DatePicker form-control" placeholder="Quotation Received Date" ng-model="VendorQutn.QutnReceivedDate" />
-                </div>
-            </div>
-        </div>*@
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label>Quotation Received Date:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="QutnReceivedDate" name="QutnReceivedDate" type="text" class="DatePicker form-control" placeholder="Quotation Received Date" ng-model="VendorQutn.QutnReceivedDate" />
+                        </div>
+                    </div>
+                </div>*@
 
             <div class="row">
                 <div class="col-lg-3 ">
@@ -351,6 +306,34 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Contract No.:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="ContractNo" name="ContractNo" type="text" class="form-control" placeholder="Contract No" ng-model="VendorQutn.ContractNo" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Contract Date:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="ContractDate" name="ContractDate" type="text" class="DatePicker form-control" placeholder="Contract Date" ng-model="VendorQutn.ContractDate" />
+                    </div>
+                </div>
+
+
+            </div>
+
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -479,7 +462,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="CommissionPercentage1" name="CommissionPercentage1" type="text" class="form-control" placeholder="Commission Percentage" ng-model="VendorQutn.CommissionPercentage1"  />
+                        <input id="CommissionPercentage1" name="CommissionPercentage1" type="text" class="form-control" placeholder="Commission Percentage" ng-model="VendorQutn.CommissionPercentage1" />
                     </div>
                 </div>
 
@@ -530,76 +513,76 @@
 
 
             @*<div class="row">
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <label>VAT (%):</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="VATPercentage" name="VATPercentage" type="text" class="form-control" placeholder="VAT Percentage" ng-model="VendorQutn.VATPercentage" ng-change="calculateAmounts()" />
-                </div>
-            </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>VAT (%):</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="VATPercentage" name="VATPercentage" type="text" class="form-control" placeholder="VAT Percentage" ng-model="VendorQutn.VATPercentage" ng-change="calculateAmounts()" />
+                        </div>
+                    </div>
 
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>Commission (%):</label>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label>Commission (%):</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="CommissionPercentage" name="CommissionPercentage" type="text" class="form-control" placeholder="Commission Percentage" ng-model="VendorQutn.CommissionPercentage" ng-change="calculateCommission()" />
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="CommissionPercentage" name="CommissionPercentage" type="text" class="form-control" placeholder="Commission Percentage" ng-model="VendorQutn.CommissionPercentage" ng-change="calculateCommission()" />
-                </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <label>VAT Amount:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="VATAmount" name="VATAmount" type="text" class="form-control" placeholder="VAT Amount" ng-model="VendorQutn.VATAmount" ng-readonly="true" />
-                </div>
-            </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>VAT Amount:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="VATAmount" name="VATAmount" type="text" class="form-control" placeholder="VAT Amount" ng-model="VendorQutn.VATAmount" ng-readonly="true" />
+                        </div>
+                    </div>
 
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>Commission Amount:</label>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label>Commission Amount:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="CommissionAmount" name="CommissionAmount" type="text" class="form-control" placeholder="Commission Amount" ng-model="VendorQutn.CommissionAmount" ng-readonly="true" />
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="CommissionAmount" name="CommissionAmount" type="text" class="form-control" placeholder="Commission Amount" ng-model="VendorQutn.CommissionAmount" ng-readonly="true" />
-                </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <label>Total Bill Amount:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="TotalBillAmount" name="TotalBillAmount" type="text" class="form-control" placeholder="Total Bill Amount" ng-model="VendorQutn.TotalBillAmount" ng-readonly="true" />
-                </div>
-            </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Total Bill Amount:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="TotalBillAmount" name="TotalBillAmount" type="text" class="form-control" placeholder="Total Bill Amount" ng-model="VendorQutn.TotalBillAmount" ng-readonly="true" />
+                        </div>
+                    </div>
 
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>Net Payable Amount:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="NetPayableAmount" name="NetPayableAmount" type="text" class="form-control" placeholder="Net Payable Amount" ng-model="VendorQutn.NetPayableAmount" ng-readonly="true" />
-                </div>
-            </div>
-        </div>*@
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label>Net Payable Amount:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="NetPayableAmount" name="NetPayableAmount" type="text" class="form-control" placeholder="Net Payable Amount" ng-model="VendorQutn.NetPayableAmount" ng-readonly="true" />
+                        </div>
+                    </div>
+                </div>*@
 
             <div class="row">
 
@@ -683,8 +666,70 @@
     </div>
 
 
-     
- 
+    <div id="VendorReqInfoModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Vendor PO Information</h3>
+                </div>
+                <div class="modal-body table-responsive">
+                    <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Name</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Vendor Name</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">PONo</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">PO Date</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('LastDateofQuotation')">Po Amount</th>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>*@
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>*@
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in VendorReqDisplayedCollection">
+
+                                <td class="hidden">{{row.ClientID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
+                                <td class="hidden">{{row.VendorID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
+                                <td class="hidden">{{row.VendorReqID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.PoNo}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.PoAprvDate}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.POAmount}}</td>
+                                @*<td class="hidden">{{row.ClientAddressID}}</td>*@
+                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                            {{row.Status == '1'? 'Active':'InActive'}}
+                        </span>
+                    </td>*@
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorReqSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div id="SearchVendorQutnModal" class="modal fade">
         <div class="modal-dialog">
@@ -877,7 +922,9 @@
             BillType: "",
             BillCategory: "",
             CommissionPercentage1: "",
-            CommissionAmount1: ""
+            CommissionAmount1: "",
+            ContractDate: "", 
+            ContractNo: ""
           
 
         }
@@ -1229,7 +1276,8 @@
             $scope.VendorQutn.AdvancePaidID = tableRow.AdvancePaidID;
             $scope.VendorQutn.RAWO = tableRow.RAWO;
 
-
+            $scope.VendorQutn.ContractDate = tableRow.ContractDate;
+            $scope.VendorQutn.ContractNo = tableRow.ContractNo;
             $scope.VendorQutn.POInstallmentID = tableRow.POInstallmentID;
             $scope.VendorQutn.POInstallmentNo = tableRow.POInstallmentNo;
 
@@ -1239,7 +1287,7 @@
 
 
 
-            $scope.p = 1;
+       
 
             //$scope.VendorQutn.SubmissionDate = row.SubmissionDate;
             //$scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;
@@ -1375,7 +1423,8 @@
             $scope.VendorQutn.WOAmt = tableRow.WOAmt;
             $scope.VendorQutn.AdvancePaidID = tableRow.AdvancePaidID;
             $scope.VendorQutn.Note = tableRow.Note;
-
+            $scope.VendorQutn.ContractDate = tableRow.ContractDate;
+            $scope.VendorQutn.ContractNo = tableRow.ContractNo;
             $scope.VendorQutn.POInstallmentID = tableRow.POInstallmentID;
             $scope.VendorQutn.POInstallmentNo = tableRow.POInstallmentNo;
 
@@ -1384,7 +1433,7 @@
             $scope.VendorQutn.BillCategory = tableRow.BillCategory; 
 
             $scope.q = 2;
-            $scope.p = 1;
+           
 
             $('#SearchVendorQutnModal').modal('hide');
         };
@@ -1557,6 +1606,7 @@
             //    return;
             //}
 
+            $scope.VendorQutn.ContractDate = $('#ContractDate').val();
             $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
        /*     $scope.VendorQutn.ReceivedDate = $('#ReceivedDate').val();*/
             $scope.VendorQutn.VendorBillDate = $('#VendorBillDate').val();
@@ -1646,6 +1696,19 @@
                 .finally(function () {
                     $scope.loading = false; // Hide the loading indicator
                 });
+        };
+        $scope.ShowVendorReqList = function () {
+            $http.get("/VendorFinalBillReceived/GetShowVendorReqList")
+                .success(function (response) {
+                    console.log(response);
+                    $scope.VendorReqList = response.VendorReqList;
+                    $scope.VendorReqDisplayedCollection = [].concat($scope.VendorReqList);
+                    console.log($scope.VendorReqDisplayedCollection);
+                    $scope.loading = false;
+                })
+                .error(function () { });
+
+            $('#VendorReqInfoModal').modal('show');
         };
 
 
