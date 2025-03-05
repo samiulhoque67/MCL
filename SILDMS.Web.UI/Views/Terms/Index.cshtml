@@ -19,25 +19,29 @@
 
 <div class="box box-primary box-body" ng-controller="TermsCtrl">
     @*Master buttons*@
-    <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
-        <i class="fa fa-user"></i>
-        <h3 style="font-family: Verdana" class="box-title">Terms & Conditions Information</h3>
+    <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
+        <h2 class="box-title" style="font-family: 'MV Boli'; font-weight: 500;">Terms & Conditions Information</h2>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
+                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom" ng-disabled="btnRefresh">
+                        <i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh
+                    </button>
                 </div>
                 <div ng-hide="toView == 1" class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-edit" style="padding-right: 5px"></i> Update   @*{{ vmTermsMst.TermsID ? 'Update' : 'Save' }}*@</button>
+                    <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="btnSave">
+                        <i class="fa fa-save" style="padding-right: 5px"></i>Update
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
+
     @*Form Name Field*@
     <div class="row" style=" margin-right: -15px; margin-left: 20px; margin-top: 20px;">
- 
+
         <div class="col-sm-2 col-md-2 col-lg-2">
             <div class="form-group">
                 <label for="FormName">Form Name:</label>
@@ -185,21 +189,21 @@
                         </div>
                     </div>
 
-                @*    <div class="row" style="position: relative; top: -3px; margin-bottom: 5px;">
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2">
-                            <div class="form-group">
-                                <label for="ItemStatus">Status:</label>
+                    @*    <div class="row" style="position: relative; top: -3px; margin-bottom: 5px;">
+                            <div class="col-sm-1 col-md-1 col-lg-1">
                             </div>
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2">
-                            <select data-ng-model="vmTermsItem.ItemStatus" class="form-control">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-                    </div>*@
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <div class="form-group">
+                                    <label for="ItemStatus">Status:</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <select data-ng-model="vmTermsItem.ItemStatus" class="form-control">
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+                        </div>*@
                 </div>
                 <div class="modal-footer">
                     <div class="col-sm-12 col-md-12 col-lg-12">
@@ -276,25 +280,25 @@
 
 
     </div>
-        <div class="modal fade" id="deleteTermsItemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
-                    <div class="modal-header" style="height: 46px;">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Delete Selected Item</h4>
-                    </div>
-                    <div class="modal-body" style="height: 80px;">
-                        Are you sure to delete this item?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: red;" ng-click="deleteTermsItem()">Yes</button>
-                        <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
-                    </div>
+    <div class="modal fade" id="deleteTermsItemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
+                <div class="modal-header" style="height: 46px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Delete Selected Item</h4>
+                </div>
+                <div class="modal-body" style="height: 80px;">
+                    Are you sure to delete this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: red;" ng-click="deleteTermsItem()">Yes</button>
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
                 </div>
             </div>
         </div>
-
     </div>
+
+</div>
 
 <script type="text/javascript">
 
