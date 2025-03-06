@@ -6,34 +6,27 @@
     @using (Html.BeginForm("MonthWiseVendorFinalBillPayment", "../Reports", System.Web.Mvc.FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
     {
         <!-- box-header -->
-        <div class="box-header with-border">
-            <i class="fa fa-user"></i>
-            <h3 class="box-title">Month wise Vendor Payment History</h3>
+        <div class="box-header with-border bg-light-blue-gradient" style="height: 38px;">
+            <h3 class="box-title" style="font-family: 'MV Boli'; font-weight: 500;">Month wise Vendor Payment History</h3>
+
             <div class="box-tools pull-right">
                 <div class="row">
-                    <div class="col-lg-2">
-
-                    </div>
-                    <div class="col-lg-2">
-                    </div>
-                    <div class="col-lg-2">
-
-                    </div>
-                    <div class="col-lg-2">
-                        <button ng-disabled="btnPreview" type="submit" id="btnPreview" data-ng-click="RequiredCheck($event)" name="ButtonType" value="Preview" class="btn btn-flat btn-success pull-right">
+                    
+                    <div class="col-lg-6">
+                        <button ng-disabled="btnPreview" type="submit" id="btnPreview" data-ng-click="RequiredCheck($event)" name="ButtonType" value="Preview" class="button-custom pull-right">
                             <i class="fa fa-print"></i>Preview
                         </button>
                     </div>
-                    <div class="col-lg-2">
 
-                    </div>
-
-                    <div class="col-lg-2">
-                        <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Refresh</button>
+                    <div class="col-lg-6">
+                        <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable()" class="button-custom pull-right" ng-disabled="loading">
+                            <i class="fa fa-refresh"></i> Refresh
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+
         <!-- /.box-header -->
         <div class="box-body">
             <div class="row">
@@ -45,13 +38,13 @@
                         <input ng-show="false" type="text" id="VendorID" name="VendorID" class="form-control" data-ng-model="Vendor.VendorID" />
                         <input type="text" id="txtVendorName" name="VendorNameDisplay" class="form-control" data-ng-model="Vendor.VendorName" readonly required placeholder="" />
                     </div>
-                    </div>
-                    <div class="col-sm-1 col-md-1 col-lg-1">
-                        <div class="input-group">
-                            <input class="btn btn-flat btn-default" ng-click="ShowInvoicingPartyList()" value="Search" style="width:80px;" ng-disabled="disable">
-                        </div>
+                </div>
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                    <div class="input-group">
+                        <input class="btn btn-flat btn-default" ng-click="ShowInvoicingPartyList()" value="Search" style="width:80px;" ng-disabled="disable">
                     </div>
                 </div>
+            </div>
 
             <div class="row" style="position:relative;top:10px">
                 <div class="col-sm-2 col-md-2 col-lg-2">

@@ -35,10 +35,10 @@ namespace SILDMS.DataAccess
                 dtTermsItem.Rows.Add(objDataRow);
             }
 
-            if (string.IsNullOrEmpty(vmTerms.TermsID))
-                vmTerms.Action = "add";
-            else
-                vmTerms.Action = "edit";
+            //if (string.IsNullOrEmpty(vmTerms.TermsID))
+            //    vmTerms.Action = "add";
+            //else
+            //    vmTerms.Action = "edit";
             string errorNumber = String.Empty;
             try
             {
@@ -50,8 +50,8 @@ namespace SILDMS.DataAccess
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.NVarChar, vmTerms.TermsID);
                     db.AddInParameter(dbCommandWrapper, "@FormName", SqlDbType.NVarChar, vmTerms.FormName);
+                    db.AddInParameter(dbCommandWrapper, "@FormCode", SqlDbType.NVarChar, vmTerms.FormCode);
                     db.AddInParameter(dbCommandWrapper, "@OBS_TermsAndConditionsNew", SqlDbType.Structured, dtTermsItem);
-                    //  db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vmTerms.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 1200);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
@@ -350,9 +350,11 @@ namespace SILDMS.DataAccess
                         DataTable dt1 = ds.Tables[0];
                         FormList = dt1.AsEnumerable().Select(reader => new OBS_Form
                         {
-                            FormID = reader.GetString("FormID"), // Fixed data type issue
+                            FormCode = reader.GetString("FormCode"), // Fixed data type issue
                             FormName = reader.GetString("FormName"),
-                            FormTable = reader.GetString("FormTable")
+                            FormTable = reader.GetString("FormTable"),
+                            TermsID = reader.GetString("TermsID"),
+                            TermsItemAvailable = reader.GetString("TermsItemAvailable"),
                         }).ToList();
                     }
                 }
