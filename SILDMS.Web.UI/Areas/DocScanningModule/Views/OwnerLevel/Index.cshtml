@@ -4,44 +4,48 @@
 }
 <div class="box box-primary box-body" ng-controller="ownerCtrl" data-ng-init="init()">
     <!-- box-header -->
-    <div class="box-header with-border">
-        <i class="fa fa-user"></i>
-        <h3 class="box-title">Company List</h3>
-        <div class="box-tools pull-right">          
-            <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable(row)" class="btn btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Refresh</button>
-            <button type="button" id="btnAdd" data-ng-click="toggleAdd(row)" class="btnSave btn btn-flat btn-primary pull-right" ng-disabled="loading"> <i class="fa fa-plus"></i> Add New</button>
+    <div class="box-header with-border bg-light-blue-gradient" style="height: 38px;">
+        <h3 class="box-title" style="font-family: 'MV Boli'; font-weight: 500;">Company List</h3>
+        <div class="box-tools pull-right">
+            <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable(row)" class="button-custom pull-right" ng-disabled="loading">
+                <i class="fa fa-refresh"></i> Refresh
+            </button>
+            <button type="button" id="btnAdd" data-ng-click="toggleAdd(row)" class="button-custom btn-primary pull-right" ng-disabled="loading">
+                <i class="fa fa-plus"></i> Add New
+            </button>
         </div>
     </div>
+
     <!-- /.box-header -->
     <!-- Display OwnerLevel Table -->
     <div class="box-body table-responsive">
         <table st-table="displayedCollection" st-safe-src="getAllOwnerLevel" class="pnlView table table-condensed table-bordered table-striped table-hover">
-           <thead>
-            <tr>
-                <th st-sort="LevelName">Level Name</th>
-                <th st-sort="OwnerLevelID">Level Code</th>                   
-                @*<th st-sort="LevelAccess">Access Level</th>*@
-                <th st-sort="Status">Status</th>
-                <th>Action</th>
-            </tr>
-            <tr>
-                <th>
-                    <input st-search="LevelName" placeholder="Company" class="input-sm form-control" type="search" alt="Search" />
-                </th>
-                <th>                       
-                </th>
-                @*<th>                     
-                </th>*@
-                <th>
-                       
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-              <tbody>
-                  <tr ng-repeat="row in displayedCollection">
+            <thead>
+                <tr>
+                    <th st-sort="LevelName">Level Name</th>
+                    <th st-sort="OwnerLevelID">Level Code</th>
+                    @*<th st-sort="LevelAccess">Access Level</th>*@
+                    <th st-sort="Status">Status</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <th>
+                        <input st-search="LevelName" placeholder="Company" class="input-sm form-control" type="search" alt="Search" />
+                    </th>
+                    <th>
+                    </th>
+                    @*<th>
+                        </th>*@
+                    <th>
+
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in displayedCollection">
                     <td>{{row.LevelName | uppercase}}</td>
-                    <td class="col-lg-2 col-md-2 col-sm-2">{{row.OwnerLevelID | uppercase}}</td>                  
+                    <td class="col-lg-2 col-md-2 col-sm-2">{{row.OwnerLevelID | uppercase}}</td>
                     @*<td>{{row.LevelAccess | uppercase}}</td>*@
                     <td class="col-lg-2 col-md-2 col-sm-2 text-center">
                         <span ng-attr-class="{{row.Status ==true? 'label label-success' : 'label label-danger' }}">
@@ -52,14 +56,14 @@
                         <button type="button" class="btnEdit btn btn-sm btn-primary btn-flat" data-ng-click="toggleEdit(row)"><i class="fa fa-edit"></i> Edit</button>
                     </td>
                 </tr>
-             </tbody>
-           <tfoot>
-            <tr>
-                <td colspan="6" class="text-center">
-                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
-                </td>
-            </tr>
-           </tfoot>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6" class="text-center">
+                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </div>
     <!-- /Display OwnerLevel Table -->
@@ -82,7 +86,7 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12">
                                         <div class="form-group">
                                             <label>Company Code</label>
-                                            <input type="text" readonly data-ng-model="vmOwnerLevel.OwnerLevelID" class="form-control" 
+                                            <input type="text" readonly data-ng-model="vmOwnerLevel.OwnerLevelID" class="form-control"
                                                    id="OwnerLevelID" placeholder="System Generated Company Code" />
                                         </div>
                                     </div>
@@ -112,11 +116,11 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12">
                                         <div class="form-group">
                                             <label>Access Level</label>
-                                            <input name="accessLevel" class="form-control" type="number" value="" data-ng-model="vmOwnerLevel.LevelAccess" required/>
+                                            <input name="accessLevel" class="form-control" type="number" value="" data-ng-model="vmOwnerLevel.LevelAccess" required />
                                             <div ng-show="ownerLevel.$submitted || ownerLevel.accessLevel.$touched">
-                                                <span ng-show="ownerLevel.accessLevel.$error.required" class="label label-danger">Please enter access level</span>                                            
+                                                <span ng-show="ownerLevel.accessLevel.$error.required" class="label label-danger">Please enter access level</span>
                                             </div>
-                                        
+
                                         </div>
                                     </div>
                                 </div>
@@ -175,10 +179,10 @@
     <!-- /Delete OwnerLevel Modal -->
 
     <div id="mydiv" data-ng-show="loading">
-        <div class="overlay">  
+        <div class="overlay">
             <div class="loder">
                 <img src="~/Content/AdminLTE/img/cube.gif" /> <span class="text-bold">Loading...</span>
-            </div>            
+            </div>
         </div>
     </div>
 </div>

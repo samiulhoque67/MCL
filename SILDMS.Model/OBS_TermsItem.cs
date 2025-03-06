@@ -33,9 +33,10 @@ namespace SILDMS.Model
 
 
     public class OBS_Form {
-        public string FormID { get; set; }
+        public string FormCode { get; set; }
         public string FormName { get; set; }
         public string FormTable { get; set; }
-
+        public string TermsID { get; set; }
+        public string TermsItemAvailable { get; set; }
     }
 }

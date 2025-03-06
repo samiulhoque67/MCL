@@ -87,27 +87,38 @@
 </style>
 
 <div class="box box-primary box-body" ng-controller="PoRecomCtrl">
-    <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
-        <i class="fa fa-user"></i>
-        <h3 style="font-family: Verdana" class="box-title">Purchase Order Recommendation</h3>
+    <div class="box-header with-border bg-light-blue-gradient" style="height: 38px; border-radius: 5px;">
+        <h2 class="box-title" style="font-family: 'MV Boli'; font-weight: 500;">Purchase Order Recommendation</h2>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
+                    <button class="button-custom btn-warning" type="button" data-ng-click="toggleRefreshTable()" ng-disabled="btnRefresh">
+                        <i class="fa fa-refresh" style="padding-right: 5px"></i> Refresh
+                    </button>
                 </div>
+
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="SearchVendorReqModal()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
+                    <button class="button-custom btn-primary" type="button" data-ng-click="SearchVendorReqModal()" ng-disabled="btnSearch">
+                        <i class="fa fa-search" style="padding-right: 5px"></i> Search
+                    </button>
                 </div>
+
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>   {{ VendorReq.VendorReqID ? 'Update' : 'Save' }}</button>
+                    <button class="button-custom btn-primary" type="button" data-ng-click="Post()" ng-disabled="btnSave">
+                        <i class="fa fa-save" style="padding-right: 5px"></i> {{ VendorReq.VendorReqID ? 'Update' : 'Save' }}
+                    </button>
                 </div>
+
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Cancel()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>Cancel</button>
+                    <button class="button-custom btn-danger" type="button" data-ng-click="Cancel()" ng-disabled="btnSave">
+                        <i class="fa fa-close" style="padding-right: 5px"></i> Cancel
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
 
     @*<div class="row">
             <div class="col-md-2">
@@ -312,266 +323,266 @@
     </div>-->
 
 
-<div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="VenCSItemGridDisplayCollection.length > 0">
-    <div class="row">
-        <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-            <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" style="width:100%;" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                <thead>
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="VenCSItemGridDisplayCollection.length > 0">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" style="width:100%;" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
 
-                    <tr>
+                        <tr>
 
-                        <th style="text-align: left;" st-sort="">Item Name</th>
-                        @*<th style="text-align: left;" st-sort="">ReqQnty</th>
-             
-                        <th style="text-align: left;" st-sort="">ReqUnit</th>*@
-                        <th style="text-align: left;" st-sort="">QutnQnty</th>
-                        <th style="text-align: left;" st-sort="">POQnty</th>
+                            <th style="text-align: left;" st-sort="">Item Name</th>
+                            @*<th style="text-align: left;" st-sort="">ReqQnty</th>
 
-                        <th style="text-align: left;" st-sort="">QutnPrice</th>
-                        <th style="text-align: left;" st-sort="">PoPrice</th>
-                        <th style="text-align: left;" st-sort="">QutnAmt</th>
-                        <th style="text-align: left;" st-sort="">PoAmt</th>
-                        <th style="text-align: left;" st-sort="">VatPerc</th>
-                        <th style="text-align: left;" st-sort="">VatAmt</th>
-                        <th style="text-align: left;" st-sort="">PoVatAmt</th>
-                        <th style="text-align: left;" st-sort="">TolAmt</th>
-                        <th style="text-align: left;" st-sort="">PoTotalAmt</th>
-                        @*<th style="text-align: left;">Action</th>*@
-                    </tr>
-                    @*<tr>
-                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                </tr>*@
-                </thead>
-                <tbody>
-                    <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
-                        <td class="hidden">{{row.index+1}}</td>
-                        <td class="hidden">{{row.VendorCSInfoItemID}}</td>
-                        <td class="hidden">{{row.VendorCSInfoID}}</td>
-                        @*<td class="col-lg-1">{{ row.ServiceItemID }} </td>*@
-                        <td class="col-lg-1">{{row.ServiceItemName}}</td>
+                                <th style="text-align: left;" st-sort="">ReqUnit</th>*@
+                            <th style="text-align: left;" st-sort="">QutnQnty</th>
+                            <th style="text-align: left;" st-sort="">POQnty</th>
 
-                        @*<td class="col-lg-1">{{row.ReqQnty | number:2}}</td>
-                 
-                        <td class="col-lg-1">{{row.ReqUnit}}</td>*@
-                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1">
-                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoQty" ng-value="0" ng-readonly="true" />
-                        </td>
+                            <th style="text-align: left;" st-sort="">QutnPrice</th>
+                            <th style="text-align: left;" st-sort="">PoPrice</th>
+                            <th style="text-align: left;" st-sort="">QutnAmt</th>
+                            <th style="text-align: left;" st-sort="">PoAmt</th>
+                            <th style="text-align: left;" st-sort="">VatPerc</th>
+                            <th style="text-align: left;" st-sort="">VatAmt</th>
+                            <th style="text-align: left;" st-sort="">PoVatAmt</th>
+                            <th style="text-align: left;" st-sort="">TolAmt</th>
+                            <th style="text-align: left;" st-sort="">PoTotalAmt</th>
+                            @*<th style="text-align: left;">Action</th>*@
+                        </tr>
+                        @*<tr>
+                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                            </tr>*@
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td class="hidden">{{row.index+1}}</td>
+                            <td class="hidden">{{row.VendorCSInfoItemID}}</td>
+                            <td class="hidden">{{row.VendorCSInfoID}}</td>
+                            @*<td class="col-lg-1">{{ row.ServiceItemID }} </td>*@
+                            <td class="col-lg-1">{{row.ServiceItemName}}</td>
 
-                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnPrice | number:2}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1">
-                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoPrice" ng-value="0" ng-readonly="true" />
-                        </td>
-                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnAmt| number:2}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1">
-                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoAmt" ng-value="0" ng-readonly="true" />
-                        </td>
-                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatPerc | number:2}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatAmt | number:2}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1">
-                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoVatAmt" ng-value="0" ng-readonly="true" />
-                        </td>
-                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:1}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1">
-                            <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoTolAmt" ng-value="0" ng-readonly="true" />
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                    </tr>
-                </tfoot>
-            </table>
+                            @*<td class="col-lg-1">{{row.ReqQnty | number:2}}</td>
+
+                                <td class="col-lg-1">{{row.ReqUnit}}</td>*@
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoQty" ng-value="0" ng-readonly="true" />
+                            </td>
+
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnPrice | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoPrice" ng-value="0" ng-readonly="true" />
+                            </td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnAmt| number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoAmt" ng-value="0" ng-readonly="true" />
+                            </td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatPerc | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatAmt | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoVatAmt" ng-value="0" ng-readonly="true" />
+                            </td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:1}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoTolAmt" ng-value="0" ng-readonly="true" />
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
+
+        <div class="row">
+
+
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Bill Category:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" ng-model="VendorCSInfo.Category" value="Normal" ng-disabled="VendorCSInfo.Category" /> Normal
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="VendorCSInfo.Category" value="plusminus" ng-disabled="VendorCSInfo.Category" /> Plus Minus
+                        </label>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Bill Type:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-disabled="VendorCSInfo.BillType">
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" ng-model="VendorCSInfo.BillType" value="Default" ng-disabled="VendorCSInfo.BillType" /> Default
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="VendorCSInfo.BillType" value="Installment" ng-disabled="VendorCSInfo.BillType" /> Installment
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-lg-2" ng-show="VendorCSInfo.BillType === 'Installment'">
+                    <div class="form-group">
+                        <label>Installment:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-show="VendorCSInfo.BillType === 'Installment'" ng-readonly="true">
+                    <div class="form-group">
+                        <input id="Installment" name="Installment" type="text" class="form-control" placeholder="Number of Installment" ng-model="VendorCSInfo.Installment" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2" ng-show="VendorCSInfo.BillType === 'Installment'">
+                    <div class="form-group">
+                        <label>Installment Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-show="VendorCSInfo.BillType === 'Installment'" ng-readonly="true">
+                    <div class="form-group">
+                        <input id="InstalledAmount" name="InstalledAmount" type="text" class="form-control" placeholder="Installed Amount" ng-model="VendorCSInfo.InstalledAmount" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>PO No:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="AutoPoNo" name="AutoPoNo" type="text" class="form-control" placeholder="Auto PO  No" ng-model="VendorCSInfo.AutoPoNo" ng-readonly="true" />
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>PO Date</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="PO Date" ng-model="VendorCSInfo.CSRecDate" ng-disabled="VendorCSInfo.CSRecDate" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>PO Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="POAmount" name="POAmount" type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.PoAmount" ng-readonly="true" />
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Recommended Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="RecommendedAmount" name="RecommendedAmount" type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.RecommendedAmount" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>PO Recom Date</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="PORecDate" name="PORecDate" type="text" class="DatePicker form-control" placeholder="PO Date" ng-model="VendorCSInfo.PORecDate" />
+                    </div>
+                </div>
+
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="QuotationFor">Note:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+
+
+
+
+            @*<div class="row">
+                    <div class="col-sm-1 col-md-1 col-lg-1">
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="QuotationFor">Note:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
+                        </div>
+                    </div>
+
+                </div>*@
+
+
+        </div>
+
+
+
+
     </div>
 
-    <div class="row">
 
-
-        <div class="row">
-            <div class="col-sm-1 col-md-1 col-lg-1">
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>Bill Category:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group" >
-                    <label>
-                        <input type="radio" ng-model="VendorCSInfo.Category" value="Normal" ng-disabled="VendorCSInfo.Category" /> Normal
-                    </label>
-                    <label>
-                        <input type="radio" ng-model="VendorCSInfo.Category" value="plusminus" ng-disabled="VendorCSInfo.Category" /> Plus Minus
-                    </label>
-                </div>
-            </div>
-
-
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>Bill Type:</label>
-                </div>
-            </div>
-            <div class="col-lg-3" ng-disabled="VendorCSInfo.BillType" >
-                <div class="form-group">
-                    <label>
-                        <input type="radio" ng-model="VendorCSInfo.BillType" value="Default" ng-disabled="VendorCSInfo.BillType" /> Default
-                    </label>
-                    <label>
-                        <input type="radio" ng-model="VendorCSInfo.BillType" value="Installment"  ng-disabled="VendorCSInfo.BillType" /> Installment
-                    </label>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row">
-            <div class="col-sm-1 col-md-1 col-lg-1">
-            </div>
-            <div class="col-lg-2" ng-show="VendorCSInfo.BillType === 'Installment'" >
-                <div class="form-group">
-                    <label>Installment:</label>
-                </div>
-            </div>
-            <div class="col-lg-3" ng-show="VendorCSInfo.BillType === 'Installment'" ng-readonly="true">
-                <div class="form-group">
-                    <input id="Installment" name="Installment" type="text" class="form-control" placeholder="Number of Installment" ng-model="VendorCSInfo.Installment"  />
-                </div>
-            </div>
-
-            <div class="col-lg-2" ng-show="VendorCSInfo.BillType === 'Installment'">
-                <div class="form-group">
-                    <label>Installment Amount:</label>
-                </div>
-            </div>
-            <div class="col-lg-3" ng-show="VendorCSInfo.BillType === 'Installment'" ng-readonly="true">
-                <div class="form-group">
-                    <input id="InstalledAmount" name="InstalledAmount" type="text" class="form-control" placeholder="Installed Amount" ng-model="VendorCSInfo.InstalledAmount" />
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-sm-1 col-md-1 col-lg-1">
-            </div>
-
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>PO No:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="AutoPoNo" name="AutoPoNo" type="text" class="form-control" placeholder="Auto PO  No" ng-model="VendorCSInfo.AutoPoNo" ng-readonly="true" />
-                </div>
-            </div>
-
-
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>PO Date</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="PO Date" ng-model="VendorCSInfo.CSRecDate" ng-disabled="VendorCSInfo.CSRecDate" />
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-sm-1 col-md-1 col-lg-1">
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>PO Amount:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="POAmount" name="POAmount" type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.PoAmount" ng-readonly="true" />
-                </div>
-            </div>
-
-
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>Recommended Amount:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="RecommendedAmount" name="RecommendedAmount" type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.RecommendedAmount" />
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-1 col-md-1 col-lg-1">
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>PO Recom Date</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="PORecDate" name="PORecDate" type="text" class="DatePicker form-control" placeholder="PO Date" ng-model="VendorCSInfo.PORecDate" />
-                </div>
-            </div>
-
-
-
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="QuotationFor">Note:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
-                </div>
-            </div>
-
-
-
-
-
-        </div>
-
-
-
-
-
-        @*<div class="row">
-            <div class="col-sm-1 col-md-1 col-lg-1">
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="QuotationFor">Note:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
-                </div>
-            </div>
-
-        </div>*@
-
-
-    </div>
-
-
-
-
-</div>
-
-    
 
     <!--<div class="col-lg-2">-->
     @*<div class="col-sm-1 col-md-1 col-lg-1">
@@ -602,8 +613,8 @@
                             <th style="text-align: left;">Action</th>
                         </tr>
                         <tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>
+                            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
@@ -622,8 +633,8 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>
+                            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                        </tr>
                     </tfoot>
                 </table>
             </div>
