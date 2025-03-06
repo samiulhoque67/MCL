@@ -771,5 +771,36 @@ namespace SILDMS.DataAccess
           
             return CSVendorList;
         }
+
+        public List<OBS_VendorCSRecmTerms> CSVendorTerms(string cSNumber)
+        {
+            string errorNumber = string.Empty;
+            List<OBS_VendorCSRecmTerms> VendorCSInfoItemList = new List<OBS_VendorCSRecmTerms>();
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSTermList"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@VendorCSRecmID", SqlDbType.VarChar, cSNumber);
+                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, "");
+                // Execute SP. 
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt1 = ds.Tables[0];
+                    VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmTerms
+                    {
+                        //VendorCSInfoTermID = reader.GetString("VendorCSInfoTermID"),
+                        //VendorCSInfoID = reader.GetString("VendorCSInfoID"),
+                        TermsID = reader.GetString("TermsID"),
+                        TermsCode = reader.GetString("TermsCode"),
+                        TermsName = reader.GetString("TermsName"),
+                        VendorID = reader.GetString("VendorID"),
+                        VendorName = reader.GetString("VendorName"),
+                  
+                    }).ToList();
+                }
+            }
+            return VendorCSInfoItemList;
+        }
     }
 }

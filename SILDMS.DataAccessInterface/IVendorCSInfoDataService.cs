@@ -27,5 +27,7 @@ namespace SILDMS.DataAccessInterface
         List<OBS_VendorCSRecmItem> GetVendorByMaterialData(string vendorReqID, string serviceItemID);
         List<Invitation> SearchCSData(string userID);
         List<OBS_VendorCSRecmItem> CSVendorData(string userID, string cSNumber);
+    
+        List<OBS_VendorCSRecmTerms> CSVendorTerms(string cSNumber);
     }
 }

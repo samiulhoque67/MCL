@@ -183,6 +183,16 @@ namespace SILDMS.Web.UI.Controllers
         }
 
 
+        public async Task<dynamic> CSVendorTerms(string CSNumber)
+        {
+            var VendorCSInfoTermList = new List<OBS_VendorCSRecmTerms>();
+            await Task.Run(() => _vendorCSInfoService.CSVendorTerms(CSNumber, out VendorCSInfoTermList));
+            var result = Json(new { VendorCSInfoTermList, msg = "VendorCSInfoTermList are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
+        }
+
+
 
 
     }

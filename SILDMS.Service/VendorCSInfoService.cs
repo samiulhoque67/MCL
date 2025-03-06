@@ -127,5 +127,11 @@ namespace SILDMS.Service
             vendorCSList = clientInfoDataService.CSVendorData(userID, cSNumber);
             return ValidationResult.Success;
         }
+
+        public ValidationResult CSVendorTerms(string cSNumber, out List<OBS_VendorCSRecmTerms> vendorCSInfoTermList)
+        {
+            vendorCSInfoTermList = clientInfoDataService.CSVendorTerms(cSNumber);
+            return ValidationResult.Success;
+        }
     }
 }
