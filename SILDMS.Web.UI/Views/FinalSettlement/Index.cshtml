@@ -17,11 +17,11 @@
     }
 </style>
 
-<div class="box box-primary box-body" ng-controller="VendorSettlementCtrl">
+<div class="box box-primary box-body" ng-controller="FinalSettlementCtrl">
 
     <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
         <i class="fa fa-user"></i>
-        <h3 style="font-family: Verdana" class="box-title">Vendor Bill Settlement </h3>
+        <h3 style="font-family: Verdana" class="box-title">Final Settlement </h3>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
@@ -29,10 +29,10 @@
                     <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="SearchVendorSettlementModal()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
+                    <button type="button" data-ng-click="SearchFinalSettlementModal()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>   {{ VendorSettlement.ClientFinalBilAprvID ? 'Update' : 'Save' }}</button>
+                    <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>   {{ FinalSettlement.ClientFinalBilAprvID ? 'Update' : 'Save' }}</button>
                 </div>
 
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
@@ -44,49 +44,59 @@
 
     <div class="box-body " style="margin: 1%; padding: 5px 5px 5px 5px;" data-ng-disabled="">
         <div class="table-responsive" ng-if="q===1">
-            <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+            <table st-table="finalSettlementDisplayedCollection" st-safe-src="finalSettlementList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                 <thead>
                     <tr>
                         <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client</th>
                         <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('WONo')">WO No</th>
                         <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('WOAmt')">WO Amount</th>
-                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ReceivedAmt')">Received Amount</th>
+                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClaimReceivedAmt')">Received Amount</th>
                         <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Vendor</th>
                         <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('PONo')">PO No</th>
                         <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('POAmt')">PO Amount</th>
-                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('POAmt')">Payment Amount</th>
-                        @*<th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('TDSAmount')">TDS Amount</th>
-                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VDSAmount')">VDS Amount</th>*@
+                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VenNetPayableAmount')">Payment Amount</th>
                         <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                     </tr>
                     <tr>
                         <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                        <th><input st-search="WONo" placeholder="Work Order No" class="input-sm form-control" type="search" /></th>
+                        <th><input st-search="WONo" placeholder="Wo No" class="input-sm form-control" type="search" /></th>
+                        <th></th>
+                        <th></th>
+                        <th><input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" /></th>
+                        <th><input st-search="PONo" placeholder="PO No" class="input-sm form-control" type="search" /></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="row in VendorReqDisplayedCollection">
-                        <td class="hidden">{{row.ClientFinalPaymentRcvdID}}</td>
+                    <tr ng-repeat="row in finalSettlementDisplayedCollection">
                         <td class="hidden">{{row.ClientID}}</td>
                         <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.ClientName}}</td>
-
                         <td class="hidden">{{row.ClientReqID}}</td>
-                        <td class="hidden">{{row.ClientReqNo}}</td>
-                        <td class="hidden">{{row.RequisitionDate}}</td>
-
+                        <td class="hidden">{{row.WOInfoID}}</td>
                         <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WONo}}</td>
                         <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WOAmt}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ReceivedAmt}}</td>
+                        <td class="hidden">{{row.ClaimReceivedAmt}}</td>
+                        <td class="hidden">{{row.ClientBillAmount}}</td>
+                        <td class="hidden">{{row.CiCommissionAmount}}</td>
+                        <td class="hidden">{{row.CiBaseAmount}}</td>
+                        <td class="hidden">{{row.AITAmount}}</td>
+                        <td class="hidden">{{row.VatAmount}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.CiReceivedAmount}}</td>
+
+                        <td class="hidden">{{row.VendorID}}</td>
                         <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.VendorName}}</td>
-                        <td class="hidden">{{row.WOInfoID}}</td>
+                        <td class="hidden">{{row.POInfoID}}</td>
                         <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.PONo}}</td>
                         <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.POAmt}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.VenPayAmt}}</td>
-                        @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.TDSAmount}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.VDSAmount}}</td>*@
+                        <td class="hidden">{{row.AdvncPaidAmt}}</td>
+                        <td class="hidden">{{row.VendorBillAmount}}</td>
+                        <td class="hidden">{{row.VenCommissionAmount}}</td>
+                        <td class="hidden">{{row.VenBaseAmount}}</td>
+                        <td class="hidden">{{row.VenVatAmount}}</td>
+                        <td class="hidden">{{row.VenTDSAmount}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.VenNetPayableAmount}}</td>
 
                         <td>
-                            <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorReqSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                            <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="togglefinalSettlementSelect(row)"><i class="fa fa-edit"></i> Select</button>
                         </td>
                     </tr>
                 </tbody>
@@ -109,7 +119,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="ClientName" name="ClientName" type="text" data-ng-model="VendorSettlement.ClientName" class="form-control" placeholder="ClientName" ng-readonly="true" />
+                        <input id="ClientName" name="ClientName" type="text" data-ng-model="FinalSettlement.ClientName" class="form-control" placeholder="ClientName" ng-readonly="true" />
                     </div>
                 </div>
                 <div class="col-lg-2 ">
@@ -119,7 +129,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorSettlement.VendorName" class="form-control" placeholder="VendorName" ng-readonly="true" />
+                        <input id="VendorName" name="VendorName" type="text" data-ng-model="FinalSettlement.VendorName" class="form-control" placeholder="VendorName" ng-readonly="true" />
                     </div>
                 </div>
             </div>
@@ -132,7 +142,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="WONo" name="WONo" type="text" data-ng-model="VendorSettlement.WONo" class="form-control" placeholder="Wo No" ng-readonly="true" />
+                        <input id="WONo" name="WONo" type="text" data-ng-model="FinalSettlement.WONo" class="form-control" placeholder="Wo No" ng-readonly="true" />
                     </div>
                 </div>
 
@@ -143,7 +153,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="PONo" name="PONo" type="text" data-ng-model="VendorSettlement.PONo" class="form-control" placeholder="PO No" ng-readonly="true" />
+                        <input id="PONo" name="PONo" type="text" data-ng-model="FinalSettlement.PONo" class="form-control" placeholder="PO No" ng-readonly="true" />
                     </div>
                 </div>
             </div>
@@ -156,7 +166,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="WOAmt" name="WOAmt" type="text" data-ng-model="VendorSettlement.WOAmt" class="form-control" placeholder="Wo Amt" ng-readonly="true" />
+                        <input id="WOAmt" name="WOAmt" type="text" data-ng-model="FinalSettlement.WOAmt" class="form-control" placeholder="Wo Amt" ng-readonly="true" />
                     </div>
                 </div>
 
@@ -167,7 +177,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="POAmt" name="POAmt" type="text" data-ng-model="VendorSettlement.POAmt" class="form-control" placeholder="PO Amt" ng-readonly="true" />
+                        <input id="POAmt" name="POAmt" type="text" data-ng-model="FinalSettlement.POAmt" class="form-control" placeholder="PO Amt" ng-readonly="true" />
                     </div>
                 </div>
             </div>
@@ -183,12 +193,156 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
+                        <label>Claim Received Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="ClaimReceivedAmt" name="ClaimReceivedAmt" type="text" class="form-control" placeholder="Claim Received Amount" ng-model="FinalSettlement.ClaimReceivedAmt" ng-readonly="true" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Advance Payment Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VenAdvncPaidAmt" name="VenAdvncPaidAmt" type="text" class="form-control" placeholder="Payment Amount" ng-model="FinalSettlement.VenAdvncPaidAmt" ng-readonly="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Bill Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="ClientBillAmount" name="ClientBillAmount" type="text" class="form-control" placeholder="Client Bill Amount" ng-model="FinalSettlement.ClientBillAmount" ng-readonly="true" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Vendor Bill Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VendorBillAmount" name="VendorBillAmount" type="text" class="form-control" placeholder="Vendor Bill Amount" ng-model="FinalSettlement.VendorBillAmount" ng-readonly="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Commission Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="CiCommissionAmount" name="CiCommissionAmount" type="text" class="form-control" placeholder="Commission Amount" ng-model="FinalSettlement.CiCommissionAmount" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Commission Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VenCommissionAmount" name="VenCommissionAmount" type="text" class="form-control" placeholder="Commission Amount" ng-model="FinalSettlement.VenCommissionAmount" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3 ">
+                    <div class="form-group">
+                        <label for="CiBaseAmount">Base Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="CiBaseAmount" name="CiBaseAmount" type="text" data-ng-model="FinalSettlement.CiBaseAmount" class="form-control" placeholder="CiBaseAmount" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2 ">
+                    <div class="form-group">
+                        <label for="VenBaseAmount">Base Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VenBaseAmount" name="VenBaseAmount" type="text" data-ng-model="FinalSettlement.VenBaseAmount" class="form-control" placeholder="VenBaseAmount" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>AIT Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="AITAmount" name="AITAmount" type="text" class="form-control" placeholder="AITAmount" ng-model="FinalSettlement.AITAmount" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>TDSAmount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VenTDSAmount" name="VenTDSAmount" type="text" class="form-control" placeholder="VenTDSAmount" ng-model="FinalSettlement.VenTDSAmount" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Vat Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VatAmount" name="VatAmount" type="text" class="form-control" placeholder="VatAmount" ng-model="FinalSettlement.VatAmount" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Vat Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VenVatAmount" name="VenVatAmount" type="text" class="form-control" placeholder="VenVatAmount" ng-model="FinalSettlement.VenVatAmount" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
                         <label>Received Amount:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="ReceivedAmt" name="TDSAmount" type="text" class="form-control" placeholder="Received Amount" ng-model="VendorSettlement.ReceivedAmt" ng-readonly="true" />
+                        <input id="CiReceivedAmount" name="CiReceivedAmount" type="text" class="form-control" placeholder="CiReceivedAmount" ng-model="FinalSettlement.CiReceivedAmount" />
                     </div>
                 </div>
 
@@ -199,145 +353,14 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="PaymentAmt" name="PaymentAmt" type="text" class="form-control" placeholder="Payment Amount" ng-model="VendorSettlement.PaymentAmt" ng-readonly="true" />
-                    </div>
-                </div>
-            </div>
-            @*<div class="row">
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <label>TDS Amount:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="TDSAmount" name="TDSAmount" type="text" class="form-control" placeholder="TDS Amount" ng-model="VendorSettlement.TDSAmount" ng-readonly="true" />
-                </div>
-            </div>
-
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label>VDS Amount:</label>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <input id="VDSAmount" name="VDSAmount" type="text" class="form-control" placeholder="VDS Amount" ng-model="VendorSettlement.VDSAmount" ng-readonly="true" />
-                </div>
-            </div>
-        </div>*@
-
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label>Challan Issue Amount:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="ChallanIssueAmount" name="ChallanIssueAmount" type="text" class="form-control" placeholder="TDS Paid Amount" ng-model="VendorSettlement.ChallanIssueAmount" ng-readonly="true" />
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Mushak Issue Amount:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="MushakIssueAmount" name="MushakIssueAmount" type="text" class="form-control" placeholder="VDS Paid Amount" ng-model="VendorSettlement.MushakIssueAmount" ng-readonly="true" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label>TDS Due Amount:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="TDSDueAmount" name="TDSDueAmount" type="text" class="form-control" placeholder="TDS Amount" ng-model="VendorSettlement.TDSDueAmount" />
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>VDS Due Amount:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="VDSDueAmount" name="VDSDueAmount" type="text" class="form-control" placeholder="VDS Amount" ng-model="VendorSettlement.VDSDueAmount" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-3 ">
-                    <div class="form-group">
-                        <label for="TDSChallanNo">Challan No.:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="TDSChallanNo" name="TDSChallanNo" type="text" data-ng-model="VendorSettlement.TDSChallanNo" class="form-control" placeholder="TDSChallanNo" />
-                    </div>
-                </div>
-
-                <div class="col-lg-2 ">
-                    <div class="form-group">
-                        <label for="MushakNo">Mushak No.:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="MushakNo" name="MushakNo" type="text" data-ng-model="VendorSettlement.MushakNo" class="form-control" placeholder="MushakNo" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label>Challan Date:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="ChallanDate" name="ChallanDate" type="text" class="DatePicker form-control" placeholder="ChallanDate" ng-model="VendorSettlement.ChallanDate" />
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Mushak Date:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="MushakDate" name="MushakDate" type="text" class="DatePicker form-control" placeholder="MushakDate" ng-model="VendorSettlement.MushakDate" />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label>Note:</label>
-                    </div>
-                </div>
-                <div class="col-lg-9">
-                    <div class="form-group">
-                        <textarea id="Note" name="Note" class="form-control" placeholder="Note" ng-model="VendorSettlement.Note"></textarea>
+                        <input id="VenNetPayableAmount" name="VenNetPayableAmount" type="text" class="form-control" placeholder="VenNetPayableAmount" ng-model="FinalSettlement.VenNetPayableAmount" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="SearchVendorSettlementModal" class="modal fade">
+    <div id="SearchFinalSettlementModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -345,7 +368,7 @@
                     <h3 class="modal-title">Client Bill Information</h3>
                 </div>
                 <div class="table-responsive" data-ng-disabled="" ng-cloak>
-                    <table st-table="VendorSettlementDisplayedCollection" st-safe-src="VendorSettlementSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <table st-table="FinalSettlementDisplayedCollection" st-safe-src="FinalSettlementSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
 
                         <thead>
                             <tr>
@@ -360,18 +383,18 @@
                         </thead>
                         <tbody>
 
-                            <tr ng-repeat="row in VendorSettlementDisplayedCollection">
+                            <tr ng-repeat="row in FinalSettlementDisplayedCollection">
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientFinalBilAprvID}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
                                 <td class="hidden">{{row.VendorID}}</td>
-                                <td class="hidden">{{row.VendorReqID}}</td>
+                                <td class="hidden">{{row.finalSettlementID}}</td>
                                 <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.WONo}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WODate}}</td>
                                 <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.WOAmt}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.AprvAmnt}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorSettlementSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleFinalSettlementSelect(row)"><i class="fa fa-edit"></i> Select</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -399,7 +422,7 @@
 
 <script type="text/javascript">
 
-    app.controller('VendorSettlementCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('FinalSettlementCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $scope.itemsByPage = 10;
         $scope.p = 2;
@@ -418,8 +441,8 @@
             billNo: ''
         };
 
-        $scope.VendorSettlement = {
-            VendorSettlementID: "",
+        $scope.FinalSettlement = {
+            FinalSettlementID: "",
             VendorFinalBilPaymentID: "",
 
             ClientID: "",
@@ -442,16 +465,16 @@
             WODate: "",
             WOAmt: "",
 
-            TDSChallanNo: "",
-            ChallanDate: "",
+            CiBaseAmount: "",
+            AITAmount: "",
             TDSAmount: "",
-            ChallanIssueAmount: "",
-            TDSDueAmount: "",
+            ClientBillAmount: "",
+            CiCommissionAmount: "",
             ChallanNo: "",
-            MushakDate: "",
+            VenTDSAmount: "",
             VDSAmount: "",
-            MushakIssueAmount: "",
-            VDSDueAmount: "",
+            VendorBillAmount: "",
+            VenCommissionAmount: "",
             NetPayableAmount: "",
             NetReceivableAmount: "",
             Remarks: "",
@@ -489,19 +512,19 @@
         };
         // ################# Detail Add Modal ####################
 
-        $http.get("/VendorSettlement/GetShowVendorReqList")
+        $http.get("/FinalSettlement/GetShowfinalSettlementList")
             .success(function (response) {
                 console.log(response);
-                $scope.VendorReqList = response.VendorReqList;
-                $scope.VendorReqDisplayedCollection = [].concat($scope.VendorReqList);
-                console.log($scope.VendorReqDisplayedCollection);
+                $scope.finalSettlementList = response.finalSettlementList;
+                $scope.finalSettlementDisplayedCollection = [].concat($scope.finalSettlementList);
+                console.log($scope.finalSettlementDisplayedCollection);
                 $scope.loading = false;
             })
             .error(function () { });
 
-        $scope.clearVendorSettlement = function () {
-            $scope.VendorSettlement = {
-                VendorSettlementID: "",
+        $scope.clearFinalSettlement = function () {
+            $scope.FinalSettlement = {
+                FinalSettlementID: "",
                 ClientID: "",
                 ClientCode: "",
                 ClientName: "",
@@ -510,7 +533,7 @@
                 ClientTINNo: "",
                 ClientBINNo: "",
                 ClientAddress: "",
-                VendorSettlementNo: "",
+                FinalSettlementNo: "",
                 ReceivedDate: "",
                 QuotationDate: "",
                 Remarks: ""
@@ -518,203 +541,206 @@
         };
         ////////////////////////Select for Update from Search grid ///////////////////////
 
-        $scope.toggleVendorReqSelect = function (tableRow) {
-            $scope.VendorSettlement.ClientFinalPaymentRcvdID = tableRow.ClientFinalPaymentRcvdID;
+        $scope.togglefinalSettlementSelect = function (tableRow) {
 
-            $scope.VendorSettlement.ClientID = tableRow.ClientID;
-            $scope.VendorSettlement.ClientName = tableRow.ClientName;
+            $scope.FinalSettlement.ClientID = tableRow.ClientID;
+            $scope.FinalSettlement.ClientName = tableRow.ClientName;
 
-            $scope.VendorSettlement.VendorID = tableRow.VendorID;
-            $scope.VendorSettlement.VendorName = tableRow.VendorName;
+            $scope.FinalSettlement.ClientReqID = tableRow.ClientReqID;
 
-            $scope.VendorSettlement.ClientReqID = tableRow.ClientReqID;
-            $scope.VendorSettlement.ClientReqNo = tableRow.ClientReqNo;
-            $scope.VendorSettlement.RequisitionDate = tableRow.RequisitionDate;
+            $scope.FinalSettlement.WOInfoID = tableRow.WOInfoID;
+            $scope.FinalSettlement.WONo = tableRow.WONo;
+            $scope.FinalSettlement.WOAmt = tableRow.WOAmt;
 
-            $scope.VendorSettlement.WOInfoID = tableRow.WOInfoID;
-            $scope.VendorSettlement.WONo = tableRow.WONo;
-            $scope.VendorSettlement.WODate = tableRow.WODate;
-            $scope.VendorSettlement.WOAmt = tableRow.WOAmt;
+            $scope.FinalSettlement.ClaimReceivedAmt = tableRow.ClaimReceivedAmt;
+            $scope.FinalSettlement.ClientBillAmount = tableRow.ClientBillAmount;
+            $scope.FinalSettlement.CiCommissionAmount = tableRow.CiCommissionAmount;
+            $scope.FinalSettlement.CiBaseAmount = tableRow.CiBaseAmount;
+            $scope.FinalSettlement.AITAmount = tableRow.AITAmount;
+            $scope.FinalSettlement.VatAmount = tableRow.VatAmount;
+            $scope.FinalSettlement.CiReceivedAmount = tableRow.CiReceivedAmount;
 
-            $scope.VendorSettlement.PONo = tableRow.PONo;
-            $scope.VendorSettlement.POAmt = tableRow.POAmt;
+            $scope.FinalSettlement.VendorID = tableRow.VendorID;
+            $scope.FinalSettlement.VendorName = tableRow.VendorName;
+            $scope.FinalSettlement.POInfoID = tableRow.POInfoID;
+            $scope.FinalSettlement.PONo = tableRow.PONo;
+            $scope.FinalSettlement.POAmt = tableRow.POAmt;
 
-            $scope.VendorSettlement.TDSAmount = tableRow.TDSAmount;
-            $scope.VendorSettlement.ChallanIssueAmount = tableRow.TDSAmount;
-            $scope.VendorSettlement.TDSDueAmount = ($scope.VendorSettlement.TDSAmount - $scope.VendorSettlement.ChallanIssueAmount);
-
-            $scope.VendorSettlement.VDSAmount = tableRow.VDSAmount;
-            $scope.VendorSettlement.MushakIssueAmount = tableRow.VDSAmount;
-            $scope.VendorSettlement.VDSDueAmount = ($scope.VendorSettlement.VDSAmount - $scope.VendorSettlement.MushakIssueAmount);
-
+            $scope.FinalSettlement.VenAdvncPaidAmt = tableRow.VenAdvncPaidAmt;
+            $scope.FinalSettlement.VendorBillAmount = tableRow.VendorBillAmount;
+            $scope.FinalSettlement.VenCommissionAmount = tableRow.VenCommissionAmount;
+            $scope.FinalSettlement.VenBaseAmount = tableRow.VenBaseAmount;
+            $scope.FinalSettlement.VenVatAmount = tableRow.VenVatAmount;
+            $scope.FinalSettlement.VenTDSAmount = tableRow.VenTDSAmount;
+            $scope.FinalSettlement.VenNetPayableAmount = tableRow.VenNetPayableAmount;
 
             $scope.p = 1;
 
-            $('#VendorReqInfoModal').modal('hide');
+            $('#finalSettlementInfoModal').modal('hide');
         };
 
 
         $scope.calculateAmounts = function () {
-            var billAmount = parseFloat($scope.VendorSettlement.RemainingAmnt) || 0;
-            var vatPercentage = parseFloat($scope.VendorSettlement.VATPercentage) || 0;
+            var billAmount = parseFloat($scope.FinalSettlement.RemainingAmnt) || 0;
+            var vatPercentage = parseFloat($scope.FinalSettlement.VATPercentage) || 0;
 
             // Calculate the VAT amount
-            $scope.VendorSettlement.VATAmount = (billAmount * vatPercentage) / 100;
+            $scope.FinalSettlement.VATAmount = (billAmount * vatPercentage) / 100;
 
             // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorSettlement.TotalBillAmount = billAmount + $scope.VendorSettlement.VATAmount;
-            $scope.VendorSettlement.NetPayableAmount = $scope.VendorSettlement.TotalBillAmount - $scope.VendorSettlement.CommissionAmount;
+            $scope.FinalSettlement.TotalBillAmount = billAmount + $scope.FinalSettlement.VATAmount;
+            $scope.FinalSettlement.NetPayableAmount = $scope.FinalSettlement.TotalBillAmount - $scope.FinalSettlement.CommissionAmount;
         };
 
         $scope.calculateCommission = function () {
-            var totalbillAmount = parseFloat($scope.VendorSettlement.TotalBillAmount) || 0;
-            var poAmount = parseFloat($scope.VendorSettlement.WOAmt) || 0;
-            var cmsnPercentage = parseFloat($scope.VendorSettlement.CommissionPercentage) || 0;
+            var totalbillAmount = parseFloat($scope.FinalSettlement.TotalBillAmount) || 0;
+            var poAmount = parseFloat($scope.FinalSettlement.WOAmt) || 0;
+            var cmsnPercentage = parseFloat($scope.FinalSettlement.CommissionPercentage) || 0;
 
             // Calculate the VAT amount
-            $scope.VendorSettlement.CommissionAmount = (poAmount * cmsnPercentage) / 100;
+            $scope.FinalSettlement.CommissionAmount = (poAmount * cmsnPercentage) / 100;
 
             // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorSettlement.NetPayableAmount = totalbillAmount - $scope.VendorSettlement.CommissionAmount;
+            $scope.FinalSettlement.NetPayableAmount = totalbillAmount - $scope.FinalSettlement.CommissionAmount;
         };
 
 
         $scope.calculateTDSAmounts = function () {
-            var billAmount = parseFloat($scope.VendorSettlement.RemainingAmnt) || 0;
-            var vatPercentage = parseFloat($scope.VendorSettlement.TDSPercentage) || 0;
+            var billAmount = parseFloat($scope.FinalSettlement.RemainingAmnt) || 0;
+            var vatPercentage = parseFloat($scope.FinalSettlement.TDSPercentage) || 0;
 
             // Calculate the VAT amount
-            $scope.VendorSettlement.TDSAmount = (billAmount * vatPercentage) / 100;
+            $scope.FinalSettlement.TDSAmount = (billAmount * vatPercentage) / 100;
 
             // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorSettlement.TotalBillAmount = billAmount + $scope.VendorSettlement.TDSAmount;
-            $scope.VendorSettlement.NetPayableAmount = $scope.VendorSettlement.TotalBillAmount - $scope.VendorSettlement.TDSAmount;
+            $scope.FinalSettlement.TotalBillAmount = billAmount + $scope.FinalSettlement.TDSAmount;
+            $scope.FinalSettlement.NetPayableAmount = $scope.FinalSettlement.TotalBillAmount - $scope.FinalSettlement.TDSAmount;
         };
 
         $scope.calculateVDSAmounts = function () {
-            var totalbillAmount = parseFloat($scope.VendorSettlement.TotalBillAmount) || 0;
-            var poAmount = parseFloat($scope.VendorSettlement.WOAmt) || 0;
-            var cmsnPercentage = parseFloat($scope.VendorSettlement.CommissionPercentage) || 0;
+            var totalbillAmount = parseFloat($scope.FinalSettlement.TotalBillAmount) || 0;
+            var poAmount = parseFloat($scope.FinalSettlement.WOAmt) || 0;
+            var cmsnPercentage = parseFloat($scope.FinalSettlement.CommissionPercentage) || 0;
 
             // Calculate the VAT amount
-            $scope.VendorSettlement.VDSAmount = (poAmount * cmsnPercentage) / 100;
+            $scope.FinalSettlement.VDSAmount = (poAmount * cmsnPercentage) / 100;
 
             // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorSettlement.NetPayableAmount = totalbillAmount - $scope.VendorSettlement.VDSAmount;
+            $scope.FinalSettlement.NetPayableAmount = totalbillAmount - $scope.FinalSettlement.VDSAmount;
         };
 
         $scope.calculateBillAmounts = function () {
-            var billAmount = parseFloat($scope.VendorSettlement.AprvAmnt) || 0;
-            var vatPercentage = parseFloat($scope.VendorSettlement.VDSPercentage) || 0;
+            var billAmount = parseFloat($scope.FinalSettlement.AprvAmnt) || 0;
+            var vatPercentage = parseFloat($scope.FinalSettlement.VDSPercentage) || 0;
 
             // Calculate the VAT amount
-            $scope.VendorSettlement.VDSAmount = (billAmount * vatPercentage) / 100;
+            $scope.FinalSettlement.VDSAmount = (billAmount * vatPercentage) / 100;
 
             // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorSettlement.TotalBillAmount = billAmount + $scope.VendorSettlement.VATAmount;
-            $scope.VendorSettlement.NetPayableAmount = $scope.VendorSettlement.TotalBillAmount - $scope.VendorSettlement.CommissionAmount;
+            $scope.FinalSettlement.TotalBillAmount = billAmount + $scope.FinalSettlement.VATAmount;
+            $scope.FinalSettlement.NetPayableAmount = $scope.FinalSettlement.TotalBillAmount - $scope.FinalSettlement.CommissionAmount;
         };
 
         ///////////////////////Save/Update Master///////////////////////
 
         //////////////////Search Grid List///////////////////////////////
 
-        $scope.SearchVendorSettlementModal = function () {
-            $scope.GetVendorSettlementSearchList();
-            $('#SearchVendorSettlementModal').modal('show');
+        $scope.SearchFinalSettlementModal = function () {
+            $scope.GetFinalSettlementSearchList();
+            $('#SearchFinalSettlementModal').modal('show');
         };
 
-        $scope.GetVendorSettlementSearchList = function () {
-            $http.post("/VendorSettlement/GetQutnSearchList")
+        $scope.GetFinalSettlementSearchList = function () {
+            $http.post("/FinalSettlement/GetfinalSettlementSearchList")
                 .success(function (response) {
-                    $scope.VendorSettlementSearchList = response.PoSearchList;
-                    $scope.VendorSettlementDisplayedCollection = [].concat($scope.VendorSettlementSearchList);
+                    $scope.FinalSettlementSearchList = response.finalSettlementSearchList;
+                    $scope.FinalSettlementDisplayedCollection = [].concat($scope.FinalSettlementSearchList);
                 })
                 .error(function () { });
         }
 
         ////////////////////////Select for Update from Search grid ///////////////////////
 
-        $scope.toggleVendorSettlementSelect = function (tableRow) {
-            $scope.VendorSettlement.VendorSettlementID = tableRow.VendorSettlementID;
-            $scope.VendorSettlement.ClientID = tableRow.ClientID;
-            $scope.VendorSettlement.ClientName = tableRow.ClientName;
+        $scope.toggleFinalSettlementSelect = function (tableRow) {
+            $scope.FinalSettlement.FinalSettlementID = tableRow.FinalSettlementID;
+            $scope.FinalSettlement.ClientID = tableRow.ClientID;
+            $scope.FinalSettlement.ClientName = tableRow.ClientName;
 
-            $scope.VendorSettlement.VendorID = tableRow.VendorID;
-            $scope.VendorSettlement.VendorName = tableRow.VendorName;
+            $scope.FinalSettlement.VendorID = tableRow.VendorID;
+            $scope.FinalSettlement.VendorName = tableRow.VendorName;
 
-            $scope.VendorSettlement.VendorSettlementNo = tableRow.VendorSettlementNo;
-            $scope.VendorSettlement.RequisitionDate = tableRow.RequiDate;
-            $scope.VendorSettlement.ClientReqNo = tableRow.ClientReqNo;
-            $scope.VendorSettlement.QuotationDate = tableRow.QuotatDate;
-            $scope.VendorSettlement.Remarks = tableRow.Remarks;
+            $scope.FinalSettlement.FinalSettlementNo = tableRow.FinalSettlementNo;
+            $scope.FinalSettlement.RequisitionDate = tableRow.RequiDate;
+            $scope.FinalSettlement.ClientReqNo = tableRow.ClientReqNo;
+            $scope.FinalSettlement.QuotationDate = tableRow.QuotatDate;
+            $scope.FinalSettlement.Remarks = tableRow.Remarks;
 
-            $scope.VendorSettlement.VendorBillNo = tableRow.VendorBillNo;
-            $scope.VendorSettlement.VendorBillDate = tableRow.VendorBillDate;
-            $scope.VendorSettlement.BillReceiveDate = tableRow.BillReceiveDate;
-            $scope.VendorSettlement.VATPercentage = tableRow.VATPercentage;
-            $scope.VendorSettlement.VATAmount = tableRow.VATAmount;
-            $scope.VendorSettlement.CommissionPercentage = tableRow.CommissionPercentage;
-            $scope.VendorSettlement.CommissionAmount = tableRow.CommissionAmount;
-            $scope.VendorSettlement.TotalBillAmount = tableRow.TotalBillAmount;
-            $scope.VendorSettlement.NetPayableAmount = tableRow.NetPayableAmount;
-            $scope.VendorSettlement.Note = tableRow.Note;
+            $scope.FinalSettlement.VendorBillNo = tableRow.VendorBillNo;
+            $scope.FinalSettlement.VendorBillDate = tableRow.VendorBillDate;
+            $scope.FinalSettlement.BillReceiveDate = tableRow.BillReceiveDate;
+            $scope.FinalSettlement.VATPercentage = tableRow.VATPercentage;
+            $scope.FinalSettlement.VATAmount = tableRow.VATAmount;
+            $scope.FinalSettlement.CommissionPercentage = tableRow.CommissionPercentage;
+            $scope.FinalSettlement.CommissionAmount = tableRow.CommissionAmount;
+            $scope.FinalSettlement.TotalBillAmount = tableRow.TotalBillAmount;
+            $scope.FinalSettlement.NetPayableAmount = tableRow.NetPayableAmount;
+            $scope.FinalSettlement.Note = tableRow.Note;
 
-            $scope.VendorSettlement.WONo = tableRow.WONo;
-            $scope.VendorSettlement.WODate = tableRow.WODate;
-            $scope.VendorSettlement.WOAmt = tableRow.WOAmt;
+            $scope.FinalSettlement.WONo = tableRow.WONo;
+            $scope.FinalSettlement.WODate = tableRow.WODate;
+            $scope.FinalSettlement.WOAmt = tableRow.WOAmt;
 
-            $scope.VendorSettlement.PONo = tableRow.PONo;
-            $scope.VendorSettlement.PODate = tableRow.PODate;
-            $scope.VendorSettlement.POAmt = tableRow.POAmt;
+            $scope.FinalSettlement.PONo = tableRow.PONo;
+            $scope.FinalSettlement.PODate = tableRow.PODate;
+            $scope.FinalSettlement.POAmt = tableRow.POAmt;
 
-            $scope.VendorSettlement.AdvancClaimRcvAmt = tableRow.AdvancClaimRcvAmt;
-            $scope.VendorSettlement.RemainingAmnt = tableRow.RemainingAmnt;
-            $scope.VendorSettlement.RecommendedAmnt = tableRow.RecommendedAmnt;
-            $scope.VendorSettlement.RecommendDate = tableRow.RecommendDate;
-            $scope.VendorSettlement.AprvAmnt = tableRow.AprvAmnt;
-            $scope.VendorSettlement.AprvDate = tableRow.AprvDate;
-            $scope.VendorSettlement.AdvancRecvID = tableRow.AdvancRecvID;
-            $scope.VendorSettlement.WOInfoID = tableRow.WOInfoID;
-            $scope.VendorSettlement.AdvancClaimRcvdDate = tableRow.AdvancClaimRcvdDate;
-            $scope.VendorSettlement.ClientFinalBilRecmID = tableRow.ClientFinalBilRecmID;
-            $scope.VendorSettlement.ClientFinalBilAprvID = tableRow.ClientFinalBilAprvID;
-            $scope.VendorSettlement.Operation = tableRow.Operation;
+            $scope.FinalSettlement.AdvancClaimRcvAmt = tableRow.AdvancClaimRcvAmt;
+            $scope.FinalSettlement.RemainingAmnt = tableRow.RemainingAmnt;
+            $scope.FinalSettlement.RecommendedAmnt = tableRow.RecommendedAmnt;
+            $scope.FinalSettlement.RecommendDate = tableRow.RecommendDate;
+            $scope.FinalSettlement.AprvAmnt = tableRow.AprvAmnt;
+            $scope.FinalSettlement.AprvDate = tableRow.AprvDate;
+            $scope.FinalSettlement.AdvancRecvID = tableRow.AdvancRecvID;
+            $scope.FinalSettlement.WOInfoID = tableRow.WOInfoID;
+            $scope.FinalSettlement.AdvancClaimRcvdDate = tableRow.AdvancClaimRcvdDate;
+            $scope.FinalSettlement.ClientFinalBilRecmID = tableRow.ClientFinalBilRecmID;
+            $scope.FinalSettlement.ClientFinalBilAprvID = tableRow.ClientFinalBilAprvID;
+            $scope.FinalSettlement.Operation = tableRow.Operation;
 
             $scope.q = 2;
             $scope.p = 1;
-            $('#SearchVendorSettlementModal').modal('hide');
+            $('#SearchFinalSettlementModal').modal('hide');
         };
 
         ///////////////////////////////////////////////
 
         $scope.Post = function () {
 
-            $scope.VendorSettlement.ChallanDate = $('#ChallanDate').val();
-            $scope.VendorSettlement.MushakDate = $('#MushakDate').val();
+            $scope.FinalSettlement.AITAmount = $('#AITAmount').val();
+            $scope.FinalSettlement.VenTDSAmount = $('#VenTDSAmount').val();
             alert('');
-            $http.post('/VendorSettlement/SaveVendorSettlement',
+            $http.post('/FinalSettlement/SaveFinalSettlement',
                 {
-                    //ChallanDate: $('#ChallanDate').val()
-                    BillRecv: $scope.VendorSettlement,
+                    //AITAmount: $('#AITAmount').val()
+                    BillRecv: $scope.FinalSettlement,
 
                 })
                 .success(function (response) {
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
-                        $scope.clearVendorSettlement();
+                        $scope.clearFinalSettlement();
                         $scope.loading = false;
                         return;
                     }
                     else if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
-                        $scope.clearVendorSettlement();
+                        $scope.clearFinalSettlement();
                         $scope.loading = false;
                         return;
                     }
                     else if (response.status == "S203") {
                         toastr.success("Data Deleted Successfully.");
-                        $scope.clearVendorSettlement();
+                        $scope.clearFinalSettlement();
                         $scope.loading = false;
                         return;
                     }
