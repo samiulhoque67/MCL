@@ -5,14 +5,20 @@
 }
 
 <div class="box box-primary box-body" ng-controller="MasterDataSetupCtrl">
-    <div class="box-header with-border">
-        <i class="fa fa-user"></i>
-        <h3 class="box-title">Master Data Setup List</h3>
+    <div class="box-header with-border bg-light-blue-gradient" style="height: 38px;">
+        <h3 class="box-title" style="font-family: math; font-weight: 500;">
+            <i class="fa fa-user"></i> Master Data Setup List
+        </h3>
         <div class="box-tools pull-right">
-            <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable(row)" class="btn btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Refresh</button>
-            <button type="button" id="btnAdd" data-ng-click="toggleAdd(row)" class="btn btn-flat btn-primary pull-right btnSave" ng-disabled="loading"> <i class="fa fa-plus"></i> Add New</button>
+            <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable(row)" class="button-custom pull-right" ng-disabled="loading">
+                <i class="fa fa-refresh"></i> Refresh
+            </button>
+            <button type="button" id="btnAdd" data-ng-click="toggleAdd(row)" class="button-custom btn-primary pull-right" ng-disabled="loading">
+                <i class="fa fa-plus"></i> Add New
+            </button>
         </div>
     </div>
+
 
     <div class="box-body table-responsive" data-ng-disabled="">
         <div class="row">
@@ -37,8 +43,8 @@
                         data-ng-disabled="!masterData.OwnerLevel">
                     <option value="" style="display: none;">--Select--</option>
                 </select>
-            </div>          
-            
+            </div>
+
         </div>
         <div class="row">
             <div class="col-lg-2">
@@ -83,156 +89,156 @@
                     </tr>
                 </tfoot>
             </table>
-        </div>       
+        </div>
     </div>
 
     <form name="masterDataFrm" id="masterDataFrm" ng-submit="">
-        
-     <div id="addModal" class="modal fade">
-                <!-- Modal HTML -->
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h3 class="modal-title">Master Data Setup Entry Form</h3>
-                        </div>
-                        <div class="modal-body">
-                            <div class="box-body">
-                                <div class="row">                                    
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="OwnerLevel">Owner Level</label>
-                                            <select name="OwnerLevel" class="form-control" ng-model="masterData.OwnerLevel"
-                                                    ng-options="ownerLevel as ownerLevel.LevelName for ownerLevel in ownerLevels
-                                                        track by ownerLevel.OwnerLevelID">
-                                                <option value="" style="display: none;">--Select--</option>
-                                            </select>
-                                            <div ng-show="masterDataFrm.$submitted || masterDataFrm.OwnerLevel.$touched">
-                                                <span ng-show="!masterDataFrm.OwnerLevel.$dirty && masterDataFrm.OwnerLevel.$pristine" class="label label-danger">Please select an owner level</span>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="OwnerName">Owner Name </label>
-                                            <select name="Owner" class="form-control" ng-model="masterData.Owner"
-                                                    data-ng-options="owner as owner.OwnerName for owner in ownersForSpecificOwnerLevel track by owner.OwnerID"
-                                                    data-ng-disabled="!masterData.OwnerLevel">
-                                                <option value="" style="display: none;">--Select--</option>
-                                            </select>
 
-                                            <div ng-show="masterDataFrm.$submitted || masterDataFrm.Owner.$touched">
-                                                <span ng-show="!masterDataFrm.Owner.$dirty && masterDataFrm.Owner.$pristine"
-                                                      class="label label-danger">Please select an Owner.</span>
-                                            </div>
+        <div id="addModal" class="modal fade">
+            <!-- Modal HTML -->
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3 class="modal-title">Master Data Setup Entry Form</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="OwnerLevel">Owner Level</label>
+                                        <select name="OwnerLevel" class="form-control" ng-model="masterData.OwnerLevel"
+                                                ng-options="ownerLevel as ownerLevel.LevelName for ownerLevel in ownerLevels
+                                                        track by ownerLevel.OwnerLevelID">
+                                            <option value="" style="display: none;">--Select--</option>
+                                        </select>
+                                        <div ng-show="masterDataFrm.$submitted || masterDataFrm.OwnerLevel.$touched">
+                                            <span ng-show="!masterDataFrm.OwnerLevel.$dirty && masterDataFrm.OwnerLevel.$pristine" class="label label-danger">Please select an owner level</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="OwnerName">Owner Name </label>
+                                        <select name="Owner" class="form-control" ng-model="masterData.Owner"
+                                                data-ng-options="owner as owner.OwnerName for owner in ownersForSpecificOwnerLevel track by owner.OwnerID"
+                                                data-ng-disabled="!masterData.OwnerLevel">
+                                            <option value="" style="display: none;">--Select--</option>
+                                        </select>
+
+                                        <div ng-show="masterDataFrm.$submitted || masterDataFrm.Owner.$touched">
+                                            <span ng-show="!masterDataFrm.Owner.$dirty && masterDataFrm.Owner.$pristine"
+                                                  class="label label-danger">Please select an Owner.</span>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="">Type Name</label>
-                                            <select name="MasterDataType" class="form-control" ng-model="masterData.MasterDataType"
-                                                    data-ng-options="type as type.TypeName for type in typeForSpecificOwner track by type.MasterDataTypeID"
-                                                    data-ng-disabled="!masterData.MasterDataType">
-                                                <option value="" style="display: none;">--Select--</option>
-                                            </select>
-                                            <div ng-show="masterDataFrm.$submitted || masterDataFrm.MasterDataType.$touched">
-                                                <span ng-show="!masterDataFrm.MasterDataType.$dirty && masterDataFrm.MasterDataType.$pristine" class="label label-danger">Please select an Type</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="MasterDataValue">Master Data</label>
-                                            <input id="MasterDataValue" name="MasterDataValue" type="text" data-ng-model="masterData.MasterDataValue"
-                                                   class="form-control" placeholder="Master Data" required />
-                                            <div ng-show="masterDataFrm.$submitted || masterDataFrm.MasterDataValue.$touched">
-                                                <span ng-show="masterDataFrm.MasterDataValue.$error.required" class="label label-danger">Please enter owner's name</span>
-                                            </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="">Type Name</label>
+                                        <select name="MasterDataType" class="form-control" ng-model="masterData.MasterDataType"
+                                                data-ng-options="type as type.TypeName for type in typeForSpecificOwner track by type.MasterDataTypeID"
+                                                data-ng-disabled="!masterData.MasterDataType">
+                                            <option value="" style="display: none;">--Select--</option>
+                                        </select>
+                                        <div ng-show="masterDataFrm.$submitted || masterDataFrm.MasterDataType.$touched">
+                                            <span ng-show="!masterDataFrm.MasterDataType.$dirty && masterDataFrm.MasterDataType.$pristine" class="label label-danger">Please select an Type</span>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="ParrentID">Parent Data</label>                                           
-                                            <select name="ParrentID" class="form-control" ng-model="masterData.ParentID"
-                                                    data-ng-options="parentDatas as parentDatas.MasterDataValue for parentDatas in ParentDataList
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="MasterDataValue">Master Data</label>
+                                        <input id="MasterDataValue" name="MasterDataValue" type="text" data-ng-model="masterData.MasterDataValue"
+                                               class="form-control" placeholder="Master Data" required />
+                                        <div ng-show="masterDataFrm.$submitted || masterDataFrm.MasterDataValue.$touched">
+                                            <span ng-show="masterDataFrm.MasterDataValue.$error.required" class="label label-danger">Please enter owner's name</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="ParrentID">Parent Data</label>
+                                        <select name="ParrentID" class="form-control" ng-model="masterData.ParentID"
+                                                data-ng-options="parentDatas as parentDatas.MasterDataValue for parentDatas in ParentDataList
                                                         track by parentDatas.MasterDataID"
-                                                    data-ng-disabled="!masterData.ParentID">
-                                                <option value="" style="display: none;">--Select--</option>
-                                            </select>
-                                            <div ng-show="masterDataFrm.$submitted || masterDataFrm.ParrentID.$touched">
-                                                <span ng-show="masterDataFrm.ParrentID.$error.required" class="label label-danger">Please enter owner's name</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="Status">Is Default</label>
-                                            <select id="IsDefault" class="form-control" ng-model="masterData.IsDefault">
-                                                <option value="" style="display: none">-- None --</option>
-                                                <option value="1">Yes</option>
-                                                <option value="0">No</option>
-                                            </select>
+                                                data-ng-disabled="!masterData.ParentID">
+                                            <option value="" style="display: none;">--Select--</option>
+                                        </select>
+                                        <div ng-show="masterDataFrm.$submitted || masterDataFrm.ParrentID.$touched">
+                                            <span ng-show="masterDataFrm.ParrentID.$error.required" class="label label-danger">Please enter owner's name</span>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="UDCode">UD Code</label>
-                                            <input id="UDCode" name="UDCode" type="text" data-ng-model="masterData.UDCode"
-                                                   class="form-control" placeholder="UD Code" />
-                                            @*<div ng-show="masterDataFrm.$submitted || masterDataFrm.UDCode.$touched">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="Status">Is Default</label>
+                                        <select id="IsDefault" class="form-control" ng-model="masterData.IsDefault">
+                                            <option value="" style="display: none">-- None --</option>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="UDCode">UD Code</label>
+                                        <input id="UDCode" name="UDCode" type="text" data-ng-model="masterData.UDCode"
+                                               class="form-control" placeholder="UD Code" />
+                                        @*<div ng-show="masterDataFrm.$submitted || masterDataFrm.UDCode.$touched">
                                                 <span ng-show="masterDataFrm.UDCode.$error.required" class="label label-danger">Please enter UD Code</span>
                                             </div>*@
-                                        </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="SerialNo">Serial No.</label>
-                                            <input id="SerialNo" name="SerialNo" type="text" data-ng-model="masterData.SerialNo"
-                                                   class="form-control" placeholder="Serial No." />
-                                            @*<div ng-show="masterDataFrm.$submitted || masterDataFrm.SerialNo.$touched">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="SerialNo">Serial No.</label>
+                                        <input id="SerialNo" name="SerialNo" type="text" data-ng-model="masterData.SerialNo"
+                                               class="form-control" placeholder="Serial No." />
+                                        @*<div ng-show="masterDataFrm.$submitted || masterDataFrm.SerialNo.$touched">
                                                 <span ng-show="masterDataFrm.SerialNo.$error.required" class="label label-danger">Please enter Serial No</span>
                                             </div>*@
-                                        </div>
                                     </div>
                                 </div>
-                                
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <div class="form-group">
-                                            <!-- Drop Down for Owner Status -->
-                                            <label for="Status">Status</label>
-                                            <select id="Status" class="form-control" ng-model="masterData.Status">
-                                                <option value="" style="display: none">-- None --</option>
-                                                <option value="1">Active</option>
-                                                <option value="0">Inactive</option>
-                                            </select><!-- Drop Down for Owner Status end -->
-                                        </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <!-- Drop Down for Owner Status -->
+                                        <label for="Status">Status</label>
+                                        <select id="Status" class="form-control" ng-model="masterData.Status">
+                                            <option value="" style="display: none">-- None --</option>
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select><!-- Drop Down for Owner Status end -->
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <div class="col-sm-12 col-md-12 col-lg-12">
-                                <div class="form-group">
-                                    <button type="submit" id="btnSubmit" ng-click="masterDataFrm.$setSubmitted(); masterDataFrm.$valid && checkDrop() && Save(masterDataFrm)" class="btn btn-primary btn-flat " ng-disabled="loading">Save</button>
-                                    <button type="button" id="btnClose" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-                                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <button type="submit" id="btnSubmit" ng-click="masterDataFrm.$setSubmitted(); masterDataFrm.$valid && checkDrop() && Save(masterDataFrm)" class="btn btn-primary btn-flat " ng-disabled="loading">Save</button>
+                                <button type="button" id="btnClose" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
                             </div>
                         </div>
-                    </div><!-- /.box-body -->
-                </div>
+                    </div>
+                </div><!-- /.box-body -->
             </div>
-       
+        </div>
+
     </form>
 
     <div id="mydiv" ng-show="loading">

@@ -87,35 +87,65 @@
 </style>
 
 <div class="box box-primary box-body" ng-controller="VendorCSAprvCtrl">
-    <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
-        <i class="fa fa-user"></i>
-        <h3 style="font-family: Verdana" class="box-title">Vendor CS Approval</h3>
+    <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
+        <h2 class="box-title" style="font-family: math; font-weight: 500;">Vendor CS Approval</h2>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
-                </div>
+                    <button class="button-custom btn-warning" type="button" data-ng-click="toggleRefreshTable()" ng-disabled="btnRefresh">
+                        <i class="fa fa-refresh" style="padding-right: 5px"></i> Refresh
+                    </button>
+                @*<div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+            <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
+        </div>*@
+                @*<div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius:5px; " type="button" data-ng-click="toggleRefreshTable()" class="btn btn-default btn-flat pull-right" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
+
+                </div>*@
+
+                <div class="btn-group pull-right" style="margin: 3px;">
+
                 <div class="btn-group pull-right" style="margin: 3px">
                     @using (Html.BeginForm("VendorCSApprevedReport", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
                     {
-                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="btn btn-sm btn-flat btn-success pull-right">
-                            <i class="fa fa-print"></i> CS Print
+                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="button-custom btn-success pull-right">
+                            <i class="fa fa-print" style="padding-right: 5px"></i> CS Print
                         </button>
                     }
                 </div>
+
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="SearchVendorReqModal()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
+                    <button class="button-custom btn-primary" type="button" data-ng-click="SearchVendorReqModal()" ng-disabled="btnSearch">
+                        <i class="fa fa-search" style="padding-right: 5px"></i> Search
+                    </button>
                 </div>
+
+                   @* <button style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius:5px; " type="button" data-ng-click="SearchVendorReqModal()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
+ *@               </div>
+
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>   {{ VendorReq.VendorReqID ? 'Update' : 'Save' }}</button>
-                </div>
+                    <button class="button-custom btn-primary" type="button" data-ng-click="Post()" ng-disabled="btnSave">
+                        <i class="fa fa-save" style="padding-right: 5px"></i> {{ VendorReq.VendorReqID ? 'Update' : 'Save' }}
+                    </button>
+                   @* <button style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius:5px; " type="button" data-ng-click="Post()" class="btn btn-flat btn-success pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>    {{ VendorCSInfo.AutoCSNo ? 'Update' : 'Save' }}</button>
+             *@   </div>
+
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Cancel()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>Cancel</button>
+                    <button class="button-custom btn-danger" type="button" data-ng-click="Cancel()" ng-disabled="btnSave">
+                        <i class="fa fa-close" style="padding-right: 5px"></i> Cancel
+                    </button>
                 </div>
+
+
+                @*<div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+            <button type="button" data-ng-click="Cancel()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>Cancel</button>
+        </div>*@
             </div>
         </div>
     </div>
+    </div>
+
 
     <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-if="p===2">
         <div class="row">
@@ -431,7 +461,7 @@
     </div>
 
 
-  
+
 
 
 
@@ -444,6 +474,7 @@
 
 
 </div>
+
 
 <script type="text/javascript">
 

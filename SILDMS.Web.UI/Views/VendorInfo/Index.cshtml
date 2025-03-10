@@ -5,21 +5,25 @@
 }
 
 <div class="box box-primary box-body" ng-controller="VendorWiseItemCtrl">
-    <div class="box-header with-border " style="font-family: Verdana; background: #c1d5bd; color: black; border-radius: 5px;">
-        <i class="fa fa-user"></i>
-        <h3 style="font-family: Verdana" class="box-title">Vendor Details Entry</h3>
+    <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
+        <h2 class="box-title" style="font-family: math; font-weight: 500;">Vendor Details Entry</h2>
+
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
-                <div class="box-group pull-right" style="margin: 3px">
-                    <button type="button" style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius:5px;" id="btnRefresh" data-ng-click="toggleRefreshTable()" class="btn btn-default btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Refresh</button>
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom" ng-disabled="loading">
+                        <i class="fa fa-refresh" style="padding-right: 5px"></i> Refresh
+                    </button>
                 </div>
-
-                <div class="btn-group pull-right" style="margin: 3px">
-                    <button type="button" style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius:5px;" id="search" data-ng-click="SearchListedVendors()" class="btn btn-primary btn-flat pull-right" ng-disabled="loading"><i class="fa fa-search"></i> Search</button>
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="SearchListedVendors()" class="button-custom" ng-disabled="loading">
+                        <i class="fa fa-search" style="padding-right: 5px"></i> Search
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
 
     @*LOADING*@
     <div id="mydiv" data-ng-show="loading">
@@ -35,7 +39,6 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
 
-                <hr style="margin-top: 0px; margin-bottom: 0px; border: 0; border-top: 1px solid #080404">
                 <div class="row" style="margin-top: 5px; margin-left:5px">
                     <div>
 
@@ -50,8 +53,8 @@
                                 <input id="VendorCode" type="text" autocomplete="off" name="VendorCode" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.VendorCode" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" @*required*@ />
                             </div>
                             @*<div class="col-md-3">
-                                <span class="center-block text-red" id="errorMessageVendorCode" style="display: none;">Please input valid Vendor Code.</span>
-                            </div>*@
+                                    <span class="center-block text-red" id="errorMessageVendorCode" style="display: none;">Please input valid Vendor Code.</span>
+                                </div>*@
                         </div>
 
                         <!-- Vendor Name -->
@@ -64,9 +67,9 @@
                             <div class="col-lg-4">
                                 <input id="VendorName" type="text" autocomplete="off" name="VendorName" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.VendorName" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" @*required*@ />
                             </div>
-                           @* <div class="col-md-3">
-                                <span class="center-block text-red" id="errorMessageVendorName" style="display: none;">Please input valid Vendor Name.</span>
-                            </div>*@
+                            @* <div class="col-md-3">
+                                    <span class="center-block text-red" id="errorMessageVendorName" style="display: none;">Please input valid Vendor Name.</span>
+                                </div>*@
                         </div>
                         <!-- Contact Person -->
                         <div class="row" style="margin-top: 5px;">
@@ -78,8 +81,8 @@
                                 <input id="ContactPerson" type="text" name="ContactPerson" autocomplete="off" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.ContactPerson" placeholder="First Name" style="font-size: smaller; padding: 3px 6px 3px;" @*required*@ />
                             </div>
                             @*<div class="col-md-3">
-                                <span class="center-block text-red" id="errorMessageContactPerson" style="display: none;">Please input valid ContactPerson.</span>
-                            </div>*@
+                                    <span class="center-block text-red" id="errorMessageContactPerson" style="display: none;">Please input valid ContactPerson.</span>
+                                </div>*@
                         </div>
 
                         <!-- Contact Number -->
@@ -91,8 +94,8 @@
                                 <input id="ContactNumber" type="text" autocomplete="off" name="ContactNumber" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.ContactNumber" placeholder="(+880) 00 0000 0000" style="font-size: smaller; padding: 3px 6px 3px;" @*required*@ />
                             </div>
                             @*<div class="col-md-3">
-                                <span class="center-block text-red" id="errorMessageVendorPhoneNumber" style="display: none;">Please input valid Contact Number.</span>
-                            </div>*@
+                                    <span class="center-block text-red" id="errorMessageVendorPhoneNumber" style="display: none;">Please input valid Contact Number.</span>
+                                </div>*@
                         </div>
 
                         <!-- Email -->
@@ -104,8 +107,8 @@
                                 <input id="Email" type="text" name="Email" autocomplete="off" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.Email" placeholder="yourname@gmail.com" style="font-size: smaller; padding: 3px 6px 3px;" @*required*@ />
                             </div>
                             @*<div class="col-md-3">
-                                <span class="center-block text-red" id="errorMessageEmail" style="display: none;">Please input valid Email.</span>
-                            </div>*@
+                                    <span class="center-block text-red" id="errorMessageEmail" style="display: none;">Please input valid Email.</span>
+                                </div>*@
                         </div>
 
 
@@ -147,7 +150,7 @@
                             </div>
                             <div class="col-lg-3">
 
-                                <select ng-model="VendorStatus"  ng-disabled="isAutoCheckMarkExecuted" class="form-control animated fadeInRight ng-pristine ng-valid ng-not-empty ng-touched" style="">
+                                <select ng-model="VendorStatus" ng-disabled="isAutoCheckMarkExecuted" class="form-control animated fadeInRight ng-pristine ng-valid ng-not-empty ng-touched" style="">
                                     <option value="">-- None --</option>
                                     <option value="1">Active</option>
                                     <option value="0">Inactive</option>
@@ -183,10 +186,10 @@
 
                     </div>
 
+                </div>
             </div>
         </div>
     </div>
-  </div>
 
 
 
@@ -231,7 +234,7 @@
                             <td class="col-lg-1">{{row.ServiceItemName}}</td>
 
                             <td class="col-lg-1">
-                               <button type="button" ng-click="selectMaterial(row)" data-dismiss="modal" title="Select" ng-disabled="isAutoCheckMarkExecuted">
+                                <button type="button" ng-click="selectMaterial(row)" data-dismiss="modal" title="Select" ng-disabled="isAutoCheckMarkExecuted">
                                     <i ng-show="!row.buttonChecked" class="fa fa-square-o"></i>
                                     <i ng-show="row.buttonChecked" class="fa fa-check-square-o"></i>
                                 </button>
@@ -363,7 +366,7 @@
         </div>
     </div>
 
-   
+
 </div>
 
 <script type="text/javascript">

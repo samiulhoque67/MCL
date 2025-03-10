@@ -32,10 +32,12 @@ namespace SILDMS.Service.Reports
         ValidationResult GetVendorNameAndAddress(string vendorID, out List<RptVendorWithAddress> RptAllEFTVendorList);
 
         ValidationResult ClientQuotationApproveReport(string ClientQutnAprvID, out DataTable dt);
+        ValidationResult MonthWiseVendorFinalBillPayment(string VendorID, string CertificateFromDate, out DataTable dt);
         ValidationResult ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID, string billCategory, out DataTable dt);
         ValidationResult FinalClientBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
         ValidationResult FinalClientDueBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
         ValidationResult OutputVatStatementReport(string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
         ValidationResult AITVDSReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
+        ValidationResult TDSVDSReport(string VendorID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt);
     }
 }

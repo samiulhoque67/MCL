@@ -4,8 +4,8 @@
     Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
 }
 <title>Reference Documents Details</title>
-<div class="box box-primary box-body" ng-controller="AITVDSReportCtrl" data-ng-init="init()">
-    @using (Html.BeginForm("AITVDSReport", "../Reports", System.Web.Mvc.FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+<div class="box box-primary box-body" ng-controller="TDSVDSReportCtrl" data-ng-init="init()">
+    @using (Html.BeginForm("TDSVDSReport", "../Reports", System.Web.Mvc.FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
     {
         <!-- box-header -->
         <div class="box-header with-border bg-light-blue-gradient" style="padding: 10px;">
@@ -40,18 +40,19 @@
             <div class="row">
             </div>
             <div class="row">
-                <div class="col-lg-3 ">
+                <div class="col-lg-2 ">
                     <div class="form-group">
-                        <label for="ClientName">Client Name :</label>
+                        <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Vendor List:</h2>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="ClientName" name="ClientName" type="text" data-ng-model="ClientReq.ClientName" class="form-control" ng-readonly="true" />
+                        <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorReq.VendorName" class="form-control" ng-readonly="true" />
                     </div>
                 </div>
+
                 <div class="col-lg-1">
-                    <button type="button" data-ng-click="ShowClientList()" class="form-control">Search</button>
+                    <button type="button" data-ng-click="ShowVendorList()" class="form-control">Search</button>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <label style="padding-left: 30px;">Download Type</label>
@@ -83,41 +84,43 @@
             </div>
         </div>
 
-        <div id="ClientInfoModal" class="modal fade">
+        <div id="VendorInfoModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
-                        <h3 class="modal-title">Client Information</h3>
+                        <h3 class="modal-title">Vendor Information</h3>
                     </div>
                     <div class="modal-body table-responsive">
-                        <table st-table="ClientDisplayedCollection" st-safe-src="ClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <table st-table="VendorDisplayedCollection" st-safe-src="VendorList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                             <thead>
                                 <tr>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCode')">Client Code</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientName')">Client Name</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCategoryName')">Client Category</th>
+                                    @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ServiceItemID')">Vendor Code</th>*@
+                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ServiceItemName')">ServiceItem Name</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorCode')">Vendor Code</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorName')">Vendor Name</th>
                                     <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactPerson')">Contact Person</th>
                                     <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactNumber')">Contact Number</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Email')">Email</th>
                                     <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>
                                     <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
                                     <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                                 </tr>
                                 <tr>
-                                    <th><input st-search="ClientCode" placeholder="Client Code" class="input-sm form-control" type="search" /></th>
-                                    <th><input st-search="ClientName" placeholder="ClientName" class="input-sm form-control" type="search" /></th>
+                                    <th><input st-search="VendorCode" placeholder="Vendor Code" class="input-sm form-control" type="search" /></th>
+                                    <th><input st-search="VendorName" placeholder="VendorName" class="input-sm form-control" type="search" /></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="row in ClientDisplayedCollection">
-                                    <td class="hidden">{{row.ClientID}}</td>
-                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientCode}}</td>
-                                    <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
-                                    <td class="hidden">{{row.ClientCategoryID}}</td>
-                                    <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientCategoryName}}</td>
+                                <tr ng-repeat="row in VendorDisplayedCollection">
+                                    <td class="hidden">{{row.VendorID}}</td>
+                                    <td class="hidden">{{row.ServiceItemID}}</td>
+                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ServiceItemName}}</td>
+                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.VendorCode}}</td>
+                                    <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
                                     <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactPerson}}</td>
                                     <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactNumber}}</td>
-                                    <td class="hidden">{{row.ClientAddressID}}</td>
+                                    <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.Email}}</td>
                                     <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.Address}}</td>
                                     <td class="col-lg-1 col-md-1 col-sm-1 text-center">
                                         <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
@@ -125,7 +128,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleClientSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                        <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorSelect(row)"><i class="fa fa-edit"></i> Select</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -220,23 +223,20 @@
         $('.datepicker').hide();
     });
 
-    app.controller('AITVDSReportCtrl', function ($scope, $http) {
+    app.controller('TDSVDSReportCtrl', function ($scope, $http) {
 
 
 
-     $scope.ShowClientList=function () {
-     $http.get("/ClientRequisition/GetClientInfoList")
-         .success(function (response) {
-             console.log(response);
-             $scope.ClientList = response.ClientInfoList;
-             $scope.ClientDisplayedCollection = [].concat($scope.ClientList);
-             console.log($scope.ClientDisplayedCollection);
-             $scope.loading = false;
-         })
-         .error(function () { });
-
-     $('#ClientInfoModal').modal('show');
- };
+        $scope.ShowVendorList = function () {
+            $http.get("/VendorRequisition/GetVendorWiseItemList?ServiceItemID=" + '')
+                .success(function (response) {
+                    $scope.VendorList = response.VendorInfoSearchList;
+                    $scope.VendorDisplayedCollection = [].concat($scope.VendorList);
+                    $scope.loading = false;
+                })
+                .error(function () { });
+            $('#VendorInfoModal').modal('show');
+        };
         $scope.saveIsReadOnly = false;
         $scope.showPrint = false;
         $scope.itemsByPage = 10;
@@ -269,25 +269,20 @@
         };
 
 
-        $scope.ClientReq = {
-            ClientReqID: "",
-            ClientID: "",
-            ClientName: "",
-
-            TermsID: "",
-            FormName: "",
-
-            //ContactPerson: "",
-            //ContactNumber: "",
-            //ClientTINNo: "",
-            //ClientBINNo: "",
-            //ClientAddress: "",
-
-            ClientReqNo: "",
+        $scope.VendorReq = {
+            VendorReqID: "",
+            VendorID: "",
+            VendorCode: "",
+            VendorName: "",
+            ContactPerson: "",
+            ContactNumber: "",
+            VendorTINNo: "",
+            VendorBINNo: "",
+            VendorAddress: "",
+            RequisitionNo: "",
             SubmissionDate: "",
             RequisitionDate: "",
-            Remarks: "",
-            Status: ""
+            Remarks: ""
         }
         $scope.toggleClientSelect = function (row) {
             $scope.ClientReq.ClientID = row.ClientID;

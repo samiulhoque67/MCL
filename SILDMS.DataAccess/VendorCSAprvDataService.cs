@@ -672,5 +672,126 @@ namespace SILDMS.DataAccess
             }
             return VendorCSInfoItemList;
         }
+
+        public List<Invitation> SearchCSData(string userID)
+        {
+            var invitationList = new List<Invitation>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_SearchForCSRecm"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@UserId", SqlDbType.VarChar, userID);
+
+                // Execute SP.
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+
+                    invitationList = dt1.AsEnumerable().Select(reader => new Invitation
+                    {
+                        //Invitation_Number = reader.GetString("InvitationNumber"),
+                        VendorCSNumber = reader.GetString("VendorCSAprvID"),
+                        VendorRequisitionNumber = reader.GetString("VendorReqID"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        CSRecDate = reader.GetString("CSRecDate"),
+                        Operation = reader.GetString("Operation"),
+                        RecommendedBy = reader.GetString("RecommendedBy"),
+                        Remarks = reader.GetString("Remarks")
+
+
+
+
+                    }).ToList();
+
+                }
+            }
+            return invitationList;
+        }
+
+        public List<OBS_VendorCSRecmItem> CSVendorData(string userID, string cSNumber)
+        {
+
+            var CSVendorList = new List<OBS_VendorCSRecmItem>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_CSVendorRecm"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@UserId", SqlDbType.VarChar, userID);
+                db.AddInParameter(dbCommandWrapper, "@CSNumber", SqlDbType.VarChar, cSNumber);
+
+                // Execute SP.
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+
+                    CSVendorList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
+                    {
+                        //InvitationNumber = reader.GetString("InvitationNumber"),
+                        VendorQutnID = reader.GetString("VendorQutnID"),
+                        VendorCSInfoID = reader.GetString("VendorCSRecmID"),
+                        VendorName = reader.GetString("VendorName"),
+                     
+                        ReqQnty = reader.GetString("ReqQnty"),
+                        QutnQnty = reader.GetString("QutnQnty"),
+                        TolAmt = reader.GetString("TolAmt"),
+
+                        DeliveryDate = reader.GetString("DeliveryDate"),
+                     
+
+
+
+                    }).ToList();
+                }
+            }
+
+            return CSVendorList;
+        }
+
+        public List<OBS_VendorCSRecmTerms> CSVendorTerms(string cSNumber)
+        {
+            string errorNumber = string.Empty;
+            List<OBS_VendorCSRecmTerms> VendorCSInfoItemList = new List<OBS_VendorCSRecmTerms>();
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSTermListRecm"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@VendorCSRecmID", SqlDbType.VarChar, cSNumber);
+                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, "");
+                // Execute SP. 
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt1 = ds.Tables[0];
+                    VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmTerms
+                    {
+                        //VendorCSInfoTermID = reader.GetString("VendorCSInfoTermID"),
+                        //VendorCSInfoID = reader.GetString("VendorCSInfoID"),
+                        TermsID = reader.GetString("TermsID"),
+                        TermsCode = reader.GetString("TermsCode"),
+                        TermsName = reader.GetString("TermsName"),
+                        VendorID = reader.GetString("VendorID"),
+                        VendorName = reader.GetString("VendorName"),
+
+                    }).ToList();
+                }
+            }
+            return VendorCSInfoItemList;
+        }
     }
 }

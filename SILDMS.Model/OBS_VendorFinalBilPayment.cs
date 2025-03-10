@@ -90,6 +90,8 @@ namespace SILDMS.Model
         public int WOInstallmentNo { get; set; }
         public double WOInstallmentAmt { get; set; }
         public Int64 VendorFinalBilPaymentID { get; set; }
-        public object NetActualPayableAmount { get; set; }
+        public decimal NetActualPayableAmount { get; set; }
+        public string ContractNo { get; set; }
+        public string ContractDate { get; set; }
     }
 }

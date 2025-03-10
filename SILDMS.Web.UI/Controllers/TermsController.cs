@@ -37,53 +37,12 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> SaveTermsAndConditions(OBS_Terms vmTerms, List<OBS_TermsItem> vmTermsItem)
         {
             vmTerms.SetBy = UserID;
-            string status = string.Empty;//, message = string.Empty;
+            string status = string.Empty;
             status = _termsService.SaveTermsAndConditions(vmTerms, vmTermsItem);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
-        //public async Task<dynamic> GetTermsAndConditionsSearchList()
-        //{
-        //    var clientReqSearchList = new List<OBS_Terms>();
-        //    await Task.Run(() => _termsService.GetTermsAndConditionsSearchList(out clientReqSearchList));
-        //    var result = Json(new { clientReqSearchList, msg = "clientReqSearchList are loaded in the table." }, JsonRequestBehavior.AllowGet);
-        //    result.MaxJsonLength = Int32.MaxValue;
-        //    return result;
-        //}
-
-        //public async Task<dynamic> GetTermsAndConditionsItemList(string ClientReqID, string ReqType)
-        //{
-        //    var ClientReqItemList = new List<OBS_TermsItem>();
-        //    await Task.Run(() => _termsService.GetTermsAndConditionsItemList(ClientReqID, ReqType, out ClientReqItemList));
-        //    var result = Json(new { ClientReqItemList, msg = "ClientReqItemList are loaded in the table." }, JsonRequestBehavior.AllowGet);
-        //    result.MaxJsonLength = Int32.MaxValue;
-        //    return result;
-        //}
-
-        //public async Task<dynamic> DeleteTermsAndConditionsItem(string TermsItemID)
-        //{
-        //    string status = string.Empty;
-        //    status = _termsService.DeleteTermsAndConditionsItem(TermsItemID);
-        //    return Json(new { status }, JsonRequestBehavior.AllowGet);
-        //    //return Json(new { ResponseCode = status, message }, JsonRequestBehavior.AllowGet);
-        //}
-
-
-        //[HttpGet]
-        ////[Authorize]
-        //public async Task<dynamic> GetServicesCategory()
-        //{
-        //    //UserID = SILAuthorization.GetUserID();
-        //    List<OBS_ServicesCategory> obServicesCategory = null;
-        //    //await Task.Run(() => _termsService.GetServicesCategory(UserID, out obServicesCategory));
-        //    //var result = obServicesCategory.Select(x => new
-        //    //{
-        //    //    TermsCategoryID = x.ServicesCategoryID,
-        //    //    TermsCategoryName = x.ServicesCategoryName
-        //    //}).OrderByDescending(ob => ob.TermsCategoryID);
-
-        //    return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
-        //}
+       
 
         [HttpPost]
         [Authorize]
@@ -91,7 +50,7 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> SaveTermsMst(OBS_Terms _modelTermsMst, List<OBS_TermsItem> itemList)
         {
             _modelTermsMst.SetBy = UserID;
-            string status = string.Empty;//, message = string.Empty;
+            string status = string.Empty;
             status = _termsService.SaveTermsMst(_modelTermsMst);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
@@ -99,7 +58,7 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> SaveTermsItem(OBS_TermsItem _modelTermsItem)
         {
             _modelTermsItem.SetBy = UserID;
-            string status = string.Empty;//, message = string.Empty;
+            string status = string.Empty;
             status = _termsService.SaveTermsItem(_modelTermsItem);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
@@ -110,7 +69,7 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> DeleteTermsItem(OBS_TermsItem _modelTermsItem)
         {
             _modelTermsItem.Action = "delete";
-            string status = string.Empty;//, message = string.Empty;
+            string status = string.Empty;
             status = _termsService.SaveTermsItem(_modelTermsItem);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
@@ -129,6 +88,15 @@ namespace SILDMS.Web.UI.Controllers
             var TermsItemList = new List<OBS_TermsItem>();
             await Task.Run(() => _termsService.GetTermsItemList(TermsID, out TermsItemList));
             var result = Json(new { TermsItemList, msg = "TermsSearchList are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
+        }
+
+        public async Task<dynamic> GetFormList()
+        {
+            var FormList = new List<OBS_Form>();
+            await Task.Run(() => _termsService.GetFormList(out FormList));
+            var result = Json(new { FormList, msg = "FormList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }

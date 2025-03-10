@@ -61,6 +61,8 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         VATPercentage = reader.GetToDecimal("VatPercnt"),
                         BillType = reader.GetString("BillType"),
                         BillCategory = reader.GetString("BillCategory"),
+                        ContractNo = reader.GetString("ContractNo"),
+                        ContractDate = reader.GetString("ContractDate"),
 
                         VendorBillDate = reader.IsNull("VendorBillDate") ? string.Empty : reader.GetString("VendorBillDate"),
                         Note= reader.IsNull("Note") ? string.Empty : reader.GetString("Note")
@@ -160,6 +162,8 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                     db.AddInParameter(dbCommandWrapper, "@AdvancePaidDate", SqlDbType.NVarChar, billRecv.AdvancePaidDate);
                     db.AddInParameter(dbCommandWrapper, "@BillAmount", SqlDbType.Decimal, billRecv.BillAmount);
                     db.AddInParameter(dbCommandWrapper, "@VendorBillNo", SqlDbType.NVarChar, billRecv.VendorBillNo);
+                    db.AddInParameter(dbCommandWrapper, "@ContractNo", SqlDbType.NVarChar, billRecv.ContractNo);
+                    db.AddInParameter(dbCommandWrapper, "@ContractDate", SqlDbType.NVarChar, billRecv.ContractDate);
                     db.AddInParameter(dbCommandWrapper, "@VendorBillDate", SqlDbType.NVarChar, billRecv.VendorBillDate);
                     db.AddInParameter(dbCommandWrapper, "@BillReceiveDate", SqlDbType.NVarChar, billRecv.BillReceiveDate);
                     db.AddInParameter(dbCommandWrapper, "@VATPercentage", SqlDbType.Decimal, billRecv.VATPercentage);

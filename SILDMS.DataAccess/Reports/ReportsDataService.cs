@@ -384,5 +384,47 @@ namespace SILDMS.DataAccess.Reports
 
             }
         }
+
+        public DataTable TDSVDSReport(string VendorID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetTDSVDSReportData"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@vendorID", SqlDbType.VarChar, VendorID);
+                db.AddInParameter(dbCommandWrapper, "@billReceiveFromDate", SqlDbType.VarChar, billReceiveFromDate);
+                db.AddInParameter(dbCommandWrapper, "@billReceiveToDate", SqlDbType.VarChar, billReceiveToDate);
+
+                ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
+                //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
+                ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
+
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+
+            }
+        }
+
+
+        public DataTable MonthWiseVendorFinalBillPayment(string VendorID, string CertificateFromDate, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_MonthWiseVendorFinalBillPayment"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
+                db.AddInParameter(dbCommandWrapper, "@CertificateFromDate", SqlDbType.VarChar, CertificateFromDate);
+
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+
+        }
     }
 }

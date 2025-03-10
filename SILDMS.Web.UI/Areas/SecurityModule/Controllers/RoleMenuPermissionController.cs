@@ -22,19 +22,19 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
 
         private readonly ILocalizationService _localizationService;
         private ValidationResult respStatus = new ValidationResult();
-        private string outStatus = string.Empty;        
+        private string outStatus = string.Empty;
         private readonly string UserID = string.Empty;
 
         public RoleMenuPermissionController(IRoleSetupService roleService,
-            ILocalizationService localizationService,IRoleMenuPermissionService roleMenuPermissionService,
+            ILocalizationService localizationService, IRoleMenuPermissionService roleMenuPermissionService,
             IUserService userService)
         {
             _roleSetupService = roleService;
-            
+
             _localizationService = localizationService;
             _roleMenuPermissionService = roleMenuPermissionService;
             UserID = SILAuthorization.GetUserID();
-           _userService = userService;
+            _userService = userService;
         }
         [SILAuthorize]
         public ActionResult Index()
@@ -61,18 +61,18 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
             return Json(new { Msg = "", result }, JsonRequestBehavior.AllowGet);
         }
         [Authorize]
-        public async Task<dynamic> GetMenuTreeData( string _OwnerID)
+        public async Task<dynamic> GetMenuTreeData(string _OwnerID)
         {
             List<SEC_User> users = null;
-                      await Task.Run(() => _userService.GetAllUser(UserID, "", out users));
+            await Task.Run(() => _userService.GetAllUser(UserID, "", out users));
 
             var roleInfo = (from r in users
-                where r.UserID == UserID
-                select new
-                {
-                    RoleID = r.RoleID,
-                    RoleTitle = r.RoleTitle
-                }).FirstOrDefault();
+                            where r.UserID == UserID
+                            select new
+                            {
+                                RoleID = r.RoleID,
+                                RoleTitle = r.RoleTitle
+                            }).FirstOrDefault();
 
             if (roleInfo.RoleTitle == "Super Admin")
             {
@@ -82,8 +82,10 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
                 await Task.Run(() => _roleMenuPermissionService.GetOwnerPermittedMenu
                     (UserID, "", out resultNav));
 
-                var root = (from t in resultNav where t.ParentMenuID == "0" &
-                                t.Status == 1 select t).ToList();
+                var root = (from t in resultNav
+                            where t.ParentMenuID == "0" &
+                                t.Status == 1
+                            select t).ToList();
                 foreach (var item in root)
                 {
                     Model.SecurityModule.Parent p = new Model.SecurityModule.Parent();
@@ -111,29 +113,31 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
 
 
                 var PermittedMenus = (from pm in roleMenuPermissionList
-                    where pm.RoleID == roleInfo.RoleID & pm.Status == 1
-                    join m in resultNav on pm.MenuID equals m.MenuID  into permittedmenus
-                    from r in permittedmenus.DefaultIfEmpty()
-                    select new SEC_NavMenuOptSetup
-                    {
-                        MenuID = pm.MenuID,
-                        MenuTitle = pm.MenuTitle,
-                        MenuUrl = r.MenuUrl,
-                        ParentMenuID = r.ParentMenuID,
-                        MenuIcon = r.MenuIcon,
-                        MenuOrder = r.MenuOrder,
-                        SetBy = pm.SetBy,
-                        SetOn = pm.SetOn,
-                        Status = pm.Status
-                    }).ToList();
+                                      where pm.RoleID == roleInfo.RoleID & pm.Status == 1
+                                      join m in resultNav on pm.MenuID equals m.MenuID into permittedmenus
+                                      from r in permittedmenus.DefaultIfEmpty()
+                                      select new SEC_NavMenuOptSetup
+                                      {
+                                          MenuID = pm.MenuID,
+                                          MenuTitle = pm.MenuTitle,
+                                          MenuUrl = r.MenuUrl,
+                                          ParentMenuID = r.ParentMenuID,
+                                          MenuIcon = r.MenuIcon,
+                                          MenuOrder = r.MenuOrder,
+                                          SetBy = pm.SetBy,
+                                          SetOn = pm.SetOn,
+                                          Status = pm.Status
+                                      }).ToList();
 
 
                 List<Model.SecurityModule.Parent> parent = new List<Model.SecurityModule.Parent>();
                 List<Child> child = new List<Child>();
 
 
-                var root = (from t in PermittedMenus where t.ParentMenuID == "0" &
-                                t.Status == 1 select t).ToList();
+                var root = (from t in PermittedMenus
+                            where t.ParentMenuID == "0" &
+                                t.Status == 1
+                            select t).ToList();
                 foreach (var item in root)
                 {
                     Model.SecurityModule.Parent p = new Model.SecurityModule.Parent();
@@ -149,14 +153,16 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
 
                 return Json(parent, JsonRequestBehavior.AllowGet);
             }
-            
+
         }
         [Authorize]
         public List<Child> GetChild(List<SEC_NavMenuOptSetup> lstMenuSetup, string parentId)
         {
             List<Child> lstChild = new List<Child>();
-            var hasChild = (from c in lstMenuSetup where c.ParentMenuID == parentId &
-                                c.Status == 1 select c).ToList();
+            var hasChild = (from c in lstMenuSetup
+                            where c.ParentMenuID == parentId &
+                                c.Status == 1
+                            select c).ToList();
             if (hasChild.Count > 0)
             {
                 foreach (var item in hasChild)
@@ -179,11 +185,11 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
             {
 
                 objMenuDetails.SetBy = UserID;
-                
+
                 respStatus = await Task.Run(() => _roleMenuPermissionService.
                     SetRoleMenuPermission(objMenuDetails, out outStatus));
-                 
-                return Json(new { Message = respStatus.Message, respStatus }, 
+
+                return Json(new { Message = respStatus.Message, respStatus },
                     JsonRequestBehavior.AllowGet);
             }
             else
@@ -201,13 +207,13 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
             await Task.Run(() => _roleMenuPermissionService.GetRoleMenuPermission(UserID, "", out roleMenuPermissionList));
 
             var result = (from r in roleMenuPermissionList
-                select new SEC_RoleMenuPermission
-                {
-                    RoleMenuPermissionID = r.RoleMenuPermissionID,
-                    RoleID = r.RoleID,
-                    MenuID = r.MenuID
-                }).ToList();
-                          
+                          select new SEC_RoleMenuPermission
+                          {
+                              RoleMenuPermissionID = r.RoleMenuPermissionID,
+                              RoleID = r.RoleID,
+                              MenuID = r.MenuID
+                          }).ToList();
+
 
             return Json(new { Msg = "", result }, JsonRequestBehavior.AllowGet);
         }
@@ -218,12 +224,18 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
             await Task.Run(() => _roleMenuPermissionService.GetRoleMenuPermission(UserID, "", out roleMenuPermissionList));
 
             var result = (from r in roleMenuPermissionList
-                where r.OwnerID == _OwnerID && r.RoleID == _RoleID & r.Status == 1 && r.UserLevel == "1"
-                select r.MenuID).ToList();
+                          where r.OwnerID == _OwnerID && r.RoleID == _RoleID & r.Status == 1 && r.UserLevel == "1"
+                          select r.MenuID).ToList();
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-	}
+
+
+
+
+
+
+    }
 
 }

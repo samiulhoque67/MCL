@@ -46,27 +46,38 @@
 </style>
 
 <div class="box box-primary box-body" ng-controller="PoAprvCtrl">
-    <div class="box-header with-border" style="font-family: Verdana; background: #E4E9E3; color: black; ">
-        <i class="fa fa-user"></i>
-        <h3 style="font-family: Verdana" class="box-title">Purchase Order Aproval</h3>
+    <div class="box-header with-border bg-light-blue-gradient" style="height: 38px; border-radius: 5px;">
+        <h2 class="box-title" style="font-family: math; font-weight: 500;">Purchase Order Approval</h2>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="btnRefresh"><i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh</button>
+                    <button class="button-custom btn-warning" type="button" data-ng-click="toggleRefreshTable()" ng-disabled="btnRefresh">
+                        <i class="fa fa-refresh" style="padding-right: 5px"></i> Refresh
+                    </button>
                 </div>
+
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="SearchVendorReqModal()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
+                    <button class="button-custom btn-primary" type="button" data-ng-click="SearchVendorReqModal()" ng-disabled="btnSearch">
+                        <i class="fa fa-search" style="padding-right: 5px"></i> Search
+                    </button>
                 </div>
+
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Post()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>   {{ VendorReq.VendorReqID ? 'Update' : 'Save' }}</button>
+                    <button class="button-custom btn-primary" type="button" data-ng-click="Post()" ng-disabled="btnSave">
+                        <i class="fa fa-save" style="padding-right: 5px"></i> {{ VendorReq.VendorReqID ? 'Update' : 'Save' }}
+                    </button>
                 </div>
+
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Cancel()" class="btn btn-flat btn-primary pull-right " ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>Cancel</button>
+                    <button class="button-custom btn-danger" type="button" data-ng-click="Cancel()" ng-disabled="btnSave">
+                        <i class="fa fa-close" style="padding-right: 5px"></i> Cancel
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div id="VendorSlipModal" class="modal fade">
         <div class="modal-dialog">
@@ -216,8 +227,8 @@
                                                 @*<th style="text-align: left;">Action</th>*@
                                             </tr>
                                             @*<tr>
-                            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                        </tr>*@
+                                                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                                                </tr>*@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="row in PoPrintCollection" ng-cloak style="font-size:12px;">
@@ -238,15 +249,15 @@
                                     </table>
                                     <!-- Total Section -->
                                     @*<div class="flex-container" style="margin-top: 10px;">
-                    <div style="font-weight: bold;">Total (BDT):</div>
-                    <div style="font-weight: bold;">Inword:</div>
-                    <div style="font-weight: bold;">Grand Total (BDT):</div>
-                </div>*@
+                                            <div style="font-weight: bold;">Total (BDT):</div>
+                                            <div style="font-weight: bold;">Inword:</div>
+                                            <div style="font-weight: bold;">Grand Total (BDT):</div>
+                                        </div>*@
                                 </div>
                             </div>
 
 
-                         
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
@@ -254,38 +265,38 @@
                                             <tr>
                                                 <th style="text-align: left;" st-sort="">Terms Code</th>
                                                 <th style="text-align: left;" st-sort="">Terms & Conditions</th>
-                                             
+
                                             </tr>
-                                          
+
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-                                                
+
                                                 <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
                                                 <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
 
-                                              
+
                                             </tr>
                                         </tbody>
-                                        
+
                                     </table>
                                 </div>
                             </div>
-                            </div>
-                        </div>
-
                         </div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                        </div>
-                    </div>
                 </div>
             </div>
-       
+        </div>
+
+        <div class="modal-footer">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="form-group">
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 
@@ -401,9 +412,9 @@
                         <tr>
 
                             <th style="text-align: left;" st-sort="">Item Name</th>
-                            <th style="text-align: left;" st-sort="">ReqQnty</th>
-                            <th style="text-align: left;" st-sort="">RemainingQnty</th>
-                            <th style="text-align: left;" st-sort="">ReqUnit</th>
+                            @*<th style="text-align: left;" st-sort="">ReqQnty</th>
+                                <th style="text-align: left;" st-sort="">RemainingQnty</th>
+                                <th style="text-align: left;" st-sort="">ReqUnit</th>*@
                             <th style="text-align: left;" st-sort="">QutnQnty</th>
                             <th style="text-align: left;" st-sort="">POQnty</th>
 
@@ -430,9 +441,9 @@
                             @*<td class="col-lg-1">{{ row.ServiceItemID }} </td>*@
                             <td class="col-lg-1">{{row.ServiceItemName}}</td>
 
-                            <td class="col-lg-1">{{row.ReqQnty | number:2}}</td>
-                            <td class="col-lg-1">{{row.RemainingQty}}</td>
-                            <td class="col-lg-1">{{row.ReqUnit}}</td>
+                            @*<td class="col-lg-1">{{row.ReqQnty | number:2}}</td>
+                                <td class="col-lg-1">{{row.RemainingQty}}</td>
+                                <td class="col-lg-1">{{row.ReqUnit}}</td>*@
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoQty" ng-value="0" ng-readonly="true" />
@@ -570,7 +581,7 @@
 
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label>Recommended Amount:</label>
+                        <label>Approved Amount:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -598,7 +609,7 @@
 
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label>PO Recom Date</label>
+                        <label>PO Approve Date</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -666,30 +677,30 @@
                             <th style="text-align: left;" st-sort="">Terms & Conditions</th>
                             <th style="text-align: left;">Action</th>
                         </tr>
-    <tr>
-            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-            <td class="hidden">{{row.VendorCSInfoTermsID}}</td>
-            <td class="hidden">{{row.VendorCSInfoID}}</td>
-            <td class="hidden">{{row.TermsID}}</td>
-            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-            <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
+                        <tr>
+                            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td class="hidden">{{row.VendorCSInfoTermsID}}</td>
+                            <td class="hidden">{{row.VendorCSInfoID}}</td>
+                            <td class="hidden">{{row.TermsID}}</td>
+                            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
 
-            <td class="col-lg-1" style="width:5%;">
-                <button type="button" ng-if="row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                <button type="button" ng-if="!row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
-            </td>
-        </tr>
-    </tbody>
-    <tfoot>
-    <tr>
-            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-        </tr>
-    </tfoot>
+                            <td class="col-lg-1" style="width:5%;">
+                                <button type="button" ng-if="row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" ng-if="!row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>

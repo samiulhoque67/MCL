@@ -3,21 +3,25 @@
 }
 <div class="box box-primary box-body" ng-controller="ownersCtrl">
     <!-- box-header -->
-    <div class="box-header with-border">
-        <i class="fa fa-user"></i>
-        <h3 class="box-title">Department List</h3>
+    <div class="box-header with-border bg-light-blue-gradient" style="height: 38px;">
+        <h3 class="box-title" style="font-family: math; font-weight: 500;">Department List</h3>
         <div class="box-tools pull-right">
-            <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable(row)" class="btn btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Refresh</button>
-            <button type="button" id="btnAdd" data-ng-click="toggleAdd(row)" class="btn btn-flat btn-primary pull-right btnSave" ng-disabled="loading"> <i class="fa fa-plus"></i> Add New</button>
+            <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable(row)" class="button-custom pull-right" ng-disabled="loading">
+                <i class="fa fa-refresh"></i> Refresh
+            </button>
+            <button type="button" id="btnAdd" data-ng-click="toggleAdd(row)" class="button-custom btn-primary pull-right" ng-disabled="loading">
+                <i class="fa fa-plus"></i> Add New
+            </button>
         </div>
     </div>
+
     <!-- /.box-header -->
     <div class="box-body table-responsive" data-ng-disabled="">
 
         <table st-table="displayedCollection" st-safe-src="owners" class="table table-condensed table-bordered table-striped table-hover pnlView">
             <thead>
                 <tr>
-                    
+
                     @*<th st-sort="UDOwnerCode">Owner Code</th>*@
                     <th st-sort="OwnerName">Department Name</th>
                     <th st-sort="ParentName">Parent Owner</th>
@@ -32,7 +36,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="row in displayedCollection" ng-cloak>
-                    
+
                     @*<td>{{row.UDOwnerCode}}</td>*@
                     <td>{{row.OwnerName}}</td>
                     <td>{{row.ParentName}}</td>
@@ -101,7 +105,7 @@
                                             <!-- Text Box for Owner Name -->
                                             <label for="OwnerName">Deparment Name </label>
                                             <input id="OwnerName" name="OwnerName" type="text" data-ng-model="ownerModel.OwnerName"
-                                                   class="form-control" placeholder="Deparment Name" required/>
+                                                   class="form-control" placeholder="Deparment Name" required />
                                             <div ng-show="ownerFrm.$submitted || ownerFrm.OwnerName.$touched">
                                                 <span ng-show="ownerFrm.OwnerName.$error.required" class="label label-danger">Please enter company's name</span>
                                             </div>

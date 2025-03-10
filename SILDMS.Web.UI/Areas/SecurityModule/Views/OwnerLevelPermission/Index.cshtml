@@ -4,13 +4,17 @@
 
 <div class="box box-primary box-body" ng-controller="OwnerProperIdentityCtrl" data-ng-init="init()">
     <!-- box-header -->
-    <div class="box-header with-border">
-        <i class="fa fa-key"></i>
-        <h3 class="box-title">Department Permisson Setup Form</h3>
+    <div class="box-header with-border bg-light-blue-gradient" style="height: 38px;">
+        <h3 class="box-title" style="font-family: math; font-weight: 500;">
+            <i class="fa fa-key"></i> Department Permission Setup Form
+        </h3>
         <div class="box-tools pull-right">
-            <button type="button" id="btnRefresh" data-ng-click="ResetModel()" class="btn btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Refresh</button>
+            <button type="button" id="btnRefresh" data-ng-click="ResetModel()" class="button-custom pull-right" ng-disabled="loading">
+                <i class="fa fa-refresh"></i> Refresh
+            </button>
         </div>
     </div>
+
     <!-- /.box-header -->
 
     <div class="box-body">
@@ -66,7 +70,7 @@
                 </div>
                 <div class="col-lg-2">
                     <input type="text" class="form-control" placeholder="Employee ID" name="EmployeeID"
-                           ng-model="UserModel.EmployeeID" readonly="readonly" ng-maxlength="256" required/>
+                           ng-model="UserModel.EmployeeID" readonly="readonly" ng-maxlength="256" required />
                     <div ng-show="frmOwnerPermission.$submitted || frmOwnerPermission.EmployeeID.$touched">
                         <span ng-show="frmOwnerPermission.EmployeeID.$error.required" class="label label-danger">
                             Please Select an Employee
@@ -129,23 +133,23 @@
             </div>
 
             @*<div class="row form-group">
-                <div class="col-lg-2">
-                    <label>Job Location</label>
-                </div>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" placeholder="Job Location"
-                           ng-model="UserModel.JobLocation" readonly="readonly" />
-                </div>
+                    <div class="col-lg-2">
+                        <label>Job Location</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" placeholder="Job Location"
+                               ng-model="UserModel.JobLocation" readonly="readonly" />
+                    </div>
 
-                <div class="col-lg-2">
-                    <label>User Level</label>
-                </div>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" placeholder="User Level"
-                           ng-model="UserModel.UserLevel" readonly="readonly" />
-                </div>
+                    <div class="col-lg-2">
+                        <label>User Level</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" placeholder="User Level"
+                               ng-model="UserModel.UserLevel" readonly="readonly" />
+                    </div>
 
-            </div>*@
+                </div>*@
             <div class="row form-group">
                 <div class="col-lg-2">
                     <label>Enable Owner Security</label>
@@ -187,11 +191,11 @@
                         <label>Department</label>
                     </div>
                     @*<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                        <label>User Level</label>
-                    </div>
-                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                        <label>Supervisor Level</label>
-                    </div>*@
+                            <label>User Level</label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                            <label>Supervisor Level</label>
+                        </div>*@
                 </div>
                 <div class="row form-group ">
                     <div ng-repeat="owner in ownersListForSpecificOwnerLevel">
@@ -201,20 +205,20 @@
                         </div>
                         @*<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
 
-                            <select class="form-control" ng-model="UserLevel.UserLevel"
-                                    data-ng-options="usrLevel as usrLevel.UserLevelName for usrLevel in AllVmUserLevel track by usrLevel.UserLevel"
-                                    data-ng-disabled="" id="{{'U_' + owner.OwnerID}}">
-                                <option value="">-- Select One --</option>
-                            </select>
+                                <select class="form-control" ng-model="UserLevel.UserLevel"
+                                        data-ng-options="usrLevel as usrLevel.UserLevelName for usrLevel in AllVmUserLevel track by usrLevel.UserLevel"
+                                        data-ng-disabled="" id="{{'U_' + owner.OwnerID}}">
+                                    <option value="">-- Select One --</option>
+                                </select>
 
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                            <select class="form-control" ng-model="UserLevel.SupervisorLevel"
-                                    data-ng-options="usrLevel as usrLevel.UserLevelName for usrLevel in AllVmUserLevel track by usrLevel.UserLevel"
-                                    data-ng-disabled="" id="{{'S_' + owner.OwnerID}}">
-                                <option value="">-- Select One --</option>
-                            </select>
-                        </div>*@
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                <select class="form-control" ng-model="UserLevel.SupervisorLevel"
+                                        data-ng-options="usrLevel as usrLevel.UserLevelName for usrLevel in AllVmUserLevel track by usrLevel.UserLevel"
+                                        data-ng-disabled="" id="{{'S_' + owner.OwnerID}}">
+                                    <option value="">-- Select One --</option>
+                                </select>
+                            </div>*@
                     </div>
 
 
@@ -230,123 +234,123 @@
             </div>
 
         </form>
-    
-</div>
 
-    
-    
+    </div>
+
+
+
     <!-- Add Menu Modal -->
-        <div id="addModal" class="modal fade">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" ng-click="" aria-hidden="true">x</button>
-                                <h3 class="modal-title">Employee List</h3>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-sm-12 table-responsive">
-                                        <table st-table="displayedCollection" st-safe-src="EmployeeGridData" class="table table-condensed table-bordered table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th st-sort="EmployeeID">Employee ID</th>
-                                                    <th st-sort="UserFullName">Full Name</th>
-                                                    <th st-sort="UserDesignation">Designation</th>
-                                                    <th st-sort="JobLocation">Job Location</th>
-                                                    <th st-sort="UserNo">User No.</th>
-                                                    <th st-sort="UserName">User Name</th>
-                                                    <th st-sort="RoleName">Role</th>
-                                                    <th st-sort="PermissionLevel">Permission Level</th>
-                                                    <th st-sort="SupervisorLevel">Supervisor Level</th>
-                                                    <th st-sort="UserLevelName">User Level</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        <input st-search="EmployeeID" placeholder="EmployeeID"
-                                                               class="input-sm form-control" type="search" />
-                                                    </th>
-                                                    <th>
-                                                        <input st-search="UserFullName"
-                                                               placeholder="UserFullName" class="input-sm form-control"
-                                                               type="search" />
-                                                    </th>
-                                                    <th>
-                                                        <input st-search="UserDesignation" placeholder="UserDesignation"
-                                                               class="input-sm form-control" type="search" />
-                                                    </th>
+    <div id="addModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Employee List</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-sm-12 table-responsive">
+                            <table st-table="displayedCollection" st-safe-src="EmployeeGridData" class="table table-condensed table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th st-sort="EmployeeID">Employee ID</th>
+                                        <th st-sort="UserFullName">Full Name</th>
+                                        <th st-sort="UserDesignation">Designation</th>
+                                        <th st-sort="JobLocation">Job Location</th>
+                                        <th st-sort="UserNo">User No.</th>
+                                        <th st-sort="UserName">User Name</th>
+                                        <th st-sort="RoleName">Role</th>
+                                        <th st-sort="PermissionLevel">Permission Level</th>
+                                        <th st-sort="SupervisorLevel">Supervisor Level</th>
+                                        <th st-sort="UserLevelName">User Level</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <input st-search="EmployeeID" placeholder="EmployeeID"
+                                                   class="input-sm form-control" type="search" />
+                                        </th>
+                                        <th>
+                                            <input st-search="UserFullName"
+                                                   placeholder="UserFullName" class="input-sm form-control"
+                                                   type="search" />
+                                        </th>
+                                        <th>
+                                            <input st-search="UserDesignation" placeholder="UserDesignation"
+                                                   class="input-sm form-control" type="search" />
+                                        </th>
 
-                                                    <th>
-                                                        <input st-search="JobLocation"
-                                                               placeholder="JobLocation" class="input-sm form-control" type="search" />
-                                                    </th>
-                                                    <th>
-                                                        <input st-search="UserNo" placeholder="UserNo"
-                                                               class="input-sm form-control" type="search" />
-                                                    </th>
-                                                    <th>
-                                                        <input st-search="UserName"
-                                                               placeholder="UserName" class="input-sm form-control" type="search" />
-                                                    </th>
-                                                    <th>
-                                                        <input st-search="RoleName" placeholder="RoleName"
-                                                               class="input-sm form-control" type="search" />
-                                                    </th>
+                                        <th>
+                                            <input st-search="JobLocation"
+                                                   placeholder="JobLocation" class="input-sm form-control" type="search" />
+                                        </th>
+                                        <th>
+                                            <input st-search="UserNo" placeholder="UserNo"
+                                                   class="input-sm form-control" type="search" />
+                                        </th>
+                                        <th>
+                                            <input st-search="UserName"
+                                                   placeholder="UserName" class="input-sm form-control" type="search" />
+                                        </th>
+                                        <th>
+                                            <input st-search="RoleName" placeholder="RoleName"
+                                                   class="input-sm form-control" type="search" />
+                                        </th>
 
-                                                    <th>
-                                                        <input st-search="PermissionLevel"
-                                                               placeholder="PermissionLevel" class="input-sm form-control" type="search" />
-                                                    </th>
-                                                    <th>
-                                                        <input st-search="SupervisorLevel" placeholder="SupervisorLevel"
-                                                               class="input-sm form-control" type="search" />
-                                                    </th>
-                                                    <th>
-                                                        <input st-search="UserLevelName"
-                                                               placeholder="UserLevelName" class="input-sm form-control" type="search" />
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr ng-repeat="row in displayedCollection">
-                                                    <td>{{row.EmployeeID}}</td>
-                                                    <td>{{row.UserFullName}}</td>
-                                                    <td>{{row.UserDesignation}}</td>
-                                                    <td>{{row.JobLocation}}</td>
-                                                    <td>{{row.UserNo}}</td>
-                                                    <td>{{row.UserName}}</td>
-                                                    <td>{{row.RoleTitle}}</td>
-                                                    <td>{{row.PermissionLevel}}</td>
-                                                    <td>{{row.SupervisorLevel}}</td>
-                                                    <td>{{row.UserLevel}}</td>
-                                                    <td>
-                                                        <a class="btn btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleSelect(row)">Select</a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td colspan="12" class="text-center">
-                                                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
-                                                    </td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
+                                        <th>
+                                            <input st-search="PermissionLevel"
+                                                   placeholder="PermissionLevel" class="input-sm form-control" type="search" />
+                                        </th>
+                                        <th>
+                                            <input st-search="SupervisorLevel" placeholder="SupervisorLevel"
+                                                   class="input-sm form-control" type="search" />
+                                        </th>
+                                        <th>
+                                            <input st-search="UserLevelName"
+                                                   placeholder="UserLevelName" class="input-sm form-control" type="search" />
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="row in displayedCollection">
+                                        <td>{{row.EmployeeID}}</td>
+                                        <td>{{row.UserFullName}}</td>
+                                        <td>{{row.UserDesignation}}</td>
+                                        <td>{{row.JobLocation}}</td>
+                                        <td>{{row.UserNo}}</td>
+                                        <td>{{row.UserName}}</td>
+                                        <td>{{row.RoleTitle}}</td>
+                                        <td>{{row.PermissionLevel}}</td>
+                                        <td>{{row.SupervisorLevel}}</td>
+                                        <td>{{row.UserLevel}}</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleSelect(row)">Select</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="12" class="text-center">
+                                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
 
-                                
-                            </div>
-                            <div class="modal-footer">
-                                <div class="col-sm-12 col-md-12 col-lg-12">
-                                    <div class="form-group">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="">Close</button>
-                                    </div>
-                                </div>
-                            </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="">Close</button>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
     <!-- /Add Menu Modal -->
 
     <div id="mydiv" data-ng-show="loading">

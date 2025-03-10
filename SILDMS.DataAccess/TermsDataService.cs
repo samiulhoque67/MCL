@@ -11,17 +11,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SILDMS.DataAccessInterface;
+using System.Data.SqlClient;
 
 namespace SILDMS.DataAccess
 {
-    public class TermsDataService: ITermsDataService
+    public class TermsDataService : ITermsDataService
     {
         private readonly string spStatusParam = "@p_Status";
         public string SaveTermsAndConditions(OBS_Terms vmTerms, List<OBS_TermsItem> vmTermsItem)
         {
             DataTable dtTermsItem = new DataTable();
             //dtTermsItem.Columns.Add("TermsID");
-            //dtTermsItem.Columns.Add("TermsCode");
+            dtTermsItem.Columns.Add("TermsCode");
             dtTermsItem.Columns.Add("TermsName");
             foreach (var item in vmTermsItem)
             {
@@ -29,15 +30,15 @@ namespace SILDMS.DataAccess
                 objDataRow[0] = item.TermsName;
 
                 //objDataRow[0] = item.TermsID;
-                //objDataRow[1] = item.TermsCode;
+                objDataRow[1] = item.TermsCode;
 
                 dtTermsItem.Rows.Add(objDataRow);
             }
 
-            if (string.IsNullOrEmpty(vmTerms.TermsID))
-                vmTerms.Action = "add";
-            else
-                vmTerms.Action = "edit";
+            //if (string.IsNullOrEmpty(vmTerms.TermsID))
+            //    vmTerms.Action = "add";
+            //else
+            //    vmTerms.Action = "edit";
             string errorNumber = String.Empty;
             try
             {
@@ -49,8 +50,8 @@ namespace SILDMS.DataAccess
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.NVarChar, vmTerms.TermsID);
                     db.AddInParameter(dbCommandWrapper, "@FormName", SqlDbType.NVarChar, vmTerms.FormName);
+                    db.AddInParameter(dbCommandWrapper, "@FormCode", SqlDbType.NVarChar, vmTerms.FormCode);
                     db.AddInParameter(dbCommandWrapper, "@OBS_TermsAndConditionsNew", SqlDbType.Structured, dtTermsItem);
-                  //  db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vmTerms.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 1200);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
@@ -318,6 +319,47 @@ namespace SILDMS.DataAccess
                 }
             }
             return masterDataList;
+        }
+
+
+        public List<OBS_Form> GetFormList(out string errorNumber)
+        {
+            List<OBS_Form> FormList = new List<OBS_Form>();
+            errorNumber = string.Empty;
+
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAllForm"))
+            {
+                string spStatusParam = "@ErrorNumber";  // Define your stored procedure output parameter name
+                db.AddOutParameter(dbCommandWrapper, spStatusParam, DbType.String, 10);
+
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                // Get error code from stored procedure output parameter
+                var statusValue = db.GetParameterValue(dbCommandWrapper, spStatusParam);
+                if (statusValue != null && !string.IsNullOrWhiteSpace(statusValue.ToString()))
+                {
+                    errorNumber = statusValue.ToString().PrefixErrorCode();
+                }
+                else
+                {
+                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        DataTable dt1 = ds.Tables[0];
+                        FormList = dt1.AsEnumerable().Select(reader => new OBS_Form
+                        {
+                            FormCode = reader.GetString("FormCode"), // Fixed data type issue
+                            FormName = reader.GetString("FormName"),
+                            FormTable = reader.GetString("FormTable"),
+                            TermsID = reader.GetString("TermsID"),
+                            TermsItemAvailable = reader.GetString("TermsItemAvailable"),
+                        }).ToList();
+                    }
+                }
+            }
+            return FormList;
         }
     }
 }

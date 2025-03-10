@@ -151,5 +151,7 @@ namespace SILDMS.Model
         public decimal NetReceivableAmount { get; set; }
         public string RecommendedByName { get; set; }
         public string RecommendedByDesignation { get; set; }
+        public string ContractDate { get; set; }
+        public string ContractNo { get; set; }
     }
 }

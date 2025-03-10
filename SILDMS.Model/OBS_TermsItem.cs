@@ -30,4 +30,13 @@ namespace SILDMS.Model
         public string ClientQutnAprvID { get; set; }
         public string ReqType { get; set; }
     }
+
+
+    public class OBS_Form {
+        public string FormCode { get; set; }
+        public string FormName { get; set; }
+        public string FormTable { get; set; }
+        public string TermsID { get; set; }
+        public string TermsItemAvailable { get; set; }
+    }
 }

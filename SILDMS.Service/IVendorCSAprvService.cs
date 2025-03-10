@@ -25,5 +25,8 @@ namespace SILDMS.Service
         ValidationResult GetAllRequisition(string userID, out List<Invitation> invitationList);
         ValidationResult GetMaterialByRequisition(string vendorRequisitionNumber, out List<OBS_VendorCSAprvItem> reqWiseMaterialList);
         ValidationResult GetVendorByMaterialService(string vendorReqID, string serviceItemID, out List<OBS_VendorCSAprvItem> matWiseVendorList);
+        ValidationResult SearchCSService(string userID, out List<Invitation> searchCSList);
+        ValidationResult CSVendorService(string userID, string cSNumber, out List<OBS_VendorCSRecmItem> vendorCSList);
+        ValidationResult CSVendorTerms(string cSNumber, out List<OBS_VendorCSRecmTerms> vendorCSInfoTermList);
     }
 }
