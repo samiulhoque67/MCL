@@ -85,7 +85,6 @@ namespace SILDMS.Web.UI.Controllers
                     ClientQutnAprvID = statusarr[1];
                     status = statusarr[0];
                 }
-                /*TempData["ClientQutnAprv"] = MasterData;*/
                 TempData["ClientQutnAprvID"] = ClientQutnAprvID;
                 return Json(new { status, ClientQutnAprvID }, JsonRequestBehavior.AllowGet);
             }

@@ -297,17 +297,11 @@ namespace SILDMS.DataAccess.QuotationRecommendation
 
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    var dt = ds.Tables[0];
-                    var dr = dt.Rows[0];
+                        var dt = ds.Tables[0];
+                        var dr = dt.Rows[0];
 
-                    if (dr["Status"].ToString() == "Successfully Submitted")
-                    {
-                        message = "Operation Done";
-                    }
-                    else
-                    {
-                        message = "Error Found";
-                    }
+                        message = dr["Status"].ToString();
+                 
                 }
             }
 

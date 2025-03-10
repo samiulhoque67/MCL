@@ -394,7 +394,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 
-              
+
 
 
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -404,14 +404,8 @@ namespace SILDMS.DataAccess.QuotationToClientService
                     var dt = ds.Tables[0];
                     var dr = dt.Rows[0];
 
-                    if (dr["Status"].ToString() == "Successfully Submitted")
-                    {
-                        message = "Operation Done";
-                    }
-                    else
-                    {
-                        message = "Error Found";
-                    }
+                    message = dr["Status"].ToString();
+
                 }
             }
 

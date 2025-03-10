@@ -47,7 +47,7 @@
 <div class="box box-primary box-body" ng-controller="WorkOrderInfoCntrl">
     <!-- Upper buttons -->
     <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
-        <h2 class="box-title" style="font-family: 'MV Boli'; font-weight: 500;">Quotation to Client</h2>
+        <h2 class="box-title" style=" font-family: math; font-weight: 500;">Quotation to Client</h2>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
@@ -56,14 +56,14 @@
                         <i class="fa fa-refresh" style="padding-right: 5px;"></i> Refresh
                     </button>
                 </div>
-                <div class="btn-group pull-right" style="margin: 3px;">
+                @*<div class="btn-group pull-right" style="margin: 3px;">
                     @using (Html.BeginForm("RptRequisitionToVendorReport", "../VendorRequisition", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
                     {
                         <button type="submit" id="btnSubmit" name="ReportType" class="button-custom">
                             <i class="fa fa-print" style="padding-right: 5px;"></i> Print
                         </button>
                     }
-                </div>
+                </div>*@
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="SearchSaveClients()" class="button-custom" ng-disabled="btnSearch">
                         <i class="fa fa-search" style="padding-right: 5px;"></i> Search
@@ -322,7 +322,7 @@
                         <td style="width: 6%;">{{ row.DeliveryLocation }}</td>
                         <td style="width: 6%;">{{ row.DeliveryDate }}</td>
 
-                        <td style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
+                        <td style="width: 6%; text-align: right;">{{ row.ReqQnty | number: 2 }}</td>
                         <td style="width: 5%;">{{ row.ReqUnit }}</td>
 
                         <td style="width: 6%;">
@@ -334,7 +334,7 @@
                                    ng-blur="validateInput0('givenQutnPrice', row)" />
                         </td>
 
-                        <td style="width: 6%;" color: #126e0f;">
+                        <td style="width: 6%; text-align: right;" color: #126e0f;">
                             {{ row.givenQutnAmt }}
                         </td>
 
@@ -346,8 +346,8 @@
                                    ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('GivenVatPerc', row)" />
                         </td>
-                        <td style="width: 6%;">{{ row.TotGivenVatAmt }}</td>
-                        <td style="width: 6%; color: #126e0f;">
+                        <td style="width: 6%; text-align: right;">{{ row.TotGivenVatAmt }}</td>
+                        <td style="width: 6%; color: #126e0f; text-align: right;">
                             {{ row.givenTolAmt }}
 
                             <button type="button" class="button-detail pull-right" ng-hide="row.ReqType === 'QC' " ng-click="detailVendorCS(row)" data-dismiss="modal" title="Show detail">
@@ -407,16 +407,16 @@
                                 <td style="width: 6%;">{{ row.DeliveryLocation }}</td>
                                 <td style="width: 6%;">{{ row.DeliveryDate }}</td>
 
-                                <td style="width: 6%;">{{ row.ReqQnty | number: 2 }}</td>
-                                <td style="width: 6%;">{{ row.QutnQnty | number: 2 }}</td>
+                                <td style="width: 6%; text-align: right;">{{ row.ReqQnty | number: 2 }}</td>
+                                <td style="width: 6%; text-align: right;">{{ row.QutnQnty | number: 2 }}</td>
                                 <td style="width: 5%;">{{ row.ReqUnit }}</td>
                                 <td style="width: 6%;">{{ row.VendorName}}</td>
 
-                                <td style="width: 6%;">{{ row.QutnPrice}}</td>
-                                <td style="width: 6%;">{{ row.QutnAmt }}</td>
-                                <td style="width: 6%;">{{ row.VatPerc }}</td>
-                                <td style="width: 6%;">{{ row.VatAmt }}</td>
-                                <td style="width: 6%;">{{ row.TolAmt }}</td>
+                                <td style="width: 6%; text-align: right;">{{ row.QutnPrice}}</td>
+                                <td style="width: 6%; text-align: right;">{{ row.QutnAmt }}</td>
+                                <td style="width: 6%; text-align: right;">{{ row.VatPerc }}</td>
+                                <td style="width: 6%; text-align: right;">{{ row.VatAmt }}</td>
+                                <td style="width: 6%; text-align: right;">{{ row.TolAmt }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -507,18 +507,21 @@
                         <thead>
                             <tr style="font-size: 15px; border: 1px solid #3003eb; background: #ffffff; ">
 
-                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
+                                <th @*colspan="12"*@ style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
                                     <span>Terms & Conditions List</span>
                                 </th>
-                                <th style="background: #ffffff;">
-                                    <input ng-show="pagefunction !== 'viewmode'" id="FormName" name="FormName" type="text"
-                                           data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true"
-                                           style="width: 200px; height: 25px; font-size: smaller; padding-right: 35px;" />
+                                <th style="background: #ffffff; position: relative; padding: 5px;">
+                                    <div style="position: relative; display: inline-block; width: 200px;">
+                                        <input ng-show="pagefunction !== 'viewmode'" id="FormName" name="FormName" type="text"
+                                               data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true"
+                                               style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
 
-                                    <button type="button" ng-click="ShowTermsConditionsList()"
-                                            style="position: absolute; right: 526px; top: 16%; transform: translateY(-56%); border: 1px solid black; background: transparent; ">
-                                        <i class="fa fa-search"></i>
-                                    </button>
+                                        <button type="button" ng-click="ShowTermsConditionsList()"
+                                                style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+                       padding: 0px 10px; border: 2px solid black; background: transparent;">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
                                 </th>
                                 <th style= "background: #ffffff;">
                                     <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
@@ -575,32 +578,42 @@
                         </div>
                     </div>
                     <div ng-cloak>
-                        <div class="row">
-                            <div class="col-lg-1">
-                            </div>
-                            <div class="col-lg-2">
-                                <div class="form-group">
-                                    <label for="TermsCode">Terms & Conditions Code:</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <input id="TermsCode" type="text" name="TermsCode" ng-model="ClientReqTerm.TermsCode" class="form-control" autofocus />
 
-                                </div>
-                            </div>
-                            <div class="col-lg-2">
-                                <div class="form-group">
-                                    <label for="TermsName">Terms & Conditions:</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <input id="TermsName" type="text" name="TermsName" ng-model="ClientReqTerm.TermsName" class="form-control" autofocus />
+                        <div class="row" style="position:relative;top:5px;">
 
+                            <div class="col-sm-1 col-md-1 col-lg-1">
+                            </div>
+
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <div class="form-group">
+                                    <label for="TermsCode">Terms Code:</label>
+                                    <label style="font-size:larger;color:red;">*</label>
                                 </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <input id="TermsCode" name="TermsCode" type="text" class="form-control" placeholder="Terms Code" autocomplete="off"
+                                       ng-model="ClientReqTerm.TermsCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
                             </div>
                         </div>
+
+
+                        <div class="row" style="position:relative;top:5px;">
+
+                            <div class="col-sm-1 col-md-1 col-lg-1">
+                            </div>
+
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <div class="form-group">
+                                    <label for="TermsName">Terms and Conditions:</label>
+                                    <label style="font-size:larger;color:red;">*</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-8 col-md-8 col-lg-8">
+                                <input id="TermsName" name="TermsName" type="text" class="form-control" placeholder="Terms Name" autocomplete="off"
+                                       ng-model="ClientReqTerm.TermsName" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                            </div>
+                        </div>
+
 
                     </div>
                     <div class="modal-footer">
@@ -652,7 +665,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="QuotationNo" name="QuotationNo" type="text" ng-model="MasterData.QuotationNo" readonly class="form-control" />
+                            <input id="QuotationNo" name="QuotationNo" type="text" ng-model="Quotation.QuotationNo" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -679,18 +692,6 @@
 
                 <!-- Quotation Note & Billing Date -->
                 <div class="row">
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="QuotationNote">Quotation Note :</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="QuotationNote" ng-readonly="pagefunction === 'viewmode'" autocomplete="off" name="QuotationNote" type="text" ng-model="MasterData.QuotationNote" class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1"></div>
 
                     <div class="col-lg-2">
                         <div class="form-group">
@@ -712,6 +713,22 @@
                         </div>
 
                     </div>
+
+
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="QuotationNote">Quotation Note :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <input id="QuotationNote" ng-readonly="pagefunction === 'viewmode'" autocomplete="off" name="QuotationNote" type="text" ng-model="MasterData.QuotationNote" class="form-control" />
+                        </div>
+                    </div>
+
+
 
                 </div>
 
@@ -750,16 +767,24 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Quotations for Recommendation</h3>
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
 
                 <!-- Modal Body -->
                 <div class="modal-body table-responsive" data-ng-disabled="" ng-cloak>
                     <table st-table="AllQuotationsCollection" st-safe-src="AllQuotationsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
-                            <tr>
+                           
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Quotations for Recommendation
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
                                 <!-- Columns with sorting -->
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('ClientCode')">
                                     Client Code
@@ -936,6 +961,11 @@
             QuotationNo: ""
         }
 
+        $scope.Quotation = {
+            QuotationNo: ""
+        }
+
+
         $('.DatePicker').datepicker({
             format: "dd/mm/yyyy", //"yyyy-mm-dd",
             autoclose: true
@@ -1037,7 +1067,7 @@
                         ContactBIN: $scope.ClientDetails[0].ClientBinNo,
                         ContactAddress: $scope.ClientDetails[0].Address
                     };
-                    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID, $scope.ClientDetails[0].ClientReqID, action);
+                    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID, $scope.ClientDetails[0].ClientReqID, ClientQutnID=null, action);
                     $scope.loading = false;
                 }).error(function () {
                     $scope.loading = false;
@@ -1073,7 +1103,7 @@
                         ContactBIN: $scope.ClientDetails[0].ClientBinNo,
                         ContactAddress: $scope.ClientDetails[0].Address
                     };
-                    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID, $scope.ClientDetails[0].ClientReqID, action);
+                    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID, $scope.ClientDetails[0].ClientReqID, row.ClientQutnID, action);
                     $scope.loading = false;
                 }).error(function () {
                     $scope.loading = false;
@@ -1081,7 +1111,7 @@
             }
         };
 
-        $scope.GetClientReqDataInfo = function (ClientID, ClientReqID, action) {
+        $scope.GetClientReqDataInfo = function (ClientID, ClientReqID, ClientQutnID, action) {
             if (action === 'save') {
                 $http.post('/QuotationToClient/GetClientReqDataInfo', {
                     ClientID: ClientID, ClientReqID, ReqType: $scope.ReqType
@@ -1105,7 +1135,7 @@
 
             else if (action === 'view' || 'edit') {
                 $http.post('/QuotationRecommendation/GetClientReqDataInfo', {
-                    ClientID: ClientID, ClientReqID: ClientReqID, ReqType: $scope.ReqType
+                    ClientID: ClientID, ClientReqID: ClientReqID, ClientQutnID: ClientQutnID
                 }).success(function (response) {
                     $scope.GetClientReqDetails = response.GetClientReqDetails;
                     $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
@@ -1323,8 +1353,9 @@
 
             }).success(function (response) {
 
-                if (response.status === "Data Save Successfully" || "Operation Done") {
+                if (response.status === "Successfully Submitted" || "Operation Done") {
                     toastr.success('Data Saved Successfully');
+                    $scope.Quotation.QuotationNo = response.ClientQutnID;
                     $scope.refreshPage();
                 }
                 else {
@@ -1479,7 +1510,7 @@
 
             $scope.clientReqTermArray.push(newTerm);
 
-            $scope.TermsConditionsDisplayedCollection = $scope.TermsConditionsList.concat(newTerm);
+            $scope.TermsConditionsDisplayedCollection = $scope.TermsConditionsDisplayedCollection.concat(newTerm);
 
             $scope.resetClientReqTerm();
             $("#btnAddReqTerm").html('Add');

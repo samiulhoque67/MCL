@@ -20,7 +20,7 @@
 <div class="box box-primary box-body" ng-controller="TermsCtrl">
     @*Master buttons*@
     <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
-        <h2 class="box-title" style="font-family: 'MV Boli'; font-weight: 500;">Terms & Conditions Information</h2>
+        <h2 class="box-title" style="font-family: math; font-weight: 500;">Terms & Conditions Information</h2>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
@@ -179,6 +179,25 @@
 
                         <div class="col-sm-2 col-md-2 col-lg-2">
                             <div class="form-group">
+                                <label for="TermsCode">Terms Code:</label>
+                                <label style="font-size:larger;color:red;">*</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <input id="TermsCode" name="TermsCode" type="text" class="form-control" placeholder="Terms Code" autocomplete="off"
+                                   ng-model="vmTermsItem.TermsCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <div class="row" style="position:relative;top:5px;">
+
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div class="form-group">
                                 <label for="TermsName">Terms and Conditions:</label>
                                 <label style="font-size:larger;color:red;">*</label>
                             </div>
@@ -250,13 +269,15 @@
                         <thead>
                             <tr>
                                 <th style="width: 5%;">S/N</th>
-                                <th style="width: 70%; text-align: left;" st-sort="">Terms & Conditions</th>
+                                <th style="width: 10%;">Terms Code</th>
+                                <th style="width: 60%; text-align: left;" st-sort="">Terms & Conditions</th>
                                 <th ng-hide="toView == 1" style="width: 15%; text-align: left;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;">
                                 <td style="text-align:center">{{$index + 1}}</td>
+                                <td style="text-align: center;">{{row.TermsCode}}</td>
                                 <td>{{row.TermsName}}</td>
                                 <td ng-hide="toView == 1">
                                     <button type="button" ng-if="row.TermsItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleTermsItemEdit(row,$index)">
@@ -318,6 +339,7 @@
 
         $scope.vmTermsItem = {
             TermsItemID: "",
+            TermsCode: "",
             TermsName: "",
             ItemStatus: "1"
         };
@@ -392,11 +414,16 @@
 
         $scope.AddTermsItem = function () {
             $scope.ConditionsList = 0;
+            if ($('#TermsCode').val() == "") {
+                toastr.error("Terms Code Required.");
+                return;
+            }
             if ($('#TermsName').val() == "") {
-                toastr.error("TermsName Required.");
+                toastr.error("Terms Name Required.");
                 return;
             }
 
+            $scope.vmTermsItem.TermsCode = $('#TermsCode').val();
             $scope.vmTermsItem.TermsName = $('#TermsName').val();
             $scope.vmTermsItem.ItemStatus = $('#ItemStatus').val();
             $scope.termsItemArray.push($scope.vmTermsItem);
@@ -411,6 +438,7 @@
         $scope.resetVmTermsItem = function () {
             $scope.vmTermsItem = {
                 TermsItemID: "",
+                TermsCode: "",
                 TermsName: "",
                 ItemStatus: "1"
             }
@@ -439,6 +467,7 @@
             $scope.resetVmTermsItem();
 
             $scope.vmTermsItem.TermsName = tableRow.TermsName;
+            $scope.vmTermsItem.TermsCode = tableRow.TermsCode;
 
             $scope.GridDisplayCollection.splice($i, 1);
             $scope.termsItemArray.splice($i, 1);
