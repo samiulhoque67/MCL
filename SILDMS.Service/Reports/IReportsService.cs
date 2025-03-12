@@ -22,6 +22,10 @@ namespace SILDMS.Service.Reports
 
         ValidationResult VendorRequisitionReport(string VendorReqID, string VendorID, out DataTable dt);
 
+        ValidationResult VendorAgeingReport(string VendorID, out DataTable dt);
+
+        ValidationResult ClientAgeingReport(string ClientID, out DataTable dt);
+
         ValidationResult GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out DataTable OwnerList);
 
         ValidationResult GetRptDocumentsList(string OwnerLevelID, string OwnerID, string DocCategoryID, string DocTypeID, string DocPropertyID, string Status, string id, string action, out DataTable DocumentsList);

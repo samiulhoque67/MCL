@@ -4,12 +4,12 @@
 <title>Vendor Ageing Report</title>
 <div class="box box-primary box-body" ng-controller="BeneficiaryDetailsCtrl" data-ng-init="init()">
 
-    @using (Html.BeginForm("AgeingReport", "../Reports", System.Web.Mvc.FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+    @using (Html.BeginForm("VendorAgeingReport", "../Reports", System.Web.Mvc.FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
     {
         <!-- box-header -->
         <div class="box-header with-border">
             <i class="fa fa-user"></i>
-            <h3 class="box-title">Client Ageing Report</h3>
+            <h3 class="box-title">Vendor Ageing Report</h3>
             <div class="box-tools pull-right">
                 <div class="row">
                     <div class="col-lg-4">
@@ -30,10 +30,10 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-          
+
             <div class="row">
                 <div class="col-sm-2 col-md-2 col-lg-2">
-                    <label>Client Code</label>
+                    <label>Vendor Code</label>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
@@ -77,15 +77,15 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
-                        <h3 class="modal-title">Client Information</h3>
+                        <h3 class="modal-title">Vendor Information</h3>
                     </div>
                     <div class="table-responsive" data-ng-disabled="" ng-cloak>
                         <table class="table table-condensed table-bordered table-striped table-hover pnlView">
                             <thead>
                                 <tr>
                                     <th class="col-lg-4 col-md-4 col-sm-4" data-ng-click="sort('VendorNameDisplay')">Name</th>
-                                    @*<th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('TransAccountName')">Transaction Name</th>
-                                    <th class="col-lg-4 col-md-4 col-sm-4" data-ng-click="sort('OwnerName')">Company</th>*@
+                                    <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('TransAccountName')">Transaction Name</th>
+                                    <th class="col-lg-4 col-md-4 col-sm-4" data-ng-click="sort('OwnerName')">Company</th>
                                     <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                                 </tr>
                                 <tr>
@@ -98,8 +98,8 @@
                                 <tr ng-repeat="row in vendorDisplayedCollection">
                                     <td class="hidden">{{row.VendorCode}}</td>
                                     <td class="">{{row.VendorNameDisplay}}</td>
-                                    @*<td class="">{{row.TransAccountName}}</td>
-                                    <td class="">{{row.OwnerName}}</td>*@
+                                    <td class="">{{row.TransAccountName}}</td>
+                                    <td class="">{{row.OwnerName}}</td>
                                     <td>
                                         <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleVendorSelect(row)">Select</a>
                                     </td>
@@ -365,12 +365,12 @@
                     reverse: $scope.pagingInfo.reverse, search: $scope.pagingInfo.search
                 }
             })
-            .success(function (response) {
-                $scope.vendorList = response.vendors;
-                $scope.vendorDisplayedCollection = [].concat($scope.vendorList);
-                $scope.pagingInfo.totalItems = $scope.vendorList[0].TotalPages;
-            })
-            .error(function () { });
+                .success(function (response) {
+                    $scope.vendorList = response.vendors;
+                    $scope.vendorDisplayedCollection = [].concat($scope.vendorList);
+                    $scope.pagingInfo.totalItems = $scope.vendorList[0].TotalPages;
+                })
+                .error(function () { });
         }
 
         $scope.GetVendors();
