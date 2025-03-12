@@ -118,8 +118,8 @@
     <div class="table-responsive">
         <table st-table="displayedCollection" st-safe-src="getAllClientInfoDtl" class="table table-condensed table-bordered table-striped table-hover pnlView">
             <thead>
-                <tr style="color: darkblue;">
-                    <th class="col-lg-1 col-md-1 col-sm-1" st-sort="ClientAddressID">SL.</th>
+                <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                   <th class="col-lg-1 col-md-1 col-sm-1" st-sort="ClientAddressID">SL.</th>
                     <th class="col-lg-2 col-md-2 col-sm-2" st-sort="ContactPerson">Contact Person</th>
                     <th class="col-lg-1 col-md-1 col-sm-1" st-sort="ContactNumber">Contact Number</th>
                     <th class="col-lg-1 col-md-1 col-sm-1" st-sort="PhoneNumber">Phone Number</th>
@@ -129,10 +129,10 @@
                     <th class="col-lg-2 col-md-2 col-sm-2">Action</th>
                 </tr>
                 @*<tr>
-                        <th><input st-search="ContactPerson" placeholder="Sl No" class="input-sm form-control" type="search" /></th>
-                        <th></th>
-                        <th><input st-search="ContactNumber" placeholder="Introduce Date" class="input-sm form-control" type="search" /></th>
-                    </tr>*@
+            <th><input st-search="ContactPerson" placeholder="Sl No" class="input-sm form-control" type="search" /></th>
+            <th></th>
+            <th><input st-search="ContactNumber" placeholder="Introduce Date" class="input-sm form-control" type="search" /></th>
+        </tr>*@
             </thead>
             <tbody>
                 <tr ng-repeat="row in displayedCollection" style="height:20px;">
@@ -170,7 +170,7 @@
                 <div class="modal-header">
                     <div class="row">
                         <div class="col-sm-5 col-md-5 col-lg-5">
-                            <h3 class="modal-title">Client Address Information</h3>
+                            <h3 style="font-family:math" class="modal-title">Client Address Information</h3>
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6">
                         </div>
@@ -280,25 +280,33 @@
     <div id="SearchClientInfoModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Client Address Information</h3>
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
+               @*Client Address Information*@
+
                 <div class="table-responsive" data-ng-disabled="" ng-cloak>
-                    <table st-table="ClientInfoDisplayedCollection" st-safe-src="ClientInfoSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <table st-table="ClientInfoDisplayedCollection" st-safe-src="ClientInfoSearchList"
+                           class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
-                            <tr>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Client List
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCode')">Client Code</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientName')">Client Name</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientType')">Client Type</th>
-                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientTinNo')">Tin No</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientBinNo')">Bin No</th>*@
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('Status')">Status</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
                             <tr>
                                 <th><input st-search="ClientCode" placeholder="Client Code" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="ClientName" placeholder="ClientName" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -307,37 +315,33 @@
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientCode}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientType}}</td>
-                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientTinNo}}</td>
-                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientBinNo}}</td>*@
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">
                                     <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                        {{row.Status == '1'? 'Active':'InActive'}}
+                                        {{row.Status == '1'? 'Active':'Inactive'}}
                                     </span>
                                 </td>
-
                                 <td>
-                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleClientInfoSelect(row)">Select</a>
+                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#"
+                                       data-ng-click="toggleClientInfoSelect(row)">Select</a>
                                 </td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="9" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div></td>
+                                <td colspan="9" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="5"></div>
+                                </td>
                             </tr>
                         </tfoot>
-
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetSearchModel()">Close</button>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Delete ServiceCategory Modal -->
     <div id="deleteModal" class="modal fade">
         <div class="modal-dialog">
@@ -378,7 +382,7 @@
         //applySecurity();
 
         ///////////////Variable Declaration////////////////////////
-        $scope.itemsByPage = 20;
+        $scope.itemsByPage = 8;
         $scope.getAllClientInfoDtl = [];  // base collection
         $scope.displayedCollection = [].concat($scope.getAllClientInfoDtl);  // displayed collection
         $scope.disableKey = true;

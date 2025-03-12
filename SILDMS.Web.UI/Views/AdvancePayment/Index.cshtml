@@ -26,6 +26,9 @@
     label {
         font-size: 12px;
     }
+    .box.box-info {
+        border-top: 1px solid #3003eb;
+    }
 
     /* Adjust icon size */
     .fa {
@@ -57,6 +60,7 @@
 
 
                 <!-- PoNo -->
+                <!-- PoNo -->
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
@@ -64,20 +68,25 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="PoNo" name="PoNo" type="text" data-ng-model="PoNo" class="form-control" ng-readonly="true" />
-                        </div>
-                    </div>
 
-                    <div class="col-lg-1">
-                        <div class="form-group">
-                            <button type="button" data-ng-click="SearchAvailableClients()" class="form-control">Search</button>
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <div style="position: relative;">
+                            <input id="PoNo" name="PoNo" type="text" data-ng-model="PoNo"
+                                   class="form-control" ng-readonly="true"
+                                   placeholder="Po No"
+                                   style="height: 25px; font-size: smaller;" />
+
+
+
+                            <button type="button" data-ng-click="SearchAvailableClients()"
+                                    style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+padding: 0px 10px; border: 2px solid black; background: transparent;">
+                                <i class="fa fa-search"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="col-lg-1"></div>
                 </div>
-
 
                 <div class="row">
 
@@ -149,7 +158,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="WOAmount" name="WOAmount" type="text" ng-model="Client.WOAmount" class="form-control" ng-readonly="true" />
+                            <input style="text-align:right" id="WOAmount" name="WOAmount" type="text" ng-model="Client.WOAmount" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                 </div>
@@ -164,16 +173,23 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Available Purchase Orders</h3>
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
-
                 <!-- Modal Body -->
                 <div class="modal-body table-responsive" ng-cloak>
                     <table st-table="AllAvailablePOsCollection" st-safe-src="AllAvailablePOsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
-                            <tr>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Available Purchase Orders
+                                </th>
+                            </tr>
+
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
                                 <!-- Columns with sorting for VendorName, PoNo, PODate, AdvanceDemandAmount, and VendrAdvncDemnID -->
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('VendorName')">
                                     Vendor Name
@@ -262,7 +278,7 @@
                 <div class="box-header with-border"
                      style="height: 40px; border-bottom: 1px solid #d3e3e3; position: relative;">
                     <h2 class="box-title"
-                        style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19; margin: 0;">
+                        style="font-family: math; font-size: 16px; font-weight: bold; color: black; margin: 0;">
                         Advance Demand Approve Info
                     </h2>
 
@@ -291,7 +307,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.PurchaseOrderAmount" readonly class="form-control" />
+                            <input style="text-align:right" id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.PurchaseOrderAmount" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -305,7 +321,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.POInstallmentAmt" readonly class="form-control" />
+                            <input  style="text-align:right" id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.POInstallmentAmt" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -317,7 +333,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceInstallmentNo" name="AdvanceInstallmentNo" type="text" data-ng-model="AdvanceInformmation.POInstallmentNo" readonly class="form-control" />
+                            <input style="text-align:right" id="AdvanceInstallmentNo" name="AdvanceInstallmentNo" type="text" data-ng-model="AdvanceInformmation.POInstallmentNo" readonly class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -331,7 +347,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceDemand" name="AdvanceDemand" type="text" data-ng-model="AdvanceInformmation.AdvanceDemand" readonly class="form-control" />
+                            <input style="text-align:right" id="AdvanceDemand" name="AdvanceDemand" type="text" data-ng-model="AdvanceInformmation.AdvanceDemand" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -362,7 +378,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="RemainingAmount" name="RemainingAmount" type="text" data-ng-model="AdvanceInformmation.RemainingAmount"
+                            <input style="text-align:right" id="RemainingAmount" name="RemainingAmount" type="text" data-ng-model="AdvanceInformmation.RemainingAmount"
                                    readonly class="form-control" />
                         </div>
                     </div>
@@ -408,7 +424,7 @@
         <div class="col-md-12">
             <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
                 <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
-                    <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Advance Payment Info</h2>
+                    <h2 class="box-title" style="font-family: MATH; font-size: 16px; font-weight: bold; color: black;">Advance Payment Info</h2>
 
                 </div>
             </div>
@@ -443,7 +459,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" @*data-ng-model="AdvanceInformmation.PurchaseOrderAmount"*@ readonly class="form-control" />
+                            <input style="text-align:right" id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" @*data-ng-model="AdvanceInformmation.PurchaseOrderAmount"*@ readonly class="form-control" />
                         </div>
                     </div>
 
@@ -457,7 +473,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="RecommendationAmount" name="RecommendationAmount" type="text" ng-model="AdvanceRecom.RecommendationAmount"
+                            <input style="text-align:right" id="RecommendationAmount" name="RecommendationAmount" type="text" ng-model="AdvanceRecom.RecommendationAmount"
                                    class="form-control" autocomplete="off" ng-keydown="calculateRemainingAmount($event)" />
                         </div>
                     </div>
@@ -472,7 +488,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="RemainingAmount" name="RemainingAmount" type="text" ng-model="AdvanceRecom.RemainingAmount" readonly
+                            <input style="text-align:right" id="RemainingAmount" name="RemainingAmount" type="text" ng-model="AdvanceRecom.RemainingAmount" readonly
                                    class="form-control" />
                         </div>
                     </div>
