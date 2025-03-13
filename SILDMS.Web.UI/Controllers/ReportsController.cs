@@ -390,7 +390,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
 
-        //[SILAuthorize]
+        [SILAuthorize]
         public ActionResult AgeingReport()
         {
             return View();
@@ -403,7 +403,7 @@ namespace SILDMS.Web.UI.Controllers
 
             DataTable dt = new DataTable();
 
-            await Task.Run(() => _reportService.ClientAgeingReport("4", out dt));
+            await Task.Run(() => _reportService.ClientAgeingReport("", out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
@@ -419,7 +419,7 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
-        //[SILAuthorize]
+        [SILAuthorize]
         public ActionResult VendorAgeingReport()
         {
             return View();
@@ -431,7 +431,7 @@ namespace SILDMS.Web.UI.Controllers
         {
             DataTable dt = new DataTable();
 
-            await Task.Run(() => _reportService.VendorAgeingReport("4", out dt));
+            await Task.Run(() => _reportService.VendorAgeingReport("", out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
