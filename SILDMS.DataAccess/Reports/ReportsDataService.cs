@@ -151,12 +151,10 @@ namespace SILDMS.DataAccess.Reports
             {
                 db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
 
-                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.Int, VendorID);
-
                 db.AddInParameter(dbCommandWrapper, "@First", SqlDbType.Int, 30);
                 db.AddInParameter(dbCommandWrapper, "@Second", SqlDbType.Int, 60);
                 db.AddInParameter(dbCommandWrapper, "@Third", SqlDbType.Int, 90);
-                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.Int, 120);
+                db.AddInParameter(dbCommandWrapper, "@Four", SqlDbType.Int, 120);
 
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
                 DataTable dt1 = ds.Tables[0];
@@ -169,14 +167,14 @@ namespace SILDMS.DataAccess.Reports
             errorNumber = string.Empty;
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("GetRptRequisitionToVendorReport"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetRptClientAgeing"))
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.VarChar, ClientID);
 
                 db.AddInParameter(dbCommandWrapper, "@First", SqlDbType.Int, 30);
                 db.AddInParameter(dbCommandWrapper, "@Second", SqlDbType.Int, 60);
                 db.AddInParameter(dbCommandWrapper, "@Third", SqlDbType.Int, 90);
-                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.Int, 120);
+                db.AddInParameter(dbCommandWrapper, "@Four", SqlDbType.Int, 120);
 
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
                 DataTable dt1 = ds.Tables[0];
