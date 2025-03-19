@@ -142,6 +142,46 @@ namespace SILDMS.DataAccess.Reports
             }
         }
 
+        public DataTable VendorAgeingReport(string VendorID, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetRptVendorAgeing"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
+
+                db.AddInParameter(dbCommandWrapper, "@First", SqlDbType.Int, 30);
+                db.AddInParameter(dbCommandWrapper, "@Second", SqlDbType.Int, 60);
+                db.AddInParameter(dbCommandWrapper, "@Third", SqlDbType.Int, 90);
+                db.AddInParameter(dbCommandWrapper, "@Four", SqlDbType.Int, 120);
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+        }
+
+        public DataTable ClientAgeingReport(string ClientID, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetRptClientAgeing"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.VarChar, ClientID);
+
+                db.AddInParameter(dbCommandWrapper, "@First", SqlDbType.Int, 30);
+                db.AddInParameter(dbCommandWrapper, "@Second", SqlDbType.Int, 60);
+                db.AddInParameter(dbCommandWrapper, "@Third", SqlDbType.Int, 90);
+                db.AddInParameter(dbCommandWrapper, "@Four", SqlDbType.Int, 120);
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+        }
+
         public DataTable GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out string errorNumber)
         {
             errorNumber = string.Empty;

@@ -22,7 +22,13 @@
     input.form-control, button.form-control {
         font-size: 12px;
     }
-
+    .box.box-info {
+        border-top: 1px solid #3003eb;
+    }
+    .dropdown-icon {
+        color: #166e19;
+        transition: transform 0.3s ease;
+    }
     label {
         font-size: 12px;
     }
@@ -46,7 +52,7 @@
 <div class="box box-primary box-body" ng-controller="QuotationApproveCntrl">
     <!-- Upper buttons -->
     <div class="box-header with-border bg-light-blue-gradient" style="height: 38px; border-radius: 5px;">
-        <h2 class="box-title" style="font-family: 'MV Boli'; font-weight: 500;">Advance Approve</h2>
+        <h2 class="box-title" style="font-family: math; font-weight: 500;">Advance Approve</h2>
 
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
@@ -68,24 +74,27 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="ClientName">Work Order No :</label>
+                            <label for="WorkOrderNo">Work Order No :</label>
                         </div>
                     </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="WorkOrderNo" name="WorkOrderNo" type="text" data-ng-model="WorkOrder.WorkOrderNo" class="form-control" ng-readonly="true" />
-                        </div>
-                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <div style="position: relative;">
+                            <input id="WorkOrderNo" name="WorkOrderNo" type="text" data-ng-model="WorkOrder.WorkOrderNo"
+                                   class="form-control" ng-readonly="true"
+                                   placeholder="Work Order No"
+                                   style="height: 25px; font-size: smaller;" />
 
-                    <div class="col-lg-1">
-                        <div class="form-group">
-                            <button type="button" data-ng-click="SearchAvailableClients()" class="form-control">Search</button>
+
+
+                            <button type="button" data-ng-click="SearchAvailableClients()"
+                                    style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+padding: 0px 10px; border: 2px solid black; background: transparent;">
+                                <i class="fa fa-search"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="col-lg-1"></div>
                 </div>
-
-
 
                 <!-- ClientName -->
                 <div class="row">
@@ -101,10 +110,10 @@
                     </div>
 
                     @*  <div class="col-lg-1">
-                            <div class="form-group">
-                                <button type="button" data-ng-click="SearchAvailableClients()" class="form-control">Search</button>
-                            </div>
-                        </div>*@
+                <div class="form-group">
+                    <button type="button" data-ng-click="SearchAvailableClients()" class="form-control">Search</button>
+                </div>
+            </div>*@
                     <div class="col-lg-1"></div>
                 </div>
 
@@ -308,7 +317,7 @@
                 <div class="box-header with-border"
                      style="height: 40px; border-bottom: 1px solid #d3e3e3; position: relative;">
                     <h2 class="box-title"
-                        style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19; margin: 0;">
+                        style="font-family: math; font-size: 16px; font-weight: bold; color: black; margin: 0;">
                         Advance Claim Info
                     </h2>
 
@@ -340,7 +349,7 @@
                     </div>
                     <div class="col-sm-2 col-md-2 col-lg-2">
                         <div class="form-group">
-                            <input id="WorkOrderAmount" name="WorkOrderAmount" type="text" ng-model="AdvanceInformmation.WorkOrderAmount" readonly class="form-control" />
+                            <input style="text-align:right"  id="WorkOrderAmount" name="WorkOrderAmount" type="text" ng-model="AdvanceInformmation.WorkOrderAmount" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -367,7 +376,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" ng-model="AdvanceInformmation.WOInstallmentAmt" readonly class="form-control" />
+                            <input style="text-align:right"  id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" ng-model="AdvanceInformmation.WOInstallmentAmt" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -379,7 +388,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceInstallmentNo" name="AdvanceInstallmentNo" type="text" data-ng-model="AdvanceInformmation.WOInstallmentNo" readonly class="form-control" />
+                            <input style="text-align:right"  id="AdvanceInstallmentNo" name="AdvanceInstallmentNo" type="text" data-ng-model="AdvanceInformmation.WOInstallmentNo" readonly class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -393,7 +402,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="AdvanceClaimAmount" name="AdvanceClaimAmount" type="text" ng-model="AdvanceInformmation.AdvanceClaimAmount" readonly class="form-control" />
+                            <input style="text-align:right"  id="AdvanceClaimAmount" name="AdvanceClaimAmount" type="text" ng-model="AdvanceInformmation.AdvanceClaimAmount" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -405,7 +414,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="RemainingAmount" name="RemainingAmount" type="text" ng-model="AdvanceInformmation.RemainingAmount"
+                            <input style="text-align:right"  id="RemainingAmount" name="RemainingAmount" type="text" ng-model="AdvanceInformmation.RemainingAmount"
                                    readonly class="form-control" />
                         </div>
                     </div>
@@ -458,7 +467,7 @@
                 <div class="box-header with-border"
                      style="height: 40px; border-bottom: 1px solid #d3e3e3; position: relative;">
                     <h2 class="box-title"
-                        style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19; margin: 0;">
+                        style="font-family: math; font-size: 16px; font-weight: bold; color: black; margin: 0;">
                         Advance Recommendation Info
                     </h2>
 
@@ -491,7 +500,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="RecommendedAmmount" name="RecommendedAmmount" readonly type="text" ng-model="AdvanceRecom.AdvancClaimRecmAmt" class="form-control" />
+                            <input  style="text-align:right" id="RecommendedAmmount" name="RecommendedAmmount" readonly type="text" ng-model="AdvanceRecom.AdvancClaimRecmAmt" class="form-control" />
 
                         </div>
                     </div>
@@ -522,7 +531,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="RemainingAmount" name="RemainingAmount" type="text" ng-model="AdvanceRecom.RecomRemainingAmt"
+                            <input style="text-align:right"  id="RemainingAmount" name="RemainingAmount" type="text" ng-model="AdvanceRecom.RecomRemainingAmt"
                                    readonly class="form-control" />
                         </div>
                     </div>
@@ -579,7 +588,7 @@
         <div class="col-md-12">
             <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
                 <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
-                    <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Advance Claim Approval</h2>
+                    <h2 class="box-title" style="font-family: math; font-size: 16px; font-weight: bold; color: black;">Advance Claim Approval</h2>
 
                 </div>
             </div>
@@ -604,7 +613,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="RecommendedAmount" autocomplete="off" name="RecommendedAmount" type="text" ng-model="AdvanceAprv.AdvanceClaimAmount" class="form-control" />
+                            <input style="text-align:right"  id="RecommendedAmount" autocomplete="off" name="RecommendedAmount" type="text" ng-model="AdvanceAprv.AdvanceClaimAmount" class="form-control" />
                         </div>
                     </div>
 
@@ -618,7 +627,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="RecommendedAmmount" name="RecommendedAmmount" readonly type="text" ng-model="AdvanceRecom.AdvancClaimRecmAmt" class="form-control" />
+                            <input  style="text-align:right" id="RecommendedAmmount" name="RecommendedAmmount" readonly type="text" ng-model="AdvanceRecom.AdvancClaimRecmAmt" class="form-control" />
 
                         </div>
                     </div>
@@ -639,7 +648,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="RecommenedRemainAmount" name="RecommenedRemainAmount" type="text" ng-model="AdvanceAprv.RemainingAmount"
+                            <input style="text-align:right"  id="RecommenedRemainAmount" name="RecommenedRemainAmount" type="text" ng-model="AdvanceAprv.RemainingAmount"
                                    readonly class="form-control" ng-keydown="calculateRemainingAmount($event)" />
                         </div>
                     </div>
@@ -686,7 +695,7 @@
                             <label for="RecommenedNote">Approve Note :</label>
                         </div>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <input id="RecommenedNote" name="RecommenedNote" type="text" ng-model="AdvanceAprv.Note" class="form-control" />
                         </div>

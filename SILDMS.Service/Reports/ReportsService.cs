@@ -84,6 +84,26 @@ namespace SILDMS.Service.Reports
             return ValidationResult.Success;
         }
 
+        public ValidationResult VendorAgeingReport(string VendorID, out DataTable dt)
+        {
+            dt = _reportDataService.VendorAgeingReport(VendorID, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult ClientAgeingReport(string ClientID, out DataTable dt)
+        {
+            dt = _reportDataService.ClientAgeingReport(ClientID, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
         public ValidationResult GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out DataTable dt)
         {
             dt = _reportDataService.GetRptOwnerList(OwnerLevelID, OwnerID, ParentOwnerID, Status, id, action, out _errorNumber);
@@ -129,7 +149,7 @@ namespace SILDMS.Service.Reports
             return ValidationResult.Success;
         }
 
-        public ValidationResult ClientAprvBillReport(string woinfoID, int installmentNo,int clientBillAprvID,string BillCategory, out DataTable dt)
+        public ValidationResult ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID, string BillCategory, out DataTable dt)
         {
             dt = _reportDataService.ClientAprvBillReport(woinfoID, installmentNo, clientBillAprvID, BillCategory, out _errorNumber);
             if (_errorNumber.Length > 0)
@@ -141,7 +161,7 @@ namespace SILDMS.Service.Reports
 
         public ValidationResult FinalClientBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out DataTable dt)
         {
-            dt = _reportDataService.FinalClientBillReport(clientID, billReceiveFromDate, billReceiveToDate,out _errorNumber);
+            dt = _reportDataService.FinalClientBillReport(clientID, billReceiveFromDate, billReceiveToDate, out _errorNumber);
             if (_errorNumber.Length > 0)
             {
                 return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
@@ -171,7 +191,7 @@ namespace SILDMS.Service.Reports
 
         public ValidationResult OutputVatStatementReport(string billReceiveFromDate, string billReceiveToDate, out DataTable dt)
         {
-            dt = _reportDataService.OutputVatStatementReport( billReceiveFromDate, billReceiveToDate, out _errorNumber);
+            dt = _reportDataService.OutputVatStatementReport(billReceiveFromDate, billReceiveToDate, out _errorNumber);
             if (_errorNumber.Length > 0)
             {
                 return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));

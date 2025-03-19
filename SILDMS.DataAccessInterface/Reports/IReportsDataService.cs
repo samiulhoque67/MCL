@@ -18,17 +18,19 @@ namespace SILDMS.DataAccessInterface.Reports
         DataTable RequisitionMovementInfo(string RequisitionNo, out string errorNumber);
         DataTable VendorCSApprevedReport(string VendorReqID, string ServiceItemID, out string errorNumber);
         DataTable VendorRequisitionReport(string VendorReqID, string ServiceItemID, out string errorNumber);
+        DataTable VendorAgeingReport(string VendorID, out string errorNumber);
+        DataTable ClientAgeingReport(string ClientID, out string errorNumber);
         DataTable GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out string errorNumber);
         DataTable GetRptDocumentsList(string OwnerLevelID, string OwnerID, string DocCategoryID, string DocTypeID, string DocPropertyID, string Status, string id, string action, out string errorNumber);
         DataTable GetRptRoleList(string OwnerLevelID, string OwnerID, string RoleID, string Status, string id, string action, out string errorNumber);
         string GetCompanyOrOwnerNameByUserID(string UserID);
 
         List<RptVendorWithAddress> GetVendorNameAndAddress(string companyID, out string errorNumber);
- 
+
         DataTable ClientQuotationApproveReport(string ClientQutnAprvID, out string errorNumber);
         DataTable MonthWiseVendorFinalBillPayment(string VendorID, string CertificateFromDate, out string _errorNumber);
 
-        DataTable ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID,  string BillCategory, out string _errorNumber);
+        DataTable ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID, string BillCategory, out string _errorNumber);
         DataTable FinalClientBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber);
         DataTable FinalClientDueBillReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber);
         DataTable OutputVatStatementReport(string billReceiveFromDate, string billReceiveToDate, out string errorNumber);

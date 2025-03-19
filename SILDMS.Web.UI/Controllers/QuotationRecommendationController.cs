@@ -66,6 +66,7 @@ namespace SILDMS.Web.UI.Controllers
         [HttpPost]
         public async Task<ActionResult> SaveQuotToClient(List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl)
         {
+            string ClientQutnRecmID = string.Empty;
             if (MasterData == null || !MasterData.Any() || DetailData == null || !DetailData.Any())
             {
                 return Json(new { status = "Error", message = "MasterList is empty or null." }, JsonRequestBehavior.AllowGet);
@@ -74,7 +75,13 @@ namespace SILDMS.Web.UI.Controllers
             try
             {
                 string status = _quotationRecommendationService.SaveQuotToClientService(UserID, MasterData, DetailData, AllTermsDtl);
-                return Json(new { status = status }, JsonRequestBehavior.AllowGet);
+                if (status != string.Empty)
+                {
+                    string[] statusarr = status.Split(',');
+                    ClientQutnRecmID = statusarr[1];
+                    status = statusarr[0];
+                }
+                return Json(new { status = status, ClientQutnRecmID }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

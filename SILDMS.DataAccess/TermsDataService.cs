@@ -22,7 +22,7 @@ namespace SILDMS.DataAccess
         {
             DataTable dtTermsItem = new DataTable();
             //dtTermsItem.Columns.Add("TermsID");
-            //dtTermsItem.Columns.Add("TermsCode");
+            dtTermsItem.Columns.Add("TermsCode");
             dtTermsItem.Columns.Add("TermsName");
             foreach (var item in vmTermsItem)
             {
@@ -30,7 +30,7 @@ namespace SILDMS.DataAccess
                 objDataRow[0] = item.TermsName;
 
                 //objDataRow[0] = item.TermsID;
-                //objDataRow[1] = item.TermsCode;
+                objDataRow[1] = item.TermsCode;
 
                 dtTermsItem.Rows.Add(objDataRow);
             }

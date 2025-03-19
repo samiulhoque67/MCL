@@ -390,7 +390,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
 
-        //[SILAuthorize]
+        [SILAuthorize]
         public ActionResult AgeingReport()
         {
             return View();
@@ -400,36 +400,47 @@ namespace SILDMS.Web.UI.Controllers
         [SILLogAttribute]
         public async Task<dynamic> AgeingReport(string ReportType)
         {
-            var tempdata = TempData["VendorRequisition"];
-            string VendorReqID = string.Empty, VendorID = string.Empty;
-            ReportType = "PDF";
-
-            OBS_VendorReq objVendorReq = new OBS_VendorReq();
-
-            if (TempData["VendorRequisition"] == null)
-            {
-                ViewBag.Title = "No valid data.";
-                //return View();
-            }
-            else
-            {
-                objVendorReq = (OBS_VendorReq)TempData["VendorRequisition"];
-                VendorReqID = objVendorReq.VendorReqID;
-                VendorID = objVendorReq.VendorID;
-            }
 
             DataTable dt = new DataTable();
 
-            await Task.Run(() => _reportService.VendorRequisitionReport(VendorReqID, VendorID, out dt));
+            await Task.Run(() => _reportService.ClientAgeingReport("", out dt));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
-            ReportPath = ReportPath + "/rptVendorRequisition.rpt";
+            ReportPath = ReportPath + "/RptClientAgeing.rpt";
             reportDocument.Load(ReportPath);
             reportDocument.SetDataSource(dt);
             reportDocument.Refresh();
 
-            string reportName = "rptVendorRequisition";
+            string reportName = "RptClientAgeing";
+            reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            reportDocument.Close();
+            reportDocument.Dispose();
+            return View();
+        }
+
+        [SILAuthorize]
+        public ActionResult VendorAgeingReport()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [SILLogAttribute]
+        public async Task<dynamic> VendorAgeingReport(string ReportType)
+        {
+            DataTable dt = new DataTable();
+
+            await Task.Run(() => _reportService.VendorAgeingReport("", out dt));
+
+            ReportDocument reportDocument = new ReportDocument();
+            string ReportPath = Server.MapPath("~/Reports");
+            ReportPath = ReportPath + "/RptVendorAgeing.rpt";
+            reportDocument.Load(ReportPath);
+            reportDocument.SetDataSource(dt);
+            reportDocument.Refresh();
+
+            string reportName = "RptVendorAgeing";
             reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
             reportDocument.Close();
             reportDocument.Dispose();
