@@ -28,7 +28,46 @@
             border-radius: 0;
         }
 
+    body {
+        font-size: 12px; /* Set global font size */
+    }
 
+    .box-body, .form-group, .btn, .form-control, .box-header {
+        font-size: 12px;
+    }
+
+    .btn {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    h3.box-title {
+        font-size: 14px;
+    }
+
+    input.form-control, button.form-control {
+        font-size: 12px;
+    }
+
+    label {
+        font-size: 12px;
+    }
+
+    /* Adjust icon size */
+    .fa {
+        font-size: 12px;
+        /* padding-right: 3px;*/
+    }
+
+    .text-success {
+        color: green;
+        font-size: 14px;
+    }
+
+    .text-primary {
+        color: blue;
+        font-size: 14px;
+    }
 </style>
 
 <div class="box box-primary box-body" ng-controller="ClientRequisitionCtrl">
@@ -71,14 +110,22 @@
                         <label for="ClientName">Client Name :</label>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="ClientName" name="ClientName" type="text" data-ng-model="ClientReq.ClientName" class="form-control" ng-readonly="true" />
+
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div style="position: relative;">
+                        <input id="ClientName" name="ClientName" type="text" data-ng-model="ClientReq.ClientName"
+                               class="form-control" ng-readonly="true"
+                               placeholder="Client Name"
+                               style="height: 25px; font-size: smaller;" />
+
+                        <button type="button" data-ng-click="ShowClientList()"
+                                style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+       padding: 0px 10px; border: 2px solid black; background: transparent;">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="col-lg-1">
-                    <button type="button" data-ng-click="ShowClientList()" class="form-control">Search</button>
-                </div>
+
             </div>
             <div class="row">
                 <div class="col-lg-3">
@@ -171,14 +218,25 @@
     <div id="ClientInfoModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Client Information</h3>
+                <!-- Modal Header -->
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
+
                 <div class="modal-body table-responsive">
                     <table st-table="ClientDisplayedCollection" st-safe-src="ClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
-                            <tr>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Client Information
+                                </th>
+                            </tr>
+
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCode')">Client Code</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientName')">Client Name</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCategoryName')">Client Category</th>
@@ -298,7 +356,7 @@
         </div>
     </div>
 
-    <div class="row">
+@*    <div class="row">
         <div class="col-md-12">
             <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
                 <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
@@ -314,14 +372,26 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>*@
 
     <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
                 <table st-table="GridDisplayCollection" st-safe-src="masterDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
                     <thead>
-                        <tr>
+                        <tr style="font-size: 15px;">
+                            <th colspan="10" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                Requisition Item List
+                            </th>
+
+                            <th style="background: #ffffff;">
+                                <button type="button" id="btnAddReqItem" ng-disabled="btnAddReqItem" ng-click="AddReqItemModal()" class="button-detail btn">
+                                    <i class="fa fa-plus" style="padding-right: 3px"></i> Add
+                                </button>
+                            </th>
+                        </tr>
+                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
                             <th style="text-align: left;" st-sort="">Item Code</th>
                             <th style="text-align: left;" st-sort="">Item Name</th>
                             <th style="text-align: left;" st-sort="">Service Category</th>
@@ -335,8 +405,8 @@
                             <th style="text-align: left;">Action</th>
                         </tr>
                         @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
+            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+        </tr>*@
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;">
@@ -376,15 +446,21 @@
                 <div class="modal-header">
                     <div class="row">
                         <div class="col-sm-5 col-md-5 col-lg-5">
-                            <h3 class="modal-title">Requisition Item Information</h3>
+                            <h4 class="modal-title" style="font-family: initial; font-weight: 700">Requisition Item Information</h4>
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6">
+
                         </div>
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                            <button type="button" class="close" data-dismiss="modal" ng-click="ResetReqItemModel()" aria-hidden="true" style="color:red;">x</button>
+                        <div style="text-align: right;">
+                            <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                                    aria-hidden="true" style="color: #ffffff;">
+                                <i class="fa fa-remove"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
+                
+
                 <div ng-cloak>
                     <div class="row">
                         <div class="col-lg-1">
@@ -476,18 +552,18 @@
 
                     <div class="row">
                         @*<div class="col-lg-1">
-                            </div>
-                            <div class="col-lg-2">
-                                <div class="form-group">
-                                    <label for="DeliveryDate">Delivery Date :</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <input id="DeliveryDate" name="DeliveryDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
-                                           ng-model="ClientReqItem.DeliveryDate" style=" background-color:#ffffff; " />
-                                </div>
-                            </div>*@
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="DeliveryDate">Delivery Date :</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="DeliveryDate" name="DeliveryDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                               ng-model="ClientReqItem.DeliveryDate" style=" background-color:#ffffff; " />
+                    </div>
+                </div>*@
                         <div class="col-lg-1">
                         </div>
                         <div class="col-lg-2">
