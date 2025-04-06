@@ -22,6 +22,46 @@
         background-color: #007bff; /* Bootstrap primary color */
         margin: 15px 0;
     }
+    body {
+        font-size: 12px; /* Set global font size */
+    }
+
+    .box-body, .form-group, .btn, .form-control, .box-header {
+        font-size: 12px;
+    }
+
+    .btn {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    h3.box-title {
+        font-size: 14px;
+    }
+
+    input.form-control, button.form-control {
+        font-size: 12px;
+    }
+
+    label {
+        font-size: 12px;
+    }
+
+    /* Adjust icon size */
+    .fa {
+        font-size: 12px;
+        /* padding-right: 3px;*/
+    }
+
+    .text-success {
+        color: green;
+        font-size: 14px;
+    }
+
+    .text-primary {
+        color: blue;
+        font-size: 14px;
+    }
 </style>
 
 <div class="box box-primary box-body" ng-controller="ClientFinalBillPrepareCtrl">
@@ -59,20 +99,28 @@
     <div class="box-body " style="margin: 1%; padding: 5px 5px 5px 5px;" data-ng-disabled="">
         <div class="row">
             <div class="row">
-                <div class="col-lg-3 ">
+                <div class="col-lg-3">
                     <div class="form-group">
                         <label for="WONo">Wo No:</label>
                     </div>
                 </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <input id="WONo" name="WONo" type="text" data-ng-model="VendorQutn.WONo" class="form-control" placeholder="Wo No" ng-readonly="true" />
+                <div class="col-sm-3 col-md-3 col-lg-3">
+
+                    <div style="position: relative;">
+                        <input id="WONo" name="WONo" type="text" data-ng-model="VendorQutn.WONo"
+                               class="form-control" ng-readonly="true"
+                               placeholder="Wo No"
+                               style="height: 25px; font-size: smaller;" />
+
+                        <button type="button" data-ng-click="ShowVendorReqList()"
+                                style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+padding: 0px 10px; border: 2px solid black; background: transparent;">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
+
                 </div>
 
-                <div class="col-lg-1">
-                    <button type="button" data-ng-click="ShowVendorReqList()" class="form-control">Search</button>
-                </div>
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label>WO Date:</label>
@@ -401,14 +449,23 @@
     <div id="VendorReqInfoModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Client Work Order Information</h3>
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
                 <div class="modal-body table-responsive">
                     <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
-                            <tr>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Client Work Order Information
+
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Work Order No</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">Work Order Amount</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('LastDateofQuotation')">Work Order Date</th>
@@ -416,9 +473,6 @@
 
                                 <th class="col-lg-2 col-md-2 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Requisition No</th>
-
-                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>*@
-                                <!--<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>-->
                                 <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
                             <tr>
@@ -430,8 +484,9 @@
                             <tr ng-repeat="row in VendorReqDisplayedCollection">
 
                                 <td class="hidden">{{row.ClientID}}</td>
-                                <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.WOInfoID}}</td>
+                                <td class="hidden">{{row.WOInfoID}}</td>
                                 <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.WONo}}</td>
+
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WOAmt}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WODate}}</td>
                                 <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.ClientName}}</td>
@@ -442,10 +497,10 @@
 
                                 @*<td class="hidden">{{row.ClientAddressID}}</td>*@
                                 @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                            {{row.Status == '1'? 'Active':'InActive'}}
-                                        </span>
-                                    </td>*@
+            <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                {{row.Status == '1'? 'Active':'InActive'}}
+            </span>
+        </td>*@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorReqSelect(row)"><i class="fa fa-edit"></i> Select</button>
                                 </td>
@@ -474,15 +529,25 @@
     <div id="SearchVendorQutnModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Client Bill Information</h3>
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
+
+
                 <div class="table-responsive" data-ng-disabled="" ng-cloak>
                     <table st-table="clientReqDisplayedCollection" st-safe-src="clientReqSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
 
                         <thead>
-                            <tr>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Client Bill Information
+
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">BillPrepID</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Client Name</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">Work Order No</th>
@@ -493,9 +558,9 @@
                                 <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
                             @*<tr>
-                                    <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                                    <th><input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" /></th>
-                                </tr>*@
+            <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+            <th><input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" /></th>
+        </tr>*@
                         </thead>
                         <tbody>
 
@@ -511,10 +576,10 @@
                                 <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.WOAmt}}</td>
                                 @*<td class="hidden">{{row.ClientAddressID}}</td>*@
                                 @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                            {{row.Status == '1'? 'Active':'InActive'}}
-                                        </span>
-                                    </td>*@
+                            <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                                {{row.Status == '1'? 'Active':'InActive'}}
+                            </span>
+                        </td>*@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorQutnSelect(row)"><i class="fa fa-edit"></i> Select</button>
                                 </td>
