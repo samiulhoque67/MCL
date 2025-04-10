@@ -292,39 +292,41 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
             VendorCSItem.Columns.Add("NegoAmt");
             VendorCSItem.Columns.Add("NegoTolAmt");
 
-
-            foreach (var item in vendorCSInfoItem)
+            if (vendorCSInfoItem != null && vendorCSInfoItem.Any()) // Check for null and non-empty
             {
-                DataRow objDataRow = VendorCSItem.NewRow();
-                objDataRow[0] = item.VendorQutnID;
-                objDataRow[1] = item.ServiceCategoryID;
-                objDataRow[2] = item.ServiceItemID;
+                foreach (var item in vendorCSInfoItem)
+                {
+                    DataRow objDataRow = VendorCSItem.NewRow();
+                    objDataRow[0] = item.VendorQutnID;
+                    objDataRow[1] = item.ServiceCategoryID;
+                    objDataRow[2] = item.ServiceItemID;
 
-                objDataRow[3] = item.Description;
-                objDataRow[4] = item.DeliveryLocation;
-                objDataRow[5] = item.DeliveryDate;
-                objDataRow[6] = item.DeliveryMode;
+                    objDataRow[3] = item.Description;
+                    objDataRow[4] = item.DeliveryLocation;
+                    objDataRow[5] = item.DeliveryDate;
+                    objDataRow[6] = item.DeliveryMode;
 
-                objDataRow[7] = item.ReqQnty;
-                objDataRow[8] = item.ReqUnit;
-                objDataRow[9] = item.QutnQnty;
-                objDataRow[10] = item.QutnPrice;
-                objDataRow[11] = item.QutnUnit;
-                objDataRow[12] = item.QutnAmt;
-                objDataRow[13] = item.VatPerc;
-                objDataRow[14] = item.VatAmt;
-                objDataRow[15] = item.TolAmt;
-                objDataRow[16] = item.VendorID;
-                objDataRow[17] = item.VendorName;
-                objDataRow[18] = item.VendorCSInfoID;
-                objDataRow[19] = item.VendorCSInfoItemID;
-                objDataRow[20] = item.NegoQty;
-                objDataRow[21] = item.NegoPrice;
-                objDataRow[22] = item.NegoVatAmt;
-                objDataRow[23] = item.NegoAmt;
-                objDataRow[24] = item.NegoTolAmt;
+                    objDataRow[7] = item.ReqQnty;
+                    objDataRow[8] = item.ReqUnit;
+                    objDataRow[9] = item.QutnQnty;
+                    objDataRow[10] = item.QutnPrice;
+                    objDataRow[11] = item.QutnUnit;
+                    objDataRow[12] = item.QutnAmt;
+                    objDataRow[13] = item.VatPerc;
+                    objDataRow[14] = item.VatAmt;
+                    objDataRow[15] = item.TolAmt;
+                    objDataRow[16] = item.VendorID;
+                    objDataRow[17] = item.VendorName;
+                    objDataRow[18] = item.VendorCSInfoID;
+                    objDataRow[19] = item.VendorCSInfoItemID;
+                    objDataRow[20] = item.NegoQty;
+                    objDataRow[21] = item.NegoPrice;
+                    objDataRow[22] = item.NegoVatAmt;
+                    objDataRow[23] = item.NegoAmt;
+                    objDataRow[24] = item.NegoTolAmt;
 
-                VendorCSItem.Rows.Add(objDataRow);
+                    VendorCSItem.Rows.Add(objDataRow);
+                }
             }
 
             DataTable VendorCSTerm = new DataTable();
@@ -332,15 +334,20 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
             VendorCSTerm.Columns.Add("TermsCode");
             VendorCSTerm.Columns.Add("TermsName");
             VendorCSTerm.Columns.Add("VendorID");
-            foreach (var item in vendorCSInfoTerm)
+            if (vendorCSInfoTerm != null && vendorCSInfoTerm.Any()) // Check for null and non-empty
             {
-                DataRow objDataRow = VendorCSTerm.NewRow();
-                objDataRow[0] = item.TermsID;
-                objDataRow[1] = item.TermsCode;
-                objDataRow[2] = item.TermsName;
-                objDataRow[3] = item.VendorID;
-                VendorCSTerm.Rows.Add(objDataRow);
+                foreach (var item in vendorCSInfoTerm)
+                {
+                    DataRow objDataRow = VendorCSTerm.NewRow();
+                    objDataRow[0] = item.TermsID;
+                    objDataRow[1] = item.TermsCode;
+                    objDataRow[2] = item.TermsName;
+                    objDataRow[3] = item.VendorID;
+
+                    VendorCSTerm.Rows.Add(objDataRow);
+                }
             }
+
 
             //DataTable vendorCSVendors = new DataTable();
             //vendorCSVendors.Columns.Add("VendorID");
@@ -662,6 +669,127 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                         // ,
 
                         //Status = reader.GetString("Status")
+                    }).ToList();
+                }
+            }
+            return VendorCSInfoItemList;
+        }
+
+        public List<Invitation> SearchCSData(string userID)
+        {
+            var invitationList = new List<Invitation>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_SearchForCSAprv"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@UserId", SqlDbType.VarChar, userID);
+
+                // Execute SP.
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+
+                    invitationList = dt1.AsEnumerable().Select(reader => new Invitation
+                    {
+                        //Invitation_Number = reader.GetString("InvitationNumber"),
+                        VendorCSNumber = reader.GetString("VendorCSActualAprvID"),
+                        VendorRequisitionNumber = reader.GetString("VendorReqID"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        CSRecDate = reader.GetString("CSRecDate"),
+                        Operation = reader.GetString("Operation"),
+                        RecommendedBy = reader.GetString("RecommendedBy"),
+                        Remarks = reader.GetString("Remarks")
+
+
+
+
+                    }).ToList();
+
+                }
+            }
+            return invitationList;
+        }
+
+        public List<OBS_VendorCSRecmItem> CSVendorData(string userID, string cSNumber)
+        {
+
+            var CSVendorList = new List<OBS_VendorCSRecmItem>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_CSVendorAprv"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@UserId", SqlDbType.VarChar, userID);
+                db.AddInParameter(dbCommandWrapper, "@CSNumber", SqlDbType.VarChar, cSNumber);
+
+                // Execute SP.
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+
+                    CSVendorList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
+                    {
+                        //InvitationNumber = reader.GetString("InvitationNumber"),
+                        VendorQutnID = reader.GetString("VendorQutnID"),
+                        VendorCSInfoID = reader.GetString("VendorCSActualAprvID"),
+                        VendorName = reader.GetString("VendorName"),
+
+                        ReqQnty = reader.GetString("ReqQnty"),
+                        QutnQnty = reader.GetString("QutnQnty"),
+                        TolAmt = reader.GetString("TolAmt"),
+
+                        DeliveryDate = reader.GetString("DeliveryDate"),
+
+
+
+
+                    }).ToList();
+                }
+            }
+
+            return CSVendorList;
+        }
+
+        public List<OBS_VendorCSRecmTerms> CSVendorTerms(string cSNumber)
+        {
+            string errorNumber = string.Empty;
+            List<OBS_VendorCSRecmTerms> VendorCSInfoItemList = new List<OBS_VendorCSRecmTerms>();
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSTermListAprv"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@VendorCSRecmID", SqlDbType.VarChar, cSNumber);
+                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, "");
+                // Execute SP. 
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt1 = ds.Tables[0];
+                    VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmTerms
+                    {
+                        //VendorCSInfoTermID = reader.GetString("VendorCSInfoTermID"),
+                        //VendorCSInfoID = reader.GetString("VendorCSInfoID"),
+                        TermsID = reader.GetString("TermsID"),
+                        TermsCode = reader.GetString("TermsCode"),
+                        TermsName = reader.GetString("TermsName"),
+                        VendorID = reader.GetString("VendorID"),
+                        VendorName = reader.GetString("VendorName"),
+
                     }).ToList();
                 }
             }

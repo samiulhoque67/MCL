@@ -296,39 +296,44 @@ namespace SILDMS.DataAccess
 
 
 
-            foreach (var item in vendorCSInfoItem)
+            if (vendorCSInfoItem != null && vendorCSInfoItem.Any()) // Check for null and non-empty
             {
-                DataRow objDataRow = VendorCSItem.NewRow();
-                objDataRow[0] = item.VendorQutnID;
-                objDataRow[1] = item.ServiceCategoryID;
-                objDataRow[2] = item.ServiceItemID;
-
-                objDataRow[3] = item.Description;
-                objDataRow[4] = item.DeliveryLocation;
-                objDataRow[5] = item.DeliveryDate;
-                objDataRow[6] = item.DeliveryMode;
-
-                objDataRow[7] = item.ReqQnty;
-                objDataRow[8] = item.ReqUnit;
-                objDataRow[9] = item.QutnQnty;
-                objDataRow[10] = item.QutnPrice;
-                objDataRow[11] = item.QutnUnit;
-                objDataRow[12] = item.QutnAmt;
-                objDataRow[13] = item.VatPerc;
-                objDataRow[14] = item.VatAmt;
-                objDataRow[15] = item.TolAmt;
-                objDataRow[16] = item.VendorID;
-                objDataRow[17] = item.VendorName;
-                objDataRow[18] = item.VendorCSInfoID;
-                objDataRow[19] = item.VendorCSInfoItemID;
-                objDataRow[20] = item.NegoQty;
-                objDataRow[21] = item.NegoPrice;
-                objDataRow[22] = item.NegoVatAmt;
-                objDataRow[23] = item.NegoAmt;
-                objDataRow[24] = item.NegoTolAmt;
 
 
-                VendorCSItem.Rows.Add(objDataRow);
+                foreach (var item in vendorCSInfoItem)
+                {
+                    DataRow objDataRow = VendorCSItem.NewRow();
+                    objDataRow[0] = item.VendorQutnID;
+                    objDataRow[1] = item.ServiceCategoryID;
+                    objDataRow[2] = item.ServiceItemID;
+
+                    objDataRow[3] = item.Description;
+                    objDataRow[4] = item.DeliveryLocation;
+                    objDataRow[5] = item.DeliveryDate;
+                    objDataRow[6] = item.DeliveryMode;
+
+                    objDataRow[7] = item.ReqQnty;
+                    objDataRow[8] = item.ReqUnit;
+                    objDataRow[9] = item.QutnQnty;
+                    objDataRow[10] = item.QutnPrice;
+                    objDataRow[11] = item.QutnUnit;
+                    objDataRow[12] = item.QutnAmt;
+                    objDataRow[13] = item.VatPerc;
+                    objDataRow[14] = item.VatAmt;
+                    objDataRow[15] = item.TolAmt;
+                    objDataRow[16] = item.VendorID;
+                    objDataRow[17] = item.VendorName;
+                    objDataRow[18] = item.VendorCSInfoID;
+                    objDataRow[19] = item.VendorCSInfoItemID;
+                    objDataRow[20] = item.NegoQty;
+                    objDataRow[21] = item.NegoPrice;
+                    objDataRow[22] = item.NegoVatAmt;
+                    objDataRow[23] = item.NegoAmt;
+                    objDataRow[24] = item.NegoTolAmt;
+
+
+                    VendorCSItem.Rows.Add(objDataRow);
+                }
             }
 
             DataTable VendorCSTerm = new DataTable();
@@ -336,15 +341,20 @@ namespace SILDMS.DataAccess
             VendorCSTerm.Columns.Add("TermsCode");
             VendorCSTerm.Columns.Add("TermsName");
             VendorCSTerm.Columns.Add("VendorID");
-            foreach (var item in vendorCSInfoTerm)
+            if (vendorCSInfoTerm != null && vendorCSInfoTerm.Any()) // Check for null and non-empty
             {
-                DataRow objDataRow = VendorCSTerm.NewRow();
-                objDataRow[0] = item.TermsID;
-                objDataRow[1] = item.TermsCode;
-                objDataRow[2] = item.TermsName;
-                objDataRow[3] = item.VendorID;
-                VendorCSTerm.Rows.Add(objDataRow);
+                foreach (var item in vendorCSInfoTerm)
+                {
+                    DataRow objDataRow = VendorCSTerm.NewRow();
+                    objDataRow[0] = item.TermsID;
+                    objDataRow[1] = item.TermsCode;
+                    objDataRow[2] = item.TermsName;
+                    objDataRow[3] = item.VendorID;
+
+                    VendorCSTerm.Rows.Add(objDataRow);
+                }
             }
+
 
             //DataTable vendorCSVendors = new DataTable();
             //vendorCSVendors.Columns.Add("VendorID");
@@ -744,7 +754,7 @@ namespace SILDMS.DataAccess
                     {
                         //InvitationNumber = reader.GetString("InvitationNumber"),
                         VendorQutnID = reader.GetString("VendorQutnID"),
-                        VendorCSInfoID = reader.GetString("VendorCSRecmID"),
+                        VendorCSInfoID = reader.GetString("VendorCSAprvID"),
                         VendorName = reader.GetString("VendorName"),
                      
                         ReqQnty = reader.GetString("ReqQnty"),
