@@ -109,11 +109,11 @@
                     </button>
                 </div>
 
-                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button class="button-custom btn-danger" type="button" data-ng-click="Cancel()" ng-disabled="btnSave">
-                        <i class="fa fa-close" style="padding-right: 5px"></i> Cancel
-                    </button>
-                </div>
+                @*<div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                        <button class="button-custom btn-danger" type="button" data-ng-click="Cancel()" ng-disabled="btnSave">
+                            <i class="fa fa-close" style="padding-right: 5px"></i> Cancel
+                        </button>
+                    </div>*@
             </div>
         </div>
     </div>
@@ -123,17 +123,23 @@
 
 
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-if="p===2">
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="p===2">
         <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+            <div ng-show="GridDisplayCollection.length<=0" style="text-align:center">
+                <h4 style="color:red;">No data available!</h4>
+            </div>
+            <div ng-show="GridDisplayCollection.length >0" class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
 
                 <table st-table="GridDisplayCollection" st-safe-src="masterDataSetupGridData" style="width:100%;" class="tableVen table-condensed table-bordered  table-hover pnlView">
 
                     <thead>
                         <tr style="font-size: 15px;">
-                            <th colspan="11" style="text-align: left; color: white; font-weight: bold">Requisition To Vendor List</th>
+                            @*<th colspan="11" style="text-align: left; color: white; font-weight: bold">Requisition To Vendor List</th>*@
+                            <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                Requisition To Vendor List
+                            </th>
                         </tr>
-                        <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
+                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
                             <th style="text-align: left;" st-sort="">Vendor Requisition No</th>
                             <th style="text-align: left;" st-sort="">Requisition Date</th>
                             <th style="text-align: left;" st-sort="">Client Name</th>
@@ -143,8 +149,8 @@
 
                         </tr>
                         @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
+                            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                        </tr>*@
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in GridDisplayCollection"
@@ -170,33 +176,35 @@
                     </tbody>
                     <tfoot>
                         @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
+                            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                        </tr>*@
                     </tfoot>
                 </table>
             </div>
         </div>
-    </div>
 
 
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isRowSelected">
-        <div class="row">
+
+        <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isRowSelected">
+
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
 
 
                 @*<div ng-if="flagToShow" style="text-align:center">
-                        <h4 style="color:red;">No data available!</h4>
-                    </div>*@
+                    <h4 style="color:red;">No data available!</h4>
+                </div>*@
                 @* Master Table *@
                 @*<div id="PndRecomAndApprovalTable" class="table-responsive">*@
                 @*<h5 style="color:chocolate; font-weight:bold">No of Requisitions: {{prList[0].Row_count}}</h5>*@
                 <table id="tableId" st-table="ReqWiseMaterialListCollection" st-safe-src="InvWiseMaterialList" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
                     <thead>
                         <tr style="font-size: 15px;">
-                            <th colspan="9" style="text-align: left; color: white; font-weight: bold">Item List</th>
+                            <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                Item List
+                            </th>
                         </tr>
-                        <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
+                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
                             <th style="text-align: left;" st-sort="">Category Name</th>
                             <th style="text-align: left;" st-sort="">Item Code</th>
                             <th style="text-align: left;" st-sort="">Item Name</th>
@@ -248,254 +256,12 @@
 
 
             </div>
-        </div>
-    </div>
-
-
-
-
-
-    <div id="SearchModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Comparative Statement List</h3>
-                </div>
-                <div class="table-responsive" data-ng-disabled="" ng-cloak>
-                    <table st-table="SearchCSListCollection" st-safe-src="SearchCSList" style="width:100%" class="tableVen table-condensed table-bordered  table-hover pnlView">
-                        <thead>
-                            <tr style="font-size: 15px;">
-                                <th colspan="11" style="text-align: left; color: white; font-weight: bold">Comparative Statement list</th>
-                            </tr>
-                            <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
-                                <th class="col-lg-1 col-md-1 col-sm-1"> Number</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1">CS Number</th>
-                                <th class="col-lg-3 col-md-3 col-sm-2">Vendor Requisition Number</th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">Service Code</th>
-                                <th class="col-lg-3 col-md-3 col-sm-3">Service Name</th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">CS Date</th>
-
-                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <th><input st-search="Material_Name" placeholder="Material Name" class="input-sm form-control" type="search" /></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            <tr ng-repeat="row in SearchCSListCollection">
-                                <td class="text-center">{{$index+1}}</td>
-                                <td class="text-center">{{row.VendorCSNumber}}</td>
-                                <td class="">{{row.VendorRequisitionNumber}}</td>
-                                <td class="">{{row.ServiceItemID}}</td>
-                                <td class="">{{row.ServiceItemName}}</td>
-                                <td class="">{{row.CSRecDate}}</td>
-
-                                <td class="text-center">
-                                    <a class="btn col-center btn-sm btn-flat btn-success" data-ng-click="toggleCSSelect(row)">Select</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="9" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>
-                        </tfoot>
-
-                    </table>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="p===1">
-        <div class="col-lg-12">
-
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-
-
-                @*<div ng-if="flagToShow" style="text-align:center">
-                        <h4 style="color:red;">No data available!</h4>
-                    </div>*@
-                <h4 style="color:red;">No data available!</h4>
-            </div>
-            @* Master Table *@
-            @*<div id="PndRecomAndApprovalTable" class="table-responsive">*@
-            @*<h5 style="color:chocolate; font-weight:bold">No of Requisitions: {{prList[0].Row_count}}</h5>*@
-            <table st-table="VendorCSListCollection" st-safe-src="VendorCSList" style="width:100%" class="tableVen table-condensed table-bordered  table-hover pnlView">
-
-                <thead>
-                    <tr style="font-size: 15px;">
-                        <th colspan="7" style="text-align: left; color: white; font-weight: bold">Selected Vendor for CS of {{CSMaterial_Name}} Material</th>
-                    </tr>
-                    <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
-                        <th class="col-lg-2 col-md-2 col-sm-2">CS Number</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2">Quotation No</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2">Vendor Name</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2">RequestQty</th>
-                        <th class="col-lg-1 col-md-1 col-sm-1">ProposeQty</th>
-                        <th class="col-lg-1 col-md-1 col-sm-1">Total Price</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2">Delivery Date</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr id="rowID" ng-repeat="row in VendorCSListCollection"
-                        style="height:20px; font-size:13px;">
-
-                        <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorCSInfoID}}</td>
-                        <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorQutnID}}</td>
-                        <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorName}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.ReqQnty | number:3}}</td>
-
-                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:3}}</td>
-                        <td class="col-lg-2 col-md-2 col-sm-2">{{row.TolAmt | number:3}}</td>
-
-                        <td class="col-lg-2 col-md-2 col-sm-2">{{row.DeliveryDate}}</td>
-
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="9" class="text-center">
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-            <br />
-            <br />
-            <div class="row">
-                <div class="row">
-                    <div class="col-sm-1 col-md-1 col-lg-1">
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label>CS Date:</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSInfo.CSRecDate" ng-readonly="true" />
-                        </div>
-
-
-
-                    </div>
-
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label>CS No:</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSInfo.AutoCSNo" ng-readonly="true" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-1 col-md-1 col-lg-1">
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label>Operation:</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <select data-ng-model="VendorCSInfo.Operation" class="form-control">
-                            <option value="">-- None --</option>
-                            <option value="Rec">Recommended</option>
-                            <option value="Bck">Back</option>
-                            <option value="Pst">Postponed</option>
-                            <option value="Can">Cancel</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="QuotationFor">Note:</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
 
         </div>
-   
-
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-        <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
-                    <thead>
-                        <tr style="font-size: 15px;">
-                            <th colspan="4" style="text-align: left; color: white; font-weight: bold">Terms & Conditions </th>
-                        </tr>
-                        <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
-
-                            <th style="text-align: left;" st-sort="">Vendor Name</th>
-                            <th style="text-align: left;" st-sort="">Terms Code</th>
-                            <th style="text-align: left;" st-sort="">Terms & Conditions</th>
-                            <th style="text-align: left;">Action</th>
-                        </tr>
-                        @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-                            <td class="hidden">{{row.VendorCSInfoTermsID}}</td>
-                            <td class="hidden">{{row.VendorCSInfoID}}</td>
-                            <td class="col-lg-1" style="width:10%;">{{row.VendorName}}</td>
-                            <td class="hidden">{{row.TermsID}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-                            <td class="col-lg-1" style="width:60%;">{{row.TermsName}}</td>
-
-                            <td class="col-lg-1" style="width:5%;">
-                                <button type="button" ng-if="row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" ng-if="!row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
 
 
-
-
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isMaterialRowSelected">
-        <div class="row">
+        <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isMaterialRowSelected">
+           
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
 
 
@@ -503,9 +269,9 @@
                 <table id="tableId" st-table="MatWiseVendorListCollection" st-safe-src="MatWiseVendorList" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
                     <thead>
                         <tr style="font-size: 15px;">
-                            <th colspan="14" style="text-align: left; color: white; font-weight: bold">Selected Item : {{VendorCSInfo.ServiceItemName}} </th>
+                            <th colspan="14" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">Selected Item : {{VendorCSInfo.ServiceItemName}} </th>
                         </tr>
-                        <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
+                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
                             <th>Quotation No</th>
                             <th>Vendor Name</th>
                             <th>ProposeQty</th>
@@ -537,6 +303,10 @@
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoQty" ng-blur="checkUnitPrice(row)" ng-value="0" />
+
+
+
+
                             </td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.ReqUnit}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnPrice | number:2}}</td>
@@ -571,7 +341,7 @@
                     </tfoot>
                 </table>
 
-
+                <br />
 
 
                 <div class="row">
@@ -636,72 +406,113 @@
                 </div>
 
 
+                <br />
 
-            </div>
-
-
-
-
-
-        </div>
-        <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-            <div class="row">
-                <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                    <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
-                        <thead>
-                            <tr style="font-size: 15px;">
-                                <th colspan="4" style="text-align: left; color: white; font-weight: bold">Terms & Conditions </th>
-                            </tr>
-                            <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
+                <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
+                    <thead>
+                        <tr style="font-size: 15px;">
+                            <th colspan="4" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">Terms & Conditions </th>
+                        </tr>
+                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
 
                             <th style="text-align: left;" st-sort="">Vendor Name</th>
                             <th style="text-align: left;" st-sort="">Terms Code</th>
                             <th style="text-align: left;" st-sort="">Terms & Conditions</th>
-                            <th style="text-align: left;">Action</th>
+                            @*<th style="text-align: left;">Action</th>*@
                         </tr>
                         @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
+                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                </tr>*@
                     </thead>
+
                     <tbody>
                         <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
                             <td class="hidden">{{row.VendorCSInfoTermsID}}</td>
                             <td class="hidden">{{row.VendorCSInfoID}}</td>
-                            <td class="col-lg-1" style="width:10%;">{{row.VendorName}}</td>
+                            <td class="col-lg-2" style="width:35%;">{{row.VendorName}}</td>
                             <td class="hidden">{{row.TermsID}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-                            <td class="col-lg-1" style="width:60%;">{{row.TermsName}}</td>
-                                <th style="text-align: left;" st-sort="">Vendor Name</th>
-                                <th style="text-align: left;" st-sort="">Terms Code</th>
-                                <th style="text-align: left;" st-sort="">Terms & Conditions</th>
-                                <th style="text-align: left;">Action</th>
+                            <td class="col-lg-9" style="width:60%;">{{row.TermsName}}</td>
+
+                            @*<td class="col-lg-1" style="width:5%;">
+                        <button type="button" ng-if="row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                        <button type="button" ng-if="!row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                        <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                    </td>*@
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        @*<tr>
+                    <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                </tr>*@
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="SearchModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
+                <!--<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>-->
+                @*<h3 class="modal-title">Comparative Statement List</h3>*@
+                <!--</div>-->
+                <div class="table-responsive" data-ng-disabled="" ng-cloak>
+                    <table st-table="SearchCSListCollection" st-safe-src="SearchCSList" style="width:100%" class="tableVen table-condensed table-bordered  table-hover pnlView">
+                        <thead>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Comparative Statement list
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                                <th class="col-lg-1 col-md-1 col-sm-1"> Number</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">CS Number</th>
+                                <th class="col-lg-3 col-md-3 col-sm-2">Vendor Requisition Number</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">Service Code</th>
+                                <th class="col-lg-3 col-md-3 col-sm-3">Service Name</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">CS Date</th>
+
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
                             @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
+                                    <th></th>
+                                    <th><input st-search="Material_Name" placeholder="Material Name" class="input-sm form-control" type="search" /></th>
+                                </tr>*@
                         </thead>
                         <tbody>
-                            <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-                                <td class="hidden">{{row.VendorCSInfoTermsID}}</td>
-                                <td class="hidden">{{row.VendorCSInfoID}}</td>
-                                <td class="col-lg-1" style="width:10%;">{{row.VendorName}}</td>
-                                <td class="hidden">{{row.TermsID}}</td>
-                                <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-                                <td class="col-lg-1" style="width:60%;">{{row.TermsName}}</td>
 
-                                <td class="col-lg-1" style="width:5%;">
-                                    <button type="button" ng-if="row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                    <button type="button" ng-if="!row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                    <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                            <tr ng-repeat="row in SearchCSListCollection">
+                                <td class="text-center">{{$index+1}}</td>
+                                <td class="text-center">{{row.VendorCSNumber}}</td>
+                                <td class="">{{row.VendorRequisitionNumber}}</td>
+                                <td class="">{{row.ServiceItemID}}</td>
+                                <td class="">{{row.ServiceItemName}}</td>
+                                <td class="">{{row.CSRecDate}}</td>
+
+                                <td class="text-center">
+                                    <a class="btn col-center btn-sm btn-flat btn-success" data-ng-click="toggleCSSelect(row)">Select</a>
                                 </td>
                             </tr>
                         </tbody>
                         <tfoot>
-                            @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
+                            <tr>
+                                <td colspan="9" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                            </tr>
                         </tfoot>
+
                     </table>
+                </div>
+                <div class="modal-footer">
                 </div>
             </div>
         </div>
@@ -709,13 +520,229 @@
 
 
 
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="p===1">
 
 
 
-    
+        <table st-table="VendorCSListCollection" st-safe-src="VendorCSList" style="width:100%" class="tableVen table-condensed table-bordered  table-hover pnlView">
+
+            <thead>
+                <tr style="font-size: 15px;">
+                    <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                        Selected Vendor For Item : {{CSMaterial_Name}}
+                    </th>
+                </tr>
+                <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                    <th class="col-lg-2 col-md-2 col-sm-2">CS Number</th>
+                    <th class="col-lg-2 col-md-2 col-sm-2">Quotation No</th>
+                    <th class="col-lg-2 col-md-2 col-sm-2">Vendor Name</th>
+                    <th class="col-lg-2 col-md-2 col-sm-2">RequestQty</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1">ProposeQty</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1">Total Price</th>
+                    <th class="col-lg-2 col-md-2 col-sm-2">Delivery Date</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="rowID" ng-repeat="row in VendorCSListCollection"
+                    style="height:20px; font-size:13px;">
+
+                    <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorCSInfoID}}</td>
+                    <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorQutnID}}</td>
+                    <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorName}}</td>
+                    <td class="col-lg-1 col-md-1 col-sm-1">{{row.ReqQnty | number:3}}</td>
+
+                    <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:3}}</td>
+                    <td class="col-lg-2 col-md-2 col-sm-2">{{row.TolAmt | number:3}}</td>
+
+                    <td class="col-lg-2 col-md-2 col-sm-2">{{row.DeliveryDate}}</td>
+
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="9" class="text-center">
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <br />
+        <br />
+        <div class="row">
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>CS Date:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSInfo.CSRecDate" ng-readonly="true" />
+                    </div>
+
+
+
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>CS No:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSInfo.AutoCSNo" ng-readonly="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Operation:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <select data-ng-model="VendorCSInfo.Operation" class="form-control">
+                        <option value="">-- None --</option>
+                        <option value="Rec">Recommended</option>
+                        <option value="Bck">Back</option>
+                        <option value="Pst">Postponed</option>
+                        <option value="Can">Cancel</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="QuotationFor">Note:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        <br />
+        <br />
+
+
+
+        <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
+            <thead>
+                <tr style="font-size: 15px;">
+                    <th colspan="4" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">Terms & Conditions </th>
+                </tr>
+                <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
+                    <th style="text-align: left;" st-sort="">Vendor Name</th>
+                    <th style="text-align: left;" st-sort="">Terms Code</th>
+                    <th style="text-align: left;" st-sort="">Terms & Conditions</th>
+                    @*<th style="text-align: left;">Action</th>*@
+                </tr>
+                @*<tr>
+                        <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                    </tr>*@
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
+                    <td class="hidden">{{row.VendorCSInfoTermsID}}</td>
+                    <td class="hidden">{{row.VendorCSInfoID}}</td>
+                    <td class="col-lg-2" style="width:35%;">{{row.VendorName}}</td>
+                    <td class="hidden">{{row.TermsID}}</td>
+                    <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
+                    <td class="col-lg-9" style="width:60%;">{{row.TermsName}}</td>
+
+                    @*<td class="col-lg-1" style="width:5%;">
+                            <button type="button" ng-if="row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                            <button type="button" ng-if="!row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                            <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                        </td>*@
+                </tr>
+            </tbody>
+            <tfoot>
+                @*<tr>
+                        <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                    </tr>*@
+            </tfoot>
+        </table>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
 </div>
 
     <script type="text/javascript">
+
+        $('.DatePicker').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+        $('#CSRecDate1').datepicker().on('changeDate', function (ev) {
+            var EnteredDate = $('#CSRecDate1').val(); // For JQuery
+            var date = EnteredDate.substring(0, 2);
+            var month = EnteredDate.substring(3, 5);
+            var year = EnteredDate.substring(6, 10);
+            var myDate = new Date(year, month - 1, date);
+
+            var today = new Date();
+            if (myDate > today) {
+                $('#CSRecDate1').val('');
+                toastr.error("Date should not grater than system date.");
+            }
+            ////////////
+            if ($('#CSRecDate').val() != '') {
+                var EnteredToDate = $('#CSRecDate').val(); // For JQuery
+                var date = EnteredToDate.substring(0, 2);
+                var month = EnteredToDate.substring(3, 5);
+                var year = EnteredToDate.substring(6, 10);
+                var myToDate = new Date(year, month - 1, date);
+                var today1 = new Date();
+                if (myToDate > today1) {
+                    $('#CSRecDate').val('');
+                    toastr.error("Date should not grater than system date.");
+                }
+            }
+            ///////
+
+            $('.datepicker').hide();
+        });
+
+    
+
+
+
+
+
+
+
+
 
         app.controller('VendorCSInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -743,6 +770,9 @@
                 .success(function (response) {
                     $scope.Invitation = response.InvitationList;
                     $scope.GridDisplayCollection = [].concat($scope.Invitation);
+                    $scope.ReqTermDataSetupGridData = [];
+                    $scope.ReqTermGridDisplayCollection = [];
+                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                     console.log($scope.GridDisplayCollection);
                     $scope.loading = false;
                 }).error(function () {
@@ -1121,16 +1151,16 @@
                 Status: ""
             }
 
-            $('.DatePicker').datepicker({
-                format: "dd/mm/yyyy",
-                autoclose: true
-                // Set minDate to 0 to disable selecting previous dates
-            });
+            //$('.DatePicker').datepicker({
+            //    format: "dd/mm/yyyy",
+            //    autoclose: true
+            //    // Set minDate to 0 to disable selecting previous dates
+            //});
 
-            $('.DatePicker')
-                .on('changeDate', function (ev) {
-                    $('.datepicker').hide();
-                });
+            //$('.DatePicker')
+            //    .on('changeDate', function (ev) {
+            //        $('.datepicker').hide();
+            //    });
 
             // ################# Detail Add Modal ####################
             $scope.AddReqItemModal = function () {
@@ -1707,6 +1737,20 @@
                     toastr.error("Please select at least one vendor");
                     return;
                 }
+                if ($scope.VendorCSInfo.AutoCSNo != "") {
+                    if ($('#CSRecDate').val() == "") {
+                        toastr.error("CS Date  Required");
+                        return;
+                    }
+                    $scope.VendorCSInfo.CSRecDate = $('#CSRecDate').val();
+                }
+                else {
+                    if ($('#CSRecDate1').val() == "") {
+                        toastr.error("CS Date  Required");
+                        return;
+                    }
+                    $scope.VendorCSInfo.CSRecDate = $('#CSRecDate1').val();
+                }
                 if (!$scope.VendorCSInfo.Operation) {
                     toastr.error("please select an  operation");
                     return; // Stop execution if validation fails
@@ -1715,12 +1759,7 @@
                     toastr.error("CS Date  Required");
                     return;
                 }
-                if ($scope.VendorCSInfo.AutoCSNo != "") {
-                    $scope.VendorCSInfo.CSRecDate = $('#CSRecDate').val();
-                }
-                else{
-                    $scope.VendorCSInfo.CSRecDate = $('#CSRecDate1').val();
-                }
+              
 
                
                 $http.post('/VendorCSInfo/SaveVendorCSInfo',

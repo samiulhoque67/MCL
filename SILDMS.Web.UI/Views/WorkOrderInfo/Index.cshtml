@@ -4,16 +4,45 @@
 }
 
 <style type="text/css">
-    label {
-        margin-bottom: 2px;
-        font-weight: bold;
+    body {
+        font-size: 12px; /* Set global font size */
+    }
+
+    .box-body, .form-group, .btn, .form-control, .box-header {
         font-size: 12px;
     }
 
-    .form-control {
-        height: 25px;
-        font-size: smaller;
-        padding: 3px 6px 3px;
+    .btn {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    h3.box-title {
+        font-size: 14px;
+    }
+
+    input.form-control, button.form-control {
+        font-size: 12px;
+    }
+
+    label {
+        font-size: 12px;
+    }
+
+    /* Adjust icon size */
+    .fa {
+        font-size: 12px;
+        /* padding-right: 3px;*/
+    }
+
+    .text-success {
+        color: green;
+        font-size: 14px;
+    }
+
+    .text-primary {
+        color: blue;
+        font-size: 14px;
     }
 </style>
 
@@ -60,14 +89,21 @@
                         <label for="ClientName">Client Name :</label>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="ClientName" name="ClientName" type="text" data-ng-model="WOInfo.ClientName" class="form-control" ng-readonly="true" />
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div style="position: relative;">
+                        <input id="ClientName" name="ClientName" type="text" data-ng-model="WOInfo.ClientName"
+                               class="form-control" ng-readonly="true"
+                               placeholder="Client Name"
+                               style="height: 25px; font-size: smaller;" />
+
+                        <button type="button" data-ng-click="ShowClientList()"
+                                style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+padding: 0px 10px; border: 2px solid black; background: transparent;">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="col-lg-1">
-                    <button type="button" data-ng-click="ShowClientList()" class="form-control">Search</button>
-                </div>
+
                 <div class="col-lg-2 ">
                     <div class="form-group">
                         <label for="BillCategory">Bill Category:</label>
@@ -92,6 +128,7 @@
                         <input id="WONo" name="WONo" type="text" class="form-control" placeholder="WONo" ng-model="WOInfo.WONo" />
                     </div>
                 </div>
+                <div class="col-lg-1"></div>
                 <div class="col-lg-2 ">
                     <div class="form-group">
                         <label for="BillType">Bill Type:</label>
@@ -169,14 +206,23 @@
     <div id="ClientInfoModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Client Information</h3>
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
+
                 <div class="modal-body table-responsive">
                     <table st-table="ClientDisplayedCollection" st-safe-src="ClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
-                            <tr>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Client Information
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientName')">Client Name</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientQutnAprvID')">AprvNo</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactPerson')">AprvDate</th>
@@ -234,14 +280,25 @@
     <div id="SearchWOInfoModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Client Requisition Information</h3>
+
+                <!-- Modal Header -->
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
                 <div class="table-responsive" data-ng-disabled="" ng-cloak>
                     <table st-table="clientReqDisplayedCollection" st-safe-src="woInfoSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
-                            <tr>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Client Requisition Information
+                                </th>
+                            </tr>
+
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
                                 <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
                                 <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('WONo')">Work Order No</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('WODate')">Work Order Date</th>
@@ -293,29 +350,25 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
-                <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
-                    <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Requisition Item List</h2>
-                    <div class="box-tools pull-right">
-                        <div class="col-lg-12 pull-right">
-                            <div class="btn-group pull-right" style="margin:2px;">
-                                <button type="button" id="btnAddWoItem" ng-disabled="btnAddWoItem" data-ng-click="AddWoItemModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
                 <table st-table="GridDisplayCollection" st-safe-src="masterDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
                     <thead>
-                        <tr>
+                        <tr style="font-size: 15px;">
+                            <th colspan="15" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                Requisition Item List
+                            </th>
+
+                            <th style="background: #ffffff;">
+                                <button type="button" id="btnAddWoItem" ng-disabled="btnAddWoItem" ng-click="AddWoItemModal()" class="button-detail btn">
+                                    <i class="fa fa-plus" style="padding-right: 3px"></i> Add
+                                </button>
+                            </th>
+                        </tr>
+                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
                             <th style="text-align: left;" st-sort="">Item Code</th>
                             <th style="text-align: left;" st-sort="">Item Name</th>
                             <th style="text-align: left;" st-sort="">Service Category</th>
@@ -400,15 +453,18 @@
                 <div class="modal-header">
                     <div class="row">
                         <div class="col-sm-5 col-md-5 col-lg-5">
-                            <h3 class="modal-title">Requisition Item Information</h3>
+                            <h4 class="modal-title" style="font-family: initial; font-weight: 700">Requisition Item Information</h4>
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6">
+
                         </div>
                         <div class="col-sm-1 col-md-1 col-lg-1">
                             <button type="button" class="close" data-dismiss="modal" ng-click="ResetReqItemModel()" aria-hidden="true" style="color:red;">x</button>
                         </div>
                     </div>
                 </div>
+
+
                 <div ng-cloak>
                     <div class="row">
                         <div class="col-lg-1">
@@ -540,17 +596,27 @@
         </div>
     </div>
 
+
+
     <div id="WOInfoTermsConditionsModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Terms & Conditions Information</h3>
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
                 <div class="modal-body table-responsive">
                     <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
-                            <tr>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Terms & Conditions Information
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormName')">Form Name</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
@@ -614,32 +680,32 @@
         </div>
     </div>
 
-    <div class="row">
+    <!--<div class="row">
         <div class="col-md-12">
             <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
-                <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
-                    @*<h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>*@
-                    <div class="col-lg-3 ">
-                        <div class="form-group">
-                            <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>
-                        </div>
-                    </div>
-                    @*<div class="row">*@
-                    <div class="col-lg-3 ">
-                        <div class="form-group">
-                            <label for="TermsAndConditions">Terms & Coonditions List:</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="FormName" name="FormName" type="text" data-ng-model="WOInfo.FormName" class="form-control" ng-readonly="true" />
-                        </div>
-                    </div>
-                    <div class="col-lg-1">
-                        <button type="button" data-ng-click="ShowTermsConditionsList()" class="form-control">Search</button>
-                    </div>
-                    @*</div>*@
-                    <div class="box-tools pull-right">
+                <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">-->
+    @*<h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>*@
+    <!--<div class="col-lg-3 ">
+        <div class="form-group">
+            <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>
+        </div>
+    </div>-->
+    @*<div class="row">*@
+    <!--<div class="col-lg-3 ">
+        <div class="form-group">
+            <label for="TermsAndConditions">Terms & Coonditions List:</label>
+        </div>
+    </div>
+    <div class="col-lg-2">
+        <div class="form-group">
+            <input id="FormName" name="FormName" type="text" data-ng-model="WOInfo.FormName" class="form-control" ng-readonly="true" />
+        </div>
+    </div>
+    <div class="col-lg-1">
+        <button type="button" data-ng-click="ShowTermsConditionsList()" class="form-control">Search</button>
+    </div>-->
+    @*</div>*@
+    <!--<div class="box-tools pull-right">
                         <div class="col-lg-12 pull-right">
                             <div class="btn-group pull-right" style="margin:2px;">
                                 <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" data-ng-click="AddReqTermModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
@@ -660,23 +726,88 @@
                             <th style="text-align: left;" st-sort="">Terms Code</th>
                             <th style="text-align: left;" st-sort="">Terms & Conditions</th>
                             <th style="text-align: left;">Action</th>
+                        </tr>-->
+    @*<tr>
+            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+        </tr>*@
+    <!--</thead>
+    <tbody>
+        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
+            <td class="hidden">{{row.WOInfoTermsID}}</td>
+            <td class="hidden">{{row.WOInfoID}}</td>
+            <td class="hidden">{{row.TermsID}}</td>
+            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
+            <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
+
+            <td class="col-lg-1" style="width:5%;">
+                <button type="button" ng-if="row.WOInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                <button type="button" ng-if="!row.WOInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>-->
+    @*<tr>
+            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+        </tr>*@
+    <!--</tfoot>
+                </table>
+            </div>
+        </div>
+    </div>-->
+
+    <div class="row">
+
+        <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+                        <tr style="font-size: 15px; border: 1px solid #3003eb; background: #ffffff; ">
+                            <th @*colspan="12"*@ style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
+                                <span>Terms & Conditions List</span>
+                            </th>
+
+                            <th style="background: #ffffff; position: relative; padding: 5px;">
+                                <div style="position: relative; display: inline-block; width: 200px;">
+                                    <input id="FormName" name="FormName" type="text"
+                                           data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true"
+                                           style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
+
+                                    <button type="button" ng-click="ShowTermsConditionsList()"
+                                            style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+padding: 0px 10px; border: 2px solid black; background: transparent;">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </th>
+
+                            <th style="background: #ffffff;">
+                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
+                                    <i class="fa fa-plus" style="padding-right: 3px"></i> Add
+                                </button>
+                            </th>
+
                         </tr>
-                        @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
+
+                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
+                            <th style="text-align: left;" st-sort="">Terms Code</th>
+                            <th colspan="13" style="text-align: left;" st-sort="">Terms & Conditions</th>
+                            <th style="text-align: left;">Action</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-                            <td class="hidden">{{row.WOInfoTermsID}}</td>
-                            <td class="hidden">{{row.WOInfoID}}</td>
+                            <td class="hidden">{{row.ClientReqTermsID}}</td>
+                            <td class="hidden">{{row.ClientReqID}}</td>
                             <td class="hidden">{{row.TermsID}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
+                            <td colspan="13" class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
 
                             <td class="col-lg-1" style="width:5%;">
-                                <button type="button" ng-if="row.WOInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" ng-if="!row.WOInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                                <button type="button" ng-if="row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" ng-if="!row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
                             </td>
                         </tr>
                     </tbody>
@@ -690,7 +821,7 @@
         </div>
     </div>
 
-    <div id="RequisitionTermModal" class="modal fade">
+   @* <div id="RequisitionTermModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -708,6 +839,67 @@
                 </div>
                 <div ng-cloak>
                     <div class="row">
+                        <div class="col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="TermsCode">Terms & Conditions Code:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="TermsCode" type="text" name="TermsCode" ng-model="WOInfoTerm.TermsCode" class="form-control" autofocus />
+
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="TermsName">Terms & Conditions:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="TermsName" type="text" name="TermsName" ng-model="WOInfoTerm.TermsName" class="form-control" autofocus />
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <div class="btn-group pull-right" style="margin:2px;">
+                                <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+    <div id="RequisitionTermModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-sm-5 col-md-5 col-lg-5">
+                            <h4 class="modal-title" style="font-family: initial; font-weight: 700">Terms & Conditions Information</h4>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+
+                        </div>
+                        <div style="text-align: right;">
+                            <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                                    aria-hidden="true" style="color: #ffffff;">
+                                <i class="fa fa-remove"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div ng-cloak>
+                    <div class="row" style="position:relative;top:5px;">
                         <div class="col-lg-1">
                         </div>
                         <div class="col-lg-2">

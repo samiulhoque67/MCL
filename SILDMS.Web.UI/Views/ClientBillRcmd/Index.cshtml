@@ -71,16 +71,24 @@
                         <label for="ClientName">Client Name :</label>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="ClientName" name="ClientName" type="text" data-ng-model="VendorQutn.ClientName" class="form-control" placeholder="ClientName" ng-readonly="true" />
+     
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div style="position: relative;">
+                        <input id="ClientName" name="ClientName" type="text" data-ng-model="VendorQutn.ClientName"
+                               class="form-control" ng-readonly="true"
+                               placeholder="Client Name"
+                               style="height: 25px; font-size: smaller;" />
+
+                        <button type="button" data-ng-click="ShowVendorReqList()" ng-if="!VendorQutn.ClientFinalBilRecmID"
+                                style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+padding: 0px 10px; border: 2px solid black; background: transparent;">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
                 </div>
 
 
-                <div class="col-lg-1" ng-if="!VendorQutn.ClientFinalBilRecmID">
-                    <button type="button" data-ng-click="ShowVendorReqList()" class="form-control">Search</button>
-                </div>
+
             </div>
 
 
@@ -478,15 +486,26 @@
     <div id="VendorReqInfoModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Client Work Order Information</h3>
+
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
+
 
                 <div class="modal-body table-responsive">
                     <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
-                            <tr>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Client Work Order Information
+
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Name</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Work Order No</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">Work Order Amount</th>
@@ -514,10 +533,10 @@
 
                                 @*<td class="hidden">{{row.ClientAddressID}}</td>*@
                                 @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                            {{row.Status == '1'? 'Active':'InActive'}}
-                                        </span>
-                                    </td>*@
+                            <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                                {{row.Status == '1'? 'Active':'InActive'}}
+                            </span>
+                        </td>*@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorReqSelect(row)"><i class="fa fa-edit"></i> Select</button>
                                 </td>
@@ -548,15 +567,25 @@
     <div id="SearchVendorQutnModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Client Bill Information</h3>
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
+
                 <div class="table-responsive" data-ng-disabled="" ng-cloak>
                     <table st-table="clientReqDisplayedCollection" st-safe-src="clientReqSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-
                         <thead>
-                            <tr>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Client Bill Information
+
+
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientName')">Recm ID</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Client Name</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('WoNo')">WO No</th>
@@ -568,9 +597,9 @@
                                 <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
                             @*<tr>
-                                    <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                                    <th><input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" /></th>
-                                </tr>*@
+                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+                <th><input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" /></th>
+            </tr>*@
                         </thead>
                         <tbody>
 
@@ -587,10 +616,10 @@
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.RecommendedAmnt}}</td>
                                 @*<td class="hidden">{{row.ClientAddressID}}</td>*@
                                 @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                            {{row.Status == '1'? 'Active':'InActive'}}
-                                        </span>
-                                    </td>*@
+                    <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                        {{row.Status == '1'? 'Active':'InActive'}}
+                    </span>
+                </td>*@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorQutnSelect(row)"><i class="fa fa-edit"></i> Select</button>
                                 </td>

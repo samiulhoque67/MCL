@@ -57,14 +57,25 @@
                         <label>Po No.</label>
                     </div>
                 </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <input id="RequisitionNo" name="RequisitionNo" type="text" class="form-control" placeholder="Po No" ng-model="VendorQutn.RequisitionNo" ng-readonly="true" />
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+
+                    <div style="position: relative;">
+                        <input id="RequisitionNo" name="RequisitionNo" type="text" data-ng-model="VendorQutn.RequisitionNo"
+                               class="form-control" ng-readonly="true"
+                               placeholder="Po No"
+                               style="height: 25px; font-size: smaller;" />
+
+                        <button type="button" data-ng-click="ShowVendorReqList()"
+                                style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+padding: 0px 10px; border: 2px solid black; background: transparent;">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
+
                 </div>
-                <div class="col-lg-1">
-                    <button type="button" data-ng-click="ShowVendorReqList()" class="form-control">Search</button>
-                </div>
+
+
 
                 <div class="col-lg-2">
                     <div class="form-group">
@@ -528,14 +539,24 @@
     <div id="VendorReqInfoModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Vendor PO Information</h3>
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
+
                 <div class="modal-body table-responsive">
                     <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
-                            <tr>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Vendor PO Information
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
+
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Name</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Vendor Name</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">PONo</th>
@@ -595,15 +616,26 @@
     <div id="SearchVendorQutnModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Vendor Quotation Information</h3>
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
                 </div>
+
+          
                 <div class="table-responsive" data-ng-disabled="" ng-cloak>
                     <table st-table="clientReqDisplayedCollection" st-safe-src="clientReqSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
 
                         <thead>
-                            <tr>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Vendor Quotation Information
+
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Name</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Vendor Name</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">PONo</th>
