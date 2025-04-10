@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SILDMS.DataAccess.VendorCSActualAprv;
+using SILDMS.DataAccess;
 
 namespace SILDMS.Service.VendorCSActualAprv
 {
@@ -110,6 +111,24 @@ namespace SILDMS.Service.VendorCSActualAprv
         public ValidationResult GetVendorByMaterialService(string vendorReqID, string serviceItemID, out List<OBS_VendorCSAprvItem> matWiseVendorList)
         {
             matWiseVendorList = vendorCSActualAprvData.GetVendorByMaterialData(vendorReqID, serviceItemID);
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult SearchCSService(string userID, out List<Invitation> searchCSList)
+        {
+            searchCSList = vendorCSActualAprvData.SearchCSData(userID);
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult CSVendorService(string userID, string cSNumber, out List<OBS_VendorCSRecmItem> vendorCSList)
+        {
+            vendorCSList = vendorCSActualAprvData.CSVendorData(userID, cSNumber);
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult CSVendorTerms(string cSNumber, out List<OBS_VendorCSRecmTerms> vendorCSInfoTermList)
+        {
+            vendorCSInfoTermList = vendorCSActualAprvData.CSVendorTerms(cSNumber);
             return ValidationResult.Success;
         }
     }
