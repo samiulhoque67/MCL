@@ -45,7 +45,7 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     servicesCategoryList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
-                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServiceSCategoryName"),
                         ServicesCategoryCount = reader.GetString("ServicesCategoryCount")
                     }).ToList();
@@ -212,7 +212,7 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
-                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
@@ -593,7 +593,7 @@ namespace SILDMS.DataAccess
                     ReqWiseMaterialList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
                         VendorReqID = reader.GetString("VendorReqID"),
-                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
@@ -630,7 +630,7 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
-                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         ServiceItemName = reader.GetString("ServiceItemName"),

@@ -42,7 +42,7 @@ namespace SILDMS.DataAccess.POCreation
                     DataTable dt1 = ds.Tables[0];
                     servicesCategoryList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
-                        ServiceCategoryID = reader.GetInt32("ServicesCategoryID"),
+                        ServiceCategoryID = reader.GetString("ServicesCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         ServicesCategoryCount = reader.GetString("ServiceCategoryCount")
                     }).ToList();
@@ -152,7 +152,7 @@ namespace SILDMS.DataAccess.POCreation
                         VendorReqID = reader.GetString("VendorReqID"),
                         VendorQutnID = reader.GetString("VendorQutnID"),
                         VendorCSAprvID = reader.GetString("VendorCSAprvID"),
-                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         //ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
