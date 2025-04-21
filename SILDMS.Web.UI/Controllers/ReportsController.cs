@@ -532,7 +532,6 @@ namespace SILDMS.Web.UI.Controllers
             if (TempData["ClientQutnAprvID"] == null)
             {
                 ViewBag.Title = "No valid data.";
-                //return View();
             }
             else
             {
