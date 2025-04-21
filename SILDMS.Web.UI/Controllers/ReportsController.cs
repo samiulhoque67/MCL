@@ -522,21 +522,20 @@ namespace SILDMS.Web.UI.Controllers
             /* TempData["ClientQutnAprv"] = MasterData;
              TempData["ClientQutnAprvID"] = ClientQutnAprvID;*/
 
-            var tempdata = TempData["ClientQutnAprv"];
+            var tempdata = TempData["ClientQutnAprvID"];
             string WoinfoID = string.Empty;
             int InstallmentNo = 0;
             ReportType = "PDF";
             OBS_QutntoClientMaster ClientQutnAprv = new OBS_QutntoClientMaster();
             string ClientQutnAprvID = string.Empty;
 
-            if (TempData["ClientQutnAprv"] == null)
+            if (TempData["ClientQutnAprvID"] == null)
             {
                 ViewBag.Title = "No valid data.";
                 //return View();
             }
             else
             {
-                ClientQutnAprv = (OBS_QutntoClientMaster)TempData["ClientQutnAprv"];
                 ClientQutnAprvID = Convert.ToString(TempData["ClientQutnAprvID"]);
             }
 
