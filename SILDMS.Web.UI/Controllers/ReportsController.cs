@@ -517,45 +517,41 @@ namespace SILDMS.Web.UI.Controllers
         [Authorize]
         [HttpPost]
         [SILLogAttribute]
-        public async Task<dynamic> ClientQuotationApproveReport(string ReportType)
+        public async Task<ActionResult> ClientQuotationApproveReport(string ReportType)
         {
-            /* TempData["ClientQutnAprv"] = MasterData;
-             TempData["ClientQutnAprvID"] = ClientQutnAprvID;*/
-
-            var tempdata = TempData["ClientQutnAprvID"];
-            string WoinfoID = string.Empty;
-            int InstallmentNo = 0;
-            ReportType = "PDF";
-            OBS_QutntoClientMaster ClientQutnAprv = new OBS_QutntoClientMaster();
-            string ClientQutnAprvID = string.Empty;
-
             if (TempData["ClientQutnAprvID"] == null)
             {
                 ViewBag.Title = "No valid data.";
+                return View();
             }
-            else
+
+            string ClientQutnAprvID = Convert.ToString(TempData["ClientQutnAprvID"]);
+
+            DataSet ds = new DataSet();
+            await Task.Run(() => _reportService.ClientQuotationApproveReport(ClientQutnAprvID, out ds));
+
+            DataTable dt1 = ds.Tables.Count > 0 ? ds.Tables[0] : new DataTable();
+            DataTable dt2 = ds.Tables.Count > 1 ? ds.Tables[1] : new DataTable();
+            DataTable dt3 = ds.Tables.Count > 2 ? ds.Tables[2] : new DataTable();
+
+            using (ReportDocument reportDocument = new ReportDocument())
             {
-                ClientQutnAprvID = Convert.ToString(TempData["ClientQutnAprvID"]);
+                string ReportPath = Server.MapPath("~/Reports/rptClientQuotationApprove.rpt");
+                reportDocument.Load(ReportPath);
+
+                reportDocument.SetDataSource(dt1);
+                reportDocument.Subreports["CQA_Subreport1"].SetDataSource(dt2);
+                reportDocument.Subreports["CQA_Subreport2"].SetDataSource(dt3);
+
+                reportDocument.Refresh();
+
+                string reportName = "ClientQuotationApproveReport";
+                reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
             }
 
-            DataTable dt = new DataTable();
-
-            await Task.Run(() => _reportService.ClientQuotationApproveReport(ClientQutnAprvID, out dt));
-
-            ReportDocument reportDocument = new ReportDocument();
-            string ReportPath = Server.MapPath("~/Reports");
-            ReportPath = ReportPath + "/rptClientQuotationApprove.rpt";
-            reportDocument.Load(ReportPath);
-            reportDocument.SetDataSource(dt);
-            reportDocument.Refresh();
-
-
-            string reportName = "ClientQuotationApproveReport";
-            reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
-            reportDocument.Close();
-            reportDocument.Dispose();
-            return View();
+            return new EmptyResult();
         }
+
 
 
         [SILAuthorize]
