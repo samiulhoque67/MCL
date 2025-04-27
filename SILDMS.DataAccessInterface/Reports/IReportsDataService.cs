@@ -27,7 +27,7 @@ namespace SILDMS.DataAccessInterface.Reports
 
         List<RptVendorWithAddress> GetVendorNameAndAddress(string companyID, out string errorNumber);
 
-        DataSet ClientQuotationApproveReport(string ClientQutnAprvID, out string errorNumber);
+        DataTable ClientQuotationApproveReport(string ClientQutnAprvID, out string errorNumber);
         DataTable MonthWiseVendorFinalBillPayment(string VendorID, string CertificateFromDate, out string _errorNumber);
 
         DataTable ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID, string BillCategory, out string _errorNumber);
@@ -36,5 +36,7 @@ namespace SILDMS.DataAccessInterface.Reports
         DataTable OutputVatStatementReport(string billReceiveFromDate, string billReceiveToDate, out string errorNumber);
         DataTable AITVDSReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber);
         DataTable TDSVDSReport(string VendorID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber);
+        DataTable ClientQuotationApproveReport1(string clientQutnAprvID, out string errorNumber);
+        DataTable ClientQuotationApproveReport2(string clientQutnAprvID, out string errorNumber);
     }
 }

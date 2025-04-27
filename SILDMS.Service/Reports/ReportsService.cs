@@ -179,7 +179,7 @@ namespace SILDMS.Service.Reports
             return ValidationResult.Success;
         }
 
-        public ValidationResult ClientQuotationApproveReport(string ClientQutnAprvID, out DataSet ds)
+        public ValidationResult ClientQuotationApproveReport(string ClientQutnAprvID, out DataTable ds)
         {
             ds = _reportDataService.ClientQuotationApproveReport(ClientQutnAprvID, out _errorNumber);
             if (_errorNumber.Length > 0)
@@ -223,6 +223,24 @@ namespace SILDMS.Service.Reports
         public ValidationResult MonthWiseVendorFinalBillPayment(string VendorID, string CertificateFromDate, out DataTable dt)
         {
             dt = _reportDataService.MonthWiseVendorFinalBillPayment(VendorID, CertificateFromDate, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+        public ValidationResult ClientQuotationApproveReport1(string ClientQutnAprvID, out DataTable ds)
+        {
+            ds = _reportDataService.ClientQuotationApproveReport1(ClientQutnAprvID, out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+        public ValidationResult ClientQuotationApproveReport2(string ClientQutnAprvID, out DataTable ds)
+        {
+            ds = _reportDataService.ClientQuotationApproveReport2(ClientQutnAprvID, out _errorNumber);
             if (_errorNumber.Length > 0)
             {
                 return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
