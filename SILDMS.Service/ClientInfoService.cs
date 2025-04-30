@@ -31,9 +31,9 @@ namespace SILDMS.Service
 
         #endregion
 
-        public string SaveClientInfoMst(OBS_ClientInfo modelClientInfoMst)
+        public string SaveClientInfoMst(OBS_ClientInfo modelClientInfoMst, string ClientAddressID)
         {
-            return clientInfoDataService.SaveClientInfoMst(modelClientInfoMst);
+            return clientInfoDataService.SaveClientInfoMst(modelClientInfoMst, ClientAddressID);
         }
 
         public string SaveClientAddress(OBS_ClientAddressInfo modelClientAddress)

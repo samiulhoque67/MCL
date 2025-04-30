@@ -21,7 +21,7 @@ namespace SILDMS.DataAccess
     {
         private readonly string spStatusParam = "@p_Status";
 
-        public string SaveClientInfoMst(OBS_ClientInfo modelClientInfoMst)
+        public string SaveClientInfoMst(OBS_ClientInfo modelClientInfoMst, string ClientAddressID)
         {
 
             if (string.IsNullOrEmpty(modelClientInfoMst.ClientID))
@@ -37,6 +37,7 @@ namespace SILDMS.DataAccess
                 {
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, modelClientInfoMst.ClientID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientAddressID", SqlDbType.NVarChar, ClientAddressID);
                     db.AddInParameter(dbCommandWrapper, "@ClientCode", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(modelClientInfoMst.ClientCode));
                     db.AddInParameter(dbCommandWrapper, "@ClientName", SqlDbType.NVarChar, modelClientInfoMst.ClientName);
                     db.AddInParameter(dbCommandWrapper, "@ClientType", SqlDbType.NVarChar,modelClientInfoMst.ClientType);
@@ -46,7 +47,7 @@ namespace SILDMS.DataAccess
                     //db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.NVarChar, modelClientInfoMst.ModifiedBy);
                     db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.Int, modelClientInfoMst.Status);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, modelClientInfoMst.Action);
-                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 20);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
                     // Getting output parameters and setting response details.
@@ -75,7 +76,7 @@ namespace SILDMS.DataAccess
                 else
                     modelClientAddress.Action = "edit";
             }
-            string errorNumber = String.Empty;
+            string statusCode = String.Empty;
             try
             {
                 DatabaseProviderFactory factory = new DatabaseProviderFactory();
@@ -97,22 +98,21 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@SetBy ", SqlDbType.NVarChar, modelClientAddress.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.Int, modelClientAddress.AddressStatus);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, modelClientAddress.Action);
-                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 50);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
                     // Getting output parameters and setting response details.
                     if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
                     {
-                        // Get the error number, if error occurred.
-                        errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
+                        statusCode = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
                     }
                 }
             }
             catch (Exception ex)
             {
-                errorNumber = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
+                statusCode = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
             }
-            return errorNumber;
+            return statusCode;
         }
 
         public List<OBS_ServicesCategory> GetServicesCategory(string userID, out string errorNumber)

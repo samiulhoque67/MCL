@@ -233,6 +233,35 @@
                         </div>
                     </div>
 
+
+                    <div class="row" style="position: relative; top: -3px; margin-bottom: 5px;">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div class="form-group">
+                                <label for="TIN Number">TIN Number</label>
+                                <label style="font-size:larger;color:red;">*</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <input id="TINNumber" name="TINNumber" type="text" class="form-control" placeholder="TIN Number"
+                                   ng-model="vmClientAddress.ClientTinNo" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                        </div>
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div class="form-group">
+                                <label for="BINNumber">BIN Number</label>
+                                <label style="font-size:larger;color:red;">*</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <input id="BINNumber" name="BINNumber" type="text" class="form-control" placeholder="BIN Number"
+                                   ng-model="vmClientAddress.ClientBinNo" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                        </div>
+                    </div>
+
+
                     <div class="row" style="position:relative;top:3px;">
                         <div class="col-sm-1 col-md-1 col-lg-1">
                         </div>
@@ -426,6 +455,8 @@
             PhoneNumber: "",
             Address: "",
             Email: "",
+            TINNumber: "",
+            BINNumber: "",
             AddressStatus: ""
         };
 
@@ -437,6 +468,8 @@
             $scope.vmClientAddress.ContactNumber = "";
             $scope.vmClientAddress.Address = "";
             $scope.vmClientAddress.Email = "";
+            $scope.vmClientAddress.TINNumber = "";
+            $scope.vmClientAddress.BINNumber = "";
             $scope.vmClientAddress.AddressStatus = "";
         }
 
@@ -506,15 +539,15 @@
                 return;
             }
 
-            if ($("#ClientBinNo").val() == "") {
-                toastr.error("Client BinNo is required");
-                return;
-            }
+            //if ($("#ClientBinNo").val() == "") {
+            //    toastr.error("Client BinNo is required");
+            //    return;
+            //}
 
-            if ($("#ClientTinNo").val() == "") {
-                toastr.error("Client TinNo is required");
-                return;
-            }
+            //if ($("#ClientTinNo").val() == "") {
+            //    toastr.error("Client TinNo is required");
+            //    return;
+            //}
 
             $scope.loading = true;
             $scope.vmClientInfoMst.ClientCode = $('#ClientCode').val();
@@ -525,7 +558,7 @@
             $scope.vmClientInfoMst.Status = $scope.vmClientInfoMst.Status;
             //$scope.vmClientInfoMst.Action = 'Add';
 
-            $http.post('/ClientInfo/SaveClientInfoMst', { _modelClientInfoMst: $scope.vmClientInfoMst })
+            $http.post('/ClientInfo/SaveClientInfoMst', { _modelClientInfoMst: $scope.vmClientInfoMst, ClientAddressID: $scope.ClientAddressID })
                 .success(function (response) {
                     //console.log(response.status);
                     if (response.status == "S201") {
@@ -579,6 +612,16 @@
                 return;
             }
 
+            if ($("#TINNumber").val() == "") {
+                toastr.error("TIN Number required");
+                return;
+            }
+
+            if ($("#BINNumber").val() == "") {
+                toastr.error("BIN Number required");
+                return;
+            }
+
             $scope.loading = true;
             $scope.vmClientAddress.ClientAddressID = $scope.vmClientAddress.ClientAddressID;// $('#ClientAddressID').val();
             $scope.vmClientAddress.ClientID = $scope.vmClientInfoMst.ClientID;// $('#ClientID').val();
@@ -586,12 +629,16 @@
             $scope.vmClientAddress.ContactNumber = $('#ContactNumber').val();
             $scope.vmClientAddress.PhoneNumber = $('#PhoneNumber').val();
             $scope.vmClientAddress.Address = $('#Address').val();
+            $scope.vmClientAddress.ClientTinNo = $('#TINNumber').val();
+            $scope.vmClientAddress.ClientBinNo = $('#BINNumber').val();
             $scope.vmClientAddress.Email = $('#Email').val();
             $scope.vmClientAddress.AddressStatus = $scope.vmClientAddress.AddressStatus;
 
             $http.post('/ClientInfo/SaveClientAddress', { _modelClientAddress: $scope.vmClientAddress })
                 .success(function (response) {
-                    if (response.status == "S201") {
+
+                    if (response.status === "S201") {
+                        $scope.ClientAddressID = response.ClientAddressID;
                         toastr.success("Data Saved Successfully.");
                         $scope.ClearClientAddress();
                         $scope.loading = false;

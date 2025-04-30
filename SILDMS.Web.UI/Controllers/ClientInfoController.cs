@@ -54,11 +54,11 @@ namespace SILDMS.Web.UI.Controllers
         [HttpPost]
         [Authorize]
         [SILLogAttribute]
-        public async Task<dynamic> SaveClientInfoMst(OBS_ClientInfo _modelClientInfoMst)
+        public async Task<dynamic> SaveClientInfoMst(OBS_ClientInfo _modelClientInfoMst, string ClientAddressID)
         {
             _modelClientInfoMst.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
-            status = _clientInfoService.SaveClientInfoMst(_modelClientInfoMst);
+            status = _clientInfoService.SaveClientInfoMst(_modelClientInfoMst, ClientAddressID);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
             //return Json(new { ResponseCode = status, message }, JsonRequestBehavior.AllowGet);
         }
@@ -67,7 +67,17 @@ namespace SILDMS.Web.UI.Controllers
         {
             _modelClientAddress.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
+            string ClientAddressID = string.Empty;//, message = string.Empty;
             status = _clientInfoService.SaveClientAddress(_modelClientAddress);
+
+            if (status != string.Empty)
+            {
+                string[] statusarr = status.Split(',');
+                ClientAddressID = statusarr[1];
+                status = statusarr[0];
+            }
+            return Json(new { status, ClientAddressID }, JsonRequestBehavior.AllowGet);
+
             return Json(new { status }, JsonRequestBehavior.AllowGet);
             //return Json(new { ResponseCode = status, message }, JsonRequestBehavior.AllowGet);
         }

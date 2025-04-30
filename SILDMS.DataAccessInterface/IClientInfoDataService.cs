@@ -10,7 +10,7 @@ namespace SILDMS.DataAccessInterface
 {
     public interface IClientInfoDataService
     {
-        string SaveClientInfoMst(OBS_ClientInfo _modelClientInfoMst);
+        string SaveClientInfoMst(OBS_ClientInfo _modelClientInfoMst, string ClientAddressID);
         string SaveClientAddress(OBS_ClientAddressInfo _modelClientInfoMst);
         List<OBS_ServicesCategory> GetServicesCategory(string action, out string errorNumber);
         List<OBS_ClientInfo> GetClientInfoSearchList();
