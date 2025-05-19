@@ -150,7 +150,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="WOAmt" name="WOAmt" type="text" class="form-control" placeholder="0.00" ng-model="WOInfo.WOAmt" />
+                        <input id="WOAmt" name="WOAmt" style="text-align:right" readonly type="text" class="form-control" placeholder="0.00" ng-model="WOInfo.WOAmt" />
                     </div>
                 </div>
                 <div class="col-lg-2" ng-show="WOInfo.BillType=='Installment'">
@@ -388,7 +388,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <th style="text-align: left;" st-sort="">VatPerc</th>
                             <th style="text-align: left;" st-sort="">VatAmt</th>
                             <th style="text-align: left;" st-sort="">TolAmt</th>
-                            <th style="text-align: left;">Action</th>
+                            <th class="col-lg-2" style="text-align: left;">Action</th>
                         </tr>
                         @*<tr>
                                 <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
@@ -424,7 +424,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 </td>*@
                             <td class="col-lg-1" style="width:6%;">{{row.VatAmt | number:2}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.TolAmt}}</td>
-                            <td class="col-lg-1">
+                            <td class="col-lg-2">
                                 <button type="button" ng-click="selectWoItem(row)" data-dismiss="modal" title="Select">
                                     <i ng-show="!row.selected" class="fa fa-square-o"></i>
                                     <i ng-show="row.selected" class="fa fa-check-square-o"></i>
@@ -1557,13 +1557,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 ServiceCategoryName: row.ServiceCategoryName,
                 Description: row.Description,
                 DeliveryLocation: row.DeliveryLocation,
-                DeliveryDate: row.DeliveryDate,                // Date object
+                DeliveryDate: row.DeliveryDate,
                 DeliveryMode: row.DeliveryMode,
-                //ReqQnty: row.ReqQnty,
-                //ReqUnit: row.ReqUnit,
-                //VendorQutnNo: row.VendorQutnNo,
-                //VendorID: row.VendorID,
-                //VendorName: row.VendorName,
                 QutnUnit: row.QutnUnit,
                 QutnQnty: row.QutnQnty,
                 QutnPrice: row.QutnPrice,
@@ -1578,24 +1573,28 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 TolAmt: row.TolAmt
             };
 
-            // Check if this vendor is already selected
             if (row.selected) {
-                // Deselect the vendor and remove it from the selected array
                 row.selected = false;
-
                 var index = $scope.selectedWoItems.findIndex(function (vendor) {
                     return vendor.ClientQutnAprvItemID === row.ClientQutnAprvItemID;
                 });
                 if (index !== -1) {
-                    $scope.selectedWoItems.splice(index, 1);  // Remove from selected array
+                    $scope.selectedWoItems.splice(index, 1);
                 }
             } else {
-                // Select the vendor and add it to the selected array
                 row.selected = true;
-
-                $scope.selectedWoItems.push(selectedWoItem);  // Add to selected array
+                $scope.selectedWoItems.push(selectedWoItem);
             }
+
+            var totalAmt = 0;
+            angular.forEach($scope.selectedWoItems, function (item) {
+                var amt = parseFloat(item.TolAmt) || 0;
+                totalAmt += amt;
+            });
+
+            $scope.WOInfo.WOAmt = totalAmt.toFixed(2); // optional formatting to 2 decimal places
         };
+
 
         ///////////////////////////////////////////////
 

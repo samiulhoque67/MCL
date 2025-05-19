@@ -67,6 +67,53 @@ namespace SILDMS.DataAccess.AdvanceClaim
 
             return AllAvailableClientsList;
         }
+    public List<OBS_ClientwithReqQoutn> AllSavedAdvanceClaimDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber)
+        {
+            _errorNumber = string.Empty;
+            var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_AllSavedAdvanceClaim"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@page", SqlDbType.Int, page);
+                db.AddInParameter(dbCommandWrapper, "@itemsPerPage", SqlDbType.Int, itemsPerPage);
+                db.AddInParameter(dbCommandWrapper, "@sortBy", SqlDbType.NVarChar, sortBy);
+                db.AddInParameter(dbCommandWrapper, "@reverse", SqlDbType.Int, reverse ? 1 : 0);
+                db.AddInParameter(dbCommandWrapper, "@search", SqlDbType.NVarChar, search);
+                db.AddInParameter(dbCommandWrapper, "@type", SqlDbType.NVarChar, type.ToString());
+                db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
+                dbCommandWrapper.CommandTimeout = 300;
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (!db.GetParameterValue(dbCommandWrapper, _spStatusParam).IsNullOrZero())
+                {
+                    _errorNumber = db.GetParameterValue(dbCommandWrapper, _spStatusParam).PrefixErrorCode();
+                }
+                else
+                {
+                    if (ds.Tables[0].Rows.Count <= 0) return AllAvailableClientsList;
+                    var dt1 = ds.Tables[0];
+                    AllAvailableClientsList = dt1.AsEnumerable().Select(reader => new OBS_ClientwithReqQoutn
+                    {
+                        AdvancClaimID = reader.GetString("AdvancClaimID"),
+                        WOInfoID = reader.GetString("WOInfoID"),
+                        WONo = reader.GetString("WONo"),
+                        ClientID = reader.GetString("ClientID"),
+                        ClientCode = reader.GetString("ClientCode"),
+                        ClientName = reader.GetString("ClientName"),
+                        ClientReqNo = reader.GetString("ClientReqNo"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        RequisitionDate = reader.GetString("RequisitionDate"),
+                        ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
+                       /* ClientAdvanceClaimDate = reader.GetString("QuotationAprvDate")*/
+                    }).ToList();
+
+                }
+            }
+
+            return AllAvailableClientsList;
+        }
 
         public List<AdvanClaimWo> WoQtforAdvanClaimDataService(string ClientID, string WOInfoID, string WONo, out string _errorNumber)
         {
@@ -111,6 +158,52 @@ namespace SILDMS.DataAccess.AdvanceClaim
             return WODetails;
         }
 
+        public List<AdvanClaimWo> AllSavedAdvanceClaimDetailsDataService(string ClientID, string WOInfoID, string WONo, string AdvancClaimID, out string _errorNumber)
+        {
+            _errorNumber = string.Empty;
+            var WODetails = new List<AdvanClaimWo>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_AllSavedAdvanceClaimDetails"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@ClientID", DbType.String, ClientID);
+                db.AddInParameter(dbCommandWrapper, "@WOInfoID", DbType.String, WOInfoID);
+                db.AddInParameter(dbCommandWrapper, "@WONo", DbType.String, WONo);
+                db.AddInParameter(dbCommandWrapper, "@AdvancClaimID", DbType.String, AdvancClaimID);
+                db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 10);
+                dbCommandWrapper.CommandTimeout = 300;
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (!db.GetParameterValue(dbCommandWrapper, _spStatusParam).IsNullOrZero())
+                {
+                    _errorNumber = db.GetParameterValue(dbCommandWrapper, _spStatusParam).PrefixErrorCode();
+                }
+                else
+                {
+                    if (ds.Tables[0].Rows.Count <= 0) return WODetails;
+                    var dt1 = ds.Tables[0];
+                    WODetails = dt1.AsEnumerable().Select(reader => new AdvanClaimWo
+                    {
+                        ClientID = reader.GetString("ClientID"),
+                        ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
+                        WOInfoID = reader.GetString("WOInfoID"),
+                        WOAmt = reader.GetString("WOAmt"),
+                        BillType = reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
+                        WOInstallmentNo = reader.GetString("WOInstallmentNo"),
+                        WOInstallmentAmt = reader.GetString("WOInstallmentAmt"),
+                        AdvancClaimAmt = reader.GetString("AdvancClaimAmt"),
+                        RemainingAmt = reader.GetString("RemainingAmt"),
+                        Note = reader.GetString("Note"),
+                        AdvancClaimDate = reader.GetString("AdvancClaimDate"),
+                    }).ToList();
+
+                }
+            }
+
+            return WODetails;
+        }
 
         public string SaveQuotToClientServiceData(string UserID, List<AdvanceClaimMaster> MasterData, out string errorNumber)
         {

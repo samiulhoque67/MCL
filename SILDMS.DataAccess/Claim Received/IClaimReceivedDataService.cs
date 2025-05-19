@@ -10,7 +10,10 @@ namespace SILDMS.DataAccess.Claim_Received
     public interface IClaimReceivedDataService
     {
         List<OBS_ClientwithReqQoutn> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
+        List<OBS_ClientwithReqQoutn> AllSavedAdvanceClaimDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
+
         List<AdvanClaimWo> WoQtforAdvanClaimDataService(string ClientID, string WOInfoID, string AdvancClaimAprvID, out string _errorNumber);
+        List<AdvanClaimWo> AllSavedAdvanceClaimDetails(string ClientID, string WOInfoID, string AdvancClaimAprvID, string AdvancClaimRcvdID, out string _errorNumber);
 
         string SaveQuotToClientServiceData(string UserID, List<AdvanceClaimMaster> MasterData, string TransactionMode, string ParticularNo, string MoneyReceiptNo, out string _errorNumber);
 

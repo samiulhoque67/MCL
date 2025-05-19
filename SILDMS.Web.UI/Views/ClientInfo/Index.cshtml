@@ -3,7 +3,7 @@
 }
 
 <div class="box box-primary box-body" ng-controller="ClientInfoCtrl">
-    <form name="ClientInfo" novalidate ng-submit="submitform(ClientInfo.$valid)" autocomplete="off">
+    @*<form name="ClientInfo" novalidate ng-submit="submitform(ClientInfo.$valid)" autocomplete="off">*@
         <!-- box-header  box header-->
         <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
             @*<i class="fa fa-list-alt"></i>*@
@@ -16,9 +16,7 @@
                     <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                         <button type="button" data-ng-click="SearchClientInfoModal()" class="button-custom" ng-disabled="btnSearch"><i class="fa fa-search" style="padding-right: 5px"></i>Search</button>
                     </div>
-                    <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                        <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="btnSave"><i class="fa fa-save" style="padding-right: 5px"></i>Save</button>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -31,7 +29,7 @@
                     </div>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
-                    <input id="ClientCode" name="ClientCode" type="text" autocomplete="off" class="form-control" placeholder="Client Code" required data-ng-model="vmClientInfoMst.ClientCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                    <input id="ClientCode" ng-readonly="searchAction == 'viewonly'" name="ClientCode" type="text" autocomplete="off" class="form-control" placeholder="Client Code" required data-ng-model="vmClientInfoMst.ClientCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
@@ -41,32 +39,12 @@
                 </div>
                 <div class="col-sm-5 col-md-5 col-lg-5">
                     <div class="form-group">
-                        <input id="ClientName" type="text" name="ClientName" required class="form-control" autofocus ng-model="vmClientInfoMst.ClientName" placeholder="Client Name" style="height: 25px; font-size: smaller" />
+                        <input ng-readonly="searchAction == 'viewonly'" id="ClientName" type="text" name="ClientName" required class="form-control" autofocus ng-model="vmClientInfoMst.ClientName" placeholder="Client Name" style="height: 25px; font-size: smaller" />
                         <p ng-show="ClientInfo.ClientName.$error.required && !ClientInfo.ClientName.$pristine" class="help-block" style="height:10px;">Client Name is required.</p>
                     </div>
                 </div>
             </div>
 
-            @*<div class="row" style="position: relative; top: -6px; margin-bottom: 5px;">
-                    <div class="col-sm-2 col-md-2 col-lg-2">
-                        <div class="form-group">
-                            <label>Client Tin No</label>
-                            <label style="font-size: smaller;color:red;">*</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-2 col-md-2 col-lg-2">
-                        <input id="ClientTinNo" name="ClientTinNo" type="text" autocomplete="off" class="form-control" placeholder="Client Tin No" required ng-model="vmClientInfoMst.ClientTinNo" style="height: 25px; background-color:#ffffff; font-size: smaller" />
-                    </div>
-                    <div class="col-sm-2 col-md-2 col-lg-2">
-                        <div class="form-group">
-                            <label for="ContactNumber">Client Bin No<span style="font-size:larger;color:red;"> *</span></label>
-                        </div>
-                    </div>
-                    <div class="col-sm-2 col-md-2 col-lg-2">
-                        <input id="ClientBinNo" name="ClientBinNo" type="text" class="form-control" placeholder="Client Bin No"
-                               ng-model="vmClientInfoMst.ClientBinNo" style="height: 25px; background-color:#ffffff; font-size: smaller" />
-                    </div>
-                </div>*@
 
             <div class="row" style="position: relative; top: -6px; margin-bottom: 5px;">
                 <div class="col-sm-2 col-md-2 col-lg-2">
@@ -76,7 +54,7 @@
                     </div>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
-                    <select data-ng-model="vmClientInfoMst.ClientType" class="form-control">
+                    <select ng-readonly="searchAction == 'viewonly'" data-ng-model="vmClientInfoMst.ClientType" class="form-control">
                         <option value="">-- None --</option>
                         <option value="Internal">Internal</option>
                         <option value="External">External</option>
@@ -88,7 +66,7 @@
                     </div>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
-                    <select data-ng-model="vmClientInfoMst.Status" class="form-control">
+                    <select ng-readonly="searchAction == 'viewonly'" data-ng-model="vmClientInfoMst.Status" class="form-control">
                         <option value="">-- None --</option>
                         <option value="1">Active</option>
                         <option value="0">Inactive</option>
@@ -101,7 +79,7 @@
                     <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
                         <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
                             <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Client Address List</h2>
-                            <div class="box-tools pull-right">
+                            <div ng-show="DetailBeforeSave == 0" ng-hide="searchAction == 'viewonly' || searchAction == 'editonly'" class="box-tools pull-right">
                                 <div class="col-lg-12 pull-right">
                                     <div class="btn-group pull-right" style="margin:2px;">
                                         <button type="button" id="btnAdd" ng-disabled="btnAdd" data-ng-click="AddDtlModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
@@ -113,43 +91,41 @@
                 </div>
             </div>
         </div>
-    </form>
 
-    <div class="table-responsive">
+    @*</form>*@
+
+    <div ng-show="DetailBeforeSave == 0">
         <table st-table="displayedCollection" st-safe-src="getAllClientInfoDtl" class="table table-condensed table-bordered table-striped table-hover pnlView">
             <thead>
                 <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                   <th class="col-lg-1 col-md-1 col-sm-1" st-sort="ClientAddressID">SL.</th>
                     <th class="col-lg-2 col-md-2 col-sm-2" st-sort="ContactPerson">Contact Person</th>
                     <th class="col-lg-1 col-md-1 col-sm-1" st-sort="ContactNumber">Contact Number</th>
                     <th class="col-lg-1 col-md-1 col-sm-1" st-sort="PhoneNumber">Phone Number</th>
                     <th class="col-lg-1 col-md-1 col-sm-1" st-sort="Email">Email</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1" st-sort="TIN">TIN</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1" st-sort="BIN">BIN</th>
                     <th class="col-lg-2 col-md-2 col-sm-2" st-sort="Address">Address</th>
                     <th class="col-lg-1 col-md-1 col-sm-1" st-sort="AddressStatus">Status</th>
-                    <th class="col-lg-2 col-md-2 col-sm-2">Action</th>
+                    <th ng-show="searchAction == 'editonly'" class="col-lg-1 col-md-1 col-sm-1">Action</th>
                 </tr>
-                @*<tr>
-            <th><input st-search="ContactPerson" placeholder="Sl No" class="input-sm form-control" type="search" /></th>
-            <th></th>
-            <th><input st-search="ContactNumber" placeholder="Introduce Date" class="input-sm form-control" type="search" /></th>
-        </tr>*@
+                
             </thead>
             <tbody>
                 <tr ng-repeat="row in displayedCollection" style="height:20px;">
-                    @*<td class="hidden">{{row.ClientAddressID}}</td>*@
-                    <td class="col-lg-1 col-md-1 col-sm-1">{{row.ClientAddressID}}</td>
                     <td class="col-lg-2 col-md-2 col-sm-2">{{row.ContactPerson}}</td>
                     <td class="col-lg-1 col-md-1 col-sm-1">{{row.ContactNumber}}</td>
                     <td class="col-lg-1 col-md-1 col-sm-1">{{row.PhoneNumber}}</td>
                     <td class="col-lg-1 col-md-1 col-sm-1">{{row.Email}}</td>
+                    <td class="col-lg-1 col-md-1 col-sm-1">{{row.ClientTinNo}}</td>
+                    <td class="col-lg-1 col-md-1 col-sm-1">{{row.ClientBinNo}}</td>
                     <td class="col-lg-2 col-md-2 col-sm-2">{{row.Address}}</td>
                     <td class="col-lg-1 col-md-1 col-sm-1 text-center">
                         <span ng-attr-class="{{row.AddressStatus =='1'? 'label label-success' : 'label label-danger' }}">
                             {{row.AddressStatus == '1'? 'Active':'InActive'}}
                         </span>
                     </td>
-                    <td class="col-lg-2 col-md-2 col-sm-2 text-center">
-                        <button type="button" class="button-detail" style="height:28px;" data-ng-click="toggleEdit(row)"><i class="fa fa-edit"></i> Edit</button>
+                    <td ng-show="searchAction == 'editonly'" class="col-lg-2 col-md-2 col-sm-2 text-center">
+                        <button type="button" class="button-detail" style="height:28px;" data-ng-click="toggleEdit(row, edit)"><i class="fa fa-edit"></i> Edit</button>
                         <button type="button" class="btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" data-ng-click="toggleDelete(row)"><i class="fa fa-remove"></i></button>
                     </td>
                 </tr>
@@ -163,6 +139,68 @@
             </tfoot>
         </table>
     </div>
+
+   
+
+    <div >
+        <table ng-show="DetailBeforeSave == 1" st-table="displayedCollection_beforeSave" st-safe-src="getAllClientInfoDtl" class="table table-condensed table-bordered table-striped table-hover pnlView">
+            <thead>
+                <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                    <th class="col-lg-2 col-md-2 col-sm-2" st-sort="ContactPerson">Contact Person</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1" st-sort="ContactNumber">Contact Number</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1" st-sort="PhoneNumber">Phone Number</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1" st-sort="Email">Email</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1" st-sort="Email">TIN</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1" st-sort="Email">BIN</th>
+                    <th class="col-lg-2 col-md-2 col-sm-2" st-sort="Address">Address</th>
+                    <th class="col-lg-1 col-md-1 col-sm-1" st-sort="AddressStatus">Status</th>
+                </tr>
+            
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in displayedCollection_beforeSave" style="height:20px;">
+                
+                    <td class="col-lg-2 col-md-2 col-sm-2">{{row.ContactPerson}}</td>
+                    <td class="col-lg-1 col-md-1 col-sm-1">{{row.ContactNumber}}</td>
+                    <td class="col-lg-1 col-md-1 col-sm-1">{{row.PhoneNumber}}</td>
+                    <td class="col-lg-1 col-md-1 col-sm-1">{{row.Email}}</td>
+                    <td class="col-lg-1 col-md-1 col-sm-1">{{row.ClientTinNo}}</td>
+                    <td class="col-lg-1 col-md-1 col-sm-1">{{row.ClientBinNo}}</td>
+                    <td class="col-lg-2 col-md-2 col-sm-2">{{row.Address}}</td>
+                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                        <span ng-attr-class="{{row.AddressStatus =='1'? 'label label-success' : 'label label-danger' }}">
+                            {{row.AddressStatus == '1'? 'Active':'InActive'}}
+                        </span>
+                    </td>
+                    
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="7" class="text-center">
+                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div>
+                    </td>
+                </tr>
+            </tfoot>
+
+        </table>
+        <div class="row" style="margin-top: 5px;">
+            <div class="col-lg-2">
+            </div>
+            <div class="col-lg-9">
+            </div>
+            <div class="col-lg-1">
+                <button ng-show="savebuttonShow==1" id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-left" data-dismiss="modal" title="Submit" ng-disabled="btnSave" ng-click="Post()">
+                    <i class="fa fa-save"></i> Save
+                </button>
+
+            </div>
+
+        </div>
+        
+    </div>
+
+
 
     <div id="ClientInfoDtlModal" class="modal fade">
         <div class="modal-dialog">
@@ -315,7 +353,7 @@
                         <i class="fa fa-remove"></i>
                     </button>
                 </div>
-               @*Client Address Information*@
+                @*Client Address Information*@
 
                 <div class="table-responsive" data-ng-disabled="" ng-cloak>
                     <table st-table="ClientInfoDisplayedCollection" st-safe-src="ClientInfoSearchList"
@@ -350,8 +388,14 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#"
-                                       data-ng-click="toggleClientInfoSelect(row)">Select</a>
+                                    
+                                    <button type="button" id="btnSelect" ng-click="toggleClientInfoSelect(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
+                                        <span class="fa fa-search-plus"> View</span>
+                                    </button>
+                                    <button type="button" id="btnEdit" ng-click="toggleClientInfoSelect(row, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
+                                        <span class="fa fa-edit"> Edit</span>
+                                    </button>
+
                                 </td>
                             </tr>
                         </tbody>
@@ -365,7 +409,7 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    
+
                 </div>
             </div>
         </div>
@@ -413,8 +457,9 @@
         ///////////////Variable Declaration////////////////////////
         $scope.itemsByPage = 8;
         $scope.getAllClientInfoDtl = [];  // base collection
-        $scope.displayedCollection = [].concat($scope.getAllClientInfoDtl);  // displayed collection
+        $scope.displayedCollection = [];  // displayed collection
         $scope.disableKey = true;
+        $scope.DetailBeforeSave = 0;
 
         $http.get('/ClientInfo/GetServicesCategory')
             .success(function (response) {
@@ -468,8 +513,8 @@
             $scope.vmClientAddress.ContactNumber = "";
             $scope.vmClientAddress.Address = "";
             $scope.vmClientAddress.Email = "";
-            $scope.vmClientAddress.TINNumber = "";
-            $scope.vmClientAddress.BINNumber = "";
+            $scope.vmClientAddress.ClientTinNo = "";
+            $scope.vmClientAddress.ClientBinNo = "";
             $scope.vmClientAddress.AddressStatus = "";
         }
 
@@ -482,6 +527,10 @@
         //////////////////Search Grid List///////////////////////////////
 
         $scope.SearchClientInfoModal = function () {
+            $scope.ClearClientInfo();
+            $scope.ClearClientAddress();
+            $scope.displayedCollection = [];
+
             $scope.GetClientInfoSearchList();
             $('#SearchClientInfoModal').modal('show');
         };
@@ -499,13 +548,21 @@
 
         ////////////////////////Select for Update from Search grid ///////////////////////
 
-        $scope.toggleClientInfoSelect = function (tableRow) {
+        $scope.toggleClientInfoSelect = function (tableRow, action) {
 
             $scope.vmClientInfoMst.ClientID = tableRow.ClientID;
             $scope.vmClientInfoMst.ClientCode = tableRow.ClientCode;
             $scope.vmClientInfoMst.ClientName = tableRow.ClientName;
             $scope.vmClientInfoMst.ClientType = tableRow.ClientType;
             $scope.vmClientInfoMst.Status = tableRow.Status;
+
+            if (action == 'view') {
+                $scope.searchAction = 'viewonly';
+            }
+            else {
+                $scope.searchAction = 'editonly';
+
+            }
 
             $http.post('/ClientInfo/GetClientAddressList', { ClientID: tableRow.ClientID })
                 .success(function (response) {
@@ -563,13 +620,24 @@
                     //console.log(response.status);
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
+                        $scope.toggleRefresh();
                         $scope.ClearClientInfo();
+                        $scope.ClearClientAddress();
+                        $scope.getAllClientInfoDtl = [];
+                        $scope.displayedCollection = [];
+                        $scope.toggleRefresh();
+
+                        $scope.displayedCollection = [];
                         $scope.loading = false;
                         return;
                     }
                     else if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
                         $scope.ClearClientInfo();
+                        $scope.ClearClientAddress();
+                        $scope.getAllClientInfoDtl = [];
+                        $scope.displayedCollection = [];
+                        $scope.toggleRefresh();
                         $scope.loading = false;
                         return;
                     }
@@ -593,7 +661,8 @@
         };
 
         ////////////////////////////////////////////////////////////////////////////////
-
+      
+        $scope.savebuttonShow = 0;
         //################ Save/Update Detail ###################
         $scope.AddUpdateDtl = function () {
 
@@ -638,16 +707,18 @@
                 .success(function (response) {
 
                     if (response.status === "S201") {
+                        $scope.savebuttonShow = 1;
                         $scope.ClientAddressID = response.ClientAddressID;
                         toastr.success("Data Saved Successfully.");
                         $scope.ClearClientAddress();
                         $scope.loading = false;
-
+                        $scope.DetailBeforeSave = 1;
                         $('#ClientInfoDtlModal').modal('hide');
-                        $scope.GetClientAddressList();
+                        $scope.GetClientAddressList_beforeSave($scope.ClientAddressID);
                         return;
                     }
                     else if (response.status == "S202") {
+                        $scope.savebuttonShow = 1;
                         toastr.success("Data Updated Successfully.");
                         $scope.ClearClientAddress();
                         $scope.loading = false;
@@ -658,6 +729,7 @@
                         return;
                     }
                     else if (response.status == "S203") {
+
                         toastr.success("Data Deleted Successfully.");
                         $scope.ClearClientAddress();
                         $scope.loading = false;
@@ -694,8 +766,37 @@
                 });
         }
 
+        //############ Added ############
+        $scope.GetClientAddressList_beforeSave = function (ClientAddressID) {
+            $http.post('/ClientInfo/GetClientAddressList_beforeSave', { ClientAddressID: ClientAddressID })
+                .success(function (response) {
+                    /*$scope.ClearClientAddress();*/
+                    $scope.getAllClientInfoDtl_beforeSave = response.ClientAddressList_beforeSave;
+                    $scope.displayedCollection_beforeSave = [].concat($scope.getAllClientInfoDtl_beforeSave);  // displayed collection
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+        }
+
         // ################# Detail Add Modal ####################
         $scope.AddDtlModal = function () {
+
+            if ($("#ClientCode").val() == "") {
+                toastr.error("Client Code is required");
+                return;
+            }
+
+            if ($("#ClientName").val() == "") {
+                toastr.error("Client Name is required");
+                return;
+            }
+
+            if ($("#ClientCategory").val() == "") {
+                toastr.error("Client Category is required");
+                return;
+            }
+
             $('#ClientInfoDtlModal').modal('show');
             $scope.vmClientAddress.AddressStatus = "1";
             $("#btnDtlSaveUpdate").html('Save');
@@ -712,8 +813,11 @@
             $scope.vmClientAddress.ContactNumber = row.ContactNumber;
             $scope.vmClientAddress.PhoneNumber = row.PhoneNumber;
             $scope.vmClientAddress.Email = row.Email;
+            $scope.vmClientAddress.ClientTinNo = row.ClientTinNo;
+            $scope.vmClientAddress.ClientBinNo = row.ClientBinNo;
             $scope.vmClientAddress.Address = row.Address;
             $scope.vmClientAddress.AddressStatus = row.AddressStatus;
+            $scope.vmClientAddress.Action = 'edit';
 
             $scope.loading = false;
             $("#btnDtlSaveUpdate").html('Update');
@@ -727,6 +831,9 @@
                 $scope.loading = false;
                 if (response.status == "S203") {
                     toastr.success("Data Deleted Successfully.");
+                    $scope.DetailBeforeSave = 0;
+                    $scope.searchAction = 'openForNewDetails';
+
                     $scope.ClearClientAddress();
                     $('#deleteModal').modal('hide');
                     $scope.loading = false;
@@ -750,8 +857,15 @@
         };
 
         $scope.toggleRefreshTable = function () {
+            $scope.loading = true;
             window.location.reload();
         };
+
+        $scope.toggleRefresh = function () {
+            $scope.loading = true;
+            location.reload();
+        };
+
         ////////////////////////////////////////////////////////////////////////////////
     });
 

@@ -240,6 +240,53 @@ namespace SILDMS.DataAccess
                         PhoneNumber = reader.GetString("PhoneNumber"),
                         Address = reader.GetString("Address"),
                         Email = reader.GetString("Email"),
+                        ClientTinNo = reader.GetString("ClientTinNo"),
+                        ClientBinNo = reader.GetString("ClientBinNo"),
+                        AddressStatus = reader.GetString("Status")
+                        //AddressStatus = reader.GetInt32("Status")
+                    }).ToList();
+                }
+                //}
+            }
+            return ClientInfoSearchList;
+        }
+        public List<OBS_ClientAddressInfo> GetClientAddressList_beforeSave(string ClientAddressID)
+        {
+            string errorNumber = string.Empty;
+            List<OBS_ClientAddressInfo> ClientInfoSearchList = new List<OBS_ClientAddressInfo>();
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientAddress_beforeSave"))
+            {
+                // Set parameters 
+                //db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.VarChar, userID);
+                db.AddInParameter(dbCommandWrapper, "@ClientAddressID", SqlDbType.VarChar, ClientAddressID);
+                //db.AddOutParameter(dbCommandWrapper, spStatusParam, DbType.String, 10);
+
+                // Execute SP. 
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                //if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
+                //{
+                //    // Get the error number, if error occurred.
+                //    errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
+                //}
+                //else
+                //{
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt1 = ds.Tables[0];
+                    ClientInfoSearchList = dt1.AsEnumerable().Select(reader => new OBS_ClientAddressInfo
+                    {
+                        ClientAddressID = reader.GetString("ClientAddressID"),
+                        ClientID = reader.GetString("ClientID"),
+                        ContactPerson = reader.GetString("ContactPerson"),
+                        ContactNumber = reader.GetString("ContactNumber"),
+                        PhoneNumber = reader.GetString("PhoneNumber"),
+                        Address = reader.GetString("Address"),
+                        Email = reader.GetString("Email"),
+                        ClientTinNo = reader.GetString("ClientTinNo"),
+                        ClientBinNo = reader.GetString("ClientBinNo"),
                         AddressStatus = reader.GetString("Status")
                         //AddressStatus = reader.GetInt32("Status")
                     }).ToList();

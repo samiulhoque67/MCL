@@ -62,6 +62,11 @@ namespace SILDMS.Service
             ClientAddressList = clientInfoDataService.GetClientAddressList(ClientID);
             return ValidationResult.Success;
         }
+        public ValidationResult GetClientAddressList_beforeSave(string ClientAddressID, out List<OBS_ClientAddressInfo> ClientAddressList)
+        {
+            ClientAddressList = clientInfoDataService.GetClientAddressList_beforeSave(ClientAddressID);
+            return ValidationResult.Success;
+        }
 
         public ValidationResult GetJobLocation(string UserID, out List<Sys_MasterData> objMasterDatas)
         {

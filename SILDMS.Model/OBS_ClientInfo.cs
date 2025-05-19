@@ -66,6 +66,7 @@ namespace SILDMS.Model
         public string AdvancClaimRecmID { get; set; }
         public string AdvancClaimAprvID { get; set; }
         public string ReqType { get; set; }
+        public string AdvancClaimRcvdID { get; set; }
     }
 
 
@@ -150,6 +151,15 @@ namespace SILDMS.Model
         public string WOInstallmentAmt { get; set; }
         public string Receivedby { get; set; }
         public string ReceivedbyClaim { get; set; }
+        public string RemainingAmtRecom { get; set; }
+        public string RemainingAmtAprv { get; set; }
+        public string AprvNote { get; set; }
+        public string Operation { get; set; }
+        public string TransactionMode { get; set; }
+        public string ParticularNo { get; set; }
+        public string MoneyReceiptNo { get; set; }
+        public string RcvdNote { get; set; }
+        public string AdvancClimRcvdDate { get; set; }
     }
 
 }
