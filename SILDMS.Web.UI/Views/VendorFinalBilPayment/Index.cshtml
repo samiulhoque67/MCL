@@ -16,14 +16,13 @@
         padding: 3px 6px 3px;
     }
 
- 
+
     .custom-hr {
         border: none;
         height: 2px;
         background-color: #007bff; /* Bootstrap primary color */
         margin: 15px 0;
     }
-
 </style>
 
 <div class="box box-primary box-body" ng-controller="VendorFinalBilPaymentCtrl">
@@ -67,22 +66,22 @@
                         <label for="VendorName"> Vendor Name :</label>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorQutn.VendorName" class="form-control" ng-readonly="true" />
-                    </div>
-                </div>
-                <div class="col-lg-1">
-                    <button type="button" data-ng-click="ShowVendorReqList()" class="form-control">Search</button>
-                </div>
+                @*<div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorQutn.VendorName" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>*@
+                @*<div class="col-lg-1">
+                        <button type="button" data-ng-click="ShowVendorReqList()" class="form-control">Search</button>
+                    </div>*@
 
 
-                @*<div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="col-sm-3 col-md-3 col-lg-3">
 
                     <div style="position: relative;">
                         <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorQutn.VendorName"
                                class="form-control" ng-readonly="true"
-                               placeholder="Po No"
+                               placeholder="Vendor Name"
                                style="height: 25px; font-size: smaller;" />
 
                         <button type="button" data-ng-click="ShowVendorReqList()"
@@ -92,7 +91,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         </button>
                     </div>
 
-                </div>*@
+                </div>
 
             </div>
             <div class="row">
@@ -876,7 +875,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             TDSAmount: "",
             VDSPercentage: "",
             VDSAmount: "",
-            VDS:"",
+            VDS: "",
 
             TotalBillAmount: "",
             NetPayableAmount: "",
@@ -894,7 +893,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             WONo: "",
             WOInfoID: "",
             TDS: "",
-            VenPayNo:"",
+            VenPayNo: "",
             MoneyRecNo: "",
             PayDate: "",
             PaymentMode: "",
@@ -959,15 +958,15 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             row.TolAmt = row.QutnAmt + row.VatAmt;
         };
 
-        $http.get("/VendorFinalBilPayment/GetShowVendorReqList")
-            .success(function (response) {
-                console.log(response);
-                $scope.VendorReqList = response.VendorReqList;
-                $scope.VendorReqDisplayedCollection = [].concat($scope.VendorReqList);
-                console.log($scope.VendorReqDisplayedCollection);
-                $scope.loading = false;
-            })
-            .error(function () { });
+        //$http.get("/VendorFinalBilPayment/GetShowVendorReqList")
+        //    .success(function (response) {
+        //        console.log(response);
+        //        $scope.VendorReqList = response.VendorReqList;
+        //        $scope.VendorReqDisplayedCollection = [].concat($scope.VendorReqList);
+        //        console.log($scope.VendorReqDisplayedCollection);
+        //        $scope.loading = false;
+        //    })
+        //    .error(function () { });
 
         $scope.clearVendorQutn = function () {
             $scope.VendorQutn = {
@@ -996,6 +995,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.VendrFinalBilRcvdID = tableRow.VendrFinalBilRcvdID;
             $scope.VendorQutn.VendrFinalBilAprvID = tableRow.VendrFinalBilAprvID;
             $scope.VendorQutn.ClientID = tableRow.ClientID;
+            $scope.VendorQutn.ClientReqID = tableRow.ClientReqID;
             $scope.VendorQutn.ClientName = tableRow.ClientName;
 
             $scope.VendorQutn.VendorID = tableRow.VendorID;
@@ -1050,7 +1050,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.POInstallmentAmt = tableRow.POInstallmentAmt;
             $scope.VendorQutn.WOInstallmentAmt = tableRow.WOInstallmentAmt;
             $scope.VendorQutn.BillType = tableRow.BillType;
-            $scope.VendorQutn.BillCategory = tableRow.BillCategory; 
+            $scope.VendorQutn.BillCategory = tableRow.BillCategory;
             $scope.VendorQutn.ContractDate = tableRow.ContractDate;
             $scope.VendorQutn.ContractNo = tableRow.ContractNo;
 
@@ -1192,7 +1192,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.PayDate = tableRow.PayDate;
             $scope.VendorQutn.PaymentMode = tableRow.PaymentMode;
             $scope.VendorQutn.PaymentAmount = tableRow.PaymentAmount;
-            
+
             $scope.VendorQutn.NetActualPayableAmount = tableRow.NetActualPayableAmount;
             $scope.VendorQutn.ChequeEftNo = tableRow.ChequeEftNo;
             $scope.VendorQutn.POInstallmentID = tableRow.POInstallmentID;
@@ -1203,15 +1203,15 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.POInstallmentAmt = tableRow.POInstallmentAmt;
             $scope.VendorQutn.WOInstallmentAmt = tableRow.WOInstallmentAmt;
             $scope.VendorQutn.BillType = tableRow.BillType;
-            $scope.VendorQutn.BillCategory = tableRow.BillCategory; 
-            $scope.VendorQutn.ClientReqID = tableRow.ClientReqID; 
-            $scope.VendorQutn.ClientReqNo = tableRow.ClientReqNo; 
-            $scope.VendorQutn.TDSPercentage = tableRow.TDSPercentage; 
-            $scope.VendorQutn.TDSAmount = tableRow.TDSAmount; 
-            $scope.VendorQutn.ClientReqNo = tableRow.ClientReqNo; 
-            $scope.VendorQutn.VendorFinalBilPaymentID = tableRow.VendorFinalBilPaymentID; 
-            $scope.VendorQutn.TDS = tableRow.TDS; 
-            $scope.VendorQutn.VDS = tableRow.VDS; 
+            $scope.VendorQutn.BillCategory = tableRow.BillCategory;
+            $scope.VendorQutn.ClientReqID = tableRow.ClientReqID;
+            $scope.VendorQutn.ClientReqNo = tableRow.ClientReqNo;
+            $scope.VendorQutn.TDSPercentage = tableRow.TDSPercentage;
+            $scope.VendorQutn.TDSAmount = tableRow.TDSAmount;
+            $scope.VendorQutn.ClientReqNo = tableRow.ClientReqNo;
+            $scope.VendorQutn.VendorFinalBilPaymentID = tableRow.VendorFinalBilPaymentID;
+            $scope.VendorQutn.TDS = tableRow.TDS;
+            $scope.VendorQutn.VDS = tableRow.VDS;
 
             $scope.VendorQutn.ContractDate = tableRow.ContractDate;
             $scope.VendorQutn.ContractNo = tableRow.ContractNo;
@@ -1219,7 +1219,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
 
             $scope.q = 2;
-      
+
 
             $('#SearchVendorQutnModal').modal('hide');
         };
@@ -1285,18 +1285,18 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         }
 
 
-     
+
         $scope.VendorQutn.PaymentMode = "Chq";
         $scope.VendorQutn.VDS = "Default";
         $scope.handleVDSChange = function (value) {
             if (value === "MCOM") {
 
                 $scope.VendorQutn.NetActualPayableAmount = $scope.VendorQutn.NetPayableAmount - $scope.VendorQutn.VATAmount - $scope.VendorQutn.TDSAmount;
-               
-              
+
+
             } else if (value === "Vendor") {
                 $scope.VendorQutn.NetActualPayableAmount = $scope.VendorQutn.NetPayableAmount - $scope.VendorQutn.TDSAmount;
-             
+
             }
         };
 
@@ -1309,6 +1309,25 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         ////    console.log("Vendor function called");
         ////     Add your logic here
         //};
+
+
+
+
+        $scope.ShowVendorReqList = function () {
+            $http.get("/VendorFinalBilPayment/GetShowVendorReqList")
+                .success(function (response) {
+                    console.log(response);
+                    $scope.VendorReqList = response.VendorReqList;
+                    $scope.VendorReqDisplayedCollection = [].concat($scope.VendorReqList);
+                    console.log($scope.VendorReqDisplayedCollection);
+                    $scope.loading = false;
+                })
+                .error(function () { });
+
+            $('#VendorReqInfoModal').modal('show');
+        };
+
+
 
 
 
