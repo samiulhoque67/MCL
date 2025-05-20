@@ -90,6 +90,7 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         ClientID = reader.GetString("ClientID"),
                         VendorID = reader.GetString("VendorID"),
                         ClientName = reader.GetString("ClientName"),
+                        ClientReqID = reader.GetString("ClientReqID"),
                         VendorName = reader.GetString("VendorName"),
                         PoNo = reader.GetString("PoNo"),
                         POAmount = reader.GetString("AprvAmnt"),
@@ -141,6 +142,7 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                     db.AddInParameter(dbCommandWrapper, "@PoNo", SqlDbType.NVarChar, billRecv.RequisitionNo);
                     //db.AddInParameter(dbCommandWrapper, "@VendorName", SqlDbType.NVarChar, billRecv.VendorName);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, billRecv.ClientID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, billRecv.ClientReqID);
                     //db.AddInParameter(dbCommandWrapper, "@ClientName", SqlDbType.NVarChar, billRecv.ClientName);
                     db.AddInParameter(dbCommandWrapper, "@WONo", SqlDbType.NVarChar, billRecv.WONo);
                     db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.NVarChar, billRecv.WOInfoID);
