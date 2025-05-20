@@ -1619,6 +1619,10 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 toastr.error("Work Order Date: Date Required");
                 return;
             }
+            if ($scope.selectedWoItems.legth <= 0) {
+                toastr.error("Must select an Item to save");
+                return;
+            }
 
             $scope.WOInfo.WODate = $('#WODate').val();
             $scope.WOInfo.WOAmt = $('#WOAmt').val();

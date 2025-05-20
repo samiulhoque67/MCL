@@ -1496,13 +1496,18 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 return;
             }
 
+            if ($scope.GridDisplayCollection.some(item => !item.QutnPrice && item.VatPerc <= 0)) {
+                toastr.error('Quotation Price & Vat(%) must be greater than 0.');
+                return;
+            }
+
             $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
             $scope.VendorQutn.QutnReceivedDate = $('#QutnReceivedDate').val();
 
             $http.post('/VendorQuotation/SaveVendorQuotation',
                 {
                     vendorQutn: $scope.VendorQutn,
-                    vendorQutnItem: $scope.GridDisplayCollection,//$scope.vendorQutnItemArray,
+                    vendorQutnItem: $scope.GridDisplayCollection,
                     vendorQutnTerm: $scope.ReqTermGridDisplayCollection
                 })
                 .success(function (response) {

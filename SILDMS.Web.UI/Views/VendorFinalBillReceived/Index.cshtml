@@ -1144,7 +1144,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.AdvancePaidAmount = row.AdvancClaimRcvAmt;
             $scope.VendorQutn.AdvancePaidDate = row.AdvancClaimRcvdDate;
             $scope.VendorQutn.AdvancePaidID = row.AdvancRecvID;
-            $scope.VendorQutn.RemainingAmnt = row.POInstallmentAmt - row.AdvancClaimRcvAmt;
+            if (row.POInstallmentAmt > 0) {
+                $scope.VendorQutn.RemainingAmnt = row.POInstallmentAmt - row.AdvancClaimRcvAmt;
+            }
+            else {
+                $scope.VendorQutn.RemainingAmnt = row.POAmount - row.AdvancClaimRcvAmt;
+            }
+
             $scope.VendorQutn.BillAmount = row.POInstallmentAmt;
 
             //$scope.VendorQutn.SubmissionDate = row.SubmissionDate;

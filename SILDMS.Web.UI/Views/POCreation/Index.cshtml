@@ -471,7 +471,7 @@
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
-                    <input id="POAmount" name="POAmount" type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.PoAmount" ng-blur="calculateInstallmentAmount()" />
+                    <input id="POAmount" name="POAmount" readonly type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.PoAmount" ng-blur="calculateInstallmentAmount()" />
                 </div>
             </div>
 
@@ -964,6 +964,8 @@
         $scope.VenCSItemList = [];  // base collection
         $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
 
+      
+
         $scope.AddReqItem = function () {
 
             if ($scope.VendorCSInfoItem.ServiceCategory.ServiceCategoryID == "") {
@@ -1296,7 +1298,7 @@
                         item.NegoTolAmt = parseFloat(item.NegoTolAmt).toFixed(2);  // Format NegoTolAmt
                         item.NegoAmt = parseFloat(item.NegoAmt).toFixed(2);
                         item.QutnQnty = parseFloat(item.QutnQnty).toFixed(2);
-                      
+                        $scope.VendorCSInfo.PoAmount = item.NegoTolAmt;
                         return item;
                     });
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
@@ -1672,6 +1674,9 @@
             row.NegoVatAmt = VatAmt;
 
             row.NegoTolAmt = row.NegoAmt + row.NegoVatAmt;
+
+            $scope.VendorCSInfo.PoAmount = row.NegoTolAmt;
+          
         };
 
 
