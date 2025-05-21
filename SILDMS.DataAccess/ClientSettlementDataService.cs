@@ -54,7 +54,7 @@ namespace SILDMS.DataAccess
                         NetPayableAmount = reader.GetToDecimal("NetReceivableAmount"),
                         Note = reader.IsNull("Note") ? string.Empty : reader.GetString("Note"),
                         ClientName = reader.IsNull("ClientName") ? string.Empty : reader.GetString("ClientName"),
-                        QuotatDate = reader.IsNull("QuotationDate") ? string.Empty : reader.GetString("QuotationDate"),
+                        //QuotatDate = reader.IsNull("QuotationDate") ? string.Empty : reader.GetString("QuotationDate"),
                         RequiDate = reader.IsNull("RequisitionDate") ? string.Empty : reader.GetString("RequisitionDate")
                     }).ToList();
                 }

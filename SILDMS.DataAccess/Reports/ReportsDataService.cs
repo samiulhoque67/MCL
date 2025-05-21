@@ -90,14 +90,14 @@ namespace SILDMS.DataAccess.Reports
             }
         }
 
-        public DataTable RequisitionMovementInfo(string ClientReqID, out string errorNumber)
+        public DataTable RequisitionMovementInfo(string ClientReqNo, out string errorNumber)
         {
             errorNumber = string.Empty;
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("GetRptRequisitionMovementInfo"))
             {
-                db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, ClientReqID);
+                db.AddInParameter(dbCommandWrapper, "@ClientReqNo", SqlDbType.VarChar, ClientReqNo);
                 //db.AddInParameter(dbCommandWrapper, "@ServiceItemID", SqlDbType.VarChar, ServiceItemID);
 
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
