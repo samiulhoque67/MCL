@@ -151,7 +151,7 @@ namespace SILDMS.DataAccess.PoAprv
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         //ServiceItemCode = reader.GetString("ServiceItemCode"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
-                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         Description = reader.GetString("Description"),
                         DeliveryLocation = reader.GetString("DeliveryLocation"),
@@ -213,7 +213,7 @@ namespace SILDMS.DataAccess.PoAprv
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         //ServiceItemCode = reader.GetString("ServiceItemCode"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
-                        ServiceCategoryID = reader.GetInt32("ServiceCategoryID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         Description = reader.GetString("Description"),
                         DeliveryLocation = reader.GetString("DeliveryLocation"),
@@ -261,7 +261,7 @@ namespace SILDMS.DataAccess.PoAprv
             VendorPOItem.Columns.Add("DeliveryLocation", typeof(string)); // Assuming ServiceItemID is an integer
             VendorPOItem.Columns.Add("DeliveryMode", typeof(string)); // Assuming ServiceItemID is an integer
             VendorPOItem.Columns.Add("DeliveryDate", typeof(string)); // Assuming ServiceItemID is an integer
-            VendorPOItem.Columns.Add("ServiceCategoryID", typeof(int)); // Assuming ServiceItemID is an integer
+            VendorPOItem.Columns.Add("ServiceCategoryID", typeof(string)); // Assuming ServiceItemID is an integer
             VendorPOItem.Columns.Add("VendorReqID", typeof(string)); // Assuming ServiceItemID is an integer
             VendorPOItem.Columns.Add("VendorCSAprvID", typeof(string)); // Assuming ServiceItemID is an integer
             VendorPOItem.Columns.Add("NegoQty");

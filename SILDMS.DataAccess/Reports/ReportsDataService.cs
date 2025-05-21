@@ -368,11 +368,9 @@ namespace SILDMS.DataAccess.Reports
             errorNumber = string.Empty;
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQuotationApproveReportData"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQuotationApproveReportData3"))
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.VarChar, ClientQutnAprvID);
-
-
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
                 DataTable dt1 = ds.Tables[0];
                 return dt1;
@@ -465,6 +463,33 @@ namespace SILDMS.DataAccess.Reports
                 return dt1;
             }
 
+        }
+
+        public DataTable ClientQuotationApproveReport1(string clientQutnAprvID, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQuotationApproveReportData4"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.VarChar, clientQutnAprvID);
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+        }
+        public DataTable ClientQuotationApproveReport2(string clientQutnAprvID, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQuotationApproveReportData5"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.VarChar, clientQutnAprvID);
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
         }
     }
 }

@@ -153,5 +153,7 @@ namespace SILDMS.Model
         public string RecommendedByDesignation { get; set; }
         public string ContractDate { get; set; }
         public string ContractNo { get; set; }
+        public string PayDate { get; set; }
+        public object ClientFinalPaymentRcvdID { get; set; }
     }
 }

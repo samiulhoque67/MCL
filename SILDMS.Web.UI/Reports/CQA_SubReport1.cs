@@ -16,14 +16,14 @@ namespace SILDMS.Web.UI.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class rptClientQuotationApprove : ReportClass {
+    public class CQA_SubReport1 : ReportClass {
         
-        public rptClientQuotationApprove() {
+        public CQA_SubReport1() {
         }
         
         public override string ResourceName {
             get {
-                return "rptClientQuotationApprove.rpt";
+                return "CQA_SubReport1.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace SILDMS.Web.UI.Reports {
         
         public override string FullResourceName {
             get {
-                return "SILDMS.Web.UI.Reports.rptClientQuotationApprove.rpt";
+                return "SILDMS.Web.UI.Reports.CQA_SubReport1.rpt";
             }
             set {
                 // Do nothing
@@ -82,25 +82,17 @@ namespace SILDMS.Web.UI.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section ReportFooterSection2 {
+        public CrystalDecisions.CrystalReports.Engine.Section Section5 {
             get {
                 return this.ReportDefinition.Sections[4];
-            }
-        }
-        
-        [Browsable(false)]
-        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section PageFooterSection1 {
-            get {
-                return this.ReportDefinition.Sections[5];
             }
         }
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedrptClientQuotationApprove : Component, ICachedReport {
+    public class CachedCQA_SubReport1 : Component, ICachedReport {
         
-        public CachedrptClientQuotationApprove() {
+        public CachedCQA_SubReport1() {
         }
         
         [Browsable(false)]
@@ -137,7 +129,7 @@ namespace SILDMS.Web.UI.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            rptClientQuotationApprove rpt = new rptClientQuotationApprove();
+            CQA_SubReport1 rpt = new CQA_SubReport1();
             rpt.Site = this.Site;
             return rpt;
         }
