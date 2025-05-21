@@ -42,6 +42,7 @@ using SILDMS.DataAccess;
 using System.Data.Common;
 using SILDMS.Model;
 using System.Web.Services.Description;
+using System.Security.Cryptography;
 /////////////////////////////////////////Test///////////////////////////
 namespace SILDMS.Web.UI.Controllers
 {
@@ -366,14 +367,17 @@ namespace SILDMS.Web.UI.Controllers
             }
 
             DataTable dt = new DataTable();
+            DataTable dt1 = new DataTable();
 
-            await Task.Run(() => _reportService.VendorRequisitionReport(VendorReqID, VendorID, out dt));
+            await Task.Run(() => _reportService.VendorRequisitionReport(VendorReqID,/* VendorID,*/ out dt));
+            await Task.Run(() => _reportService.VendorRequisitionTermsReport(VendorReqID,/* VendorID,*/ out dt1));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
             ReportPath = ReportPath + "/rptVendorRequisition.rpt";
             reportDocument.Load(ReportPath);
             reportDocument.SetDataSource(dt);
+            reportDocument.Subreports["rptVendorRequisitionTerms.rpt"].SetDataSource(dt1);
             reportDocument.Refresh();
 
             //reportDocument.SetParameterValue("RequisitionNo", objVendorReq.RequisitionNo);

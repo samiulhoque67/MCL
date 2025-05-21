@@ -20,7 +20,8 @@ namespace SILDMS.Service.Reports
         ValidationResult RequisitionMovementInfo(string RequisitionNo, out DataTable RequisitionMovementInfo);
         ValidationResult VendorCSApprevedReport(string VendorReqID, string ServiceItemID, out DataTable dt);
 
-        ValidationResult VendorRequisitionReport(string VendorReqID, string VendorID, out DataTable dt);
+        ValidationResult VendorRequisitionReport(string VendorReqID, /*string VendorID,*/ out DataTable dt);
+        ValidationResult VendorRequisitionTermsReport(string VendorReqID, /*string VendorID,*/ out DataTable dt1);
 
         ValidationResult VendorAgeingReport(string VendorID, out DataTable dt);
 
