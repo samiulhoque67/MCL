@@ -52,9 +52,6 @@
                             <div class="col-lg-4">
                                 <input id="VendorCode" type="text" autocomplete="off" name="VendorCode" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.VendorCode" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" @*required*@ />
                             </div>
-                            @*<div class="col-md-3">
-                                    <span class="center-block text-red" id="errorMessageVendorCode" style="display: none;">Please input valid Vendor Code.</span>
-                                </div>*@
                         </div>
 
                         <!-- Vendor Name -->
@@ -65,50 +62,56 @@
                                 </div>
                             </div>
                             <div class="col-lg-4">
-                                <input id="VendorName" type="text" autocomplete="off" name="VendorName" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.VendorName" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" @*required*@ />
+                                <input id="VendorName" type="text" autocomplete="off" name="VendorName" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.VendorName" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
                             </div>
-                            @* <div class="col-md-3">
-                                    <span class="center-block text-red" id="errorMessageVendorName" style="display: none;">Please input valid Vendor Name.</span>
-                                </div>*@
-                        </div>
-                        <!-- Contact Person -->
-                        <div class="row" style="margin-top: 5px;">
 
-                            <div class="col-lg-2 col-md-2 col-sm-2" style="font-size: smaller;">
-                                <label for="ContactPerson">Contact Person :<span style="color: red;"> *</span></label>
-                            </div>
-                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                <input id="ContactPerson" type="text" name="ContactPerson" autocomplete="off" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.ContactPerson" placeholder="First Name" style="font-size: smaller; padding: 3px 6px 3px;" @*required*@ />
-                            </div>
-                            @*<div class="col-md-3">
-                                    <span class="center-block text-red" id="errorMessageContactPerson" style="display: none;">Please input valid ContactPerson.</span>
-                                </div>*@
-                        </div>
 
-                        <!-- Contact Number -->
-                        <div class="row" style="margin-top: 5px;">
-                            <div class="col-lg-2" style="font-size: smaller;">
-                                <label for="ContactNumber">Contact Number :<span style="color: red;"> *</span></label>
-                            </div>
+                            <!-- Add More Info Button -->
                             <div class="col-lg-2">
-                                <input id="ContactNumber" type="text" autocomplete="off" name="ContactNumber" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.ContactNumber" placeholder="(+880) 00 0000 0000" style="font-size: smaller; padding: 3px 6px 3px;" @*required*@ />
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#moreInfoModal" style="margin-top: 2px;">
+                                    More Info
+                                </button>
                             </div>
-                            @*<div class="col-md-3">
-                                    <span class="center-block text-red" id="errorMessageVendorPhoneNumber" style="display: none;">Please input valid Contact Number.</span>
-                                </div>*@
                         </div>
 
-                        <!-- Email -->
-                        <div class="row" style="margin-top: 5px;">
-                            <div class="col-lg-2" style="font-size: smaller;">
-                                <label for="Email">Email :<span style="color: red;"> *</span></label>
+                        <!-- Modal -->
+                        <div class="modal fade" id="moreInfoModal" tabindex="-1" role="dialog" aria-labelledby="moreInfoModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-sm" role="document">
+                                <!-- Smaller modal -->
+                                <div class="modal-content">
+                                    <div style="text-align: right;">
+                                        <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                                                aria-hidden="true" style="color: #ffffff;">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <!-- Contact Person -->
+                                        <div class="form-group" style="font-size: smaller;">
+                                            <label for="ContactPerson">Contact Person:<span style="color: red;"> *</span></label>
+                                            <input id="ContactPerson" type="text" name="ContactPerson" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.ContactPerson" placeholder="Full Name" />
+                                        </div>
+
+                                        <!-- Contact Number -->
+                                        <div class="form-group" style="font-size: smaller;">
+                                            <label for="ContactNumber">Contact Number:<span style="color: red;"> *</span></label>
+                                            <input id="ContactNumber" type="text" name="ContactNumber" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.ContactNumber" placeholder="(+880) 00 0000 0000" />
+                                        </div>
+
+                                        <!-- Email -->
+                                        <div class="form-group" style="font-size: smaller;">
+                                            <label for="Email">Email:<span style="color: red;"> *</span></label>
+                                            <input id="Email" type="email" name="Email" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.Email" placeholder="yourname@gmail.com" />
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                        <button ng-disabled="isAutoCheckMarkExecuted" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Save Info</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-lg-2">
-                                <input id="Email" type="text" name="Email" autocomplete="off" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.Email" placeholder="yourname@gmail.com" style="font-size: smaller; padding: 3px 6px 3px;" @*required*@ />
-                            </div>
-                            @*<div class="col-md-3">
-                                    <span class="center-block text-red" id="errorMessageEmail" style="display: none;">Please input valid Email.</span>
-                                </div>*@
                         </div>
 
 
@@ -130,6 +133,55 @@
                                 <input id="VendorBinNo" type="text" name="VendorBinNo" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.VendorBinNo" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
                             </div>
 
+                        </div>
+
+
+
+                        <div class="row" style="margin-top: 5px;">
+                            <!-- Bank Name -->
+                            <div class="col-lg-2">
+                                <div class="form-group" style="font-size: smaller;">
+                                    <label for="BankName">Bank Name:<span style="color: red;"> *</span></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <input id="BankName" type="text" name="BankName" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.BankName" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
+                            </div>
+
+                            <div class="col-lg-1"></div>
+                            <!-- Account Name -->
+                            <div class="col-lg-1">
+                                <div class="form-group" style="font-size: smaller;">
+                                    <label for="AccountName">Acc Name:<span style="color: red;"> *</span></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <input id="AccountName" type="text" name="AccountName" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.AccountName" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 5px;">
+                            <!-- Account Number -->
+                            <div class="col-lg-2">
+                                <div class="form-group" style="font-size: smaller;">
+                                    <label for="AccountNumber">Acc No :<span style="color: red;"> *</span></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <input id="AccountNumber" type="text" name="AccountNumber" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.AccountNumber" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
+                            </div>
+
+                            <div class="col-lg-1"></div>
+
+                            <!-- Routing Number -->
+                            <div class="col-lg-1">
+                                <div class="form-group" style="font-size: smaller;">
+                                    <label for="RoutingNumber">Routing No:<span style="color: red;"> *</span></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <input id="RoutingNumber" type="text" name="RoutingNumber" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.RoutingNumber" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
+                            </div>
                         </div>
 
                         <div class="row" style="margin-top: 5px;">
@@ -264,74 +316,54 @@
                         <i class="fa fa-remove"></i>
                     </button>
                 </div>
-                <div class="modal-body table-responsive">
-                    <div class="row">
-                        <table st-table="ListedVendorsCollection" st-safe-src="ListedVendorsList" style="width:100%" class="tableVen table-condensed table-bordered table-hover" style="font-size:smaller">
-                            <thead>
-                                <tr style="font-size: 15px;">
-                                    <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
-                                        Visit List
-                                    </th>
-                                </tr>
-                                <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('VendorCode')">
-                                        Vendor Code
-                                        <span ng-show="PagingInfo.sortBy == 'VendorCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                        <span ng-show="PagingInfo.sortBy == 'VendorCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                    </th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('VendorName')">
-                                        Vendor Name
-                                        <span ng-show="PagingInfo.sortBy == 'VendorName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                        <span ng-show="PagingInfo.sortBy == 'VendorName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                    </th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('VendorBussinessName')">
-                                        Vendor Business Name
-                                        <span ng-show="PagingInfo.sortBy == 'VendorBussinessName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                        <span ng-show="PagingInfo.sortBy == 'VendorBussinessName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                    </th>
-                                    <th>
-                                        Action
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <input st-search="VendorCode" placeholder="Vendor Code" class="input-sm form-control" type="search" />
-                                    </th>
-                                    <th>
-                                        <input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" />
-                                    </th>
-                                    <th>
-                                        <input st-search="VendorBussinessName" placeholder="Vendor Bussiness Name" class="input-sm form-control" type="search" />
 
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="row in ListedVendorsCollection | orderBy:'IsBack':true">
-                                    <td class="text-center">{{row.VendorCode}}</td>
-                                    <td class="text-center">{{row.VendorName}}</td>
-                                    <td class="text-center">{{row.VendorBussinessName}}</td>
-                                    <td class="col-lg-1 text-center">
-                                        <button type="button" id="btnSelect" ng-click="toggleSelectVendor(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
-                                            <span class="fa fa-search-plus"> View</span>
-                                        </button>
-                                        <button type="button" id="btnEdit" ng-click="toggleSelectVendor(row, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
-                                            <span class="fa fa-edit"> Edit</span>
-                                        </button>
-                                    </td>
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div ng-if="PagingInfo.totalItems > 0" class="text-center">
-                        <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" force-ellipses="true" ng-change="selectPageList()"></ul>
-                    </div>
-                    <div ng-if="PagingInfo.totalItems <= 0" class="text-center">
-                        NO ITEM
-                    </div>
+                <div class="table-responsive" ng-cloak>
+                    <table st-table="ListedVendorsCollection" st-safe-src="ListedVendorsList"
+                           class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Visit List
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                                <th class="col-lg-1 col-md-1 col-sm-1">Vendor Code</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">Vendor Name</th>
+                                <th class="col-lg-3 col-md-3 col-sm-3">Vendor Business Name</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+                            <tr>
+                                <th><input st-search="VendorCode" placeholder="Vendor Code" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="VendorBussinessName" placeholder="Vendor Business Name" class="input-sm form-control" type="search" /></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in ListedVendorsCollection | orderBy:'IsBack':true">
+                                <td class="col-lg-1 text-center">{{row.VendorCode}}</td>
+                                <td class="col-lg-2 text-center">{{row.VendorName}}</td>
+                                <td class="col-lg-3 text-center">{{row.VendorBussinessName}}</td>
+                                <td class="col-lg-1 text-center">
+                                    <button type="button" id="btnSelect" ng-click="toggleSelectVendor(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
+                                        <span class="fa fa-search-plus"> View</span>
+                                    </button>
+                                    <button type="button" id="btnEdit" ng-click="toggleSelectVendor(row, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
+                                        <span class="fa fa-edit"> Edit</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="5"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
+
                 <div class="modal-footer">
                     <div class="col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
@@ -342,7 +374,6 @@
             </div>
         </div>
     </div>
-
 
 
     @*Save / Delete Modal*@
@@ -398,7 +429,11 @@
             Email: "",
             VendorTinNo: "",
             VendorBinNo: "",
-            Address: ""
+            Address: "",
+            BankName: "",
+            AccountName: "",
+            AccountNumber: "",
+            RoutingNumber: ""
         }
 
 
@@ -451,6 +486,11 @@
                     VendorBinNo: $scope.Vendor.VendorBinNo,
                     VAddress: $scope.Vendor.Address,
 
+                    BankName: $scope.Vendor.BankName,
+                    AccountName: $scope.Vendor.AccountName,
+                    AccountNumber: $scope.Vendor.AccountNumber,
+                    RoutingNumber: $scope.Vendor.RoutingNumber,
+
                     ServiceItemInfo: $scope.selectedRows,
 
                     VendorStatus: $scope.VendorStatus,
@@ -489,7 +529,12 @@
                 Email: "",
                 VendorTinNo: "",
                 VendorBinNo: "",
-                Address: ""
+                Address: "",
+
+                BankName: "",
+                AccountName: "",
+                AccountNumber: "",
+                RoutingNumber: "",
             }
             $scope.selectedMaterialsDisplay = '';
             $scope.selectedMaterialsCodes = '';
@@ -512,7 +557,7 @@
                 .success(function (response) {
                     $scope.ListedVendorsList = response.ListedVendorsList;
                     $scope.ListedVendorsCollection = [].concat($scope.ListedVendorsList);
-                    $scope.PagingInfo.totalItems = $scope.ListedVendorsList[0].TotalPages;
+                  /*  $scope.PagingInfo.totalItems = $scope.ListedVendorsList[0].TotalPages;*/
                     $scope.loading = false;
                 }).error(function () {
                     $scope.loading = false;
@@ -610,6 +655,12 @@
             $scope.Vendor.VendorTinNo = row.VendorTinNo;
             $scope.Vendor.VendorBinNo = row.VendorBinNo;
             $scope.Vendor.Address = row.Address;
+
+            $scope.Vendor.BankName = row.BankName;
+            $scope.Vendor.AccountName = row.AccountName;
+            $scope.Vendor.AccountNumber = row.AccountNumber;
+            $scope.Vendor.RoutingNumber = row.RoutingNumber;
+
 
             // Determine VendorStatus selection
             if (row.Status === 1 || row.Status === '1') {

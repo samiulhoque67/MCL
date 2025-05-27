@@ -100,7 +100,7 @@ namespace SILDMS.Web.UI.Controllers
             string status = string.Empty;//, message = string.Empty;
             status = _vendorCSInfoService.SaveVendorCSAprv(vendorCS, vendorCSItem, vendorCSTerm);
 
-            TempData["VendorCSRecmInfo"] = vendorCS;
+            //TempData["VendorCSRecmInfo"] = vendorCS;
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
