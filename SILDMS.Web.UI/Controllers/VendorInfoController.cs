@@ -58,7 +58,6 @@ namespace SILDMS.Web.UI.Controllers
 
             }
         }
-
         public async Task<dynamic> GetAllListedVendors(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
         {
             var ListedVendorsList = new List<OBS_VendorInfo>();

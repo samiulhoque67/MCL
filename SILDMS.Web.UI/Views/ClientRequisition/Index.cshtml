@@ -55,7 +55,7 @@
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom" ng-disabled="btnRefresh">
+                    <button type="button" data-ng-click="toggleRefreshTablemain()" class="button-custom" ng-disabled="btnRefresh">
                         <i class="fa fa-refresh" style="padding-right: 5px"></i> Refresh
                     </button>
                 </div>
@@ -906,7 +906,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
 <script type="text/javascript">
 
-    app.controller('ClientRequisitionCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('ClientRequisitionCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
         $scope.clientReqItemArray = [];
         $scope.clientReqTermArray = [];
@@ -1545,7 +1545,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 });
         }
 
-        $scope.toggleRefreshTable = function () {
+        $scope.toggleRefreshTablemain = function () {
             window.location.reload();
         };
 
@@ -1682,7 +1682,14 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
 
 
+        $scope.toggleRefreshTable = function () {
 
+            $timeout(function () {
+                // Reload the current page
+                window.location.reload();
+            }, 2000);
+
+        };
 
 
 

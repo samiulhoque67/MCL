@@ -1419,6 +1419,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 VendorReqID: row.VendorReqID,
                 index: row.index
             };
+
+            // 👇 Set the last clicked item's name
+            $scope.VendorReq.SelectedItemName = row.ServiceItemName;
+
+            // 👇 Clear Vendor name
+            $scope.VendorReq.VendorName = "";
+
             ServiceItemID = row.ServiceItemID;
             ServiceCategoryID = row.ServiceCategoryID;
             VenReqQnty = row.ReqQnty;
@@ -1429,24 +1436,25 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     indexToRemove = index;
                 }
             });
+
             if (indexToRemove !== -1) {
                 $scope.selectedRowsForVendor.splice(indexToRemove, 1);
                 $scope.SelectedVendorForBiddingDisplayedCollection.splice(indexToRemove, 1);
                 row.selected = false;
-            }
-
-            else {
+            } else {
                 $scope.selectedRowsForVendor.push(selecteditems);
                 $scope.SelectedVendorForBiddingDisplayedCollection = [].concat($scope.selectedRowsForVendor);
                 row.selected = true;
                 $scope.showVendorforBiddingArea = true;
             }
+
             row.buttonCheckedforVendor = row.selected;
 
             if ($scope.selectedRowsForVendor.length <= 0) {
                 $scope.showVendorforBiddingArea = false;
             }
         };
+
 
         $scope.resetVendorWiseItemReq = function () {
             $scope.VendorWiseItemReq = {
