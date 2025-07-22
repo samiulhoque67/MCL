@@ -42,6 +42,7 @@ using SILDMS.DataAccess;
 using System.Data.Common;
 using SILDMS.Model;
 using System.Web.Services.Description;
+using System.Security.Cryptography;
 /////////////////////////////////////////Test///////////////////////////
 namespace SILDMS.Web.UI.Controllers
 {
@@ -321,6 +322,7 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.SetDataSource(dt);
             reportDocument.Refresh();
 
+            objVendorReq.CSRecmVendorName = dt.Rows[0]["AprvVendorName"].ToString();
             reportDocument.SetParameterValue("RecmVendor", objVendorReq.CSRecmVendorName);
             reportDocument.SetParameterValue("RecmBy", objVendorReq.RecommendedByName);
             reportDocument.SetParameterValue("RecmDesig", objVendorReq.RecommendedByDesignation);
@@ -366,14 +368,17 @@ namespace SILDMS.Web.UI.Controllers
             }
 
             DataTable dt = new DataTable();
+            DataTable dt1 = new DataTable();
 
-            await Task.Run(() => _reportService.VendorRequisitionReport(VendorReqID, VendorID, out dt));
+            await Task.Run(() => _reportService.VendorRequisitionReport(VendorReqID,/* VendorID,*/ out dt));
+            await Task.Run(() => _reportService.VendorRequisitionTermsReport(VendorReqID,/* VendorID,*/ out dt1));
 
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
             ReportPath = ReportPath + "/rptVendorRequisition.rpt";
             reportDocument.Load(ReportPath);
             reportDocument.SetDataSource(dt);
+            reportDocument.Subreports["rptVendorRequisitionTerms.rpt"].SetDataSource(dt1);
             reportDocument.Refresh();
 
             //reportDocument.SetParameterValue("RequisitionNo", objVendorReq.RequisitionNo);
@@ -527,21 +532,25 @@ namespace SILDMS.Web.UI.Controllers
 
             string ClientQutnAprvID = Convert.ToString(TempData["ClientQutnAprvID"]);
 
-            DataSet ds = new DataSet();
+            DataTable ds = new DataTable();
+            DataTable ds1 = new DataTable();
+            DataTable ds2 = new DataTable();
             await Task.Run(() => _reportService.ClientQuotationApproveReport(ClientQutnAprvID, out ds));
+            await Task.Run(() => _reportService.ClientQuotationApproveReport1(ClientQutnAprvID, out ds1));
+            await Task.Run(() => _reportService.ClientQuotationApproveReport2(ClientQutnAprvID, out ds2));
 
-            DataTable dt1 = ds.Tables.Count > 0 ? ds.Tables[0] : new DataTable();
-            DataTable dt2 = ds.Tables.Count > 1 ? ds.Tables[1] : new DataTable();
-            DataTable dt3 = ds.Tables.Count > 2 ? ds.Tables[2] : new DataTable();
+            //////DataTable dt1 = ds.Tables.Count > 0 ? ds.Tables[0] : new DataTable();
+            //////DataTable dt2 = ds.Tables.Count > 1 ? ds.Tables[1] : new DataTable();
+            //////DataTable dt3 = ds.Tables.Count > 2 ? ds.Tables[2] : new DataTable();
 
             using (ReportDocument reportDocument = new ReportDocument())
             {
                 string ReportPath = Server.MapPath("~/Reports/rptClientQuotationApprove.rpt");
                 reportDocument.Load(ReportPath);
 
-                reportDocument.SetDataSource(dt1);
-                reportDocument.Subreports["CQA_Subreport1"].SetDataSource(dt2);
-                reportDocument.Subreports["CQA_Subreport2"].SetDataSource(dt3);
+                reportDocument.SetDataSource(ds);
+                reportDocument.Subreports["CQA_SubReport.rpt"].SetDataSource(ds1);
+                reportDocument.Subreports["CQA_SubReport1.rpt"].SetDataSource(ds2);
 
                 reportDocument.Refresh();
 
@@ -549,8 +558,19 @@ namespace SILDMS.Web.UI.Controllers
                 reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
             }
 
-            return new EmptyResult();
+            return View();
         }
+
+
+       
+
+
+
+
+
+
+
+
 
 
 
@@ -1186,11 +1206,11 @@ namespace SILDMS.Web.UI.Controllers
                 reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
             else
                 reportDocument.SetParameterValue("ComDiv", model.ClientName);
-            string rptHeaderName = "Client Wise Bill Receive.";
+            string rptHeaderName = "Client Wise Due Bill.";
             reportDocument.SetParameterValue("rptName", rptHeaderName);
             reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
             //string reportName = GetCompanyShortName(model.ClientName) + "-" + "ChequeOrEFTInfoVendorWise";
-            string reportName = "Bill Receive Report" + ' ' + model.ClientName;
+            string reportName = "Client Wise Due Bill" + ' ' + model.ClientName;
 
             if (model.ButtonType == "Preview")
                 reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);

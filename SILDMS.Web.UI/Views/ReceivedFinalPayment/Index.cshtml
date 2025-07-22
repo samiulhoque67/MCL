@@ -42,7 +42,7 @@
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="btnSave">
-                        <i class="fa fa-save" style="padding-right: 5px;"></i> Save
+                        <i class="fa fa-save" style="padding-right: 5px;"></i> {{ VendorQutn.ClientFinalPaymentRcvdID ? 'Update' : 'Save' }}
                     </button>
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
@@ -301,7 +301,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <input type="radio" ng-model="VendorQutn.BillCategory" value="Normal" ng-disabled="VendorQutn.BillCategory" /> Normal
                         </label>
                         <label>
-                            <input type="radio" ng-model="VendorQutn.BillCategory" value="plusminus" ng-disabled="VendorQutn.BillCategory" /> Plus Minus
+                            <input type="radio" ng-model="VendorQutn.BillCategory" value="PlusMinus" ng-disabled="VendorQutn.BillCategory" /> Plus Minus
                         </label>
                     </div>
                 </div>
@@ -813,7 +813,9 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         VDSAmount: "",
                         BaseAmount: "",
                         ReceivableAmount: "",
-                        ReceivedAmount: ""
+                        ReceivedAmount: "",
+                        ClientFinalPaymentRcvdID: "",
+
 
 
 
@@ -1051,7 +1053,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         $scope.VendorQutn.WOInstallmentNo = tableRow.WOInstallmentNo;
                         $scope.VendorQutn.WOInstallmentID = tableRow.WOInstallmentID;
                         $scope.VendorQutn.WOInstallmentAmt = tableRow.WOInstallmentAmt;
+                      
+             
+             /*           $scope.VendorQutn.ClientReqNo = tableRow.ClientReqNo;*/
+     
 
+
+                  
                         $scope.p = 1;
 
 
@@ -1183,6 +1191,22 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         $scope.VendorQutn.Operation = tableRow.Operation;
                         $scope.VendorQutn.ReceivableAmount = tableRow.ReceivableAmount;
                         $scope.VendorQutn.ReceivedAmount = tableRow.ReceivedAmount;
+                        $scope.VendorQutn.TDSPercentage = tableRow.TDSPercentage;
+                        $scope.VendorQutn.TDSAmount = tableRow.TDSAmount;
+                        $scope.VendorQutn.ClientReqNo = tableRow.ClientReqNo;
+                        $scope.VendorQutn.ClientFinalPaymentRcvdID = tableRow.ClientFinalPaymentRcvdID;
+                        $scope.VendorQutn.TDS = tableRow.TDS;
+                        $scope.VendorQutn.VDS = tableRow.VDS; 
+
+                        $scope.VendorQutn.PaymentMode = tableRow.PaymentMode;
+                        $scope.VendorQutn.PaymentAmount = tableRow.PaymentAmount;
+                        $scope.VendorQutn.ReceiveDate = tableRow.ReceiveDate;
+                        $scope.VendorQutn.ChequeEftNo = tableRow.ChequeEftNo;
+                        $scope.VendorQutn.MoneyRecNo = tableRow.MoneyRecNo;
+                        $scope.VendorQutn.ReceiveNo = tableRow.ClientFinalPaymentRcvdID;
+                        $scope.VendorQutn.BillType = tableRow.BillType;
+                        $scope.VendorQutn.BillCategory = tableRow.BillCategory;
+                        $scope.VendorQutn.BaseAmount = tableRow.BaseAmount;
 
                         $scope.q = 2;
                         $scope.p = 1;

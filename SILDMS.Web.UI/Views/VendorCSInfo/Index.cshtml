@@ -1723,15 +1723,7 @@
 
             $scope.Post = function () {
 
-                //if ($('#RequisitionNo').val() == "") {
-                //    toastr.error("Vendor ReqNo.  Required");
-                //    return;
-                //}
 
-                //if ($('#SubmissionDate').val() == "") {
-                //    toastr.error("Submission Date Required.");
-                //    return;
-                //}
 
                 if ($scope.selectedVendors.length <= 0 && $scope.p!=1) {
                     toastr.error("Please select at least one vendor");
@@ -1753,13 +1745,35 @@
                 }
                 if (!$scope.VendorCSInfo.Operation) {
                     toastr.error("please select an  operation");
-                    return; // Stop execution if validation fails
+                    return; 
                 }
                 if ($('#CSRecDate1').val() == "") {
                     toastr.error("CS Date  Required");
                     return;
                 }
-              
+
+                if ($scope.selectedVendors.length > 1) {
+                    let totalNegoQty = 0;
+                    let individualQty = parseFloat($scope.selectedVendors[0].NegoQty);
+
+                    for (let i = 0; i < $scope.selectedVendors.length; i++) {
+                        let currentQty = parseFloat($scope.selectedVendors[i].NegoQty);
+
+                        // Check if this vendor's NegoQty is same as the first one
+                        if (currentQty !== individualQty) {
+                            toastr.error("Either select only one vendor or divide the Request Quantity among them equally");
+                            return;
+                        }
+
+                        totalNegoQty += currentQty;
+                    }
+
+                    let reqQnty = parseFloat($scope.selectedVendors[0].ReqQnty); // assuming all have the same ReqQnty
+                    if (totalNegoQty !== reqQnty) {
+                        toastr.error("Either select only one vendor or divide the Request Quantity among them equally");
+                        return;
+                    }
+                }
 
                
                 $http.post('/VendorCSInfo/SaveVendorCSInfo',
@@ -1815,7 +1829,7 @@
             };
 
 
-            $scope.checkUnitPrice = function (row) {
+          /*  $scope.checkUnitPrice = function (row) {
 
                 if (!row.NegoQty || row.NegoQty <= 0) {
                     toastr.error("Quantity cannot be zero or negative!");
@@ -1830,7 +1844,37 @@
                 QutnAmt = (row.NegoQty * row.NegoPrice);
                 row.NegoAmt = QutnAmt;
                 $scope.checkVatPerc(row);
+            };*/
+
+            $scope.checkUnitPrice = function (row) {
+
+                // Validation
+                if (!row.NegoQty || row.NegoQty <= 0) {
+                    toastr.error("Quantity cannot be zero or negative!");
+                    row.NegoQty = 1;
+                }
+
+                if (!row.NegoPrice || row.NegoPrice <= 0) {
+                    toastr.error("Price cannot be zero or negative!");
+                    row.NegoPrice = 1;
+                }
+
+                row.NegoAmt = parseFloat(row.NegoQty) * parseFloat(row.NegoPrice);
+                $scope.checkVatPerc(row);
+
+                var matchingVendor = $scope.selectedVendors.find(v =>
+                    v.VendorID == row.VendorID && v.ServiceItemID == row.ServiceItemID
+                );
+
+                if (matchingVendor) {
+                    matchingVendor.NegoQty = row.NegoQty;
+                    matchingVendor.NegoPrice = row.NegoPrice;
+                    matchingVendor.NegoAmt = row.NegoAmt;
+                    matchingVendor.NegoVatAmt = row.NegoVatAmt;
+                    matchingVendor.NegoTolAmt = row.NegoTolAmt;
+                }
             };
+
 
             $scope.checkVatPerc = function (row) {
                 var VatAmt = 0;

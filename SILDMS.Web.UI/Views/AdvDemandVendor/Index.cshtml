@@ -634,8 +634,14 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
 
         function performCalculation() {
-            if ($scope.AdvanceInformmation.POInstallmentAmt && $scope.AdvanceInformmation.ProposedAmount) {
-                $scope.AdvanceInformmation.RemainingAmount = $scope.AdvanceInformmation.POInstallmentAmt - $scope.AdvanceInformmation.ProposedAmount;
+            var proposed = parseFloat($scope.AdvanceInformmation.ProposedAmount) || 0;
+            var poInstallment = parseFloat($scope.AdvanceInformmation.POInstallmentAmt) || 0;
+            var demandAmount = parseFloat($scope.AdvanceInformmation.AdvanceDemandAmount) || 0;
+
+            if (poInstallment > 0 && proposed) {
+                $scope.AdvanceInformmation.RemainingAmount = poInstallment - proposed;
+            } else if (poInstallment <= 0 && proposed) {
+                $scope.AdvanceInformmation.RemainingAmount = demandAmount - proposed;
             } else {
                 $scope.AdvanceInformmation.RemainingAmount = 0;
             }

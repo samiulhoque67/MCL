@@ -292,7 +292,7 @@
             <table st-table="GetClientReqDetailsCollection" st-safe-src="GetClientReqDetails" style="width:100%" class="table table-condensed table-bordered table-striped table-hover pnlView">
                 <thead>
                     <tr style="font-size: 15px;">
-                        <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                        <th colspan="14" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
                             Item and Service List
                         </th>
                     </tr>
@@ -307,7 +307,9 @@
                         <th style="text-align: left;">Req Unit</th>
                         <th style="text-align: left;">Quotation Amount</th>
                         <th style="text-align: left;">Given Quotation Amount</th>
-                        <th style="text-align: left;">Vat (%) Rate</th>
+                        <th style="text-align: left;">ASF (%)</th>
+                        <th style="text-align: left;">ASF Amount</th>
+                        <th style="text-align: left;">Vat (%)</th>
                         <th style="text-align: left;">Vat Amount</th>
                         <th style="text-align: left;">Given Total Amount</th>
                     </tr>
@@ -340,20 +342,39 @@
 
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
-                                   type="number"
+                                   type="text"
+                                   ng-readonly="pagefunction === 'viewmode'"
+                                   ng-model="row.GivenASFPerc"
+                                   ng-change="calculateRowFields(row)"
+                                   ng-blur="validateInput('GivenASFPerc', row)" />
+                        </td>
+                        <td style="width: 6%; text-align: right;">{{ row.TotGivenASFAmt }}</td>
+
+                        <td style="width: 6%;">
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
+                                   type="text"
                                    ng-readonly="pagefunction === 'viewmode'"
                                    ng-model="row.GivenVatPerc"
                                    ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('GivenVatPerc', row)" />
                         </td>
                         <td style="width: 6%; text-align: right;">{{ row.TotGivenVatAmt }}</td>
-                        <td style="width: 6%; color: #126e0f; text-align: right;">
-                            {{ row.givenTolAmt }}
 
-                            <button type="button" class="button-detail pull-right" ng-hide="row.ReqType === 'QC' " ng-click="detailVendorCS(row)" data-dismiss="modal" title="Show detail">
-                                <i class="fa fa-info"> </i>
-                            </button>
+                        <td style="width: 6%; color: #126e0f; text-align: right;">
+                            <div style="display: inline-flex; align-items: center;">
+                                <span>{{ row.givenTolAmt }}</span>
+                                <button type="button"
+                                        class="button-detail"
+                                        style="margin-left: 5px;"
+                                        ng-hide="row.ReqType === 'QC'"
+                                        ng-click="detailVendorCS(row)"
+                                        data-dismiss="modal"
+                                        title="Show detail">
+                                    <i class="fa fa-info"></i>
+                                </button>
+                            </div>
                         </td>
+
                     </tr>
                 </tbody>
             </table>
@@ -1195,6 +1216,8 @@
                     VenPrice: row.QutnPrice,
                     MclPrice: row.givenQutnPrice, //<--
                     QutnAmt: row.givenQutnAmt,
+                    ASFPerc: row.GivenASFPerc,
+                    ASFAmt: row.TotGivenASFAmt,
                     VatPerc: row.GivenVatPerc,
                     VatAmt: row.TotGivenVatAmt,
                     TolAmt: row.givenTolAmt
@@ -1206,6 +1229,10 @@
                     existingItem.MclPrice = row.givenQutnPrice
                     existingItem.VatPerc = row.GivenVatPerc;
                     existingItem.VatAmt = row.TotGivenVatAmt;
+
+                    existingItem.ASFPerc = row.GivenASFPerc;
+                    existingItem.ASFAmt = row.TotGivenASFAmt;
+
                     existingItem.TolAmt = row.givenTolAmt;
                 } else {
                     $scope.selectedRows.push(selecteditems);
@@ -1234,6 +1261,8 @@
                     VenPrice: row.QutnPrice,
                     MclPrice: row.givenQutnPrice,
                     QutnAmt: row.QutnAmt, 
+                    ASFPerc: row.ASFPerc,
+                    ASFAmt: row.ASFAmt,
                     VatPerc: row.VatPerc, 
                     VatAmt: row.VatAmt,
                     TolAmt: row.givenTolAmt
@@ -1289,21 +1318,35 @@
 
         $scope.calculateRowFields = function (row) {
             row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
-            row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
-            row.givenQutnAmt = row.givenQutnPrice * (parseFloat(row.ReqQnty) || 0);
-            row.TotGivenVatAmt = row.givenQutnAmt * (row.GivenVatPerc / 100);
-            row.givenTolAmt = row.givenQutnAmt + row.TotGivenVatAmt;
+            //row.GivenASFPerc = parseFloat(row.GivenASFPerc) || 0;
+            //row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
+            row.ReqQnty = parseFloat(row.ReqQnty) || 0;
+
+            // 1. Calculate Base Amount
+            row.givenQutnAmt = row.givenQutnPrice * row.ReqQnty;
+
+            // 2. Calculate ASF Amount
+            row.TotGivenASFAmt = row.givenQutnAmt * (row.GivenASFPerc / 100);
+
+            // 3. Calculate VAT based on (Base + ASF)
+            const basePlusASF = row.givenQutnAmt + row.TotGivenASFAmt;
+            row.TotGivenVatAmt = basePlusASF * (row.GivenVatPerc / 100);
+
+            // 4. Total Amount
+            row.givenTolAmt = row.givenQutnAmt + row.TotGivenASFAmt + row.TotGivenVatAmt;
 
             $scope.selectEntity(row, 'save');
         };
 
+
         $scope.validateInput = function (field, row) {
-            const floatRegex = /^[0-9]*\.?[0-9]*$/; 
+            const floatRegex = /^[0-9]*\.?[0-9]*$/;
             if (!floatRegex.test(row[field]) || row[field] === '') {
                 row[field] = 0;
             }
             $scope.calculateRowFields(row);
         };
+
 
         $scope.checkEnter = function (event, row) {
             if (event.keyCode === 13 || event.keyCode === 9) {
@@ -1317,10 +1360,9 @@
             if (!$scope.MasterData.BriefingDate || $scope.MasterData.BriefingDate.trim() === '') {
                 toastr.error('Please enter a Briefing Date');
             }
-            else if (!$scope.selectedRows.MclPrice <= 0) {
-                toastr.error('Given Quotation Price must be greater than 0.');
+            else if ($scope.selectedRows.some(item => !item.MclPrice || item.MclPrice <= 0)) {
+                toastr.error('Given Quotation Amount must be greater than 0.');
             }
-
             else {
                 // $('#ConfirmModal').modal('show');
                 $scope.SaveQuotToClient(action);
@@ -1330,35 +1372,33 @@
         
         $scope.SaveQuotToClient = function (action) {
 
-            console.log($scope.MasterData);
-            console.log($scope.selectedRows);
-            console.log($scope.TermsConditionsDisplayedCollection);
-            console.log($scope.ReqType);
-
             $scope.MasterData.BriefingDate = $('#BriefingDate').val();
 
+            // Extract QV and QC only (without numbers)
+            let matches = $scope.ReqType ? $scope.ReqType.match(/\b(QV|QC)\b/g) : [];
+            let cleanedReqType = matches ? matches.join(', ') : '';
+
             $http.post('/QuotationToClient/SaveQuotToClient', {
-                action : action,
+                action: action,
                 MasterData: [$scope.MasterData],
                 DetailData: $scope.selectedRows,
                 AllTermsDtl: $scope.TermsConditionsDisplayedCollection,
-                ReqType: $scope.ReqType
-
-            }).success(function (response) {
-
-                if (response.status === "Successfully Submitted" || "Operation Done") {
-                    toastr.success('Data Saved Successfully');
-                    $scope.Quotation.QuotationNo = response.ClientQutnID;
-                    $scope.refreshPage();
-                }
-                else {
-                    toastr.error('Something went wrong');
-                }
-                $scope.loading = false;
-            }).error(function () {
-                $scope.loading = false;
-                toastr.error('Data Loading Failed.');
-            });
+                ReqType: cleanedReqType
+            })
+                .success(function (response) {
+                    if (response.status === "Successfully Submitted" || response.status === "Operation Done") {
+                        toastr.success('Data Saved Successfully');
+                        $scope.Quotation.QuotationNo = response.ClientQutnID;
+                        $scope.refreshPage();
+                    } else {
+                        toastr.error('Something went wrong');
+                    }
+                    $scope.loading = false;
+                })
+                .error(function () {
+                    $scope.loading = false;
+                    toastr.error('Data Loading Failed.');
+                });
         }
 
         $scope.toggleRefreshTable = function () {

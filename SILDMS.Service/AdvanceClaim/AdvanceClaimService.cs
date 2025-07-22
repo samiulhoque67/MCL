@@ -35,10 +35,26 @@ namespace SILDMS.Service.AdvanceClaim
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
                 : ValidationResult.Success;
         }
+        ValidationResult IAdvanceClaimService.AllSavedAdvanceClaimService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out List<OBS_ClientwithReqQoutn> AllAvailableClientsList)
+        {
+            AllAvailableClientsList = _advanceClaimData.AllSavedAdvanceClaimDataService(UserId, page, itemsPerPage, sortBy, reverse, search, type, out _errorNumber);
+
+            return _errorNumber.Length > 0
+                ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
+                : ValidationResult.Success;
+        }
 
         ValidationResult IAdvanceClaimService.WoQtforAdvanClaimService(string ClientID, string WOInfoID, string WONo, out List<AdvanClaimWo> WODetails)
          {
             WODetails = _advanceClaimData.WoQtforAdvanClaimDataService(ClientID, WOInfoID, WONo, out _errorNumber);
+
+             return _errorNumber.Length > 0
+                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
+                 : ValidationResult.Success;
+         }
+        ValidationResult IAdvanceClaimService.AllSavedAdvanceClaimDetailsService(string ClientID, string WOInfoID, string WONo, string AdvancClaimID, out List<AdvanClaimWo> WODetails)
+         {
+            WODetails = _advanceClaimData.AllSavedAdvanceClaimDetailsDataService(ClientID, WOInfoID, WONo, AdvancClaimID, out _errorNumber);
 
              return _errorNumber.Length > 0
                  ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))

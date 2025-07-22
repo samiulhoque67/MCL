@@ -21,7 +21,7 @@ namespace SILDMS.DataAccess.ReceivedFinalPayment
             List<VendorBillRecvd> vendorBillRecvdList = new List<VendorBillRecvd>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientBillAprvList"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SearchClientFinalPaymentList"))
             {
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -30,6 +30,7 @@ namespace SILDMS.DataAccess.ReceivedFinalPayment
                     DataTable dt1 = ds.Tables[0];
                     vendorBillRecvdList = dt1.AsEnumerable().Select(reader => new VendorBillRecvd
                     {
+                        ClientFinalPaymentRcvdID = reader.IsNull("ClientFinalBilAprvID") ? 0 : Convert.ToInt32(reader["ClientFinalPaymentRcvdID"]),
                         ClientFinalBilAprvID = reader.IsNull("ClientFinalBilAprvID") ? 0 : Convert.ToInt32(reader["ClientFinalBilAprvID"]),
                         ClientFinalBilRecmID = reader.IsNull("ClientFinalBilRecmID") ? 0 : Convert.ToInt32(reader["ClientFinalBilRecmID"]),
                         ClientFinalBilPreprID = reader.IsNull("ClientFinalBilPreprID") ? 0 : Convert.ToInt32(reader["ClientFinalBilPreprID"]),
@@ -65,6 +66,18 @@ namespace SILDMS.DataAccess.ReceivedFinalPayment
                         RequiDate = reader.IsNull("RequisitionDate") ? string.Empty : reader.GetString("RequisitionDate"),
                         ReceivableAmount = reader.GetToDecimal("ReceivableAmount"),
                         ReceivedAmount = reader.GetToDecimal("ReceivedAmount"),
+                        MoneyRecNo = reader.GetString("MoneyRecNo"),
+                        ChequeEftNo = reader.GetString("ChequeEftNo"),
+                        PaymentMode = reader.GetString("PaymentMode"),
+                        ReceiveDate = reader.GetString("ReceiveDate"),
+                        TDSPercentage = reader.GetToDecimal("TDSPercnt"),
+                        TDSAmount = reader.GetToDecimal("TDSAmount"),
+
+                        TDS = reader.GetString("TDS"),
+                        VDS = reader.GetString("VDS"),
+                        BillType = reader.GetString("BillType"),
+                        BillCategory = reader.GetString("BillCategory"),
+                        BaseAmount = reader.GetToDecimal("BaseAmount"),
                     }).ToList();
                 }
             }
@@ -124,6 +137,7 @@ namespace SILDMS.DataAccess.ReceivedFinalPayment
                         WOInstallmentAmt = reader.GetToDecimal("WOInstallmentAmt"),
                         BillType = reader.GetString("BillType"),
                         BillCategory = reader.GetString("BillCategory"),
+                    
                        
                     }).ToList();
                 }
@@ -235,6 +249,7 @@ namespace SILDMS.DataAccess.ReceivedFinalPayment
                 using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetClientFinalBillRcvd"))
                 {
                     // Set parameters 
+                    db.AddInParameter(dbCommandWrapper, "@ClientFinalPaymentRcvdID", SqlDbType.Int, billRecv.ClientFinalPaymentRcvdID);
                     db.AddInParameter(dbCommandWrapper, "@ClientFinalBilAprvID", SqlDbType.Int, billRecv.ClientFinalBilAprvID);
                     db.AddInParameter(dbCommandWrapper, "@ClientFinalBilRecmID", SqlDbType.Int, billRecv.ClientFinalBilRecmID);
                     db.AddInParameter(dbCommandWrapper, "@ClientFinalBilPreprID", SqlDbType.Int, billRecv.ClientFinalBilPreprID);

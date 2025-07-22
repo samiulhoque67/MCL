@@ -44,6 +44,15 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
+        public async Task<dynamic> AllSavedAdvanceClaim(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
+        {
+            var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
+            await Task.Run(() => _advanceClaimService.AllSavedAdvanceClaimService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out AllAvailableClientsList));
+            var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
+            return result;
+        }
+
+        [HttpPost]
         public async Task<dynamic> WoQtforAdvanClaim(string ClientID , string WOInfoID, string WONo)
         {
             var WODetails = new List<AdvanClaimWo>();  // Renamed to ClientDetails
@@ -51,6 +60,16 @@ namespace SILDMS.Web.UI.Controllers
             var result = Json(new { WODetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
             return result;
         }
+
+        [HttpPost]
+        public async Task<dynamic> AllSavedAdvanceClaimDetails(string ClientID, string WOInfoID, string WONo, string AdvancClaimID)
+        {
+            var WODetails = new List<AdvanClaimWo>();  // Renamed to ClientDetails
+            await Task.Run(() => _advanceClaimService.AllSavedAdvanceClaimDetailsService(ClientID, WOInfoID, WONo, AdvancClaimID, out WODetails));
+            var result = Json(new { WODetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
+            return result;
+        }
+
 
 
 

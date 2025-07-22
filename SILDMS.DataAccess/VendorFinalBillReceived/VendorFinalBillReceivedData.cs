@@ -36,7 +36,8 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         VendorName = reader.IsNull("VendorName") ? string.Empty : reader.GetString("VendorName"),
                         ClientName = reader.IsNull("ClientName") ? string.Empty : reader.GetString("ClientName"),
                         ClientID = reader.IsNull("ClientID") ? string.Empty : reader.GetString("ClientID"),
-                        NetPayableAmount =  reader.GetToDecimal("NetPayableAmount"),
+                        ClientReqID = reader.IsNull("ClientReqID") ? string.Empty : reader.GetString("ClientReqID"),
+                        NetPayableAmount = reader.GetToDecimal("NetPayableAmount"),
                         PoNo = reader.IsNull("PONo") ? string.Empty : reader.GetString("PONo"),
                         PoAprvDate = reader.IsNull("PoAprvDate") ? string.Empty : reader.GetString("PoAprvDate"),
                         POAmount = reader.GetToDecimal("PoAmount"),
@@ -49,7 +50,7 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         AdvancePaidAmount = reader.GetToDecimal("AdvncPaidAmt"),
                         WOAmt = reader.GetToDecimal("WOAmount"),
                         AdvancePaidDate = reader.IsNull("AdvncPaidDate") ? string.Empty : reader.GetString("AdvncPaidDate"),
-                      
+
                         WOInfoID = reader.IsNull("WOInfoID") ? string.Empty : reader.GetString("WOInfoID"),
                         WONo = reader.IsNull("WOInfoNo") ? string.Empty : reader.GetString("WOInfoNo"),
                         POInstallmentNo = reader.GetInt32("POInstallmentNo"),
@@ -64,8 +65,9 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         ContractNo = reader.GetString("ContractNo"),
                         ContractDate = reader.GetString("ContractDate"),
 
+
                         VendorBillDate = reader.IsNull("VendorBillDate") ? string.Empty : reader.GetString("VendorBillDate"),
-                        Note= reader.IsNull("Note") ? string.Empty : reader.GetString("Note")
+                        Note = reader.IsNull("Note") ? string.Empty : reader.GetString("Note")
                     }).ToList();
                 }
             }
@@ -88,6 +90,7 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                     ClientInfoList = dt1.AsEnumerable().Select(reader => new OBS_VendorQutn
                     {
                         ClientID = reader.GetString("ClientID"),
+                        ClientReqID = reader.GetString("ClientReqID"),
                         VendorID = reader.GetString("VendorID"),
                         ClientName = reader.GetString("ClientName"),
                         VendorName = reader.GetString("VendorName"),
@@ -98,13 +101,13 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                         WONo = reader.GetString("WONo"),
                         WOAmt = reader.GetToDecimal("WOAmt"),
                         RemainingAmnt = reader.GetToDecimal("RemainingAmt"),
-                       
+
                         AdvancClaimRcvAmt = reader.GetToDecimal("VendorAdvncAprvAmt"),
                         AdvancRecvID = reader.GetString("VendorAdvancAprvID"),
                         AdvancClaimRcvdDate = reader.GetString("VendorAdvncAprvDate"),
-                        POInstallmentNo= reader.GetInt32("POInstallmentNo"),
-                        POInstallmentID= reader.GetInt32("POInstallmentID"),
-                        POInstallmentAmt=reader.GetDouble("POInstallmentAmt"),
+                        POInstallmentNo = reader.GetInt32("POInstallmentNo"),
+                        POInstallmentID = reader.GetInt32("POInstallmentID"),
+                        POInstallmentAmt = reader.GetDouble("POInstallmentAmt"),
                         BillType = reader.GetString("BillType"),
                         BillCategory = reader.GetString("BillCategory"),
                         //VendorQutnID = reader.GetString("VendorQutnID")
@@ -121,14 +124,14 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
         {
             DataTable dtVendorQutnItem = new DataTable();
             //dtVendorQutnItem.Columns.Add("VendorQutnItemID");
-         
+
             string errorNumber = String.Empty;
             try
             {
                 DatabaseProviderFactory factory = new DatabaseProviderFactory();
                 SqlDatabase db = factory.CreateDefault() as SqlDatabase;
 
-                if ((billRecv.VendrFinalBilRcvdID)==0)
+                if ((billRecv.VendrFinalBilRcvdID) == 0)
                     billRecv.Action = "add";
                 else
                     billRecv.Action = "edit";
@@ -141,6 +144,7 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                     db.AddInParameter(dbCommandWrapper, "@PoNo", SqlDbType.NVarChar, billRecv.RequisitionNo);
                     //db.AddInParameter(dbCommandWrapper, "@VendorName", SqlDbType.NVarChar, billRecv.VendorName);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, billRecv.ClientID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, billRecv.ClientReqID);
                     //db.AddInParameter(dbCommandWrapper, "@ClientName", SqlDbType.NVarChar, billRecv.ClientName);
                     db.AddInParameter(dbCommandWrapper, "@WONo", SqlDbType.NVarChar, billRecv.WONo);
                     db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.NVarChar, billRecv.WOInfoID);
@@ -156,7 +160,7 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
                     db.AddInParameter(dbCommandWrapper, "@POInstallmentAmt", SqlDbType.Decimal, billRecv.POInstallmentAmt);
                     db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, billRecv.BillType);
                     db.AddInParameter(dbCommandWrapper, "@BillCategory", SqlDbType.NVarChar, billRecv.BillCategory);
-            
+
                     db.AddInParameter(dbCommandWrapper, "@AdvancePaidAmount", SqlDbType.Decimal, billRecv.AdvancePaidAmount);
                     db.AddInParameter(dbCommandWrapper, "@AdvancePaidID", SqlDbType.NVarChar, billRecv.AdvancePaidID);
                     db.AddInParameter(dbCommandWrapper, "@AdvancePaidDate", SqlDbType.NVarChar, billRecv.AdvancePaidDate);
@@ -198,6 +202,6 @@ namespace SILDMS.DataAccess.VendorFinalBillReceived
 
 
 
-       
+
     }
 }

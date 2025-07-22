@@ -90,14 +90,14 @@ namespace SILDMS.DataAccess.Reports
             }
         }
 
-        public DataTable RequisitionMovementInfo(string ClientReqID, out string errorNumber)
+        public DataTable RequisitionMovementInfo(string ClientReqNo, out string errorNumber)
         {
             errorNumber = string.Empty;
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("GetRptRequisitionMovementInfo"))
             {
-                db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, ClientReqID);
+                db.AddInParameter(dbCommandWrapper, "@ClientReqNo", SqlDbType.VarChar, ClientReqNo);
                 //db.AddInParameter(dbCommandWrapper, "@ServiceItemID", SqlDbType.VarChar, ServiceItemID);
 
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -126,7 +126,7 @@ namespace SILDMS.DataAccess.Reports
             }
         }
 
-        public DataTable VendorRequisitionReport(string VendorReqID, string VendorID, out string errorNumber)
+        public DataTable VendorRequisitionReport(string VendorReqID, /*string VendorID,*/ out string errorNumber)
         {
             errorNumber = string.Empty;
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
@@ -134,7 +134,22 @@ namespace SILDMS.DataAccess.Reports
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("GetRptRequisitionToVendorReport"))
             {
                 db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.VarChar, VendorReqID);
-                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
+                //db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+        }
+        public DataTable VendorRequisitionTermsReport(string VendorReqID, /*string VendorID,*/ out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("GetRptRequisitionToVendorReportsub2"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.VarChar, VendorReqID);
+                //db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
 
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
                 DataTable dt1 = ds.Tables[0];
@@ -363,16 +378,17 @@ namespace SILDMS.DataAccess.Reports
         }
 
 
-        public DataSet ClientQuotationApproveReport(string ClientQutnAprvID, out string errorNumber)
+        public DataTable ClientQuotationApproveReport(string ClientQutnAprvID, out string errorNumber)
         {
             errorNumber = string.Empty;
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQuotationApproveReportData2"))
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQuotationApproveReportData3"))
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.VarChar, ClientQutnAprvID);
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
-                return ds;
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
             }
         }
 
@@ -462,6 +478,33 @@ namespace SILDMS.DataAccess.Reports
                 return dt1;
             }
 
+        }
+
+        public DataTable ClientQuotationApproveReport1(string clientQutnAprvID, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQuotationApproveReportData4"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.VarChar, clientQutnAprvID);
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
+        }
+        public DataTable ClientQuotationApproveReport2(string clientQutnAprvID, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQuotationApproveReportData5"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.VarChar, clientQutnAprvID);
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                DataTable dt1 = ds.Tables[0];
+                return dt1;
+            }
         }
     }
 }

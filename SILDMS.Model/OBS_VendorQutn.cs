@@ -73,6 +73,7 @@ namespace SILDMS.Model
         public string VendorName { get; set; }
         public string ClientID { get; set; }
         public string ClientName { get; set; }
+        public string ClientReqID { get; set; }
         public string TermsID { get; set; }
         public string FormName { get; set; }
         public string VendorQutnNo { get; set; }
@@ -153,5 +154,7 @@ namespace SILDMS.Model
         public string RecommendedByDesignation { get; set; }
         public string ContractDate { get; set; }
         public string ContractNo { get; set; }
+        public string PayDate { get; set; }
+        public object ClientFinalPaymentRcvdID { get; set; }
     }
 }

@@ -150,7 +150,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="WOAmt" name="WOAmt" type="text" class="form-control" placeholder="0.00" ng-model="WOInfo.WOAmt" />
+                        <input id="WOAmt" name="WOAmt" style="text-align:right" readonly type="text" class="form-control" placeholder="0.00" ng-model="WOInfo.WOAmt" />
                     </div>
                 </div>
                 <div class="col-lg-2" ng-show="WOInfo.BillType=='Installment'">
@@ -358,7 +358,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     <thead>
                         <tr style="font-size: 15px;">
                             <th colspan="15" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
-                                Requisition Item List
+                                Work Order Item List
                             </th>
 
                             <th style="background: #ffffff;">
@@ -388,7 +388,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <th style="text-align: left;" st-sort="">VatPerc</th>
                             <th style="text-align: left;" st-sort="">VatAmt</th>
                             <th style="text-align: left;" st-sort="">TolAmt</th>
-                            <th style="text-align: left;">Action</th>
+                            <th class="col-lg-2" style="text-align: left;">Action</th>
                         </tr>
                         @*<tr>
                                 <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
@@ -424,7 +424,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 </td>*@
                             <td class="col-lg-1" style="width:6%;">{{row.VatAmt | number:2}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.TolAmt}}</td>
-                            <td class="col-lg-1">
+                            <td class="col-lg-2">
                                 <button type="button" ng-click="selectWoItem(row)" data-dismiss="modal" title="Select">
                                     <i ng-show="!row.selected" class="fa fa-square-o"></i>
                                     <i ng-show="row.selected" class="fa fa-check-square-o"></i>
@@ -821,63 +821,63 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         </div>
     </div>
 
-   @* <div id="RequisitionTermModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="row">
-                        <div class="col-sm-5 col-md-5 col-lg-5">
-                            <h3 class="modal-title">Terms & Conditions Information</h3>
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-
-                        </div>
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                            <button type="button" class="close" data-dismiss="modal" ng-click="ResetReqTermModel()" aria-hidden="true" style="color:red;">x</button>
-                        </div>
-                    </div>
-                </div>
-                <div ng-cloak>
-                    <div class="row">
-                        <div class="col-lg-1">
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="TermsCode">Terms & Conditions Code:</label>
+    @* <div id="RequisitionTermModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="row">
+                            <div class="col-sm-5 col-md-5 col-lg-5">
+                                <h3 class="modal-title">Terms & Conditions Information</h3>
                             </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <input id="TermsCode" type="text" name="TermsCode" ng-model="WOInfoTerm.TermsCode" class="form-control" autofocus />
+                            <div class="col-sm-6 col-md-6 col-lg-6">
 
                             </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="TermsName">Terms & Conditions:</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <input id="TermsName" type="text" name="TermsName" ng-model="WOInfoTerm.TermsName" class="form-control" autofocus />
-
+                            <div class="col-sm-1 col-md-1 col-lg-1">
+                                <button type="button" class="close" data-dismiss="modal" ng-click="ResetReqTermModel()" aria-hidden="true" style="color:red;">x</button>
                             </div>
                         </div>
                     </div>
+                    <div ng-cloak>
+                        <div class="row">
+                            <div class="col-lg-1">
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label for="TermsCode">Terms & Conditions Code:</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <input id="TermsCode" type="text" name="TermsCode" ng-model="WOInfoTerm.TermsCode" class="form-control" autofocus />
 
-                </div>
-                <div class="modal-footer">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <div class="btn-group pull-right" style="margin:2px;">
-                                <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add</button>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label for="TermsName">Terms & Conditions:</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <input id="TermsName" type="text" name="TermsName" ng-model="WOInfoTerm.TermsName" class="form-control" autofocus />
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <div class="btn-group pull-right" style="margin:2px;">
+                                    <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>*@
+        </div>*@
 
     <div id="RequisitionTermModal" class="modal fade">
         <div class="modal-dialog">
@@ -1557,13 +1557,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 ServiceCategoryName: row.ServiceCategoryName,
                 Description: row.Description,
                 DeliveryLocation: row.DeliveryLocation,
-                DeliveryDate: row.DeliveryDate,                // Date object
+                DeliveryDate: row.DeliveryDate,
                 DeliveryMode: row.DeliveryMode,
-                //ReqQnty: row.ReqQnty,
-                //ReqUnit: row.ReqUnit,
-                //VendorQutnNo: row.VendorQutnNo,
-                //VendorID: row.VendorID,
-                //VendorName: row.VendorName,
                 QutnUnit: row.QutnUnit,
                 QutnQnty: row.QutnQnty,
                 QutnPrice: row.QutnPrice,
@@ -1578,24 +1573,28 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 TolAmt: row.TolAmt
             };
 
-            // Check if this vendor is already selected
             if (row.selected) {
-                // Deselect the vendor and remove it from the selected array
                 row.selected = false;
-
                 var index = $scope.selectedWoItems.findIndex(function (vendor) {
                     return vendor.ClientQutnAprvItemID === row.ClientQutnAprvItemID;
                 });
                 if (index !== -1) {
-                    $scope.selectedWoItems.splice(index, 1);  // Remove from selected array
+                    $scope.selectedWoItems.splice(index, 1);
                 }
             } else {
-                // Select the vendor and add it to the selected array
                 row.selected = true;
-
-                $scope.selectedWoItems.push(selectedWoItem);  // Add to selected array
+                $scope.selectedWoItems.push(selectedWoItem);
             }
+
+            var totalAmt = 0;
+            angular.forEach($scope.selectedWoItems, function (item) {
+                var amt = parseFloat(item.TolAmt) || 0;
+                totalAmt += amt;
+            });
+
+            $scope.WOInfo.WOAmt = totalAmt.toFixed(2); // optional formatting to 2 decimal places
         };
+
 
         ///////////////////////////////////////////////
 
@@ -1618,6 +1617,10 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
             if ($('#WODate').val() == "") {
                 toastr.error("Work Order Date: Date Required");
+                return;
+            }
+            if ($scope.selectedWoItems.legth <= 0) {
+                toastr.error("Must select an Item to save");
                 return;
             }
 

@@ -55,7 +55,7 @@
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom" ng-disabled="btnRefresh">
+                    <button type="button" data-ng-click="toggleRefreshTablemain()" class="button-custom" ng-disabled="btnRefresh">
                         <i class="fa fa-refresh" style="padding-right: 5px"></i> Refresh
                     </button>
                 </div>
@@ -112,18 +112,18 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="ClientReqNo" name="ClientReqNo" type="text" class="form-control" placeholder="Client Requisition No" ng-model="ClientReq.ClientReqNo" />
+                        <input ng-readonly="viewonlymode == true" id="ClientReqNo" name="ClientReqNo" type="text" autocomplete="off" class="form-control" placeholder="Client Requisition No" ng-model="ClientReq.ClientReqNo" />
                     </div>
                 </div>
 
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="form-group">
-                        <label>Requisition No.:</label>
+                        <label>Requisition ID:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="ClientReqID" name="ClientReqID" readonly type="text" class="form-control" placeholder="Auto Requisition No." ng-model="ClientReq.ClientReqID" />
+                        <input id="ClientReqID" name="ClientReqID" readonly type="text" class="form-control"  placeholder="Auto Requisition ID" ng-model="ClientReq.ClientReqID" />
                     </div>
                 </div>
             </div>
@@ -136,17 +136,17 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="SubmissionDate" name="SubmissionDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.SubmissionDate" />
+                        <input ng-readonly="viewonlymode == true" id="SubmissionDate" name="SubmissionDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.SubmissionDate" />
                     </div>
                 </div>
-                <div class="col-lg-3 ">
+                <div class="col-lg-2 ">
                     <div class="form-group">
                         <label for="RequisitionDate">Requisition Date:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="RequisitionDate" name="RequisitionDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.RequisitionDate" />
+                        <input ng-readonly="viewonlymode == true" id="RequisitionDate" name="RequisitionDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.RequisitionDate" />
                     </div>
                 </div>
             </div>
@@ -159,7 +159,7 @@
                 </div>
                 <div class="col-lg-8">
                     <div class="form-group">
-                        <input id="Remarks" name="Remarks" type="text" data-ng-model="ClientReq.Remarks" class="form-control" placeholder="Remarks" />
+                        <input ng-readonly="viewonlymode == true" id="Remarks" name="Remarks" type="text" data-ng-model="ClientReq.Remarks" class="form-control" placeholder="Remarks" />
                     </div>
                 </div>
             </div>
@@ -358,7 +358,7 @@
                                 Requisition Item List
                             </th>
 
-                            <th style="background: #ffffff;">
+                            <th ng-hide="viewonlymode == true" style="background: #ffffff;">
                                 <button type="button" id="btnAddReqItem" ng-disabled="btnAddReqItem" ng-click="AddReqItemModal()" class="button-detail btn">
                                     <i class="fa fa-plus" style="padding-right: 3px"></i> Add
                                 </button>
@@ -376,7 +376,7 @@
                             <th style="text-align: left;" st-sort="">ReqType</th>
                             <th style="text-align: left;" st-sort="">ReqQnty</th>
                             <th style="text-align: left;" st-sort="">ReqUnit</th>
-                            <th style="text-align: left;">Action</th>
+                            <th ng-hide="viewonlymode == true" style="text-align: left;">Action</th>
                         </tr>
                         @*<tr>
                                 <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
@@ -397,7 +397,7 @@
                             <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
 
-                            <td class="col-lg-1" style="width:5%;">
+                            <td ng-hide="viewonlymode == true" class="col-lg-1" style="width:5%;">
                                 <button type="button" ng-if="row.ClientReqItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                 <button type="button" ng-if="!row.ClientReqItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                 <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqItemDelete(row,$index)"><i class="fa fa-remove"></i> </button>
@@ -586,7 +586,13 @@
                     <div class="col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             <div class="btn-group pull-right" style="margin:2px;">
-                                <button type="button" id="btnAddReqItem" data-ng-click="AddReqItem()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add to Item List</button>
+                                <button type="button"
+                                        id="btnAddReqItem"
+                                        data-ng-click="AddReqItem()"
+                                        class="button-detail btn"
+                                        ng-disabled="isDuplicateCombination">
+                                    <i class="fa fa-save" style="padding-right: 3px"></i>Add to Item List
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -746,7 +752,7 @@
                                 <span>Terms & Conditions List</span>
                             </th>
 
-                            <th style="background: #ffffff; position: relative; padding: 5px;">
+                            <th ng-hide="viewonlymode == true" style="background: #ffffff; position: relative; padding: 5px;">
                                 <div style="position: relative; display: inline-block; width: 200px;">
                                     <input id="FormName" name="FormName" type="text"
                                            data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true"
@@ -760,7 +766,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 </div>
                             </th>
 
-                            <th style="background: #ffffff;">
+                            <th ng-hide="viewonlymode == true" style="background: #ffffff;">
                                 <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
                                     <i class="fa fa-plus" style="padding-right: 3px"></i> Add
                                 </button>
@@ -772,7 +778,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
                             <th style="text-align: left;" st-sort="">Terms Code</th>
                             <th colspan="13" style="text-align: left;" st-sort="">Terms & Conditions</th>
-                            <th style="text-align: left;">Action</th>
+                            <th ng-hide="viewonlymode == true" style="text-align: left;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -783,7 +789,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
                             <td colspan="13" class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
 
-                            <td class="col-lg-1" style="width:5%;">
+                            <td ng-hide="viewonlymode == true" class="col-lg-1" style="width:5%;">
                                 <button type="button" ng-if="row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                 <button type="button" ng-if="!row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                 <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
@@ -900,7 +906,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
 <script type="text/javascript">
 
-    app.controller('ClientRequisitionCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('ClientRequisitionCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
         $scope.clientReqItemArray = [];
         $scope.clientReqTermArray = [];
@@ -1014,6 +1020,24 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         $scope.ClientReqItem = {
             ReqType: "QV" // Default value set to "Quotation from Vendor"
         };
+
+        $scope.isDuplicateCombination = false;
+
+        $scope.$watchGroup(['ClientReqItem.ServiceCategory', 'ClientReqItem.ServiceItem'], function (newValues) {
+            var selectedCategory = newValues[0];
+            var selectedItem = newValues[1];
+
+            if (selectedCategory && selectedItem) {
+                $scope.isDuplicateCombination = $scope.clientReqItemArray.some(function (item) {
+                    return item.ServiceCategoryID === selectedCategory.ServiceCategoryID &&
+                        item.ServiceItemID === selectedItem.ServiceItemID;
+                });
+
+                if ($scope.isDuplicateCombination) {
+                    toastr.error("This Service Category and Item combination already exists in the current Requistion.");
+                }
+            }
+        });
 
         $scope.AddReqItem = function () {
 
@@ -1242,7 +1266,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         ///////////////////////Save/Update Master///////////////////////
 
         //////////////////Search Grid List///////////////////////////////
-
+        $scope.viewonlymode = false;
         $scope.SearchClientReqModal = function () {
             $scope.GetClientReqSearchList();
             $('#SearchClientReqModal').modal('show');
@@ -1260,6 +1284,9 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         ////////////////////////Select for Update from Search grid ///////////////////////
 
         $scope.toggleClientReqSelect = function (tableRow) {
+            $scope.viewonlymode = true;
+
+
             $scope.ClientReq.ClientReqID = tableRow.ClientReqID;
             $scope.ClientReq.ClientID = tableRow.ClientID;
             $scope.ClientReq.ClientName = tableRow.ClientName;
@@ -1479,6 +1506,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     clientReqTerm: $scope.ReqTermGridDisplayCollection
                 })
                 .success(function (response) {
+                    $scope.ClientReq.ClientReqID = response.ClientReqID;
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
 
@@ -1487,6 +1515,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         }
 
                         $scope.clearClientReq();
+                        $scope.toggleRefreshTable();
                         $scope.loading = false;
                         return;
                     }
@@ -1496,9 +1525,16 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         $scope.loading = false;
                         return;
                     }
+
+                    else if (response.status == "ERROR_Duplicate") {
+                        toastr.error("This requisition no. already exists");
+                        $scope.loading = false;
+                        return;
+                    }
                     else if (response.status == "S203") {
                         toastr.success("Data Deleted Successfully.");
                         $scope.clearClientReq();
+                        $scope.toggleRefreshTable();
                         $scope.loading = false;
                         return;
                     }
@@ -1515,7 +1551,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 });
         }
 
-        $scope.toggleRefreshTable = function () {
+        $scope.toggleRefreshTablemain = function () {
             window.location.reload();
         };
 
@@ -1652,7 +1688,14 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
 
 
+        $scope.toggleRefreshTable = function () {
 
+            $timeout(function () {
+                // Reload the current page
+                window.location.reload();
+            }, 2000);
+
+        };
 
 
 

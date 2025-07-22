@@ -148,7 +148,10 @@ namespace SILDMS.DataAccess.QuotationApproval
                         QutnQnty = reader.GetString("QutnQnty"),
                         QutnPrice = reader.GetString("VenPrice"),
                         QutnUnit = reader.GetString("QutnUnit"),
-                       /* QutnAmt = reader.GetString("QutnAmt"),*/
+                        /* QutnAmt = reader.GetString("QutnAmt"),*/
+                        ASFPerc = reader.GetString("ASFPerc"),
+                        ASFAmt = reader.GetString("ASFAmt"),
+
                         ClientQutnAmt = reader.GetString("ClientQutnAmt"),
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
@@ -219,6 +222,8 @@ namespace SILDMS.DataAccess.QuotationApproval
             detailDataTable.Columns.Add("VenPrice", typeof(string));
             detailDataTable.Columns.Add("MclPrice", typeof(string));
             detailDataTable.Columns.Add("QutnAmt", typeof(string));
+            detailDataTable.Columns.Add("ASFPerc", typeof(string));
+            detailDataTable.Columns.Add("ASFAmt", typeof(string));
             detailDataTable.Columns.Add("VatPerc", typeof(string));
             detailDataTable.Columns.Add("VatAmt", typeof(string));
             detailDataTable.Columns.Add("TolAmt", typeof(string));
@@ -246,6 +251,9 @@ namespace SILDMS.DataAccess.QuotationApproval
                     objDataRow["VenPrice"] = string.IsNullOrEmpty(item.VenPrice) ? DBNull.Value : (object)item.VenPrice;
                     objDataRow["MclPrice"] = string.IsNullOrEmpty(item.MclPrice) ? DBNull.Value : (object)item.MclPrice;
                     objDataRow["QutnAmt"] = string.IsNullOrEmpty(item.QutnAmt) ? DBNull.Value : (object)item.QutnAmt;
+                    objDataRow["ASFPerc"] = string.IsNullOrEmpty(item.ASFPerc) ? DBNull.Value : (object)item.ASFPerc;
+                    objDataRow["ASFPerc"] = string.IsNullOrEmpty(item.ASFPerc) ? DBNull.Value : (object)item.ASFPerc;
+
                     objDataRow["VatPerc"] = string.IsNullOrEmpty(item.VatPerc) ? DBNull.Value : (object)item.VatPerc;
                     objDataRow["VatAmt"] = string.IsNullOrEmpty(item.VatAmt) ? DBNull.Value : (object)item.VatAmt;
                     objDataRow["TolAmt"] = string.IsNullOrEmpty(item.TolAmt) ? DBNull.Value : (object)item.TolAmt;

@@ -492,7 +492,7 @@
                             <input type="radio" ng-model="VendorCSInfo.Category" value="Normal" ng-disabled="VendorCSInfo.Category" /> Normal
                         </label>
                         <label>
-                            <input type="radio" ng-model="VendorCSInfo.Category" value="plusminus" ng-disabled="VendorCSInfo.Category" /> Plus Minus
+                            <input type="radio" ng-model="VendorCSInfo.Category" value="PlusMinus" ng-disabled="VendorCSInfo.Category" /> Plus Minus
                         </label>
                     </div>
                 </div>
@@ -586,7 +586,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="RecommendedAmount" name="RecommendedAmount" type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.RecommendedAmount" />
+                        <input id="RecommendedAmount" name="RecommendedAmount" autocomplete="off" type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.RecommendedAmount" />
                     </div>
                 </div>
             </div>
@@ -624,7 +624,7 @@
 
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label>Recommended By:</label>
+                        <label>Approve By:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -781,6 +781,7 @@
 
 
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
+                    $scope.VendorCSInfo.PoAmount = $scope.VenCSItemGridDisplayCollection[0].NegoTolAmt;
                     console.log($scope.VenCSItemGridDisplayCollection);
                 })
                 .error(function () {

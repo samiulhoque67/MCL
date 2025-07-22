@@ -17,7 +17,8 @@ namespace SILDMS.DataAccessInterface.Reports
         DataTable GetRptUserDetails(string UserRptID, string BillReceiveFromDate, string Status, string id, string action, out string errorNumber);
         DataTable RequisitionMovementInfo(string RequisitionNo, out string errorNumber);
         DataTable VendorCSApprevedReport(string VendorReqID, string ServiceItemID, out string errorNumber);
-        DataTable VendorRequisitionReport(string VendorReqID, string ServiceItemID, out string errorNumber);
+        DataTable VendorRequisitionReport(string VendorReqID, /*string ServiceItemID,*/ out string errorNumber);
+        DataTable VendorRequisitionTermsReport(string VendorReqID, /*string ServiceItemID,*/ out string errorNumber);
         DataTable VendorAgeingReport(string VendorID, out string errorNumber);
         DataTable ClientAgeingReport(string ClientID, out string errorNumber);
         DataTable GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out string errorNumber);
@@ -27,7 +28,7 @@ namespace SILDMS.DataAccessInterface.Reports
 
         List<RptVendorWithAddress> GetVendorNameAndAddress(string companyID, out string errorNumber);
 
-        DataSet ClientQuotationApproveReport(string ClientQutnAprvID, out string errorNumber);
+        DataTable ClientQuotationApproveReport(string ClientQutnAprvID, out string errorNumber);
         DataTable MonthWiseVendorFinalBillPayment(string VendorID, string CertificateFromDate, out string _errorNumber);
 
         DataTable ClientAprvBillReport(string woinfoID, int installmentNo, int clientBillAprvID, string BillCategory, out string _errorNumber);
@@ -36,5 +37,7 @@ namespace SILDMS.DataAccessInterface.Reports
         DataTable OutputVatStatementReport(string billReceiveFromDate, string billReceiveToDate, out string errorNumber);
         DataTable AITVDSReport(string clientID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber);
         DataTable TDSVDSReport(string VendorID, string billReceiveFromDate, string billReceiveToDate, out string errorNumber);
+        DataTable ClientQuotationApproveReport1(string clientQutnAprvID, out string errorNumber);
+        DataTable ClientQuotationApproveReport2(string clientQutnAprvID, out string errorNumber);
     }
 }

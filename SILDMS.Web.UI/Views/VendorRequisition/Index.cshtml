@@ -3,9 +3,13 @@
     Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
 }
 
-<style type="text/css">
+<style>
     body {
         font-size: 12px; /* Set global font size */
+    }
+    
+    .selected-row {
+        background-color: #bbf0ea !important;
     }
 
     .box-body, .form-group, .btn, .form-control, .box-header {
@@ -426,7 +430,7 @@
                             </tr>*@
                     </thead>
                     <tbody>
-                        <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;">
+                        <tr ng-repeat="row in GridDisplayCollection" ng-class="{'selected-row': row.selected}" ng-cloak style="font-size:12px;">
                             <td class="hidden">{{row.index+1}}</td>
                             <td class="hidden">{{row.ClientReqItemID}}</td>
                             <td class="hidden">{{row.VendorReqItemID}}</td>
@@ -732,14 +736,17 @@
 
                             <th @*colspan="12"*@ style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
                                 <span>CS Status</span>
-                                <label style="font-size: larger;color:red;">*</label>
+                                <label style="font-size: 8px;color:red;">*</label>
                             </th>
 
                             <th style="background: #ffffff; position: relative; padding: 5px;">
 
-                                <select id="CsStatus" name="CsStatus" style="background-color: #ffffff; width: 90px; height: 26px; font-size: 10px" class="form-control" ng-model="VendorReq.CsStatus">
-                                    <option value="WCS">With CS</option>
-                                    <option value="NCS">Without CS</option>
+                                <select id="CsStatus" name="CsStatus"
+                                        style="background-color: #ffffff; width: 120px; height: 26px; font-size: 12px;
+              /* text-align: center; */ /*text-align-last: center;*/ line-height: 26px; padding: 0;"
+                                        class="form-control p-0" ng-model="VendorReq.CsStatus">
+                                    <option value="WCS">With  CS</option>
+                                    <option value="NCS">Without  CS</option>
                                 </select>
                             </th>
 
@@ -969,7 +976,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             Remarks: "",
             TolalItem: "",
             SelectedItem: "",
-            Status: ""
+            Status: "",
+            CsStatus: "WCS"
         }
 
         $scope.VendorReqItem = {
@@ -1348,6 +1356,16 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         };
 
         $scope.toggleVendorSelect = function (row) {
+            // Check if the vendor is already selected
+            var isAlreadySelected = $scope.VendorInfoDisplayedCollection.some(function (item) {
+                return item.VendorID === row.VendorID && item.ServiceItemID === row.ServiceItemID;
+            });
+
+            if (isAlreadySelected) {
+                toastr.error("This Vendor is already Selected for " + row.ServiceItemName);
+                return; // Exit the function
+            }
+
 
             $scope.VendorReq.VendorID = row.VendorID;
             $scope.VendorReq.VendorCode = row.VendorCode;
@@ -1385,6 +1403,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         var ServiceItemID = "";
         var VenReqQnty = "";
         $scope.selectEntity = function (row) {
+            row.selected = true;
             var selecteditems = {
                 ServiceCategoryID: row.ServiceCategoryID,
                 ServiceCategoryName: row.ServiceCategoryName,
@@ -1400,6 +1419,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 VendorReqID: row.VendorReqID,
                 index: row.index
             };
+
+            // 👇 Set the last clicked item's name
+            $scope.VendorReq.SelectedItemName = row.ServiceItemName;
+
+            // 👇 Clear Vendor name
+            $scope.VendorReq.VendorName = "";
+
             ServiceItemID = row.ServiceItemID;
             ServiceCategoryID = row.ServiceCategoryID;
             VenReqQnty = row.ReqQnty;
@@ -1410,24 +1436,25 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     indexToRemove = index;
                 }
             });
+
             if (indexToRemove !== -1) {
                 $scope.selectedRowsForVendor.splice(indexToRemove, 1);
                 $scope.SelectedVendorForBiddingDisplayedCollection.splice(indexToRemove, 1);
                 row.selected = false;
-            }
-
-            else {
+            } else {
                 $scope.selectedRowsForVendor.push(selecteditems);
                 $scope.SelectedVendorForBiddingDisplayedCollection = [].concat($scope.selectedRowsForVendor);
                 row.selected = true;
                 $scope.showVendorforBiddingArea = true;
             }
+
             row.buttonCheckedforVendor = row.selected;
 
             if ($scope.selectedRowsForVendor.length <= 0) {
                 $scope.showVendorforBiddingArea = false;
             }
         };
+
 
         $scope.resetVendorWiseItemReq = function () {
             $scope.VendorWiseItemReq = {
@@ -1512,7 +1539,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $('#SearchVendorReqModal').modal('hide');
         };
 
-        ///////////////////////////////////////////////
 
         ////////////////////////Requsition Terms & Conditions ///////////////////////
 
@@ -1650,27 +1676,46 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         }
 
         //////////////////    SAVE    /////////////////////////////
-
-        $scope.Post = function () {           
+        $scope.Post = function () {
             if ($('#ClientName').val() == "") {
-                toastr.error("Client Name Date Required.");
+                toastr.error("Client Name Required.");
                 return;
             }
             if ($('#SubmissionDate').val() == "") {
                 toastr.error("Submission Date Required.");
                 return;
             }
-
             if ($('#RequisitionDate').val() == "") {
-                toastr.error("Requisition Date Date Required");
+                toastr.error("Requisition Date Required.");
                 return;
             }
             if ($('#LastDateofQuotation').val() == "") {
-                toastr.error("LastDateofQuotation Date Date Required");
+                toastr.error("Last Date of Quotation Required.");
                 return;
             }
             if ($('#CsStatus').val() == "") {
-                toastr.error("CS Status  Required");
+                toastr.error("CS Status Required.");
+                return;
+            }
+
+            const allItems = $scope.GridDisplayCollection;
+            const selectedItems = $scope.SelectedVendorForBiddingDisplayedCollection;
+            const vendorItemWise = $scope.VendorInfoDisplayedCollection;
+
+            // ✅ Validation 1: Must select all listed items
+            if (allItems.length !== selectedItems.length) {
+                toastr.error("Please select all listed items before save.");
+                return;
+            }
+
+            // ✅ Validation 2: Each ServiceItemID must have at least one vendor assigned
+            const missingAssignments = allItems.filter(item => {
+                return !vendorItemWise.some(vendor => vendor.ServiceItemID === item.ServiceItemID);
+            });
+
+            if (missingAssignments.length > 0) {
+                const missingNames = missingAssignments.map(m => m.ServiceItemName).join(', ');
+                toastr.error("Please assign a vendor for " + missingNames);
                 return;
             }
 
@@ -1678,47 +1723,35 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorReq.SubmissionDate = $('#SubmissionDate').val();
             $scope.VendorReq.LastDateofQuotation = $('#LastDateofQuotation').val();
 
-            $scope.VendorReq.TolalItem = $scope.GridDisplayCollection.length;
-            $scope.VendorReq.SelectedItem = $scope.SelectedVendorForBiddingDisplayedCollection.length;
+            $scope.VendorReq.TolalItem = allItems.length;
+            $scope.VendorReq.SelectedItem = selectedItems.length;
 
             $http.post('/VendorRequisition/SaveVendorRequisition',
                 {
                     vendorReq: $scope.VendorReq,
-                    vendorReqItem: $scope.SelectedVendorForBiddingDisplayedCollection,
+                    vendorReqItem: selectedItems,
                     vendorReqTerm: $scope.ReqTermGridDisplayCollection,
-                    vendorReqItemWise: $scope.VendorInfoDisplayedCollection
+                    vendorReqItemWise: vendorItemWise
                 })
                 .success(function (response) {
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
-                        $scope.clearVendorReq();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else if (response.status == "S202") {
+                    } else if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
-                        $scope.clearVendorReq();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else if (response.status == "S203") {
+                    } else if (response.status == "S203") {
                         toastr.success("Data Deleted Successfully.");
-                        $scope.clearVendorReq();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else {
+                    } else {
                         toastr.error("Data Save Failed.");
-                        $scope.loading = false;
-                        return;
                     }
+                    $scope.clearVendorReq();
+                    $scope.loading = false;
                 })
                 .error(function () {
                     toastr.error("Data Save Failed.");
                     $scope.loading = false;
-                    return;
                 });
-        }
+        };
+
 
         $scope.toggleRefreshTable = function () {
             window.location.reload();

@@ -97,6 +97,9 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                         BaseAmount = reader.GetToDecimal("BaseAmount"),
 
                         AdvancClaimRcvAmt = reader.GetToDecimal("AdvancClaimRcvdAmt"),
+                        AdvancRecvID = reader.GetString("AdvancClaimRcvdID"),
+                        AdvancClaimRcvdDate = reader.GetString("AdvancClimRcvdDate"),
+
                         WOInstallmentNo = reader.GetInt32("WOInstallmentNo"),
                         WOInstallmentID = reader.GetInt64("WOInstallmentID"),
                         WOInstallmentAmt = reader.GetDouble("WOInstallmentAmt"),
@@ -148,6 +151,8 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                     db.AddInParameter(dbCommandWrapper, "@WOAmt", SqlDbType.Decimal, billRecv.WOAmt);
                     db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.Decimal, billRecv.WOInfoID);
                     db.AddInParameter(dbCommandWrapper, "@AdvanceRecvAmount", SqlDbType.Decimal, billRecv.AdvancClaimRcvAmt);
+                    db.AddInParameter(dbCommandWrapper, "@AdvancClaimRcvdDate", SqlDbType.NVarChar, billRecv.AdvancClaimRcvdDate);
+                    db.AddInParameter(dbCommandWrapper, "@AdvancClaimRcvdID", SqlDbType.NVarChar, billRecv.AdvancRecvID);
                     //db.AddInParameter(dbCommandWrapper, "@AdvancClaimRcvdDate", SqlDbType.NVarChar, billRecv.AdvancClaimRcvdDate);
                     db.AddInParameter(dbCommandWrapper, "@RemainingAmnt", SqlDbType.Decimal, billRecv.RemainingAmnt);
                     db.AddInParameter(dbCommandWrapper, "@BillAmount", SqlDbType.Decimal, billRecv.BillAmount);

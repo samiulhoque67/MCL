@@ -31,9 +31,9 @@ namespace SILDMS.Service
 
         #endregion
 
-        public string SaveClientInfoMst(OBS_ClientInfo modelClientInfoMst)
+        public string SaveClientInfoMst(OBS_ClientInfo modelClientInfoMst, string ClientAddressID)
         {
-            return clientInfoDataService.SaveClientInfoMst(modelClientInfoMst);
+            return clientInfoDataService.SaveClientInfoMst(modelClientInfoMst, ClientAddressID);
         }
 
         public string SaveClientAddress(OBS_ClientAddressInfo modelClientAddress)
@@ -60,6 +60,11 @@ namespace SILDMS.Service
         public ValidationResult GetClientAddressList(string ClientID, out List<OBS_ClientAddressInfo> ClientAddressList)
         {
             ClientAddressList = clientInfoDataService.GetClientAddressList(ClientID);
+            return ValidationResult.Success;
+        }
+        public ValidationResult GetClientAddressList_beforeSave(string ClientAddressID, out List<OBS_ClientAddressInfo> ClientAddressList)
+        {
+            ClientAddressList = clientInfoDataService.GetClientAddressList_beforeSave(ClientAddressID);
             return ValidationResult.Success;
         }
 

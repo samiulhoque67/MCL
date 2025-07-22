@@ -11,7 +11,10 @@ namespace SILDMS.DataAccess.AdvanceClaimRecomClient
     public interface IAdvanceClaimRecomClientData
     {
         List<OBS_ClientwithReqQoutn> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
+        List<OBS_ClientwithReqQoutn> AllSavedAdvanceClaimDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
+
         List<AdvanClaimWo> WoQtforAdvanClaimDataService(string ClientID, string WOInfoID, string AdvancClaimID, out string _errorNumber);
+        List<AdvanClaimWo> AllSavedAdvanceClaimDetails(string ClientID, string WOInfoID, string AdvancClaimRecmID, out string _errorNumber);
 
         string SaveQuotToClientServiceData(string UserID, List<AdvanceClaimMaster> MasterData,string Operation, out string _errorNumber);
 

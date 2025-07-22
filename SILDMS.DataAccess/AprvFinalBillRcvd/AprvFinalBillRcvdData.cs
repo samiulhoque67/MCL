@@ -70,6 +70,8 @@ namespace SILDMS.DataAccess.AprvFinalBillRcvd
                         POInstallmentAmt = reader.GetDouble("POInstallmentAmt"),
                         BillType = reader.GetString("BillType"),
                         BillCategory = reader.GetString("BillCategory"),
+                        ContractNo = reader.GetString("ContractNo"),
+                        ContractDate = reader.GetString("ContractDate"),
 
                     }).ToList();
                 }
@@ -97,6 +99,7 @@ namespace SILDMS.DataAccess.AprvFinalBillRcvd
                         VendorID = reader.IsNull("VendorID") ? string.Empty : reader.GetString("VendorID"),
                         VendorName = reader.IsNull("VendorName") ? string.Empty : reader.GetString("VendorName"),
                         ClientID = reader.IsNull("ClientID") ? string.Empty : reader.GetString("ClientID"),
+                        ClientReqID = reader.IsNull("ClientReqID") ? string.Empty : reader.GetString("ClientReqID"),
                         ClientName = reader.IsNull("ClientName") ? string.Empty : reader.GetString("ClientName"),
                         NetPayableAmount = reader.GetToDecimal("NetPayableAmount"),
                         PoNo = reader.IsNull("PONo") ? string.Empty : reader.GetString("PONo"),
@@ -127,6 +130,8 @@ namespace SILDMS.DataAccess.AprvFinalBillRcvd
                         POInstallmentAmt = reader.GetDouble("POInstallmentAmt"),
                         BillType = reader.GetString("BillType"),
                         BillCategory = reader.GetString("BillCategory"),
+                        ContractNo = reader.GetString("ContractNo"),
+                        ContractDate = reader.GetString("ContractDate"),
                     }).ToList();
                 }
             }
@@ -157,6 +162,7 @@ namespace SILDMS.DataAccess.AprvFinalBillRcvd
                     db.AddInParameter(dbCommandWrapper, "@PoNo", SqlDbType.NVarChar, billRecv.RequisitionNo);
                     db.AddInParameter(dbCommandWrapper, "@VendorName", SqlDbType.NVarChar, billRecv.VendorName);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, billRecv.ClientID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, billRecv.ClientReqID);
                     db.AddInParameter(dbCommandWrapper, "@ClientName", SqlDbType.NVarChar, billRecv.ClientName);
                     //db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.NVarChar, billRecv.TermsID);
                     //db.AddInParameter(dbCommandWrapper, "@FormName", SqlDbType.NVarChar, billRecv.FormName);
@@ -199,6 +205,8 @@ namespace SILDMS.DataAccess.AprvFinalBillRcvd
                     db.AddInParameter(dbCommandWrapper, "@POInstallmentAmt", SqlDbType.Decimal, billRecv.POInstallmentAmt);
                     db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, billRecv.BillType);
                     db.AddInParameter(dbCommandWrapper, "@BillCategory", SqlDbType.NVarChar, billRecv.BillCategory);
+                    db.AddInParameter(dbCommandWrapper, "@ContractNo", SqlDbType.NVarChar, billRecv.ContractNo);
+                    db.AddInParameter(dbCommandWrapper, "@ContractDate", SqlDbType.NVarChar, billRecv.ContractDate);
 
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
                     // Execute SP.
