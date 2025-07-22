@@ -322,9 +322,14 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.SetDataSource(dt);
             reportDocument.Refresh();
 
-            reportDocument.SetParameterValue("RecmVendor", objVendorReq.CSRecmVendorName);
-            reportDocument.SetParameterValue("RecmBy", objVendorReq.RecommendedByName);
-            reportDocument.SetParameterValue("RecmDesig", objVendorReq.RecommendedByDesignation);
+            //if (!string.IsNullOrEmpty(objVendorReq.CSRecmVendorName))
+            //    reportDocument.SetParameterValue("RecmVendor", objVendorReq.CSRecmVendorName);
+            //else
+            //    reportDocument.SetParameterValue("RecmVendor", string.Empty);
+
+            reportDocument.SetParameterValue("RecmVendor", string.IsNullOrEmpty(objVendorReq.CSRecmVendorName) ? string.Empty : objVendorReq.CSRecmVendorName);
+            reportDocument.SetParameterValue("RecmBy", string.IsNullOrEmpty(objVendorReq.RecommendedByName) ? string.Empty : objVendorReq.RecommendedByName);
+            reportDocument.SetParameterValue("RecmDesig", string.IsNullOrEmpty(objVendorReq.RecommendedByDesignation) ? string.Empty : objVendorReq.RecommendedByDesignation);
 
             //reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
             //reportDocument.SetParameterValue("RecmVendor", "Square Informatix Ltd.");
@@ -561,7 +566,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
 
-       
+
 
 
 
