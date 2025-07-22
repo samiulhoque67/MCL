@@ -1126,6 +1126,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         $scope.toggleVendorReqSelect = function (row) {
             $scope.VendorQutn.ClientID = row.ClientID;
             $scope.VendorQutn.VendorID = row.VendorID;
+            $scope.VendorQutn.ClientReqID = row.ClientReqID;
          /*   $scope.VendorQutn.VendorReqID = row.VendorReqID;*/
             $scope.VendorQutn.ClientName = row.ClientName;
             $scope.VendorQutn.VendorName = row.VendorName;
@@ -1273,9 +1274,9 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.VATPercentage = tableRow.VATPercentage;
             $scope.VendorQutn.VATAmount = tableRow.VATAmount;
             $scope.VendorQutn.CommissionPercentage = tableRow.CommissionPercentage;
-            $scope.VendorQutn.CommissionPercentage = tableRow.CommissionPercentage1;
+            $scope.VendorQutn.CommissionPercentage1 = tableRow.CommissionPercentage1;
             $scope.VendorQutn.CommissionAmount = tableRow.CommissionAmount;
-            $scope.VendorQutn.CommissionAmount = tableRow.CommissionAmount1;
+            $scope.VendorQutn.CommissionAmount1 = tableRow.CommissionAmount1;
             $scope.VendorQutn.BillAmount = tableRow.BillAmount;
             $scope.VendorQutn.TotalBillAmount = tableRow.TotalBillAmount;
             $scope.VendorQutn.NetPayableAmount = tableRow.NetPayableAmount;
@@ -1288,6 +1289,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.ContractNo = tableRow.ContractNo;
 
             $scope.VendorQutn.POInstallmentAmt = tableRow.POInstallmentAmt;
+            $scope.VendorQutn.RemainingAmnt = tableRow.POInstallmentAmt - tableRow.AdvancePaidAmount;
             $scope.VendorQutn.BillType = tableRow.BillType;
             $scope.VendorQutn.BillCategory = tableRow.BillCategory;
         
@@ -1474,9 +1476,36 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             //}
 
             $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
+            $scope.VendorQutn.RequisitionDate = $('#RequisitionDate').val();
+            $scope.VendorQutn.ContractDate = $('#ContractDate').val();
        /*     $scope.VendorQutn.ReceivedDate = $('#ReceivedDate').val();*/
             $scope.VendorQutn.VendorBillDate = $('#VendorBillDate').val();
             $scope.VendorQutn.BillReceiveDate = $('#BillReceiveDate').val();
+
+            if ($scope.VendorQutn.VendrFinalBilRcvdID) {
+                var fileUpload = document.getElementById("FileUpload1");
+                var files = fileUpload.files;
+
+                if (files.length === 0) {
+                    toastr.error("Please select a file to upload.");
+                    return;
+                }
+
+                var file = files[0];
+                var ext = file.name.split('.').pop().toLowerCase();
+
+                var maxSizeInMB = 2;
+                if (file.size > maxSizeInMB * 1024 * 1024) {
+                    toastr.error("File size must be 2 MB or less.");
+                    return;
+                }
+
+                // Validate file extension
+                if (ext !== "pdf") {
+                    toastr.error("Please upload PDF files only.");
+                    return;
+                }
+            }
             
 
             $http.post('/VendorFinalBillReceived/SaveVendorFinalBill',
@@ -1491,7 +1520,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         toastr.success("Data Saved Successfully.");
 
                         if ($scope.uploadedFile) {
-                            $scope.SaveDocument(response.VendrFinalBilRcvdID); //
+                            $scope.SaveDocument(file,response.VendrFinalBilRcvdID); //
                         }
 
                         $scope.clearVendorQutn();
@@ -1530,28 +1559,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         $scope.SaveDocument = function (VendrFinalBilRcvdID) {
             $scope.DocCrudStatus = "I";
 
-            var fileUpload = document.getElementById("FileUpload1");
-            var files = fileUpload.files;
-
-            if (files.length === 0) {
-                toastr.error("Please select a file to upload.");
-                return;
-            }
-
-            var file = files[0];
-            var ext = file.name.split('.').pop().toLowerCase();
-
-            var maxSizeInMB = 2;
-            if (file.size > maxSizeInMB * 1024 * 1024) {
-                toastr.error("File size must be 2 MB or less.");
-                return;
-            }
-
-            // Validate file extension
-            if (ext !== "pdf") {
-                toastr.error("Please upload PDF files only.");
-                return;
-            }
 
             $scope.loading = true; // Show loading indicator
 
