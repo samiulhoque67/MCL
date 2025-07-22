@@ -112,7 +112,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input ng-readonly="viewonlymode == true" id="ClientReqNo" name="ClientReqNo" type="text" class="form-control" placeholder="Client Requisition No" ng-model="ClientReq.ClientReqNo" />
+                        <input ng-readonly="viewonlymode == true" id="ClientReqNo" name="ClientReqNo" type="text" autocomplete="off" class="form-control" placeholder="Client Requisition No" ng-model="ClientReq.ClientReqNo" />
                     </div>
                 </div>
 
@@ -1522,6 +1522,12 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     else if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
                         $scope.clearClientReq();
+                        $scope.loading = false;
+                        return;
+                    }
+
+                    else if (response.status == "ERROR_Duplicate") {
+                        toastr.error("This requisition no. already exists");
                         $scope.loading = false;
                         return;
                     }

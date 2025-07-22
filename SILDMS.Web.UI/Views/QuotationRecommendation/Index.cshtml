@@ -202,7 +202,7 @@
                     <table st-table="AllQuotationsCollection" st-safe-src="AllQuotationsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr style="font-size: 15px;">
-                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                <th colspan="14" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
                                     Quotations for Recommendation
                                 </th>
                             </tr>
@@ -290,7 +290,7 @@
 
                 <thead>
                     <tr style="font-size: 15px;">
-                        <th colspan="15" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                        <th colspan="17" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
                             Item and Service List
                         </th>
                     </tr>
@@ -308,8 +308,10 @@
                         <th style="text-align: left;">Recom Quoted Unit Price</th>
                         <th style="text-align: left;">C.Quoted Amount (without vat)</th>
                         <th style="text-align: left;">Recom Quoted Amount</th>
-                        <th style="text-align: left;">VAT Rate</th>
-                        <th style="text-align: left;">VAT Amount</th>
+                        <th style="text-align: left;">ASF (%)</th>
+                        <th style="text-align: left;">ASF Amount</th>
+                        <th style="text-align: left;">Vat (%)</th>
+                        <th style="text-align: left;">Vat Amount</th>
                         <th style="text-align: left;">Total C.Quoted Amount (with vat)</th>
                         <th style="text-align: left;">Recom Total Amount (with vat)</th>
                     </tr>
@@ -333,6 +335,16 @@
                         </td>
                         <td style="width: 6%; text-align: right">{{ row.ClientQutnAmt }}</td>
                         <td style="width: 6%; text-align: right; color: #126e0f;">{{ row.givenQutnAmt }}</td>
+                        <td style="width: 6%;">
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
+                                   type="text"
+                                   ng-readonly="pagefunction === 'viewmode'"
+                                   ng-model="row.ASFPerc"
+                                   ng-change="calculateRowFields(row)"
+                                   ng-blur="validateInput('GivenASFPerc', row)" />
+                        </td>
+                        <td style="width: 6%; text-align: right;">{{ row.TotGivenASFAmt }}</td>
+
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
                                    ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
@@ -1039,6 +1051,9 @@
                     QutnUnit: row.ReqUnit,
                     VenPrice: row.QutnPrice,
                     MclPrice: row.givenQutnPrice,
+                    ASFPerc: row.ASFPerc,
+                    ASFAmt: row.TotGivenASFAmt,
+                    VatAmt: row.TotGivenAFSAmt,
                     VatPerc: row.GivenVatPerc,
                     VatAmt: row.TotGivenVatAmt,
                     TolAmt: row.givenTolAmt
@@ -1070,6 +1085,8 @@
                     QutnUnit: row.ReqUnit, //--
                     VenPrice: row.QutnPrice, //-- VenPrice
                     MclPrice: row.givenQutnPrice, //--
+                    AFSPerc: row.GivenAFSPerc,
+                    VatAmt: row.TotGivenAFSAmt,
                     VatPerc: row.VatPerc, //--
                     VatAmt: row.VatAmt, //--
                     TolAmt: row.givenTolAmt
@@ -1124,11 +1141,32 @@
         };
 
         $scope.calculateRowFields = function (row) {
+            //row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
+            //row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
+            //row.givenQutnAmt = row.givenQutnPrice * (parseFloat(row.QutnQnty) || 0);
+            //row.TotGivenVatAmt = row.givenQutnAmt * (row.GivenVatPerc / 100);
+            //row.givenTolAmt = row.givenQutnAmt + row.TotGivenVatAmt;
+
+            //$scope.selectEntity(row, 'save');
+
+
             row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
-            row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
-            row.givenQutnAmt = row.givenQutnPrice * (parseFloat(row.QutnQnty) || 0);
-            row.TotGivenVatAmt = row.givenQutnAmt * (row.GivenVatPerc / 100);
-            row.givenTolAmt = row.givenQutnAmt + row.TotGivenVatAmt;
+            //row.GivenASFPerc = parseFloat(row.GivenASFPerc) || 0;
+            //row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
+            row.ReqQnty = parseFloat(row.ReqQnty) || 0;
+
+            // 1. Calculate Base Amount
+            row.givenQutnAmt = row.givenQutnPrice * row.QutnQnty;
+
+            // 2. Calculate ASF Amount
+            row.TotGivenASFAmt = row.givenQutnAmt * (row.ASFPerc / 100);
+
+            // 3. Calculate VAT based on (Base + ASF)
+            const basePlusASF = row.givenQutnAmt + row.TotGivenASFAmt;
+            row.TotGivenVatAmt = basePlusASF * (row.GivenVatPerc / 100);
+
+            // 4. Total Amount
+            row.givenTolAmt = row.givenQutnAmt + row.TotGivenASFAmt + row.TotGivenVatAmt;
 
             $scope.selectEntity(row, 'save');
         };

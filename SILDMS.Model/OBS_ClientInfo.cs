@@ -88,6 +88,8 @@ namespace SILDMS.Model
         public string MclPrice { get; set; }
         public string QutnUnit { get; set; }
         public string QutnAmt { get; set; }
+        public string ASFPerc { get; set; }
+        public string ASFAmt { get; set; }
         public string VatPerc { get; set; }
         public string VatAmt { get; set; }
         public string TolAmt { get; set; }
@@ -110,6 +112,7 @@ namespace SILDMS.Model
         public string QuotationDate { get; set; }
         public string ReqType { get; set; }
         public string VendorName { get; set; }
+ 
     }
 
     public class OBS_QutntoClientMaster

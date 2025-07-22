@@ -2653,7 +2653,7 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
     extend(scope, {
       $hasHeader: false,
       $hasSubheader: false,
-      $hasFooter: false,
+      $hAFSooter: false,
       $hasSubfooter: false,
       $hasTabs: false,
       $hasTabsTop: false
@@ -9727,7 +9727,7 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
         $scope.$watch(function() {
           return (parentScope.$hasHeader ? ' has-header' : '') +
             (parentScope.$hasSubheader ? ' has-subheader' : '') +
-            (parentScope.$hasFooter ? ' has-footer' : '') +
+            (parentScope.$hAFSooter ? ' has-footer' : '') +
             (parentScope.$hasSubfooter ? ' has-subfooter' : '') +
             (parentScope.$hasTabs ? ' has-tabs' : '') +
             (parentScope.$hasTabsTop ? ' has-tabs-top' : '');
@@ -9738,7 +9738,7 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
 
         //Only this ionContent should use these variables from parent scopes
         $scope.$hasHeader = $scope.$hasSubheader =
-          $scope.$hasFooter = $scope.$hasSubfooter =
+          $scope.$hAFSooter = $scope.$hasSubfooter =
           $scope.$hasTabs = $scope.$hasTabsTop =
           false;
         $ionicBind($scope, $attr, {
@@ -10363,11 +10363,11 @@ function headerFooterBarDirective(isHeader) {
             $scope.$watch(function() { return $element[0].className; }, function(value) {
               var isShown = value.indexOf('ng-hide') === -1;
               var isSubfooter = value.indexOf('bar-subfooter') !== -1;
-              $scope.$hasFooter = isShown && !isSubfooter;
+              $scope.$hAFSooter = isShown && !isSubfooter;
               $scope.$hasSubfooter = isShown && isSubfooter;
             });
             $scope.$on('$destroy', function() {
-              delete $scope.$hasFooter;
+              delete $scope.$hAFSooter;
               delete $scope.$hasSubfooter;
             });
             $scope.$watch('$hasTabs', function(val) {

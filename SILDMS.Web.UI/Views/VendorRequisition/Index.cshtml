@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
 }
 
-<style type="text/css">
+<style>
     body {
         font-size: 12px; /* Set global font size */
     }
@@ -1539,7 +1539,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $('#SearchVendorReqModal').modal('hide');
         };
 
-        ///////////////////////////////////////////////
 
         ////////////////////////Requsition Terms & Conditions ///////////////////////
 
@@ -1677,27 +1676,46 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         }
 
         //////////////////    SAVE    /////////////////////////////
-
-        $scope.Post = function () {           
+        $scope.Post = function () {
             if ($('#ClientName').val() == "") {
-                toastr.error("Client Name Date Required.");
+                toastr.error("Client Name Required.");
                 return;
             }
             if ($('#SubmissionDate').val() == "") {
                 toastr.error("Submission Date Required.");
                 return;
             }
-
             if ($('#RequisitionDate').val() == "") {
-                toastr.error("Requisition Date Date Required");
+                toastr.error("Requisition Date Required.");
                 return;
             }
             if ($('#LastDateofQuotation').val() == "") {
-                toastr.error("LastDateofQuotation Date Date Required");
+                toastr.error("Last Date of Quotation Required.");
                 return;
             }
             if ($('#CsStatus').val() == "") {
-                toastr.error("CS Status  Required");
+                toastr.error("CS Status Required.");
+                return;
+            }
+
+            const allItems = $scope.GridDisplayCollection;
+            const selectedItems = $scope.SelectedVendorForBiddingDisplayedCollection;
+            const vendorItemWise = $scope.VendorInfoDisplayedCollection;
+
+            // ✅ Validation 1: Must select all listed items
+            if (allItems.length !== selectedItems.length) {
+                toastr.error("Please select all listed items before save.");
+                return;
+            }
+
+            // ✅ Validation 2: Each ServiceItemID must have at least one vendor assigned
+            const missingAssignments = allItems.filter(item => {
+                return !vendorItemWise.some(vendor => vendor.ServiceItemID === item.ServiceItemID);
+            });
+
+            if (missingAssignments.length > 0) {
+                const missingNames = missingAssignments.map(m => m.ServiceItemName).join(', ');
+                toastr.error("Please assign a vendor for " + missingNames);
                 return;
             }
 
@@ -1705,47 +1723,35 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorReq.SubmissionDate = $('#SubmissionDate').val();
             $scope.VendorReq.LastDateofQuotation = $('#LastDateofQuotation').val();
 
-            $scope.VendorReq.TolalItem = $scope.GridDisplayCollection.length;
-            $scope.VendorReq.SelectedItem = $scope.SelectedVendorForBiddingDisplayedCollection.length;
+            $scope.VendorReq.TolalItem = allItems.length;
+            $scope.VendorReq.SelectedItem = selectedItems.length;
 
             $http.post('/VendorRequisition/SaveVendorRequisition',
                 {
                     vendorReq: $scope.VendorReq,
-                    vendorReqItem: $scope.SelectedVendorForBiddingDisplayedCollection,
+                    vendorReqItem: selectedItems,
                     vendorReqTerm: $scope.ReqTermGridDisplayCollection,
-                    vendorReqItemWise: $scope.VendorInfoDisplayedCollection
+                    vendorReqItemWise: vendorItemWise
                 })
                 .success(function (response) {
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
-                        $scope.clearVendorReq();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else if (response.status == "S202") {
+                    } else if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
-                        $scope.clearVendorReq();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else if (response.status == "S203") {
+                    } else if (response.status == "S203") {
                         toastr.success("Data Deleted Successfully.");
-                        $scope.clearVendorReq();
-                        $scope.loading = false;
-                        return;
-                    }
-                    else {
+                    } else {
                         toastr.error("Data Save Failed.");
-                        $scope.loading = false;
-                        return;
                     }
+                    $scope.clearVendorReq();
+                    $scope.loading = false;
                 })
                 .error(function () {
                     toastr.error("Data Save Failed.");
                     $scope.loading = false;
-                    return;
                 });
-        }
+        };
+
 
         $scope.toggleRefreshTable = function () {
             window.location.reload();

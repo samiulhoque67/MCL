@@ -44,7 +44,6 @@
         color: blue;
         font-size: 14px;
     }
-
 </style>
 
 <div class="box box-primary box-body" ng-controller="VendorQuotationCtrl">
@@ -151,7 +150,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="VendorQutnNo" name="VendorQutnNo" type="text" class="form-control" placeholder="Vendor Quotation No" ng-model="VendorQutn.VendorQutnNo" />
+                        <input id="VendorQutnNo" autocomplete="off" name="VendorQutnNo" type="text" class="form-control" placeholder="Vendor Quotation No" ng-model="VendorQutn.VendorQutnNo" />
                     </div>
                 </div>
 
@@ -281,13 +280,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
     <div id="SearchVendorQutnModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                    <!-- Modal Header -->
-                    <div style="text-align: right;">
-                        <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
-                                aria-hidden="true" style="color: #ffffff;">
-                            <i class="fa fa-remove"></i>
-                        </button>
-                    </div>
+                <!-- Modal Header -->
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
                 <div class="table-responsive" data-ng-disabled="" ng-cloak>
                     <table st-table="vendorQutnDisplayedCollection" st-safe-src="vendorQutnSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
@@ -939,7 +938,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             QutnAmt: "",
             VatPerc: "",
             VatAmt: "",
-            TolAmt: ""
+            TolAmt: "",
+            CsStatus: ""
         }
 
         $('.DatePicker').datepicker({
@@ -980,7 +980,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             QutnAmt = (row.QutnQnty * row.QutnPrice);
             row.QutnAmt = QutnAmt;
         };
-       
+
         $scope.checkVatPerc = function (row) {
             var VatAmt = 0;
             VatAmt = (row.VatPerc * row.QutnAmt) / 100;
@@ -1496,18 +1496,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 return;
             }
 
-            if ($scope.GridDisplayCollection.some(item => !item.QutnPrice && item.VatPerc <= 0)) {
-                toastr.error('Quotation Price & Vat(%) must be greater than 0.');
-                return;
-            }
-
             $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
             $scope.VendorQutn.QutnReceivedDate = $('#QutnReceivedDate').val();
 
             $http.post('/VendorQuotation/SaveVendorQuotation',
                 {
                     vendorQutn: $scope.VendorQutn,
-                    vendorQutnItem: $scope.GridDisplayCollection,
+                    vendorQutnItem: $scope.GridDisplayCollection,//$scope.vendorQutnItemArray,
                     vendorQutnTerm: $scope.ReqTermGridDisplayCollection
                 })
                 .success(function (response) {
@@ -1526,6 +1521,11 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     else if (response.status == "S203") {
                         toastr.success("Data Deleted Successfully.");
                         $scope.clearVendorQutn();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "ERROR_Duplicate") {
+                        toastr.error("This quotation no. already exists");
                         $scope.loading = false;
                         return;
                     }

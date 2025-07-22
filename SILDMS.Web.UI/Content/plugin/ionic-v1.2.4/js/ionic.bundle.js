@@ -6663,11 +6663,11 @@ ionic.views.Scroll = ionic.views.View.inherit({
         return self.__isAnimating === id;
       };
 
-      var completed = function(renderedFramesPerSecond, animationId, wasFinished) {
+      var completed = function(renderedFramesPerSecond, animationId, wAFSinished) {
         if (animationId === self.__isAnimating) {
           self.__isAnimating = false;
         }
-        if (self.__didDecelerationComplete || wasFinished) {
+        if (self.__didDecelerationComplete || wAFSinished) {
           self.__scrollingComplete();
         }
 
@@ -28157,8 +28157,8 @@ function $$RAFProvider() { //rAF
                                $window.webkitCancelAnimationFrame ||
                                $window.webkitCancelRequestAnimationFrame;
 
-    var rafSupported = !!requestAnimationFrame;
-    var rafFn = rafSupported
+    var rAFSupported = !!requestAnimationFrame;
+    var rafFn = rAFSupported
       ? function(fn) {
           var id = requestAnimationFrame(fn);
           return function() {
@@ -28172,7 +28172,7 @@ function $$RAFProvider() { //rAF
           };
         };
 
-    queueFn.supported = rafSupported;
+    queueFn.supported = rAFSupported;
 
     var cancelLastRAF;
     var taskCount = 0;
@@ -39289,8 +39289,8 @@ var ngOptionsDirective = ['$compile', '$parse', function($compile, $parse) {
     var trackBy = match[9];
     // An expression that generates the viewValue for an option if there is no label expression
     var valueFn = $parse(match[2] ? match[1] : valueName);
-    var selectAsFn = selectAs && $parse(selectAs);
-    var viewValueFn = selectAsFn || valueFn;
+    var selectAFSn = selectAs && $parse(selectAs);
+    var viewValueFn = selectAFSn || valueFn;
     var trackByFn = trackBy && $parse(trackBy);
 
     // Get the value by which we are going to track the option
@@ -52997,7 +52997,7 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
     extend(scope, {
       $hasHeader: false,
       $hasSubheader: false,
-      $hasFooter: false,
+      $hAFSooter: false,
       $hasSubfooter: false,
       $hasTabs: false,
       $hasTabsTop: false
@@ -60071,7 +60071,7 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
         $scope.$watch(function() {
           return (parentScope.$hasHeader ? ' has-header' : '') +
             (parentScope.$hasSubheader ? ' has-subheader' : '') +
-            (parentScope.$hasFooter ? ' has-footer' : '') +
+            (parentScope.$hAFSooter ? ' has-footer' : '') +
             (parentScope.$hasSubfooter ? ' has-subfooter' : '') +
             (parentScope.$hasTabs ? ' has-tabs' : '') +
             (parentScope.$hasTabsTop ? ' has-tabs-top' : '');
@@ -60082,7 +60082,7 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
 
         //Only this ionContent should use these variables from parent scopes
         $scope.$hasHeader = $scope.$hasSubheader =
-          $scope.$hasFooter = $scope.$hasSubfooter =
+          $scope.$hAFSooter = $scope.$hasSubfooter =
           $scope.$hasTabs = $scope.$hasTabsTop =
           false;
         $ionicBind($scope, $attr, {
@@ -60707,11 +60707,11 @@ function headerFooterBarDirective(isHeader) {
             $scope.$watch(function() { return $element[0].className; }, function(value) {
               var isShown = value.indexOf('ng-hide') === -1;
               var isSubfooter = value.indexOf('bar-subfooter') !== -1;
-              $scope.$hasFooter = isShown && !isSubfooter;
+              $scope.$hAFSooter = isShown && !isSubfooter;
               $scope.$hasSubfooter = isShown && isSubfooter;
             });
             $scope.$on('$destroy', function() {
-              delete $scope.$hasFooter;
+              delete $scope.$hAFSooter;
               delete $scope.$hasSubfooter;
             });
             $scope.$watch('$hasTabs', function(val) {
