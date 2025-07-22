@@ -720,7 +720,7 @@
                 items = (cbd && cbd.items) || [],
                 data = {files: []};
             $.each(items, function (index, item) {
-                var file = item.getAsFile && item.getAsFile();
+                var file = item.getAFSile && item.getAFSile();
                 if (file) {
                     data.files.push(file);
                 }

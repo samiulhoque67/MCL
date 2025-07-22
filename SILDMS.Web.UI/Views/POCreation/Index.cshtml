@@ -4,14 +4,13 @@
 <style>
 
     .dbody {
-       background-color:whitesmoke;
+        background-color: whitesmoke;
     }
 
 
     .font-weight-bold {
         font-weight: bold;
-        color:darkgreen;
-
+        color: darkgreen;
     }
 
     .w-100 {
@@ -29,6 +28,7 @@
     .justify-content-center {
         justify-content: center;
     }
+
     .link_total_bm {
         color: black;
         font-weight: bold;
@@ -76,6 +76,7 @@
         color: darkblue !important;
         font-size: 13px;
     }
+
     .tableVen-striped > tbody > tr:nth-of-type(odd) {
         background-color: rgba(23, 250, 132, 0.01);
     }
@@ -83,8 +84,6 @@
     .selected-row {
         background-color: #dff0d8; /* Light green color to indicate selection */
     }
-
-
 </style>
 
 <div class="box box-primary box-body" ng-controller="POCreationCtrl">
@@ -224,7 +223,7 @@
 
 
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-               <table st-table="CSClientDisplayedCollection" st-safe-src="CSClientList" style="width:100%;" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                <table st-table="CSClientDisplayedCollection" st-safe-src="CSClientList" style="width:100%;" class="table table-condensed table-bordered table-striped table-hover pnlView">
                     <thead>
                         <tr style="font-size: 15px;">
                             <th colspan="15" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
@@ -239,9 +238,9 @@
                             <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                         </tr>
                         @*<tr>
-            <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-            <th><input st-search="ClientReqNo" placeholder="Client Req.No" class="input-sm form-control" type="search" /></th>
-        </tr>*@
+                                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="ClientReqNo" placeholder="Client Req.No" class="input-sm form-control" type="search" /></th>
+                            </tr>*@
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in CSClientDisplayedCollection"
@@ -359,8 +358,8 @@
                                 @*<th style="text-align: left;">Action</th>*@
                             </tr>
                             @*<tr>
-            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-        </tr>*@
+                                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                                </tr>*@
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
@@ -555,7 +554,7 @@
         <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
             <div class="row">
                 <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                   <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView" style="width:100%;">
+                    <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView" style="width:100%;">
                         <thead>
                             <tr style="font-size: 15px;">
                                 <th colspan="15" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
@@ -569,8 +568,8 @@
 
                             </tr>
                             @*<tr>
-            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-        </tr>*@
+                                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                                </tr>*@
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
@@ -608,7 +607,7 @@
                         <i class="fa fa-remove"></i>
                     </button>
                 </div>
-       
+
                 <div class="table-responsive" data-ng-disabled="" ng-cloak>
                     <table st-table="SearchPOListCollection" st-safe-src="SearchPOList" style="width:100%" class="tableVen table-condensed table-bordered  table-hover pnlView">
                         <thead>
@@ -760,12 +759,12 @@
 
 
 
-            $http.post("/POCreation/GetPoCreationClientInfo/")
-                .success(function (response) {
-                    $scope.CSClientList = response.CSClientList;
-                    $scope.CSClientDisplayedCollection = [].concat($scope.CSClientList);
-                })
-                .error(function () { });
+        $http.post("/POCreation/GetPoCreationClientInfo/")
+            .success(function (response) {
+                $scope.CSClientList = response.CSClientList;
+                $scope.CSClientDisplayedCollection = [].concat($scope.CSClientList);
+            })
+            .error(function () { });
 
 
         //$scope.ClientSelect = function (row) {
@@ -890,11 +889,11 @@
             BillType: "",
             Installment: 1,
             InstalledAmount: "",
-            Category:""
+            Category: ""
         }
 
-        $scope.VendorCSInfo.Category = 'Normal'; 
-        $scope.VendorCSInfo.BillType = 'Default'; 
+        $scope.VendorCSInfo.Category = 'Normal';
+        $scope.VendorCSInfo.BillType = 'Default';
 
         $scope.VendorCSInfoItem = {
             VendorCSInfoItemID: "",
@@ -1056,7 +1055,7 @@
                     $scope.VenCSItemGridDisplayCollection.forEach(function (item, index) {
                         // Add an index field to each object
                         item.index = index;
-                  // Adding 1 to start index from 1
+                        // Adding 1 to start index from 1
                     });
                     $scope.loading = false;
                 }).error(function () {
@@ -1090,7 +1089,7 @@
                 SubmissionDate: "",
                 RequisitionDate: "",
                 Remarks: "",
-                PoAmount:""
+                PoAmount: ""
             }
 
             $scope.VendorCSInfoItem = {
@@ -1289,14 +1288,14 @@
             $http.post("/POCreation/GetVendorPOQuotationItem", {
                 VendorID: row.VendorID,
                 ClientReqID: row.ClientReqID,
-                WIInfoID:row.WIInfoID
+                WIInfoID: row.WIInfoID
             })
                 .success(function (response) {
                     $scope.VenCSItemList = response.VenCSItemList.map(function (item) {
                         item.NegoTolAmt = parseFloat(item.NegoTolAmt).toFixed(2);  // Format NegoTolAmt
                         item.NegoAmt = parseFloat(item.NegoAmt).toFixed(2);
                         item.QutnQnty = parseFloat(item.QutnQnty).toFixed(2);
-                      
+
                         return item;
                     });
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
@@ -1604,13 +1603,13 @@
 
 
 
-            //$scope.printData = function () {
-            //    var VendorSlip = document.getElementById("masterRow");
-            //    newWin = window.open("");
-            //    newWin.document.write(VendorSlip.outerHTML);
-            //    $timeout(newWin.print(), 0);
-            //    newWin.close();
-            //};
+        //$scope.printData = function () {
+        //    var VendorSlip = document.getElementById("masterRow");
+        //    newWin = window.open("");
+        //    newWin.document.write(VendorSlip.outerHTML);
+        //    $timeout(newWin.print(), 0);
+        //    newWin.close();
+        //};
 
         //$scope.printData = function () {
         //    var VendorSlip = document.getElementById("masterRow");
@@ -1677,25 +1676,25 @@
 
 
         $scope.SearchPO = function () {
-       
+
             $http.post('/POCreation/SearchPO',
 
 
 
-                )
+            )
 
-                    .success(function (response) {
-                        $scope.SearchPOList = response.SearchPOList;
-                        $scope.SearchPOListCollection = [].concat($scope.SearchPOList);
-                        console.log($scope.SearchPOListCollection);
-                        $scope.loading = false;
-                    }).error(function () {
-                        $scope.loading = false;
-                    });
+                .success(function (response) {
+                    $scope.SearchPOList = response.SearchPOList;
+                    $scope.SearchPOListCollection = [].concat($scope.SearchPOList);
+                    console.log($scope.SearchPOListCollection);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
 
-                $('#SearchModal').modal('show');
-            } 
-        
+            $('#SearchModal').modal('show');
+        }
+
 
 
 

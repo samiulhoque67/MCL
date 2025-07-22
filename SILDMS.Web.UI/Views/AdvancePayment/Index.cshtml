@@ -316,7 +316,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="PurchaseOrderAmount">Installment  Amount :</label>
+                            <label for="PurchaseOrderAmount">Installment Amount :</label>
                         </div>
                     </div>
                     <div class="col-lg-2">
@@ -836,8 +836,20 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         };
 
         function performCalculation() {
-            if ($scope.AdvanceInformmation.POInstallmentAmt && $scope.AdvanceRecom.RecommendationAmount) {
-                $scope.AdvanceRecom.RemainingAmount = $scope.AdvanceInformmation.POInstallmentAmt - $scope.AdvanceRecom.RecommendationAmount;
+            //if ($scope.AdvanceInformmation.POInstallmentAmt && $scope.AdvanceRecom.RecommendationAmount) {
+            //    $scope.AdvanceRecom.RemainingAmount = $scope.AdvanceInformmation.POInstallmentAmt - $scope.AdvanceRecom.RecommendationAmount;
+            //} else {
+            //    $scope.AdvanceRecom.RemainingAmount = 0;
+            //}
+
+            var RecomAmnt = parseFloat($scope.AdvanceRecom.RecommendationAmount) || 0;
+            var poInstallment = parseFloat($scope.AdvanceInformmation.POInstallmentAmt) || 0;
+            var demandAmount = parseFloat($scope.AdvanceInformmation.AdvanceDemandAmount) || 0;
+
+            if (poInstallment > 0 && RecomAmnt) {
+                $scope.AdvanceRecom.RemainingAmount = poInstallment - RecomAmnt;
+            } else if (poInstallment <= 0 && RecomAmnt) {
+                $scope.AdvanceRecom.RemainingAmount = demandAmount - RecomAmnt;
             } else {
                 $scope.AdvanceRecom.RemainingAmount = 0;
             }

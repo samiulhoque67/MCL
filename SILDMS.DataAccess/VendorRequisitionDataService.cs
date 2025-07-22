@@ -341,7 +341,7 @@ namespace SILDMS.DataAccess
                         VendorBinNo = reader.GetString("VendorBinNo"),
                         ContactPerson = reader.GetString("ContactPerson"),
                         ContactNumber = reader.GetString("ContactNumber"),
-                        Address = reader.GetString("Address"),
+                        Address = reader.GetString("CurrentAddress"),
                         Email = reader.GetString("Email"),
                         Status = reader.GetString("Status")
                     }).ToList();

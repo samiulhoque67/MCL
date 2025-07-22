@@ -17,7 +17,8 @@ namespace SILDMS.DataAccessInterface.Reports
         DataTable GetRptUserDetails(string UserRptID, string BillReceiveFromDate, string Status, string id, string action, out string errorNumber);
         DataTable RequisitionMovementInfo(string RequisitionNo, out string errorNumber);
         DataTable VendorCSApprevedReport(string VendorReqID, string ServiceItemID, out string errorNumber);
-        DataTable VendorRequisitionReport(string VendorReqID, string ServiceItemID, out string errorNumber);
+        DataTable VendorRequisitionReport(string VendorReqID, /*string ServiceItemID,*/ out string errorNumber);
+        DataTable VendorRequisitionTermsReport(string VendorReqID, /*string ServiceItemID,*/ out string errorNumber);
         DataTable VendorAgeingReport(string VendorID, out string errorNumber);
         DataTable ClientAgeingReport(string ClientID, out string errorNumber);
         DataTable GetRptOwnerList(string OwnerLevelID, string OwnerID, string ParentOwnerID, string Status, string id, string action, out string errorNumber);

@@ -212,7 +212,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     <table st-table="AllQuotationsCollection" st-safe-src="AllQuotationsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr style="font-size: 15px;">
-                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                               <th colspan="14" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
                                     Quotations for Approval
                                 </th>
                             </tr>
@@ -300,7 +300,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             <table st-table="GetClientReqDetailsCollection" st-safe-src="GetClientReqDetails" class="table table-condensed table-bordered table-striped table-hover pnlView">
                 <thead>
                     <tr style="font-size: 15px;">
-                        <th colspan="15" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                        <th colspan="17" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
                             Item and Service List
                         </th>
                     </tr>
@@ -317,7 +317,9 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         <th style="text-align: left;">Aprv Quoted Unit Price</th>
                         <th style="text-align: left;">C.Qut.Recom Amount (without vat)</th>
                         <th style="text-align: left;">Aprv Quoted Amount</th>
-                        <th style="text-align: left;">VAT Rate</th>
+                        <th style="text-align: left;">ASF (%)</th>
+                        <th style="text-align: left;">ASF Amount</th>
+                        <th style="text-align: left;">Vat (%)</th>
                         <th style="text-align: left;">VAT Amount</th>
                         <th style="text-align: left;">Total C.Qut.Recom Amount (with vat)</th>
                         <th style="text-align: left;">Aprv Total Amount (with vat)</th>
@@ -341,6 +343,16 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         </td>
                         <td style="width: 6%;">{{ row.ClientQutnAmt }}</td>
                         <td style="width: 6%; color: #126e0f;">{{ row.givenQutnAmt }}</td>
+                        <td style="width: 6%;">
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
+                                   type="text"
+                                   ng-readonly="pagefunction === 'viewmode'"
+                                   ng-model="row.ASFPerc"
+                                   ng-change="calculateRowFields(row)"
+                                   ng-blur="validateInput('GivenASFPerc', row)" />
+                        </td>
+                        <td style="width: 6%; text-align: right;">{{ row.TotGivenASFAmt }}</td>
+
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
                                    ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
@@ -1371,6 +1383,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     VenPrice: row.QutnPrice, //-- VenPrice
                     MclPrice: row.givenQutnPrice, //--
                     QutnAmt: row.QutnAmt, //--
+                    ASFPerc: row.ASFPerc,
+                    ASFAmt: row.TotGivenASFAmt,
                     VatPerc: row.VatPerc, //--
                     VatAmt: row.VatAmt, //--
                     TolAmt: row.givenTolAmt
@@ -1406,6 +1420,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     VenPrice: row.QutnPrice, //-- VenPrice
                     MclPrice: row.givenQutnPrice, //--
                     QutnAmt: row.QutnAmt, //--
+                    AFSPerc: row.GivenAFSPerc,
+                    VatAmt: row.TotGivenAFSAmt,
                     VatPerc: row.VatPerc, //--
                     VatAmt: row.VatAmt, //--
                     TolAmt: row.givenTolAmt
@@ -1457,11 +1473,30 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         };
 
         $scope.calculateRowFields = function (row) {
-            row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
+           /* row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
             row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
             row.givenQutnAmt = row.givenQutnPrice * (parseFloat(row.QutnQnty) || 0);
             row.TotGivenVatAmt = row.givenQutnAmt * (row.GivenVatPerc / 100);
-            row.givenTolAmt = row.givenQutnAmt + row.TotGivenVatAmt;
+            row.givenTolAmt = row.givenQutnAmt + row.TotGivenVatAmt;*/
+
+            row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
+            //row.GivenASFPerc = parseFloat(row.GivenASFPerc) || 0;
+            //row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
+            row.ReqQnty = parseFloat(row.ReqQnty) || 0;
+
+            // 1. Calculate Base Amount
+            row.givenQutnAmt = row.givenQutnPrice * row.QutnQnty;
+
+            // 2. Calculate ASF Amount
+            row.TotGivenASFAmt = row.givenQutnAmt * (row.ASFPerc / 100);
+
+            // 3. Calculate VAT based on (Base + ASF)
+            const basePlusASF = row.givenQutnAmt + row.TotGivenASFAmt;
+            row.TotGivenVatAmt = basePlusASF * (row.GivenVatPerc / 100);
+
+            // 4. Total Amount
+            row.givenTolAmt = row.givenQutnAmt + row.TotGivenASFAmt + row.TotGivenVatAmt;
+
 
             $scope.selectEntity(row, 'save');
         };

@@ -73,6 +73,7 @@ namespace SILDMS.Model
         public string VendorName { get; set; }
         public string ClientID { get; set; }
         public string ClientName { get; set; }
+        public string ClientReqID { get; set; }
         public string TermsID { get; set; }
         public string FormName { get; set; }
         public string VendorQutnNo { get; set; }

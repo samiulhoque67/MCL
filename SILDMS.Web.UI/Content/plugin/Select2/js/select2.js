@@ -5504,13 +5504,13 @@ S2.define('select2/core',[
     return this.$container.hasClass('select2-container--open');
   };
 
-  Select2.prototype.hasFocus = function () {
+  Select2.prototype.hAFSocus = function () {
     return this.$container.hasClass('select2-container--focus');
   };
 
   Select2.prototype.focus = function (data) {
     // No need to re-trigger focus events if we are already focused
-    if (this.hasFocus()) {
+    if (this.hAFSocus()) {
       return;
     }
 

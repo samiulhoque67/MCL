@@ -99,6 +99,7 @@ namespace SILDMS.DataAccess.AprvFinalBillRcvd
                         VendorID = reader.IsNull("VendorID") ? string.Empty : reader.GetString("VendorID"),
                         VendorName = reader.IsNull("VendorName") ? string.Empty : reader.GetString("VendorName"),
                         ClientID = reader.IsNull("ClientID") ? string.Empty : reader.GetString("ClientID"),
+                        ClientReqID = reader.IsNull("ClientReqID") ? string.Empty : reader.GetString("ClientReqID"),
                         ClientName = reader.IsNull("ClientName") ? string.Empty : reader.GetString("ClientName"),
                         NetPayableAmount = reader.GetToDecimal("NetPayableAmount"),
                         PoNo = reader.IsNull("PONo") ? string.Empty : reader.GetString("PONo"),
@@ -161,6 +162,7 @@ namespace SILDMS.DataAccess.AprvFinalBillRcvd
                     db.AddInParameter(dbCommandWrapper, "@PoNo", SqlDbType.NVarChar, billRecv.RequisitionNo);
                     db.AddInParameter(dbCommandWrapper, "@VendorName", SqlDbType.NVarChar, billRecv.VendorName);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, billRecv.ClientID);
+                    db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, billRecv.ClientReqID);
                     db.AddInParameter(dbCommandWrapper, "@ClientName", SqlDbType.NVarChar, billRecv.ClientName);
                     //db.AddInParameter(dbCommandWrapper, "@TermsID", SqlDbType.NVarChar, billRecv.TermsID);
                     //db.AddInParameter(dbCommandWrapper, "@FormName", SqlDbType.NVarChar, billRecv.FormName);

@@ -357,23 +357,16 @@ namespace SILDMS.DataAccess
                         DeliveryMode = reader.GetString("DeliveryMode"),
                         ReqQnty = reader.GetString("ReqQnty"),
                         ReqUnit = reader.GetString("ReqUnit"),
-
-
-
-
                         QutnQnty = reader.GetString("QutnQnty"),
                         QutnPrice = reader.GetString("QutnPrice"),
-
                         QutnUnit = reader.GetString("QutnUnit"),
                         QutnAmt = reader.GetString("QutnAmt"),
-
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
-
-                        TolAmt = reader.GetString("TolAmt")
-                        // ,
-
-                        //Status = reader.GetString("Status")
+                        TolAmt = reader.GetString("TolAmt"),
+                        WOQnty = reader.GetString("ReqQnty"),
+                        WOPrice = reader.GetString("ReqUnit"),
+                        WOAmt = reader.GetString("QutnQnty")
                     }).ToList();
                 }
             }

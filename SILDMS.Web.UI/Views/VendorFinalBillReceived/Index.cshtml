@@ -775,6 +775,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             VendorID:"",
             VendorName:"",
             ClientID: "",
+            ClientReqID: "",
             ClientName: "",
             TermsID: "",
             FormName: "",
@@ -1125,7 +1126,9 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
         $scope.toggleVendorReqSelect = function (row) {
             $scope.VendorQutn.ClientID = row.ClientID;
+            $scope.VendorQutn.ClientReqID = row.ClientReqID;
             $scope.VendorQutn.VendorID = row.VendorID;
+            $scope.VendorQutn.ClientReqID = row.ClientReqID;
          /*   $scope.VendorQutn.VendorReqID = row.VendorReqID;*/
             $scope.VendorQutn.ClientName = row.ClientName;
             $scope.VendorQutn.VendorName = row.VendorName;
@@ -1144,7 +1147,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.AdvancePaidAmount = row.AdvancClaimRcvAmt;
             $scope.VendorQutn.AdvancePaidDate = row.AdvancClaimRcvdDate;
             $scope.VendorQutn.AdvancePaidID = row.AdvancRecvID;
-            $scope.VendorQutn.RemainingAmnt = row.POInstallmentAmt - row.AdvancClaimRcvAmt;
+            if (row.POInstallmentAmt > 0) {
+                $scope.VendorQutn.RemainingAmnt = row.POInstallmentAmt - row.AdvancClaimRcvAmt;
+            }
+            else {
+                $scope.VendorQutn.RemainingAmnt = row.POAmount - row.AdvancClaimRcvAmt;
+            }
+
             $scope.VendorQutn.BillAmount = row.POInstallmentAmt;
 
             //$scope.VendorQutn.SubmissionDate = row.SubmissionDate;
@@ -1172,55 +1181,117 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         };
 
 
-        $scope.calculateAmounts = function () {
-            var billAmount = parseFloat($scope.VendorQutn.BillAmount) || 0;
-            var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
+        //$scope.calculateAmounts = function () {
+        //    var billAmount = parseFloat($scope.VendorQutn.BillAmount) || 0;
+        //    var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
 
-            // Calculate the VAT amount
-            var totalbillAmount = billAmount + $scope.VendorQutn.CommissionAmount;
-        /*    $scope.VendorQutn.VATAmount = (totalbillAmount * vatPercentage) / 100;*/
-            $scope.VendorQutn.VATAmount = parseFloat(((totalbillAmount * vatPercentage) / 100).toFixed(3));
+        //    // Calculate the VAT amount
+        //    var totalbillAmount = billAmount + $scope.VendorQutn.CommissionAmount;
+        ///*    $scope.VendorQutn.VATAmount = (totalbillAmount * vatPercentage) / 100;*/
+        //    $scope.VendorQutn.VATAmount = parseFloat(((totalbillAmount * vatPercentage) / 100).toFixed(3));
 
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorQutn.TotalBillAmount = totalbillAmount + $scope.VendorQutn.VATAmount;
-         /* $scope.VendorQutn.TotalBillAmount = billAmount;*/
-          $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount;
-        };
+        //    // Calculate the total bill amount (bill amount + VAT amount)
+        //    $scope.VendorQutn.TotalBillAmount = totalbillAmount + $scope.VendorQutn.VATAmount;
+        // /* $scope.VendorQutn.TotalBillAmount = billAmount;*/
+        //  $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount;
+        //};
 
-        $scope.calculateAmounts1 = function () {
-            var billAmount = parseFloat($scope.VendorQutn.BillAmount) || 0;
-            var vatAmount= parseFloat($scope.VendorQutn.VATAmount) || 0;
-            var commissionPercentage = parseFloat($scope.VendorQutn.CommissionPercentage1) || 0;
+        //$scope.calculateAmounts1 = function () {
+        //    var billAmount = parseFloat($scope.VendorQutn.BillAmount) || 0;
+        //    var vatAmount= parseFloat($scope.VendorQutn.VATAmount) || 0;
+        //    var commissionPercentage = parseFloat($scope.VendorQutn.CommissionPercentage1) || 0;
 
-            // Calculate the VAT amount
-            var totalbillAmount = billAmount + $scope.VendorQutn.CommissionAmount + $scope.VendorQutn.VATAmount;
-            var totalbillwithoutvat = billAmount + $scope.VendorQutn.CommissionAmount ;
-            /*    $scope.VendorQutn.VATAmount = (totalbillAmount * vatPercentage) / 100;*/
-            $scope.VendorQutn.CommissionAmount1 = parseFloat(((totalbillwithoutvat * commissionPercentage) / 100).toFixed(3));
+        //    // Calculate the VAT amount
+        //    var totalbillAmount = billAmount + $scope.VendorQutn.CommissionAmount + $scope.VendorQutn.VATAmount;
+        //    var totalbillwithoutvat = billAmount + $scope.VendorQutn.CommissionAmount ;
+        //    /*    $scope.VendorQutn.VATAmount = (totalbillAmount * vatPercentage) / 100;*/
+        //    $scope.VendorQutn.CommissionAmount1 = parseFloat(((totalbillwithoutvat * commissionPercentage) / 100).toFixed(3));
 
-            // Calculate the total bill amount (bill amount + VAT amount)
-            $scope.VendorQutn.TotalBillAmount = totalbillAmount - $scope.VendorQutn.CommissionAmount1;
-            /* $scope.VendorQutn.TotalBillAmount = billAmount;*/
-            $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount;
-        };
+        //    // Calculate the total bill amount (bill amount + VAT amount)
+        //    $scope.VendorQutn.TotalBillAmount = totalbillAmount - $scope.VendorQutn.CommissionAmount1;
+        //    /* $scope.VendorQutn.TotalBillAmount = billAmount;*/
+        //    $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount;
+        //};
 
 
 
        
-        $scope.calculateCommission = function () {
+        //$scope.calculateCommission = function () {
          
+        //    var billAmount = parseFloat($scope.VendorQutn.BillAmount) || 0;
+        //    var installmentAmount = parseFloat($scope.VendorQutn.POInstallmentAmt) || 0;
+        //    var cmsnPercentage = parseFloat($scope.VendorQutn.CommissionPercentage) || 0;
+
+        //    // Calculate the VAT amount
+        //    $scope.VendorQutn.CommissionAmount = parseFloat(((installmentAmount * cmsnPercentage) / 100).toFixed(3));
+        //    $scope.VendorQutn.TotalBillAmount = parseFloat(billAmount + $scope.VendorQutn.CommissionAmount).toFixed(3);
+        //    // Calculate the total bill amount (bill amount + VAT amount)
+        //    $scope.VendorQutn.NetPayableAmount = billAmount + $scope.VendorQutn.CommissionAmount;
+        //};
+
+        $scope.calculateAmounts = function () {
+            var billAmount = parseFloat($scope.VendorQutn.BillAmount) || 0;
+            var vatPercentage = parseFloat($scope.VendorQutn.VATPercentage) || 0;
+            var commissionAmount = parseFloat($scope.VendorQutn.CommissionAmount) || 0;
+
+            // Calculate total bill amount before VAT
+            var totalBeforeVAT = billAmount + commissionAmount;
+
+            // VAT calculation
+            $scope.VendorQutn.VATAmount = parseFloat(((totalBeforeVAT * vatPercentage) / 100).toFixed(3));
+
+            // Final total and net payable
+            $scope.VendorQutn.TotalBillAmount = totalBeforeVAT + $scope.VendorQutn.VATAmount;
+            $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount;
+
+            // Remaining amount logic
+            var advanceClaim = parseFloat($scope.VendorQutn.AdvancClaimRcvAmt) || 0;
+            if ($scope.VendorQutn.POInstallmentAmt > 0) {
+                $scope.VendorQutn.RemainingAmnt = $scope.VendorQutn.POInstallmentAmt - advanceClaim;
+            } else {
+                $scope.VendorQutn.RemainingAmnt = $scope.VendorQutn.POAmount - advanceClaim;
+            }
+        };
+
+
+        $scope.calculateAmounts1 = function () {
+            var billAmount = parseFloat($scope.VendorQutn.BillAmount) || 0;
+            var vatAmount = parseFloat($scope.VendorQutn.VATAmount) || 0;
+            var commissionAmount = parseFloat($scope.VendorQutn.CommissionAmount) || 0;
+            var commissionPercentage1 = parseFloat($scope.VendorQutn.CommissionPercentage1) || 0;
+
+            var totalWithoutVAT = billAmount + commissionAmount;
+
+            $scope.VendorQutn.CommissionAmount1 = parseFloat(((totalWithoutVAT * commissionPercentage1) / 100).toFixed(3));
+
+            // Total with VAT minus second-level commission
+            var totalWithVAT = totalWithoutVAT + vatAmount;
+            $scope.VendorQutn.TotalBillAmount = totalWithVAT - $scope.VendorQutn.CommissionAmount1;
+            $scope.VendorQutn.NetPayableAmount = $scope.VendorQutn.TotalBillAmount;
+
+            // You may optionally apply RemainingAmnt logic here too if needed
+        };
+
+
+        $scope.calculateCommission = function () {
             var billAmount = parseFloat($scope.VendorQutn.BillAmount) || 0;
             var installmentAmount = parseFloat($scope.VendorQutn.POInstallmentAmt) || 0;
             var cmsnPercentage = parseFloat($scope.VendorQutn.CommissionPercentage) || 0;
 
-            // Calculate the VAT amount
+            // Commission based on installment
             $scope.VendorQutn.CommissionAmount = parseFloat(((installmentAmount * cmsnPercentage) / 100).toFixed(3));
+
             $scope.VendorQutn.TotalBillAmount = parseFloat(billAmount + $scope.VendorQutn.CommissionAmount).toFixed(3);
-            // Calculate the total bill amount (bill amount + VAT amount)
             $scope.VendorQutn.NetPayableAmount = billAmount + $scope.VendorQutn.CommissionAmount;
+
+            // Remaining amount logic
+            var advanceClaim = parseFloat($scope.VendorQutn.AdvancClaimRcvAmt) || 0;
+            if (installmentAmount > 0) {
+                $scope.VendorQutn.RemainingAmnt = installmentAmount - advanceClaim;
+            } else {
+                $scope.VendorQutn.RemainingAmnt = ($scope.VendorQutn.POAmount || 0) - advanceClaim;
+            }
         };
-
-
 
 
         ///////////////////////Save/Update Master///////////////////////
@@ -1273,9 +1344,9 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.VATPercentage = tableRow.VATPercentage;
             $scope.VendorQutn.VATAmount = tableRow.VATAmount;
             $scope.VendorQutn.CommissionPercentage = tableRow.CommissionPercentage;
-            $scope.VendorQutn.CommissionPercentage = tableRow.CommissionPercentage1;
+            $scope.VendorQutn.CommissionPercentage1 = tableRow.CommissionPercentage1;
             $scope.VendorQutn.CommissionAmount = tableRow.CommissionAmount;
-            $scope.VendorQutn.CommissionAmount = tableRow.CommissionAmount1;
+            $scope.VendorQutn.CommissionAmount1 = tableRow.CommissionAmount1;
             $scope.VendorQutn.BillAmount = tableRow.BillAmount;
             $scope.VendorQutn.TotalBillAmount = tableRow.TotalBillAmount;
             $scope.VendorQutn.NetPayableAmount = tableRow.NetPayableAmount;
@@ -1288,6 +1359,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.ContractNo = tableRow.ContractNo;
 
             $scope.VendorQutn.POInstallmentAmt = tableRow.POInstallmentAmt;
+            $scope.VendorQutn.RemainingAmnt = tableRow.POInstallmentAmt - tableRow.AdvancePaidAmount;
             $scope.VendorQutn.BillType = tableRow.BillType;
             $scope.VendorQutn.BillCategory = tableRow.BillCategory;
         
@@ -1479,6 +1551,28 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.BillReceiveDate = $('#BillReceiveDate').val();
             
 
+                if (files.length === 0) {
+                    toastr.error("Please select a file to upload.");
+                    return;
+                }
+
+                var file = files[0];
+                var ext = file.name.split('.').pop().toLowerCase();
+
+                var maxSizeInMB = 2;
+                if (file.size > maxSizeInMB * 1024 * 1024) {
+                    toastr.error("File size must be 2 MB or less.");
+                    return;
+                }
+
+                // Validate file extension
+                if (ext !== "pdf") {
+                    toastr.error("Please upload PDF files only.");
+                    return;
+                }
+            }
+            
+
             $http.post('/VendorFinalBillReceived/SaveVendorFinalBill',
                 {
                     BillRecv: $scope.VendorQutn,
@@ -1530,28 +1624,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         $scope.SaveDocument = function (file,VendrFinalBilRcvdID) {
             $scope.DocCrudStatus = "I";
 
-            var fileUpload = document.getElementById("FileUpload1");
-            var files = fileUpload.files;
-
-            if (files.length === 0) {
-                toastr.error("Please select a file to upload.");
-                return;
-            }
-
-            var file = files[0];
-            var ext = file.name.split('.').pop().toLowerCase();
-
-            var maxSizeInMB = 2;
-            if (file.size > maxSizeInMB * 1024 * 1024) {
-                toastr.error("File size must be 2 MB or less.");
-                return;
-            }
-
-            // Validate file extension
-            if (ext !== "pdf") {
-                toastr.error("Please upload PDF files only.");
-                return;
-            }
 
             $scope.loading = true; // Show loading indicator
 

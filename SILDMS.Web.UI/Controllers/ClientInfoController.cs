@@ -54,11 +54,11 @@ namespace SILDMS.Web.UI.Controllers
         [HttpPost]
         [Authorize]
         [SILLogAttribute]
-        public async Task<dynamic> SaveClientInfoMst(OBS_ClientInfo _modelClientInfoMst)
+        public async Task<dynamic> SaveClientInfoMst(OBS_ClientInfo _modelClientInfoMst, string ClientAddressID)
         {
             _modelClientInfoMst.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
-            status = _clientInfoService.SaveClientInfoMst(_modelClientInfoMst);
+            status = _clientInfoService.SaveClientInfoMst(_modelClientInfoMst, ClientAddressID);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
             //return Json(new { ResponseCode = status, message }, JsonRequestBehavior.AllowGet);
         }
@@ -67,8 +67,18 @@ namespace SILDMS.Web.UI.Controllers
         {
             _modelClientAddress.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
+            string ClientAddressID = string.Empty;//, message = string.Empty;
             status = _clientInfoService.SaveClientAddress(_modelClientAddress);
-            return Json(new { status }, JsonRequestBehavior.AllowGet);
+
+            if (status != string.Empty)
+            {
+                string[] statusarr = status.Split(',');
+                ClientAddressID = statusarr[1];
+                status = statusarr[0];
+            }
+            return Json(new { status, ClientAddressID }, JsonRequestBehavior.AllowGet);
+
+           // return Json(new { status }, JsonRequestBehavior.AllowGet);
             //return Json(new { ResponseCode = status, message }, JsonRequestBehavior.AllowGet);
         }
 
@@ -98,6 +108,15 @@ namespace SILDMS.Web.UI.Controllers
             var ClientAddressList = new List<OBS_ClientAddressInfo>();
             await Task.Run(() => _clientInfoService.GetClientAddressList(ClientID, out ClientAddressList));
             var result = Json(new { ClientAddressList, msg = "ClientInfoSearchList are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
+        }
+
+        public async Task<dynamic> GetClientAddressList_beforeSave(string ClientAddressID)
+        {
+            var ClientAddressList_beforeSave = new List<OBS_ClientAddressInfo>();
+            await Task.Run(() => _clientInfoService.GetClientAddressList_beforeSave(ClientAddressID, out ClientAddressList_beforeSave));
+            var result = Json(new { ClientAddressList_beforeSave, msg = "ClientInfoSearchList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }

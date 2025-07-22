@@ -58,6 +58,15 @@
                         <i class="fa fa-refresh" style="padding-right: 5px;"></i> Refresh
                     </button>
                 </div>
+
+
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button class="button-custom btn-primary" type="button" ng-click="SearchSaveClients()" ng-disabled="btnSearch">
+                        <i class="fa fa-search" style="padding-right: 5px;"></i> Search
+                    </button>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -320,6 +329,108 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
     </div>
 
 
+    <div id="AllSavedAdvanceClaimRecom" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body table-responsive" data-ng-disabled="" ng-cloak>
+                    <table st-table="AllSavedAdvanceClaimCollection" st-safe-src="AllSavedAdvanceClaimList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Available Work Order
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                                <!-- Columns with sorting -->
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('ClientCode')">
+                                    Client Code
+                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientName')">
+                                    Client Name
+                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientReqNo')">
+                                    Requisition No
+                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Requisition Date
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Quotation Approve ID
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Quotation Approve Date
+                                </th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">
+                                    Action
+                                </th>
+                            </tr>
+
+                            <!-- Search Fields -->
+                            <tr>
+                                <th>
+                                    <input st-search="ClientCode" placeholder="Search Client Code" class="input-sm form-control" type="search" />
+                                </th>
+                                <th>
+                                    <input st-search="ClientName" placeholder="Search Client Name" class="input-sm form-control" type="search" />
+                                </th>
+                                <th>
+                                    <input st-search="ClientReqNo" placeholder="Search Req No" class="input-sm form-control" type="search" />
+                                </th>
+                                <th></th> <!-- No search for dates -->
+                                <th></th> <!-- No search for Quotation No -->
+                                <th></th> <!-- No search for Quotation Date -->
+                                <th></th> <!-- No search for Quotation Amount -->
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in AllSavedAdvanceClaimList | orderBy:'IsBack':true">
+                                <td class="text-center">{{row.ClientCode}}</td>
+                                <td class="text-center">{{row.ClientName}}</td>
+                                <td class="text-center">{{row.ClientReqNo}}</td>
+                                <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">{{row.ClientQutnAprvID}}</td>
+                                <td class="text-center">{{row.ClientAdvanceClaimDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="col-lg-1 text-center">
+                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-click="AllSavedAdvanceClaim(row)">Select</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination and No Item Message -->
+                    <div ng-if="PagingInfo.totalItems > 0" class="text-center">
+                        <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" force-ellipses="true" ng-change="selectPageList()"></ul>
+                    </div>
+
+                    <div ng-if="PagingInfo.totalItems > 0 && searchType==='MasterSearch'" class="text-center">
+                        <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" force-ellipses="true" ng-change="selectPageList()"></ul>
+                    </div>
+
+                    <div ng-if="PagingInfo.totalItems <= 0" class="text-center">
+                        NO ITEM
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     @*</div>*@
     <div class="row">
         <div class="col-md-12">
@@ -359,7 +470,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     </div>
                     <div class="col-sm-2 col-md-2 col-lg-2">
                         <div class="form-group">
-                            <input  style="text-align:right" id="WorkOrderAmount" name="WorkOrderAmount" type="text" ng-model="AdvanceInformmation.WorkOrderAmount" readonly class="form-control" />
+                            <input style="text-align:right" id="WorkOrderAmount" name="WorkOrderAmount" type="text" ng-model="AdvanceInformmation.WorkOrderAmount" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -398,7 +509,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input  style="text-align:right" id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.WOInstallmentAmt" readonly class="form-control" />
+                            <input style="text-align:right" id="PurchaseOrderAmount" name="PurchaseOrderAmount" type="text" data-ng-model="AdvanceInformmation.WOInstallmentAmt" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -410,7 +521,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input  style="text-align:right" id="AdvanceInstallmentNo" name="AdvanceInstallmentNo" type="text" data-ng-model="AdvanceInformmation.WOInstallmentNo" readonly class="form-control" />
+                            <input style="text-align:right" id="AdvanceInstallmentNo" name="AdvanceInstallmentNo" type="text" data-ng-model="AdvanceInformmation.WOInstallmentNo" readonly class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -424,7 +535,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input style="text-align:right"  id="AdvanceClaimAmount" name="AdvanceClaimAmount" type="text" ng-model="AdvanceInformmation.AdvanceClaimAmount" readonly class="form-control" />
+                            <input style="text-align:right" id="AdvanceClaimAmount" name="AdvanceClaimAmount" type="text" ng-model="AdvanceInformmation.AdvanceClaimAmount" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -437,7 +548,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input style="text-align:right"  id="RemainingAmount" name="RemainingAmount" type="text" ng-model="AdvanceInformmation.RemainingAmount"
+                            <input style="text-align:right" id="RemainingAmount" name="RemainingAmount" type="text" ng-model="AdvanceInformmation.RemainingAmount"
                                    readonly class="form-control" />
                         </div>
                     </div>
@@ -517,7 +628,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input style="text-align:right" id="RecommendedAmount" autocomplete="off" name="RecommendedAmount" type="text" ng-model="AdvanceRecom.AdvanceClaimAmount" class="form-control" />
+                            <input ng-readonly="onlyView == true" style="text-align:right" id="RecommendedAmount" autocomplete="off" name="RecommendedAmount" type="text" ng-model="AdvanceRecom.AdvanceClaimAmount" class="form-control" />
                         </div>
                     </div>
 
@@ -529,7 +640,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input  style="text-align:right" id="AdvanceClaimAmount" name="AdvanceClaimAmount" type="text" ng-model="AdvanceInformmation.AdvanceClaimAmount" readonly class="form-control" />
+                            <input style="text-align:right" id="AdvanceClaimAmount" name="AdvanceClaimAmount" type="text" ng-model="AdvanceInformmation.AdvanceClaimAmount" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -560,7 +671,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="RecommenedDate" name="RecommenedDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                            <input ng-disabled="onlyView == true" id="RecommenedDate" name="RecommenedDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
                                    ng-model="AdvanceRecom.RecommenedDate" style=" background-color:#ffffff; " />
 
                         </div>
@@ -576,7 +687,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         </div>
                     </div>
                     <div class="col-lg-2">
-                        <select data-ng-model="AdvanceRecom.Operation" class="form-control">
+                        <select ng-disabled="onlyView == true" data-ng-model="AdvanceRecom.Operation" class="form-control">
                             <option value="">-- None --</option>
                             <option value="Rec">Recommended</option>
                             <option value="Bck">Back</option>
@@ -595,7 +706,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <input id="RecommenedNote" name="RecommenedNote" type="text" ng-model="AdvanceRecom.Note" class="form-control" />
+                            <input ng-readonly="onlyView == true"  id="RecommenedNote" name="RecommenedNote" type="text" ng-model="AdvanceRecom.Note" class="form-control" />
                         </div>
                     </div>
 
@@ -740,6 +851,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         document.getElementById("AdvanceClaimDate").value = `${year}-${month}-${day}`
 
         $scope.SearchAvailableClients = function () {
+            $scope.onlyView = false;
             $scope.Client = "";
             $http.post('/AdvanceClaimRecom/AllAvailableClients', {
                 page: $scope.PagingInfo.page,
@@ -857,6 +969,79 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 $scope.loading = false;
             });
         };
+
+        $scope.AllSavedAdvanceClaim = function (row) {
+            $('#AllSavedAdvanceClaimRecom').modal('hide');
+            $scope.loading = true;
+
+            $scope.WorkOrder.WorkOrderNo = row.WONo;
+
+            $http.post('/QuotationToClient/AvailableClientDetailInfo', {
+                ClientID: row.ClientID, ClientReqID: row.ClientReqID
+            }).success(function (response) {
+                $scope.ClientDetails = response.ClientDetails;
+
+                $scope.Client = {
+                    ClientName: $scope.ClientDetails[0].ClientName,
+                    ClientRequisitionNo: $scope.ClientDetails[0].ClientReqNo,
+                    ClientRequisitionDate: $scope.ClientDetails[0].RequisitionDate,
+                    ContactPerson: $scope.ClientDetails[0].ContactPerson,
+                    ContactNumber: $scope.ClientDetails[0].ContactNumber,
+                    ContactTIN: $scope.ClientDetails[0].ClientTinNo,
+                    ContactBIN: $scope.ClientDetails[0].ClientBinNo,
+                    ContactAddress: $scope.ClientDetails[0].Address
+                };
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+            });
+
+            $scope.AllSavedAdvanceClaimDetails(row.ClientID, row.WOInfoID, row.AdvancClaimRecmID);
+
+        };
+
+        $scope.onlyView = false;
+        $scope.AllSavedAdvanceClaimDetails = function (ClientID, WOInfoID, AdvancClaimRecmID) {
+            $scope.onlyView = true;
+            $http.post('/AdvanceClaimRecom/AllSavedAdvanceClaimDetails', {
+                ClientID: ClientID,
+                WOInfoID: WOInfoID,
+                AdvancClaimRecmID: AdvancClaimRecmID
+            }).success(function (response) {
+                $scope.WODetails = response.WODetails;
+
+                $scope.AdvanceInformmation = {
+                    ClientID: $scope.WODetails[0].ClientID,
+                    WorkOrderAmount: $scope.WODetails[0].WOAmt,
+                    ClientQutnAprvID: $scope.WODetails[0].ClientQutnAprvID,
+                    AdvanceClaimAmount: $scope.WODetails[0].AdvancClaimAmt,
+                    RemainingAmount: $scope.WODetails[0].RemainingAmt,
+                    AdvancClaimID: $scope.WODetails[0].AdvancClaimID,
+                    AdvanceClaimDate: $scope.WODetails[0].AdvancClaimDate,
+                    AdvancClaimNote: $scope.WODetails[0].AdvancClaimNote,
+
+                    WOInstallmentAmt: $scope.WODetails[0].WOInstallmentAmt,
+                    WOInstallmentNo: $scope.WODetails[0].WOInstallmentNo,
+                    Receivedby: $scope.WODetails[0].Receivedby
+                };
+
+                $scope.AdvanceRecom = {
+                    ClientID: $scope.WODetails[0].ClientID,
+                    WOInfoID: $scope.WODetails[0].WOInfoID,
+                    ClientQutnAprvID: $scope.WODetails[0].AdvancClaimID,
+                    RecommenedDate: $scope.WODetails[0].AdvancClimRecmDate,
+                    AdvanceClaimAmount: $scope.WODetails[0].AdvancClaimAmt,
+                    Operation: $scope.WODetails[0].Operation,
+                    Note: $scope.WODetails[0].Note,
+
+                };
+
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+            });
+        };
+
 
         $scope.calculateRemainingAmount = function (event) {
             if (event.keyCode === 13 || event.keyCode === 9) {
@@ -1011,6 +1196,29 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             }
         };
 
+        $scope.searchType = "";
+        //master search
+        $scope.SearchSaveClients = function () {
+            $scope.onlyView = false;
+            $scope.Client = "";
+            $scope.searchType = "MasterSearch";
+            $http.post('/AdvanceClaimRecom/AllSavedAdvanceClaim', {
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack"
+
+            }).success(function (response) {
+                $scope.AllSavedAdvanceClaimList = response.AllAvailableClientsList;
+                $scope.AllSavedAdvanceClaimCollection = [].concat($scope.AllSavedAdvanceClaimList);
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+            });
+            $('#AllSavedAdvanceClaimRecom').modal('show');
+        };
 
     }
     )

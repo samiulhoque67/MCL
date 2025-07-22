@@ -74,9 +74,19 @@ namespace SILDMS.Service.Reports
             return ValidationResult.Success;
         }
 
-        public ValidationResult VendorRequisitionReport(string VendorReqID, string VendorID, out DataTable dt)
+        public ValidationResult VendorRequisitionReport(string VendorReqID,/* string VendorID,*/ out DataTable dt)
         {
-            dt = _reportDataService.VendorRequisitionReport(VendorReqID, VendorID, out _errorNumber);
+            dt = _reportDataService.VendorRequisitionReport(VendorReqID, /*VendorID,*/ out _errorNumber);
+            if (_errorNumber.Length > 0)
+            {
+                return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult VendorRequisitionTermsReport(string VendorReqID,/* string VendorID,*/ out DataTable dt1)
+        {
+            dt1 = _reportDataService.VendorRequisitionTermsReport(VendorReqID, /*VendorID,*/ out _errorNumber);
             if (_errorNumber.Length > 0)
             {
                 return new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber));

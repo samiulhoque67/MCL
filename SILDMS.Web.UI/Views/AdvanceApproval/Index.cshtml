@@ -946,11 +946,24 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         };
 
         function performCalculation() {
-            if ($scope.AdvanceRecom.RecommendationAmount && $scope.AdvanceInformmation0.POInstallmentAmt) {
-                $scope.AdvanceRecom.RemainingAmount = $scope.AdvanceInformmation0.POInstallmentAmt - $scope.AdvanceRecom.RecommendationAmount;
+            //if ($scope.AdvanceRecom.RecommendationAmount && $scope.AdvanceInformmation0.POInstallmentAmt) {
+            //    $scope.AdvanceRecom.RemainingAmount = $scope.AdvanceInformmation0.POInstallmentAmt - $scope.AdvanceRecom.RecommendationAmount;
+            //} else {
+            //    $scope.AdvanceRecom.RemainingAmount = 0;
+            //}
+
+            var RecomAmnt = parseFloat($scope.AdvanceRecom.RecommendationAmount) || 0;
+            var poInstallment = parseFloat($scope.AdvanceInformmation0.POInstallmentAmt) || 0;
+            var demandAmount = parseFloat($scope.AdvanceInformmation0.AdvanceDemandAmount) || 0;
+
+            if (poInstallment > 0 && RecomAmnt) {
+                $scope.AdvanceRecom.RemainingAmount = poInstallment - RecomAmnt;
+            } else if (poInstallment <= 0 && RecomAmnt) {
+                $scope.AdvanceRecom.RemainingAmount = demandAmount - RecomAmnt;
             } else {
                 $scope.AdvanceRecom.RemainingAmount = 0;
             }
+
         }
 
         $scope.$watchGroup(['AdvanceRecom.PurchaseOrderAmount', 'AdvanceRecom.RecommendationAmount'], function (newValues, oldValues) {
