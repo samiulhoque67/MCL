@@ -1752,29 +1752,7 @@
                     return;
                 }
 
-                if ($scope.selectedVendors.length > 1) {
-                    let totalNegoQty = 0;
-                    let individualQty = parseFloat($scope.selectedVendors[0].NegoQty);
-
-                    for (let i = 0; i < $scope.selectedVendors.length; i++) {
-                        let currentQty = parseFloat($scope.selectedVendors[i].NegoQty);
-
-                        // Check if this vendor's NegoQty is same as the first one
-                        if (currentQty !== individualQty) {
-                            toastr.error("Either select only one vendor or divide the Request Quantity among them equally");
-                            return;
-                        }
-
-                        totalNegoQty += currentQty;
-                    }
-
-                    let reqQnty = parseFloat($scope.selectedVendors[0].ReqQnty); // assuming all have the same ReqQnty
-                    if (totalNegoQty !== reqQnty) {
-                        toastr.error("Either select only one vendor or divide the Request Quantity among them equally");
-                        return;
-                    }
-                }
-
+              
                
                 $http.post('/VendorCSInfo/SaveVendorCSInfo',
                     {
