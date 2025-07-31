@@ -1088,7 +1088,7 @@
                 });
             }
 
-            else if (action === 'view' || 'edit') {
+            else if (action === 'view' || action === 'edit') {
 
                 $scope.ReqType = row.ReqType;
 
@@ -1147,7 +1147,7 @@
                 });
             }
 
-            else if (action === 'view' || 'edit') {
+            else if (action === 'view' || action === 'edit') {
                 $http.post('/QuotationRecommendation/GetClientReqDataInfo', {
                     ClientID: ClientID, ClientReqID: ClientReqID, ClientQutnID: ClientQutnID
                 }).success(function (response) {
@@ -1240,7 +1240,7 @@
                 $scope.showTermsItem = $scope.selectedRows.length > 0;
             }
 
-            else if (action === 'view' || 'edit') {
+            else if (action === 'view' || action === 'edit') {
                 $scope.MasterData = {
                     ClientID: row.ClientID,
                     ClientReqID: row.ClientReqID,
@@ -1297,7 +1297,7 @@
                     .error(function () { });
             }
 
-            else if (action === 'view' || 'edit') {
+            else if (action === 'view' || action === 'edit') {
                 $http.post('/QuotationRecommendation/GetVendorTermList',
                     { ClientQuotationID: TempID, ClientReqID: ClientReqID, ReqType: $scope.ReqType })
                     .success(function (response) {
@@ -1318,8 +1318,6 @@
 
         $scope.calculateRowFields = function (row) {
             row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
-            //row.GivenASFPerc = parseFloat(row.GivenASFPerc) || 0;
-            //row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
             row.ReqQnty = parseFloat(row.ReqQnty) || 0;
 
             // 1. Calculate Base Amount
@@ -1369,7 +1367,8 @@
             }
         };
 
-        
+
+                  
         $scope.SaveQuotToClient = function (action) {
 
             $scope.MasterData.BriefingDate = $('#BriefingDate').val();
@@ -1377,6 +1376,7 @@
             // Extract QV and QC only (without numbers)
             let matches = $scope.ReqType ? $scope.ReqType.match(/\b(QV|QC)\b/g) : [];
             let cleanedReqType = matches ? matches.join(', ') : '';
+
 
             $http.post('/QuotationToClient/SaveQuotToClient', {
                 action: action,
