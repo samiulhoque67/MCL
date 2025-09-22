@@ -1,0 +1,360 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+
+<div class="box box-primary box-body" ng-controller="/MonthWiseVendorFinalBillPayment" data-ng-init="init()">
+    @using (Html.BeginForm("MonthWiseVendorFinalBillPayment", "../Reports", System.Web.Mvc.FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+    {
+        <!-- box-header -->
+        <div class="box-header with-border bg-light-blue-gradient" style="height: 38px;">
+            <h3 class="box-title" style="font-family: math; font-weight: 500;">Month wise Vendor Payment History</h3>
+
+            <div class="box-tools pull-right">
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <button ng-disabled="btnPreview" type="submit" id="btnPreview" data-ng-click="RequiredCheck($event)" name="ButtonType" value="Preview" class="button-custom pull-right">
+                            <i class="fa fa-print"></i>View
+                        </button>
+                    </div>
+
+                    <div class="col-lg-4">
+                    </div>
+                    
+                    <div class="col-lg-2">
+                        <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable()" class="button-custom pull-right" ng-disabled="loading">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <label>Vendor</label>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <input ng-show="false" type="text" id="VendorID" name="VendorID" class="form-control" data-ng-model="Vendor.VendorID" />
+                        <input type="text" id="txtVendorName" name="VendorNameDisplay" class="form-control" data-ng-model="Vendor.VendorName" readonly required placeholder="" />
+                    </div>
+                </div>
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                    <div class="input-group">
+                        <input class="btn btn-flat btn-default" ng-click="ShowInvoicingPartyList()" value="Search" style="width:80px;" ng-disabled="disable">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="position:relative;top:10px">
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <label>Year & Month</label>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <input id="txtCertificateFromDate" name="CertificateFromDate" type="text" autocomplete="off" class="DatePicker1 form-control" placeholder="MM/YYYY" ng-disabled="disable" required
+                               data-ng-model="vmTDSVDSCertificateInfo.CertificateFromDate" style="background:#fff" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        /*vendorInfoModal*/
+
+
+        <div id="SearchModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body table-responsive">
+                        <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
+
+                        <div class="row">
+                            <table st-table="ListedVendorsCollection" st-safe-src="ListedVendorsList" style="width:100%" class="tableVen table-condensed table-bordered table-hover" style="font-size:smaller">
+                                <thead>
+                                    <tr style="font-size: 15px;">
+                                        <th colspan="11" style="text-align: left; color: white; font-weight: bold">Vendors</th>
+                                    </tr>
+                                    <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
+                                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('VendorCode')">
+                                            Vendor Code
+                                            <span ng-show="PagingInfo.sortBy == 'VendorCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                            <span ng-show="PagingInfo.sortBy == 'VendorCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                        </th>
+                                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('VendorName')">
+                                            Vendor Name
+                                            <span ng-show="PagingInfo.sortBy == 'VendorName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                            <span ng-show="PagingInfo.sortBy == 'VendorName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                        </th>
+                                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('VendorBussinessName')">
+                                            Vendor Business Name
+                                            <span ng-show="PagingInfo.sortBy == 'VendorBussinessName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                            <span ng-show="PagingInfo.sortBy == 'VendorBussinessName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                        </th>
+                                        <th>
+                                            Action
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <input st-search="VendorCode" placeholder="Vendor Code" class="input-sm form-control" type="search" />
+                                        </th>
+                                        <th>
+                                            <input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" />
+                                        </th>
+                                        <th>
+                                            <input st-search="VendorBussinessName" placeholder="Vendor Bussiness Name" class="input-sm form-control" type="search" />
+
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="row in ListedVendorsCollection | orderBy:'IsBack':true">
+                                        <td class="text-center">{{row.VendorCode}}</td>
+                                        <td class="text-center">{{row.VendorName}}</td>
+                                        <td class="text-center">{{row.VendorBussinessName}}</td>
+                                        <td class="col-lg-1 text-center">
+                                            <button type="button" id="btnSelect" ng-click="toggleSelectVendor(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
+                                                <span class="fa fa-search-plus"> View</span>
+                                            </button>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-if="PagingInfo.totalItems > 0" class="text-center">
+                            <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" force-ellipses="true" ng-change="selectPageList()"></ul>
+                        </div>
+                        <div ng-if="PagingInfo.totalItems <= 0" class="text-center">
+                            NO ITEM
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-flat btn-default" data-dismiss="modal" ng-click="ResetSearchModel()">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+
+<script type="text/javascript">
+    
+    app.controller('/MonthWiseVendorFinalBillPayment', function ($scope, $http) {
+
+        $('.DatePicker1').datepicker({
+            format: "mm/yyyy",
+            viewMode: 1,
+            minViewMode: 1,
+            autoclose: true
+        }).on('changeDate', function (ev) {
+            var fromDate = ev.date;
+            var CertifiFromDate = new Date(fromDate);
+            var CertifiFromMonth = (CertifiFromDate.getMonth() + 1).toString().padStart(2, '0');
+            var CertifiFromYear = CertifiFromDate.getFullYear();
+            var formattedDate = CertifiFromMonth + '/' + CertifiFromYear;
+
+            var today = new Date();
+            var todayMonth = (today.getMonth() + 1);
+            var todayYear = today.getFullYear();
+
+            if ((CertifiFromMonth > todayMonth) && (CertifiFromYear == todayYear)) {
+                $('#txtCertificateFromDate').val('');
+                toastr.error("CertificateFromDate should not be greater than or equal to the system month.");
+            } else if (CertifiFromYear > todayYear) {
+                $('#txtCertificateFromDate').val('');
+                toastr.error("CertificateFromDate should not be greater than or equal to the system month.");
+            } else {
+                var scope = angular.element($('#txtCertificateFromDate')).scope();
+                scope.$apply(function () {
+                    scope.vmTDSVDSCertificateInfo.CertificateFromDate = formattedDate;
+                });
+
+                $('#txtCertificateFromDate').val(formattedDate);
+            }
+
+            $('.datepicker').hide();
+        });
+
+
+
+        $scope.itemsByPage = 8;
+        $scope.fromMenu = 1;
+        $scope.loading = true;
+        $scope.flag = 1;
+
+        $scope.PagingInfo = {
+            page: 1,
+            itemsPerPage: 10,
+            sortBy: null,
+            reverse: false,
+            search: null,
+            totalItems: 0
+        };
+
+
+        $scope.ShowInvoicingPartyList = function () {
+            $scope.Vendor = {
+                VendorCode: "",
+                VendorID: "",
+                VendorName: "",
+                ContactPerson: "",
+                ContactNumber: "",
+                Email: "",
+                VendorTinNo: "",
+                VendorBinNo: "",
+                Address: ""
+            }
+
+            $http.post('/VendorInfo/GetAllListedVendors', {
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack"
+
+            })
+                .success(function (response) {
+                    $scope.ListedVendorsList = response.ListedVendorsList;
+                    $scope.ListedVendorsCollection = [].concat($scope.ListedVendorsList);
+                    $scope.PagingInfo.totalItems = $scope.ListedVendorsList[0].TotalPages;
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+            $('#SearchModal').modal('show');
+        }
+
+
+        $scope.selectPageList = function () {
+
+            $http.post('/VendorInfo/GetAllListedVendors', {
+
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack"
+
+            })
+                .success(function (response) {
+                    $scope.ListedVendorsList = response.ListedVendorsList;
+                    $scope.ListedVendorsCollection = [].concat($scope.ListedVendorsList);
+                    $scope.PagingInfo.totalItems = $scope.ListedVendorsList[0].TotalPages;
+                    $scope.loading = false;
+                })
+                .error(function () {
+                    $scope.loading = false;
+                });
+        }
+
+
+        $scope.toggleSelectVendor = function (row, task) {
+            $('#SearchModal').modal('hide');
+           
+
+            $scope.Vendor.VendorID = row.VendorID;
+            $scope.Vendor.VendorCode = row.VendorCode;
+            $scope.Vendor.VendorName = row.VendorName;
+            $scope.Vendor.ContactPerson = row.ContactPerson;
+            $scope.Vendor.ContactNumber = row.ContactNumber;
+            $scope.Vendor.Email = row.Email;
+            $scope.Vendor.VendorTinNo = row.VendorTinNo;
+            $scope.Vendor.VendorBinNo = row.VendorBinNo;
+            $scope.Vendor.Address = row.Address;
+
+            // Determine VendorStatus selection
+            if (row.Status === 1 || row.Status === '1') {
+                $scope.VendorStatus = "1"; // Active
+            } else if (row.Status === 0 || row.Status === null || row.Status === '' || row.Status === '0') {
+                $scope.VendorStatus = "0"; // Inactive
+            } else {
+                $scope.VendorStatus = ""; // None
+            }
+
+        };
+
+
+        $scope.toggleVendorSelect = function (row) {
+
+            $scope.VendorReq.VendorID = row.VendorID;
+            $scope.VendorReq.VendorCode = row.VendorCode;
+            $scope.VendorReq.VendorName = row.VendorName;
+
+            $scope.VendorReq.SelectedItemName = row.ServiceItemName;
+
+            $scope.VendorWiseItemReq.ServiceItemID = row.ServiceItemID;
+            $scope.VendorWiseItemReq.ServiceItemName = row.ServiceItemName;
+
+            $scope.VendorWiseItemReq.VendorID = row.VendorID;
+            $scope.VendorWiseItemReq.VendorCode = row.VendorCode;
+            $scope.VendorWiseItemReq.VendorName = row.VendorName;
+            $scope.VendorWiseItemReq.TransactionName = row.TransactionName;
+            $scope.VendorWiseItemReq.ContactPerson = row.ContactPerson;
+            $scope.VendorWiseItemReq.ContactNumber = row.ContactNumber;
+            $scope.VendorWiseItemReq.Email = row.Email;
+            $scope.VendorWiseItemReq.Address = row.Address;
+            $scope.VendorWiseItemReq.VenReqQnty = VenReqQnty;
+
+            $scope.VendorInfoDisplayedCollection = $scope.VendorInfoDisplayedCollection.concat($scope.VendorWiseItemReq);
+
+            $scope.resetVendorWiseItemReq();
+
+            $('#VendorInfoModal').modal('hide');
+        };
+
+
+        //validations
+
+
+
+        $scope.RequiredCheck = function (e) {
+           
+                /////////////////////////////////////////////
+                var today = new Date();
+                todayMonth = (today.getMonth() + 1);
+                todayYear = today.getFullYear();
+
+                var CertifiFromDate = $('#txtCertificateFromDate').val();
+                var CertifiFromMonth = CertifiFromDate.substring(0, 2);
+                var CertifiFromYear = CertifiFromDate.substring(3, 7);
+
+
+                //if ((CertifiFromMonth < 10) && (CertifiFromYear <= 2021)) {
+                //    $('#txtCertificateFromDate').val('');
+                //    toastr.error("Certificate can’t issue before Oct/2021.");
+                //}
+
+                
+
+            ////////System Date Check////////////////////
+
+            if ($('#txtVendorName').val().trim() === '') {
+                toastr.error("Select a vendor");
+            }
+
+                if ((CertifiFromMonth > todayMonth) && (CertifiFromYear == todayYear)) {
+                    $('#txtCertificateFromDate').val('');
+                    toastr.error("CertificateFromDate should not be greater than or Equal  system Month.");
+                }
+                if (CertifiFromYear > todayYear) {
+                    $('#txtCertificateFromDate').val('');
+                    toastr.error("CertificateFromDate should not be greater than or Equal  system Month.");
+                }
+
+        }
+    });
+</script>

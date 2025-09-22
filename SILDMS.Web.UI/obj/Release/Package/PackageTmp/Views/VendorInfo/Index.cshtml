@@ -1,0 +1,795 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+
+<div class="box box-primary box-body" ng-controller="VendorWiseItemCtrl">
+    <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
+        <h2 class="box-title" style="font-family: math; font-weight: 500;">Vendor Details Entry</h2>
+
+        <div class="box-tools pull-right">
+            <div class="col-lg-12 pull-right">
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom" ng-disabled="loading">
+                        <i class="fa fa-refresh" style="padding-right: 5px"></i> Refresh
+                    </button>
+                </div>
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="SearchListedVendors()" class="button-custom" ng-disabled="loading">
+                        <i class="fa fa-search" style="padding-right: 5px"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*LOADING*@
+    <div id="mydiv" data-ng-show="loading">
+        <div class="overlay">
+            <div class="loder">
+                <img src="~/Content/AdminLTE/img/cube.gif" /> <span class="text-bold">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="box-body" style="margin: 1%; padding: 10px 10px 10px 10px;" data-ng-disabled="">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+
+                <div class="row" style="margin-top: 5px; margin-left:5px">
+                    <div>
+
+                        <!-- Vendor Code -->
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-lg-2">
+                                <div class="form-group" style="font-size: smaller;">
+                                    <label for="VendorCode">Vendor Code :<span style="color: red;"> *</span></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <input id="VendorCode" type="text" autocomplete="off" name="VendorCode" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.VendorCode" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" @*required*@ />
+                            </div>
+                        </div>
+
+                        <!-- Vendor Name -->
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-lg-2">
+                                <div class="form-group" style="font-size: smaller;">
+                                    <label for="VendorName">Vendor Name :<span style="color: red;"> *</span></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <input id="VendorName" type="text" autocomplete="off" name="VendorName" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.VendorName" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
+                            </div>
+
+
+                            <!-- Add More Info Button -->
+                            <div class="col-lg-2">
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#moreInfoModal" style="margin-top: 2px;">
+                                    More Info
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="moreInfoModal" tabindex="-1" role="dialog" aria-labelledby="moreInfoModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-sm" role="document">
+                                <!-- Smaller modal -->
+                                <div class="modal-content">
+                                    <div style="text-align: right;">
+                                        <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                                                aria-hidden="true" style="color: #ffffff;">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <!-- Contact Person -->
+                                        <div class="form-group" style="font-size: smaller;">
+                                            <label for="ContactPerson">Contact Person:<span style="color: red;"> *</span></label>
+                                            <input id="ContactPerson" type="text" name="ContactPerson" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.ContactPerson" placeholder="Full Name" />
+                                        </div>
+
+                                        <!-- Contact Number -->
+                                        <div class="form-group" style="font-size: smaller;">
+                                            <label for="ContactNumber">Contact Number:<span style="color: red;"> *</span></label>
+                                            <input id="ContactNumber" type="text" name="ContactNumber" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.ContactNumber" placeholder="(+880) 00 0000 0000" />
+                                        </div>
+
+                                        <!-- Email -->
+                                        <div class="form-group" style="font-size: smaller;">
+                                            <label for="Email">Email:<span style="color: red;"> *</span></label>
+                                            <input id="Email" type="email" name="Email" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.Email" placeholder="yourname@gmail.com" />
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                        <button ng-disabled="isAutoCheckMarkExecuted" type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Save Info</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row" style="margin-top: 5px;">
+                            @*TIN*@
+                            <div class="col-lg-2">
+                                <label style="font-size:smaller" for="VendorTinNo">TIN :<span style="color: red;"> *</span></label>
+                            </div>
+                            <div class="col-lg-3">
+                                <input id="VendorTinNo" type="text" name="VendorTinNo" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.VendorTinNo" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
+                            </div>
+
+                            <div class="col-lg-1"></div>
+                            @*BIN*@
+                            <div class="col-lg-1">
+                                <label style="font-size:smaller" for="VendorBinNo">BIN :<span style="color: red;"> *</span></label>
+                            </div>
+                            <div class="col-lg-3">
+                                <input id="VendorBinNo" type="text" name="VendorBinNo" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.VendorBinNo" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="row" style="margin-top: 5px;">
+                            <!-- Bank Name -->
+                            <div class="col-lg-2">
+                                <div class="form-group" style="font-size: smaller;">
+                                    <label for="BankName">Bank Name:<span style="color: red;"> *</span></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <input id="BankName" type="text" name="BankName" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.BankName" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
+                            </div>
+
+                            <div class="col-lg-1"></div>
+                            <!-- Account Name -->
+                            <div class="col-lg-1">
+                                <div class="form-group" style="font-size: smaller;">
+                                    <label for="AccountName">Acc Name:<span style="color: red;"> *</span></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <input id="AccountName" type="text" name="AccountName" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.AccountName" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 5px;">
+                            <!-- Account Number -->
+                            <div class="col-lg-2">
+                                <div class="form-group" style="font-size: smaller;">
+                                    <label for="AccountNumber">Acc No :<span style="color: red;"> *</span></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <input id="AccountNumber" type="text" name="AccountNumber" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.AccountNumber" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
+                            </div>
+
+                            <div class="col-lg-1"></div>
+
+                            <!-- Routing Number -->
+                            <div class="col-lg-1">
+                                <div class="form-group" style="font-size: smaller;">
+                                    <label for="RoutingNumber">Routing No:<span style="color: red;"> *</span></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <input id="RoutingNumber" type="text" name="RoutingNumber" class="form-control" autocomplete="off" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.RoutingNumber" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 5px;">
+
+                            @*Company Address*@
+                            <div class="col-lg-2">
+                                <label style="font-size:smaller" for="Address">Company Address :<span style="color: red;"> *</span></label>
+                            </div>
+                            <div class="col-lg-3">
+                                <input id="Address" type="text" name="Address" autocomplete="off" class="form-control" ng-disabled="isAutoCheckMarkExecuted" ng-model="Vendor.Address" placeholder="" style="font-size: smaller; padding: 3px 6px 3px;" />
+                            </div>
+
+                            <div class="col-lg-1"></div>
+
+                            @*Status*@
+                            <div class="col-lg-1">
+                                <label style="font-size:smaller" for="Status">Status :<span style="color: red;"> *</span></label>
+                            </div>
+                            <div class="col-lg-3">
+
+                                <select ng-model="VendorStatus" ng-disabled="isAutoCheckMarkExecuted" class="form-control animated fadeInRight ng-pristine ng-valid ng-not-empty ng-touched" style="">
+                                    <option value="">-- None --</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="row" style="margin-top: 5px;">
+                            @*Selected Materials *@
+
+                            <div class="col-lg-2">
+                                <label style="font-size:smaller" for="SelectedMat">Selected Materials:</label>
+                            </div>
+                            <div class="col-lg-9">
+                                <span id="SelectedMat" name="SelectedMat" style="font-size: small; padding: 3px 6px 3px;">{{selectedMaterialsDisplay}}</span>
+                            </div>
+                        </div>
+                        <div @*ng-if="flag!==1 && !showupdate"*@ class="row" style="margin-top: 5px;">
+                            <div class="col-lg-10" style="margin-top: 10px;">
+                            </div>
+                            @* button save*@
+                            <div class="col-lg-1">
+                                <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-left" data-dismiss="modal" title="Submit" ng-hide="showupdate" ng-click="SaveVendorwithMat()">
+                                    <i class="fa fa-save"></i> Save
+                                </button>
+                                <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-left" data-dismiss="modal" title="Submit" ng-show="showupdate" ng-click="SaveVendorwithMat()">
+                                    <i class="fa fa-edit"></i> Update
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div ng-if="flag===1" class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="MaterialDisplayedCollection" st-safe-src="MaterialSearchModalList" style="width:100%" class="tableVen table-condensed table-bordered table-hover pnlView">
+                    <thead>
+                        <tr style="font-size: 15px;">
+                            <th colspan="11" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                Materials of Purchase Requisition
+                            </th>
+                        </tr>
+                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                            <th st-sort="">Services Category Code</th>
+                            <th st-sort="">Services Category Name</th>
+                            <th st-sort="">Service Item Code</th>
+                            <th st-sort="">Service Item Name</th>
+                            <th>Action</th>
+                        </tr>
+
+                        <tr>
+                        </tr>
+                        <tr>
+                            <th><input st-search="ServicesCategoryCode" placeholder="Search by Code" class="input-sm form-control" type="search" /></th>
+                            <th><input st-search="ServicesCategoryName" placeholder="Search by Name" class="input-sm form-control" type="search" /></th>
+
+                            <th colspan="1"></th>
+                            <th><input st-search="ServiceItemName" placeholder="Search by Item" class="input-sm form-control" type="search" /></th>
+
+                            <th>
+                                <button type="button" ng-click="toggleSelectAll()" title="Select All" ng-disabled="isAutoCheckMarkExecuted">
+                                    <i ng-show="!isAllSelected" class="fa fa-square-o"></i>
+                                    <i ng-show="isAllSelected" class="fa fa-check-square-o"></i>
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in MaterialDisplayedCollection" ng-cloak style="font-size:11px;" ng-class="{'selected-row': row.selected}" ng-style="getRowStyle(row)">
+                            <td class="col-lg-1">{{row.ServicesCategoryCode}}</td>
+                            <td class="col-lg-1">{{row.ServicesCategoryName}}</td>
+                            <td class="col-lg-1">{{row.ServiceItemCode}}</td>
+                            <td class="col-lg-1">{{row.ServiceItemName}}</td>
+
+                            <td class="col-lg-1">
+                                <button type="button" ng-click="selectMaterial(row)" data-dismiss="modal" title="Select" ng-disabled="isAutoCheckMarkExecuted">
+                                    <i ng-show="!row.buttonChecked" class="fa fa-square-o"></i>
+                                    <i ng-show="row.buttonChecked" class="fa fa-check-square-o"></i>
+                                </button>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                        </tr>
+                    </tfoot>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="SearchModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
+
+                <div class="table-responsive" ng-cloak>
+                    <table st-table="ListedVendorsCollection" st-safe-src="ListedVendorsList"
+                           class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Vendor List
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                                <th class="col-lg-1 col-md-1 col-sm-1">Vendor Code</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">Vendor Name</th>
+                                <th class="col-lg-3 col-md-3 col-sm-3">Vendor Business Name</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+                            <tr>
+                                <th><input st-search="VendorCode" placeholder="Vendor Code" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="VendorBussinessName" placeholder="Vendor Business Name" class="input-sm form-control" type="search" /></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in ListedVendorsCollection | orderBy:'IsBack':true">
+                                <td class="col-lg-1 text-center">{{row.VendorCode}}</td>
+                                <td class="col-lg-2 text-center">{{row.VendorName}}</td>
+                                <td class="col-lg-3 text-center">{{row.VendorBussinessName}}</td>
+                                <td class="col-lg-1 text-center">
+                                    <button type="button" id="btnSelect" ng-click="toggleSelectVendor(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
+                                        <span class="fa fa-search-plus"> View</span>
+                                    </button>
+                                    <button type="button" id="btnEdit" ng-click="toggleSelectVendor(row, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
+                                        <span class="fa fa-edit"> Edit</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="5"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-flat btn-default" data-dismiss="modal" ng-click="ResetSearchModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*Save / Delete Modal*@
+    <div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important ">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
+                <div class="modal-header" style="height: 46px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" style="height:30px;" id="myModalLabel">Confirm your Action</h4>
+                </div>
+                <div class="modal-body" style="height:80px;">
+                    <h5 class="modal-title" style="height:30px;" id="myModalLabel">Are you sure to Save</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSaveMaster" class="btn button-custom" style="color: white; background-color: darkgreen;" data-dismiss="modal" ng-click="SaveVendorwithMat()">Confirm</button>
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: darkred;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mydiv" ng-show="loading">
+        <div class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>Loading...
+        </div>
+    </div>
+
+
+</div>
+
+<script type="text/javascript">
+    app.controller('VendorWiseItemCtrl', function ($scope, $http) {
+
+        $scope.itemsByPage = 8;
+        $scope.fromMenu = 1;
+        $scope.loading = true;
+
+
+        $scope.PagingInfo = {
+            page: 1,
+            itemsPerPage: 10,
+            sortBy: null,
+            reverse: false,
+            search: null,
+            totalItems: 0
+        };
+
+        $scope.Vendor = {
+            VendorCode: "",
+            VendorName: "",
+            ContactPerson: "",
+            ContactNumber: "",
+            Email: "",
+            VendorTinNo: "",
+            VendorBinNo: "",
+            Address: "",
+            BankName: "",
+            AccountName: "",
+            AccountNumber: "",
+            RoutingNumber: ""
+        }
+
+
+        $(function () {
+
+            $scope.GetMat();
+
+        });
+
+
+        $scope.GetMat = function () {
+
+            $http.post('/VendorInfo/GetAllMaterial')
+                .success(function (response) {
+                    $scope.MaterialSearchModalList = response.MaterialList;
+                    $scope.MaterialDisplayedCollection = [].concat($scope.MaterialSearchModalList);
+                    $scope.loading = false;
+
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+        }
+
+        $scope.flag = 1;
+        $scope.showFlag = false;
+        $scope.selectedRows = [];
+        $scope.buttonChecked = false;
+        $scope.disBtn = true;
+        $scope.showupdate = false;
+
+
+        $scope.selectedMaterialsDisplay = '';
+        $scope.SelectedMaterialLength = 0;
+
+    
+
+        $scope.SaveVendorwithMat = function () {
+            console.log($scope.Vendor);
+            console.log($scope.selectedRows);
+
+            $http.post('/VendorInfo/SaveVendorwithMat',
+                {
+                    VendorCode: $scope.Vendor.VendorCode,
+                    VendorName: $scope.Vendor.VendorName,
+                    ContactPerson: $scope.Vendor.ContactPerson,
+                    ContactNumber: $scope.Vendor.ContactNumber,
+                    Email: $scope.Vendor.Email,
+                    VendorTinNo: $scope.Vendor.VendorTinNo,
+                    VendorBinNo: $scope.Vendor.VendorBinNo,
+                    VAddress: $scope.Vendor.Address,
+
+                    BankName: $scope.Vendor.BankName,
+                    AccountName: $scope.Vendor.AccountName,
+                    AccountNumber: $scope.Vendor.AccountNumber,
+                    RoutingNumber: $scope.Vendor.RoutingNumber,
+
+                    ServiceItemInfo: $scope.selectedRows,
+
+                    VendorStatus: $scope.VendorStatus,
+
+                    TempVendorID: $scope.TempVendorID
+
+
+                }).success(function (response) {
+                    var status = response.Status;
+                    var message = response.message;
+                    if (status == "Success" && message == "Data Saved Successfully") {
+                        toastr.success(message);
+                        $scope.refreshPage();
+                    }
+                })
+                .error(function (reponse) {
+                    toastr.error('Something went wrong');
+                    $scope.loading = false;
+                    return;
+                });
+
+        };
+
+        $scope.selectedMaterialsDisplay = '';
+        $scope.selectedMaterialsCodes = ''
+
+        $scope.SearchListedVendors = function () {
+
+            $scope.TempVendorID = '';
+
+            $scope.Vendor = {
+                VendorCode: "",
+                VendorName: "",
+                ContactPerson: "",
+                ContactNumber: "",
+                Email: "",
+                VendorTinNo: "",
+                VendorBinNo: "",
+                Address: "",
+
+                BankName: "",
+                AccountName: "",
+                AccountNumber: "",
+                RoutingNumber: "",
+            }
+            $scope.selectedMaterialsDisplay = '';
+            $scope.selectedMaterialsCodes = '';
+            $scope.selectedRows = [];
+            $scope.SelectedMaterialCollection = [];
+            $scope.SelectedMaterialLength = [];
+            $scope.VendorStatus = '';
+
+            $scope.GetMat();
+
+            $http.post('/VendorInfo/GetAllListedVendors', {
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack"
+
+            })
+                .success(function (response) {
+                    $scope.ListedVendorsList = response.ListedVendorsList;
+                    $scope.ListedVendorsCollection = [].concat($scope.ListedVendorsList);
+                  /*  $scope.PagingInfo.totalItems = $scope.ListedVendorsList[0].TotalPages;*/
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+            $('#SearchModal').modal('show');
+        };
+
+
+        $scope.selectPageList = function () {
+
+            $http.post('/VendorInfo/GetAllListedVendors', {
+
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack"
+
+            })
+                .success(function (response) {
+                    $scope.ListedVendorsList = response.ListedVendorsList;
+                    $scope.ListedVendorsCollection = [].concat($scope.ListedVendorsList);
+                    $scope.PagingInfo.totalItems = $scope.ListedVendorsList[0].TotalPages;
+                    $scope.loading = false;
+                })
+                .error(function () {
+                    $scope.loading = false;
+                });
+        }
+
+        $scope.sortList = function (sortBy) {
+            if (sortBy === $scope.PagingInfo.sortBy) {
+                $scope.PagingInfo.reverse = !$scope.pagingInfo.reverse;
+            } else {
+                $scope.PagingInfo.sortBy = sortBy;
+                $scope.PagingInfo.reverse = false;
+            }
+            $scope.PagingInfo.page = 1;
+            $scope.Search();
+        };
+
+        $scope.selectMaterial = function (row) {
+            var selecteditems = {
+                ServicesCategoryCode: row.ServicesCategoryCode,
+                ServicesCategoryName: row.ServicesCategoryName,
+                ServicesCategoryID: row.ServicesCategoryID,
+                ServiceItemName: row.ServiceItemName,
+                ServiceItemCode: row.ServiceItemCode,
+                ServiceItemID: row.ServiceItemID
+            };
+
+            var indexToRemove = -1;
+
+            $scope.selectedRows.forEach(function (item, index) {
+                if (item.ServiceItemName === selecteditems.ServiceItemName && item.ServiceItemID === selecteditems.ServiceItemID) {
+                    indexToRemove = index;
+                }
+            });
+
+            if (indexToRemove !== -1) {
+                $scope.selectedRows.splice(indexToRemove, 1);
+                $scope.SelectedMaterialCollection.splice(indexToRemove, 1);
+                row.selected = false;
+            } else {
+                $scope.selectedRows.push(selecteditems);
+                $scope.SelectedMaterialCollection = [].concat($scope.selectedRows);
+                row.selected = true;
+            }
+            row.buttonChecked = row.selected;
+            // Update the display value of selected materials
+            $scope.SelectedMaterialLength = $scope.SelectedMaterialCollection.length;
+            $scope.updateSelectedMaterialsDisplay();
+        };
+
+        $scope.toggleSelectVendor = function (row, task) {
+            $scope.selectedMaterialsDisplay = '';
+            $('#SearchModal').modal('hide');
+            $scope.flag = 1;
+
+            if (task === 'view') {
+                $scope.isAutoCheckMarkExecuted = true;
+            } else {
+                $scope.isAutoCheckMarkExecuted = false;
+                $scope.showupdate = true;
+            }
+
+            // Setting vendor details
+            $scope.TempVendorID = row.VendorID;
+            $scope.Vendor.VendorCode = row.VendorCode;
+            $scope.Vendor.VendorName = row.VendorName;
+            $scope.Vendor.ContactPerson = row.ContactPerson;
+            $scope.Vendor.ContactNumber = row.ContactNumber;
+            $scope.Vendor.Email = row.Email;
+            $scope.Vendor.VendorTinNo = row.VendorTinNo;
+            $scope.Vendor.VendorBinNo = row.VendorBinNo;
+            $scope.Vendor.Address = row.Address;
+
+            $scope.Vendor.BankName = row.BankName;
+            $scope.Vendor.AccountName = row.AccountName;
+            $scope.Vendor.AccountNumber = row.AccountNumber;
+            $scope.Vendor.RoutingNumber = row.RoutingNumber;
+
+
+            // Determine VendorStatus selection
+            if (row.Status === 1 || row.Status === '1') {
+                $scope.VendorStatus = "1"; // Active
+            } else if (row.Status === 0 || row.Status === null || row.Status === '' || row.Status === '0') {
+                $scope.VendorStatus = "0"; // Inactive
+            } else {
+                $scope.VendorStatus = ""; // None
+            }
+
+            // Service Item selection
+            $scope.selectedMaterialsDisplay = row.ServiceItemName;
+            $scope.AutoCheckMark(row.ServiceItemName, row.ServiceItemID);
+        };
+
+        $scope.AutoCheckMark = function (ServiceItemName, ServiceItemID) {
+
+            let serviceItemIDs = ServiceItemID.split(',').map(code => code.trim());
+
+            $scope.MaterialSearchModalList.forEach(item => {
+                let codeMatch = serviceItemIDs.includes(item.ServiceItemID);
+
+                if (codeMatch) {
+                    item.selected = true;
+                    item.buttonChecked = true;
+
+                    let existingItem = $scope.selectedRows.find(selected => selected.ServiceItemID === item.ServiceItemID);
+
+                    if (!existingItem) {
+                        let selecteditems = {
+                            ServiceItemName: item.ServiceItemName,
+                            ServiceItemID: item.ServiceItemID,
+                        };
+                        $scope.selectedRows.push(selecteditems);
+                    }
+                }
+            });
+
+            $scope.SelectedMaterialCollection = [].concat($scope.selectedRows);
+            $scope.SelectedMaterialLength = $scope.SelectedMaterialCollection.length;
+            $scope.updateSelectedMaterialsDisplay();
+
+            $scope.MaterialDisplayedCollection = [].concat($scope.MaterialSearchModalList);
+        };
+
+      
+
+        $scope.isAllSelected = false;
+        // Function to toggle Select All
+        $scope.toggleSelectAll = function () {
+            $scope.isAllSelected = !$scope.isAllSelected;
+
+            if ($scope.isAllSelected) {
+                // Select all rows
+                $scope.MaterialDisplayedCollection.forEach(function (row) {
+                    row.selected = true;
+                    row.buttonChecked = true;
+
+                    var selecteditems = {
+                        ServiceItemName: row.ServiceItemName,
+                        ServiceItemID: row.ServiceItemID
+                    };
+
+                    var alreadySelected = $scope.selectedRows.some(function (item) {
+                        return item.ServiceItemName === selecteditems.ServiceItemName && item.ServiceItemID === selecteditems.ServiceItemID;
+                    });
+
+                    if (!alreadySelected) {
+                        $scope.selectedRows.push(selecteditems);
+                    }
+                });
+            } else {
+                // Unselect all rows
+                $scope.MaterialDisplayedCollection.forEach(function (row) {
+                    row.selected = false;
+                    row.buttonChecked = false;
+                });
+                $scope.selectedRows = [];
+            }
+
+            $scope.SelectedMaterialCollection = [].concat($scope.selectedRows);
+            $scope.SelectedMaterialLength = $scope.SelectedMaterialCollection.length;
+            $scope.updateSelectedMaterialsDisplay();
+        };
+
+
+
+        $scope.updateSelectedMaterialsDisplay = function () {
+            var ServiceItemName = $scope.selectedRows.map(function (item) {
+                return item.ServiceItemName;
+            });
+            var ServiceItemID = $scope.selectedRows.map(function (item) {
+                return item.ServiceItemID;
+            });
+            $scope.selectedMaterialsDisplay = ServiceItemName.join(',');
+            $scope.ServiceItemIDs = ServiceItemID.join(',');
+        };
+
+
+
+
+//--------------------utility
+
+        $scope.refreshPage = function () {
+            setTimeout(function () {
+                window.location.reload(); // Reload the current page
+            }, 2000); // 2000 milliseconds = 3 seconds
+        }
+
+        $scope.toggleRefreshTable = function () {
+            location.reload();
+        };
+
+        $scope.toggleResetAll = function () {
+            $scope.PRmasterData = null;
+        }
+
+        $scope.goToDiv = function () {
+            var targetDiv = document.getElementById('targetdDiv');
+            targetDiv.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        $scope.getRowStyle = function (row) {
+            if (row.selected) {
+                return { background: '#8bf5d2' }; // Change this to your desired color
+            } else {
+                return {}; // No additional styling
+            }
+        };
+
+    });
+</script>

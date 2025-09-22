@@ -1,0 +1,1821 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+<style>
+    body {
+        font-size: 12px; /* Set global font size */
+    }
+
+    .box-body, .form-group, .btn, .form-control, .box-header {
+        font-size: 12px;
+    }
+
+    .btn {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    h3.box-title {
+        font-size: 14px;
+    }
+
+    input.form-control, button.form-control {
+        font-size: 12px;
+    }
+
+    label {
+        font-size: 12px;
+    }
+
+    /* Adjust icon size */
+    .fa {
+        font-size: 12px;
+        /* padding-right: 3px;*/
+    }
+</style>
+
+<div class="box box-primary box-body" ng-controller="QuotationApproveCntrl">
+    <!-- Upper buttons -->
+    <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
+        <h2 class="box-title" style="font-family: math; font-weight: 500;">Client Quotation Approval</h2>
+
+        <div class="box-tools pull-right">
+            <div class="col-lg-12 pull-right">
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    @using (Html.BeginForm("ClientQuotationApproveReport", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+                    {
+                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="button-custom">
+                            <i class="fa fa-print"></i> Quotation Print
+                        </button>
+                    }
+                </div>
+
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom btn-warning" ng-disabled="btnRefresh">
+                        <i class="fa fa-refresh" style="padding-right: 5px;"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="SearchSaveClients()" class="button-custom btn-primary" ng-disabled="btnSearch">
+                        <i class="fa fa-search" style="padding-right: 5px;"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="box-body">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+
+                <!-- ClientName -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ClientName">Client Name :</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <div style="position: relative;">
+                            <input id="ClientName" name="ClientName" type="text" data-ng-model="Client.ClientName"
+                                   class="form-control" ng-readonly="true"
+                                   placeholder="Client Name"
+                                   style="height: 25px; font-size: smaller;" />
+
+                            <button type="button" data-ng-click="SearchAvailableClients()"
+                                    style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+padding: 0px 10px; border: 2px solid black; background: transparent;">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-1"></div>
+                </div>
+
+
+                <!-- ClientRequisition No & Date -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ClientRequisitionNo">Client Requisition No :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="ClientRequisitionNo" name="ClientRequisitionNo" type="text" data-ng-model="Client.ClientRequisitionNo" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ClientRequisitionDate">Client Requisition Date:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="ClientRequisitionDate" name="ClientRequisitionDate" type="text" data-ng-model="Client.ClientRequisitionDate" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ClientRequisition Person & Number -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ContactPerson">Contact Person :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="ContactPerson" name="ContactPerson" type="text" data-ng-model="Client.ContactPerson" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ContactNumber">Contact Number :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="ContactNumber" name="ContactNumber" type="text" data-ng-model="Client.ContactNumber" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Client TIN & BIN -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ContactTIN">Contact TIN :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="ContactTIN" name="ContactTIN" type="text" data-ng-model="Client.ContactTIN" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ContactBIN">Contact BIN :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="ContactBIN" name="ContactBIN" type="text" data-ng-model="Client.ContactBIN" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Client Address -->
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="ContactAddress">Contact Address :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <input id="ContactAddress" name="ContactAddress" type="text" data-ng-model="Client.ContactAddress" class="form-control" ng-readonly="true" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="QuotationForRecom" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body table-responsive" data-ng-disabled="" ng-cloak>
+                    <table st-table="AllQuotationsCollection" st-safe-src="AllQuotationsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr style="font-size: 15px;">
+                               <th colspan="14" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Quotations for Approval
+                                </th>
+                            </tr>
+
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                                <!-- Columns with sorting -->
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('ClientCode')">
+                                    Client Code
+                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientName')">
+                                    Client Name
+                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientReqNo')">
+                                    Requisition No
+                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Requisition Date
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Quotation No
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Quotation Date
+                                </th>
+
+                                <th class="col-lg-1 col-md-1 col-sm-1">
+                                    Action
+                                </th>
+                            </tr>
+
+                            <!-- Search Fields -->
+                            <tr>
+                                <th>
+                                    <input st-search="ClientCode" placeholder="Search Client Code" class="input-sm form-control" type="search" />
+                                </th>
+                                <th>
+                                    <input st-search="ClientName" placeholder="Search Client Name" class="input-sm form-control" type="search" />
+                                </th>
+                                <th>
+                                    <input st-search="ClientReqNo" placeholder="Search Req No" class="input-sm form-control" type="search" />
+                                </th>
+                                <th></th> <!-- No search for dates -->
+                                <th></th> <!-- No search for Quotation No -->
+                                <th></th> <!-- No search for Quotation Date -->
+                                <th></th> <!-- No search for Quotation Amount -->
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in AllQuotationsList | orderBy:'IsBack':true">
+                                <td class="text-center">{{row.ClientCode}}</td>
+                                <td class="text-center">{{row.ClientName}}</td>
+                                <td class="text-center">{{row.ClientReqNo}}</td>
+                                <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">{{row.QuotationNo}}</td>
+                                <td class="text-center">{{row.ClientAdvanceClaimDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="col-lg-1 text-center">
+                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row, 'save')">Select</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination and No Item Message -->
+                    <div ng-if="PagingInfo.totalItems > 0" class="text-center">
+                        <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" force-ellipses="true" ng-change="selectPageList()"></ul>
+                    </div>
+                    <div ng-if="PagingInfo.totalItems <= 0" class="text-center">
+                        NO ITEM
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row" ng-if="GetClientReqDetails.length > 0">
+        <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+            <table st-table="GetClientReqDetailsCollection" st-safe-src="GetClientReqDetails" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                <thead>
+                    <tr style="font-size: 15px;">
+                        <th colspan="17" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                            Item and Service List
+                        </th>
+                    </tr>
+                    <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                        <th style="text-align: left;">Item Code</th>
+                        <th style="text-align: left;">Item Name</th>
+                        <th style="text-align: left;">Description</th>
+                        <th style="text-align: left;">Delivery Location</th>
+                        <th style="text-align: left;">Delivery Date</th>
+                        <th style="text-align: left;">Req Unit</th>
+                        <th style="text-align: left;">Quoted Qty</th>
+
+                        <th style="text-align: left;">C.Qut.Recom Unit Price (without vat)</th>
+                        <th style="text-align: left;">Aprv Quoted Unit Price</th>
+                        <th style="text-align: left;">C.Qut.Recom Amount (without vat)</th>
+                        <th style="text-align: left;">Aprv Quoted Amount</th>
+                        <th style="text-align: left;">ASF (%)</th>
+                        <th style="text-align: left;">ASF Amount</th>
+                        <th style="text-align: left;">Vat (%)</th>
+                        <th style="text-align: left;">VAT Amount</th>
+                        <th style="text-align: left;">Total C.Qut.Recom Amount (with vat)</th>
+                        <th style="text-align: left;">Aprv Total Amount (with vat)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in GetClientReqDetailsCollection" ng-init="initializeDefaults(row)" ng-cloak style="font-size: 12px;">
+                        <td style="width: 5%;">{{ row.ServiceItemID }}</td>
+                        <td style="width: 5%;">{{ row.ServiceItemName }}</td>
+                        <td style="width: 6%;">{{ row.Description }}</td>
+                        <td style="width: 6%;">{{ row.DeliveryLocation }}</td>
+                        <td style="width: 6%;">{{ row.DeliveryDate }}</td>
+                        <td style="width: 5%;">{{ row.ReqUnit }}</td>
+                        <td style="width: 6%;">{{ row.QutnQnty }}</td>
+
+                        <td style="width: 6%;">{{ row.QutnPrice }}</td>
+                        <td style="width: 6%;">
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
+                                   ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"
+                                   ng-blur="validateInput('givenQutnPrice', row)" />
+                        </td>
+                        <td style="width: 6%;">{{ row.ClientQutnAmt }}</td>
+                        <td style="width: 6%; color: #126e0f;">{{ row.givenQutnAmt }}</td>
+                        <td style="width: 6%;">
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
+                                   type="text"
+                                   ng-readonly="pagefunction === 'viewmode'"
+                                   ng-model="row.ASFPerc"
+                                   ng-change="calculateRowFields(row)"
+                                   ng-blur="validateInput('GivenASFPerc', row)" />
+                        </td>
+                        <td style="width: 6%; text-align: right;">{{ row.TotGivenASFAmt }}</td>
+
+                        <td style="width: 6%;">
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
+                                   ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
+                                   ng-blur="validateInput('GivenVatPerc', row)" />
+                        </td>
+                        <td style="width: 6%;">{{ row.TotGivenVatAmt }}</td>
+                        <td style="width: 6%;">{{ row.TolAmt }}</td>
+                        <td style="width: 6%; color: #126e0f;">{{ row.givenTolAmt }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @*</div>*@
+
+
+<div class="box-body" ng-show="showTermsItem===true">
+
+    @*terms and conditons*@
+
+
+    <div id="ClientReqTermsConditionsModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
+                <div class="modal-body table-responsive">
+                    <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+
+
+                        <thead>
+                            <tr style="font-size: 15px;">
+                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Terms & Conditions Information
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormName')">Form Name</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+                            <tr>
+                                <th><input st-search="FormCode" placeholder="Form Code" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="FormName" placeholder="Form Name" class="input-sm form-control" type="search" /></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in TermsConditionsDisplayedCollection">
+                                <td class="hidden">{{row.TermsID}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.FormCode}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.FormName}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                    <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                                        {{row.Status == '1'? 'Active':'InActive'}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleTermsConditionsSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+            <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                <thead>
+                    <tr style="font-size: 15px; border: 1px solid #3003eb; background: #ffffff; ">
+
+                        <th @*colspan="12"*@ style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
+                            <span>Terms & Conditions List</span>
+                        </th>
+                        <th style="background: #ffffff; position: relative; padding: 5px;">
+                            <div style="position: relative; display: inline-block; width: 200px;">
+                                <input ng-show="pagefunction !== 'viewmode'" id="FormName" name="FormName" type="text"
+                                       data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true"
+                                       style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
+
+                                <button type="button" ng-click="ShowTermsConditionsList()"
+                                        style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+              padding: 0px 10px; border: 2px solid black; background: transparent;">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </th>
+                        <th style="background: #ffffff;">
+                            <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
+                                <i class="fa fa-plus" style="padding-right: 3px"></i> Add
+                            </button>
+                        </th>
+                    </tr>
+
+                    <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                        <th style="text-align: left;" st-sort="">Terms Code</th>
+                        <th colspan="13" style="text-align: left;" st-sort="">Terms & Conditions</th>
+                        <th ng-show="pagefunction !== 'viewmode'" style="text-align: left;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in TermsConditionsDisplayedCollection" ng-cloak style="font-size:12px;">
+                        <td class="hidden">{{row.ClientReqTermsID}}</td>
+                        <td class="hidden">{{row.ClientReqID}}</td>
+                        <td class="hidden">{{row.TermsID}}</td>
+                        <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
+                        <td colspan="13" style="width:6%;">{{row.TermsName}}</td>
+
+                        <td ng-show="pagefunction !== 'viewmode'" class="col-lg-1" style="width:5%;">
+                            <button type="button" ng-if="row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                            <button type="button" ng-if="!row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                            <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+
+    <div id="RequisitionTermModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-sm-5 col-md-5 col-lg-5">
+                            <h4 class="modal-title" style="font-family: initial; font-weight: 700">Terms & Conditions Information</h4>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+
+                        </div>
+                        <div style="text-align: right;">
+                            <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                                    aria-hidden="true" style="color: #ffffff;">
+                                <i class="fa fa-remove"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div ng-cloak>
+
+                    <div class="row" style="position:relative;top:5px;">
+
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div class="form-group">
+                                <label for="TermsCode">Terms Code:</label>
+                                <label style="font-size:larger;color:red;">*</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <input id="TermsCode" name="TermsCode" type="text" class="form-control" placeholder="Terms Code" autocomplete="off"
+                                   ng-model="ClientReqTerm.TermsCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                        </div>
+                    </div>
+
+
+                    <div class="row" style="position:relative;top:5px;">
+
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div class="form-group">
+                                <label for="TermsName">Terms and Conditions:</label>
+                                <label style="font-size:larger;color:red;">*</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-md-8 col-lg-8">
+                            <input id="TermsName" name="TermsName" type="text" class="form-control" placeholder="Terms Name" autocomplete="off"
+                                   ng-model="ClientReqTerm.TermsName" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <div class="btn-group pull-right" style="margin:2px;">
+                                <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteReqTermModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
+                <div class="modal-header" style="height: 46px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Delete Selected Item</h4>
+                </div>
+                <div class="modal-body" style="height: 80px;">
+                    Are you sure to delete this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: red;" ng-click="DeleteReqTerm()">Yes</button>
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*terms and conditons ends*@
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+
+            <!-- Quotation No & Date -->
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="QuotationNo">Approve No :</label>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <input id="QuotationNo" name="QuotationNo" type="text" data-ng-model="Quotation.QuotationNo" readonly class="form-control" />
+                    </div>
+                </div>
+
+                <div class="col-lg-1"></div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="QuotationDate">Approved Date :</label>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <input id="QuotationDate" name="QuotationDate" type="text" class="form-control" style="background-color:#ffffff;" readonly />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quotation Note & Billing Date -->
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Operation:</label>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <select data-ng-model="MasterData.Operation" class="form-control">
+                        <option value="">-- None --</option>
+                        <option value="Aprv">Approved</option>
+                        <option value="Rec">Recommended</option>
+                        <option value="Bck">Back</option>
+                        <option value="Pst">Postponed</option>
+                        <option value="Can">Cancel</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-1"></div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="QuotationNote">Approved Note :</label>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <input id="QuotationNote" autocomplete="off" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-9">
+
+                </div>
+
+                <div ng-show="pagefunction === 'savemode'" class="col-lg-2">
+                    <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
+                            ng-click="openConfirmModal('save')" data-dismiss="modal" title="Save"
+                            style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius: 5px;">
+                        <i class="fa fa-check"></i> Submit
+                    </button>
+                </div>
+
+                <div ng-show="pagefunction === 'editmode'" class="col-lg-2">
+                    <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
+                            ng-click="openConfirmModal('edit')" data-dismiss="modal" title="Save"
+                            style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); background-color: #ac5604c2; border-radius: 5px; ">
+                        <i class="fa fa-check"></i> Update
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+    @*Save / Delete Modal*@
+    <div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important ">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
+                <div class="modal-header" style="height: 46px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" style="height:30px;" id="myModalLabel">Confirm your Action</h4>
+                </div>
+                <div class="modal-body" style="height:80px;">
+                    <h5 class="modal-title" style="height:30px;" id="myModalLabel">Are you sure to Save</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSaveMaster" class="btn button-custom" style="color: white; background-color: darkgreen;" data-dismiss="modal" ng-click="SaveQCApprove()">Confirm</button>
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: darkred;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*edit or view modal*@
+
+    <div id="QuotationForRecom" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Quotations for Recommendation</h3>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body table-responsive" data-ng-disabled="" ng-cloak>
+                    <table st-table="AllQuotationsCollection" st-safe-src="AllQuotationsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <!-- Columns with sorting -->
+                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('ClientCode')">
+                                    Client Code
+                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientName')">
+                                    Client Name
+                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientReqNo')">
+                                    Requisition No
+                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Requisition Date
+                                </th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">
+                                    Quotation No
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Quotation Date
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Action
+                                </th>
+                            </tr>
+
+                            <!-- Search Fields -->
+                            <tr>
+                                <th>
+                                    <input st-search="ClientCode" placeholder="Search Client Code" class="input-sm form-control" type="search" />
+                                </th>
+                                <th>
+                                    <input st-search="ClientName" placeholder="Search Client Name" class="input-sm form-control" type="search" />
+                                </th>
+                                <th>
+                                    <input st-search="ClientReqNo" placeholder="Search Req No" class="input-sm form-control" type="search" />
+                                </th>
+                                <th></th> <!-- No search for dates -->
+                                <th></th> <!-- No search for Quotation No -->
+                                <th></th> <!-- No search for Quotation Date -->
+                                <th></th> <!-- No search for Quotation Amount -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in AllQuotationsList | orderBy:'IsBack':true">
+                                <td class="text-center">{{row.ClientCode}}</td>
+                                <td class="text-center">{{row.ClientName}}</td>
+                                <td class="text-center">{{row.ClientReqNo}}</td>
+                                <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">{{row.QuotationNo}}</td>
+                                <td class="text-center">{{row.QuotationDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="col-lg-2 text-center">
+                                    <button type="button" id="btnSelect" ng-click="selectAvailableClient(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
+                                        <span class="fa fa-search-plus"> View</span>
+                                    </button>
+                                    <button type="button" id="btnEdit" ng-click="selectAvailableClient(row, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
+                                        <span class="fa fa-edit"> Edit</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination and No Item Message -->
+                    <div ng-if="PagingInfo.totalItems > 0" class="text-center">
+                        <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" force-ellipses="true" ng-change="selectSavePageList()"></ul>
+                    </div>
+                    <div ng-if="PagingInfo.totalItems <= 0" class="text-center">
+                        NO ITEM
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mydiv" data-ng-show="loading">
+        <div class="overlay">
+            <div class="loder">
+                <img src="~/Content/AdminLTE/img/cube.gif" /> <span class="text-bold">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    @*Report printing*@
+
+    <div id="VendorSlipModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h3 class="modal-title"></h3>
+                </div>
+
+                <div class="modal-body">
+                    <div class="box-body">
+                        <div class="row">
+                            <input type="button" class="btn btn-primary pull-right" value="Re-print" ng-click="printData()" />
+                        </div>
+                        <br />
+
+                        <div class="row" id="masterRow" style="position:relative; padding-right: 100px;padding-left: 60px">
+                            <div class="col-md-5">
+                                <div>
+                                    <p style="font-weight: bold; margin: 0;">MEDIACOM LIMITED</p>
+                                    <p style="margin: 0;">SAMSON CENTER</p>
+                                    <p style="margin: 0;">Levels - 5 to 7</p>
+                                    <p style="margin: 0;">43 South Avenue, Road-126, Plot-CES (G) 5A,</p>
+                                    <p style="margin: 0;">Gulshan 1, Dhaka - 1212</p>
+                                    <p style="margin: 5px 0; color: orangered; font-weight: bold;">
+                                        IP No. 09610939393 extn: 1200/1205<br />
+                                        email: mediacombd.com, www.mediacombd.com
+                                    </p>
+                                </div>
+                                <br />
+                                <div>
+                                    <p style="font-weight: bold; margin: 0;">Corporate Headquarters</p>
+                                    <p style="margin: 0;">SQUARE CENTRE</p>
+                                    <p style="margin: 0;">48, Mohakhali C/A, Dhaka - 1212</p>
+                                </div>
+                                <br />
+                                <div>
+                                    <p style="font-weight: bold;">Prepare For</p>
+                                    <table>
+                                        <tr>
+                                            <td>Vendor Code:</td>
+                                            <td style="padding-left: 10px;">1300100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Name:</td>
+                                            <td style="padding-left: 10px;">******** ***</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address:</td>
+                                            <td style="padding-left: 10px;">
+                                                ************<br />
+                                                *****<br />
+                                                ****
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Right Table -->
+                            <div class="col-md-4">
+                                <table style="width: 100%; border-collapse: collapse; font-size: smaller; margin-top: 10px;">
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Quotation Number:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">MCL/PO000</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">RFQ Date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Created by:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">PR No:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Briefing Date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Quotation submission date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="VendorSlipModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h3 class="modal-title"></h3>
+                </div>
+
+                <div class="modal-body">
+                    <div class="box-body">
+                        <div class="row">
+                            <input type="button" class="btn btn-primary pull-right" value="Re-print" ng-click="printData()" />
+                        </div>
+                        <br />
+
+                        <div class="row" id="masterRow" style="position: relative; padding-right: 100px; padding-left: 60px;">
+                            <div class="col-md-5">
+                                <div class="media">
+                                    <img src="../../Content/AdminLTE/img/mediacom-logomini.png" style="height: 20px; margin-bottom: 10px;margin-left:0px;" />
+                                </div>
+                                <div>
+                                    <p style="font-weight: bold; margin: 0;">MEDIACOM LIMITED</p>
+                                    <p style="margin: 0;">SAMSON CENTER</p>
+                                    <p style="margin: 0;">Levels - 5 to 7</p>
+                                    <p style="margin: 0;">43 South Avenue, Road-126, Plot-CES (G) 5A,</p>
+                                    <p style="margin: 0;">Gulshan 1, Dhaka - 1212</p>
+                                    <p style="margin: 5px 0; color: orangered; font-weight: bold;">
+                                        IP No. 09610939393 extn: 1200/1205<br />
+                                        email: mediacombd.com, www.mediacombd.com
+                                    </p>
+                                </div>
+                                <br />
+                                <div>
+                                    <p style="font-weight: bold; margin: 0;">Corporate Headquarters</p>
+                                    <p style="margin: 0;">SQUARE CENTRE</p>
+                                    <p style="margin: 0;">48, Mohakhali C/A, Dhaka - 1212</p>
+                                </div>
+                                <br />
+                                <div>
+                                    <p style="font-weight: bold;">Prepare For</p>
+                                    <table>
+                                        <tr>
+                                            <td>Vendor Code:</td>
+                                            <td style="padding-left: 10px;">
+                                                {{MasterData.ClientID}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Name:</td>
+                                            <td style="padding-left: 10px;">
+                                                {{MasterData.ClientID}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address:</td>
+                                            <td style="padding-left: 10px;">
+                                                ************<br />
+                                                *****<br />
+                                                ****
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Right Table -->
+                            <div class="col-md-4">
+                                <table style="width: 100%; border-collapse: collapse; font-size: smaller; margin-top: 10px;">
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Quotation Number:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">MCL/PO000</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">RFQ Date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Created by:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">PR No:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Briefing Date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Quotation submission date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <div id="VendorSlipModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h3 class="modal-title"></h3>
+                </div>
+
+                <div class="modal-body">
+                    <div class="box-body">
+                        <div class="row">
+                            <input type="button" class="btn btn-primary pull-right" value="Re-print" ng-click="printData()" />
+                        </div>
+                        <br />
+
+                        <div class="row" id="masterRow" style="position: relative; padding-right: 100px; padding-left: 60px;">
+                            <div class="col-md-5">
+                                <div class="media">
+                                    <img src="../../Content/AdminLTE/img/mediacom-logomini.png" style="height: 20px; margin-bottom: 10px;margin-left:0px;" />
+                                </div>
+                                <div>
+                                    <p style="font-weight: bold; margin: 0;">MEDIACOM LIMITED</p>
+                                    <p style="margin: 0;">SAMSON CENTER</p>
+                                    <p style="margin: 0;">Levels - 5 to 7</p>
+                                    <p style="margin: 0;">43 South Avenue, Road-126, Plot-CES (G) 5A,</p>
+                                    <p style="margin: 0;">Gulshan 1, Dhaka - 1212</p>
+                                    <p style="margin: 5px 0; color: orangered; font-weight: bold;">
+                                        IP No. 09610939393 extn: 1200/1205<br />
+                                        email: mediacombd.com, www.mediacombd.com
+                                    </p>
+                                </div>
+                                <br />
+                                <div>
+                                    <p style="font-weight: bold; margin: 0;">Corporate Headquarters</p>
+                                    <p style="margin: 0;">SQUARE CENTRE</p>
+                                    <p style="margin: 0;">48, Mohakhali C/A, Dhaka - 1212</p>
+                                </div>
+                                <br />
+                                <div>
+                                    <p style="font-weight: bold;">Prepare For</p>
+                                    <table>
+                                        <tr>
+                                            <td>Vendor Code:</td>
+                                            <td style="padding-left: 10px;">
+                                                {{MasterData.ClientID}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Name:</td>
+                                            <td style="padding-left: 10px;">
+                                                {{MasterData.ClientID}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address:</td>
+                                            <td style="padding-left: 10px;">
+                                                ************<br />
+                                                *****<br />
+                                                ****
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Right Table -->
+                            <div class="col-md-4">
+                                <table style="width: 100%; border-collapse: collapse; font-size: smaller; margin-top: 10px;">
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Quotation Number:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">MCL/PO000</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">RFQ Date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Created by:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">PR No:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Briefing Date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Quotation submission date:</td>
+                                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+
+<script type="text/javascript">
+
+
+
+    app.controller('QuotationApproveCntrl', function ($scope, $http) {
+
+        $scope.PagingInfo = {
+            page: 1,
+            itemsPerPage: 10,
+            sortBy: null,
+            reverse: false,
+            search: null,
+            totalItems: 0
+        };
+
+        $scope.ClientReq = {
+            TermsID: "",
+            FormName: "",
+        }
+        $scope.ClientReqTerm = {
+            ClientReqTermsID: "",
+            ClientReqID: "",
+            TermsID: "",
+            TermsCode: "",
+            TermsName: ""
+        }
+
+
+        $scope.Client = {
+            ClientName: "",
+            ClientRequisitionNo: "",
+            ClientReqID: "",
+            ClientRequisitionDate: "",
+            ContactPerson: "",
+            ContactNumber: "",
+            ContactTIN: "",
+            ContactBIN: "",
+            ContactAddress: "",
+        }
+
+        $scope.MasterData = {
+            ClientID: "",
+            ClientReqID: "",
+            ClientQuotationID: "",
+            ClientQutnRecmID: "",
+            Operation: "",
+            QuotationNote: ""
+        }
+
+        $scope.Quotation = {
+            QuotationNo: ""
+        }
+
+        const currentDate = new Date();
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const year = currentDate.getFullYear();
+        document.getElementById("QuotationDate").value = `${day}/${month}/${year}`;
+
+        $scope.ClientQutnRecmID = '';
+
+        $scope.SearchAvailableClients = function () {
+            $scope.ClearEverything();
+
+            $http.post('/QuotationApproval/AllAvailableClients', {
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack",
+                action: 'AvailableSearch'
+
+            }).success(function (response) {
+                $scope.AllQuotationsList = response.AllAvailableClientsList;
+                $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsList);
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+            });
+            $('#QuotationForRecom').modal('show');
+        };
+
+        $scope.selectPageList = function () {
+            $http.post('/QuotationApproval/AllAvailableClients', {
+
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack",
+                action: 'AvailableSearch'
+
+            }).success(function (response) {
+                $scope.AllQuotationsList = response.AllAvailableClientsList;
+                $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsCollection);
+                $scope.loading = false;
+            })
+                .error(function () {
+                    $scope.loading = false;
+                });
+        }
+
+        $scope.sortList = function (sortBy) {
+            if (sortBy === $scope.PagingInfo.sortBy) {
+                $scope.PagingInfo.reverse = !$scope.pagingInfo.reverse;
+            } else {
+                $scope.PagingInfo.sortBy = sortBy;
+                $scope.PagingInfo.reverse = false;
+            }
+            $scope.PagingInfo.page = 1;
+            $scope.Search();
+        };
+
+        $scope.pagefunction = '';
+
+
+        $scope.selectQuotationForRecom = function (row, action) {
+            if (action === 'save') {
+                $scope.pagefunction = 'savemode';
+
+                $('#QuotationForRecom').modal('hide');
+                $scope.loading = true;
+
+                $http.post('/QuotationToClient/AvailableClientDetailInfo', {
+                    ClientID: row.ClientID, ClientReqID: row.ClientReqID
+                }).success(function (response) {
+                    $scope.ClientDetails = response.ClientDetails;
+
+                    $scope.Client = {
+                        ClientName: $scope.ClientDetails[0].ClientName,
+                        ClientRequisitionNo: $scope.ClientDetails[0].ClientReqNo,
+                        ClientRequisitionDate: $scope.ClientDetails[0].RequisitionDate,
+                        ContactPerson: $scope.ClientDetails[0].ContactPerson,
+                        ContactNumber: $scope.ClientDetails[0].ContactNumber,
+                        ContactTIN: $scope.ClientDetails[0].ClientTinNo,
+                        ContactBIN: $scope.ClientDetails[0].ClientBinNo,
+                        ContactAddress: $scope.ClientDetails[0].Address
+                    };
+                    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID, $scope.ClientDetails[0].ClientReqID, action);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+            }
+
+            else if (action === 'view' || 'edit') {
+
+                $('#QuotationForRecom').modal('hide');
+                $scope.loading = true;
+
+                $http.post('/QuotationToClient/AvailableClientDetailInfo', {
+                    ClientID: row.ClientID, ClientReqID: row.ClientReqID
+                }).success(function (response) {
+                    $scope.ClientDetails = response.ClientDetails;
+
+                    $scope.Client = {
+                        ClientName: $scope.ClientDetails[0].ClientName,
+                        ClientRequisitionNo: $scope.ClientDetails[0].ClientReqNo,
+                        ClientRequisitionDate: $scope.ClientDetails[0].RequisitionDate,
+                        ContactPerson: $scope.ClientDetails[0].ContactPerson,
+                        ContactNumber: $scope.ClientDetails[0].ContactNumber,
+                        ContactTIN: $scope.ClientDetails[0].ClientTinNo,
+                        ContactBIN: $scope.ClientDetails[0].ClientBinNo,
+                        ContactAddress: $scope.ClientDetails[0].Address
+                    };
+                    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID, $scope.ClientDetails[0].ClientReqID, action);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+            }
+        };
+
+        $scope.GetClientReqDataInfo = function (ClientID, ClientReqID, action) {
+            if (action === 'save') {
+                $http.post('/QuotationApproval/GetClientReqDataInfo', {
+                    ClientID: ClientID,
+                    ClientReqID: ClientReqID
+                }).success(function (response) {
+                    $scope.GetClientReqDetails = response.GetClientReqDetails;
+                    $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
+                    $scope.loading = false;
+
+                    $scope.MasterData = {
+                        ClientID: $scope.GetClientReqDetailsCollection[0].ClientID,
+                        ClientReqID: $scope.GetClientReqDetailsCollection[0].ClientReqID,
+                        ClientQutnRecmID: $scope.GetClientReqDetailsCollection[0].ClientQutnRecmID
+                    };
+
+                    $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
+
+                }).error(function () {
+                    $scope.loading = false;
+                });
+            }
+
+            else if (action === 'view' || 'edit') {
+                $http.post('/QuotationApproval/GetClientReqDataInfo', {
+                    ClientID: ClientID,
+                    ClientReqID: ClientReqID
+                }).success(function (response) {
+                    $scope.GetClientReqDetails = response.GetClientReqDetails;
+                    $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
+                    $scope.loading = false;
+
+                    $scope.MasterData = {
+                        ClientID: $scope.GetClientReqDetailsCollection[0].ClientID,
+                        ClientReqID: $scope.GetClientReqDetailsCollection[0].ClientReqID,
+                        ClientQutnRecmID: $scope.GetClientReqDetailsCollection[0].ClientQutnRecmID
+                    };
+                    $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
+                }).error(function () {
+                    $scope.loading = false;
+                });
+            }
+        };
+
+
+        $scope.showFlag = false;
+        $scope.selectedRows = [];
+        $scope.buttonChecked = false;
+
+        $scope.selectEntity = function (row, action) {
+
+            if (action === 'save') {
+                var selecteditems = {
+                    ClientQuotationRecomID: row.ClientQuotationRecomID,
+                    ClientQutnRecmItemID: row.ClientQutnRecmItemID,
+
+                    ServiceCategoryID: row.ServiceCategoryID, //--
+                    TermsID: row.TermsID,
+                    ServiceItemID: row.ServiceItemID,
+                    Description: row.Description, //--
+                    DeliveryLocation: row.DeliveryLocation, //--
+                    DeliveryDate: row.DeliveryDate, //--
+                    DeliveryMode: row.DeliveryMode, //--
+                    QutnQnty: row.QutnQnty, //--
+                    QutnUnit: row.ReqUnit, //--
+                    VenPrice: row.QutnPrice, //-- VenPrice
+                    MclPrice: row.givenQutnPrice, //--
+                    QutnAmt: row.QutnAmt, //--
+                    ASFPerc: row.ASFPerc,
+                    ASFAmt: row.TotGivenASFAmt,
+                    VatPerc: row.VatPerc, //--
+                    VatAmt: row.VatAmt, //--
+                    TolAmt: row.givenTolAmt
+                }
+
+                var existingItem = $scope.selectedRows.find(item => item.ClientQutnRecmItemID === row.ClientQutnRecmItemID);
+
+                if (existingItem) {
+                    existingItem.MclPrice = row.givenQutnPrice
+                    existingItem.VatPerc = row.GivenVatPerc;
+                    existingItem.VatAmt = row.TotGivenVatAmt;
+                    existingItem.TolAmt = row.givenTolAmt;
+                } else {
+                    $scope.selectedRows.push(selecteditems);
+                }
+                $scope.showTermsItem = $scope.selectedRows.length > 0;
+            }
+
+            else if (action === 'view' || 'edit') {
+                var selecteditems = {
+                    ClientQuotationRecomID: row.ClientQuotationRecomID,
+                    ClientQutnRecmItemID: row.ClientQutnRecmItemID,
+
+                    ServiceCategoryID: row.ServiceCategoryID, //--
+                    TermsID: row.TermsID,
+                    ServiceItemID: row.ServiceItemID,
+                    Description: row.Description, //--
+                    DeliveryLocation: row.DeliveryLocation, //--
+                    DeliveryDate: row.DeliveryDate, //--
+                    DeliveryMode: row.DeliveryMode, //--
+                    QutnQnty: row.QutnQnty, //--
+                    QutnUnit: row.ReqUnit, //--
+                    VenPrice: row.QutnPrice, //-- VenPrice
+                    MclPrice: row.givenQutnPrice, //--
+                    QutnAmt: row.QutnAmt, //--
+                    AFSPerc: row.GivenAFSPerc,
+                    VatAmt: row.TotGivenAFSAmt,
+                    VatPerc: row.VatPerc, //--
+                    VatAmt: row.VatAmt, //--
+                    TolAmt: row.givenTolAmt
+                }
+
+                var existingItem = $scope.selectedRows.find(item => item.ClientQutnRecmItemID === row.ClientQutnRecmItemID);
+
+                if (existingItem) {
+                    existingItem.MclPrice = row.givenQutnPrice
+                    existingItem.VatPerc = row.GivenVatPerc;
+                    existingItem.VatAmt = row.TotGivenVatAmt;
+                    existingItem.TolAmt = row.givenTolAmt;
+                } else {
+                    $scope.selectedRows.push(selecteditems);
+                }
+                $scope.showTermsItem = $scope.selectedRows.length > 0;
+            }
+        }
+
+        $scope.GetTermsItemList = function (TempID, action) {
+            if (action === 'save') {
+                $http.post('/QuotationApproval/GetVendorTermList',
+                    { ClientQutnRecmID: TempID })
+                    .success(function (response) {
+                        $scope.TermsConditionsList = response.VendorTermTermList;
+                        $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
+                        $scope.loading = false;
+                    })
+                    .error(function () { });
+            }
+            else if (action === 'view' || 'edit') {
+                $http.post('/QuotationApproval/GetVendorTermList',
+                    { ClientQutnRecmID: TempID })
+                    .success(function (response) {
+                        $scope.TermsConditionsList = response.VendorTermTermList;
+                        $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
+                        $scope.loading = false;
+                    })
+                    .error(function () { });
+            }
+        }
+
+
+        $scope.initializeDefaults = function (row) {
+            row.givenQutnPrice = row.QutnPrice || 0;
+            row.GivenVatPerc = 15;
+
+            $scope.calculateRowFields(row);
+        };
+
+        $scope.calculateRowFields = function (row) {
+           /* row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
+            row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
+            row.givenQutnAmt = row.givenQutnPrice * (parseFloat(row.QutnQnty) || 0);
+            row.TotGivenVatAmt = row.givenQutnAmt * (row.GivenVatPerc / 100);
+            row.givenTolAmt = row.givenQutnAmt + row.TotGivenVatAmt;*/
+
+            row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
+            //row.GivenASFPerc = parseFloat(row.GivenASFPerc) || 0;
+            //row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
+            row.ReqQnty = parseFloat(row.ReqQnty) || 0;
+
+            // 1. Calculate Base Amount
+            row.givenQutnAmt = row.givenQutnPrice * row.QutnQnty;
+
+            // 2. Calculate ASF Amount
+            row.TotGivenASFAmt = row.givenQutnAmt * (row.ASFPerc / 100);
+
+            // 3. Calculate VAT based on (Base + ASF)
+            const basePlusASF = row.givenQutnAmt + row.TotGivenASFAmt;
+            row.TotGivenVatAmt = basePlusASF * (row.GivenVatPerc / 100);
+
+            // 4. Total Amount
+            row.givenTolAmt = row.givenQutnAmt + row.TotGivenASFAmt + row.TotGivenVatAmt;
+
+
+            $scope.selectEntity(row, 'save');
+        };
+
+        $scope.validateInput = function (field, row) {
+            const floatRegex = /^[0-9]*\.?[0-9]*$/;
+            if (!floatRegex.test(row[field]) || row[field] === '') {
+                row[field] = 0;
+            }
+            $scope.calculateRowFields(row);
+        };
+
+        $scope.checkEnter = function (event, row) {
+            if (event.keyCode === 13 || event.keyCode === 9) {
+                $scope.calculateRowFields(row);
+            }
+        };
+
+
+        $scope.openConfirmModal = function (action) {
+            if (!$scope.MasterData.Operation || $scope.MasterData.Operation.trim() === '') {
+                toastr.error('Please select Operation');
+            } else {
+                // $('#ConfirmModal').modal('show');
+                $scope.SaveQuotToClient(action);
+            }
+        };
+
+
+        $scope.SaveQuotToClient = function (action) {
+
+            console.log($scope.MasterData);
+            console.log($scope.selectedRows);
+            console.log($scope.TermsConditionsDisplayedCollection);
+
+            $http.post('/QuotationApproval/SaveQuotToClient', {
+                MasterData: [$scope.MasterData],
+                DetailData: $scope.selectedRows,
+                AllTermsDtl: $scope.TermsConditionsDisplayedCollection
+
+            }).success(function (response) {
+
+                if (response.status === "Successfully Submitted" || "Operation Done") {
+                    toastr.success('Data Saved Successfully');
+                    $scope.Quotation.QuotationNo = response.ClientQutnAprvID;
+                    $scope.refreshPage();
+                }
+                else {
+                    toastr.error('Something went wrong');
+                }
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+                toastr.error('Data Loading Failed.');
+            });
+        }
+
+        $scope.refreshPage = function () {
+            setTimeout(function () {
+                window.location.reload();
+            }, 2000);
+        }
+
+        $scope.getRowStyle = function (row) {
+            if (row.selected) {
+                return { background: '#b9e7d8' };
+            } else {
+                return {};
+            }
+        };
+
+        $scope.SearchSaveClients = function () {
+
+            $scope.ClearEverything();
+
+            $http.post('/QuotationApproval/AllAvailableClients', {
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack",
+                action: 'SaveSearch'
+
+            }).success(function (response) {
+                $scope.AllQuotationsList = response.AllAvailableClientsList;
+                $scope.AllQuotationsCollection = $scope.AllQuotationsList.filter(function (item) {
+                    return item.ProcessStatus == null || item.ProcessStatus === '';
+                });
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+            });
+            $('#QuotationForRecom').modal('show');
+        };
+
+
+        $scope.selectSavePageList = function () {
+            $http.post('/QuotationApproval/AllAvailableClients', {
+
+                page: $scope.PagingInfo.page,
+                itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy,
+                reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search,
+                type: "isBack",
+                action: 'SaveSearch'
+
+            }).success(function (response) {
+                $scope.AllQuotationsList = response.AllAvailableClientsList;
+                $scope.AllQuotationsCollection = $scope.AllQuotationsList.filter(function (item) {
+                    return item.ProcessStatus == null || item.ProcessStatus === '';
+                });
+                $scope.loading = false;
+            })
+                .error(function () {
+                    $scope.loading = false;
+                });
+        }
+
+
+        /////===============> terms and conditions
+
+        $scope.ShowTermsConditionsList = function () {
+            $http.get("/ClientRequisition/GetTermsConditionsList")
+                .success(function (response) {
+                    console.log(response);
+                    $scope.TermsConditionsList = response.termsConditionsList;
+                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
+                    console.log($scope.TermsConditionsDisplayedCollection);
+                    $scope.loading = false;
+                })
+                .error(function () { });
+
+            $('#ClientReqTermsConditionsModal').modal('show');
+        };
+
+        $scope.toggleTermsConditionsSelect = function (row) {
+            $scope.ClientReq.TermsID = row.TermsID;
+            $scope.ClientReq.FormName = row.FormName;
+
+            $http.post('/ClientRequisition/GetClientReqTermAgainstFormList', { TermsID: row.TermsID })
+                .success(function (response) {
+                    $scope.TermsConditionsList = response.ClientReqTermList;
+                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+            $('#ClientReqTermsConditionsModal').modal('hide');
+        };
+
+        $scope.AddReqTermModal = function () {
+
+            $('#RequisitionTermModal').modal('show');
+        };
+
+
+        $scope.TermsConditionsList = [];
+        $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
+
+        $scope.AddReqTerm = function () {
+            if ($('#TermsCode').val() === "") {
+                toastr.error("Terms Code is required.");
+                return;
+            }
+
+            if ($('#TermsName').val() === "") {
+                toastr.error("Terms Name is required.");
+                return;
+            }
+
+            const newTerm = {
+                TermsCode: $('#TermsCode').val(),
+                TermsName: $('#TermsName').val(),
+            };
+
+            $scope.clientReqTermArray.push(newTerm);
+
+            $scope.TermsConditionsDisplayedCollection = $scope.TermsConditionsList.concat(newTerm);
+
+            $scope.resetClientReqTerm();
+            $("#btnAddReqTerm").html('Add');
+            $('#RequisitionTermModal').modal('hide');
+        };
+
+        $scope.resetClientReqTerm = function () {
+            $scope.ClientReqTerm = {
+                ClientReqTermsID: "",
+                ClientReqID: "",
+                TermsID: "",
+                TermsCode: "",
+                TermsName: ""
+            };
+        };
+
+        $scope.toggleReqTermEdit = function (tableRow, index) {
+            $('#RequisitionTermModal').modal('show');
+            $scope.resetClientReqTerm();
+
+            $scope.ClientReqTerm = angular.copy(tableRow);
+
+            $scope.TermsConditionsDisplayedCollection.splice(index, 1);
+            $scope.clientReqTermArray.splice(index, 1);
+            $("#btnAddReqTerm").html('Update');
+        };
+
+        $scope.toggleReqTermDelete = function (tableRow, index) {
+            if (!tableRow.ClientReqTermID) {
+                $scope.resetClientReqTerm();
+                $scope.TermsConditionsDisplayedCollection.splice(index, 1);
+                $scope.clientReqTermArray.splice(index, 1);
+                toastr.success('Data deleted successfully.');
+            } else {
+                $scope.resetClientReqTerm();
+                $scope.ClientReqTerm = angular.copy(tableRow);
+                $('#deleteReqTermModal').modal('show');
+            }
+        };
+
+
+        //print document
+
+        $scope.printData = function () {
+            var VendorSlip = document.getElementById("masterRow");
+
+            // Create an iframe dynamically
+            var iframe = document.createElement('iframe');
+            iframe.style.position = 'absolute';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = 'none';
+            document.body.appendChild(iframe);
+
+            // Write the content to the iframe document
+            var doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write('<html><head><title>Print</title>');
+
+            // Add custom styles for printing
+            doc.write('<style>' +
+                'body { font-family: Arial, sans-serif; margin: 0; padding: 0; }' +
+                'table { width: 100%; border-collapse: collapse; }' +
+                'td, th { padding: 8px; text-align: left; border: 1px solid #ddd; }' +
+                'p { margin: 0; font-size: 14px; }' + // Adjust as needed
+                '.row { display: flex; justify-content: space-between; padding: 20px; }' +
+                '.col-md-5, .col-md-4 { flex: 1; margin: 10px; }' + // Flex layout for columns
+                'table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }' +
+                '</style>');
+
+            doc.write('</head><body>');
+
+            // Copy content from the original div and write it into the iframe
+            doc.write(VendorSlip.outerHTML);
+
+            doc.write('</body></html>');
+            doc.close();
+
+            // Trigger print on the iframe content
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+
+            // Remove the iframe from the DOM after printing
+            document.body.removeChild(iframe);
+        }
+
+        $scope.ClearEverything = function () {
+            $scope.showTermsItem = false;
+
+            $scope.clientReqTermArray = [];
+            $scope.Client = "";
+            $scope.ClientReq = {
+                TermsID: "",
+                FormName: "",
+            }
+
+            $scope.ClientReqTerm = {
+                ClientReqTermsID: "",
+                ClientReqID: "",
+                TermsID: "",
+                TermsCode: "",
+                TermsName: ""
+            }
+            $scope.Client = {
+                ClientName: "",
+                ClientRequisitionNo: "",
+                ClientReqID: "",
+                ClientRequisitionDate: "",
+                ContactPerson: "",
+                ContactNumber: "",
+                ContactTIN: "",
+                ContactBIN: "",
+                ContactAddress: "",
+            }
+
+            $scope.MasterData = {
+                ClientID: "",
+                ClientReqID: "",
+                BriefingDate: "",
+                QuotationNote: ""
+            }
+            $scope.ClientDetails = [];
+            $scope.GetClientReqDetails = [];
+            $scope.GetClientReqDetailsCollection = [];
+            $scope.TermsConditionsList = [];
+            $scope.TermsConditionsDisplayedCollection = [];
+            $scope.AllAvailableClientsList = [];
+            $scope.AllAvailableClientstCollection = [];
+            $scope.selectedRows = [];
+            $scope.ClientReq.TermsID = "";
+            $scope.ClientReq.FormName = "";
+        }
+
+
+    }
+    )
+
+
+</script>
+
+

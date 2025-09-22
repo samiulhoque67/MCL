@@ -1,0 +1,1612 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+<style>
+    .link_total_bm {
+        color: black;
+        font-weight: bold;
+    }
+
+        .link_total_bm :hover {
+            color: #0091EA !important;
+            font-weight: bold;
+        }
+
+    .link_within_bm {
+        color: green;
+        font-weight: bold;
+    }
+
+        .link_within_bm :hover {
+            color: #0091EA;
+            font-weight: bold;
+        }
+
+    .link_out_bm {
+        color: firebrick;
+        font-weight: bold;
+    }
+
+        .link_out_bm :hover {
+            color: #0091EA;
+            font-weight: bold;
+        }
+
+    .global-search {
+        height: 34px;
+    }
+
+    .btn-round {
+        border-radius: 17px;
+    }
+
+    .box.box-solid.box-primary > .box-header {
+        text-align: center;
+    }
+</style>
+
+<div class="box box-primary box-body" ng-controller="PoAprvCtrl">
+    <div class="box-header with-border bg-light-blue-gradient" style="height: 38px; border-radius: 5px;">
+        <h2 class="box-title" style="font-family: math; font-weight: 500;">Purchase Order Approval</h2>
+
+        <div class="box-tools pull-right">
+            <div class="col-lg-12 pull-right">
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button class="button-custom btn-warning" type="button" data-ng-click="toggleRefreshTable()" ng-disabled="btnRefresh">
+                        <i class="fa fa-refresh" style="padding-right: 5px"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button class="button-custom btn-primary" type="button" data-ng-click="SearchVendorReqModal()" ng-disabled="btnSearch">
+                        <i class="fa fa-search" style="padding-right: 5px"></i> Search
+                    </button>
+                </div>
+
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button class="button-custom btn-primary" type="button" data-ng-click="Post()" ng-disabled="btnSave">
+                        <i class="fa fa-save" style="padding-right: 5px"></i> {{ VendorReq.VendorReqID ? 'Update' : 'Save' }}
+                    </button>
+                </div>
+
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button class="button-custom btn-danger" type="button" data-ng-click="Cancel()" ng-disabled="btnSave">
+                        <i class="fa fa-close" style="padding-right: 5px"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="VendorSlipModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h3 class="modal-title"></h3>
+                </div>
+
+                <div class="modal-body">
+                    <div class="box-body">
+                        <div class="row">
+                            <input type="button" class="btn btn-primary pull-right" value="Re-print" ng-click="printData()" />
+                        </div>
+                        <br />
+
+                        <div class="row" id="masterRow" style="position:relative; padding-right: 0px;padding-left: 0px">
+                            <div class="row">
+                                <!-- Left Section -->
+
+
+
+                                <div class="col-md-5">
+
+
+                                    <div>
+                                        <img src="../../Content/AdminLTE/img/mediacom-logomini.png" style="height: 20px; margin-left:-35px;" />
+                                        <p style="font-weight: bold; margin: 0;">MEDIACOM LIMITED</p>
+                                        <p style="margin: 0;">SAMSON CENTER</p>
+                                        <p style="margin: 0;">Levels - 5 to 7</p>
+                                        <p style="margin: 0;">43 South Avenue, Road-126, Plot-CES (G) 5A,</p>
+                                        <p style="margin: 0;">Gulshan 1, Dhaka – 1212</p>
+                                        <p style="margin: 5px 0; color: orangered; font-weight: bold;">
+                                            IP No. 09610939393 extn: 1200/1205<br />
+                                            email: mediacombd.com, www.mediacombd.com
+                                        </p>
+                                    </div>
+                                    <br />
+                                    <div>
+                                        <p style="font-weight: bold; margin: 0;">Corporate Headquarters</p>
+                                        <p style="margin: 0;">SQUARE CENTRE</p>
+                                        <p style="margin: 0;">48, Mohakhali C/A, Dhaka – 1212</p>
+                                    </div>
+                                    <br />
+                                    <div>
+                                        <p style="font-weight: bold;">Supplier Information</p>
+                                        <br />
+                                        <table>
+                                            <tr>
+                                                <td style="font-weight: bold;">Supplier No.:</td>
+                                                <td>  {{VendorCSInfo.VendorID}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">Name:</td>
+                                                <td>{{VendorCSInfo.VendorName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">Address:</td>
+                                                <td>{{VendorCSInfo.VendorAddress}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Right Section -->
+                                <div class="col-md-4">
+                                    <p style="font-weight: bold; font-size:18px;">Purchase Order</p>
+                                    <br />
+                                    <br />
+
+                                    <table style="width: 100%; border-collapse: collapse; font-size: smaller; margin-top: 10px;">
+                                        <tr>
+                                            <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">PO Number:</td>
+                                            <td style="border: 1px solid #000; padding: 5px;">{{VendorCSInfo.PONo}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Revision:</td>
+                                            <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">Created by:</td>
+                                            <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">PR No:</td>
+                                            <td style="border: 1px solid #000; padding: 5px;">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">WO Ref:</td>
+                                            <td style="border: 1px solid #000; padding: 5px;">{{VendorCSInfo.WIInfoID}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">PO Hand over date:</td>
+                                            <td style="border: 1px solid #000; padding: 5px;">{{VendorCSInfo.PODate}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-3">
+
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <tr>
+                                            <td style="font-weight: bold; padding: 8px;">Ship To:</td>
+                                            <td style="padding: 8px;">SAMSON CENTER</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding: 8px;">Bill To:</td>
+                                            <td style="padding: 8px;">SAMSON CENTER</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding: 8px;">Requester:</td>
+                                            <td style="padding: 8px;">Sumon kumar paul</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding: 8px;">Confirm To:</td>
+                                            <td style="padding: 8px;">Vendor/supplier</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding: 8px;">Task Name:</td>
+                                            <td style="padding: 8px;">Printing</td>
+                                        </tr>
+                                    </table>
+
+
+                                </div>
+                            </div>
+
+                            <!-- Line Items -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table st-table="PoPrintCollection" st-safe-src="PoPrintList" style="width:100%;" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                                        <thead>
+
+                                            <tr>
+
+                                                <th style="text-align: left;" st-sort="">Line</th>
+                                                <th style="text-align: left;" st-sort="">Item Name</th>
+                                                <th style="text-align: left;" st-sort="">Description</th>
+                                                <th style="text-align: left;" st-sort="">UOM</th>
+
+                                                <th style="text-align: left;" st-sort="">Unit Price</th>
+                                                <th style="text-align: left;" st-sort="">Quantity</th>
+                                                <th style="text-align: left;" st-sort="">Amount</th>
+
+                                                <th style="text-align: left;" st-sort="">Vat</th>
+                                                <th style="text-align: left;" st-sort="">Agreed Delivery Date</th>
+
+                                                @*<th style="text-align: left;">Action</th>*@
+                                            </tr>
+                                            @*<tr>
+                                                    <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                                                </tr>*@
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="row in PoPrintCollection" ng-cloak style="font-size:12px;">
+                                                <td class="col-lg-1">{{$index + 1}}</td>
+
+                                                <td class="col-lg-2">{{row.ServiceItemName}}</td>
+                                                <td class="col-lg-2">{{row.Description}}</td>
+                                                <td class="col-lg-1">{{row.ReqUnit}}</td>
+                                                <td class="col-lg-1 col-md-1 col-sm-1">{{row.NegoPrice | number:2}}</td>
+                                                <td class="col-lg-1 col-md-1 col-sm-1">{{row.NegoQty | number:2}}</td>
+                                                <td class="col-lg-1 col-md-1 col-sm-1">{{row.NegoAmt | number:2}}</td>
+                                                <td class="col-lg-1 col-md-1 col-sm-1">{{row.NegoVatAmt | number:2}}</td>
+                                                <td class="col-lg-1 col-md-2 col-sm-2">{{row.PODate}}</td>
+
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                    <!-- Total Section -->
+                                    @*<div class="flex-container" style="margin-top: 10px;">
+                                            <div style="font-weight: bold;">Total (BDT):</div>
+                                            <div style="font-weight: bold;">Inword:</div>
+                                            <div style="font-weight: bold;">Grand Total (BDT):</div>
+                                        </div>*@
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: left;" st-sort="">Terms Code</th>
+                                                <th style="text-align: left;" st-sort="">Terms & Conditions</th>
+
+                                            </tr>
+
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
+
+                                                <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
+                                                <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
+
+
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="form-group">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-if="CSClientDisplayedCollection.length > 0">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="CSClientDisplayedCollection" st-safe-src="CSClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+                        <tr>
+                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">POPreparation ID</th>
+                            <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
+                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientReqNo')">Requisition No</th>
+                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
+                            <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Vendor Name</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                        </tr>
+                        @*<tr>
+                                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="ClientReqNo" placeholder="Client Req.No" class="input-sm form-control" type="search" /></th>
+                            </tr>*@
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in CSClientDisplayedCollection">
+                            @*<td class="hidden">{{row.ClientReqID}}</td>*@
+                            <td class="hidden">{{row.ClientID}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.PORecmID}}</td>
+                            <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2 text-left">{{row.ClientReqNo}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.RequisitionDate}}</td>
+                            <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.VendorName}}</td>
+                            <td>
+                                @*<a class="btn col-center btn-sm btn-flat btn-success" data-ng-click="ClientSelect(row)">Details</a>*@
+                                <button type="button" class="btn col-center btn-sm btn-flat btn-success" data-ng-click="ItemSelect(row)">Details</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        @*<tr>
+                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                            </tr>*@
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!--<div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="CSVendorDisplayedCollection" st-safe-src="CSVendorList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+                        <tr>
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorName')">Vendor Name</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactPerson')">Contact Person</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactNumber')">Contact Number</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('VendorQutnNo')">VendorQutnNo</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('QuotationDate')">QuotationDate</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('TolQnty')">TolQnty</th>
+                            <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in CSVendorDisplayedCollection" ng-cloak style="font-size:12px;">
+                            <td class="hidden">{{row.index+1}}</td>
+                            <td class="hidden">{{row.VendorCSAprvID}}</td>
+                            <td class="hidden">{{row.VendorID}}</td>
+                            <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactPerson}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactNumber}}</td>
+                            <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorQutnNo}}</td>
+                            <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.QuotationDate}}</td>
+                            <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.TolQnty}}</td>
+                            <td class="col-lg-1" style="width:5%;">
+                                <button type="button" class="ChildButtons" ng-click="selectEntity(row)" data-dismiss="modal" title="Select">
+                                    <i ng-show="!row.buttonCheckedforVendor" class="fa fa-square-o"></i>
+                                    <i ng-show="row.buttonCheckedforVendor" class="fa fa-check-square-o"></i>
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn col-center btn-sm btn-flat btn-success" data-ng-click="ItemSelect(row)">Details</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>-->
+    @*<tr>
+            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+        </tr>*@
+    <!--</tfoot>
+                </table>
+            </div>
+        </div>
+    </div>-->
+
+
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="VenCSItemGridDisplayCollection.length > 0">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList" style="width:100%;" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+
+                        <tr>
+
+                            <th style="text-align: left;" st-sort="">Item Name</th>
+                            @*<th style="text-align: left;" st-sort="">ReqQnty</th>
+                                <th style="text-align: left;" st-sort="">RemainingQnty</th>
+                                <th style="text-align: left;" st-sort="">ReqUnit</th>*@
+                            <th style="text-align: left;" st-sort="">QutnQnty</th>
+                            <th style="text-align: left;" st-sort="">POQnty</th>
+
+                            <th style="text-align: left;" st-sort="">QutnPrice</th>
+                            <th style="text-align: left;" st-sort="">PoPrice</th>
+                            <th style="text-align: left;" st-sort="">QutnAmt</th>
+                            <th style="text-align: left;" st-sort="">PoAmt</th>
+                            <th style="text-align: left;" st-sort="">VatPerc</th>
+                            <th style="text-align: left;" st-sort="">VatAmt</th>
+                            <th style="text-align: left;" st-sort="">PoVatAmt</th>
+                            <th style="text-align: left;" st-sort="">TolAmt</th>
+                            <th style="text-align: left;" st-sort="">PoTotalAmt</th>
+                            @*<th style="text-align: left;">Action</th>*@
+                        </tr>
+                        @*<tr>
+                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                            </tr>*@
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td class="hidden">{{row.index+1}}</td>
+                            <td class="hidden">{{row.VendorCSInfoItemID}}</td>
+                            <td class="hidden">{{row.VendorCSInfoID}}</td>
+                            @*<td class="col-lg-1">{{ row.ServiceItemID }} </td>*@
+                            <td class="col-lg-1">{{row.ServiceItemName}}</td>
+
+                            @*<td class="col-lg-1">{{row.ReqQnty | number:2}}</td>
+                                <td class="col-lg-1">{{row.RemainingQty}}</td>
+                                <td class="col-lg-1">{{row.ReqUnit}}</td>*@
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoQty" ng-value="0" ng-readonly="true" />
+                            </td>
+
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnPrice | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoPrice" ng-value="0" ng-readonly="true" />
+                            </td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnAmt| number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoAmt" ng-value="0" ng-readonly="true" />
+                            </td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatPerc | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatAmt | number:2}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoVatAmt" ng-value="0" ng-readonly="true" />
+                            </td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:1}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoTolAmt" ng-value="0" ng-readonly="true" />
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Bill Category:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" ng-model="VendorCSInfo.Category" value="Normal" ng-disabled="VendorCSInfo.Category" /> Normal
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="VendorCSInfo.Category" value="PlusMinus" ng-disabled="VendorCSInfo.Category" /> Plus Minus
+                        </label>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Bill Type:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-disabled="VendorCSInfo.BillType">
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" ng-model="VendorCSInfo.BillType" value="Default" ng-disabled="VendorCSInfo.BillType" /> Default
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="VendorCSInfo.BillType" value="Installment" ng-disabled="VendorCSInfo.BillType" /> Installment
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-lg-2" ng-show="VendorCSInfo.BillType === 'Installment'">
+                    <div class="form-group">
+                        <label>Installment:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-show="VendorCSInfo.BillType === 'Installment'" ng-readonly="true">
+                    <div class="form-group">
+                        <input id="Installment" name="Installment" type="text" class="form-control" placeholder="Number of Installment" ng-model="VendorCSInfo.Installment" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2" ng-show="VendorCSInfo.BillType === 'Installment'">
+                    <div class="form-group">
+                        <label>Installment Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-show="VendorCSInfo.BillType === 'Installment'" ng-readonly="true">
+                    <div class="form-group">
+                        <input id="InstalledAmount" name="InstalledAmount" type="text" class="form-control" placeholder="Installed Amount" ng-model="VendorCSInfo.InstalledAmount" />
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>PO No:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="AutoPoNo" name="AutoPoNo" type="text" class="form-control" placeholder="Auto PO  No" ng-model="VendorCSInfo.AutoPoNo" ng-readonly="true" />
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>PO Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="POAmount" name="POAmount" type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.PoAmount" ng-readonly="true" />
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Approved Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="RecommendedAmount" name="RecommendedAmount" autocomplete="off" type="text" class="form-control" placeholder="PO Amount" ng-model="VendorCSInfo.RecommendedAmount" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>PO Date</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="CSRecDate" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="PO Date" ng-model="VendorCSInfo.CSRecDate" ng-disabled="VendorCSInfo.CSRecDate" />
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>PO Approve Date</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="PORecDate" name="PORecDate" type="text" class="DatePicker form-control" placeholder="PO Date" ng-model="VendorCSInfo.PORecDate" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Approve By:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="RecommendedBy" name="RecommendedBy" type="text" class="form-control" placeholder="Recommended By" ng-model="VendorCSInfo.RecommendedBy" />
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="QuotationFor">Note:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSInfo.Remarks" class="form-control" placeholder="Note for CS" />
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <!--<div class="col-lg-2">-->
+    @*<div class="col-sm-1 col-md-1 col-lg-1">
+        </div>*@
+    <!--<div class="form-group">
+            <label>PO Created by:</label>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="form-group">
+            <input id="RecommendedBy" name="RecommendedBy" type="text" class="form-control" placeholder="CreatedBy" ng-model="VendorCSInfo.RecommendedBy" />
+        </div>
+    </div>-->
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;" st-sort="">Terms Code</th>
+                            <th style="text-align: left;" st-sort="">Terms & Conditions</th>
+                            <th style="text-align: left;">Action</th>
+                        </tr>
+                        <tr>
+                            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td class="hidden">{{row.VendorCSInfoTermsID}}</td>
+                            <td class="hidden">{{row.VendorCSInfoID}}</td>
+                            <td class="hidden">{{row.TermsID}}</td>
+                            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
+                            <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
+
+                            <td class="col-lg-1" style="width:5%;">
+                                <button type="button" ng-if="row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" ng-if="!row.VendorCSInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script type="text/javascript">
+
+    app.controller('PoAprvCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+        $scope.vendorCSItemArray = [];
+        $scope.vendorCSTermArray = [];
+        $scope.itemsByPage = 10;
+
+        $scope.dashBoardResult = {};
+
+        //$http.get('/PoAprv/GetPOAprvDashBordData')
+        //    .success(function (response) {
+        //        $scope.loading = false;
+        //        $scope.dashBoardResult = response.result;
+        //    }).error(function () { });
+
+        $http.post("/PoAprv/GetPoAprvClientInfo/")
+            .success(function (response) {
+                $scope.CSClientList = response.CSClientList;
+                $scope.VendorCSInfo.VendorQutnID = response.CSClientList[0].VendorQutnID;
+                $scope.CSClientDisplayedCollection = [].concat($scope.CSClientList);
+            })
+            .error(function () { });
+
+
+        //$scope.ClientSelect = function (row) {
+        //    $scope.VendorCSInfo.ClientID = row.ClientID;
+        //    $scope.VendorCSInfo.ClientReqID = row.ClientReqID;
+        //    $scope.VendorCSInfo.ServiceCategoryID = $scope.ServiceCategoryID;
+        //    $scope.VendorCSInfo.VendorCSAprvID = row.VendorCSAprvID;
+        //    $http.post("/POCreation/OBS_GetPOVendorsUsingClient", {
+        //        ClientID: row.ClientID,
+        //        VendorCSAprvID: row.VendorCSAprvID,
+        //        ServiceCategoryID: $scope.ServiceCategoryID
+        //    })
+        //        .success(function (response) {
+        //            $scope.CSVendorList = response.CSVendorList;
+        //            $scope.CSVendorDisplayedCollection = [].concat($scope.CSVendorList);
+        //            $scope.CSVendorDisplayedCollection.forEach(function (item, index) {
+        //                // Add an index field to each object
+        //                item.index = index; // Adding 1 to start index from 1
+        //            });
+        //        })
+        //        .error(function () { });
+        //};
+
+        $scope.ItemSelect = function (row) {
+            $scope.VendorCSInfo.ClientID = row.ClientID;
+            $scope.VendorCSInfo.ClientReqID = row.ClientReqID;
+
+            $scope.VendorCSInfo.POPreparationID = row.POPreparationID;
+            $scope.VendorCSInfo.PORecmID = row.PORecmID;
+            $http.post("/PoAprv/GetVendorPOAprvQuotationItem", {
+                VendorID: row.VendorID,
+                ClientID: row.ClientID,
+
+                PORecmID: row.PORecmID
+            })
+                .success(function (response) {
+                    $scope.VenCSItemList = response.VenCSItemList;
+                    $scope.VendorCSInfo.AutoPoNo = response.VenCSItemList[0].PONo;
+                    $scope.VendorCSInfo.CSRecDate = response.VenCSItemList[0].PODate;
+                    $scope.VendorCSInfo.PoAmount = response.VenCSItemList[0].POAmt;
+                    $scope.VendorCSInfo.Remarks = response.VenCSItemList[0].Remarks;
+                    $scope.VendorCSInfo.RecommendedBy = response.VenCSItemList[0].POCreatedBy;
+
+                    $scope.VendorCSInfo.BillType = response.VenCSItemList[0].BillType;
+                    $scope.VendorCSInfo.Category = response.VenCSItemList[0].BillCategory;
+                    $scope.VendorCSInfo.Installment = response.VenCSItemList[0].Installment;
+                    $scope.VendorCSInfo.InstalledAmount = response.VenCSItemList[0].InstalledAmount;
+
+
+                    $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
+                    $scope.VendorCSInfo.PoAmount = $scope.VenCSItemGridDisplayCollection[0].NegoTolAmt;
+                    console.log($scope.VenCSItemGridDisplayCollection);
+                })
+                .error(function () {
+                    $scope.loading = false;
+                });
+
+            $http.post('/PoAprv/GetPOAprvInfoTermList', { PORecmID: row.PORecmID })
+                .success(function (response) {
+                    $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
+
+                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+        };
+
+        $scope.VendorCSInfo = {
+            VendorCSAprvID: "",
+            POPreparationID: "",
+            PORecmID: "",
+            VendorID: "",
+            VendorName: "",
+            ClientID: "",
+            AutoPoNo: "",
+            CSRecDate: "",
+            PORecDate: "",
+            Operation: "",
+            RecommendedBy: "",
+            Remarks: "",
+            Status: "",
+            PoAmount: "",
+            RecommendedAmount: "",
+            ServiceCategoryID: "",
+            ClientReqID: "",
+            VendorQutnID: "",
+            WIInfoID: "",
+            VendorAddress:"",
+            BillType: "",
+            Installment: 1,
+            InstalledAmount: "",
+            Category: ""
+        }
+
+        $scope.VendorCSInfo.Category = 'Normal';
+        $scope.VendorCSInfo.BillType = 'Default'; 
+
+        $scope.VendorCSInfoItem = {
+            VendorCSInfoItemID: "",
+            ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
+            ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
+            ReqQnty: "",
+            ReqUnit: "",
+            QutnQnty: "",
+            QutnPrice: "",
+            QutnUnit: "",
+            QutnAmt: "",
+            VatPerc: "",
+            VatAmt: "",
+            TolAmt: ""
+        }
+
+        $scope.VendorCSVendorsItemWise = {
+            VendorCSVendorsItemWiseID: "",
+            VendorCSInfoID: "",
+            VendorCSInfoItemID: "",
+            VendorID: "",
+            VendorName: "",
+            TolQnty: "",
+            VendorQutnID: "",
+            //ContactPerson: "",
+            //ContactNumber: "",
+            //VendorTINNo: "",
+            //VendorBINNo: "",
+            //VendorEmail: "",
+            //VendorAddress: "",
+            //VenReqQnty: "",
+            //VenReqUnit: "",
+            Status: ""
+        }
+
+        $('.DatePicker').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true
+            // Set minDate to 0 to disable selecting previous dates
+        });
+
+        $('.DatePicker')
+            .on('changeDate', function (ev) {
+                $('.datepicker').hide();
+            });
+
+        // ################# Detail Add Modal ####################
+        $scope.AddReqItemModal = function () {
+
+            if ($('#RequisitionNo').val() == "") {
+                toastr.error("Vendor ReqNo.  Required");
+                return;
+            }
+
+            if ($('#SubmissionDate').val() == "") {
+                toastr.error("Submission Date Required.");
+                return;
+            }
+
+            if ($('#RequisitionDate').val() == "") {
+                toastr.error("Requisition Date Date Required");
+                return;
+            }
+            $('#RequisitionItemModal').modal('show');
+        };
+
+        $scope.VenCSItemList = [];  // base collection
+        $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
+
+        $scope.AddReqItem = function () {
+
+            if ($scope.VendorCSInfoItem.ServiceCategory.ServiceCategoryID == "") {
+                toastr.error("Service Category Required");
+                return;
+            }
+
+            if ($scope.VendorCSInfoItem.ServiceItem.ServiceItemID == "") {
+                toastr.error("Service Item  Required");
+                return;
+            }
+
+            if ($scope.VendorCSInfoItem.DeliveryMode == "") {
+                toastr.error("Submission Date Required.");
+                return;
+            }
+
+            if ($scope.VendorCSInfoItem.ReqUnit == "") {
+                toastr.error("Requisition Date Date Required");
+                return;
+            }
+
+            if ($('#DeliveryLocation').val() == "") {
+                toastr.error("Service Category Required");
+                return;
+            }
+
+            if ($('#DeliveryDate').val() == "") {
+                toastr.error("Service Item  Required");
+                return;
+            }
+
+            if ($('#Description').val() == "") {
+                toastr.error("Submission Date Required.");
+                return;
+            }
+
+            if ($('#ReqQnty').val() == "") {
+                toastr.error("Requisition Date Date Required");
+                return;
+            }
+
+            $scope.VendorCSInfoItem.ServiceCategoryID = $scope.VendorCSInfoItem.ServiceCategory.ServiceCategoryID;
+            $scope.VendorCSInfoItem.ServiceCategoryName = $scope.VendorCSInfoItem.ServiceCategory.ServiceCategoryName;
+            $scope.VendorCSInfoItem.ServiceItemID = $scope.VendorCSInfoItem.ServiceItem.ServiceItemID;
+            $scope.VendorCSInfoItem.ServiceItemName = $scope.VendorCSInfoItem.ServiceItem.ServiceItemName;
+
+            $scope.VendorCSInfoItem.DeliveryMode = $scope.VendorCSInfoItem.DeliveryMode;
+            $scope.VendorCSInfoItem.ReqUnit = $scope.VendorCSInfoItem.ReqUnit;
+
+            $scope.VendorCSInfoItem.DeliveryLocation = $('#DeliveryLocation').val();
+            $scope.VendorCSInfoItem.DeliveryDate = $('#DeliveryDate').val();
+            $scope.VendorCSInfoItem.Description = $('#Description').val();
+            $scope.VendorCSInfoItem.ReqQnty = $('#ReqQnty').val();
+
+            $scope.vendorCSItemArray.push($scope.VendorCSInfoItem);
+
+            $scope.VenCSItemGridDisplayCollection = $scope.VenCSItemGridDisplayCollection.concat($scope.VendorCSInfoItem);
+
+            $scope.resetVendorCSInfoItem();
+            $("#btnAddReqItem").html('Add');
+            $('#RequisitionItemModal').modal('hide');
+        }
+
+        $scope.resetVendorCSInfoItem = function () {
+            $('#DeliveryDate').val('');
+            $scope.VendorCSInfoItem = {
+                VendorCSInfoItemID: "",
+                VendorCSInfoID: "",
+                ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
+                ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
+                Description: "",
+                DeliveryLocation: "",
+                DeliveryDate: "",
+                DeliveryMode: "",
+                ReqQnty: "",
+                ReqUnit: ""
+            }
+        }
+
+
+        $scope.toggleClientReqSelect = function (tableRow) {
+            $scope.VendorCSInfo.ClientReqID = tableRow.ClientReqID;
+            $scope.VendorCSInfo.ClientID = tableRow.ClientID;
+            $scope.VendorCSInfo.ClientName = tableRow.ClientName;
+            $http.post('/ClientRequisition/GetClientReqItemList', { ClientReqID: tableRow.ClientReqID })
+                .success(function (response) {
+                    $scope.VenCSItemList = response.ClientReqItemList;
+                    $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
+                    $scope.VenCSItemGridDisplayCollection.forEach(function (item, index) {
+                        // Add an index field to each object
+                        item.index = index; // Adding 1 to start index from 1
+                    });
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+            $http.post('/ClientRequisition/GetClientReqTermList', { ClientReqID: tableRow.ClientReqID })
+                .success(function (response) {
+                    $scope.ReqTermDataSetupGridData = response.ClientReqTermList;
+                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+            $('#ClientInfoModal').modal('hide');
+        };
+
+        $scope.clearVendorCSInfo = function () {
+            $scope.VendorCSInfo = {
+                VendorCSAprvID: "",
+                VendorID: "",
+                VendorCode: "",
+                VendorName: "",
+                ContactPerson: "",
+                ContactNumber: "",
+                VendorTINNo: "",
+                VendorBINNo: "",
+                VendorAddress: "",
+                RequisitionNo: "",
+                SubmissionDate: "",
+                RequisitionDate: "",
+                Remarks: "",
+                PoAmount: ""
+            }
+
+            $scope.VendorCSInfoItem = {
+                VendorCSInfoItemID: "",
+                VendorCSInfoID: "",
+                Description: "",
+                DeliveryLocation: "",
+                DeliveryDate: "",
+                ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
+                ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
+                DeliveryMode: "",
+                ReqQnty: "",
+                ReqUnit: ""
+            }
+            $scope.VendorCSInfoTerm = {
+                VendorCSInfoTermsID: "",
+                VendorCSInfoID: "",
+                TermsID: "",
+                TermsCode: "",
+                TermsName: ""
+            }
+            $scope.VendorCSVendorsItemWise = {
+                VendorCSInfoID: "",
+                VendorID: "",
+                VendorName: "",
+                TransactionName: "",
+                VendorCSInfoItemID: "",
+                ContactPerson: "",
+                ContactNumber: "",
+                VendorQutnID: "",
+                VendorQutnNo: "",
+                QuotationDate: "",
+                TolQnty: "",
+                VenReqUnit: "",
+                Status: ""
+            }
+
+            $("#DeliveryDate").val('');
+            $scope.VenCSItemList = [];  // base collection
+            $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
+
+            $scope.ReqTermDataSetupGridData = [];  // base collection
+            $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+
+            $scope.ReqWiseVendorList = [];  // base collection
+            $scope.VendorInfoDisplayedCollection = [].concat($scope.ReqWiseVendorList);
+        }
+
+        $scope.toggleReqItemEdit = function (tableRow, $i) {
+            $('#RequisitionItemModal').modal('show');
+            $scope.resetVendorCSInfoItem();
+
+            $scope.VendorCSInfoItem.VendorCSInfoItemID = tableRow.VendorCSInfoItemID;
+
+            $scope.VendorCSInfoItem.ServiceCategory.ServiceCategoryID = tableRow.ServiceCategoryID;
+            $scope.VendorCSInfoItem.ServiceCategory.ServiceCategoryName = tableRow.ServiceCategoryName;
+            $scope.VendorCSInfoItem.ServiceItem.ServiceItemID = tableRow.ServiceItemID;
+            $scope.VendorCSInfoItem.ServiceItem.ServiceItemName = tableRow.ServiceItemName;
+
+            $scope.VendorCSInfoItem.DeliveryMode = tableRow.DeliveryMode;
+            $scope.VendorCSInfoItem.DeliveryLocation = tableRow.DeliveryLocation;
+            $scope.VendorCSInfoItem.DeliveryDate = tableRow.DeliveryDate;
+            $scope.VendorCSInfoItem.Description = tableRow.Description;
+
+            $scope.VendorCSInfoItem.ReqQnty = tableRow.ReqQnty;
+            $scope.VendorCSInfoItem.ReqUnit = tableRow.ReqUnit;
+
+            $scope.VenCSItemGridDisplayCollection.splice($i, 1);
+            $scope.vendorCSItemArray.splice($i, 1);
+
+            $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + tableRow.ServiceCategoryID)
+                .success(function (response) {
+                    $scope.loading = false;
+                    $scope.serviceItems = response.ServiceItemInfoSearchList;
+                })
+                .error(function () { });
+
+            $("#btnAddReqItem").html('Update');
+        };
+
+        $scope.toggleReqItemDelete = function (tableRow, $i) {
+            if (!tableRow.VendorCSInfoItemID) {
+                $scope.resetVendorCSInfoItem();
+                $scope.VenCSItemGridDisplayCollection.splice($i, 1);
+                $scope.vendorCSItemArray.splice($i, 1);
+                toastr.success('Data Deleted Successsfully');
+            }
+            else {
+                $scope.resetVendorCSInfoItem();
+                $scope.VendorCSInfoItem.VendorCSInfoItemID = tableRow.VendorCSInfoItemID;
+                $('#deleteReqItemModal').modal('show');
+            }
+        };
+
+        $scope.DeleteVendorCSInfoItem = function () {
+            $http.post('/VendorCSInfo/DeleteVendorCSInfoItemAndTerm',
+                { VendorCSInfoItemID: $scope.VendorCSInfoItem.VendorCSInfoItemID, VendorCSInfoTermID: $scope.VendorCSInfoTerm.VendorCSInfoTermID })
+                .success(function (response) {
+                    if (response.status == "S203") {
+                        $scope.resetVendorCSInfoItem();
+                        $scope.VenCSItemGridDisplayCollection.splice($i, 1);
+                        $scope.vendorCSItemArray.splice($i, 1);
+                        toastr.success('Data Deleted Successsfully');
+                        return;
+                    }
+                });
+        }
+
+        ////////////////////////Select for Update from Search grid ///////////////////////
+        $scope.toggleVendorWiseItemReqDelete = function (tableRow, $i) {
+            if (!tableRow.VendorCSInfoItemWiseID) {
+                $scope.resetVendorWiseItemReq();
+                $scope.VendorInfoDisplayedCollection.splice($i, 1);
+                //$scope.vendorCSItemArray.splice($i, 1);
+                toastr.success('Data Deleted Successsfully');
+            }
+            else {
+                $scope.resetVendorWiseItemReq();
+                $scope.VendorCSVendorsItemWise.VendorCSInfoItemWiseID = tableRow.VendorCSInfoItemWiseID;
+                $('#deleteReqItemModal').modal('show');
+            }
+        };
+
+        $scope.toggleVendorSelect = function (row) {
+
+            $scope.VendorCSInfo.VendorID = row.VendorID;
+            $scope.VendorCSInfo.VendorCode = row.VendorCode;
+            $scope.VendorCSInfo.VendorName = row.VendorName;
+
+            $scope.VendorCSVendorsItemWise.VendorID = row.VendorID;
+            $scope.VendorCSVendorsItemWise.VendorName = row.VendorName;
+            $scope.VendorCSVendorsItemWise.TransactionName = row.TransactionName;
+            $scope.VendorCSVendorsItemWise.ContactPerson = row.ContactPerson;
+            $scope.VendorCSVendorsItemWise.ContactNumber = row.ContactNumber;
+            $scope.VendorCSVendorsItemWise.Email = row.Email;
+            $scope.VendorCSVendorsItemWise.Address = row.Address;
+
+            $scope.VendorInfoDisplayedCollection = $scope.VendorInfoDisplayedCollection.concat($scope.VendorCSVendorsItemWise);
+
+            $scope.resetVendorWiseItemReq();
+
+            $('#VendorInfoModal').modal('hide');
+        };
+
+        ////////////////////////////////////
+
+        $scope.selectedRowsForVendor = [];
+        $scope.SelectedVendorForBiddingDisplayedCollection = [];
+        $scope.showVendorforBiddingArea = false;
+
+        $scope.selectEntity = function (row) {
+            var selecteditems = {
+                VendorQutnID: row.VendorQutnNo,
+                VendorID: row.VendorID,
+                VendorName: row.VendorName,
+                ContactPerson: row.ContactPerson,
+                ContactNumber: row.ContactNumber,
+                VendorQutnNo: row.VendorQutnNo,
+                QuotationDate: row.QuotationDate,
+                TolQnty: row.TolQnty,
+                TolAmt: row.TolAmt,
+                index: row.index
+            };
+            var indexToRemove = -1;
+            $scope.selectedRowsForVendor.forEach(function (item, index) {
+                if (item.index === selecteditems.index) {
+                    indexToRemove = index;
+                }
+            });
+            if (indexToRemove !== -1) {
+                $scope.selectedRowsForVendor.splice(indexToRemove, 1);
+                $scope.SelectedVendorForBiddingDisplayedCollection.splice(indexToRemove, 1);
+                row.selected = false;
+            }
+
+            else {
+                $scope.selectedRowsForVendor.push(selecteditems);
+                $scope.SelectedVendorForBiddingDisplayedCollection = [].concat($scope.selectedRowsForVendor);
+                row.selected = true;
+                $scope.showVendorforBiddingArea = true;
+            }
+            row.buttonCheckedforVendor = row.selected;
+
+            if ($scope.selectedRowsForVendor.length <= 0) {
+                $scope.showVendorforBiddingArea = false;
+            }
+        };
+
+        $scope.resetVendorWiseItemReq = function () {
+            $scope.VendorCSVendorsItemWise = {
+                VendorCSInfoID: "",
+                VendorID: "",
+                VendorName: "",
+                TransactionName: "",
+                VendorCSInfoItemID: "",
+                ContactPerson: "",
+                ContactNumber: "",
+                VendorTINNo: "",
+                VendorBINNo: "",
+                VendorEmail: "",
+                VendorAddress: "",
+                VenReqQnty: "",
+                VenReqUnit: "",
+                Status: ""
+            }
+        }
+
+        ///////////////////////Save/Update Master///////////////////////
+
+        //////////////////Search Grid List///////////////////////////////
+
+        $scope.SearchVendorCSInfoModal = function () {
+            $scope.GetVendorCSInfoSearchList();
+            $('#SearchVendorCSInfoModal').modal('show');
+        };
+
+        $scope.GetVendorCSInfoSearchList = function () {
+            $http.post("/VendorCSInfo/GetVendorCSInfoSearchList")
+                .success(function (response) {
+                    $scope.vendorCSSearchList = response.vendorCSSearchList;
+                    $scope.vendorCSDisplayedCollection = [].concat($scope.vendorCSSearchList);
+                })
+                .error(function () { });
+        }
+
+        ////////////////////////Select for Update from Search grid ///////////////////////
+
+        $scope.toggleVendorCSInfoSelect = function (tableRow) {
+            $scope.VendorCSInfo.VendorCSInfoID = tableRow.VendorCSInfoID;
+            $scope.VendorCSInfo.ClientID = tableRow.ClientID;
+            $scope.VendorCSInfo.ClientName = tableRow.ClientName;
+            $scope.VendorCSInfo.VendorID = tableRow.VendorID;
+            $scope.VendorCSInfo.VendorName = tableRow.VendorName;
+            $scope.VendorCSInfo.RequisitionNo = tableRow.RequisitionNo;
+            $scope.VendorCSInfo.RequisitionDate = tableRow.RequisitionDate;
+            $scope.VendorCSInfo.SubmissionDate = tableRow.SubmissionDate;
+            $scope.VendorCSInfo.LastDateofQuotation = tableRow.LastDateofQuotation;
+            $scope.VendorCSInfo.Remarks = tableRow.Remarks;
+            $scope.VendorCSInfo.Status = tableRow.Status;
+
+            $http.post('/VendorCSInfo/GetVendorCSInfoItemList', { VendorCSInfoID: tableRow.VendorCSInfoID })
+                .success(function (response) {
+                    $scope.VenCSItemList = response.VendorCSInfoItemList;
+                    $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+            $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorCSInfoID: tableRow.VendorCSInfoID })
+                .success(function (response) {
+                    $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
+                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+            $http.post('/VendorCSInfo/GetReqWiseVendorList', { VendorCSInfoID: tableRow.VendorCSInfoID })
+                .success(function (response) {
+                    $scope.ReqWiseVendorList = response.ReqWiseVendorList;
+                    $scope.VendorInfoDisplayedCollection = [].concat($scope.ReqWiseVendorList);//VendorInfoDisplayedCollection
+                    $scope.loading = false;
+                })
+                .error(function () { });
+
+
+            $('#SearchVendorCSInfoModal').modal('hide');
+        };
+
+        ///////////////////////////////////////////////
+
+        ////////////////////////Requsition Terms & Conditions ///////////////////////
+
+        $scope.ShowTermsConditionsList = function () {
+            $http.get("/VendorCSInfo/GetTermsConditionsList")
+                .success(function (response) {
+                    $scope.TermsConditionsList = response.termsConditionsList;
+                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
+                    $scope.loading = false;
+                })
+                .error(function () { });
+
+            $('#VendorCSInfoTermsConditionsModal').modal('show');
+        };
+
+        $scope.toggleTermsConditionsSelect = function (row) {
+            $scope.VendorCSInfo.TermsID = row.TermsID;
+            $scope.VendorCSInfo.FormName = row.FormName;
+
+            $http.post('/VendorCSInfo/GetVendorCSInfoTermAgainstFormList', { TermsID: row.TermsID })
+                .success(function (response) {
+                    $scope.ReqTermDataSetupGridData = response.VendorCSInfoTermList;
+                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+            $('#VendorCSInfoTermsConditionsModal').modal('hide');
+        };
+
+        $scope.VendorCSInfoTerm = {
+            VendorCSInfoTermsID: "",
+            VendorCSInfoID: "",
+            TermsID: "",
+            TermsCode: "",
+            TermsName: ""
+        }
+
+        $scope.AddReqTermModal = function () {
+
+            if ($('#RequisitionNo').val() == "") {
+                toastr.error("Vendor ReqNo.  Required");
+                return;
+            }
+
+            if ($('#SubmissionDate').val() == "") {
+                toastr.error("Submission Date Required.");
+                return;
+            }
+
+            if ($('#RequisitionDate').val() == "") {
+                toastr.error("Requisition Date Date Required");
+                return;
+            }
+            $('#RequisitionTermModal').modal('show');
+        };
+
+        $scope.ReqTermDataSetupGridData = [];  // base collection
+        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+
+        $scope.AddReqTerm = function () {
+
+            if ($('#TermsCode').val() == "") {
+                toastr.error("Terms Code Required");
+                return;
+            }
+
+            if ($('#TermsName').val() == "") {
+                toastr.error("Terms Name Required.");
+                return;
+            }
+
+            $scope.VendorCSInfoTerm.TermsCode = $('#TermsCode').val();
+            $scope.VendorCSInfoTerm.TermsName = $('#TermsName').val();
+
+            $scope.vendorCSTermArray.push($scope.VendorCSInfoTerm);
+
+            $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection.concat($scope.VendorCSInfoTerm);
+
+            $scope.resetVendorCSInfoTerm();
+            $("#btnAddReqTerm").html('Add');
+            $('#RequisitionTermModal').modal('hide');
+        }
+
+        $scope.resetVendorCSInfoTerm = function () {
+            $scope.VendorCSInfoTerm = {
+                VendorCSInfoTermsID: "",
+                VendorCSInfoID: "",
+                TermsID: "",
+                TermsCode: "",
+                TermsName: ""
+            }
+        }
+
+        $scope.toggleReqTermEdit = function (tableRow, $i) {
+            $('#RequisitionTermModal').modal('show');
+            $scope.resetVendorCSInfoTerm();
+            $scope.VendorCSInfoTerm.VendorCSInfoTermID = tableRow.VendorCSInfoTermD;
+            $scope.VendorCSInfoTerm.VendorCSInfoID = tableRow.VendorCSInfoID;
+            $scope.VendorCSInfoTerm.TermsID = tableRow.TermsID;
+            $scope.VendorCSInfoTerm.TermsCode = tableRow.TermsCode;
+            $scope.VendorCSInfoTerm.TermsName = tableRow.TermsName;
+            $scope.ReqTermGridDisplayCollection.splice($i, 1);
+            $scope.vendorCSTermArray.splice($i, 1);
+            $("#btnAddReqTerm").html('Update');
+        };
+
+        $scope.toggleReqTermDelete = function (tableRow, $i) {
+            if (!tableRow.VendorCSInfoTermID) {
+                $scope.resetVendorCSInfoTerm();
+                $scope.ReqTermGridDisplayCollection.splice($i, 1);
+                $scope.vendorCSTermArray.splice($i, 1);
+                toastr.success('Data Deleted Successsfully');
+            }
+            else {
+                $scope.resetVendorCSInfoTerm();
+                $scope.VendorCSInfoTerm.VendorCSInfoTermID = tableRow.VendorCSInfoTermID;
+                $('#deleteReqTermModal').modal('show');
+            }
+        };
+
+        $scope.DeleteVendorCSInfoTerm = function () {
+            $http.post('/VendorCSInfo/DeleteVendorCSInfoItemAndTerm',
+                { VendorCSInfoItemID: $scope.VendorCSInfoItem.VendorCSInfoItemID, VendorCSInfoTermID: $scope.VendorCSInfoTerm.VendorCSInfoTermID })
+                .success(function (response) {
+                    if (response.status == "S203") {
+                        $scope.resetVendorCSInfoTerm();
+                        $scope.ReqTermGridDisplayCollection.splice($i, 1);
+                        $scope.vendorCSTermArray.splice($i, 1);
+                        toastr.success('Data Deleted Successsfully');
+                        return;
+                    }
+                });
+        }
+
+        ///////////////////////////////////////////////
+
+        $scope.Post = function () {
+
+            if ($('#RequisitionNo').val() == "") {
+                toastr.error("Vendor ReqNo.  Required");
+                return;
+            }
+
+            if ($('#SubmissionDate').val() == "") {
+                toastr.error("Submission Date Required.");
+                return;
+            }
+
+            if ($('#RequisitionDate').val() == "") {
+                toastr.error("Requisition Date Date Required");
+                return;
+            }
+
+            $scope.VendorCSInfo.RequisitionDate = $('#RequisitionDate').val();
+            $scope.VendorCSInfo.SubmissionDate = $('#SubmissionDate').val();
+            $scope.VendorCSInfo.PORecDate = $('#PORecDate').val();
+            $http.post('/PoAprv/SaveVendorPOAprvInfo',
+                {
+                    vendorCS: $scope.VendorCSInfo,
+                    vendorCSItem: $scope.VenCSItemGridDisplayCollection,
+                    vendorCSTerm: $scope.ReqTermGridDisplayCollection,
+                    /*    vendorCSItemWise: $scope.SelectedVendorForBiddingDisplayedCollection*/
+                })
+                .success(function (response) {
+                    if (response.status == "S201") {
+                        toastr.success("Data Saved Successfully.");
+
+
+                        $scope.PoPrint();
+                     
+                        $scope.toggleRefreshTable();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "S202") {
+                        toastr.success("Data Updated Successfully.");
+                        $scope.clearVendorCSInfo();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "S203") {
+                        toastr.success("Data Deleted Successfully.");
+                        $scope.clearVendorCSInfo();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else {
+                        toastr.error("Data Save Failed.");
+                        $scope.loading = false;
+                        return;
+                    }
+                })
+                .error(function () {
+                    toastr.error("Data Save Failed.");
+                    $scope.loading = false;
+                    return;
+                });
+        }
+
+
+        $scope.PoPrint = function () {
+
+            $http.post("/PoAprv/PoPrint", {
+                PORecmID: $scope.VendorCSInfo.PORecmID,
+
+            })
+                .success(function (response) {
+
+                    $scope.PoPrintList = response.PoPrintList;
+                    $scope.PoPrintCollection = [].concat($scope.PoPrintList);
+                    if ($scope.PoPrintList && $scope.PoPrintList.length > 0) {
+                        $scope.VendorCSInfo.VendorID = $scope.PoPrintList[0].VendorID;
+                        $scope.VendorCSInfo.VendorName = $scope.PoPrintList[0].VendorName;
+                        $scope.VendorCSInfo.PONo = $scope.PoPrintList[0].PONo;
+                        $scope.VendorCSInfo.PODate = $scope.PoPrintList[0].PODate;
+                        $scope.VendorCSInfo.WIInfoID = $scope.PoPrintList[0].WIInfoID;
+                        $scope.VendorCSInfo.VendorAddress = $scope.PoPrintList[0].VendorAddress;
+                        $scope.printData();
+                    }
+                    //$scope.VendorCSInfo.VendorID = response.PoPrintList[0].VendorID;
+                    //$scope.VendorCSInfo.VendorName = response.PoPrintList[0].VendorName;
+                    //$scope.VendorCSInfo.PONo = response.PoPrintList[0].PONo;
+                    //$scope.VendorCSInfo.PODate = response.PoPrintList[0].PODate;
+                   
+                    console.log($scope.PoPrintCollection);
+
+                    
+                })
+                .error(function () {
+                    $scope.loading = false;
+                });
+
+
+           
+        }
+
+        //$scope.printData = function () {
+        //    var VendorSlip = document.getElementById("masterRow");
+        //    newWin = window.open("");
+        //    newWin.document.write(VendorSlip.outerHTML);
+        //    $timeout(newWin.print(), 0);
+        //    newWin.close();
+        //};
+        $scope.printData = function () {
+            // Use $timeout to ensure DOM updates are complete
+            $timeout(function () {
+                var VendorSlip = document.getElementById("masterRow");
+
+                // Create an iframe dynamically
+                var iframe = document.createElement('iframe');
+                iframe.style.position = 'relative';
+                iframe.style.width = '0';
+                iframe.style.height = '0';
+                iframe.style.border = 'none';
+                document.body.appendChild(iframe);
+
+                // Write the content to the iframe document
+                var doc = iframe.contentWindow.document;
+                doc.open();
+                doc.write('<html><head><title>PO Info</title>');
+
+                // Add custom styles for printing
+                doc.write('<style>' +
+                    'body { font-family: Arial, sans-serif; margin: 0; padding: 0; }' +
+                    '.title { margin-top: 50px; font-weight: bold; font-size: 24px; }' +
+                    'table { width: 80%;  border-collapse: collapse; }' + // Adjusted width here
+                    'td, th { padding: 8px; text-align: left; border: 1px solid #ddd; }' +
+                    'p { margin: 0; font-size: 14px; }' +
+                    '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 10px; }' +
+                    '.col-md-5, .col-md-4, .col-md-3 { margin-left: 0px;margin-right: 20px; }' +
+                    '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 20px; width: 100%; }' +
+                   /* '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 20px; }' +*/
+                    '.col-md-12 {width: 100%; margin: 0px; }' +
+                    'table {width: 80%;  font-size: 12px; margin-top: 0px;margin-right:0px; }' +
+                    '.flex-container { display: flex; justify-content: space-between; margin-top: 20px; width: 100%; }' +
+                    '</style>');
+
+                doc.write('</head><body>');
+
+                // Copy content from the original div and write it into the iframe
+                doc.write(VendorSlip.outerHTML);
+
+                doc.write('</body></html>');
+                doc.close();
+
+                // Wait for content to load and then trigger print
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+
+                // Remove the iframe from the DOM after printing
+                document.body.removeChild(iframe);
+            }, 0); // Delay for one digest cycle
+        };
+            // Define printData function
+         
+       
+
+        $scope.Cancel = function () {
+           
+            $scope.printData();
+        }
+
+
+        $scope.toggleRefreshTable = function () {
+
+            $timeout(function () {
+                // Reload the current page
+                window.location.reload();
+            }, 2000);
+
+        };
+    }])
+</script>
+

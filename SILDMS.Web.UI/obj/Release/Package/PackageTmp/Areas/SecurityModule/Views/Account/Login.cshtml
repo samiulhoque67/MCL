@@ -1,0 +1,210 @@
+﻿@{
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>MCL | Log in</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <!-- Bootstrap 3.3.4 -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome Icons -->
+    <!-- Theme style -->
+    <link href="~/Content/AdminLTE/AdminLTE.min.css" rel="stylesheet" />
+    <!-- iCheck -->
+    <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Content/plugin/toaster/toastr.js"></script>
+    <link href="~/Content/plugin/toaster/toastr.css" rel="stylesheet" />
+    <style>
+        .login-page {
+            background-image: url("/Content/AdminLTE/img/MCLlogin0.jpg");
+        }
+
+        .loder {
+            position: absolute;
+            top: -340%;
+            left: -150%;
+            color: #000;
+            font-size: 30px;
+        }
+        .box-footer {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 3px;
+            border-bottom-left-radius: 3px;
+            border-top: 1px solid #f4f4f4;
+            padding: 10px;
+            background-color: #ffffff00;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.5); /*dim the background*/
+        }
+        .login-box-body, .register-box-body {
+            background: #ffffff00;
+            padding: 20px;
+            color: #444;
+            border-top: 0;
+            color: #66666600;
+        }
+
+        .box {
+            background: linear-gradient(to left, rgb(65 98 98 / 50%), rgb(22 16 16 / 74%), rgb(128 182 183));
+            padding: 20px;
+            width: 120%;
+            max-width: 400px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        .transparent-image {
+            background-color: transparent;
+        }
+
+
+    </style>
+    <link href="~/Content/css/animate.css" rel="stylesheet" />
+</head>
+<body class="login-page" data-ng-app="myApp" data-ng-controller="myCtrl">
+    <div class="login-box">
+        <form name="name" id="name" data-ng-submit="sendPost()">
+            <div class="box">
+                <div class="box-header with-border" style="text-align: center; background-color:transparent;">
+                    <h3 class="box-title text-center" style="font-weight: bold; color: aliceblue;">MCL LOGIN</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="login-box-body">
+                        <p class="login-box-msg"></p>
+                        <div class="form-group has-feedback">
+                            <input id="username" type="text" class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" placeholder="User Name" data-ng-model="userName" required="">
+                            <span class="fa fa-user form-control-feedback" style="margin-top: 10px;"></span>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <input id="password" type="password" class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" placeholder="Password" data-ng-model="password" required="">
+                            <span class="fa fa-lock form-control-feedback" style="margin-top: 10px;"></span>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-xs-8">
+                                <div class="checkbox">
+                                </div>
+                            </div><!-- /.col -->
+                            <div class="col-xs-4">
+                                <button type="submit" class="btn btn-primary btn-block btn-flat" data-ng-disabled="loading" ng-click="Login()">Sign In</button>
+                                <div id="mydiv" data-ng-show="loading" class="ng-hide">
+                                    <div class="overlay">
+                                        <div class="loder">
+                                            <img src="/Content/AdminLTE/img/cube.gif"> <span style="color:white" class="text-bold">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /.col -->
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span class="center-block bg-red" id="conf"></span>
+                            </div>
+                        </div>
+                    </div><!-- /.row -->
+                </div><!-- ./box-body -->
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12">
+                            <img class="responsive-md pull-right transparent-image" src="/Content/AdminLTE/img/sil_logo.png">
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.box-footer -->
+            </div>
+        </form>
+        <!-- /.login-box-body -->
+    </div><!-- /.login-box -->
+
+
+    <!-- jQuery 2.1.4 -->
+<script>
+
+
+    // create an object
+    var myObject = {};
+
+    // create a method on our object
+    myObject.someMethod = function () {
+        console.log(this);
+    };
+
+    // call our method
+    myObject.someMethod();
+
+
+
+    $('#name').addClass('animated slideInRight');
+    $('input:text, input:password').addClass('animated bounceInLeft');
+    //$('#yourElement').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', $('input:text, input:password').animateCss('bounce'));
+
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function ($scope, $http) {
+
+        sayHelloAsync('deepak');
+        function sayHelloAsync(name) {
+            //debugger;
+            return function () {
+                var defer = $q.defer()
+                setTimeout(function() {
+                    //Greet when your name is 'deepak'
+                    if (name == 'deepak') {
+                        defer.resolve('Hello, ' + name + '!');
+                    }
+                    else {
+                        defer.reject('Greeting ' + name + ' is not allowed.');
+                    }
+                }, 1000);
+ 
+                return defer.promise
+            }
+        }  
+
+
+
+
+        $scope.userName = "";
+        $scope.password = "";
+        $scope.remember = "";
+
+        $scope.Login = function () {
+            if ($scope.userName !== "" && $scope.password !== "")
+            {
+                $scope.loading = true;
+                $http.post('/SecurityModule/Account/SetAuthorization', { user: $scope.userName, password: $scope.password, isRemeber: $scope.remember })
+                    .success(function (data) {
+                        if (data === 'E401') {
+							$("#conf").text("  Please input valid UserID or Password.");
+							$("#password").val("");
+                            $scope.loading = false;
+                            return;
+                        }
+                        if (data !== "" || data != null) {
+                            window.location = data;
+                        }
+                        else {
+                            window.location = "/SecurityModule/Account/Login";
+                        }
+                    }).error(function () {
+                        $scope.loading = false;
+                    });
+            }
+        }
+    });
+
+</script>
+</body>
+
+</html>

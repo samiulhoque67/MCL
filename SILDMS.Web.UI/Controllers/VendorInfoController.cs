@@ -66,7 +66,7 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        [Authorize]
+        //[Authorize]
         public async Task<dynamic> GetAllMaterial()
         {
             string MaterialCategory = null;

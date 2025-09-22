@@ -1,0 +1,563 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+
+<style type="text/css">
+    label {
+        margin-bottom: 2px;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .form-control {
+        height: 25px;
+        font-size: smaller;
+        padding: 3px 6px 3px;
+    }
+</style>
+
+<div class="box box-primary box-body" ng-controller="TermsCtrl">
+    @*Master buttons*@
+    <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
+        <h2 class="box-title" style="font-family: math; font-weight: 500;">Terms & Conditions Information</h2>
+
+        <div class="box-tools pull-right">
+            <div class="col-lg-12 pull-right">
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom" ng-disabled="btnRefresh">
+                        <i class="fa fa-refresh" style="padding-right: 5px"></i>Refresh
+                    </button>
+                </div>
+                <div ng-hide="toView == 1" class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="btnSave">
+                        <i class="fa fa-save" style="padding-right: 5px"></i>Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*Form Name Field*@
+    <div class="row" style=" margin-right: -15px; margin-left: 20px; margin-top: 20px;">
+
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <div class="form-group">
+                <label for="FormName">Form Name:</label>
+                <label style="font-size: larger;color:red;">*</label>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <div style="position: relative;">
+                <input id="FormName" type="text" name="FormName" required class="form-control" autocomplete="off" autofocus ng-model="vmTermsMst.FormName" readonly placeholder="Form Name" style="height: 25px; font-size: smaller" />
+                <p ng-show="Terms.FormName.$error.required && !Terms.FormName.$pristine" class="help-block" style="height:10px;">Terms Name is required.</p>
+
+                <button class="btn-group pull-right" type="button" ng-click="GetFormList()"
+                        style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%); padding: 0px 10px; border: 2px solid black; background: transparent; ">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form List Modal -->
+    <div class="modal fade" id="formListModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr style="font-size: 15px;">
+                                <th colspan="13" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Form List
+                                </th>
+                            </tr>
+
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+
+                                <th>S/N</th>
+                                <th>Form Name</th>
+                                <th>Terms Item Available</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="form in FormListCollection">
+                                <td>{{$index + 1}}</td>
+                                <td>{{form.FormName}}</td>
+                                <td>{{form.TermsItemAvailable}}</td>
+                                <td class="col-lg-3 text-center">
+                                    <button type="button" id="btnSelect" ng-click="selectForm(form, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
+                                        <span class="fa fa-search-plus"> View</span>
+                                    </button>
+                                    <button type="button" id="btnEdit" ng-click="selectForm(form, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
+                                        <span class="fa fa-edit"> Edit</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Existing Terms and Conditions*@
+    <div id="SearchTermsModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Terms & Conditions Form Information</h3>
+                </div>
+                <div class="table-responsive" data-ng-disabled="" ng-cloak>
+                    <table st-table="TermsSearchListDisplayedCollection" st-safe-src="TermsSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-1 col-md-1 col-sm-1">sl</th>
+                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('FormName')">Form Name</th>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>*@
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+                            <tr>
+                                <th><input st-search="ClientCode" placeholder="Form Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="FormName" placeholder="FormName" class="input-sm form-control" type="search" /></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in TermsSearchListDisplayedCollection">
+                                <td>{{$index + 1}}</td>
+                                <td class="hidden">{{row.TermsID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.FormName}}</td>
+                                <td>
+                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleTermsSelect(row)">Select</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div></td>
+                            </tr>
+                        </tfoot>
+
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetSearchModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    @*New Terms and Conditions Information Add Modal*@
+    <div id="TermsItemModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-sm-5 col-md-5 col-lg-5">
+                            <h3 style="font-family:math" class="modal-title">Terms and Conditions Information</h3>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                        </div>
+                    </div>
+                </div>
+                <div ng-cloak>
+                    <div class="row" style="position:relative;top:5px;">
+
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div class="form-group">
+                                <label for="TermsCode">Terms Code:</label>
+                                <label style="font-size:larger;color:red;">*</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <input id="TermsCode" name="TermsCode" type="text" class="form-control" placeholder="Terms Code" autocomplete="off"
+                                   ng-model="vmTermsItem.TermsCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                        </div>
+                    </div>
+
+
+
+                    <div class="row" style="position:relative;top:5px;">
+
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div class="form-group">
+                                <label for="TermsName">Terms and Conditions:</label>
+                                <label style="font-size:larger;color:red;">*</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-md-8 col-lg-8">
+                            <input id="TermsName" name="TermsName" type="text" class="form-control" placeholder="Terms & Conditions" autocomplete="off"
+                                   ng-model="vmTermsItem.TermsName" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <div class="btn-group pull-right" style="margin:2px;">
+                                <button ng-hide="toView == 1" type="button" id="btnTermsItem" data-ng-click="AddTermsItem ()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add to Item List</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="box-body " style="margin: 1%; padding: 5px 5px 5px 5px;" data-ng-disabled="">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
+                    <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
+                        <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms and Conditions List</h2>
+                        <div class="box-tools pull-right">
+                            <div class="col-lg-12 pull-right">
+                                <div class="btn-group pull-right" style="margin:2px;">
+                                    <button ng-hide="toView == 1" type="button" id="btnTermsItem" ng-disabled="btnTermsItem" data-ng-click="AddTermsModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="ConditionsList==1" class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+            <div class="col-sm-12 col-md-12 col-lg-12" style="text-align:center">
+                <h4 style="color:red;">No Terms and conditions available!</h4>
+            </div>
+        </div>
+
+        <div ng-show="ConditionsList==0" class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+            <div class="row">
+                <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                    <table st-table="GridDisplayCollection" st-safe-src="TermsItemList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                        <thead>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                                <th style="width: 5%;">S/N</th>
+                                <th style="width: 10%;">Terms Code</th>
+                                <th style="width: 60%; text-align: left;" st-sort="">Terms & Conditions</th>
+                                <th ng-hide="toView == 1" style="width: 15%; text-align: left;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;">
+                                <td style="text-align:center">{{$index + 1}}</td>
+                                <td style="text-align: center;">{{row.TermsCode}}</td>
+                                <td>{{row.TermsName}}</td>
+                                <td ng-hide="toView == 1">
+                                    <button type="button" ng-if="row.TermsItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleTermsItemEdit(row,$index)">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button type="button" ng-if="!row.TermsItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleTermsItemEdit(row,$index)">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqItemDelete(row,$index)">
+                                        <i class="fa fa-remove"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="modal fade" id="deleteTermsItemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
+                <div class="modal-header" style="height: 46px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Delete Selected Item</h4>
+                </div>
+                <div class="modal-body" style="height: 80px;">
+                    Are you sure to delete this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: red;" ng-click="deleteTermsItem()">Yes</button>
+                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    app.controller('TermsCtrl', ['$scope', '$http', function ($scope, $http) {
+
+        $scope.termsItemArray = [];
+        $scope.itemsByPage = 10;
+
+        $scope.showsaveButton = 1;
+
+        $scope.vmTermsMst = {
+            TermsID: "",
+            FormName: "",
+            FormCode: "",
+            Status: "1"
+        }
+
+        $scope.vmTermsItem = {
+            TermsItemID: "",
+            TermsCode: "",
+            TermsName: "",
+            ItemStatus: "1"
+        };
+
+        //FORM LIST and SELECT --- START
+        $scope.GetFormList = function () {
+            $scope.toView = 0;
+            $scope.ConditionsList = 1
+            $http.post("/Terms/GetFormList")
+                .success(function (response) {
+                    $scope.FormList = response.FormList;
+                    $scope.FormListCollection = [].concat($scope.FormList);
+                    $("#formListModal").modal("show")
+                })
+                .error(function () { });
+        }
+        $scope.toView = 0;
+        $scope.selectForm = function (selectedForm, action) {
+            if (action == 'view') {
+                $scope.toView = 1;
+            }
+            $scope.vmTermsMst.FormName = selectedForm.FormName;
+            $("#formListModal").modal("hide");
+
+            $scope.toggleTermsSelect(selectedForm);
+        };
+
+
+        $scope.ConditionsList = 1;
+        $scope.toggleTermsSelect = function (tableRow) {
+            $scope.vmTermsMst.FormName = tableRow.FormName;
+            $scope.vmTermsMst.FormCode = tableRow.FormCode;
+            $scope.showsaveButton = 2;
+
+            if (tableRow.TermsItemAvailable == '' || tableRow.TermsItemAvailable == null || tableRow.TermsItemAvailable == 0) {
+                $scope.ConditionsList = 1;
+            }
+            else {
+                $scope.ConditionsList = 0;
+
+            }
+            $scope.vmTermsMst.TermsID = tableRow.TermsID;
+
+            $http.post('/Terms/GetTermsItemList', { TermsID: tableRow.TermsID })
+                .success(function (response) {
+                    $scope.TermsItemList = response.TermsItemList;
+                    $scope.GridDisplayCollection = [].concat($scope.TermsItemList);
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+
+            $('#SearchTermsModal').modal('hide');
+        };
+
+        //FORM LIST and SELECT --- END
+
+
+ //////////////*ADD NEW TERMS MODAL POP-UP*////////////////////////
+        $scope.AddTermsModal = function () {
+            $scope.resetVmTermsItem();
+            if ($('#FormName').val() == "") {
+                toastr.error("Form Name Required");
+                return;
+            }
+            $('#TermsItemModal').modal('show');
+        };
+
+        $scope.masterDataSetupGridData = [];  // base collection
+        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+
+
+        $scope.AddTermsItem = function () {
+            $scope.ConditionsList = 0;
+            if ($('#TermsCode').val() == "") {
+                toastr.error("Terms Code Required.");
+                return;
+            }
+            if ($('#TermsName').val() == "") {
+                toastr.error("Terms Name Required.");
+                return;
+            }
+
+            $scope.vmTermsItem.TermsCode = $('#TermsCode').val();
+            $scope.vmTermsItem.TermsName = $('#TermsName').val();
+            $scope.vmTermsItem.ItemStatus = $('#ItemStatus').val();
+            $scope.termsItemArray.push($scope.vmTermsItem);
+
+            $scope.GridDisplayCollection = $scope.GridDisplayCollection.concat($scope.vmTermsItem);
+
+            $scope.resetVmTermsItem();
+            $("#btnTermsItem").html('Add');
+            $('#TermsItemModal').modal('hide');
+        }
+
+        $scope.resetVmTermsItem = function () {
+            $scope.vmTermsItem = {
+                TermsItemID: "",
+                TermsCode: "",
+                TermsName: "",
+                ItemStatus: "1"
+            }
+        }
+
+        $scope.ClearVmTermsMst = function () {
+            $scope.vmTermsMst = {
+                TermsID: "",
+                FormName: "",
+                Status: "1"
+            }
+
+            $scope.vmTermsItem = {
+                TermsItemID: "",
+                TermsName: "",
+                ItemStatus: "1"
+
+            }
+
+            $scope.masterDataSetupGridData = [];  // base collection
+            $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+        }
+
+        $scope.toggleTermsItemEdit = function (tableRow, $i) {
+            $('#TermsItemModal').modal('show');
+            $scope.resetVmTermsItem();
+
+            $scope.vmTermsItem.TermsName = tableRow.TermsName;
+            $scope.vmTermsItem.TermsCode = tableRow.TermsCode;
+
+            $scope.GridDisplayCollection.splice($i, 1);
+            $scope.termsItemArray.splice($i, 1);
+
+            $("#btnTermsItem").html('Update');
+        };
+
+        $scope.toggleReqItemDelete = function (tableRow, $i) {
+            if (!tableRow.TermsItemID) {
+                $scope.resetVmTermsItem();
+                $scope.GridDisplayCollection.splice($i, 1);
+                $scope.termsItemArray.splice($i, 1);
+                toastr.success('Data Deleted Successsfully');
+            }
+            else {
+                $scope.resetVmTermsItem();
+                $scope.vmTermsItem.TermsItemID = tableRow.TermsItemID;
+                $('#deleteTermsItemModal').modal('show');
+            }
+        };
+
+        $scope.deleteTermsItem = function () {
+            $http.post('/Terms/deleteTermsItem',
+                { TermsItemID: $scope.vmTermsItem.TermsItemID})
+                .success(function (response) {
+                    if (response.status == "S203") {
+                        toastr.success('Data Deleted Successsfully');
+                        $scope.toggleRefreshTable();
+                    }
+                });
+        }
+
+        //////////////////Search Grid List///////////////////////////////
+
+        $scope.GetTermsAndConditionsSearchList = function () {
+            $http.post("/Terms/GetTermsSearchList")
+                .success(function (response) {
+                    $scope.TermsSearchList = response.TermsSearchList;
+                    $scope.TermsSearchListDisplayedCollection = [].concat($scope.TermsSearchList);
+                })
+                .error(function () { });
+        }
+
+
+        ////////////////////////Select for Update from Search grid ///////////////////////
+        
+        ///////////////////////////////////////////////
+
+        $scope.Post = function () {
+
+            if ($('#FormName').val() == "") {
+                toastr.error("Form Name Required");
+                return;
+            }
+
+            $http.post('/Terms/SaveTermsAndConditions',
+                {
+                    vmTerms: $scope.vmTermsMst,
+                    vmTermsItem: $scope.GridDisplayCollection
+                })
+                .success(function (response) {
+                    if (response.status == "S201") {
+                        toastr.success("Data Saved Successfully.");
+                        $scope.ClearVmTermsMst();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "S202") {
+                        toastr.success("Data Updated Successfully.");
+                        $scope.ClearVmTermsMst();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "S203") {
+                        toastr.success("Data Deleted Successfully.");
+                        $scope.ClearVmTermsMst();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else {
+                        toastr.error("Data Save Failed.");
+                        $scope.loading = false;
+                        return;
+                    }
+                })
+                .error(function () {
+                    toastr.error("Data Save Failed.");
+                    $scope.loading = false;
+                    return;
+                });
+        }
+
+        $scope.toggleRefreshTable = function () {
+            window.location.reload();
+        };
+    }])
+</script>

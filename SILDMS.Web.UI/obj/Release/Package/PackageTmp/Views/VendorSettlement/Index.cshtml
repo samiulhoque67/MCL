@@ -1,0 +1,666 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+
+<style type="text/css">
+    label {
+        margin-bottom: 2px;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .form-control {
+        height: 25px;
+        font-size: smaller;
+        padding: 3px 6px 3px;
+    }
+</style>
+
+<div class="box box-primary box-body" ng-controller="VendorSettlementCtrl">
+    <div class="box-header with-border bg-light-blue-gradient" style="height: 38px;">
+        <h3 class="box-title" style="font-family: math; font-weight: 500;">Vendor Bill Settlement</h3>
+
+        <div class="box-tools pull-right">
+            <div class="col-lg-12 pull-right">
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom" ng-disabled="btnRefresh">
+                        <i class="fa fa-refresh" style="padding-right: 5px;"></i> Refresh
+                    </button>
+                </div>
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="SearchVendorSettlementModal()" class="button-custom" ng-disabled="btnSearch">
+                        <i class="fa fa-search" style="padding-right: 5px;"></i> Search
+                    </button>
+                </div>
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="btnSave">
+                        <i class="fa fa-save" style="padding-right: 5px;"></i> {{ VendorSettlement.ClientFinalBilAprvID ? 'Update' : 'Save' }}
+                    </button>
+                </div>
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="Cancel()" class="button-custom" ng-disabled="btnSave">
+                        <i class="fa fa-save" style="padding-right: 5px;"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="box-body " style="margin: 1%; padding: 5px 5px 5px 5px;" data-ng-disabled="">
+        <div class="table-responsive" ng-if="q===1">
+            <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                <thead>
+                    <tr>
+                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Name</th>
+                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Vendor Name</th>
+                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('WONo')">WO No</th>
+                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('WOAmt')">WO Amount</th>
+                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('PONo')">PO No</th>
+                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('POAmt')">PO Amount</th>
+                        @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('WODate')">WO Date</th>*@
+
+                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('TDSAmount')">TDS Amount</th>
+                        <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VDSAmount')">VDS Amount</th>
+
+                        <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                    </tr>
+                    <tr>
+                        <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+                        <th><input st-search="WONo" placeholder="Work Order No" class="input-sm form-control" type="search" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in VendorReqDisplayedCollection">
+                        <td class="hidden">{{row.VendorFinalBilPaymentID}}</td>
+                        <td class="hidden">{{row.ClientID}}</td>
+                        <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.ClientName}}</td>
+                        <td class="hidden">{{row.VendorID}}</td>
+                        <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.VendorName}}</td>
+                        <td class="hidden">{{row.ClientReqID}}</td>
+                        <td class="hidden">{{row.ClientReqNo}}</td>
+                        <td class="hidden">{{row.RequisitionDate}}</td>
+                        <td class="hidden">{{row.WOInfoID}}</td>
+                        @*<td class="hidden">{{row.VendorID}}</td>
+                            <td class="hidden">{{row.VendorReqID}}</td>*@
+                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WONo}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WOAmt}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.PONo}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.POAmt}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.TDSAmount}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.VDSAmount}}</td>
+
+                        <td>
+                            <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorReqSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="row" ng-show="p==1">
+            <div class="row">
+                <div class="col-lg-3 ">
+                    <div class="form-group">
+                        <label for="ClientName">Client Name :</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="ClientName" name="ClientName" type="text" data-ng-model="VendorSettlement.ClientName" class="form-control" placeholder="ClientName" ng-readonly="true" />
+                    </div>
+                </div>
+                <div class="col-lg-2 ">
+                    <div class="form-group">
+                        <label for="VendorName">Vendor Name :</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorSettlement.VendorName" class="form-control" placeholder="VendorName" ng-readonly="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3 ">
+                    <div class="form-group">
+                        <label for="WONo">Wo No:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="WONo" name="WONo" type="text" data-ng-model="VendorSettlement.WONo" class="form-control" placeholder="Wo No" ng-readonly="true" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="PONo">PO No:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="PONo" name="PONo" type="text" data-ng-model="VendorSettlement.PONo" class="form-control" placeholder="PO No" ng-readonly="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3 ">
+                    <div class="form-group">
+                        <label for="WOAmt">Wo Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="WOAmt" name="WOAmt" type="text" data-ng-model="VendorSettlement.WOAmt" class="form-control" placeholder="Wo Amt" ng-readonly="true" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="POAmt">Po Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="POAmt" name="POAmt" type="text" data-ng-model="VendorSettlement.POAmt" class="form-control" placeholder="PO Amt" ng-readonly="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
+                        <div class="box-header with-border" style="height: 10px; border-bottom: 1px solid #d3e3e3;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>TDS Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="TDSAmount" name="TDSAmount" type="text" class="form-control" placeholder="TDS Amount" ng-model="VendorSettlement.TDSAmount" ng-readonly="true" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>VDS Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VDSAmount" name="VDSAmount" type="text" class="form-control" placeholder="VDS Amount" ng-model="VendorSettlement.VDSAmount" ng-readonly="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Challan Issue Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="ChallanIssueAmount" name="ChallanIssueAmount" type="text" class="form-control" placeholder="TDS Paid Amount" ng-model="VendorSettlement.ChallanIssueAmount" ng-change="calculateTDSAmounts()" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Mushak Issue Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="MushakIssueAmount" name="MushakIssueAmount" type="text" class="form-control" placeholder="VDS Paid Amount" ng-model="VendorSettlement.MushakIssueAmount" ng-change="calculateVDSAmounts()" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>TDS Due Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="TDSDueAmount" name="TDSDueAmount" type="text" class="form-control" placeholder="TDS Amount" ng-model="VendorSettlement.TDSDueAmount" ng-readonly="true" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>VDS Due Amount:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="VDSDueAmount" name="VDSDueAmount" type="text" class="form-control" placeholder="VDS Amount" ng-model="VendorSettlement.VDSDueAmount" ng-readonly="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3 ">
+                    <div class="form-group">
+                        <label for="TDSChallanNo">Challan No.:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="TDSChallanNo" name="TDSChallanNo" type="text" data-ng-model="VendorSettlement.TDSChallanNo" class="form-control" placeholder="TDSChallanNo" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2 ">
+                    <div class="form-group">
+                        <label for="MushakNo">Mushak No.:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="MushakNo" name="MushakNo" type="text" data-ng-model="VendorSettlement.MushakNo" class="form-control" placeholder="MushakNo" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Challan Date:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="ChallanDate" name="ChallanDate" type="text" class="DatePicker form-control" placeholder="ChallanDate" ng-model="VendorSettlement.ChallanDate" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Mushak Date:</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input id="MushakDate" name="MushakDate" type="text" class="DatePicker form-control" placeholder="MushakDate" ng-model="VendorSettlement.MushakDate" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Note:</label>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="form-group">
+                        <textarea id="Note" name="Note" class="form-control" placeholder="Note" ng-model="VendorSettlement.Note"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="SearchVendorSettlementModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Client Bill Information</h3>
+                </div>
+                <div class="table-responsive" data-ng-disabled="" ng-cloak>
+                    <table st-table="VendorSettlementDisplayedCollection" st-safe-src="VendorSettlementSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+
+                        <thead>
+                            <tr>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientName')">Aprv ID</th>*@
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Client Name</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('WoNo')">WO No</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('WODate')">WO Date</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('WOAmt')">WO Amount</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('AprvAmnt')">Aprv Amount</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr ng-repeat="row in VendorSettlementDisplayedCollection">
+                                <td class="hidden">{{row.ClientID}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientFinalBilAprvID}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
+                                <td class="hidden">{{row.VendorID}}</td>
+                                <td class="hidden">{{row.VendorReqID}}</td>
+                                <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.WONo}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WODate}}</td>
+                                <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.WOAmt}}</td>
+                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.AprvAmnt}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorSettlementSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetSearchModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    app.controller('VendorSettlementCtrl', ['$scope', '$http', function ($scope, $http) {
+
+        $scope.itemsByPage = 10;
+        $scope.p = 2;
+        $scope.q = 1;
+
+        $scope.vendor = {
+            name: '',
+            poNo: '',
+            poDate: '',
+            quotationNo: '',
+            quotationDate: '',
+            clientName: '',
+            woNo: '',
+            woAmount: '',
+            poAmount: '',
+            billNo: ''
+        };
+
+        $scope.VendorSettlement = {
+            VendorSettlementID: "",
+            VendorFinalBilPaymentID: "",
+
+            ClientID: "",
+            ClientName: "",
+            ClientReqID: "",
+            ClientReqNo: "",
+            RequisitionDate: "",
+            CAddress: "",
+
+            VendorID: "",
+            VendorName: "",
+            VAddress: "",
+
+            PONo: "",
+            PODate: "",
+            POAmt: "",
+
+            WOInfoID: "",
+            WONo: "",
+            WODate: "",
+            WOAmt: "",
+
+            TDSChallanNo: "",
+            ChallanDate: "",
+            TDSAmount: "",
+            ChallanIssueAmount: "",
+            TDSDueAmount: "",
+            ChallanNo: "",
+            MushakDate: "",
+            VDSAmount: "",
+            MushakIssueAmount: "",
+            VDSDueAmount: "",
+            NetPayableAmount: "",
+            NetReceivableAmount: "",
+            Remarks: "",
+            SetOn: "",
+            SetBy: "",
+            ModifiedOn: "",
+            ModifiedBy: "",
+            Action: "",
+            Status: ""
+        };
+
+
+        $('.DatePicker').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true
+            // Set minDate to 0 to disable selecting previous dates
+        });
+
+        $('.DatePicker')
+            .on('changeDate', function (ev) {
+                $('.datepicker').hide();
+            });
+
+        $scope.checkUnitPrice = function (row) {
+            var QutnAmt = 0;
+            QutnAmt = (row.ReqQnty * row.QutnPrice);
+            row.QutnAmt = QutnAmt;
+        };
+        $scope.checkVatPerc = function (row) {
+            var VatAmt = 0;
+            VatAmt = (row.VatPerc * row.QutnAmt) / 100;
+            row.VatAmt = VatAmt;
+
+            row.TolAmt = row.QutnAmt + row.VatAmt;
+        };
+        // ################# Detail Add Modal ####################
+
+        $http.get("/VendorSettlement/GetShowVendorReqList")
+            .success(function (response) {
+                console.log(response);
+                $scope.VendorReqList = response.VendorReqList;
+                $scope.VendorReqDisplayedCollection = [].concat($scope.VendorReqList);
+                console.log($scope.VendorReqDisplayedCollection);
+                $scope.loading = false;
+            })
+            .error(function () { });
+
+        $scope.clearVendorSettlement = function () {
+            $scope.VendorSettlement = {
+                VendorSettlementID: "",
+                ClientID: "",
+                ClientCode: "",
+                ClientName: "",
+                ContactPerson: "",
+                ContactNumber: "",
+                ClientTINNo: "",
+                ClientBINNo: "",
+                ClientAddress: "",
+                VendorSettlementNo: "",
+                ReceivedDate: "",
+                QuotationDate: "",
+                Remarks: ""
+            }
+        };
+        ////////////////////////Select for Update from Search grid ///////////////////////
+
+        $scope.toggleVendorReqSelect = function (tableRow) {
+
+            $scope.VendorSettlement.VendorFinalBilPaymentID = tableRow.VendorFinalBilPaymentID;
+
+            $scope.VendorSettlement.ClientReqID = tableRow.ClientReqID;
+            $scope.VendorSettlement.ClientReqNo = tableRow.ClientReqNo;
+            //$scope.VendorSettlement.RequisitionDate = tableRow.RequisitionDate;
+
+            $scope.VendorSettlement.ClientID = tableRow.ClientID;
+            $scope.VendorSettlement.ClientName = tableRow.ClientName;
+            $scope.VendorSettlement.WOInfoID = tableRow.WOInfoID;
+            $scope.VendorSettlement.WONo = tableRow.WONo;
+            $scope.VendorSettlement.WODate = tableRow.WODate;
+            $scope.VendorSettlement.WOAmt = tableRow.WOAmt;
+
+            $scope.VendorSettlement.VendorID = tableRow.VendorID;
+            $scope.VendorSettlement.VendorName = tableRow.VendorName;
+            $scope.VendorSettlement.POAprvID = tableRow.POAprvID;
+            $scope.VendorSettlement.PONo = tableRow.PONo;
+            $scope.VendorSettlement.POAmt = tableRow.POAmt;
+
+            $scope.VendorSettlement.TDSAmount = tableRow.TDSAmount;
+            $scope.VendorSettlement.ChallanIssueAmount = tableRow.TDSAmount;
+            $scope.VendorSettlement.TDSDueAmount = ($scope.VendorSettlement.TDSAmount - $scope.VendorSettlement.ChallanIssueAmount);
+
+            $scope.VendorSettlement.VDSAmount = tableRow.VDSAmount;
+            $scope.VendorSettlement.MushakIssueAmount = tableRow.VDSAmount;
+            $scope.VendorSettlement.VDSDueAmount = ($scope.VendorSettlement.VDSAmount - $scope.VendorSettlement.MushakIssueAmount);
+
+
+            $scope.p = 1;
+
+            $('#VendorReqInfoModal').modal('hide');
+        };
+
+        $scope.calculateTDSAmounts = function () {
+            $scope.VendorSettlement.TDSDueAmount = ($scope.VendorSettlement.TDSAmount - $scope.VendorSettlement.ChallanIssueAmount);
+        };
+
+        $scope.calculateVDSAmounts = function () {
+            $scope.VendorSettlement.VDSDueAmount = ($scope.VendorSettlement.VDSAmount - $scope.VendorSettlement.MushakIssueAmount);
+        };
+
+        ///////////////////////Save/Update Master///////////////////////
+
+        //////////////////Search Grid List///////////////////////////////
+
+        $scope.SearchVendorSettlementModal = function () {
+            $scope.GetVendorSettlementSearchList();
+            $('#SearchVendorSettlementModal').modal('show');
+        };
+
+        $scope.GetVendorSettlementSearchList = function () {
+            $http.post("/VendorSettlement/GetQutnSearchList")
+                .success(function (response) {
+                    $scope.VendorSettlementSearchList = response.PoSearchList;
+                    $scope.VendorSettlementDisplayedCollection = [].concat($scope.VendorSettlementSearchList);
+                })
+                .error(function () { });
+        }
+
+        ////////////////////////Select for Update from Search grid ///////////////////////
+
+        $scope.toggleVendorSettlementSelect = function (tableRow) {
+            $scope.VendorSettlement.VendorSettlementID = tableRow.VendorSettlementID;
+            $scope.VendorSettlement.ClientID = tableRow.ClientID;
+            $scope.VendorSettlement.ClientName = tableRow.ClientName;
+
+            $scope.VendorSettlement.VendorID = tableRow.VendorID;
+            $scope.VendorSettlement.VendorName = tableRow.VendorName;
+
+            $scope.VendorSettlement.VendorSettlementNo = tableRow.VendorSettlementNo;
+            $scope.VendorSettlement.RequisitionDate = tableRow.RequiDate;
+            $scope.VendorSettlement.ClientReqNo = tableRow.ClientReqNo;
+            $scope.VendorSettlement.QuotationDate = tableRow.QuotatDate;
+            $scope.VendorSettlement.Remarks = tableRow.Remarks;
+
+            $scope.VendorSettlement.VendorBillNo = tableRow.VendorBillNo;
+            $scope.VendorSettlement.VendorBillDate = tableRow.VendorBillDate;
+            $scope.VendorSettlement.BillReceiveDate = tableRow.BillReceiveDate;
+            $scope.VendorSettlement.VATPercentage = tableRow.VATPercentage;
+            $scope.VendorSettlement.VATAmount = tableRow.VATAmount;
+            $scope.VendorSettlement.CommissionPercentage = tableRow.CommissionPercentage;
+            $scope.VendorSettlement.CommissionAmount = tableRow.CommissionAmount;
+            $scope.VendorSettlement.TotalBillAmount = tableRow.TotalBillAmount;
+            $scope.VendorSettlement.NetPayableAmount = tableRow.NetPayableAmount;
+            $scope.VendorSettlement.Note = tableRow.Note;
+
+            $scope.VendorSettlement.WONo = tableRow.WONo;
+            $scope.VendorSettlement.WODate = tableRow.WODate;
+            $scope.VendorSettlement.WOAmt = tableRow.WOAmt;
+
+            $scope.VendorSettlement.PONo = tableRow.PONo;
+            $scope.VendorSettlement.PODate = tableRow.PODate;
+            $scope.VendorSettlement.POAmt = tableRow.POAmt;
+
+            $scope.VendorSettlement.AdvancClaimRcvAmt = tableRow.AdvancClaimRcvAmt;
+            $scope.VendorSettlement.RemainingAmnt = tableRow.RemainingAmnt;
+            $scope.VendorSettlement.RecommendedAmnt = tableRow.RecommendedAmnt;
+            $scope.VendorSettlement.RecommendDate = tableRow.RecommendDate;
+            $scope.VendorSettlement.AprvAmnt = tableRow.AprvAmnt;
+            $scope.VendorSettlement.AprvDate = tableRow.AprvDate;
+            $scope.VendorSettlement.AdvancRecvID = tableRow.AdvancRecvID;
+            $scope.VendorSettlement.WOInfoID = tableRow.WOInfoID;
+            $scope.VendorSettlement.AdvancClaimRcvdDate = tableRow.AdvancClaimRcvdDate;
+            $scope.VendorSettlement.ClientFinalBilRecmID = tableRow.ClientFinalBilRecmID;
+            $scope.VendorSettlement.ClientFinalBilAprvID = tableRow.ClientFinalBilAprvID;
+            $scope.VendorSettlement.Operation = tableRow.Operation;
+
+            $scope.q = 2;
+            $scope.p = 1;
+            $('#SearchVendorSettlementModal').modal('hide');
+        };
+
+        ///////////////////////////////////////////////
+
+        $scope.Post = function () {
+
+            $scope.VendorSettlement.ChallanDate = $('#ChallanDate').val();
+            $scope.VendorSettlement.MushakDate = $('#MushakDate').val();
+            $http.post('/VendorSettlement/SaveVendorSettlement',
+                {
+                    //ChallanDate: $('#ChallanDate').val()
+                    BillRecv: $scope.VendorSettlement,
+
+                })
+                .success(function (response) {
+                    if (response.status == "S201") {
+                        toastr.success("Data Saved Successfully.");
+                        $scope.clearVendorSettlement();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "S202") {
+                        toastr.success("Data Updated Successfully.");
+                        $scope.clearVendorSettlement();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else if (response.status == "S203") {
+                        toastr.success("Data Deleted Successfully.");
+                        $scope.clearVendorSettlement();
+                        $scope.loading = false;
+                        return;
+                    }
+                    else {
+                        toastr.error("Data Save Failed.");
+                        $scope.loading = false;
+                        return;
+                    }
+                })
+                .error(function () {
+                    toastr.error("Data Save Failed.");
+                    $scope.loading = false;
+                    return;
+                });
+        }
+
+        $scope.toggleRefreshTable = function () {
+            window.location.reload();
+        };
+    }])
+</script>
