@@ -97,7 +97,7 @@ namespace SILDMS.DataAccess.AdvanceApproval
                         VendorName = reader.GetString("VendorName"),
                         VendorQutnNo = reader.GetString("VendorQutnNo"),
                         QuotationDate = reader.GetString("QuotationDate"),
-                        VendrAdvncDemnID = reader.GetString("VendrAdvncDemnID"),
+                        //VendrAdvncDemnID = reader.GetString("VendrAdvncDemnID"),
                         AdvncDemnAmt = reader.GetString("AdvncDemnAmt"),
                         AdvncDemnAmtPrev = reader.GetString("AdvncDemnAmtPrev"),
                         AdvncDemnDate = reader.GetString("AdvncDemnDate"),
