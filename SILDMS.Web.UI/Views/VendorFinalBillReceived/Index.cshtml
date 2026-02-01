@@ -36,7 +36,7 @@
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="btnSave">
-                        <i class="fa fa-save" style="padding-right: 5px;"></i> {{ VendorQutn.VendrFinalBilRcvdID ? 'Update' : 'Save' }}
+                        <i class="fa fa-save" style="padding-right: 5px;"></i> {{VendorQutn.VendrFinalBilRcvdID ? 'Update' : 'Save' }}
                     </button>
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
@@ -1128,6 +1128,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.ClientID = row.ClientID;
             $scope.VendorQutn.ClientReqID = row.ClientReqID;
             $scope.VendorQutn.VendorID = row.VendorID;
+            $scope.VendorQutn.ClientReqID = row.ClientReqID;
          /*   $scope.VendorQutn.VendorReqID = row.VendorReqID;*/
             $scope.VendorQutn.ClientName = row.ClientName;
             $scope.VendorQutn.VendorName = row.VendorName;
@@ -1545,37 +1546,32 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             //}
 
             $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
-            $scope.VendorQutn.RequisitionDate = $('#RequisitionDate').val();
-            $scope.VendorQutn.ContractDate = $('#ContractDate').val();
-
        /*     $scope.VendorQutn.ReceivedDate = $('#ReceivedDate').val();*/
             $scope.VendorQutn.VendorBillDate = $('#VendorBillDate').val();
             $scope.VendorQutn.BillReceiveDate = $('#BillReceiveDate').val();
             
-            if ($scope.VendorQutn.VendrFinalBilRcvdID) {
-                var fileUpload = document.getElementById("FileUpload1");
-                var files = fileUpload.files;
 
-                if (files.length === 0) {
-                    toastr.error("Please select a file to upload.");
-                    return;
-                }
+                //if (files.length === 0) {
+                //    toastr.error("Please select a file to upload.");
+                //    return;
+                //}
 
-                var file = files[0];
-                var ext = file.name.split('.').pop().toLowerCase();
+                //var file = files[0];
+                //var ext = file.name.split('.').pop().toLowerCase();
 
-                var maxSizeInMB = 2;
-                if (file.size > maxSizeInMB * 1024 * 1024) {
-                    toastr.error("File size must be 2 MB or less.");
-                    return;
-                }
+                //var maxSizeInMB = 2;
+                //if (file.size > maxSizeInMB * 1024 * 1024) {
+                //    toastr.error("File size must be 2 MB or less.");
+                //    return;
+                //}
 
-                // Validate file extension
-                if (ext !== "pdf") {
-                    toastr.error("Please upload PDF files only.");
-                    return;
-                }
-            }
+                //// Validate file extension
+                //if (ext !== "pdf") {
+                //    toastr.error("Please upload PDF files only.");
+                //    return;
+                //}
+            
+            
 
             $http.post('/VendorFinalBillReceived/SaveVendorFinalBill',
                 {
@@ -1589,8 +1585,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         toastr.success("Data Saved Successfully.");
 
                         if ($scope.uploadedFile) {
-                            $scope.SaveDocument(file, response.VendrFinalBilRcvdID); //
-                     
+                            $scope.SaveDocument(response.VendrFinalBilRcvdID); //
                         }
 
                         $scope.clearVendorQutn();
@@ -1626,31 +1621,9 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
 
         $scope.DocCrudStatus = "";
-        $scope.SaveDocument = function (file, VendrFinalBilRcvdID) {
+        $scope.SaveDocument = function (file,VendrFinalBilRcvdID) {
             $scope.DocCrudStatus = "I";
 
-            var fileUpload = document.getElementById("FileUpload1");
-            var files = fileUpload.files;
-
-            if (files.length === 0) {
-                toastr.error("Please select a file to upload.");
-                return;
-            }
-
-            var file = files[0];
-            var ext = file.name.split('.').pop().toLowerCase();
-
-            var maxSizeInMB = 2;
-            if (file.size > maxSizeInMB * 1024 * 1024) {
-                toastr.error("File size must be 2 MB or less.");
-                return;
-            }
-
-            // Validate file extension
-            if (ext !== "pdf") {
-                toastr.error("Please upload PDF files only.");
-                return;
-            }
 
             $scope.loading = true; // Show loading indicator
 
@@ -1752,10 +1725,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     $scope.loading = false; // Hide the loading indicator
                 });
         };
-
-
-
-
 
 
         $scope.toggleRefreshTable = function () {

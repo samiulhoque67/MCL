@@ -67,7 +67,7 @@ namespace SILDMS.Web.UI.Controllers
 
             status = _clientInfoService.SaveClientRequisition(clientReq, clientReqItem, clientReqTerm);
 
-            if (status != string.Empty)
+            if (status != string.Empty && status != "ERROR_Duplicate")
             {
                 string[] statusarr = status.Split(',');
                 ClientReqID = statusarr[1];

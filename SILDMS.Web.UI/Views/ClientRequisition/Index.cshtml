@@ -55,7 +55,7 @@
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom" ng-disabled="btnRefresh">
+                    <button type="button" data-ng-click="toggleRefreshTablemain()" class="button-custom" ng-disabled="btnRefresh">
                         <i class="fa fa-refresh" style="padding-right: 5px"></i> Refresh
                     </button>
                 </div>
@@ -112,7 +112,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input ng-readonly="viewonlymode == true" id="ClientReqNo" name="ClientReqNo" type="text" class="form-control" placeholder="Client Requisition No" ng-model="ClientReq.ClientReqNo" />
+                        <input ng-readonly="viewonlymode == true" id="ClientReqNo" name="ClientReqNo" type="text" autocomplete="off" class="form-control" placeholder="Client Requisition No" ng-model="ClientReq.ClientReqNo" />
                     </div>
                 </div>
 
@@ -216,7 +216,7 @@
 
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCode')">Client Code</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientName')">Client Name</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCategoryName')">Client Category</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1 hidden" data-ng-click="sort('ClientCategoryName')">Client Category</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactPerson')">Contact Person</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactNumber')">Contact Number</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>
@@ -234,7 +234,7 @@
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientCode}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
                                 <td class="hidden">{{row.ClientCategoryID}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientCategoryName}}</td>
+                                <td class="hidden" class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientCategoryName}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactPerson}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactNumber}}</td>
                                 <td class="hidden">{{row.ClientAddressID}}</td>
@@ -373,9 +373,9 @@
                             <th style="text-align: left;" st-sort="">Delivery Location</th>
                             <th style="text-align: left;" st-sort="">Delivery Date</th>
                             <th style="text-align: left;" st-sort="">Delivery Mode</th>
-                            <th style="text-align: left;" st-sort="">ReqType</th>
-                            <th style="text-align: left;" st-sort="">ReqQnty</th>
-                            <th style="text-align: left;" st-sort="">ReqUnit</th>
+                            <th style="text-align: left;" st-sort="">Req. Type</th>
+                            <th style="text-align: left;" st-sort="">Req. Qnty</th>
+                            <th style="text-align: left;" st-sort="">Req. Unit</th>
                             <th ng-hide="viewonlymode == true" style="text-align: left;">Action</th>
                         </tr>
                         @*<tr>
@@ -558,7 +558,7 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label for="ReqQnty">ReqQnty :</label>
+                                <label for="ReqQnty">Req. Qnty :</label>
                             </div>
                         </div>
                         <div class="col-lg-3">
@@ -568,7 +568,7 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label for="ReqUnit">ReqUnit :</label>
+                                <label for="ReqUnit">Req. Unit :</label>
                             </div>
                         </div>
                         <div class="col-lg-3">
@@ -906,7 +906,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
 <script type="text/javascript">
 
-    app.controller('ClientRequisitionCtrl', ['$scope', '$http', function ($scope, $http) {
+    app.controller('ClientRequisitionCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
         $scope.clientReqItemArray = [];
         $scope.clientReqTermArray = [];
@@ -1525,6 +1525,12 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         $scope.loading = false;
                         return;
                     }
+
+                    else if (response.status == "ERROR_Duplicate") {
+                        toastr.error("This requisition no. already exists");
+                        $scope.loading = false;
+                        return;
+                    }
                     else if (response.status == "S203") {
                         toastr.success("Data Deleted Successfully.");
                         $scope.clearClientReq();
@@ -1545,7 +1551,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 });
         }
 
-        $scope.toggleRefreshTable = function () {
+        $scope.toggleRefreshTablemain = function () {
             window.location.reload();
         };
 
@@ -1682,7 +1688,14 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
 
 
+        $scope.toggleRefreshTable = function () {
 
+            $timeout(function () {
+                // Reload the current page
+                window.location.reload();
+            }, 2000);
+
+        };
 
 
 

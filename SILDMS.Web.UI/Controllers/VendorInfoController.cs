@@ -39,13 +39,13 @@ namespace SILDMS.Web.UI.Controllers
         [HttpPost]
         [Authorize]
         public async Task<dynamic> SaveVendorwithMat(string VendorCode,string VendorName, string ContactPerson, string ContactNumber, string Email,
-            string VendorTinNo, string VendorBinNo,string VAddress, List<OBS_ServicesCategory> ServiceItemInfo, int VendorStatus, string TempVendorID =  null)
+            string VendorTinNo, string VendorBinNo,string VAddress, string BankName, string AccountName, string AccountNumber, string RoutingNumber, List<OBS_ServicesCategory> ServiceItemInfo, int VendorStatus, string TempVendorID =  null)
 
         {
             string Status = string.Empty, message = string.Empty;
 
             Status = _vendorInfoService.SaveVendorwithMatService(UserID, VendorCode, VendorName, ContactPerson, ContactNumber, Email,
-             VendorTinNo,  VendorBinNo,  VAddress, ServiceItemInfo, VendorStatus, TempVendorID, out Status);
+            VendorTinNo,  VendorBinNo,  VAddress, BankName, AccountName, AccountNumber, RoutingNumber, ServiceItemInfo, VendorStatus, TempVendorID, out Status);
             if (Status == "Success" || Status != null || Status != "")
             {
                 message = "Data Saved Successfully";
@@ -58,7 +58,6 @@ namespace SILDMS.Web.UI.Controllers
 
             }
         }
-
         public async Task<dynamic> GetAllListedVendors(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
         {
             var ListedVendorsList = new List<OBS_VendorInfo>();
@@ -67,7 +66,7 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        [Authorize]
+        //[Authorize]
         public async Task<dynamic> GetAllMaterial()
         {
             string MaterialCategory = null;

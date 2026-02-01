@@ -89,6 +89,7 @@ namespace SILDMS.DataAccess
                         ReqQnty = reader.GetString("ReqQnty"),
                         ReqUnit = reader.GetString("ReqUnit"),
                         QutnQnty = reader.GetString("QutnQnty"),
+                        CsStatus = reader.GetString("CsStatus"),
                         Status = reader.GetString("Status")
                     }).ToList();
                 }
@@ -148,6 +149,7 @@ namespace SILDMS.DataAccess
             dtVendorQutnItem.Columns.Add("QutnAmt");
             dtVendorQutnItem.Columns.Add("VatPerc");
             dtVendorQutnItem.Columns.Add("VatAmt");
+            dtVendorQutnItem.Columns.Add("CsStatus");
 
             foreach (var item in VendorQutnItem)
             {
@@ -168,6 +170,7 @@ namespace SILDMS.DataAccess
                 objDataRow[12] = item.QutnAmt;
                 objDataRow[13] = item.VatPerc;
                 objDataRow[14] = item.VatAmt;
+                objDataRow[15] = item.CsStatus;
 
                 dtVendorQutnItem.Rows.Add(objDataRow);
             }
@@ -215,7 +218,7 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorQutnItem", SqlDbType.Structured, dtVendorQutnItem);
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorQutnTerm", SqlDbType.Structured, dtVendorQutnTerm);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, VendorQutn.Action);
-                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 50);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
                     // Getting output parameters and setting response details.

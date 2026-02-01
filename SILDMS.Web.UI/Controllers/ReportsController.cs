@@ -1210,11 +1210,11 @@ namespace SILDMS.Web.UI.Controllers
                 reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
             else
                 reportDocument.SetParameterValue("ComDiv", model.ClientName);
-            string rptHeaderName = "Client Wise Bill Receive.";
+            string rptHeaderName = "Client Wise Due Bill.";
             reportDocument.SetParameterValue("rptName", rptHeaderName);
             reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
             //string reportName = GetCompanyShortName(model.ClientName) + "-" + "ChequeOrEFTInfoVendorWise";
-            string reportName = "Bill Receive Report" + ' ' + model.ClientName;
+            string reportName = "Client Wise Due Bill" + ' ' + model.ClientName;
 
             if (model.ButtonType == "Preview")
                 reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);

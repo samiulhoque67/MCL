@@ -163,7 +163,7 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@OBS_ClientReqItem", SqlDbType.Structured, dtReqItem);
                     db.AddInParameter(dbCommandWrapper, "@OBS_ClientReqTerm", SqlDbType.Structured, dtReqTerm);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, clientReq.Action);
-                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 50);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 500);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
                     // Getting output parameters and setting response details.

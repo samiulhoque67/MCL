@@ -523,7 +523,7 @@ if (!document.createElement('canvas').getContext) {
     }
 
     // Compute the size
-    var canvasFontSize = parseFloat(element.currentStyle.fontSize),
+    var canvAFSontSize = parseFloat(element.currentStyle.fontSize),
         fontSize = parseFloat(style.size);
 
     if (typeof style.size == 'number') {
@@ -531,13 +531,13 @@ if (!document.createElement('canvas').getContext) {
     } else if (style.size.indexOf('px') != -1) {
       computedStyle.size = fontSize;
     } else if (style.size.indexOf('em') != -1) {
-      computedStyle.size = canvasFontSize * fontSize;
+      computedStyle.size = canvAFSontSize * fontSize;
     } else if(style.size.indexOf('%') != -1) {
-      computedStyle.size = (canvasFontSize / 100) * fontSize;
+      computedStyle.size = (canvAFSontSize / 100) * fontSize;
     } else if (style.size.indexOf('pt') != -1) {
       computedStyle.size = fontSize / .75;
     } else {
-      computedStyle.size = canvasFontSize;
+      computedStyle.size = canvAFSontSize;
     }
 
     // Different scaling between normal text and VML text. This was found using

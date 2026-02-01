@@ -4511,7 +4511,7 @@ Expr = Sizzle.selectors = {
 
 		"focus": function( elem ) {
 			var doc = elem.ownerDocument;
-			return elem === doc.activeElement && (!doc.hasFocus || doc.hasFocus()) && !!(elem.type || elem.href);
+			return elem === doc.activeElement && (!doc.hAFSocus || doc.hAFSocus()) && !!(elem.type || elem.href);
 		},
 
 		"active": function( elem ) {

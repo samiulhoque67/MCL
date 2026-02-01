@@ -1645,6 +1645,14 @@
                 return;
             }
 
+            if ($scope.selectedVendors.length > 1) {
+                
+                        toastr.error("Select only one vendor");
+                        return;
+             
+            }
+
+
             $http.post('/VendorCSAprv/SaveVendorCSAprv',
                 {
                     vendorCS: $scope.VendorCSAprv,

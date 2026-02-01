@@ -6,7 +6,7 @@
  * Use, reproduction, distribution, and modification of this code is subject to the terms and
  * conditions of the MIT license, available at http://www.opensource.org/licenses/mit-license.php
  *
- * ARIA Support: Greta Krafsig
+ * ARIA Support: Greta KrAFSig
  *
  * Project: https://github.com/CodeSeven/toastr
  */

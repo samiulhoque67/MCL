@@ -16920,8 +16920,8 @@ function $$RAFProvider() { //rAF
                                $window.webkitCancelAnimationFrame ||
                                $window.webkitCancelRequestAnimationFrame;
 
-    var rafSupported = !!requestAnimationFrame;
-    var raf = rafSupported
+    var rAFSupported = !!requestAnimationFrame;
+    var raf = rAFSupported
       ? function(fn) {
           var id = requestAnimationFrame(fn);
           return function() {
@@ -16935,7 +16935,7 @@ function $$RAFProvider() { //rAF
           };
         };
 
-    raf.supported = rafSupported;
+    raf.supported = rAFSupported;
 
     return raf;
   }];
@@ -29275,8 +29275,8 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
     var trackBy = match[9];
     // An expression that generates the viewValue for an option if there is no label expression
     var valueFn = $parse(match[2] ? match[1] : valueName);
-    var selectAsFn = selectAs && $parse(selectAs);
-    var viewValueFn = selectAsFn || valueFn;
+    var selectAFSn = selectAs && $parse(selectAs);
+    var viewValueFn = selectAFSn || valueFn;
     var trackByFn = trackBy && $parse(trackBy);
 
     // Get the value by which we are going to track the option

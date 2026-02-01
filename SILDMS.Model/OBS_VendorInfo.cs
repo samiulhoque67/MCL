@@ -35,5 +35,9 @@ namespace SILDMS.Model
         public string Status { get; set; }
 
         public string TotalPages { get; set; }
+        public string BankName { get; set; }
+        public string AccountName { get; set; }
+        public string AccountNumber { get; set; }
+        public string RoutingNumber { get; set; }
     }
 }

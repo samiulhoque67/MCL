@@ -87,19 +87,13 @@ namespace SILDMS.Web.UI.Controllers
         [SILLogAttribute]
         public async Task<dynamic> EditServicesCategory(OBS_ServicesCategory obServicesCategory)
         {
-            if (ModelState.IsValid)
-            {
+           
                 action = "edit";
                 obServicesCategory.SetBy = UserID;
                 obServicesCategory.ModifiedBy = obServicesCategory.SetBy;
                 respStatus = await Task.Run(() => _servicesCategoryService.AddServicesCategory(obServicesCategory, action, out outStatus));
                 return Json(new { Message = respStatus.Message, respStatus }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                respStatus = new ValidationResult("E404", _localizationService.GetResource("E404"));
-            }
-            return Json(new { Message = respStatus.Message, respStatus }, JsonRequestBehavior.AllowGet);
+           
         }
 
 

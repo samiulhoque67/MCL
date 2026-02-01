@@ -50,7 +50,7 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> GetVendorReqItemListForVenQutn(string VendorID, string VendorReqID)
         {
             var VendorReqItemList = new List<OBS_VendorReqItem>();
-            await Task.Run(() => _clientInfoService.GetVendorReqItemListForVenQutn( VendorID, VendorReqID, out VendorReqItemList));
+            await Task.Run(() => _clientInfoService.GetVendorReqItemListForVenQutn(VendorID, VendorReqID, out VendorReqItemList));
             var result = Json(new { VendorReqItemList, msg = "VendorReqItemList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;

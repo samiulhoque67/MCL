@@ -21,7 +21,7 @@ namespace SILDMS.DataAccess
         private readonly string spStatusParam = "@p_Status";
 
         public string SaveVendorwithMatDataService(string UserID, string VendorCode, string VendorName, string ContactPerson, string ContactNumber, string Email,
-            string VendorTinNo, string VendorBinNo, string VAddress, List<OBS_ServicesCategory> ServiceItemInfo, int VendorStatus, string TempVendorID, out string errorNumber)
+            string VendorTinNo, string VendorBinNo, string VAddress, string BankName, string AccountName, string AccountNumber, string RoutingNumber, List<OBS_ServicesCategory> ServiceItemInfo, int VendorStatus, string TempVendorID, out string errorNumber)
         {
             errorNumber = string.Empty;
             string message = "";
@@ -59,6 +59,12 @@ namespace SILDMS.DataAccess
                 db.AddInParameter(dbCommandWrapper, "@VendorTinNo", SqlDbType.VarChar, VendorTinNo);
                 db.AddInParameter(dbCommandWrapper, "@VendorBinNo", SqlDbType.VarChar, VendorBinNo);
                 db.AddInParameter(dbCommandWrapper, "@VAddress", SqlDbType.VarChar, VAddress);
+
+                db.AddInParameter(dbCommandWrapper, "@BankName", SqlDbType.VarChar, BankName);
+                db.AddInParameter(dbCommandWrapper, "@AccountName", SqlDbType.VarChar, AccountName);
+                db.AddInParameter(dbCommandWrapper, "@AccountNumber", SqlDbType.VarChar, AccountNumber);
+                db.AddInParameter(dbCommandWrapper, "@RoutingNumber", SqlDbType.VarChar, RoutingNumber);
+
 
                 db.AddInParameter(dbCommandWrapper, "@OBS_QtC_ServiceItemInfolType", SqlDbType.Structured, detailDataTable);
                 db.AddInParameter(dbCommandWrapper, "@VendorStatus", SqlDbType.Int, VendorStatus);
@@ -183,10 +189,17 @@ namespace SILDMS.DataAccess
                             Email = reader.GetString("Email"),
                             ContactNumber = reader.GetString("ContactNumber"),
                             Address = reader.GetString("CurrentAddress"),
+
+                            BankName = reader.GetString("BankName"),
+                            AccountName = reader.GetString("AccountName"),
+                            AccountNumber = reader.GetString("AccountNumber"),
+                            RoutingNumber = reader.GetString("RoutingNumber"),
+
+
                             ServiceItemName = reader.GetString("ServiceItemName"),
                             ServiceItemID = reader.GetString("ServiceItemID"),
-                            Status = reader.GetString("Status"),
-                            TotalPages = reader.GetString("TotalPages")
+                            Status = reader.GetString("Status")
+                            //TotalPages = reader.GetString("TotalPages")
                         }).ToList();
                     }
                 }
