@@ -6,6 +6,7 @@ using SILDMS.Utillity.Localization;
 using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -136,7 +137,6 @@ namespace SILDMS.Web.UI.Controllers
 
 
         [HttpPost]
-        /*string serverIP, string ftpPort, string ftpUserName, string ftpPassword, string serverURL, string documentID, string Ext*/
         public ActionResult SaveDocument(string serverIP, string ftpPort, string ftpUserName, string ftpPassword, string serverUrl, string documentID, string ext, HttpPostedFileBase file)
         {
             if (file == null || file.ContentLength == 0)
@@ -146,6 +146,10 @@ namespace SILDMS.Web.UI.Controllers
 
             try
             {
+                serverIP = ConfigurationManager.AppSettings["serverIP"];
+                ftpPort = ConfigurationManager.AppSettings["ftpPort"];
+                ftpUserName = ConfigurationManager.AppSettings["ftpUserName"];
+                ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
                 // Build FTP URL dynamically
                 string ftpUrl = $"ftp://{serverIP}:{ftpPort}/{serverUrl}/{documentID}.{ext}";
 
@@ -193,6 +197,11 @@ namespace SILDMS.Web.UI.Controllers
         {
             try
             {
+                serverIP = ConfigurationManager.AppSettings["serverIP"];
+                ftpPort = ConfigurationManager.AppSettings["ftpPort"];
+                ftpUserName = ConfigurationManager.AppSettings["ftpUserName"];
+                ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
+
                 // Ensure the extension starts with a dot
                 if (!ext.StartsWith(".")) ext = "." + ext;
 
@@ -230,7 +239,5 @@ namespace SILDMS.Web.UI.Controllers
                 return new HttpStatusCodeResult(500, $"Error retrieving document: {ex.Message}");
             }
         }
-
-
     }
 }

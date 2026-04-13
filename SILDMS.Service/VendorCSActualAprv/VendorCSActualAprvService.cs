@@ -76,6 +76,16 @@ namespace SILDMS.Service.VendorCSActualAprv
             return vendorCSActualAprvData.SaveVendorCSAprv(clientReq, clientReqItem, clientReqTerm);
         }
 
+        public string SaveVendorCSRecAcc(OBS_VendorCSAprv clientReq, List<OBS_VendorCSAprvItem> clientReqItem, List<OBS_VendorCSAprvTerms> clientReqTerm)
+        {
+            return vendorCSActualAprvData.SaveVendorCSRecAcc(clientReq, clientReqItem, clientReqTerm);
+        }
+
+        public string SaveVendorCSRecAudit(OBS_VendorCSAprv clientReq, List<OBS_VendorCSAprvItem> clientReqItem, List<OBS_VendorCSAprvTerms> clientReqTerm)
+        {
+            return vendorCSActualAprvData.SaveVendorCSRecAudit(clientReq, clientReqItem, clientReqTerm);
+        }
+
         public ValidationResult GetVendorCSAprvTermAgainstFormList(string TermsID, out List<OBS_VendorCSAprvTerms> VendorCSAprvTermList)
         {
             VendorCSAprvTermList = vendorCSActualAprvData.GetVendorCSAprvTermAgainstFormList(TermsID);
@@ -99,6 +109,24 @@ namespace SILDMS.Service.VendorCSActualAprv
         public ValidationResult GetAllRequisition(string userID, out List<Invitation> invitationList)
         {
             invitationList = vendorCSActualAprvData.GetAllRequisition(userID);
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult GetAllCSRecDataforAcc(string userID, out List<Invitation> invitationList)
+        {
+            invitationList = vendorCSActualAprvData.GetAllCSRecDataforAcc(userID);
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult GetAllCSRecDataforVerify(string userID, out List<Invitation> invitationList)
+        {
+            invitationList = vendorCSActualAprvData.GetAllCSRecDataforVerify(userID);
+            return ValidationResult.Success;
+        }
+
+        public ValidationResult GetAllApprovedData(string userID, out List<Invitation> invitationList)
+        {
+            invitationList = vendorCSActualAprvData.GetAllApprovedData(userID);
             return ValidationResult.Success;
         }
 

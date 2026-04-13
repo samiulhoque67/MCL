@@ -93,9 +93,29 @@ namespace SILDMS.Web.UI.Controllers
 
         public async Task<dynamic> SaveVendorCSInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm)
         {
+            OBS_VendorCSReport objOBS_VendorCSReport = new OBS_VendorCSReport();
+
             vendorCS.SetBy = UserID;
+
+            objOBS_VendorCSReport.ClientReqNo = vendorCS.ClientReqNo;
+            objOBS_VendorCSReport.RequisitionDate = vendorCS.RequisitionDate;
+            objOBS_VendorCSReport.RptQutnQty = vendorCS.RptQutnQty;
+            objOBS_VendorCSReport.RptQutnUnit = vendorCS.RptQutnUnit;
+            objOBS_VendorCSReport.ClientName = vendorCS.ClientName;
+            objOBS_VendorCSReport.VenReqItem = vendorCS.VenReqItem;
+            objOBS_VendorCSReport.Note = vendorCS.Remarks;
+            objOBS_VendorCSReport.CSRecmVendorName = vendorCS.VendorCsRecmName;
+            objOBS_VendorCSReport.RecommendedByName = SILAuthorization.GetUserFullName();
+            objOBS_VendorCSReport.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
+            objOBS_VendorCSReport.CSPrepDate = vendorCS.CSRecDate;
+            objOBS_VendorCSReport.VendorReqID = vendorCS.VendorReqID;
+            objOBS_VendorCSReport.ServiceItemID = vendorCSItem[0].ServiceItemID;
+            TempData["VendorCSprepInfo"] = objOBS_VendorCSReport;
+
             string status = string.Empty;//, message = string.Empty;
             status = _vendorCSInfoService.SaveVendorCSInfo(vendorCS, vendorCSItem, vendorCSTerm);
+
+            
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
@@ -136,7 +156,6 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-
         [Authorize]
         public async Task<dynamic> GetAllRequisition()
         {
@@ -145,7 +164,13 @@ namespace SILDMS.Web.UI.Controllers
             return Json(new { InvitationList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
 
-
+        [Authorize]
+        public async Task<dynamic> ExsitingCSPrepVendorByVenReqID(string VendorReqID)
+        {
+            var InvitationList = new List<Invitation>();
+            await Task.Run(() => _vendorCSInfoService.ExsitingCSPrepVendorByVenReqID(VendorReqID, out InvitationList));
+            return Json(new { InvitationList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
 
         [Authorize]
         public async Task<dynamic> GetMaterialByRequisition(string VendorRequisitionNumber)
@@ -154,7 +179,6 @@ namespace SILDMS.Web.UI.Controllers
             await Task.Run(() => _vendorCSInfoService.GetMaterialByRequisition(VendorRequisitionNumber, out ReqWiseMaterialList));
             return Json(new { ReqWiseMaterialList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
-
 
         [Authorize]
         public async Task<dynamic> GetVendorByMaterial(string VendorReqID, string ServiceItemID)
@@ -172,8 +196,6 @@ namespace SILDMS.Web.UI.Controllers
             return Json(new { SearchCSList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
 
-
-
         [Authorize]
         public async Task<dynamic> CSVendor(string CSNumber)
         {
@@ -181,7 +203,6 @@ namespace SILDMS.Web.UI.Controllers
             await Task.Run(() => _vendorCSInfoService.CSVendorService(UserID, CSNumber, out VendorCSList));
             return Json(new { VendorCSList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
-
 
         public async Task<dynamic> CSVendorTerms(string CSNumber)
         {
@@ -191,9 +212,5 @@ namespace SILDMS.Web.UI.Controllers
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
-
-
-
-
     }
 }

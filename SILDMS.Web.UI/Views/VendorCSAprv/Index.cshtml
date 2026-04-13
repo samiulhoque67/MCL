@@ -93,8 +93,6 @@
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
 
-
-
                 <div class="btn-group pull-right" style="margin: 3px;">
                     <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                         <button class="button-custom btn-warning" type="button" data-ng-click="toggleRefreshTable()" ng-disabled="btnRefresh">
@@ -102,40 +100,22 @@
                         </button>
                     </div>
                     <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                        @using (Html.BeginForm("VendorCSApprevedReport", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
-                        {
-                            <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="button-custom btn-success pull-right">
-                                <i class="fa fa-print" style="padding-right: 5px"></i> CS Print
-                            </button>
-                        }
-                    </div>
-
-                    <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                         <button class="button-custom btn-primary" type="button" data-ng-click="SearchCS()" ng-disabled="btnSearch">
                             <i class="fa fa-search" style="padding-right: 5px"></i> Search
                         </button>
                     </div>
-
-
-
                     <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                         <button class="button-custom btn-primary" type="button" data-ng-click="Post()" ng-disabled="btnSave">
                             <i class="fa fa-save" style="padding-right: 5px"></i> {{ VendorCSAprv.AutoCSNo ? 'Update' : 'Save' }}
                         </button>
 
                     </div>
-
                 </div>
-
-
             </div>
         </div>
     </div>
 
-
-
     <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="p===2">
-
         <div class="row">
             <div ng-show="GridDisplayCollection.length<=0" style="text-align:center">
                 <h4 style="color:red;">No data available!</h4>
@@ -146,7 +126,6 @@
 
                     <thead>
                         <tr style="font-size: 15px;">
-                            @*<th colspan="11" style="text-align: left; color: white; font-weight: bold">Requisition To Vendor List</th>*@
                             <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
                                 Requisition To Vendor List
                             </th>
@@ -160,9 +139,6 @@
                             <th style="text-align: left;" st-sort="">Action</th>
 
                         </tr>
-                        @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in GridDisplayCollection"
@@ -170,14 +146,12 @@
                             style="height:20px; font-size:13px;"
                             ng-class="{'selected-row': row.selected}"
                             ng-style="getRowStyle(row)">
-
                             <td class="hidden">{{row.Id}}</td>
                             <td class="col-lg-2">{{ row.VendorRequisitionNumber }} </td>
                             <td class="col-lg-2">{{row.RequisitionDate}}</td>
                             <td class="col-lg-2">{{row.ClientName}}</td>
                             <td class="col-lg-2">{{row.ClientRequisitionNumber}}</td>
                             <td class="col-lg-2">{{row.LastDateofQuotation}}</td>
-
                             <td class="col-lg-1 col-md-1 col-sm-1 text-center" style="font-weight:bold">
                                 <button type="button" ng-click="selectInvitation(row)" data-dismiss="modal" title="Select">
                                     <i ng-show="!row.selected" class="fa fa-square-o"></i>
@@ -187,21 +161,12 @@
                         </tr>
                     </tbody>
                     <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
                     </tfoot>
                 </table>
             </div>
         </div>
-
-
         <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isRowSelected">
-
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-
-
-
                 <table id="tableId" st-table="ReqWiseMaterialListCollection" st-safe-src="InvWiseMaterialList" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
                     <thead>
                         <tr style="font-size: 15px;">
@@ -218,10 +183,7 @@
                             <th style="text-align: left;" st-sort="">Description</th>
                             <th style="text-align: left;" st-sort="">DeliveryLocation</th>
                             <th style="text-align: left;" st-sort="">DeliveryDate</th>
-
-
                             <th>Action</th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -229,7 +191,6 @@
                             style="height:20px; font-size:13px;"
                             ng-class="{'selected-row': row.selected}"
                             ng-style="getRowStyle(row)">
-
                             <td class="col-lg-2 col-md-2 col-sm-2">{{row.ServiceCategoryName}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.ServiceItemID}}</td>
                             <td class="col-lg-2 col-md-2 col-sm-2">{{row.ServiceItemName}}</td>
@@ -238,10 +199,7 @@
                             <td class="col-lg-2 col-md-2 col-sm-2">{{row.Description}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.DeliveryLocation}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.DeliveryDate}}</td>
-
-
                             <td class="col-lg-1 col-md-1 col-sm-1 " style="font-weight:bold">
-                                @*<button type="button" class="button-detail" ng-click="showDetailsOfPR(row)" data-dismiss="modal" title="Show detail">Detail  <i class="fa fa-info"> </i> </button>*@
                                 <button type="button" ng-click="selectMaterial(row)" data-dismiss="modal" title="Select">
                                     <i ng-show="!row.selected" class="fa fa-square-o"></i>
                                     <i ng-show="row.selected" class="fa fa-check-square-o"></i>
@@ -256,15 +214,6 @@
                         </tr>
                     </tfoot>
                 </table>
-
-
-
-                @*<div class="box-tools pull-right">
-                        <button type="button" id="btnRefresh" data-ng-click="fetchfromgoogle()" class="btn btn-warning btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Fetch from Google</button>
-                    </div>*@
-
-
-                @*</div>*@
             </div>
 
         </div>
@@ -272,8 +221,6 @@
         <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isMaterialRowSelected">
 
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-
-
 
                 <table id="tableId" st-table="MatWiseVendorListCollection" st-safe-src="MatWiseVendorList" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
                     <thead>
@@ -288,16 +235,14 @@
                             <th>Unit</th>
                             <th>QutnPrice</th>
                             <th>Nego Price</th>
-
                             <th>Vat %</th>
                             <th>Vat Amnt</th>
                             <th>Nego Vat Amnt</th>
                             <th>Total Price</th>
                             <th>Nego Total Price</th>
                             <th>Delivery Date</th>
-
-                            <th>Action</th>
-
+                            @*<th>Action</th>*@
+                            <th>View</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -329,12 +274,8 @@
                             </td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.DeliveryDate}}</td>
 
-                            <td class="col-lg-1 col-md-1 col-sm-1 " style="font-weight:bold">
-                                @*<button type="button" class="button-detail" ng-click="showDetailsOfPR(row)" data-dismiss="modal" title="Show detail">Detail  <i class="fa fa-info"> </i> </button>*@
-                                <button type="button" ng-click="selectVendor(row)" data-dismiss="modal" title="Select">
-                                    <i ng-show="!row.selected" class="fa fa-square-o"></i>
-                                    <i ng-show="row.selected" class="fa fa-check-square-o"></i>
-                                </button>
+                            <td>
+                                <button ng-click="ViewDocument(row)" class="btn button-custom"><i class="fa fa-eye" style="width:11px;"></i></button>
                             </td>
                         </tr>
                     </tbody>
@@ -352,7 +293,84 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label>CS Date</label>
+                                <label>CS Recm. Vendor:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                <input id="CSRecmVendorName" name="CSRecmVendorName" type="text" class="form-control" placeholder="CS Recm. Vendor" ng-model="VendorCSAprv.CSRecmVendorName" ng-readonly="true" />
+                                <input id="CSRecmVendorID" name="CSRecmVendorID" type="hidden" data-ng-model="VendorCSAprv.CSRecmVendorID" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>CS Prep. Note:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                @*<input id="CSRecmNote" name="CSRecmNote" type="text" class="form-control" placeholder="CS Recm. Note" ng-model="VendorCSAprv.CSRecmNote" ng-readonly="true" />*@
+                                <textarea id="CSPrepNote" name="CSPrepNote" data-ng-model="VendorCSAprv.CSPrepNote" class="form-control" ng-readonly="true"> </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>CS Recm. Note:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                @*<input id="CSRecmNote" name="CSRecmNote" type="text" class="form-control" placeholder="CS Recm. Note" ng-model="VendorCSAprv.CSRecmNote" ng-readonly="true" />*@
+                                <textarea id="CSRecmNote" name="CSRecmNote" data-ng-model="VendorCSAprv.CSRecmNote" class="form-control" ng-readonly="true"> </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>CS Accounts Note:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                @*<input id="CSAccNote" name="CSAccNote" type="text" class="form-control" placeholder="CS Recm. Note" ng-model="VendorCSAprv.CSAccNote" ng-readonly="true" />*@
+                                <textarea id="CSAccNote" name="CSAccNote" data-ng-model="VendorCSAprv.CSAccNote" class="form-control" ng-readonly="true"> </textarea>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>CS Verify Note:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                <textarea id="CSAudNote" name="CSAudNote" data-ng-model="VendorCSAprv.CSAudNote" class="form-control" ng-readonly="true"> </textarea>
+
+                                @*<input id="CSAudNote" name="CSAudNote" type="text" class="form-control" placeholder="CS Audit. Note" ng-model="VendorCSAprv.CSAudNote" ng-readonly="true" />*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>CS Approved Date:</label>
                             </div>
                         </div>
                         <div class="col-lg-3">
@@ -363,12 +381,20 @@
 
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label>CS No:</label>
+                                <label>Operation:</label>
+                                @*<label>CS No:</label>*@
                             </div>
                         </div>
                         <div class="col-lg-3">
                             <div class="form-group">
-                                <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSAprv.AutoCSNo" ng-readonly="true" />
+                                <select data-ng-model="VendorCSAprv.Operation" class="form-control">
+                                    <option value="">-- select --</option>
+                                    <option value="Aprv">Approved</option>
+                                    <option value="Bck">Back</option>
+                                    <option value="Pst">Postponed</option>
+                                    <option value="Can">Cancel</option>
+                                </select>
+                                @*<input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSAprv.AutoCSNo" ng-readonly="true" />*@
                             </div>
                         </div>
                     </div>
@@ -376,30 +402,15 @@
                     <div class="row">
                         <div class="col-sm-1 col-md-1 col-lg-1">
                         </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>Operation:</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <select data-ng-model="VendorCSAprv.Operation" class="form-control">
-                                <option value="">-- None --</option>
-                                <option value="Aprv">Approved</option>
-                                <option value="Rec">Recommended</option>
-                                <option value="Bck">Back</option>
-                                <option value="Pst">Postponed</option>
-                                <option value="Can">Cancel</option>
-                            </select>
-                        </div>
 
                         <div class="col-lg-2">
                             <div class="form-group">
                                 <label for="Note">Note:</label>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-8">
                             <div class="form-group">
-                                <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSAprv.Remarks" class="form-control" placeholder="Note for CS" />
+                                <textarea id="Remarks" name="Remarks" data-ng-model="VendorCSAprv.Remarks" class="form-control" placeholder="Note for CS"> </textarea>
                             </div>
                         </div>
 
@@ -449,9 +460,6 @@
         </div>
 
     </div>
-
-
-
 
     <div id="SearchModal" class="modal fade">
         <div class="modal-dialog">
@@ -518,10 +526,6 @@
         </div>
     </div>
 
-
-
-
-
     <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="p===1">
         @*<div class="col-lg-12">*@
 
@@ -578,84 +582,6 @@
             </table>
             <br />
             <br />
-
-
-
-
-
-            <div class="row">
-                <div class="row">
-                    <div class="col-sm-1 col-md-1 col-lg-1">
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label>CS Date</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <input id="CSRecDate" autocomplete="off" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSAprv.CSRecDate" />
-                        </div>
-                    </div>
-
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label>CS No:</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSAprv.AutoCSNo" ng-readonly="true" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-1 col-md-1 col-lg-1">
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label>Operation:</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <select data-ng-model="VendorCSAprv.Operation" class="form-control">
-                            <option value="">-- None --</option>
-                            <option value="Aprv">Approved</option>
-                            <option value="Rec">Recommended</option>
-                            <option value="Bck">Back</option>
-                            <option value="Pst">Postponed</option>
-                            <option value="Can">Cancel</option>
-                        </select>
-                    </div>
-
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="Note">Note:</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorCSAprv.Remarks" class="form-control" placeholder="Note for CS" />
-                        </div>
-                    </div>
-
-                </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-            </div>
-
 
             <br />
             <br />
@@ -716,14 +642,30 @@
 
     </div>
 
-
-
-
+    <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="padding: 0; margin: 0;">
+                    <iframe id="pdfViewer"
+                            style="width: 100%; height: 100vh; border: none;"
+                            title="PDF Viewer">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-
 <script type="text/javascript">
+    $(document).ready(function () {
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0');
+        var year = today.getFullYear();
 
+        var formattedDate = day + '/' + month + '/' + year;
+        $('#CSRecDate1').val(formattedDate);
+    });
     app.controller('VendorCSAprvCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
         $scope.vendorCSItemArray = [];
@@ -786,42 +728,6 @@
             }
         };
 
-        //$scope.isRowSelected = false;
-
-        //$scope.selectInvitation = function (row) {
-        //    // If the clicked row is already selected, toggle it off
-        //    if ($scope.selectedRow === row) {
-        //        row.selected = false;
-        //        $scope.selectedRow = null;
-        //        $scope.isRowSelected = false;
-        //    }
-        //    // If the clicked row is not selected, select it and unselect the previous one
-        //    else {
-        //        if ($scope.selectedRow) {
-        //            $scope.selectedRow.selected = false; // Unselect the previous row
-        //        }
-
-        //        row.selected = true;  // Select the current row
-        //        $scope.selectedRow = row;
-        //        $scope.isRowSelected = true;  // Set the current row as the selected one
-
-        //        $scope.VendorCSAprv.VendorReqID = row.VendorRequisitionNumber;
-        //        $scope.VendorCSAprv.ClientReqNo = row.ClientRequisitionNumber;
-        //        $scope.VendorCSAprv.ClientReqID = row.ClientReqID;
-        //        $scope.VendorCSAprv.ClientID = row.ClientID;
-        //        $http.post('/VendorCSAprv/GetMaterialByRequisition',
-        //            { VendorRequisitionNumber: row.VendorRequisitionNumber })
-        //            .success(function (response) {
-        //                $scope.ReqWiseMaterialList = response.ReqWiseMaterialList;
-        //                $scope.ReqWiseMaterialListCollection = [].concat($scope.ReqWiseMaterialList);
-        //                console.log($scope.ReqWiseMaterialListCollection);
-        //                $scope.loading = false;
-        //            }).error(function () {
-        //                $scope.loading = false;
-        //            });
-        //    }
-        //};
-
         $scope.selectedMaterialRow = null;  // Track the selected row for material list
         $scope.isMaterialRowSelected = false;
         $scope.selectMaterial = function (row) {
@@ -859,6 +765,31 @@
                         $scope.MatWiseVendorList = response.MatWiseVendorList;
                         $scope.MatWiseVendorListCollection = [].concat($scope.MatWiseVendorList);
                         console.log($scope.MatWiseVendorListCollection);
+                        $scope.loading = false;
+                    }).error(function () {
+                        $scope.loading = false;
+                    });
+
+                $http.post('/VendorCSRecm/GetVendorByMaterialCSVendor',
+                    {
+                        VendorReqID: row.VendorReqID,
+                        ServiceItemID: row.ServiceItemID
+                    })
+                    .success(function (response) {
+                        $scope.VendorCSAprv.CSRecmVendorName = response.MatWiseVendorList[0].CSRecmVendorName;
+                        $scope.VendorCSAprv.CSPrepNote = response.MatWiseVendorList[0].CSPrepNote;
+                        $scope.VendorCSAprv.CSRecmNote = response.MatWiseVendorList[0].CSRecmNote;
+                        $scope.VendorCSAprv.CSAccNote = response.MatWiseVendorList[0].CSAccNote;
+                        $scope.VendorCSAprv.CSAudNote = response.MatWiseVendorList[0].CSAudNote;
+                        $scope.loading = false;
+                    }).error(function () {
+                        $scope.loading = false;
+                    });
+                $http.post('/VendorCSAprv/GetVendorCSAprvTermList', { VendorCSRecmID: $scope.VendorCSAprv.VendorCSRecmID, VendorID: row.VendorID })
+                    .success(function (response) {
+
+                        $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.concat(response.VendorCSAprvTermList);
+                        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                         $scope.loading = false;
                     }).error(function () {
                         $scope.loading = false;
@@ -927,7 +858,7 @@
                 $scope.VendorCSAprv.CSRecmVendorName = row.VendorName;
                 $http.post('/VendorCSAprv/GetVendorCSAprvTermList', { VendorCSRecmID: $scope.VendorCSAprv.VendorCSRecmID, VendorID: row.VendorID })
                     .success(function (response) {
-                   
+
                         $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.concat(response.VendorCSAprvTermList);
                         $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                         $scope.loading = false;
@@ -1617,10 +1548,10 @@
 
         $scope.Post = function () {
 
-            if ($scope.selectedVendors.length <= 0 && $scope.p != 1) {
-                toastr.error("Please select at least one vendor");
-                return;
-            }
+            //if ($scope.selectedVendors.length <= 0 && $scope.p != 1) {
+            //    toastr.error("Please select at least one vendor");
+            //    return;
+            //}
 
             if ($scope.VendorCSAprv.CSRecDate != "") {
                 if ($('#CSRecDate').val() == "") {
@@ -1646,19 +1577,18 @@
             }
 
             if ($scope.selectedVendors.length > 1) {
-                
-                        toastr.error("Select only one vendor");
-                        return;
-             
+
+                toastr.error("Select only one vendor");
+                return;
+
             }
 
 
             $http.post('/VendorCSAprv/SaveVendorCSAprv',
                 {
                     vendorCS: $scope.VendorCSAprv,
-
-
-                    vendorCSItem: $scope.selectedVendors,
+                    vendorCSItem: $scope.MatWiseVendorListCollection,
+                    //vendorCSItem: $scope.selectedVendors,
                     vendorCSTerm: $scope.ReqTermGridDisplayCollection,
                 })
                 .success(function (response) {
@@ -1694,7 +1624,7 @@
                 });
         }
 
-      
+
 
         $scope.toggleRefreshTable = function () {
 
@@ -1782,17 +1712,47 @@
             $('#SearchModal').modal('hide');
         }
 
+        $scope.ViewDocument = function (row) {
+            $scope.loading = true; // Show loading indicator
+            // FTP details
+            var ftpDetails = {
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "ftpuser",
+                ftpPassword: "Ftp@Cbps#2k25",
+                serverUrl: "MCL/Vendor_Requisition",
+                documentID: "VR_" + row.VendorQutnID,
+                ext: "pdf"
+            };
 
+            // Construct URL with query parameters
+            var requestUrl = "/VendorQuotation/ViewDocument?" +
+                "serverIP=" + encodeURIComponent(ftpDetails.serverIP) +
+                "&ftpPort=" + encodeURIComponent(ftpDetails.ftpPort) +
+                "&ftpUserName=" + encodeURIComponent(ftpDetails.ftpUserName) +
+                "&ftpPassword=" + encodeURIComponent(ftpDetails.ftpPassword) +
+                "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
+                "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
+                "&ext=" + encodeURIComponent(ftpDetails.ext);
 
+            // Make GET request to fetch the PDF
+            $http.get(requestUrl, { responseType: 'arraybuffer' })
+                .then(function (response) {
+                    var file = new Blob([response.data], { type: 'application/pdf' });
+                    var fileURL = URL.createObjectURL(file);
+                    let zoomParam = "#view=Fit";
 
-
-
-
-
-
-
-
-
+                    $("#pdfViewer").attr("src", fileURL + zoomParam);
+                    $('#ShowPDFModal').modal('show');
+                })
+                .catch(function (error) {
+                    toastr.error("Failed to load the PDF.");
+                    console.error(error);
+                })
+                .finally(function () {
+                    $scope.loading = false; // Hide the loading indicator
+                });
+        };
     }])
 </script>
 

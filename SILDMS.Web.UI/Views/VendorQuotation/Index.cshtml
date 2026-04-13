@@ -106,29 +106,29 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
 
             </div>
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label>Requisition No.</label>
+            @*<div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Requisition No.</label>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="RequisitionNo" name="RequisitionNo" type="text" class="form-control" placeholder="Client Requisition No" ng-model="VendorQutn.RequisitionNo" ng-readonly="true" />
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="RequisitionNo" name="RequisitionNo" type="text" class="form-control" placeholder="Client Requisition No" ng-model="VendorQutn.RequisitionNo" ng-readonly="true" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Requisition Date:</label>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label>Requisition Date:</label>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="RequisitionDate" name="RequisitionDate" readonly type="text" class="form-control" placeholder="Requisition Date" ng-model="VendorQutn.RequisitionDate" ng-readonly="true" />
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="RequisitionDate" name="RequisitionDate" readonly type="text" class="form-control" placeholder="Requisition Date" ng-model="VendorQutn.RequisitionDate" ng-readonly="true" />
+                        </div>
                     </div>
-                </div>
-            </div>
+                </div>*@
 
             <div class="row">
                 <div class="col-lg-3 ">
@@ -142,6 +142,20 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-lg-3 ">
+                    <div class="form-group">
+                        <label for="ProjectName">Project Name :</label>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="form-group">
+                        <textarea id="ProjectName" name="ProjectName" data-ng-model="VendorQutn.ProjectName" class="form-control" placeholder="Project Name" ng-readonly="true"> </textarea>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -197,11 +211,31 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 </div>
                 <div class="col-lg-8">
                     <div class="form-group">
-                        <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorQutn.Remarks" class="form-control" placeholder="Remarks" />
+                        @*<input id="Remarks" name="Remarks" type="text" data-ng-model="VendorQutn.Remarks" class="form-control" placeholder="Quotation For" />*@
+                        <textarea id="Remarks" name="Remarks" data-ng-model="VendorQutn.Remarks" class="form-control" placeholder="Quotation For"> </textarea>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="upload_documents">
+                            Upload Documents <br>
+                            (<span style="color:#ff4900;"> PDF Only, Max Size 2MB </span>)
+                        </label>
+                    </div>
+                </div>
+                <div ng-show="vendorQutnDisplayedCollection.length <= 0" class="col-lg-3">
+                    <div class="form-group">
+                        <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1" accept=".pdf"
+                               ng-model="uploadedFile" onchange="angular.element(this).scope().fileSelected(this)" />
+                    </div>
+                </div>
+                <div ng-show="vendorQutnDisplayedCollection.length > 0" class="col-lg-1">
+                    <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
 
+                </div>
+            </div>
         </div>
     </div>
 
@@ -228,12 +262,12 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
 
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Name</th>
+                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('Remarks')">Project Name</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Vendor Name</th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">RequisitionNo</th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('LastDateofQuotation')">Last Date of Quotation</th>
-                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>*@
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
+                                @*<th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">RequisitionNo</th>
+                                    <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
+                                    <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('LastDateofQuotation')">Last Date of Quotation</th>*@
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>*@
                                 <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
                             <tr>
@@ -246,19 +280,22 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="hidden">{{row.ClientReqID}}</td>
                                 <td class="hidden">{{row.ClientReqNo}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.ClientName}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
                                 <td class="hidden">{{row.VendorID}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.VendorName}}</td>
                                 <td class="hidden">{{row.VendorReqID}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.RequisitionNo}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.RequisitionDate}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.LastDateofQuotation}}</td>
-                                @*<td class="hidden">{{row.ClientAddressID}}</td>*@
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                    <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                        {{row.Status == '1'? 'Active':'InActive'}}
-                                    </span>
-                                </td>
+                                <td class="hidden">{{row.RequisitionNo}}</td>
+                                <td class="hidden">{{row.RequisitionDate}}</td>
+                                <td class="hidden">{{row.LastDateofQuotation}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.Remarks}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.VendorName}}</td>
+                                @*<td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.RequisitionNo}}</td>
+                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.RequisitionDate}}</td>
+                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.LastDateofQuotation}}</td>*@
+                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                                            {{row.Status == '1'? 'Active':'InActive'}}
+                                        </span>
+                                    </td>*@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorReqSelect(row)"><i class="fa fa-edit"></i> Select</button>
                                 </td>
@@ -299,7 +336,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
 
                                 <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
-                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort(VendorName')">Vendor Name</th>
+                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('VendorName')">Vendor Name</th>
                                 <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('VendorQutnNo')">Vendor Quotation No</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('QuotationDate')">Quotation Date</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ReceivedDate')">Received Date</th>
@@ -348,23 +385,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         </div>
     </div>
 
-    <!--<div class="row">
-        <div class="col-md-12">
-            <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
-                <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
-                    <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Quotation Item List</h2>-->
-    @*<div class="box-tools pull-right">
-            <div class="col-lg-12 pull-right">
-                <div class="btn-group pull-right" style="margin:2px;">
-                    <button type="button" id="btnAddReqItem" ng-disabled="btnAddReqItem" data-ng-click="AddReqItemModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
-                </div>
-            </div>
-        </div>*@
-    <!--</div>
-            </div>
-        </div>
-    </div>-->
-
     <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
@@ -394,15 +414,12 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <th style="text-align: left;" st-sort="">Tol Amt</th>
                             <th style="text-align: left;">Action</th>
                         </tr>
-                        @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
+
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;">
                             <td class="hidden">{{row.VendorQutnItemID}}</td>
                             <td class="hidden">{{row.VendorQutnID}}</td>
-                            @*<td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>*@
                             <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.ServiceCategoryName}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.Description}}</td>
@@ -411,7 +428,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <td class="col-lg-1" style="width:6%;">{{row.DeliveryMode}}</td>
                             <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
-                            @*<td class="col-lg-1" style="width:6%;">{{row.QutnQnty | number:2}}</td>*@
                             <td class="col-lg-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.QutnQnty" ng-blur="checkUnitPrice(row)" ng-value="0" />
                             </td>
@@ -432,9 +448,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         </tr>
                     </tbody>
                     <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
                     </tfoot>
                 </table>
             </div>
@@ -449,11 +462,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         <div class="col-sm-5 col-md-5 col-lg-5">
                             <h3 class="modal-title">Quotation Item Information</h3>
                         </div>
-                        @*<div class="col-sm-6 col-md-6 col-lg-6">
-                            </div>
-                            <div class="col-sm-1 col-md-1 col-lg-1">
-                                <button type="button" class="close" data-dismiss="modal" ng-click="ResetReqItemModel()" aria-hidden="true" style="color:red;">x</button>
-                            </div>*@
                     </div>
                 </div>
                 <div ng-cloak>
@@ -642,13 +650,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         </tfoot>
                     </table>
                 </div>
-                @*<div class="modal-footer">
-                        <div class="col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
-                            </div>
-                        </div>
-                    </div>*@
             </div>
         </div>
     </div>
@@ -672,82 +673,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         </div>
     </div>
 
-    <!--<div class="row">
-        <div class="col-md-12">
-            <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
-                <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
-                    <div class="col-lg-3 ">
-                        <div class="form-group">
-                            <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>
-                        </div>
-                    </div>-->
-    @*<div class="row">*@
-    <!--<div class="col-lg-3 ">
-        <div class="form-group">
-            <label for="TermsAndConditions">Terms & Coonditions List:</label>
-        </div>
-    </div>
-    <div class="col-lg-2">
-        <div class="form-group">
-            <input id="FormName" name="FormName" type="text" data-ng-model="VendorQutn.FormName" class="form-control" ng-readonly="true" />
-        </div>
-    </div>
-    <div class="col-lg-1">
-        <button type="button" data-ng-click="ShowTermsConditionsList()" class="form-control">Search</button>
-    </div>-->
-    @*</div>*@
-    <!--<div class="box-tools pull-right">
-                        <div class="col-lg-12 pull-right">
-                            <div class="btn-group pull-right" style="margin:2px;">
-                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" data-ng-click="AddReqTermModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-        <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;" st-sort="">Terms Code</th>
-                            <th style="text-align: left;" st-sort="">Terms & Conditions</th>
-                            <th style="text-align: left;">Action</th>
-                        </tr>-->
-    @*<tr>
-            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-        </tr>*@
-    <!--</thead>
-    <tbody>
-        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-            <td class="hidden">{{row.VendorQutnTermsID}}</td>
-            <td class="hidden">{{row.VendorQutnID}}</td>
-            <td class="hidden">{{row.TermsID}}</td>
-            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-            <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
-
-            <td class="col-lg-1" style="width:5%;">
-                <button type="button" ng-if="row.VendorQutnTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                <button type="button" ng-if="!row.VendorQutnTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
-            </td>
-        </tr>
-    </tbody>
-    <tfoot>-->
-    @*<tr>
-            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-        </tr>*@
-    <!--</tfoot>
-                </table>
-            </div>
-        </div>
-    </div>-->
-
-
     <div class="row">
 
         <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
@@ -755,7 +680,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
                     <thead>
                         <tr style="font-size: 15px; border: 1px solid #3003eb; background: #ffffff; ">
-                            <th @*colspan="12"*@ style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
+                            <th style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
                                 <span>Terms & Conditions List</span>
                             </th>
 
@@ -804,9 +729,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         </tr>
                     </tbody>
                     <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
                     </tfoot>
                 </table>
             </div>
@@ -893,10 +815,39 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             </div>
         </div>
     </div>
+    <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="padding: 0; margin: 0;">
+                    <iframe id="pdfViewer"
+                            style="width: 100%; height: 100vh; border: none;"
+                            title="PDF Viewer">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0');
+        var year = today.getFullYear();
 
+        var formattedDate = day + '/' + month + '/' + year;
+        $('#QuotationDate').val(formattedDate);
+    });
+    $(document).ready(function () {
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0');
+        var year = today.getFullYear();
+
+        var formattedDate = day + '/' + month + '/' + year;
+        $('#QutnReceivedDate').val(formattedDate);
+    });
     app.controller('VendorQuotationCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $scope.vendorQutnItemArray = [];
@@ -1098,10 +1049,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         $scope.ShowVendorReqList = function () {
             $http.get("/VendorQuotation/GetShowVendorReqList")
                 .success(function (response) {
-                    console.log(response);
                     $scope.VendorReqList = response.VendorReqList;
                     $scope.VendorReqDisplayedCollection = [].concat($scope.VendorReqList);
-                    console.log($scope.VendorReqDisplayedCollection);
                     $scope.loading = false;
                 })
                 .error(function () { });
@@ -1240,7 +1189,9 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.RequisitionNo = row.RequisitionNo;
             $scope.VendorQutn.RequisitionDate = row.RequisitionDate;
             $scope.VendorQutn.SubmissionDate = row.SubmissionDate;
-            $scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;
+            $scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;//ProjectName
+            $scope.VendorQutn.ProjectName = row.Remarks;
+            $scope.VendorQutn.Remarks = row.Remarks;
 
             $http.post('/VendorQuotation/GetVendorReqItemListForVenQutn', { VendorID: row.VendorID, VendorReqID: row.VendorReqID })
                 .success(function (response) {
@@ -1275,8 +1226,11 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         $scope.GetVendorQutnSearchList = function () {
             $http.post("/VendorQuotation/GetVendorQutnSearchList")
                 .success(function (response) {
+                    console.log(response);
                     $scope.vendorQutnSearchList = response.vendorQutnSearchList;
+                    console.log($scope.vendorQutnSearchList);
                     $scope.vendorQutnDisplayedCollection = [].concat($scope.vendorQutnSearchList);
+                    console.log($scope.vendorQutnDisplayedCollection);
                 })
                 .error(function () { });
         }
@@ -1469,6 +1423,16 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
         ///////////////////////////////////////////////
 
+        $scope.uploadedFile = null;
+
+        $scope.fileSelected = function (element) {
+            $scope.$apply(function () {
+                $scope.uploadedFile = element.files.length > 0 ? element.files[0] : null;
+            });
+        };
+
+        ///////////////////////////////////////////////
+
         $scope.Post = function () {
 
             if ($('#VendorName').val() == "") {
@@ -1508,7 +1472,11 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 .success(function (response) {
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
+                        if ($scope.uploadedFile) {
+                            $scope.SaveDocument(response.VendorQutnID);
+                        }
                         $scope.clearVendorQutn();
+                        window.location.reload();
                         $scope.loading = false;
                         return;
                     }
@@ -1541,6 +1509,131 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     return;
                 });
         }
+
+
+        $scope.DocCrudStatus = "";
+        $scope.SaveDocument = function (VendorQutnID) {
+            $scope.DocCrudStatus = "I";
+
+            var fileUpload = document.getElementById("FileUpload1");
+            var files = fileUpload.files;
+
+            if (files.length === 0) {
+                toastr.error("Please select a file to upload.");
+                return;
+            }
+
+            var file = files[0];
+            var ext = file.name.split('.').pop().toLowerCase();
+
+            var maxSizeInMB = 2;
+            if (file.size > maxSizeInMB * 1024 * 1024) {
+                toastr.error("File size must be 2 MB or less.");
+                return;
+            }
+
+            // Validate file extension
+            if (ext !== "pdf") {
+                toastr.error("Please upload PDF files only.");
+                return;
+            }
+
+            $scope.loading = true; // Show loading indicator
+
+            // FTP details
+            var ftpDetails = {
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "ftpuser",
+                ftpPassword: "Ftp@Cbps#2k25",
+                serverUrl: "MCL/Vendor_Requisition",
+                documentID: "VR_" + VendorQutnID,
+                ext: "pdf"
+            };
+
+            function uploadFileToServer(file, ftpDetails) {
+                var formData = new FormData();
+                formData.append("file", file);
+                formData.append("serverIP", ftpDetails.serverIP);
+                formData.append("ftpPort", ftpDetails.ftpPort);
+                formData.append("ftpUserName", ftpDetails.ftpUserName);
+                formData.append("ftpPassword", ftpDetails.ftpPassword);
+                formData.append("serverUrl", ftpDetails.serverUrl);
+                formData.append("documentID", ftpDetails.documentID);
+                formData.append("ext", ftpDetails.ext);
+
+                $.ajax({
+                    url: '/VendorQuotation/SaveDocument',
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (result) {
+                        toastr.success("Document uploaded successfully.");
+                        resetFileInput();
+                    },
+                    error: function (err) {
+                        toastr.error("Document upload failed. Please try again.");
+                        console.error(err);
+                    },
+                    complete: function () {
+                        $scope.loading = false;
+                    }
+                });
+            }
+
+            uploadFileToServer(file, ftpDetails);
+
+            // Helper to reset file input field
+            function resetFileInput() {
+                var fileInput = document.getElementById("FileUpload1");
+                fileInput.value = "";
+            }
+
+        };
+
+        $scope.ViewDocument = function () {
+            $scope.loading = true; // Show loading indicator
+            // FTP details
+            var ftpDetails = {
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "ftpuser",
+                ftpPassword: "Ftp@Cbps#2k25",
+                serverUrl: "MCL/Vendor_Requisition",
+                documentID: "VR_" + $scope.VendorQutn.VendorQutnID,
+                ext: "pdf"
+            };
+
+            // Construct URL with query parameters
+            var requestUrl = "/VendorQuotation/ViewDocument?" +
+                "serverIP=" + encodeURIComponent(ftpDetails.serverIP) +
+                "&ftpPort=" + encodeURIComponent(ftpDetails.ftpPort) +
+                "&ftpUserName=" + encodeURIComponent(ftpDetails.ftpUserName) +
+                "&ftpPassword=" + encodeURIComponent(ftpDetails.ftpPassword) +
+                "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
+                "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
+                "&ext=" + encodeURIComponent(ftpDetails.ext);
+
+            // Make GET request to fetch the PDF
+            $http.get(requestUrl, { responseType: 'arraybuffer' })
+                .then(function (response) {
+                    var file = new Blob([response.data], { type: 'application/pdf' });
+                    var fileURL = URL.createObjectURL(file);
+                    let zoomParam = "#view=Fit";
+
+                    $("#pdfViewer").attr("src", fileURL + zoomParam);
+                    $('#ShowPDFModal').modal('show');
+                })
+                .catch(function (error) {
+                    toastr.error("Failed to load the PDF.");
+                    console.error(error);
+                })
+                .finally(function () {
+                    $scope.loading = false; // Hide the loading indicator
+                });
+        };
+
 
         $scope.toggleRefreshTable = function () {
             window.location.reload();

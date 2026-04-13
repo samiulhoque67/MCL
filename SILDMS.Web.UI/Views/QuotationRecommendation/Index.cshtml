@@ -362,313 +362,313 @@
     @*</div>*@
 
 
-<div class="box-body" ng-show="showTermsItem===true">
-    @*terms ALL Popup*@
+    <div class="box-body" ng-show="showTermsItem===true">
+        @*terms ALL Popup*@
 
-    <div id="ClientReqTermsConditionsModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div style="text-align: right;">
-                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
-                            aria-hidden="true" style="color: #ffffff;">
-                        <i class="fa fa-remove"></i>
-                    </button>
-                </div>
-                <div class="modal-body table-responsive">
-                    <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+        <div id="ClientReqTermsConditionsModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div style="text-align: right;">
+                        <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                                aria-hidden="true" style="color: #ffffff;">
+                            <i class="fa fa-remove"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body table-responsive">
+                        <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
 
 
-                        <thead>
-                            <tr style="font-size: 15px;">
-                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
-                                    Terms & Conditions Information
-                                </th>
-                            </tr>
-                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormName')">Form Name</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
-                            </tr>
-                            <tr>
-                                <th><input st-search="FormCode" placeholder="Form Code" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="FormName" placeholder="Form Name" class="input-sm form-control" type="search" /></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="row in TermsConditionsDisplayedCollection">
-                                <td class="hidden">{{row.TermsID}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.FormCode}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.FormName}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                    <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                        {{row.Status == '1'? 'Active':'InActive'}}
-                                    </span>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleTermsConditionsSelect(row)"><i class="fa fa-edit"></i> Select</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="7" class="text-center">
-                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
+                            <thead>
+                                <tr style="font-size: 15px;">
+                                    <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                        Terms & Conditions Information
+                                    </th>
+                                </tr>
+                                <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormName')">Form Name</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                                </tr>
+                                <tr>
+                                    <th><input st-search="FormCode" placeholder="Form Code" class="input-sm form-control" type="search" /></th>
+                                    <th><input st-search="FormName" placeholder="Form Name" class="input-sm form-control" type="search" /></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="row in TermsConditionsDisplayedCollection">
+                                    <td class="hidden">{{row.TermsID}}</td>
+                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.FormCode}}</td>
+                                    <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.FormName}}</td>
+                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                                            {{row.Status == '1'? 'Active':'InActive'}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleTermsConditionsSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-            <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                <thead>
-                    <tr style="font-size: 15px; border: 1px solid #3003eb; background: #ffffff; ">
+        <div class="row">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+                        <tr style="font-size: 15px; border: 1px solid #3003eb; background: #ffffff; ">
 
-                        <th @*colspan="12"*@ style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
-                            <span>Terms & Conditions List</span>
-                        </th>
-                        <th style="background: #ffffff; position: relative; padding: 5px;">
-                            <div style="position: relative; display: inline-block; width: 200px;">
-                                <input ng-show="pagefunction !== 'viewmode'" id="FormName" name="FormName" type="text"
-                                       data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true"
-                                       style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
+                            <th @*colspan="12"*@ style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
+                                <span>Terms & Conditions List</span>
+                            </th>
+                            <th style="background: #ffffff; position: relative; padding: 5px;">
+                                <div style="position: relative; display: inline-block; width: 200px;">
+                                    <input ng-show="pagefunction !== 'viewmode'" id="FormName" name="FormName" type="text"
+                                           data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true"
+                                           style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
 
-                                <button type="button" ng-click="ShowTermsConditionsList()"
-                                        style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+                                    <button type="button" ng-click="ShowTermsConditionsList()"
+                                            style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
                  padding: 0px 10px; border: 2px solid black; background: transparent;">
-                                    <i class="fa fa-search"></i>
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </th>
+                            <th style="background: #ffffff;">
+                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
+                                    <i class="fa fa-plus" style="padding-right: 3px"></i> Add
+                                </button>
+                            </th>
+                        </tr>
+
+                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                            <th style="text-align: left;" st-sort="">Terms Code</th>
+                            <th colspan="13" style="text-align: left;" st-sort="">Terms & Conditions</th>
+                            <th ng-show="pagefunction !== 'viewmode'" style="text-align: left;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in TermsConditionsDisplayedCollection" ng-cloak style="font-size:12px;">
+                            <td class="hidden">{{row.ClientReqTermsID}}</td>
+                            <td class="hidden">{{row.ClientReqID}}</td>
+                            <td class="hidden">{{row.TermsID}}</td>
+                            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
+                            <td colspan="13" style="width:6%;">{{row.TermsName}}</td>
+
+                            <td ng-show="pagefunction !== 'viewmode'" class="col-lg-1" style="width:5%;">
+                                <button type="button" ng-if="row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" ng-if="!row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
+                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+
+        <div id="RequisitionTermModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="row">
+                            <div class="col-sm-5 col-md-5 col-lg-5">
+                                <h4 class="modal-title" style="font-family: initial; font-weight: 700">Terms & Conditions Information</h4>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+
+                            </div>
+                            <div style="text-align: right;">
+                                <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                                        aria-hidden="true" style="color: #ffffff;">
+                                    <i class="fa fa-remove"></i>
                                 </button>
                             </div>
-                        </th>
-                        <th style="background: #ffffff;">
-                            <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
-                                <i class="fa fa-plus" style="padding-right: 3px"></i> Add
-                            </button>
-                        </th>
-                    </tr>
+                        </div>
+                    </div>
+                    <div ng-cloak>
 
-                    <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                        <th style="text-align: left;" st-sort="">Terms Code</th>
-                        <th colspan="13" style="text-align: left;" st-sort="">Terms & Conditions</th>
-                        <th ng-show="pagefunction !== 'viewmode'" style="text-align: left;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="row in TermsConditionsDisplayedCollection" ng-cloak style="font-size:12px;">
-                        <td class="hidden">{{row.ClientReqTermsID}}</td>
-                        <td class="hidden">{{row.ClientReqID}}</td>
-                        <td class="hidden">{{row.TermsID}}</td>
-                        <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-                        <td colspan="13" style="width:6%;">{{row.TermsName}}</td>
+                        <div class="row" style="position:relative;top:5px;">
 
-                        <td ng-show="pagefunction !== 'viewmode'" class="col-lg-1" style="width:5%;">
-                            <button type="button" ng-if="row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                            <button type="button" ng-if="!row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                            <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                </tfoot>
-            </table>
+                            <div class="col-sm-1 col-md-1 col-lg-1">
+                            </div>
+
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <div class="form-group">
+                                    <label for="TermsCode">Terms Code:</label>
+                                    <label style="font-size:larger;color:red;">*</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <input id="TermsCode" name="TermsCode" type="text" class="form-control" placeholder="Terms Code" autocomplete="off"
+                                       ng-model="ClientReqTerm.TermsCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                            </div>
+                        </div>
+
+
+                        <div class="row" style="position:relative;top:5px;">
+
+                            <div class="col-sm-1 col-md-1 col-lg-1">
+                            </div>
+
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <div class="form-group">
+                                    <label for="TermsName">Terms and Conditions:</label>
+                                    <label style="font-size:larger;color:red;">*</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-8 col-md-8 col-lg-8">
+                                <input id="TermsName" name="TermsName" type="text" class="form-control" placeholder="Terms Name" autocomplete="off"
+                                       ng-model="ClientReqTerm.TermsName" style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <div class="btn-group pull-right" style="margin:2px;">
+                                    <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-
-    <div id="RequisitionTermModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="row">
-                        <div class="col-sm-5 col-md-5 col-lg-5">
-                            <h4 class="modal-title" style="font-family: initial; font-weight: 700">Terms & Conditions Information</h4>
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-
-                        </div>
-                        <div style="text-align: right;">
-                            <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
-                                    aria-hidden="true" style="color: #ffffff;">
-                                <i class="fa fa-remove"></i>
-                            </button>
-                        </div>
+        <div class="modal fade" id="deleteReqTermModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
+                    <div class="modal-header" style="height: 46px;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Delete Selected Item</h4>
+                    </div>
+                    <div class="modal-body" style="height: 80px;">
+                        Are you sure to delete this item?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: red;" ng-click="DeleteReqTerm()">Yes</button>
+                        <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
                     </div>
                 </div>
-                <div ng-cloak>
+            </div>
+        </div>
 
-                    <div class="row" style="position:relative;top:5px;">
+        @*terms and conditons ends*@
 
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
 
-                        <div class="col-sm-2 col-md-2 col-lg-2">
-                            <div class="form-group">
-                                <label for="TermsCode">Terms Code:</label>
-                                <label style="font-size:larger;color:red;">*</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2">
-                            <input id="TermsCode" name="TermsCode" type="text" class="form-control" placeholder="Terms Code" autocomplete="off"
-                                   ng-model="ClientReqTerm.TermsCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
-                        </div>
-                    </div>
-
-
-                    <div class="row" style="position:relative;top:5px;">
-
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                        </div>
-
-                        <div class="col-sm-2 col-md-2 col-lg-2">
-                            <div class="form-group">
-                                <label for="TermsName">Terms and Conditions:</label>
-                                <label style="font-size:larger;color:red;">*</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-8 col-md-8 col-lg-8">
-                            <input id="TermsName" name="TermsName" type="text" class="form-control" placeholder="Terms Name" autocomplete="off"
-                                   ng-model="ClientReqTerm.TermsName" style="height: 25px; background-color:#ffffff; font-size: smaller" />
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
+                <!-- Quotation No & Date -->
+                <div class="row">
+                    <div class="col-lg-2">
                         <div class="form-group">
-                            <div class="btn-group pull-right" style="margin:2px;">
-                                <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add</button>
-                            </div>
+                            <label for="QuotationNo">Recommendation No :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="QuotationNo" name="QuotationNo" type="text" data-ng-model="Quotation.QuotationNo" readonly class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="QuotationDate">Recommendation Date :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="QuotationDate" name="QuotationDate" type="text" class="form-control" style="background-color:#ffffff;" readonly />
                         </div>
                     </div>
                 </div>
+
+                <!-- Quotation Note & Billing Date -->
+                <div class="row">
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label>Operation:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <select data-ng-model="MasterData.Operation" class="form-control">
+                            <option value="">-- None --</option>
+                            <option value="Rec">Recommended</option>
+                            <option value="Bck">Back</option>
+                            <option value="Pst">Postponed</option>
+                            <option value="Can">Cancel</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-1"></div>
+
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="QuotationNote">Recommendation Note :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <input id="QuotationNote" autocomplete="off" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-9">
+
+                    </div>
+
+                    <div ng-show="pagefunction === 'savemode'" class="col-lg-2">
+                        <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
+                                ng-click="openConfirmModal('save')" data-dismiss="modal" title="Save"
+                                style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius: 5px;">
+                            <i class="fa fa-check"></i> Submit
+                        </button>
+                    </div>
+
+                    <div ng-show="pagefunction === 'editmode'" class="col-lg-2">
+                        <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
+                                ng-click="openConfirmModal('edit')" data-dismiss="modal" title="Save"
+                                style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); background-color: #ac5604c2; border-radius: 5px; ">
+                            <i class="fa fa-check"></i> Update
+                        </button>
+                    </div>
+
+                </div>
+
             </div>
         </div>
+
     </div>
-
-    <div class="modal fade" id="deleteReqTermModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
-                <div class="modal-header" style="height: 46px;">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Delete Selected Item</h4>
-                </div>
-                <div class="modal-body" style="height: 80px;">
-                    Are you sure to delete this item?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: red;" ng-click="DeleteReqTerm()">Yes</button>
-                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    @*terms and conditons ends*@
-
-    <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-
-            <!-- Quotation No & Date -->
-            <div class="row">
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label for="QuotationNo">Recommendation No :</label>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <input id="QuotationNo" name="QuotationNo" type="text" data-ng-model="Quotation.QuotationNo" readonly class="form-control" />
-                    </div>
-                </div>
-
-                <div class="col-lg-1"></div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label for="QuotationDate">Recommendation Date :</label>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <input id="QuotationDate" name="QuotationDate" type="text" class="form-control" style="background-color:#ffffff;" readonly />
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quotation Note & Billing Date -->
-            <div class="row">
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Operation:</label>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <select data-ng-model="MasterData.Operation" class="form-control">
-                        <option value="">-- None --</option>
-                        <option value="Rec">Recommended</option>
-                        <option value="Bck">Back</option>
-                        <option value="Pst">Postponed</option>
-                        <option value="Can">Cancel</option>
-                    </select>
-                </div>
-
-                <div class="col-lg-1"></div>
-
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label for="QuotationNote">Recommendation Note :</label>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <input id="QuotationNote" autocomplete="off" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-lg-9">
-
-                </div>
-
-                <div ng-show="pagefunction === 'savemode'" class="col-lg-2">
-                    <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
-                            ng-click="openConfirmModal('save')" data-dismiss="modal" title="Save"
-                            style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius: 5px;">
-                        <i class="fa fa-check"></i> Submit
-                    </button>
-                </div>
-
-                <div ng-show="pagefunction === 'editmode'" class="col-lg-2">
-                    <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
-                            ng-click="openConfirmModal('edit')" data-dismiss="modal" title="Save"
-                            style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); background-color: #ac5604c2; border-radius: 5px; ">
-                        <i class="fa fa-check"></i> Update
-                    </button>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
-</div>
 
     @*edit or view modal*@
 
@@ -676,12 +676,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
-                 <div style="text-align: right;">
-                     <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
-                             aria-hidden="true" style="color: #ffffff;">
-                         <i class="fa fa-remove"></i>
-                     </button>
-                 </div>
+                <div style="text-align: right;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                            aria-hidden="true" style="color: #ffffff;">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
 
                 <!-- Modal Body -->
                 <div class="modal-body table-responsive" data-ng-disabled="" ng-cloak>
@@ -753,8 +753,8 @@
                                         <span class="fa fa-search-plus"> View</span>
                                     </button>
                                     @*<button type="button" id="btnEdit" ng-click="selectQuotationForRecom(row, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
-            <span class="fa fa-edit"> Edit</span>
-        </button>*@
+                                            <span class="fa fa-edit"> Edit</span>
+                                        </button>*@
                                 </td>
                             </tr>
                         </tbody>
@@ -835,15 +835,15 @@
         }
 
         $scope.Client = {
-            ClientName :"",
-            ClientRequisitionNo :"",
-            ClientReqID :"",
-            ClientRequisitionDate :"",
-            ContactPerson :"",
-            ContactNumber :"",
-            ContactTIN :"",
-            ContactBIN :"",
-            ContactAddress :"",
+            ClientName: "",
+            ClientRequisitionNo: "",
+            ClientReqID: "",
+            ClientRequisitionDate: "",
+            ContactPerson: "",
+            ContactNumber: "",
+            ContactTIN: "",
+            ContactBIN: "",
+            ContactAddress: "",
         }
 
         $scope.MasterData = {
@@ -866,8 +866,8 @@
 
         $scope.ClientQutnID = '';
 
-    $scope.SearchAvailableClients = function () {
-        $scope.ClearEverything();
+        $scope.SearchAvailableClients = function () {
+            $scope.ClearEverything();
 
             $http.post('/QuotationRecommendation/AllAvailableClients', {
                 page: $scope.PagingInfo.page,
@@ -989,9 +989,9 @@
                     $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
                     $scope.loading = false;
 
-                   /*  $scope.GetClientReqDetails.forEach(function (row) {
-                        $scope.selectEntity(row);
-                    });*/
+                    /*  $scope.GetClientReqDetails.forEach(function (row) {
+                         $scope.selectEntity(row);
+                     });*/
 
                     $scope.MasterData = {
                         ClientID: $scope.GetClientReqDetailsCollection[0].ClientID,
@@ -1141,32 +1141,22 @@
         };
 
         $scope.calculateRowFields = function (row) {
-            //row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
-            //row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
-            //row.givenQutnAmt = row.givenQutnPrice * (parseFloat(row.QutnQnty) || 0);
-            //row.TotGivenVatAmt = row.givenQutnAmt * (row.GivenVatPerc / 100);
-            //row.givenTolAmt = row.givenQutnAmt + row.TotGivenVatAmt;
-
-            //$scope.selectEntity(row, 'save');
-
-
+           
             row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
-            //row.GivenASFPerc = parseFloat(row.GivenASFPerc) || 0;
-            //row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
             row.ReqQnty = parseFloat(row.ReqQnty) || 0;
 
-            // 1. Calculate Base Amount
-            row.givenQutnAmt = row.givenQutnPrice * row.QutnQnty;
+            // 1. Base Amount
+            row.givenQutnAmt = Math.round((row.givenQutnPrice * row.QutnQnty) * 100) / 100;
 
-            // 2. Calculate ASF Amount
-            row.TotGivenASFAmt = row.givenQutnAmt * (row.ASFPerc / 100);
+            // 2. ASF Amount
+            row.TotGivenASFAmt = Math.round((row.givenQutnAmt * (row.ASFPerc / 100)) * 100) / 100;
 
-            // 3. Calculate VAT based on (Base + ASF)
+            // 3. VAT Amount
             const basePlusASF = row.givenQutnAmt + row.TotGivenASFAmt;
-            row.TotGivenVatAmt = basePlusASF * (row.GivenVatPerc / 100);
+            row.TotGivenVatAmt = Math.round((basePlusASF * (row.GivenVatPerc / 100)) * 100) / 100;
 
             // 4. Total Amount
-            row.givenTolAmt = row.givenQutnAmt + row.TotGivenASFAmt + row.TotGivenVatAmt;
+            row.givenTolAmt = Math.round((row.givenQutnAmt + row.TotGivenASFAmt + row.TotGivenVatAmt) * 100) / 100;
 
             $scope.selectEntity(row, 'save');
         };

@@ -344,19 +344,6 @@ namespace SILDMS.DataAccess
                 }
             }
 
-            //DataTable vendorCSVendors = new DataTable();
-            //vendorCSVendors.Columns.Add("VendorID");
-            //vendorCSVendors.Columns.Add("VendorQutnID");
-            //vendorCSVendors.Columns.Add("TolQnty");
-            //foreach (var item in vendorCSVendorsItemWise)
-            //{
-            //    DataRow objDataRow = vendorCSVendors.NewRow();
-            //    objDataRow[0] = item.VendorID;
-            //    objDataRow[1] = item.VendorQutnID;
-            //    objDataRow[2] = item.TolQnty;
-            //    vendorCSVendors.Rows.Add(objDataRow);
-            //}
-
             if (string.IsNullOrEmpty(vendorCSInfo.AutoCSNo))
                 vendorCSInfo.Action = "add";
             else
@@ -380,16 +367,15 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@DeliveryLocation", SqlDbType.NVarChar, vendorCSInfo.DeliveryLocation);
                     db.AddInParameter(dbCommandWrapper, "@DeliveryMode", SqlDbType.NVarChar, vendorCSInfo.DeliveryMode);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.BigInt, vendorCSInfo.ClientID);
-                    //db.AddInParameter(dbCommandWrapper, "@CSNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.CSNo));
                     db.AddInParameter(dbCommandWrapper, "@CSRecDate", SqlDbType.NVarChar, vendorCSInfo.CSRecDate);
-                    db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Operation));
-                    db.AddInParameter(dbCommandWrapper, "@RecommendedBy", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.RecommendedBy));
-
+                    db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.NVarChar, vendorCSInfo.Operation);
+                    db.AddInParameter(dbCommandWrapper, "@RecommendedBy", SqlDbType.NVarChar,vendorCSInfo.RecommendedBy);
+                    db.AddInParameter(dbCommandWrapper, "@CSRecmVendorID", SqlDbType.NVarChar, vendorCSInfo.CSRecmVendorID);
+                    db.AddInParameter(dbCommandWrapper, "@VendorCSRecmName", SqlDbType.NVarChar, vendorCSInfo.VendorCsRecmName);
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, vendorCSInfo.Remarks);
-                    db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
+                    db.AddInParameter(dbCommandWrapper, "@UserID", SqlDbType.NVarChar, vendorCSInfo.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmItem", SqlDbType.Structured, VendorCSItem);
                     db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmTerms", SqlDbType.Structured, VendorCSTerm);
-                    //db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmVendors", SqlDbType.Structured, vendorCSVendors);
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vendorCSInfo.Action);
                     db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
 
@@ -529,7 +515,7 @@ namespace SILDMS.DataAccess
             }
             return TermsConditionsList;
         }
-
+         
         public List<Invitation> GetAllRequisition(string userID)
         {
             var invitationList = new List<Invitation>();
@@ -559,10 +545,42 @@ namespace SILDMS.DataAccess
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
-                        LastDateofQuotation = reader.GetString("LastDateofQuotation")
+                        LastDateofQuotation = reader.GetString("LastDateofQuotation"),
+                        Remarks = reader.GetString("Remarks")
+                    }).ToList();
 
+                }
+            }
+            return invitationList;
+        }
 
+        public List<Invitation> ExsitingCSPrepVendorByVenReqID(string VendorReqID)
+        {
+            var invitationList = new List<Invitation>();
 
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_ExsitingCSPrepVendorByVenReqID"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.VarChar, VendorReqID);
+                // Execute SP.
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+
+                    invitationList = dt1.AsEnumerable().Select(reader => new Invitation
+                    {
+                        VendorRequisitionNumber = reader.GetString("VendorReqID"),
+                        ClientRequisitionNumber = reader.GetString("ClientReqNo"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        ClientID = reader.GetString("ClientID"),
+                        ClientName = reader.GetString("ClientName"),
+                        RequisitionDate = reader.GetString("RequisitionDate"),
+                        LastDateofQuotation = reader.GetString("LastDateofQuotation"),
+                        Remarks = reader.GetString("Remarks")
                     }).ToList();
 
                 }
@@ -700,13 +718,7 @@ namespace SILDMS.DataAccess
                             ServiceItemID = reader.GetString("ServiceItemID"),
                             ServiceItemName = reader.GetString("ServiceItemName"),
                             CSRecDate = reader.GetString("CSRecDate"),
-                            Operation=reader.GetString("Operation"),
-                            RecommendedBy= reader.GetString("RecommendedBy"),
-                            Remarks=reader.GetString("Remarks")
-
-
-
-
+                            VendorReqID = reader.GetString("VendorReqID")
                         }).ToList();
                     
                 }

@@ -140,6 +140,7 @@ namespace SILDMS.DataAccess
                         ClientReqID = reader.GetString("ClientReqID"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
+                        Remarks = reader.GetString("Remarks"),
                         Status = reader.GetString("Status")
                     }).ToList();
                 }

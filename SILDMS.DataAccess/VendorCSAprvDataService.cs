@@ -355,20 +355,6 @@ namespace SILDMS.DataAccess
                 }
             }
 
-
-            //DataTable vendorCSVendors = new DataTable();
-            //vendorCSVendors.Columns.Add("VendorID");
-            //vendorCSVendors.Columns.Add("VendorQutnID");
-            //vendorCSVendors.Columns.Add("TolQnty");
-            //foreach (var item in vendorCSVendorsItemWise)
-            //{
-            //    DataRow objDataRow = vendorCSVendors.NewRow();
-            //    objDataRow[0] = item.VendorID;
-            //    objDataRow[1] = item.VendorQutnID;
-            //    objDataRow[2] = item.TolQnty;
-            //    vendorCSVendors.Rows.Add(objDataRow);
-            //}
-
             if (string.IsNullOrEmpty(vendorCSInfo.VendorCSAprvID))
                 vendorCSInfo.Action = "add";
             else
@@ -561,6 +547,7 @@ namespace SILDMS.DataAccess
 
                     invitationList = dt1.AsEnumerable().Select(reader => new Invitation
                     {
+                        VendorCSRecmID = reader.GetString("VendorCSRecmID"),
                         VendorRequisitionNumber = reader.GetString("VendorReqID"),
                         ClientRequisitionNumber = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
@@ -677,6 +664,51 @@ namespace SILDMS.DataAccess
                         // ,
 
                         //Status = reader.GetString("Status")
+                    }).ToList();
+                }
+            }
+            return VendorCSInfoItemList;
+        }
+
+        public List<OBS_VendorCSAprv> GetVendorByMaterialCSVendorData(string vendorReqID, string serviceItemID)
+        {
+            List<OBS_VendorCSAprv> VendorCSInfoItemList = new List<OBS_VendorCSAprv>();
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_VendorDetailsForCSVendorAprv"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@vendorReqID", SqlDbType.VarChar, vendorReqID);
+                db.AddInParameter(dbCommandWrapper, "@serviceItemID", SqlDbType.VarChar, serviceItemID);
+
+                // Execute SP. 
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt1 = ds.Tables[0];
+                    VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSAprv
+                    {
+                        VendorCSRecmID = reader.GetString("VendorCSRecmID"),
+                        CSRecmVendorName = reader.GetString("VendorCSRecmName"),
+                        CSPrepNote = reader.GetString("PrepRemarks"),
+                        CSRecmNote = reader.GetString("RecmRemarks"),
+                        CSAccNote = reader.GetString("RecmAccRemarks"),
+                        CSAudNote = reader.GetString("VerifyRemarks"),
+                        CSAprvNote = reader.GetString("ApvRemarks"),
+
+                        PrepBy = reader.GetString("PrepBy"),
+                        PrepDesig = reader.GetString("PrepDesig"),
+
+                        RecomenBy = reader.GetString("RecomenBy"),
+                        RecomenDesig = reader.GetString("RecomenDesig"),
+                       
+                        RecmAccBy = reader.GetString("RecmAccBy"),
+                        RecmAccDesig = reader.GetString("RecmAccDesig"),
+
+                        VerifyBy = reader.GetString("VerifyBy"),
+                        VerifyDesig = reader.GetString("VerifyDesig"),
+
+                        ApprovedBy = reader.GetString("ApprovedBy"),
+                        ApprovedDesig = reader.GetString("ApprovedDesig")
                     }).ToList();
                 }
             }
