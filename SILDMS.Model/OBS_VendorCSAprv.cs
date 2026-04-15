@@ -44,9 +44,35 @@ namespace SILDMS.Model
         [Required]
         public string Status { get; set; }
         public string VendorCSRecmItemID { get; set; }
+
+        //////////////////
+
+        public string ClientReqNo { get; set; }
+        public string RequisitionDate { get; set; }
+        public string RptQutnQty { get; set; }
+        public string RptQutnUnit { get; set; }
+        public string VenReqItem { get; set; }
         public string CSRecmVendorName { get; set; }
+        public string VendorCsRecmName { get; set; }
         public string ServiceItemID { get; set; }
         public string RecommendedByName { get; set; }
         public string RecommendedByDesignation { get; set; }
+        public string CSPrepNote { get; set; }
+        public string CSRecmNote { get; set; }
+        public string CSAccNote { get; set; }
+        public string CSAudNote { get; set; }
+        public string CSAprvNote { get; set; }
+
+        public string PrepBy { get; set; }
+        public string PrepDesig { get; set; }
+        public string RecomenBy { get; set; }
+        public string RecomenDesig { get; set; }
+        public string RecmAccBy { get; set; }
+        public string RecmAccDesig { get; set; }
+        public string VerifyBy { get; set; }
+        public string VerifyDesig { get; set; }
+        public string ApprovedBy { get; set; }
+        public string ApprovedDesig { get; set; }
+
     }
 }

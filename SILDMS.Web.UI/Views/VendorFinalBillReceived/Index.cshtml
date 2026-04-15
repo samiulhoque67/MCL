@@ -36,7 +36,7 @@
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="btnSave">
-                        <i class="fa fa-save" style="padding-right: 5px;"></i> {{ VendorQutn.VendrFinalBilRcvdID ? 'Update' : 'Save' }}
+                        <i class="fa fa-save" style="padding-right: 5px;"></i> {{VendorQutn.VendrFinalBilRcvdID ? 'Update' : 'Save' }}
                     </button>
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
@@ -1551,26 +1551,26 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.BillReceiveDate = $('#BillReceiveDate').val();
             
 
-                if (files.length === 0) {
-                    toastr.error("Please select a file to upload.");
-                    return;
-                }
+                //if (files.length === 0) {
+                //    toastr.error("Please select a file to upload.");
+                //    return;
+                //}
 
-                var file = files[0];
-                var ext = file.name.split('.').pop().toLowerCase();
+                //var file = files[0];
+                //var ext = file.name.split('.').pop().toLowerCase();
 
-                var maxSizeInMB = 2;
-                if (file.size > maxSizeInMB * 1024 * 1024) {
-                    toastr.error("File size must be 2 MB or less.");
-                    return;
-                }
+                //var maxSizeInMB = 2;
+                //if (file.size > maxSizeInMB * 1024 * 1024) {
+                //    toastr.error("File size must be 2 MB or less.");
+                //    return;
+                //}
 
-                // Validate file extension
-                if (ext !== "pdf") {
-                    toastr.error("Please upload PDF files only.");
-                    return;
-                }
-            }
+                //// Validate file extension
+                //if (ext !== "pdf") {
+                //    toastr.error("Please upload PDF files only.");
+                //    return;
+                //}
+            
             
 
             $http.post('/VendorFinalBillReceived/SaveVendorFinalBill',
@@ -1725,10 +1725,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     $scope.loading = false; // Hide the loading indicator
                 });
         };
-
-
-
-
 
 
         $scope.toggleRefreshTable = function () {

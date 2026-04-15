@@ -239,7 +239,7 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetVendorCSActualTermList"))
             {
                 db.AddInParameter(dbCommandWrapper, "@VendorCSRecmID", SqlDbType.VarChar, VendorCSRecmID);
-                db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
+                //db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, VendorID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -252,8 +252,8 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                         TermsID = reader.GetString("TermsID"),
                         TermsCode = reader.GetString("TermsCode"),
                         TermsName = reader.GetString("TermsName"),
-                        VendorID= reader.GetString("VendorID"),
-                        VendorName= reader.GetString("VendorName")
+                        VendorID = reader.GetString("VendorID"),
+                        VendorName = reader.GetString("VendorName")
                     }).ToList();
                 }
             }
@@ -348,20 +348,6 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                 }
             }
 
-
-            //DataTable vendorCSVendors = new DataTable();
-            //vendorCSVendors.Columns.Add("VendorID");
-            //vendorCSVendors.Columns.Add("VendorQutnID");
-            //vendorCSVendors.Columns.Add("TolQnty");
-            //foreach (var item in vendorCSVendorsItemWise)
-            //{
-            //    DataRow objDataRow = vendorCSVendors.NewRow();
-            //    objDataRow[0] = item.VendorID;
-            //    objDataRow[1] = item.VendorQutnID;
-            //    objDataRow[2] = item.TolQnty;
-            //    vendorCSVendors.Rows.Add(objDataRow);
-            //}
-
             if (string.IsNullOrEmpty(vendorCSInfo.VendorCSAprvID))
                 vendorCSInfo.Action = "add";
             else
@@ -403,6 +389,75 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                         errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
                     }
 
+                }
+            }
+            catch (Exception ex)
+            {
+                errorNumber = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
+            }
+            return errorNumber;
+        }
+
+
+        public string SaveVendorCSRecAcc(OBS_VendorCSAprv vendorCSInfo, List<OBS_VendorCSAprvItem> vendorCSInfoItem, List<OBS_VendorCSAprvTerms> vendorCSInfoTerm)
+        {
+            
+            string errorNumber = String.Empty;
+            try
+            {
+                DatabaseProviderFactory factory = new DatabaseProviderFactory();
+                SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetVendorCSAccRec"))
+                {
+                    // Set parameters 
+                    db.AddInParameter(dbCommandWrapper, "@VendorCSAprvID", SqlDbType.NVarChar, vendorCSInfo.VendorCSAprvID);
+                    db.AddInParameter(dbCommandWrapper, "@CSRecDate", SqlDbType.NVarChar, vendorCSInfo.CSRecDate);
+                    db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
+                    db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+
+                    // Execute SP.
+                    db.ExecuteNonQuery(dbCommandWrapper);
+                    // Getting output parameters and setting response details.
+                    if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
+                    {
+                        // Get the error number, if error occurred.
+                        errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errorNumber = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
+            }
+            return errorNumber;
+        }
+
+        public string SaveVendorCSRecAudit(OBS_VendorCSAprv vendorCSInfo, List<OBS_VendorCSAprvItem> vendorCSInfoItem, List<OBS_VendorCSAprvTerms> vendorCSInfoTerm)
+        {
+
+            string errorNumber = String.Empty;
+            try
+            {
+                DatabaseProviderFactory factory = new DatabaseProviderFactory();
+                SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetVendorCSRecAudit"))
+                {
+                    // Set parameters 
+                    db.AddInParameter(dbCommandWrapper, "@VendorCSAprvID", SqlDbType.NVarChar, vendorCSInfo.VendorCSAprvID);
+                    db.AddInParameter(dbCommandWrapper, "@CSRecDate", SqlDbType.NVarChar, vendorCSInfo.CSRecDate);
+                    db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
+                    db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+
+                    // Execute SP.
+                    db.ExecuteNonQuery(dbCommandWrapper);
+                    // Getting output parameters and setting response details.
+                    if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
+                    {
+                        // Get the error number, if error occurred.
+                        errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
+                    }
                 }
             }
             catch (Exception ex)
@@ -571,6 +626,109 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
             return invitationList;
         }
 
+        public List<Invitation> GetAllCSRecDataforAcc(string userID)
+        {
+            var invitationList = new List<Invitation>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_VendorReqForCSAccRec"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@UserId", SqlDbType.VarChar, userID);
+                //db.AddOutParameter(dbCommandWrapper, "@p_Error", DbType.Int32, 10);
+                // Execute SP.
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+
+                    invitationList = dt1.AsEnumerable().Select(reader => new Invitation
+                    {
+                        VendorCSAprvID = reader.GetString("VendorCSAprvID"),
+                        VendorRequisitionNumber = reader.GetString("VendorReqID"),
+                        ClientRequisitionNumber = reader.GetString("ClientReqNo"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        ClientID = reader.GetString("ClientID"),
+                        ClientName = reader.GetString("ClientName"),
+                        RequisitionDate = reader.GetString("RequisitionDate"),
+                        LastDateofQuotation = reader.GetString("LastDateofQuotation")
+
+
+
+                    }).ToList();
+
+                }
+            }
+            return invitationList;
+        }
+
+        public List<Invitation> GetAllCSRecDataforVerify(string userID)
+        {
+            var invitationList = new List<Invitation>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_VendorReqForCSRecAudit"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@UserId", SqlDbType.VarChar, userID);
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+
+                    invitationList = dt1.AsEnumerable().Select(reader => new Invitation
+                    {
+                        VendorCSAprvID = reader.GetString("VendorCSAprvID"),
+                        VendorRequisitionNumber = reader.GetString("VendorReqID"),
+                        ClientRequisitionNumber = reader.GetString("ClientReqNo"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        ClientID = reader.GetString("ClientID"),
+                        ClientName = reader.GetString("ClientName"),
+                        RequisitionDate = reader.GetString("RequisitionDate"),
+                        LastDateofQuotation = reader.GetString("LastDateofQuotation")
+                    }).ToList();
+
+                }
+            }
+            return invitationList;
+        }
+
+        public List<Invitation> GetAllApprovedData(string userID)
+        {
+            var invitationList = new List<Invitation>();
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAllApprovedData"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@UserId", SqlDbType.VarChar, userID);
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+                    invitationList = dt1.AsEnumerable().Select(reader => new Invitation
+                    {
+                        VendorRequisitionNumber = reader.GetString("VendorReqID"),
+                        ClientRequisitionNumber = reader.GetString("ClientReqNo"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        ClientID = reader.GetString("ClientID"),
+                        ClientName = reader.GetString("ClientName"),
+                        RequisitionDate = reader.GetString("RequisitionDate"),
+                        LastDateofQuotation = reader.GetString("LastDateofQuotation"),
+                        Remarks = reader.GetString("Remarks")
+                    }).ToList();
+                }
+            }
+            return invitationList;
+        }
+
         public List<OBS_VendorCSAprvItem> GetMaterialByRequisition(string vendorRequisitionNumber)
         {
             var ReqWiseMaterialList = new List<OBS_VendorCSAprvItem>();
@@ -635,7 +793,7 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
 
 
                         VendorCSInfoID = reader.GetString("VendorCSAprvID"),
-                        VendorCSInfoItemID = reader.GetString("VendorCSAprvItemID"),
+                        //VendorCSInfoItemID = reader.GetString("VendorCSAprvItemID"),
                         ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         ServiceItemID = reader.GetString("ServiceItemID"),

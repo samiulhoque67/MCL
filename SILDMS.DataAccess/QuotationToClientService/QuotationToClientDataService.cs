@@ -54,6 +54,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                     {
                         ClientID   = reader.GetString("ClientID"),
                         ClientCode = reader.GetString("ClientCode"),
+                        ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         ReqType = reader.GetString("ReqTypeSummary"),
@@ -108,7 +109,6 @@ namespace SILDMS.DataAccess.QuotationToClientService
 
             return ClientDetails;
         }
-
 
         public List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, string ClientReqID, string ReqType, out string _errorNumber)
         {
@@ -250,7 +250,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                     var dt1 = ds.Tables[0];
                     VendorTermTermList = dt1.AsEnumerable().Select(reader => new OBS_TermsItem
                     {
-                        VendorCSAprvTermID = reader.GetString("VendorCSAprvTermID"),
+                        //VendorCSAprvTermID = reader.GetString("VendorCSAprvTermID"),
                         TermsItemID = reader.GetString("TermsItemID"),
                         TermsID = reader.GetString("TermsID"),
                         TermsCode = reader.GetString("TermsCode"),
@@ -397,9 +397,6 @@ namespace SILDMS.DataAccess.QuotationToClientService
                 db.AddInParameter(dbCommandWrapper, "@ReqType", SqlDbType.NVarChar, ReqType);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
-
-
-
 
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
 

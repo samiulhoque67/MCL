@@ -115,6 +115,12 @@ namespace SILDMS.Service
             return ValidationResult.Success;
         }
 
+        public ValidationResult GetVendorByMaterialCSVendorService(string vendorReqID, string serviceItemID, out List<OBS_VendorCSAprv> matWiseVendorList)
+        {
+            matWiseVendorList = clientInfoDataService.GetVendorByMaterialCSVendorData(vendorReqID, serviceItemID);
+            return ValidationResult.Success;
+        }
+
         public ValidationResult SearchCSService(string userID, out List<Invitation> searchCSList)
         {
             searchCSList = clientInfoDataService.SearchCSData(userID);

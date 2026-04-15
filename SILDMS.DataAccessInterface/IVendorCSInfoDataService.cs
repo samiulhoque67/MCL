@@ -23,6 +23,7 @@ namespace SILDMS.DataAccessInterface
         string DeleteVendorCSInfoItemAndTerm(string VendorCSInfoItemID, string VendorCSInfoTermID);
         List<OBS_Terms> GetTermsConditionsList();
         List<Invitation> GetAllRequisition(string userID);
+        List<Invitation> ExsitingCSPrepVendorByVenReqID(string VendorReqID);
         List<OBS_VendorCSRecmItem> GetMaterialByRequisition(string vendorRequisitionNumber);
         List<OBS_VendorCSRecmItem> GetVendorByMaterialData(string vendorReqID, string serviceItemID);
         List<Invitation> SearchCSData(string userID);

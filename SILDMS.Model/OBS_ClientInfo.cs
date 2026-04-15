@@ -12,6 +12,7 @@ namespace SILDMS.Model
         public string ClientID { get; set; }
         [Required]
         public string ClientCode { get; set; }
+        public string ClientReqNo { get; set; }
         [Required]
         public string ClientName { get; set; }
         public string ClientCategoryID { get; set; }

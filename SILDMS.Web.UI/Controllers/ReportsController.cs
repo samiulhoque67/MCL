@@ -3,16 +3,12 @@ using CrystalDecisions.Shared;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using SILDMS.Model.CBPSModule;
-//using SILDMS.Model.CheckPrintModule;
 using SILDMS.Model.DocScanningModule;
-//using SILDMS.Model.LCModule;
 using SILDMS.Model.SecurityModule;
-//using SILDMS.Service.ChecquePrint;
 using SILDMS.Service.DocumentCategory;
 using SILDMS.Service.EmailMessage;
 using SILDMS.Service.Owner;
 using SILDMS.Service.Reports;
-//using SILDMS.Service.TDSVDS;
 using SILDMS.Service.Users;
 using SILDMS.Utillity;
 using SILDMS.Utillity.Localization;
@@ -33,7 +29,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using PdfSharp.Pdf.IO;
-//using SILDMS.Service.BackgroundTaskService;
 using SILDMS.Model.BackgroundTaskModule;
 using System.Web.Http.Results;
 using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
@@ -43,6 +38,7 @@ using System.Data.Common;
 using SILDMS.Model;
 using System.Web.Services.Description;
 using System.Security.Cryptography;
+using System.ServiceModel;
 /////////////////////////////////////////Test///////////////////////////
 namespace SILDMS.Web.UI.Controllers
 {
@@ -57,7 +53,6 @@ namespace SILDMS.Web.UI.Controllers
         private readonly string UserID = string.Empty;
         private string action = string.Empty;
         readonly IDocCategoryService _docCategoryService;
-        //private readonly IEmailMessageService _emailMessageService;
         private string res_code = string.Empty;
         private string res_message = string.Empty;
 
@@ -65,14 +60,10 @@ namespace SILDMS.Web.UI.Controllers
         {
             this._ownerService = ownerService;
             this._userService = usrRepository;
-            //this._chequePrintService = repository;
             this._localizationService = localizationService;
             this._reportService = reportService;
             UserID = SILAuthorization.GetUserID();
             _docCategoryService = docCategoryService;
-            //_tdsVdsService = tdsVdsService;
-            //this._emailMessageService = emailMessageService;
-            //this._backgroundTaskService = backgroundTaskService;
         }
 
         public ActionResult ExportChecqueInfoInXls()
@@ -151,24 +142,6 @@ namespace SILDMS.Web.UI.Controllers
         {
             DataTable dt = new DataTable();
 
-            //if (string.IsNullOrEmpty(model.BillReceiveFromDate))
-            //{
-            //    if (string.IsNullOrEmpty(model.BillReceiveToDate))
-            //    {
-            //        model.BillReceiveFromDate = model.BillReceiveFromDate;
-            //        model.BillReceiveToDate = model.BillReceiveToDate;
-            //    }
-            //    else
-            //        model.BillReceiveFromDate = model.BillReceiveToDate;
-            //}
-            //else
-            //{
-            //    if (string.IsNullOrEmpty(model.BillReceiveToDate))
-            //        model.BillReceiveToDate = model.BillReceiveFromDate;
-            //}
-
-            //await Task.Run(() => _reportService.GetRptUserActivityStatus(model.BillReceiveFromDate, model.BillReceiveToDate, model.UserRptID, "", UserID, out dt));
-
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
             ReportPath = ReportPath + "/rptUserActivityStatus.rpt";
@@ -179,8 +152,6 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.SetParameterValue("rptName", "User Activity Status");
             reportDocument.SetParameterValue("ProcessBy", GetUserName(model.UserRptID));
             reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
-            //reportDocument.SetParameterValue("fromDate", model.BillReceiveFromDate);
-            //reportDocument.SetParameterValue("toDate", model.BillReceiveToDate);
 
             if (model.ButtonType == "Preview")
                 reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, "UserActivityStatus");
@@ -221,7 +192,6 @@ namespace SILDMS.Web.UI.Controllers
                     Response.End();
 
                 }
-                //reportDocument.ExportToHttpResponse(ExportFormatType.ExcelRecord, System.Web.HttpContext.Current.Response, true, "UserActivityStatus");
                 else
                     reportDocument.ExportToHttpResponse(ExportFormatType.EditableRTF, System.Web.HttpContext.Current.Response, true, "UserActivityStatus");
             }
@@ -262,19 +232,12 @@ namespace SILDMS.Web.UI.Controllers
 
             DataTable dt = new DataTable();
 
-            //await Task.Run(() => _reportService.VendorCSApprevedReport(model.UserRptID, model.BillReceiveFromDate, model.Status, "", UserID, out dt));
-
             ReportDocument reportDocument = new ReportDocument();
             string ReportPath = Server.MapPath("~/Reports");
             ReportPath = ReportPath + "/rptQuotationtoClient.rpt";
             reportDocument.Load(ReportPath);
             reportDocument.SetDataSource(dt);
             reportDocument.Refresh();
-            //reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
-            //reportDocument.SetParameterValue("rptName", "User Details");
-            //reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
-
-
             string reportName = "rptQuotationtoClient";
             reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
 
@@ -294,19 +257,18 @@ namespace SILDMS.Web.UI.Controllers
         [SILLogAttribute]
         public async Task<dynamic> VendorCSApprevedReport(string ReportType)
         {
-            var tempdata = TempData["VendorCSRecmInfo"];
+            var tempdata = TempData["VendorCSprepInfo"];
             string VendorReqID = string.Empty, ServiceItemID = string.Empty;
             ReportType = "PDF";
-            OBS_VendorCSAprv objVendorReq = new OBS_VendorCSAprv();
+            OBS_VendorCSReport objVendorReq = new OBS_VendorCSReport();
 
-            if (TempData["VendorCSRecmInfo"] == null)
+            if (TempData["VendorCSprepInfo"] == null)
             {
                 ViewBag.Title = "No valid data.";
-                //return View();
             }
             else
             {
-                objVendorReq = (OBS_VendorCSAprv)TempData["VendorCSRecmInfo"];
+                objVendorReq = (OBS_VendorCSReport)TempData["VendorCSprepInfo"];
                 VendorReqID = objVendorReq.VendorReqID;
                 ServiceItemID = objVendorReq.ServiceItemID;
             }
@@ -322,19 +284,30 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.SetDataSource(dt);
             reportDocument.Refresh();
 
-            //if (!string.IsNullOrEmpty(objVendorReq.CSRecmVendorName))
-            //    reportDocument.SetParameterValue("RecmVendor", objVendorReq.CSRecmVendorName);
-            //else
-            //    reportDocument.SetParameterValue("RecmVendor", string.Empty);
-
+            reportDocument.SetParameterValue("RptQutnQty", string.IsNullOrEmpty(objVendorReq.RptQutnQty) ? string.Empty : objVendorReq.RptQutnQty);
+            reportDocument.SetParameterValue("RptQutnUnit", string.IsNullOrEmpty(objVendorReq.RptQutnUnit) ? string.Empty : objVendorReq.RptQutnUnit);
+            reportDocument.SetParameterValue("ClientReqNo", string.IsNullOrEmpty(objVendorReq.ClientReqNo) ? string.Empty : objVendorReq.ClientReqNo);
+            reportDocument.SetParameterValue("RequisitionDate", string.IsNullOrEmpty(objVendorReq.RequisitionDate) ? string.Empty : objVendorReq.RequisitionDate);
+            reportDocument.SetParameterValue("ClientName", string.IsNullOrEmpty(objVendorReq.ClientName) ? string.Empty : objVendorReq.ClientName);
+            reportDocument.SetParameterValue("VenReqItem", string.IsNullOrEmpty(objVendorReq.VenReqItem) ? string.Empty : objVendorReq.VenReqItem);
+            reportDocument.SetParameterValue("CSPrepDate", string.IsNullOrEmpty(objVendorReq.CSPrepDate) ? string.Empty : objVendorReq.CSPrepDate);
+            reportDocument.SetParameterValue("note", string.IsNullOrEmpty(objVendorReq.Note) ? string.Empty : objVendorReq.Note);
             reportDocument.SetParameterValue("RecmVendor", string.IsNullOrEmpty(objVendorReq.CSRecmVendorName) ? string.Empty : objVendorReq.CSRecmVendorName);
-            reportDocument.SetParameterValue("RecmBy", string.IsNullOrEmpty(objVendorReq.RecommendedByName) ? string.Empty : objVendorReq.RecommendedByName);
-            reportDocument.SetParameterValue("RecmDesig", string.IsNullOrEmpty(objVendorReq.RecommendedByDesignation) ? string.Empty : objVendorReq.RecommendedByDesignation);
+            
+            reportDocument.SetParameterValue("PrepBy", string.IsNullOrEmpty(objVendorReq.PrepBy) ? string.Empty : objVendorReq.PrepBy);
+            reportDocument.SetParameterValue("PrepDesig", string.IsNullOrEmpty(objVendorReq.PrepDesig) ? string.Empty : objVendorReq.PrepDesig);
 
-            //reportDocument.SetParameterValue("ComDiv", GetCompanyOrOwnerNameByUserID(UserID));
-            //reportDocument.SetParameterValue("RecmVendor", "Square Informatix Ltd.");
-            //reportDocument.SetParameterValue("rptUser", GetUserName(UserID));
+            reportDocument.SetParameterValue("RecmBy", string.IsNullOrEmpty(objVendorReq.RecomenBy) ? string.Empty : objVendorReq.RecomenBy);
+            reportDocument.SetParameterValue("RecmDesig", string.IsNullOrEmpty(objVendorReq.RecomenDesig) ? string.Empty : objVendorReq.RecomenDesig);
 
+            reportDocument.SetParameterValue("RecmAccBy", string.IsNullOrEmpty(objVendorReq.RecmAccBy) ? string.Empty : objVendorReq.RecmAccBy);
+            reportDocument.SetParameterValue("RecmAccDesig", string.IsNullOrEmpty(objVendorReq.RecmAccDesig) ? string.Empty : objVendorReq.RecmAccDesig);
+
+            reportDocument.SetParameterValue("VerifyBy", string.IsNullOrEmpty(objVendorReq.VerifyBy) ? string.Empty : objVendorReq.VerifyBy);
+            reportDocument.SetParameterValue("VerifyDesig", string.IsNullOrEmpty(objVendorReq.VerifyDesig) ? string.Empty : objVendorReq.VerifyDesig);
+
+            reportDocument.SetParameterValue("ApprovBy", string.IsNullOrEmpty(objVendorReq.ApprovedBy) ? string.Empty : objVendorReq.ApprovedBy);
+            reportDocument.SetParameterValue("ApprovDesg", string.IsNullOrEmpty(objVendorReq.ApprovedDesig) ? string.Empty : objVendorReq.ApprovedDesig);
 
             string reportName = "VendorCSApprevedReport";
             reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
@@ -566,7 +539,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
 
-       
+
 
 
 

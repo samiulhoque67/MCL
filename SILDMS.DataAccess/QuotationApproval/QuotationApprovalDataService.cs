@@ -252,7 +252,7 @@ namespace SILDMS.DataAccess.QuotationApproval
                     objDataRow["MclPrice"] = string.IsNullOrEmpty(item.MclPrice) ? DBNull.Value : (object)item.MclPrice;
                     objDataRow["QutnAmt"] = string.IsNullOrEmpty(item.QutnAmt) ? DBNull.Value : (object)item.QutnAmt;
                     objDataRow["ASFPerc"] = string.IsNullOrEmpty(item.ASFPerc) ? DBNull.Value : (object)item.ASFPerc;
-                    objDataRow["ASFPerc"] = string.IsNullOrEmpty(item.ASFPerc) ? DBNull.Value : (object)item.ASFPerc;
+                    objDataRow["ASFAmt"] = string.IsNullOrEmpty(item.ASFAmt) ? DBNull.Value : (object)item.ASFAmt;
 
                     objDataRow["VatPerc"] = string.IsNullOrEmpty(item.VatPerc) ? DBNull.Value : (object)item.VatPerc;
                     objDataRow["VatAmt"] = string.IsNullOrEmpty(item.VatAmt) ? DBNull.Value : (object)item.VatAmt;
