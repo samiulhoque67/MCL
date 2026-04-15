@@ -115,10 +115,6 @@ namespace SILDMS.DataAccess.Reports
             {
                 db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.VarChar, VendorReqID);
                 db.AddInParameter(dbCommandWrapper, "@ServiceItemID", SqlDbType.VarChar, ServiceItemID);
-                ////db.AddInParameter(dbCommandWrapper, "@ToDate", SqlDbType.VarChar, ToDate);
-                //db.AddInParameter(dbCommandWrapper, "@Status", SqlDbType.VarChar, Status);
-                ////db.AddOutParameter(dbCommandWrapper, spErrorParam, DbType.Int32, 10);
-
 
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
                 DataTable dt1 = ds.Tables[0];

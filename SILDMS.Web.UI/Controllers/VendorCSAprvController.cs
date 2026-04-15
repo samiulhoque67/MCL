@@ -32,10 +32,27 @@ namespace SILDMS.Web.UI.Controllers
             UserID = SILAuthorization.GetUserID();
             UserName = SILAuthorization.GetUserFullName();
         }
+       
+        public ActionResult AllCSRecDataforAcc()
+        {
+            return View();
+        }
+
+        public ActionResult AllCSVerifyDataforAud()
+        {
+            return View();
+        }
+
         public ActionResult Index()
         {
             return View();
         }
+
+        public ActionResult AllCSData()
+        {
+            return View();
+        }
+
 
         public async Task<dynamic> GetVendorCSAprvDashBordData()
         {
@@ -107,6 +124,70 @@ namespace SILDMS.Web.UI.Controllers
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<dynamic> SaveVendorCSRecAcc(OBS_VendorCSAprv vendorCS, List<OBS_VendorCSAprvItem> vendorCSItem, List<OBS_VendorCSAprvTerms> vendorCSTerm)
+        {
+            vendorCS.SetBy = UserID;
+            vendorCS.RecommendedByName = SILAuthorization.GetUserFullName();
+            vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
+            string status = string.Empty;//, message = string.Empty;
+            status = _vendorCSActualAprvService.SaveVendorCSRecAcc(vendorCS, vendorCSItem, vendorCSTerm);
+
+            return Json(new { status }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<dynamic> SaveVendorCSRecAudit(OBS_VendorCSAprv vendorCS, List<OBS_VendorCSAprvItem> vendorCSItem, List<OBS_VendorCSAprvTerms> vendorCSTerm)
+        {
+            vendorCS.SetBy = UserID;
+            vendorCS.RecommendedByName = SILAuthorization.GetUserFullName();
+            vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
+            string status = string.Empty;//, message = string.Empty;
+            status = _vendorCSActualAprvService.SaveVendorCSRecAudit(vendorCS, vendorCSItem, vendorCSTerm);
+
+            return Json(new { status }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<dynamic> SaveVendorCSInfo(OBS_VendorCSAprv vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm)
+        {
+            OBS_VendorCSReport objOBS_VendorCSReport = new OBS_VendorCSReport();
+
+            vendorCS.SetBy = UserID;
+
+            objOBS_VendorCSReport.ClientReqNo = vendorCS.ClientReqNo;
+            objOBS_VendorCSReport.RequisitionDate = vendorCS.RequisitionDate;
+            objOBS_VendorCSReport.RptQutnQty = vendorCS.RptQutnQty;
+            objOBS_VendorCSReport.RptQutnUnit = vendorCS.RptQutnUnit;
+            objOBS_VendorCSReport.ClientName = vendorCS.ClientName;
+            objOBS_VendorCSReport.VenReqItem = vendorCS.VenReqItem;
+            objOBS_VendorCSReport.Note = vendorCS.CSAprvNote;
+            objOBS_VendorCSReport.CSRecmVendorName = vendorCS.CSRecmVendorName;
+            objOBS_VendorCSReport.RecommendedByName = SILAuthorization.GetUserFullName();
+            objOBS_VendorCSReport.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
+            objOBS_VendorCSReport.CSPrepDate = vendorCS.CSRecDate;
+            objOBS_VendorCSReport.VendorReqID = vendorCS.VendorReqID;
+            objOBS_VendorCSReport.ServiceItemID = vendorCSItem[0].ServiceItemID;
+
+            objOBS_VendorCSReport.PrepBy = vendorCS.PrepBy;
+            objOBS_VendorCSReport.PrepDesig = vendorCS.PrepDesig;
+
+            objOBS_VendorCSReport.RecomenBy = vendorCS.RecomenBy;
+            objOBS_VendorCSReport.RecomenDesig = vendorCS.RecomenDesig;
+
+            objOBS_VendorCSReport.RecmAccBy = vendorCS.RecmAccBy;
+            objOBS_VendorCSReport.RecmAccDesig = vendorCS.RecmAccDesig;
+
+            objOBS_VendorCSReport.VerifyBy = vendorCS.VerifyBy;
+            objOBS_VendorCSReport.VerifyDesig = vendorCS.VerifyDesig;
+
+            objOBS_VendorCSReport.ApprovedBy = vendorCS.ApprovedBy;
+            objOBS_VendorCSReport.ApprovedDesig = vendorCS.ApprovedDesig;
+
+            TempData["VendorCSprepInfo"] = objOBS_VendorCSReport;
+
+            string status = "S201";//, message = string.Empty;
+
+            return Json(new { status }, JsonRequestBehavior.AllowGet);
+        }
+
         //[HttpPost]
         //[Authorize]
         //[SILLogAttribute]
@@ -151,6 +232,31 @@ namespace SILDMS.Web.UI.Controllers
             await Task.Run(() => _vendorCSActualAprvService.GetAllRequisition(UserID, out InvitationList));
             return Json(new { InvitationList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
+
+        [Authorize]
+        public async Task<dynamic> GetAllCSRecDataforAcc()
+        {
+            var InvitationList = new List<Invitation>();
+            await Task.Run(() => _vendorCSActualAprvService.GetAllCSRecDataforAcc(UserID, out InvitationList));
+            return Json(new { InvitationList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public async Task<dynamic> GetAllCSRecDataforVerify()
+        {
+            var InvitationList = new List<Invitation>();
+            await Task.Run(() => _vendorCSActualAprvService.GetAllCSRecDataforVerify(UserID, out InvitationList));
+            return Json(new { InvitationList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public async Task<dynamic> GetAllApprovedData()
+        {
+            var InvitationList = new List<Invitation>();
+            await Task.Run(() => _vendorCSActualAprvService.GetAllApprovedData(UserID, out InvitationList));
+            return Json(new { InvitationList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
+
 
         [Authorize]
         public async Task<dynamic> GetMaterialByRequisition(string VendorRequisitionNumber)

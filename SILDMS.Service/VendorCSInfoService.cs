@@ -104,6 +104,13 @@ namespace SILDMS.Service
             return ValidationResult.Success;
         }
 
+        public ValidationResult ExsitingCSPrepVendorByVenReqID(string VendorReqID, out List<Invitation> invitationList)
+        {
+
+            invitationList = clientInfoDataService.ExsitingCSPrepVendorByVenReqID(VendorReqID);
+            return ValidationResult.Success;
+        }
+
         public ValidationResult GetMaterialByRequisition(string vendorRequisitionNumber, out List<OBS_VendorCSRecmItem> reqWiseMaterialList)
         {
             reqWiseMaterialList = clientInfoDataService.GetMaterialByRequisition(vendorRequisitionNumber);

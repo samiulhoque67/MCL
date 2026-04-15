@@ -41,11 +41,14 @@ namespace SILDMS.Model
 
     public class Invitation
     {
+        public string VendorCSRecmID { get; set; }
         public string VendorRequisitionNumber { get; set; }
         public string ClientRequisitionNumber { get; set; }
         public string ClientReqID { get; set; }
 
         public string ClientID { get; set; }
+
+        public string VendorReqID { get; set; }
 
         public string ClientName { get; set; }
 
@@ -57,7 +60,7 @@ namespace SILDMS.Model
 
         public string LastDateofQuotation { get; set; }
 
-
+        public string VendorCSAprvID { get; set; }
 
         public string ServiceItemID { get; set; }
         public string ServiceItemName { get; set; }

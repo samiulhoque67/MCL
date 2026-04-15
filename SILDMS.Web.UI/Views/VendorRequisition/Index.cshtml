@@ -7,7 +7,7 @@
     body {
         font-size: 12px; /* Set global font size */
     }
-    
+
     .selected-row {
         background-color: #bbf0ea !important;
     }
@@ -48,7 +48,6 @@
         color: blue;
         font-size: 14px;
     }
-
 </style>
 
 <div class="box box-primary box-body" ng-controller="VendorRequisitionCtrl">
@@ -122,31 +121,6 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label>Requisition No.:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="VendorReqID" name="VendorReqID" readonly type="text" class="form-control" placeholder="Auto Requisition No." ng-model="VendorReq.VendorReqID" />
-                    </div>
-                </div>
-
-                <div class="col-lg-3 ">
-                    <div class="form-group">
-                        <label for="RequisitionDate">Requisition Date:</label>
-                        <label style="font-size: larger;color:red;">*</label>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <input id="RequisitionDate" autocomplete="off" name="RequisitionDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorReq.RequisitionDate" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
                 <div class="col-lg-3 ">
                     <div class="form-group">
                         <label for="SubmissionDate">Submission Date:</label>
@@ -158,27 +132,52 @@
                         <input id="SubmissionDate" autocomplete="off" name="SubmissionDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorReq.SubmissionDate" />
                     </div>
                 </div>
-                <div class="col-lg-3 ">
-                    <div class="form-group">
-                        <label for="LastDateofQuotation">Last Date of Quotation :</label>
-                        <label style="font-size: larger;color:red;">*</label>
+                @*<div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Requisition No.:</label>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <input id="LastDateofQuotation" autocomplete="off" name="LastDateofQuotation" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorReq.LastDateofQuotation" />
-                    </div>
-                </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="VendorReqID" name="VendorReqID" readonly type="text" class="form-control" placeholder="Auto Requisition No." ng-model="VendorReq.VendorReqID" />
+                        </div>
+                    </div>*@
             </div>
+
+            @*<div class="row">
+                    <div class="col-lg-3 ">
+                        <div class="form-group">
+                            <label for="RequisitionDate">Requisition Date:</label>
+                            <label style="font-size: larger;color:red;">*</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="RequisitionDate" autocomplete="off" name="RequisitionDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorReq.RequisitionDate" />
+                        </div>
+                    </div>
+                    <div class="col-lg-3 ">
+                        <div class="form-group">
+                            <label for="LastDateofQuotation">Last Date of Quotation :</label>
+                            <label style="font-size: larger;color:red;">*</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="LastDateofQuotation" autocomplete="off" name="LastDateofQuotation" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorReq.LastDateofQuotation" />
+                        </div>
+                    </div>
+                </div>*@
             <div class="row">
                 <div class="col-lg-3 ">
                     <div class="form-group">
-                        <label for="Remarks">Remarks :</label>
+                        <label for="Remarks">Project Name :</label>
                     </div>
                 </div>
                 <div class="col-lg-8">
                     <div class="form-group">
-                        <input id="Remarks" name="Remarks" type="text" data-ng-model="VendorReq.Remarks" class="form-control" placeholder="Remarks" />
+                        @*<input id="Remarks" name="Remarks" type="text" data-ng-model="VendorReq.Remarks" class="form-control" placeholder="Remarks" />*@
+                        <textarea id="Remarks" name="Remarks" data-ng-model="VendorReq.Remarks" class="form-control" placeholder="Project Name"> </textarea>
                     </div>
                 </div>
             </div>
@@ -196,12 +195,12 @@
                     <table st-table="ClientDisplayedCollection" st-safe-src="ClientList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr>
-                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ClientCode')">Client Code</th>*@
                                 <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
-                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientReqNo')">Requisition No</th>
+                                @*<th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientReqNo')">Requisition No</th>*@
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('SubmissionDate')">Submission Date</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('SubmissionDate')">Submission Date</th>
+                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>*@
+                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('Remarks')">Project Name</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
                             <tr>
@@ -214,15 +213,16 @@
                                 <td class="hidden">{{row.ClientReqID}}</td>
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientReqNo}}</td>
+                                @*<td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientReqNo}}</td>*@
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.RequisitionDate}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.SubmissionDate}}</td>
-                                <td class="hidden">{{row.Remarks}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                    <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                        {{row.Status == '1'? 'Active':'InActive'}}
-                                    </span>
-                                </td>
+                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.SubmissionDate}}</td>*@
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.Remarks}}</td>
+                                @*<td class="hidden">{{row.Remarks}}</td>*@
+                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                                            {{row.Status == '1'? 'Active':'InActive'}}
+                                        </span>
+                                    </td>*@
 
                                 <td>
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleClientReqSelect(row)">Select</a>
@@ -332,7 +332,7 @@
                         <i class="fa fa-remove"></i>
                     </button>
                 </div>
-               
+
                 <div class="table-responsive" data-ng-disabled="" ng-cloak>
                     <table st-table="vendorReqDisplayedCollection" st-safe-src="vendorReqSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
@@ -383,12 +383,12 @@
                     </table>
                 </div>
                 @*<div class="modal-footer">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetSearchModel()">Close</button>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetSearchModel()">Close</button>
+                            </div>
                         </div>
-                    </div>
-                </div>*@
+                    </div>*@
             </div>
         </div>
     </div>
@@ -952,7 +952,19 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
 <script type="text/javascript">
 
+    $(document).ready(function () {
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0');
+        var year = today.getFullYear();
+
+        var formattedDate = day + '/' + month + '/' + year;
+        $('#SubmissionDate').val(formattedDate);
+    });
+
     app.controller('VendorRequisitionCtrl', ['$scope', '$http', function ($scope, $http) {
+
+        //$('#SubmissionDate').val(new Date().toLocaleString());
 
         $scope.vendorReqItemArray = [];
         $scope.vendorReqTermArray = [];
@@ -1047,20 +1059,20 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         // ################# Detail Add Modal ####################
         $scope.AddReqItemModal = function () {
 
-            if ($('#RequisitionNo').val() == "") {
-                toastr.error("Vendor ReqNo.  Required");
-                return;
-            }
+            //if ($('#RequisitionNo').val() == "") {
+            //    toastr.error("Vendor ReqNo.  Required");
+            //    return;
+            //}
 
             if ($('#SubmissionDate').val() == "") {
                 toastr.error("Submission Date Required.");
                 return;
             }
 
-            if ($('#RequisitionDate').val() == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
-            }
+            //if ($('#RequisitionDate').val() == "") {
+            //    toastr.error("Requisition Date Date Required");
+            //    return;
+            //}
             $('#RequisitionItemModal').modal('show');
         };
 
@@ -1080,14 +1092,14 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             }
 
             if ($scope.VendorReqItem.DeliveryMode == "") {
-                toastr.error("Submission Date Required.");
+                toastr.error("DeliveryMode Required.");
                 return;
             }
 
-            if ($scope.VendorReqItem.ReqUnit == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
-            }
+            //if ($scope.VendorReqItem.ReqUnit == "") {
+            //    toastr.error("Requisition Date Date Required");
+            //    return;
+            //}
 
             if ($('#DeliveryLocation').val() == "") {
                 toastr.error("Service Category Required");
@@ -1100,14 +1112,14 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             }
 
             if ($('#Description').val() == "") {
-                toastr.error("Submission Date Required.");
+                toastr.error("Description Required.");
                 return;
             }
 
-            if ($('#ReqQnty').val() == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
-            }
+            //if ($('#ReqQnty').val() == "") {
+            //    toastr.error("Requisition Date Date Required");
+            //    return;
+            //}
 
             $scope.VendorReqItem.ServiceCategoryID = $scope.VendorReqItem.ServiceCategory.ServiceCategoryID;
             $scope.VendorReqItem.ServiceCategoryName = $scope.VendorReqItem.ServiceCategory.ServiceCategoryName;
@@ -1148,7 +1160,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         }
 
         $scope.ShowClientReqList = function () {
-            //$http.get("/ClientRequisition/GetClientReqSearchList")
             $http.get("/VendorRequisition/GetClientListForVendorRequisition")
                 .success(function (response) {
                     $scope.ClientList = response.clientReqSearchList;
@@ -1165,6 +1176,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorReq.ClientReqNo = tableRow.ClientReqNo;
             $scope.VendorReq.ClientID = tableRow.ClientID;
             $scope.VendorReq.ClientName = tableRow.ClientName;
+            $scope.VendorReq.Remarks = tableRow.Remarks;
 
             $http.post('/ClientRequisition/GetClientReqItemList', { ClientReqID: tableRow.ClientReqID, ReqType: "QV" })
                 .success(function (response) {
@@ -1580,20 +1592,20 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
         $scope.AddReqTermModal = function () {
 
-            if ($('#RequisitionNo').val() == "") {
-                toastr.error("Vendor ReqNo.  Required");
-                return;
-            }
+            //if ($('#RequisitionNo').val() == "") {
+            //    toastr.error("Vendor ReqNo.  Required");
+            //    return;
+            //}
 
             if ($('#SubmissionDate').val() == "") {
                 toastr.error("Submission Date Required.");
                 return;
             }
 
-            if ($('#RequisitionDate').val() == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
-            }
+            //if ($('#RequisitionDate').val() == "") {
+            //    toastr.error("Requisition Date Date Required");
+            //    return;
+            //}
             $('#RequisitionTermModal').modal('show');
         };
 
@@ -1685,14 +1697,14 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 toastr.error("Submission Date Required.");
                 return;
             }
-            if ($('#RequisitionDate').val() == "") {
-                toastr.error("Requisition Date Required.");
-                return;
-            }
-            if ($('#LastDateofQuotation').val() == "") {
-                toastr.error("Last Date of Quotation Required.");
-                return;
-            }
+            //if ($('#RequisitionDate').val() == "") {
+            //    toastr.error("Requisition Date Required.");
+            //    return;
+            //}
+            //if ($('#LastDateofQuotation').val() == "") {
+            //    toastr.error("Last Date of Quotation Required.");
+            //    return;
+            //}
             if ($('#CsStatus').val() == "") {
                 toastr.error("CS Status Required.");
                 return;

@@ -10,7 +10,6 @@ using System.Web.Mvc;
 using SILDMS.Model;
 using System.Threading.Tasks;
 
-
 namespace SILDMS.Web.UI.Controllers
 {
     public class QuotationRecommendationController : Controller

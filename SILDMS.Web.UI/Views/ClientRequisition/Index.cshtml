@@ -44,7 +44,6 @@
         color: blue;
         font-size: 14px;
     }
-
 </style>
 
 <div class="box box-primary box-body" ng-controller="ClientRequisitionCtrl">
@@ -105,7 +104,19 @@
 
             </div>
             <div class="row">
+
+                <div class="col-lg-3 ">
+                    <div class="form-group">
+                        <label for="RequisitionDate">Requisition Date:</label>
+                    </div>
+                </div>
                 <div class="col-lg-3">
+                    <div class="form-group">
+                        <input ng-readonly="viewonlymode == true" id="RequisitionDate" name="RequisitionDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.RequisitionDate" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label>Client Requisition No.</label>
                     </div>
@@ -116,50 +127,51 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Requisition ID:</label>
+                @*<div class="col-lg-2">
+                        <div class="form-group">
+                            <label>Requisition ID:</label>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input id="ClientReqID" name="ClientReqID" readonly type="text" class="form-control"  placeholder="Auto Requisition ID" ng-model="ClientReq.ClientReqID" />
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input id="ClientReqID" name="ClientReqID" readonly type="text" class="form-control" placeholder="Auto Requisition ID" ng-model="ClientReq.ClientReqID" />
+                        </div>
+                    </div>*@
+            </div>
+
+            <div class="row">
+                @*<div class="col-lg-3 ">
+                        <div class="form-group">
+                            <label for="RequisitionDate">Requisition Date:</label>
+                        </div>
                     </div>
-                </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input ng-readonly="viewonlymode == true" id="RequisitionDate" name="RequisitionDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.RequisitionDate" />
+                        </div>
+                    </div>*@
+                @*<div class="col-lg-2 ">
+                        <div class="form-group">
+                            <label for="SubmissionDate">Submission Date:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input ng-readonly="viewonlymode == true" id="SubmissionDate" name="SubmissionDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.SubmissionDate" />
+                        </div>
+                    </div>*@
             </div>
 
             <div class="row">
                 <div class="col-lg-3 ">
                     <div class="form-group">
-                        <label for="SubmissionDate">Submission Date:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input ng-readonly="viewonlymode == true" id="SubmissionDate" name="SubmissionDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.SubmissionDate" />
-                    </div>
-                </div>
-                <div class="col-lg-2 ">
-                    <div class="form-group">
-                        <label for="RequisitionDate">Requisition Date:</label>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input ng-readonly="viewonlymode == true" id="RequisitionDate" name="RequisitionDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="ClientReq.RequisitionDate" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-3 ">
-                    <div class="form-group">
-                        <label for="Remarks">Remarks :</label>
+                        <label for="Remarks">Project Name :</label>
                     </div>
                 </div>
                 <div class="col-lg-8">
                     <div class="form-group">
-                        <input ng-readonly="viewonlymode == true" id="Remarks" name="Remarks" type="text" data-ng-model="ClientReq.Remarks" class="form-control" placeholder="Remarks" />
+                        @*<input ng-readonly="viewonlymode == true" id="Remarks" name="Remarks" type="text" data-ng-model="ClientReq.Remarks" class="form-control" placeholder="Remarks" />*@
+                        <textarea ng-readonly="viewonlymode == true" id="Remarks" name="Remarks" data-ng-model="ClientReq.Remarks" class="form-control" placeholder="Project Name"> </textarea>
                     </div>
                 </div>
             </div>
@@ -258,7 +270,7 @@
                         </tfoot>
                     </table>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -329,24 +341,6 @@
             </div>
         </div>
     </div>
-
-    @*    <div class="row">
-            <div class="col-md-12">
-                <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
-                    <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">
-                        <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Requisition Item List</h2>
-
-                        <div class="box-tools pull-right">
-                            <div class="col-lg-12 pull-right">
-                                <div class="btn-group pull-right" style="margin:2px;">
-                                    <button type="button" id="btnAddReqItem" ng-disabled="btnAddReqItem" data-ng-click="AddReqItemModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>*@
 
     <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
         <div class="row">
@@ -476,23 +470,22 @@
                                 <label for="Description">Description:</label>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-8">
                             <div class="form-group">
-                                <input id="Description" type="text" name="Description" ng-model="ClientReqItem.Description" class="form-control" autofocus />
-
+                                @*<input id="Description" type="text" name="Description" ng-model="ClientReqItem.Description" class="form-control" autofocus />*@
+                                <textarea id="Description" name="Description" data-ng-model="ClientReqItem.Description" placeholder="Description" class="form-control" autofocus> </textarea>
                             </div>
                         </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="Delivery Location">Delivery Location:</label>
+                        @*<div class="col-lg-2">
+                                <div class="form-group">
+                                    <label for="Delivery Location">Delivery Location:</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <input id="DeliveryLocation" type="text" name="DeliveryLocation" ng-model="ClientReqItem.DeliveryLocation" class="form-control" autofocus />
-
-                            </div>
-                        </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <input id="DeliveryLocation" type="text" name="DeliveryLocation" ng-model="ClientReqItem.DeliveryLocation" class="form-control" autofocus />
+                                </div>
+                            </div>*@
                     </div>
 
                     <div class="row">
@@ -525,19 +518,7 @@
                     </div>
 
                     <div class="row">
-                        @*<div class="col-lg-1">
-                            </div>
-                            <div class="col-lg-2">
-                                <div class="form-group">
-                                    <label for="DeliveryDate">Delivery Date :</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <input id="DeliveryDate" name="DeliveryDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
-                                           ng-model="ClientReqItem.DeliveryDate" style=" background-color:#ffffff; " />
-                                </div>
-                            </div>*@
+
                         <div class="col-lg-1">
                         </div>
                         <div class="col-lg-2">
@@ -550,6 +531,16 @@
                                 <option value="QV">Quotation from Vendor</option>
                                 <option value="QC">Quotation to Client</option>
                             </select>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="Delivery Location">Delivery Location:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="DeliveryLocation" type="text" name="DeliveryLocation" ng-model="ClientReqItem.DeliveryLocation" class="form-control" autofocus />
+                            </div>
                         </div>
                     </div>
 
@@ -600,62 +591,6 @@
             </div>
         </div>
     </div>
-
-    @* <div id="ClientReqTermsConditionsModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
-                        <h3 class="modal-title">Terms & Conditions Information</h3>
-                    </div>
-                    <div class="modal-body table-responsive">
-                        <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                            <thead>
-                                <tr>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormName')">Form Name</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
-                                </tr>
-                                <tr>
-                                    <th><input st-search="FormCode" placeholder="Form Code" class="input-sm form-control" type="search" /></th>
-                                    <th><input st-search="FormName" placeholder="Form Name" class="input-sm form-control" type="search" /></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="row in TermsConditionsDisplayedCollection">
-                                    <td class="hidden">{{row.TermsID}}</td>
-                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.FormCode}}</td>
-                                    <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.FormName}}</td>
-                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                            {{row.Status == '1'? 'Active':'InActive'}}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleTermsConditionsSelect(row)"><i class="fa fa-edit"></i> Select</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="7" class="text-center">
-                                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>*@
 
     <div id="ClientReqTermsConditionsModal" class="modal fade">
         <div class="modal-dialog">
@@ -711,13 +646,7 @@
                         </tfoot>
                     </table>
                 </div>
-                @*<div class="modal-footer">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
-                        </div>
-                    </div>
-                </div>*@
+
             </div>
         </div>
     </div>
@@ -797,9 +726,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         </tr>
                     </tbody>
                     <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
+
                     </tfoot>
                 </table>
             </div>
@@ -898,13 +825,28 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             </div>
         </div>
     </div>
-
-
-
-
 </div>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0');
+        var year = today.getFullYear();
+
+        var formattedDate = day + '/' + month + '/' + year;
+        $('#RequisitionDate').val(formattedDate);
+    });
+
+    $(document).ready(function () {
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0');
+        var year = today.getFullYear();
+
+        var formattedDate = day + '/' + month + '/' + year;
+        $('#DeliveryDate').val(formattedDate);
+    });
 
     app.controller('ClientRequisitionCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -922,16 +864,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             ClientReqID: "",
             ClientID: "",
             ClientName: "",
-
             TermsID: "",
             FormName: "",
-
-            //ContactPerson: "",
-            //ContactNumber: "",
-            //ClientTINNo: "",
-            //ClientBINNo: "",
-            //ClientAddress: "",
-
             ClientReqNo: "",
             SubmissionDate: "",
             RequisitionDate: "",
@@ -978,11 +912,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             var myDate = new Date(year, month - 1, date);
             myDate.setHours(0, 0, 0, 0);
 
-            //if (myDate < today) {
-            //    $('#DeliveryDate').val('');
-            //    toastr.error("Purchase date should not be less than system date.");
-            //}
-
             $('.datepicker').hide();
         });
 
@@ -993,16 +922,16 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 return;
             }
 
-            if ($('#ClientReqNo').val() == "") {
-                toastr.error("Client ReqNo.  Required");
-                return;
-            }
+            //if ($('#ClientReqNo').val() == "") {
+            //    toastr.error("Client ReqNo.  Required");
+            //    return;
+            //}
 
 
-            if ($('#SubmissionDate').val() == "") {
-                toastr.error("Submission Date Required.");
-                return;
-            }
+            //if ($('#SubmissionDate').val() == "") {
+            //    toastr.error("Submission Date Required.");
+            //    return;
+            //}
 
             if ($('#RequisitionDate').val() == "") {
                 toastr.error("Requisition Date Date Required");
@@ -1481,23 +1410,23 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 return;
             }
 
-            if ($('#ClientReqNo').val() == "") {
-                toastr.error("Client ReqNo.  Required");
-                return;
-            }
+            //if ($('#ClientReqNo').val() == "") {
+            //    toastr.error("Client ReqNo.  Required");
+            //    return;
+            //}
 
-            if ($('#SubmissionDate').val() == "") {
-                toastr.error("Submission Date Required.");
-                return;
-            }
+            //if ($('#SubmissionDate').val() == "") {
+            //    toastr.error("Submission Date Required.");
+            //    return;
+            //}
 
             if ($('#RequisitionDate').val() == "") {
-                toastr.error("Requisition Date Date Required");
+                toastr.error("Requisition Date Required");
                 return;
             }
 
             $scope.ClientReq.RequisitionDate = $('#RequisitionDate').val();
-            $scope.ClientReq.SubmissionDate = $('#SubmissionDate').val();
+            //$scope.ClientReq.SubmissionDate = $('#SubmissionDate').val();
 
             $http.post('/ClientRequisition/SaveClientRequisition',
                 {
@@ -1555,9 +1484,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             window.location.reload();
         };
 
-
-
-
         $scope.DocCrudStatus = "";
         $scope.SaveDocument = function (ClientReqID) {
             $scope.DocCrudStatus = "I";
@@ -1592,8 +1518,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
                 serverIP: "172.16.189.34",
                 ftpPort: "21",
-                ftpUserName: "silsoft",
-                ftpPassword: "s!L@123",
+                ftpUserName: "ftpuser",
+                ftpPassword: "Ftp@Cbps#2k25",
                 serverUrl: "MCL/Client_Requisition",
                 documentID: "CR_" + ClientReqID,
                 ext: "pdf"
@@ -1640,7 +1566,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 var fileInput = document.getElementById("FileUpload1");
                 fileInput.value = "";
             }
-
         };
 
         $scope.ViewDocument = function () {
@@ -1650,8 +1575,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             var ftpDetails = {
                 serverIP: "172.16.189.34",
                 ftpPort: "21",
-                ftpUserName: "silsoft",
-                ftpPassword: "s!L@123",
+                ftpUserName: "ftpuser",
+                ftpPassword: "Ftp@Cbps#2k25",
                 serverUrl: "MCL/Client_Requisition",
                 documentID: "CR_" + $scope.ClientReq.ClientReqID,
                 ext: "pdf"
@@ -1686,8 +1611,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 });
         };
 
-
-
         $scope.toggleRefreshTable = function () {
 
             $timeout(function () {
@@ -1696,8 +1619,5 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             }, 2000);
 
         };
-
-
-
     }]);
 </script>

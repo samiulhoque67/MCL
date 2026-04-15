@@ -104,9 +104,6 @@ namespace SILDMS.Web.UI.Controllers
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
-        //[HttpPost]
-        //[Authorize]
-        //[SILLogAttribute]
         public async Task<dynamic> DeleteVendorCSAprvItemAndTerm(string VendorCSAprvItemID, string VendorCSAprvTermID)
         {
             string status = string.Empty;
@@ -132,6 +129,7 @@ namespace SILDMS.Web.UI.Controllers
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
+
         public async Task<dynamic> GetReqWiseVendorList(string VendorCSAprvID)
         {
             var ReqWiseVendorList = new List<OBS_VendorCSAprvVendors>();
@@ -165,6 +163,13 @@ namespace SILDMS.Web.UI.Controllers
             return Json(new { MatWiseVendorList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize]
+        public async Task<dynamic> GetVendorByMaterialCSVendor(string VendorReqID, string ServiceItemID)
+        {
+            var MatWiseVendorList = new List<OBS_VendorCSAprv>();
+            await Task.Run(() => _vendorCSInfoService.GetVendorByMaterialCSVendorService(VendorReqID, ServiceItemID, out MatWiseVendorList));
+            return Json(new { MatWiseVendorList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
 
         [Authorize]
         public async Task<dynamic> SearchCS()
@@ -173,8 +178,6 @@ namespace SILDMS.Web.UI.Controllers
             await Task.Run(() => _vendorCSInfoService.SearchCSService(UserID, out SearchCSList));
             return Json(new { SearchCSList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
-
-
 
         [Authorize]
         public async Task<dynamic> CSVendor(string CSNumber)
@@ -192,7 +195,5 @@ namespace SILDMS.Web.UI.Controllers
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
-
-
     }
 }
