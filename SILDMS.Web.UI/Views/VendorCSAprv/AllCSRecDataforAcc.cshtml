@@ -631,12 +631,12 @@
                 $scope.isRowSelected = true;  // Set the current row as the selected one
 
 
-                $scope.VendorCSAprv.VendorCSAprvID = row.VendorCSAprvID;
+                //$scope.VendorCSAprv.VendorCSAprvID = row.VendorCSAprvID;
                 $scope.VendorCSAprv.VendorReqID = row.VendorRequisitionNumber;
                 $scope.VendorCSAprv.ClientReqNo = row.ClientRequisitionNumber;
                 $scope.VendorCSAprv.ClientReqID = row.ClientReqID;
                 $scope.VendorCSAprv.ClientID = row.ClientID;
-                $http.post('/VendorCSAprv/GetMaterialByRequisition',
+                $http.post('/VendorCSAprv/GetMaterialByRequisitionAcc',
                     { VendorRequisitionNumber: row.VendorRequisitionNumber })
                     .success(function (response) {
                         $scope.ReqWiseMaterialList = response.ReqWiseMaterialList;
@@ -661,6 +661,7 @@
                 // If a different row was previously selected, deselect it
                 if ($scope.selectedMaterialRow) {
                     $scope.selectedMaterialRow.selected = false;
+                    $scope.isMaterialRowSelected = false;
                 }
                 // Select the current row
                 row.selected = true;

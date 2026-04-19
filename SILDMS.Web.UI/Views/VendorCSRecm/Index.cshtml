@@ -716,18 +716,20 @@
                 row.selected = false;
                 $scope.selectedRow = null;
                 $scope.isRowSelected = false;
+                $scope.isMaterialRowSelected = false;
             }
             // If the clicked row is not selected, select it and unselect the previous one
             else {
                 if ($scope.selectedRow) {
-                    $scope.selectedRow.selected = false; // Unselect the previous row
+                    $scope.selectedRow.selected = false;
+                    $scope.isMaterialRowSelected = false;// Unselect the previous row
                 }
 
                 row.selected = true;  // Select the current row
                 $scope.selectedRow = row;
                 $scope.isRowSelected = true;  // Set the current row as the selected one
 
-                $scope.VendorCSAprv.VendorCSRecmID = row.VendorCSRecmID;
+            /*    $scope.VendorCSAprv.VendorCSRecmID = row.VendorCSRecmID;*/
                 $scope.VendorCSAprv.VendorReqID = row.VendorRequisitionNumber;
                 $scope.VendorCSAprv.ClientReqNo = row.ClientRequisitionNumber;
                 $scope.VendorCSAprv.ClientReqID = row.ClientReqID;

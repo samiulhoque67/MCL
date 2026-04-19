@@ -265,6 +265,21 @@ namespace SILDMS.Web.UI.Controllers
             await Task.Run(() => _vendorCSActualAprvService.GetMaterialByRequisition(VendorRequisitionNumber, out ReqWiseMaterialList));
             return Json(new { ReqWiseMaterialList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
+           [Authorize]
+        public async Task<dynamic> GetMaterialByRequisitionAud(string VendorRequisitionNumber)
+        {
+            var ReqWiseMaterialList = new List<OBS_VendorCSAprvItem>();
+            await Task.Run(() => _vendorCSActualAprvService.GetMaterialByRequisitionAud(VendorRequisitionNumber, out ReqWiseMaterialList));
+            return Json(new { ReqWiseMaterialList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
+        public async Task<dynamic> GetMaterialByRequisitionAcc(string VendorRequisitionNumber)
+        {
+            var ReqWiseMaterialList = new List<OBS_VendorCSAprvItem>();
+            await Task.Run(() => _vendorCSActualAprvService.GetMaterialByRequisitionAcc(VendorRequisitionNumber, out ReqWiseMaterialList));
+            return Json(new { ReqWiseMaterialList, Msg = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+
 
         [Authorize]
         public async Task<dynamic> GetVendorByMaterial(string VendorReqID, string ServiceItemID)
