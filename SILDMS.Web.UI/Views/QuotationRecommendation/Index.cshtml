@@ -182,6 +182,24 @@
                     <div class="col-lg-1"></div>
                 </div>
 
+                <div class="row" ng-if="GetClientReqDetails.length > 0">
+
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="upload_documents">
+                                Uploaded Documents <br>
+                                (<span style="color:#ff4900;"> PDF Only </span>)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                        <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
+
+                    </div>
+
+
+                </div>
+
             </div>
         </div>
     </div>
@@ -617,13 +635,22 @@
                         </div>
                     </div>
                     <div class="col-lg-2">
-                        <select data-ng-model="MasterData.Operation" class="form-control">
+                        <select ng-hide="pagefunction === 'viewmode'" data-ng-model="MasterData.Operation" class="form-control">
                             <option value="">-- None --</option>
                             <option value="Rec">Recommended</option>
                             <option value="Bck">Back</option>
                             <option value="Pst">Postponed</option>
                             <option value="Can">Cancel</option>
                         </select>
+
+                        <div ng-show="pagefunction === 'viewmode'" class="form-group">
+                            <input class="form-control"
+                                   ng-value="MasterData.Operation === 'Rec' ? 'Recommended' :
+                     MasterData.Operation === 'Bck' ? 'Back' :
+                     MasterData.Operation === 'Pst' ? 'Postponed' :
+                     MasterData.Operation === 'Can' ? 'Cancel' : ''"
+                                   readonly />
+                        </div>
                     </div>
 
                     <div class="col-lg-1"></div>
@@ -631,12 +658,12 @@
 
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="QuotationNote">Recommendation Note :</label>
+                            <label for="QuotationNote">Project Name :</label>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <input id="QuotationNote" autocomplete="off" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
+                            <input id="QuotationNote"  ng-readonly="pagefunction === 'viewmode'" autocomplete="off" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
                         </div>
                     </div>
 
@@ -802,6 +829,22 @@
     </div>
 
 
+
+
+    @*view pdf modal*@
+    <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="padding: 0; margin: 0;">
+                    <iframe id="pdfViewer"
+                            style="width: 100%; height: 100vh; border: none;"
+                            title="PDF Viewer">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
@@ -953,7 +996,7 @@
             else if (action === 'view' || 'edit') {
                 $('#QuotationForApproval').modal('hide');
                 $scope.loading = true;
-
+                $scope.pagefunction = 'viewmode';
                 $http.post('/QuotationToClient/AvailableClientDetailInfo', {
                     ClientID: row.ClientID, ClientReqID: row.ClientReqID
                 }).success(function (response) {
@@ -996,7 +1039,8 @@
                     $scope.MasterData = {
                         ClientID: $scope.GetClientReqDetailsCollection[0].ClientID,
                         ClientReqID: $scope.GetClientReqDetailsCollection[0].ClientReqID,
-                        ClientQuotationID: $scope.GetClientReqDetailsCollection[0].ClientQuotationID
+                        ClientQuotationID: $scope.GetClientReqDetailsCollection[0].ClientQuotationID,
+                        
                     };
 
                     $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQuotationID, action);
@@ -1018,8 +1062,11 @@
                     $scope.MasterData = {
                         ClientID: $scope.GetClientReqDetailsCollection[0].ClientID,
                         ClientReqID: $scope.GetClientReqDetailsCollection[0].ClientReqID,
-                        ClientQuotationID: $scope.GetClientReqDetailsCollection[0].ClientQuotationID
+                        ClientQuotationID: $scope.GetClientReqDetailsCollection[0].ClientQuotationID,
+                        QuotationNote: $scope.GetClientReqDetailsCollection[0].Remarks,
+                        Operation: $scope.GetClientReqDetailsCollection[0].Operation
                     };
+                    $scope.MasterData.QuotationNote = $scope.GetClientReqDetailsCollection[0].Remarks
 
                     $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
 
@@ -1432,6 +1479,54 @@
         $scope.toggleRefreshTable = function () {
             window.location.reload();
         }
+
+
+
+
+
+
+        $scope.ViewDocument = function () {
+            $scope.loading = true; // Show loading indicator
+
+            // FTP details
+            var ftpDetails = {
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "ftpuser",
+                ftpPassword: "Ftp@Cbps#2k25",
+                serverUrl: "MCL/Client_Requisition",
+                documentID: "CR_" + $scope.ClientDetails[0].ClientReqID,
+                ext: "pdf"
+            };
+
+            // Construct URL with query parameters
+            var requestUrl = "/ClientRequisition/ViewDocument?" +
+                "serverIP=" + encodeURIComponent(ftpDetails.serverIP) +
+                "&ftpPort=" + encodeURIComponent(ftpDetails.ftpPort) +
+                "&ftpUserName=" + encodeURIComponent(ftpDetails.ftpUserName) +
+                "&ftpPassword=" + encodeURIComponent(ftpDetails.ftpPassword) +
+                "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
+                "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
+                "&ext=" + encodeURIComponent(ftpDetails.ext);
+
+            // Make GET request to fetch the PDF
+            $http.get(requestUrl, { responseType: 'arraybuffer' })
+                .then(function (response) {
+                    var file = new Blob([response.data], { type: 'application/pdf' });
+                    var fileURL = URL.createObjectURL(file);
+                    let zoomParam = "#view=Fit";
+
+                    $("#pdfViewer").attr("src", fileURL + zoomParam);
+                    $('#ShowPDFModal').modal('show');
+                })
+                .catch(function (error) {
+                    toastr.error("Failed to load the PDF.");
+                    console.error(error);
+                })
+                .finally(function () {
+                    $scope.loading = false; // Hide the loading indicator
+                });
+        };
 
     }
 

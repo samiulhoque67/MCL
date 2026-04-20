@@ -101,7 +101,8 @@ namespace SILDMS.DataAccess.QuotationToClientService
                         ContactPerson = reader.GetString("ContactPerson"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
-                        RequisitionDate = reader.GetString("RequisitionDate")
+                        RequisitionDate = reader.GetString("RequisitionDate"),
+                        Remarks = reader.GetString("Remarks"),
                     }).ToList();
 
                 }

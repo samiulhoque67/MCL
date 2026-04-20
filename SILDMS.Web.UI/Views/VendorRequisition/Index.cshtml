@@ -63,7 +63,7 @@
                     </button>
                 </div>
 
-                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px; display: none">
                     @using (Html.BeginForm("RequisitionToVendorReport", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
                     {
                         <button type="submit" id="btnSubmit" name="ReportType" class="button-custom btn-success">
@@ -280,7 +280,7 @@
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactNumber')">Contact Number</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Email')">Email</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>*@
                                 <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
                             <tr>
@@ -299,11 +299,11 @@
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactNumber}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.Email}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.Address}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
                                     <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
                                         {{row.Status == '1'? 'Active':'InActive'}}
                                     </span>
-                                </td>
+                                </td>*@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorSelect(row)"><i class="fa fa-edit"></i> Select</button>
                                 </td>

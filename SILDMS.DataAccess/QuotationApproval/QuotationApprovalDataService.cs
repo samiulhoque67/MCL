@@ -155,7 +155,10 @@ namespace SILDMS.DataAccess.QuotationApproval
                         ClientQutnAmt = reader.GetString("ClientQutnAmt"),
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
-                        TolAmt = reader.GetString("TolAmt")
+                        TolAmt = reader.GetString("TolAmt"),
+
+                        Remarks = reader.GetString("Remarks"),
+                        Operation = reader.GetString("Operation")
                     }).ToList();
 
                 }
