@@ -148,6 +148,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                         DeliveryDate = reader.GetString("DeliveryDate"),
                         DeliveryMode = reader.GetString("DeliveryMode"),
                         ReqUnit = reader.GetString("QutnUnit"),
+                        ReqType = reader.GetString("ReqType"),
                         QutnQnty = reader.GetString("QutnQnty"),
                         QutnPrice = reader.GetString("VenPrice"),
                         QutnUnit = reader.GetString("QutnUnit"),

@@ -1410,15 +1410,15 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 return;
             }
 
-            //if ($('#ClientReqNo').val() == "") {
-            //    toastr.error("Client ReqNo.  Required");
-            //    return;
-            //}
+            if (!$scope.GridDisplayCollection || $scope.GridDisplayCollection.length === 0) {
+                toastr.error("At least one Requisition Item Required");
+                return;
+            }
 
-            //if ($('#SubmissionDate').val() == "") {
-            //    toastr.error("Submission Date Required.");
-            //    return;
-            //}
+            if (!$scope.ReqTermGridDisplayCollection || $scope.ReqTermGridDisplayCollection.length === 0) {
+                toastr.error("At least one Term Required");
+                return;
+            }
 
             if ($('#RequisitionDate').val() == "") {
                 toastr.error("Requisition Date Required");

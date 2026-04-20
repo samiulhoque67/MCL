@@ -195,6 +195,26 @@
                     <div class="col-lg-1"></div>
                 </div>
 
+
+                <div class="row"  ng-if="GetClientReqDetails.length > 0">
+                
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="upload_documents">
+                                Uploaded Documents <br>
+                                (<span style="color:#ff4900;"> PDF Only </span>)
+                            </label>
+                        </div>
+                    </div>
+                    <div  class="col-lg-1">
+                        <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
+
+                    </div>
+
+
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -328,7 +348,8 @@
                         <td style="width: 6%;">{{ row.DeliveryLocation }}</td>
                         <td style="width: 6%;">{{ row.DeliveryDate }}</td>
 
-                        <td style="width: 6%; text-align: right;">{{ row.ReqQnty | number: 2 }}</td>
+                        <td ng-show="pagefunction === 'savemode'" style="width: 6%; text-align: right;">{{ row.ReqQnty | number: 2 }}</td>
+                        <td ng-show="pagefunction === 'viewmode'" style="width: 6%; text-align: right;">{{ row.QutnQnty | number: 2 }}</td>
                         <td style="width: 5%;">{{ row.ReqUnit }}</td>
 
                         <td style="width: 6%;">
@@ -340,33 +361,54 @@
                                    ng-blur="validateInput0('givenQutnPrice', row)" />
                         </td>
 
-                        <td style="width: 6%; text-align: right;" color: #126e0f;">
+                        <td ng-show="pagefunction === 'savemode'" style="width: 6%; text-align: right;" color: #126e0f;">
                             {{ row.givenQutnAmt }}
                         </td>
 
+                        <td ng-show="pagefunction === 'viewmode'" style="width: 6%; text-align: right;" color: #126e0f;">
+                            {{ row.QutnAmt }}
+                        </td>
+
                         <td style="width: 6%;">
+                           
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
                                    type="text"
-                                   ng-readonly="pagefunction === 'viewmode'"
+                                   ng-show="pagefunction === 'savemode'"
                                    ng-model="row.GivenASFPerc"
                                    ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('GivenASFPerc', row)" />
+
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
+                                   type="text"
+                                    ng-show="pagefunction === 'viewmode'" ng-readonly="pagefunction === 'viewmode'"
+                                   ng-model="row.ASFPerc"/>
+
+
                         </td>
-                        <td style="width: 6%; text-align: right;">{{ row.TotGivenASFAmt }}</td>
+                        <td ng-show="pagefunction === 'savemode'" style="width: 6%; text-align: right;">{{ row.TotGivenASFAmt }}</td>
+                        <td  ng-show="pagefunction === 'viewmode'" style="width: 6%; text-align: right;">{{ row.ASFAmt }}</td>
 
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
                                    type="text"
-                                   ng-readonly="pagefunction === 'viewmode'"
+                                   ng-show="pagefunction === 'savemode'"
                                    ng-model="row.GivenVatPerc"
                                    ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('GivenVatPerc', row)" />
+
+
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
+                                   type="text"
+                                   ng-show="pagefunction === 'viewmode'" ng-readonly="pagefunction === 'viewmode'"
+                                   ng-model="row.VatPerc" />
                         </td>
-                        <td style="width: 6%; text-align: right;">{{ row.TotGivenVatAmt }}</td>
+                        <td ng-show="pagefunction === 'savemode'" style="width: 6%; text-align: right;">{{ row.TotGivenVatAmt }}</td>
+                        <td ng-show="pagefunction === 'viewmode'" style="width: 6%; text-align: right;">{{ row.VatAmt }}</td>
 
                         <td style="width: 6%; color: #126e0f; text-align: right;">
                             <div style="display: inline-flex; align-items: center;">
-                                <span>{{ row.givenTolAmt }}</span>
+                                <span  ng-show="pagefunction === 'savemode'" >{{ row.givenTolAmt }}</span>
+                                <span>{{ row.TolAmt }}</span>
                                 <button type="button"
                                         class="button-detail"
                                         style="margin-left: 5px;"
@@ -524,7 +566,7 @@
                             <th @*colspan="12"*@ style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
                                 <span>Terms & Conditions List</span>
                             </th>
-                            <th style="background: #ffffff; position: relative; padding: 5px;">
+                            <th  ng-show="pagefunction === 'savemode'" style="background: #ffffff; position: relative; padding: 5px;">
                                 <div style="position: relative; display: inline-block; width: 200px;">
                                     <input ng-show="pagefunction !== 'viewmode'" id="FormName" name="FormName" type="text"
                                            data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true"
@@ -537,7 +579,7 @@
                                     </button>
                                 </div>
                             </th>
-                            <th style="background: #ffffff;">
+                            <th  ng-show="pagefunction === 'savemode'" style="background: #ffffff;">
                                 <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
                                     <i class="fa fa-plus" style="padding-right: 3px"></i> Add
                                 </button>
@@ -679,7 +721,8 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="QuotationNo" name="QuotationNo" type="text" ng-model="Quotation.QuotationNo" readonly class="form-control" />
+                            <input  ng-show="pagefunction === 'savemode'" id="QuotationNo" name="QuotationNo" type="text" ng-model="Quotation.QuotationNo" readonly class="form-control" />
+                            <input  ng-show="pagefunction === 'viewmode'" id="QuotationNo" name="QuotationNo" type="text" ng-model="SavedClientQutnID" readonly class="form-control" />
                         </div>
                     </div>
 
@@ -733,7 +776,7 @@
 
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="QuotationNote">Quotation Note :</label>
+                            <label for="QuotationNote">Project Name :</label>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -865,9 +908,9 @@
                                     <button type="button" id="btnSelect" ng-click="selectAvailableClient(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
                                         <span class="fa fa-search-plus"> View</span>
                                     </button>
-                                    <button type="button" id="btnEdit" ng-click="selectAvailableClient(row, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
+                                    @*<button type="button" id="btnEdit" ng-click="selectAvailableClient(row, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
                                         <span class="fa fa-edit"> Edit</span>
-                                    </button>
+                                    </button>*@
                                 </td>
                             </tr>
                         </tbody>
@@ -912,6 +955,21 @@
         </div>
     </div>
 
+
+
+    @*view pdf modal*@
+    <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="padding: 0; margin: 0;">
+                    <iframe id="pdfViewer"
+                            style="width: 100%; height: 100vh; border: none;"
+                            title="PDF Viewer">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 
@@ -1036,7 +1094,7 @@
         };
         $scope.pagefunction = '';
         $scope.ReqType = '';
-
+        $scope.SavedClientQutnID = '';
         $scope.selectAvailableClient = function (row, action) {
 
             $scope.MasterData.ClientReqID = row.ClientReqID;
@@ -1065,6 +1123,7 @@
                         ContactBIN: $scope.ClientDetails[0].ClientBinNo,
                         ContactAddress: $scope.ClientDetails[0].Address
                     };
+                    $scope.MasterData.QuotationNote = $scope.ClientDetails[0].Remarks;
                     $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID, $scope.ClientDetails[0].ClientReqID, ClientQutnID = null, action);
                     $scope.loading = false;
                 }).error(function () {
@@ -1131,6 +1190,8 @@
             }
 
             else if (action === 'view' || action === 'edit') {
+                $scope.SavedClientQutnID = ClientQutnID;
+
                 $http.post('/QuotationRecommendation/GetClientReqDataInfo', {
                     ClientID: ClientID, ClientReqID: ClientReqID, ClientQutnID: ClientQutnID
                 }).success(function (response) {
@@ -1139,11 +1200,11 @@
                     $scope.loading = false;
                     $scope.MasterData = {
                         QuotationNo: $scope.GetClientReqDetailsCollection[0].QutnNo,
-                        QuotationNote: $scope.GetClientReqDetailsCollection[0].Remarks,
+                      
                         BriefingDate: $scope.GetClientReqDetailsCollection[0].BriefingDate,
-                        QuotationDate: $scope.GetClientReqDetailsCollection[0].QuotationDate
+                        QuotationDate: $scope.GetClientReqDetailsCollection[0].QuotationDate,
                     };
-
+                    $scope.MasterData.QuotationNote = $scope.GetClientReqDetailsCollection[0].Remarks,
                     $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQuotationID, ClientReqID, action);
 
                 }).error(function () {
@@ -1248,7 +1309,7 @@
                     ASFAmt: row.ASFAmt,
                     VatPerc: row.VatPerc,
                     VatAmt: row.VatAmt,
-                    TolAmt: row.givenTolAmt
+                    TolAmt: row.TolAmt
                 }
 
                 $scope.selectedRows.push(selecteditems);
@@ -1316,8 +1377,15 @@
             // 4. Total (now correct)
             row.givenTolAmt = row.givenQutnAmt + row.TotGivenASFAmt + row.TotGivenVatAmt;
             row.givenTolAmt = row.givenTolAmt.toFixed(2);
+            if ($scope.pagefunction == 'savemode') {
 
-            $scope.selectEntity(row, 'save');
+                $scope.selectEntity(row, 'save');
+            }
+
+            else {
+
+                $scope.selectEntity(row, 'view');
+            }
         };
 
 
@@ -1619,6 +1687,50 @@
             $scope.ClientReq.FormName = "";
         }
 
+
+
+        $scope.ViewDocument = function () {
+            $scope.loading = true; // Show loading indicator
+
+            // FTP details
+            var ftpDetails = {
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "ftpuser",
+                ftpPassword: "Ftp@Cbps#2k25",
+                serverUrl: "MCL/Client_Requisition",
+                documentID: "CR_" + $scope.ClientDetails[0].ClientReqID,
+                ext: "pdf"
+            };
+
+            // Construct URL with query parameters
+            var requestUrl = "/ClientRequisition/ViewDocument?" +
+                "serverIP=" + encodeURIComponent(ftpDetails.serverIP) +
+                "&ftpPort=" + encodeURIComponent(ftpDetails.ftpPort) +
+                "&ftpUserName=" + encodeURIComponent(ftpDetails.ftpUserName) +
+                "&ftpPassword=" + encodeURIComponent(ftpDetails.ftpPassword) +
+                "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
+                "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
+                "&ext=" + encodeURIComponent(ftpDetails.ext);
+
+            // Make GET request to fetch the PDF
+            $http.get(requestUrl, { responseType: 'arraybuffer' })
+                .then(function (response) {
+                    var file = new Blob([response.data], { type: 'application/pdf' });
+                    var fileURL = URL.createObjectURL(file);
+                    let zoomParam = "#view=Fit";
+
+                    $("#pdfViewer").attr("src", fileURL + zoomParam);
+                    $('#ShowPDFModal').modal('show');
+                })
+                .catch(function (error) {
+                    toastr.error("Failed to load the PDF.");
+                    console.error(error);
+                })
+                .finally(function () {
+                    $scope.loading = false; // Hide the loading indicator
+                });
+        };
     }
     )
 
