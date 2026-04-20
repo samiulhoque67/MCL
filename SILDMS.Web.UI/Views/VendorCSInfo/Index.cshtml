@@ -236,7 +236,7 @@
                 <table id="tableId" st-table="MatWiseVendorListCollection" st-safe-src="MatWiseVendorList" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
                     <thead>
                         <tr style="font-size: 15px;">
-                            <th colspan="14" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">Selected Item : {{VendorCSInfo.ServiceItemName}} </th>
+                            <th colspan="16" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">Selected Item : {{VendorCSInfo.ServiceItemName}} </th>
                         </tr>
                         <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
                             <th>Quotation No</th>
@@ -452,7 +452,7 @@
                     </button>
                 </div>
                 <div class="modal-body table-responsive">
-                    <table id="tableId" st-table="MatWiseVendorListCollection" st-safe-src="MatWiseVendorList" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
+                    <table id="tableId" st-table="MatWiseVendorListCollection1" st-safe-src="MatWiseVendorList1" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
                         <thead>
                             <tr style="font-size: 15px;">
                                 <th colspan="14" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">Selected Item : {{VendorCSInfo.ServiceItemName}} </th>
@@ -476,10 +476,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr id="rowID" ng-repeat="row in MatWiseVendorListCollection"
-                                style="height:20px; font-size:13px;"
+                            <tr id="rowID" ng-repeat="row in MatWiseVendorListCollection1"
+                                @*style="height:20px; font-size:13px;"
                                 ng-class="{'selected-row': row.selected}"
-                                ng-style="getRowStyle(row)">
+                                ng-style="getRowStyle(row)"*@
+                                >
 
                                 <td class="col-lg-1 col-md-1 col-sm-1">{{row.VendorQutnNo}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1">{{row.VendorName}}</td>
@@ -812,6 +813,7 @@
                 row.selected = false;
                 $scope.selectedRow = null;
                 $scope.isRowSelected = false;
+                $scope.isMaterialRowSelected = false;
             }
             // If the clicked row is not selected, select it and unselect the previous one
             else {
@@ -819,12 +821,13 @@
 
 
                     $scope.selectedRow.selected = false; // Unselect the previous row
+                    $scope.isMaterialRowSelected = false;
                 }
 
                 row.selected = true;  // Select the current row
                 $scope.selectedRow = row;
                 $scope.isRowSelected = true;  // Set the current row as the selected one
-
+                $scope.isMaterialRowSelected = false;
                 $scope.VendorCSInfo.RequisitionDate = row.RequisitionDate;
                 $scope.VendorCSInfo.ClientName = row.ClientName;
                 $scope.VendorCSInfo.VenReqItem = row.Remarks;
@@ -966,75 +969,199 @@
 
         $scope.selectedVendors = [];  // Array to hold selected vendor items
 
+        //$scope.selectVendor = function (row) {
+        //    var selectedVendorItem = {
+        //        ServiceCategoryID: row.ServiceCategoryID,
+        //        ServiceCategoryName: row.ServiceCategoryName,
+        //        ServiceItemID: row.ServiceItemID,
+        //        ServiceItemName: row.ServiceItemName,
+        //        Description: row.Description,
+        //        DeliveryLocation: row.DeliveryLocation,
+        //        DeliveryDate: row.DeliveryDate,                // Date object
+        //        Delivery_DateString: row.DeliveryDateString,    // Formatted string (e.g., 'yyyy/MM/dd')
+        //        DeliveryMode: row.DeliveryMode,
+        //        ReqQnty: row.ReqQnty,
+        //        ReqUnit: row.ReqUnit,
+        //        VendorQutnNo: row.VendorQutnNo,
+        //        VendorQutnID: row.VendorQutnID,
+        //        VendorID: row.VendorID,
+        //        VendorName: row.VendorName,
+
+        //        QutnQnty: row.QutnQnty,
+        //        NegoQty: row.NegoQty,
+        //        QutnPrice: row.QutnPrice,
+        //        NegoPrice: row.NegoPrice,
+        //        QutnUnit: row.QutnUnit,
+        //        QutnAmt: row.QutnAmt,
+        //        NegoAmt: row.NegoAmt,
+
+        //        VatPerc: row.VatPerc,
+        //        VatAmt: row.VatAmt,
+        //        NegoVatAmt: row.NegoVatAmt,
+        //        TolAmt: row.TolAmt,
+        //        NegoTolAmt: row.NegoTolAmt
+        //    };
+
+        //    // Check if this vendor is already selected
+        //    if (row.selected) {
+        //        $scope.VendorCSInfo.VendorName = row.VendorName;
+        //        // Deselect the vendor and remove it from the selected array
+        //        row.selected = false;
+        //        $scope.ReqTermGridDisplayCollection = [];
+
+        //        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+        //        var index = $scope.selectedVendors.findIndex(function (vendor) {
+        //            return vendor.VendorQutnID === row.VendorQutnID;
+        //        });
+        //        if (index !== -1) {
+        //            $scope.selectedVendors.splice(index, 1);  // Remove from selected array
+        //        }
+        //        $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.filter(function (term) {
+        //            return term.VendorQutnID !== row.VendorQutnID;
+        //        });
+        //        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+        //    } else {
+        //        // Select the vendor and add it to the selected array
+        //        row.selected = true;
+
+        //        $scope.VendorCSInfo.VendorName = row.VendorName;
+        //        $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: row.VendorQutnID })
+        //            .success(function (response) {
+        //                // Concatenate the new data with the existing data
+        //                $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.concat(response.VendorCSInfoTermList);
+        //                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+        //                $scope.loading = false;
+        //            }).error(function () {
+        //                $scope.loading = false;
+        //            });
+
+        //        $scope.selectedVendors.push(selectedVendorItem);  // Add to selected array
+        //    }
+        //};
+
+
+
+
+
         $scope.selectVendor = function (row) {
+
+            var id = row.VendorQutnID;
+
+            // 🔒 Always enforce single source of truth
+            var existsIndex = $scope.selectedVendors.findIndex(function (v) {
+                return v.VendorQutnID === id;
+            });
+
+            if (existsIndex !== -1) {
+                // =========================
+                // ❌ UNSELECT (CLEAN REMOVE)
+                // =========================
+                row.selected = false;
+
+                // Remove ALL duplicates safely
+                $scope.selectedVendors = $scope.selectedVendors.filter(function (v) {
+                    return v.VendorQutnID !== id;
+                });
+
+                // Remove related terms
+                $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.filter(function (t) {
+                    return t.VendorQutnID !== id;
+                });
+
+                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+
+                return;
+            }
+
+            // =========================
+            // ✅ SELECT (CONTROLLED ADD)
+            // =========================
+            row.selected = true;
+
             var selectedVendorItem = {
-                ServiceCategoryID: row.ServiceCategoryID,
-                ServiceCategoryName: row.ServiceCategoryName,
-                ServiceItemID: row.ServiceItemID,
-                ServiceItemName: row.ServiceItemName,
-                Description: row.Description,
-                DeliveryLocation: row.DeliveryLocation,
-                DeliveryDate: row.DeliveryDate,                // Date object
-                Delivery_DateString: row.DeliveryDateString,    // Formatted string (e.g., 'yyyy/MM/dd')
-                DeliveryMode: row.DeliveryMode,
-                ReqQnty: row.ReqQnty,
-                ReqUnit: row.ReqUnit,
-                VendorQutnNo: row.VendorQutnNo,
-                VendorQutnID: row.VendorQutnID,
-                VendorID: row.VendorID,
-                VendorName: row.VendorName,
+                        ServiceCategoryID: row.ServiceCategoryID,
+                        ServiceCategoryName: row.ServiceCategoryName,
+                        ServiceItemID: row.ServiceItemID,
+                        ServiceItemName: row.ServiceItemName,
+                        Description: row.Description,
+                        DeliveryLocation: row.DeliveryLocation,
+                        DeliveryDate: row.DeliveryDate,                // Date object
+                        Delivery_DateString: row.DeliveryDateString,    // Formatted string (e.g., 'yyyy/MM/dd')
+                        DeliveryMode: row.DeliveryMode,
+                        ReqQnty: row.ReqQnty,
+                        ReqUnit: row.ReqUnit,
+                        VendorQutnNo: row.VendorQutnNo,
+                        VendorQutnID: row.VendorQutnID,
+                        VendorID: row.VendorID,
+                        VendorName: row.VendorName,
 
-                QutnQnty: row.QutnQnty,
-                NegoQty: row.NegoQty,
-                QutnPrice: row.QutnPrice,
-                NegoPrice: row.NegoPrice,
-                QutnUnit: row.QutnUnit,
-                QutnAmt: row.QutnAmt,
-                NegoAmt: row.NegoAmt,
+                        QutnQnty: row.QutnQnty,
+                        NegoQty: row.NegoQty,
+                        QutnPrice: row.QutnPrice,
+                        NegoPrice: row.NegoPrice,
+                        QutnUnit: row.QutnUnit,
+                        QutnAmt: row.QutnAmt,
+                        NegoAmt: row.NegoAmt,
 
-                VatPerc: row.VatPerc,
-                VatAmt: row.VatAmt,
-                NegoVatAmt: row.NegoVatAmt,
-                TolAmt: row.TolAmt,
-                NegoTolAmt: row.NegoTolAmt
+                        VatPerc: row.VatPerc,
+                        VatAmt: row.VatAmt,
+                        NegoVatAmt: row.NegoVatAmt,
+                        TolAmt: row.TolAmt,
+                        NegoTolAmt: row.NegoTolAmt
             };
 
-            // Check if this vendor is already selected
-            if (row.selected) {
-                $scope.VendorCSInfo.VendorName = row.VendorName;
-                // Deselect the vendor and remove it from the selected array
-                row.selected = false;
-                $scope.ReqTermGridDisplayCollection = [];
+            // 🔒 Double-check before push (defensive programming)
+            var alreadyExists = $scope.selectedVendors.some(function (v) {
+                return v.VendorQutnID === id;
+            });
 
-                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-                var index = $scope.selectedVendors.findIndex(function (vendor) {
-                    return vendor.VendorQutnID === row.VendorQutnID;
-                });
-                if (index !== -1) {
-                    $scope.selectedVendors.splice(index, 1);  // Remove from selected array
-                }
-                $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.filter(function (term) {
-                    return term.VendorQutnID !== row.VendorQutnID;
-                });
-                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-            } else {
-                // Select the vendor and add it to the selected array
-                row.selected = true;
+            if (!alreadyExists) {
+                $scope.selectedVendors.push(selectedVendorItem);
+            }
 
-                $scope.VendorCSInfo.VendorName = row.VendorName;
-                $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: row.VendorQutnID })
-                    .success(function (response) {
-                        // Concatenate the new data with the existing data
-                        $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.concat(response.VendorCSInfoTermList);
-                        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-                        $scope.loading = false;
-                    }).error(function () {
-                        $scope.loading = false;
+            $scope.VendorCSInfo.VendorName = row.VendorName;
+
+            // =========================
+            // ⚠️ SAFE API CALL
+            // =========================
+            $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: id })
+                .success(function (response) {
+
+                    // ❗ Check AGAIN (user may have unselected before response returned)
+                    var stillSelected = $scope.selectedVendors.some(function (v) {
+                        return v.VendorQutnID === id;
                     });
 
-                $scope.selectedVendors.push(selectedVendorItem);  // Add to selected array
-            }
+                    if (!stillSelected) return;
+
+                    // Remove old terms first (avoid duplication)
+                    $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.filter(function (t) {
+                        return t.VendorQutnID !== id;
+                    });
+
+                    // Add fresh terms
+                    $scope.ReqTermDataSetupGridData =
+                        $scope.ReqTermDataSetupGridData.concat(response.VendorCSInfoTermList);
+
+                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                })
+                .error(function () {
+                    // optional: rollback selection if needed
+                });
         };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         $scope.getRowStyle = function (row) {
             if (row.selected) {
@@ -1856,6 +1983,8 @@
         };
 
         $scope.ShowVendorList = function () {
+            $scope.MatWiseVendorList1 = [];
+            $scope.MatWiseVendorListCollection1 = [];
 
             $http.post('/VendorCSInfo/GetVendorByMaterial',
                 {
@@ -1863,9 +1992,9 @@
                     ServiceItemID: $scope.VendorCSInfo.ServiceItemID
                 })
                 .success(function (response) {
-                    $scope.MatWiseVendorList = response.MatWiseVendorList;
-                    $scope.MatWiseVendorListCollection = [].concat($scope.MatWiseVendorList);
-                    console.log($scope.MatWiseVendorListCollection);
+                    $scope.MatWiseVendorList1 = response.MatWiseVendorList;
+                    $scope.MatWiseVendorListCollection1 = [].concat($scope.MatWiseVendorList1);
+                    console.log($scope.MatWiseVendorListCollection1);
                     $scope.loading = false;
                 }).error(function () {
                     $scope.loading = false;

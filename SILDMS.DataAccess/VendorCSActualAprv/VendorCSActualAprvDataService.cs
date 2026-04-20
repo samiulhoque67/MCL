@@ -410,7 +410,7 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                 using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetVendorCSAccRec"))
                 {
                     // Set parameters 
-                    db.AddInParameter(dbCommandWrapper, "@VendorCSAprvID", SqlDbType.NVarChar, vendorCSInfo.VendorCSAprvID);
+                    db.AddInParameter(dbCommandWrapper, "@VendorCSAprvID", SqlDbType.NVarChar, vendorCSInfo.VendorCSRecmID);
                     db.AddInParameter(dbCommandWrapper, "@CSRecDate", SqlDbType.NVarChar, vendorCSInfo.CSRecDate);
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
@@ -444,7 +444,7 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                 using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetVendorCSRecAudit"))
                 {
                     // Set parameters 
-                    db.AddInParameter(dbCommandWrapper, "@VendorCSAprvID", SqlDbType.NVarChar, vendorCSInfo.VendorCSAprvID);
+                    db.AddInParameter(dbCommandWrapper, "@VendorCSAprvID", SqlDbType.NVarChar, vendorCSInfo.VendorCSRecmID);
                     db.AddInParameter(dbCommandWrapper, "@CSRecDate", SqlDbType.NVarChar, vendorCSInfo.CSRecDate);
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
@@ -649,7 +649,7 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
 
                     invitationList = dt1.AsEnumerable().Select(reader => new Invitation
                     {
-                        VendorCSAprvID = reader.GetString("VendorCSAprvID"),
+                        //VendorCSAprvID = reader.GetString("VendorCSAprvID"),
                         VendorRequisitionNumber = reader.GetString("VendorReqID"),
                         ClientRequisitionNumber = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
@@ -685,7 +685,7 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
 
                     invitationList = dt1.AsEnumerable().Select(reader => new Invitation
                     {
-                        VendorCSAprvID = reader.GetString("VendorCSAprvID"),
+                        //VendorCSAprvID = reader.GetString("VendorCSAprvID"),
                         VendorRequisitionNumber = reader.GetString("VendorReqID"),
                         ClientRequisitionNumber = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
@@ -736,6 +736,94 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
             var factory = new DatabaseProviderFactory();
             var db = factory.CreateDefault() as SqlDatabase;
             using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetMaterialByRequisitionActualAprv"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@vendorRequisitionNumber", SqlDbType.VarChar, vendorRequisitionNumber);
+
+                // Execute SP.
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+
+                    ReqWiseMaterialList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSAprvItem
+                    {
+                        VendorCSInfoID = reader.GetString("VendorCSAprvID"),
+                        VendorReqID = reader.GetString("VendorReqID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        ServiceCategoryName = reader.GetString("ServicesCategoryName"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        Description = reader.GetString("Description"),
+                        DeliveryLocation = reader.GetString("DeliveryLocation"),
+                        DeliveryDate = reader.GetString("DeliveryDate"),
+                        DeliveryMode = reader.GetString("DeliveryMode"),
+                        ReqQnty = reader.GetString("ReqQnty"),
+                        ReqUnit = reader.GetString("ReqUnit"),
+
+
+
+                    }).ToList();
+                }
+
+            }
+            return ReqWiseMaterialList;
+        } 
+        
+        public List<OBS_VendorCSAprvItem> GetMaterialByRequisitionAud(string vendorRequisitionNumber)
+        {
+            var ReqWiseMaterialList = new List<OBS_VendorCSAprvItem>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetMaterialByRequisitionActualAprvAud"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@vendorRequisitionNumber", SqlDbType.VarChar, vendorRequisitionNumber);
+
+                // Execute SP.
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+
+                    ReqWiseMaterialList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSAprvItem
+                    {
+                        VendorCSInfoID = reader.GetString("VendorCSAprvID"),
+                        VendorReqID = reader.GetString("VendorReqID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        ServiceCategoryName = reader.GetString("ServicesCategoryName"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        Description = reader.GetString("Description"),
+                        DeliveryLocation = reader.GetString("DeliveryLocation"),
+                        DeliveryDate = reader.GetString("DeliveryDate"),
+                        DeliveryMode = reader.GetString("DeliveryMode"),
+                        ReqQnty = reader.GetString("ReqQnty"),
+                        ReqUnit = reader.GetString("ReqUnit"),
+
+
+
+                    }).ToList();
+                }
+
+            }
+            return ReqWiseMaterialList;
+        }
+
+        public List<OBS_VendorCSAprvItem> GetMaterialByRequisitionAcc(string vendorRequisitionNumber)
+        {
+            var ReqWiseMaterialList = new List<OBS_VendorCSAprvItem>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetMaterialByRequisitionActualAprvAcc"))
             {
                 db.AddInParameter(dbCommandWrapper, "@vendorRequisitionNumber", SqlDbType.VarChar, vendorRequisitionNumber);
 

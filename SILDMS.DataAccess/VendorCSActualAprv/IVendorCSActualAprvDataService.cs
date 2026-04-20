@@ -32,6 +32,8 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
         List<Invitation> GetAllApprovedData(string userID);
 
         List<OBS_VendorCSAprvItem> GetMaterialByRequisition(string vendorRequisitionNumber);
+        List<OBS_VendorCSAprvItem> GetMaterialByRequisitionAud(string vendorRequisitionNumber);
+        List<OBS_VendorCSAprvItem> GetMaterialByRequisitionAcc(string vendorRequisitionNumber);
         List<OBS_VendorCSAprvItem> GetVendorByMaterialData(string vendorReqID, string serviceItemID);
         List<Invitation> SearchCSData(string userID);
         List<OBS_VendorCSRecmItem> CSVendorData(string userID, string cSNumber);
