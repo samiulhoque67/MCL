@@ -629,17 +629,6 @@
 
         @*</div>*@
 
-
-
-
-
-
-
-
-
-
-
-
     </div>
 
     <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
@@ -1596,20 +1585,22 @@
                 .success(function (response) {
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
-                        $scope.clearVendorCSAprv();
+                        //$scope.clearVendorCSAprv();
                         $scope.toggleRefreshTable();
                         $scope.loading = false;
                         return;
                     }
                     else if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
-                        $scope.clearVendorCSAprv();
+                        //$scope.clearVendorCSAprv();
+                        $scope.toggleRefreshTable();
                         $scope.loading = false;
                         return;
                     }
                     else if (response.status == "S203") {
                         toastr.success("Data Deleted Successfully.");
-                        $scope.clearVendorCSAprv();
+                        $scope.toggleRefreshTable();
+                        //$scope.clearVendorCSAprv();
                         $scope.loading = false;
                         return;
                     }
