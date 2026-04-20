@@ -644,23 +644,25 @@
                 row.selected = false;
                 $scope.selectedRow = null;
                 $scope.isRowSelected = false;
+                $scope.isMaterialRowSelected = false;
             }
             // If the clicked row is not selected, select it and unselect the previous one
             else {
                 if ($scope.selectedRow) {
                     $scope.selectedRow.selected = false; // Unselect the previous row
+                    $scope.isMaterialRowSelected = false;
                 }
 
                 row.selected = true;  // Select the current row
                 $scope.selectedRow = row;
                 $scope.isRowSelected = true;  // Set the current row as the selected one
 
-                $scope.VendorCSAprv.VendorCSAprvID = row.VendorCSAprvID;
+               /* $scope.VendorCSAprv.VendorCSAprvID = row.VendorCSAprvID;*/
                 $scope.VendorCSAprv.VendorReqID = row.VendorRequisitionNumber;
                 $scope.VendorCSAprv.ClientReqNo = row.ClientRequisitionNumber;
                 $scope.VendorCSAprv.ClientReqID = row.ClientReqID;
                 $scope.VendorCSAprv.ClientID = row.ClientID;
-                $http.post('/VendorCSAprv/GetMaterialByRequisition',
+                $http.post('/VendorCSAprv/GetMaterialByRequisitionAud',
                     { VendorRequisitionNumber: row.VendorRequisitionNumber })
                     .success(function (response) {
                         $scope.ReqWiseMaterialList = response.ReqWiseMaterialList;

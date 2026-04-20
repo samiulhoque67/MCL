@@ -29,6 +29,8 @@ namespace SILDMS.Service.VendorCSActualAprv
         ValidationResult GetAllCSRecDataforVerify(string userID, out List<Invitation> invitationList);
         ValidationResult GetAllApprovedData(string userID, out List<Invitation> invitationList);
         ValidationResult GetMaterialByRequisition(string vendorRequisitionNumber, out List<OBS_VendorCSAprvItem> reqWiseMaterialList);
+        ValidationResult GetMaterialByRequisitionAud(string vendorRequisitionNumber, out List<OBS_VendorCSAprvItem> reqWiseMaterialList);
+        ValidationResult GetMaterialByRequisitionAcc(string vendorRequisitionNumber, out List<OBS_VendorCSAprvItem> reqWiseMaterialList);
         ValidationResult GetVendorByMaterialService(string vendorReqID, string serviceItemID, out List<OBS_VendorCSAprvItem> matWiseVendorList);
         ValidationResult SearchCSService(string userID, out List<Invitation> searchCSList);
         ValidationResult CSVendorService(string userID, string cSNumber, out List<OBS_VendorCSRecmItem> vendorCSList);

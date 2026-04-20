@@ -412,7 +412,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <th style="text-align: left;" st-sort="">Vat(%)</th>
                             <th style="text-align: left;" st-sort="">Vat Amt</th>
                             <th style="text-align: left;" st-sort="">Tol Amt</th>
-                            <th style="text-align: left;">Action</th>
+                            @*<th style="text-align: left;">Action</th>*@
                         </tr>
 
                     </thead>
@@ -440,11 +440,11 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             </td>
                             <td class="col-lg-1" style="width:5%;">{{row.VatAmt}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.TolAmt}}</td>
-                            <td class="col-lg-1" style="width:5%;">
+                            @*<td class="col-lg-1" style="width:5%;">
                                 <button type="button" ng-if="row.VendorQutnItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                 <button type="button" ng-if="!row.VendorQutnItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
                                 <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqItemDelete(row,$index)"><i class="fa fa-remove"></i> </button>
-                            </td>
+                            </td>*@
                         </tr>
                     </tbody>
                     <tfoot>
@@ -1433,20 +1433,101 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
         ///////////////////////////////////////////////
 
+        //$scope.Post = function () {
+
+        //    if ($('#VendorName').val() == "") {
+        //        toastr.error("Vendor Name Required");
+        //        return;
+        //    }
+
+        //    if ($('#VendorQutnNo').val() == "") {
+        //        toastr.error("Vendor QutnNo.  Required");
+        //        return;
+        //    }
+
+        //    if ($('#ReceivedDate').val() == "") {
+        //        toastr.error("Submission Date Required.");
+        //        return;
+        //    }
+
+            //if ($('#QuotationDate').val() == "") {
+            //    toastr.error("Quotation Date Required");
+            //    return;
+            //}
+
+            //if ($('#QutnReceivedDate').val() == "") {
+            //    toastr.error("Qutn. Received Date Required");
+            //    return;
+            //}
+
+        //    $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
+        //    $scope.VendorQutn.QutnReceivedDate = $('#QutnReceivedDate').val();
+
+        //    $http.post('/VendorQuotation/SaveVendorQuotation',
+        //        {
+        //            vendorQutn: $scope.VendorQutn,
+        //            vendorQutnItem: $scope.GridDisplayCollection,//$scope.vendorQutnItemArray,
+        //            vendorQutnTerm: $scope.ReqTermGridDisplayCollection
+        //        })
+        //        .success(function (response) {
+        //            if (response.status == "S201") {
+        //                toastr.success("Data Saved Successfully.");
+        //                if ($scope.uploadedFile) {
+        //                    $scope.SaveDocument(response.VendorQutnID);
+        //                }
+        //                $scope.clearVendorQutn();
+        //                window.location.reload();
+        //                $scope.loading = false;
+        //                return;
+        //            }
+        //            else if (response.status == "S202") {
+        //                toastr.success("Data Updated Successfully.");
+        //                $scope.clearVendorQutn();
+        //                $scope.loading = false;
+        //                return;
+        //            }
+        //            else if (response.status == "S203") {
+        //                toastr.success("Data Deleted Successfully.");
+        //                $scope.clearVendorQutn();
+        //                $scope.loading = false;
+        //                return;
+        //            }
+        //            else if (response.status == "ERROR_Duplicate") {
+        //                toastr.error("This quotation no. already exists");
+        //                $scope.loading = false;
+        //                return;
+        //            }
+        //            else {
+        //                toastr.error("Data Save Failed.");
+        //                $scope.loading = false;
+        //                return;
+        //            }
+        //        })
+        //        .error(function () {
+        //            toastr.error("Data Save Failed.");
+        //            $scope.loading = false;
+        //            return;
+        //        });
+        //}
+
+
+
+
+
+
+
         $scope.Post = function () {
 
-            if ($('#VendorName').val() == "") {
+            // =========================
+            // 🔹 HEADER VALIDATION
+            // =========================
+            if (!$('#VendorName').val()) {
                 toastr.error("Vendor Name Required");
                 return;
             }
 
-            if ($('#VendorQutnNo').val() == "") {
-                toastr.error("Vendor QutnNo.  Required");
-                return;
-            }
-
-            if ($('#ReceivedDate').val() == "") {
-                toastr.error("Submission Date Required.");
+            if (!$('#VendorQutnNo').val()) {
+                toastr.error("Vendor QutnNo. Required");
                 return;
             }
 
@@ -1460,55 +1541,95 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 return;
             }
 
+            // Assign dates
             $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
             $scope.VendorQutn.QutnReceivedDate = $('#QutnReceivedDate').val();
+
+            // =========================
+            // 🔴 GRID VALIDATION
+            // =========================
+
+            function isNumber(val) {
+                return val !== null && val !== undefined && val !== "" && !isNaN(val);
+            }
+
+            var invalidRows = [];
+
+            $scope.GridDisplayCollection.forEach(function (row) {
+
+                row.isInvalid = false;
+
+                if (!isNumber(row.QutnAmt) ||
+                    !isNumber(row.VatPerc) ||
+                    !isNumber(row.VatAmt) ||
+                    !isNumber(row.TolAmt)) {
+
+                    row.isInvalid = true;
+                    invalidRows.push(row);
+                }
+            });
+
+            if (invalidRows.length > 0) {
+                toastr.error("All rows must have valid Qutn Amount, VAT %, VAT Amount, and Total Amount.");
+                return;
+            }
+
+            // =========================
+            // 🚀 API CALL
+            // =========================
+
+            $scope.loading = true;
 
             $http.post('/VendorQuotation/SaveVendorQuotation',
                 {
                     vendorQutn: $scope.VendorQutn,
-                    vendorQutnItem: $scope.GridDisplayCollection,//$scope.vendorQutnItemArray,
+                    vendorQutnItem: $scope.GridDisplayCollection,
                     vendorQutnTerm: $scope.ReqTermGridDisplayCollection
                 })
                 .success(function (response) {
+
+                    $scope.loading = false;
+
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
+
                         if ($scope.uploadedFile) {
                             $scope.SaveDocument(response.VendorQutnID);
                         }
+
                         $scope.clearVendorQutn();
                         window.location.reload();
-                        $scope.loading = false;
                         return;
                     }
-                    else if (response.status == "S202") {
+
+                    if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
                         $scope.clearVendorQutn();
-                        $scope.loading = false;
                         return;
                     }
-                    else if (response.status == "S203") {
+
+                    if (response.status == "S203") {
                         toastr.success("Data Deleted Successfully.");
                         $scope.clearVendorQutn();
-                        $scope.loading = false;
                         return;
                     }
-                    else if (response.status == "ERROR_Duplicate") {
+
+                    if (response.status == "ERROR_Duplicate") {
                         toastr.error("This quotation no. already exists");
-                        $scope.loading = false;
                         return;
                     }
-                    else {
-                        toastr.error("Data Save Failed.");
-                        $scope.loading = false;
-                        return;
-                    }
+
+                    toastr.error("Data Save Failed.");
                 })
                 .error(function () {
-                    toastr.error("Data Save Failed.");
                     $scope.loading = false;
-                    return;
+                    toastr.error("Data Save Failed.");
                 });
-        }
+        };
+
+
+
+
 
 
         $scope.DocCrudStatus = "";

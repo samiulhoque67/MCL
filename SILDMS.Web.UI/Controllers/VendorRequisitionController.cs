@@ -83,18 +83,26 @@ namespace SILDMS.Web.UI.Controllers
 
         public async Task<dynamic> SaveVendorRequisition(OBS_VendorReq vendorReq, List<OBS_VendorReqItem> vendorReqItem, List<OBS_VendorReqTerms> vendorReqTerm, List<OBS_VendorReqItemWise> vendorReqItemWise)
         {
-
-            vendorReq.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
-            status = _clientInfoService.SaveVendorRequisition(vendorReq, vendorReqItem, vendorReqTerm, vendorReqItemWise);
 
-            if (status != string.Empty)
+            if (string.IsNullOrEmpty(vendorReq.VendorReqID))
             {
-                string[] statusarr = status.Split(',');
-                vendorReq.VendorReqID = statusarr[1];
-                status = statusarr[0];
+                vendorReq.SetBy = UserID;
+                status = _clientInfoService.SaveVendorRequisition(vendorReq, vendorReqItem, vendorReqTerm, vendorReqItemWise);
+
+                if (status != string.Empty)
+                {
+                    string[] statusarr = status.Split(',');
+                    vendorReq.VendorReqID = statusarr[1];
+                    status = statusarr[0];
+                }
+                TempData["VendorRequisition"] = vendorReq;
             }
-            TempData["VendorRequisition"] = vendorReq;
+            else
+            {
+                status = "S202";
+                TempData["VendorRequisition"] = vendorReq;
+            }
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
@@ -133,7 +141,7 @@ namespace SILDMS.Web.UI.Controllers
             DataTable dtVR = ds.Tables[0];
             reportDocument.SetDataSource(dtVR);
             reportDocument.Refresh();
-            
+
             string reportName = "VendorRequisition";
             reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
 

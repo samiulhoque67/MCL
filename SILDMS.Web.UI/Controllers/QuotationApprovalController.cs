@@ -37,6 +37,11 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
+        public ActionResult AllClientQuotationApprovalData()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<dynamic> AllAvailableClients(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action)
         {
