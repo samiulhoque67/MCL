@@ -628,7 +628,7 @@ namespace SILDMS.DataAccess
                     {
 
 
-                        VendorCSInfoID = reader.GetString("VendorCSRecmItemID"),
+                        VendorCSInfoID = reader.GetString("VendorCSRecmID"),
                         VendorCSInfoItemID = reader.GetString("VendorCSRecmItemID"),
                         ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),

@@ -881,7 +881,7 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
 
 
                         VendorCSInfoID = reader.GetString("VendorCSAprvID"),
-                        //VendorCSInfoItemID = reader.GetString("VendorCSAprvItemID"),
+                        VendorCSInfoItemID = reader.GetString("VendorCSAprvItemID"),
                         ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
