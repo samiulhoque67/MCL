@@ -198,21 +198,22 @@ namespace SILDMS.Web.UI.Controllers
         [HttpGet]
         public ActionResult ViewDocument(string serverIP, string ftpPort, string ftpUserName, string ftpPassword, string serverUrl, string DocID, string ext)
         {
-
             try
             {
+                // Always take from config (ignore frontend values)
                 serverIP = ConfigurationManager.AppSettings["serverIP"];
                 ftpPort = ConfigurationManager.AppSettings["ftpPort"];
                 ftpUserName = ConfigurationManager.AppSettings["ftpUserName"];
                 ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
 
-                // Ensure the extension starts with a dot
+                if (string.IsNullOrEmpty(DocID))
+                    return new HttpStatusCodeResult(400, "Invalid document ID.");
+
+                // Ensure extension starts with "."
                 if (!ext.StartsWith(".")) ext = "." + ext;
 
-                // Construct the FTP URL correctly
                 string ftpUrl = $"ftp://{serverIP}:{ftpPort}/{serverUrl}/{DocID}{ext}";
 
-                // Create an FTP request to download the file
                 FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpUrl);
                 ftpRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
                 ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
@@ -222,13 +223,17 @@ namespace SILDMS.Web.UI.Controllers
                 using (FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse())
                 using (Stream responseStream = ftpResponse.GetResponseStream())
                 {
+                    // 🔴 File not found or empty
                     if (responseStream == null)
-                        return new HttpStatusCodeResult(404, "File not found on the FTP server.");
+                        return new HttpStatusCodeResult(404, "Document not found.");
 
                     using (MemoryStream memoryStream = new MemoryStream())
                     {
                         responseStream.CopyTo(memoryStream);
                         byte[] fileData = memoryStream.ToArray();
+
+                        if (fileData == null || fileData.Length == 0)
+                            return new HttpStatusCodeResult(404, "Document is empty or not found.");
 
                         return File(fileData, "application/pdf");
                     }
@@ -236,11 +241,32 @@ namespace SILDMS.Web.UI.Controllers
             }
             catch (WebException webEx)
             {
-                return new HttpStatusCodeResult(500, $"FTP error: {webEx.Message}");
+                var response = webEx.Response as FtpWebResponse;
+
+                if (response != null)
+                {
+                    // 🔴 Handle FTP-specific errors
+                    if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                    {
+                        return new HttpStatusCodeResult(404, "Document not found on server.");
+                    }
+
+                    if (response.StatusCode == FtpStatusCode.NotLoggedIn)
+                    {
+                        return new HttpStatusCodeResult(401, "FTP authentication failed.");
+                    }
+
+                    if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailableOrBusy)
+                    {
+                        return new HttpStatusCodeResult(404, "Document currently unavailable.");
+                    }
+                }
+
+                return new HttpStatusCodeResult(500, "FTP connection error.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return new HttpStatusCodeResult(500, $"Error retrieving document: {ex.Message}");
+                return new HttpStatusCodeResult(500, "Unexpected error occurred while retrieving document.");
             }
         }
 
