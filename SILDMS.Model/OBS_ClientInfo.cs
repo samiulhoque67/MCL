@@ -43,6 +43,7 @@ namespace SILDMS.Model
         public string RequisitionDate { get; set; }
         public string ServiceCategoryID { get; set; }
         public string ClientReqID { get; set; }
+        public string Remarks { get; set; }
     }
 
     public class OBS_ClientwithReqQoutn
@@ -113,7 +114,7 @@ namespace SILDMS.Model
         public string QuotationDate { get; set; }
         public string ReqType { get; set; }
         public string VendorName { get; set; }
- 
+        public string Operation { get; set; }
     }
 
     public class OBS_QutntoClientMaster

@@ -63,7 +63,7 @@
                     </button>
                 </div>
 
-                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px; display: none">
                     @using (Html.BeginForm("RequisitionToVendorReport", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
                     {
                         <button type="submit" id="btnSubmit" name="ReportType" class="button-custom btn-success">
@@ -130,6 +130,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <input id="SubmissionDate" autocomplete="off" name="SubmissionDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorReq.SubmissionDate" />
+                        <input type="hidden" id="VendorReqID" name="VendorReqID" ng-model="VendorReq.VendorReqID" />
                     </div>
                 </div>
                 @*<div class="col-lg-3">
@@ -280,7 +281,7 @@
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ContactNumber')">Contact Number</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Email')">Email</th>
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>*@
                                 <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
                             <tr>
@@ -299,11 +300,11 @@
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ContactNumber}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.Email}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.Address}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
                                     <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
                                         {{row.Status == '1'? 'Active':'InActive'}}
                                     </span>
-                                </td>
+                                </td>*@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorSelect(row)"><i class="fa fa-edit"></i> Select</button>
                                 </td>
@@ -344,11 +345,11 @@
 
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
                                 <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('VendorName')">Client Name</th>
-                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('RequisitionNo')">Requisition No</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
+                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('Remarks')">Project Name</th>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('RequisitionDate')">Requisition Date</th>*@
                                 <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('SubmissionDate')">Submission Date</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('LastDateofQuotation')">Last Date of Quotation</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('LastDateofQuotation')">Last Date of Quotation</th>*@
+                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>*@
                                 <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
 
@@ -358,17 +359,16 @@
                                 <td class="hidden">{{row.VendorReqID}}</td>
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.RequisitionNo}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.RequisitionDate}}</td>
+                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.Remarks}}</td>
+                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.RequisitionDate}}</td>*@
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.SubmissionDate}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.LastDateofQuotation}}</td>
-                                <td class="hidden">{{row.Remarks}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                    <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                        {{row.Status == '1'? 'Active':'InActive'}}
-                                    </span>
-                                </td>
-
+                                <!--<td class="col-lg-1 col-md-1 col-sm-1 text-center">-->@*{{row.LastDateofQuotation}}*@<!--</td>-->
+                                <td class="hidden">{{row.RequisitionNo}}</td>
+                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
+                                            {{row.Status == '1'? 'Active':'InActive'}}
+                                        </span>
+                                    </td>*@
                                 <td>
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleVendorReqSelect(row)">Select</a>
                                 </td>
