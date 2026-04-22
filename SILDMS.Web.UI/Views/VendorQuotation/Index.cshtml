@@ -225,13 +225,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         </label>
                     </div>
                 </div>
-                <div ng-show="vendorQutnDisplayedCollection.length <= 0" class="col-lg-3">
+                <div ng-hide="viewmode" class="col-lg-3">
                     <div class="form-group">
                         <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1" accept=".pdf"
                                ng-model="uploadedFile" onchange="angular.element(this).scope().fileSelected(this)" />
                     </div>
                 </div>
-                <div ng-show="vendorQutnDisplayedCollection.length > 0" class="col-lg-1">
+                <div ng-show="viewmode" class="col-lg-1">
                     <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
 
                 </div>
@@ -1047,6 +1047,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         }
 
         $scope.ShowVendorReqList = function () {
+
+            $scope.viewmode = false;
             $http.get("/VendorQuotation/GetShowVendorReqList")
                 .success(function (response) {
                     $scope.VendorReqList = response.VendorReqList;
@@ -1237,7 +1239,12 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
         ////////////////////////Select for Update from Search grid ///////////////////////
 
+        $scope.viewmode = false;
+
         $scope.toggleVendorQutnSelect = function (tableRow) {
+
+            $scope.viewmode = true;
+
             $scope.VendorQutn.VendorQutnID = tableRow.VendorQutnID;
             $scope.VendorQutn.ClientID = tableRow.ClientID;
             $scope.VendorQutn.ClientName = tableRow.ClientName;
@@ -1430,89 +1437,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 $scope.uploadedFile = element.files.length > 0 ? element.files[0] : null;
             });
         };
-
-        ///////////////////////////////////////////////
-
-        //$scope.Post = function () {
-
-        //    if ($('#VendorName').val() == "") {
-        //        toastr.error("Vendor Name Required");
-        //        return;
-        //    }
-
-        //    if ($('#VendorQutnNo').val() == "") {
-        //        toastr.error("Vendor QutnNo.  Required");
-        //        return;
-        //    }
-
-        //    if ($('#ReceivedDate').val() == "") {
-        //        toastr.error("Submission Date Required.");
-        //        return;
-        //    }
-
-            //if ($('#QuotationDate').val() == "") {
-            //    toastr.error("Quotation Date Required");
-            //    return;
-            //}
-
-            //if ($('#QutnReceivedDate').val() == "") {
-            //    toastr.error("Qutn. Received Date Required");
-            //    return;
-            //}
-
-        //    $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
-        //    $scope.VendorQutn.QutnReceivedDate = $('#QutnReceivedDate').val();
-
-        //    $http.post('/VendorQuotation/SaveVendorQuotation',
-        //        {
-        //            vendorQutn: $scope.VendorQutn,
-        //            vendorQutnItem: $scope.GridDisplayCollection,//$scope.vendorQutnItemArray,
-        //            vendorQutnTerm: $scope.ReqTermGridDisplayCollection
-        //        })
-        //        .success(function (response) {
-        //            if (response.status == "S201") {
-        //                toastr.success("Data Saved Successfully.");
-        //                if ($scope.uploadedFile) {
-        //                    $scope.SaveDocument(response.VendorQutnID);
-        //                }
-        //                $scope.clearVendorQutn();
-        //                window.location.reload();
-        //                $scope.loading = false;
-        //                return;
-        //            }
-        //            else if (response.status == "S202") {
-        //                toastr.success("Data Updated Successfully.");
-        //                $scope.clearVendorQutn();
-        //                $scope.loading = false;
-        //                return;
-        //            }
-        //            else if (response.status == "S203") {
-        //                toastr.success("Data Deleted Successfully.");
-        //                $scope.clearVendorQutn();
-        //                $scope.loading = false;
-        //                return;
-        //            }
-        //            else if (response.status == "ERROR_Duplicate") {
-        //                toastr.error("This quotation no. already exists");
-        //                $scope.loading = false;
-        //                return;
-        //            }
-        //            else {
-        //                toastr.error("Data Save Failed.");
-        //                $scope.loading = false;
-        //                return;
-        //            }
-        //        })
-        //        .error(function () {
-        //            toastr.error("Data Save Failed.");
-        //            $scope.loading = false;
-        //            return;
-        //        });
-        //}
-
-
-
-
 
 
 
