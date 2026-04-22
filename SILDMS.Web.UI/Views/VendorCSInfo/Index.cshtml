@@ -923,6 +923,22 @@
         $scope.selectedMaterialRow = null;  // Track the selected row for material list
         $scope.isMaterialRowSelected = false;
         $scope.selectMaterial = function (row) {
+
+
+
+            $scope.ReqTermDataSetupGridData = [];
+            $scope.ReqTermGridDisplayCollection = [];
+
+
+            $scope.VendorCSInfo.VendorCsRecmName = "";
+            $scope.VendorCSInfo.CSRecmVendorID = "";
+            $scope.VendorCSInfo.Operation = "";
+            $scope.VendorCSInfo.Remarks = "";
+
+            $scope.selectedVendors = [];
+
+
+
             // If the clicked row is already selected, deselect it
             if ($scope.selectedMaterialRow === row) {
                 row.selected = false;
@@ -968,81 +984,12 @@
 
         $scope.selectedVendors = [];  // Array to hold selected vendor items
 
-        //$scope.selectVendor = function (row) {
-        //    var selectedVendorItem = {
-        //        ServiceCategoryID: row.ServiceCategoryID,
-        //        ServiceCategoryName: row.ServiceCategoryName,
-        //        ServiceItemID: row.ServiceItemID,
-        //        ServiceItemName: row.ServiceItemName,
-        //        Description: row.Description,
-        //        DeliveryLocation: row.DeliveryLocation,
-        //        DeliveryDate: row.DeliveryDate,                // Date object
-        //        Delivery_DateString: row.DeliveryDateString,    // Formatted string (e.g., 'yyyy/MM/dd')
-        //        DeliveryMode: row.DeliveryMode,
-        //        ReqQnty: row.ReqQnty,
-        //        ReqUnit: row.ReqUnit,
-        //        VendorQutnNo: row.VendorQutnNo,
-        //        VendorQutnID: row.VendorQutnID,
-        //        VendorID: row.VendorID,
-        //        VendorName: row.VendorName,
-
-        //        QutnQnty: row.QutnQnty,
-        //        NegoQty: row.NegoQty,
-        //        QutnPrice: row.QutnPrice,
-        //        NegoPrice: row.NegoPrice,
-        //        QutnUnit: row.QutnUnit,
-        //        QutnAmt: row.QutnAmt,
-        //        NegoAmt: row.NegoAmt,
-
-        //        VatPerc: row.VatPerc,
-        //        VatAmt: row.VatAmt,
-        //        NegoVatAmt: row.NegoVatAmt,
-        //        TolAmt: row.TolAmt,
-        //        NegoTolAmt: row.NegoTolAmt
-        //    };
-
-        //    // Check if this vendor is already selected
-        //    if (row.selected) {
-        //        $scope.VendorCSInfo.VendorName = row.VendorName;
-        //        // Deselect the vendor and remove it from the selected array
-        //        row.selected = false;
-        //        $scope.ReqTermGridDisplayCollection = [];
-
-        //        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-        //        var index = $scope.selectedVendors.findIndex(function (vendor) {
-        //            return vendor.VendorQutnID === row.VendorQutnID;
-        //        });
-        //        if (index !== -1) {
-        //            $scope.selectedVendors.splice(index, 1);  // Remove from selected array
-        //        }
-        //        $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.filter(function (term) {
-        //            return term.VendorQutnID !== row.VendorQutnID;
-        //        });
-        //        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-        //    } else {
-        //        // Select the vendor and add it to the selected array
-        //        row.selected = true;
-
-        //        $scope.VendorCSInfo.VendorName = row.VendorName;
-        //        $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: row.VendorQutnID })
-        //            .success(function (response) {
-        //                // Concatenate the new data with the existing data
-        //                $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.concat(response.VendorCSInfoTermList);
-        //                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-        //                $scope.loading = false;
-        //            }).error(function () {
-        //                $scope.loading = false;
-        //            });
-
-        //        $scope.selectedVendors.push(selectedVendorItem);  // Add to selected array
-        //    }
-        //};
-
-
-
 
 
         $scope.selectVendor = function (row) {
+
+            $scope.VendorCSInfo.VendorCSRecmID = "";
+            $scope.VendorCSInfo.VendorCsRecmName = "";
 
             var id = row.VendorQutnID;
 
@@ -1812,7 +1759,7 @@
             }
 
             if ($('#VendorCsRecmName').val() == "") {
-                toastr.error("CS Vendor is  Required");
+                toastr.error("CS Recm. Vendor is  Required");
                 return;
             }
 
@@ -1982,23 +1929,17 @@
         };
 
         $scope.ShowVendorList = function () {
-            $scope.MatWiseVendorList1 = [];
-            $scope.MatWiseVendorListCollection1 = [];
 
-            $http.post('/VendorCSInfo/GetVendorByMaterial',
-                {
-                    VendorReqID: $scope.VendorCSInfo.VendorReqID,
-                    ServiceItemID: $scope.VendorCSInfo.ServiceItemID
-                })
-                .success(function (response) {
-                    $scope.MatWiseVendorList1 = response.MatWiseVendorList;
-                    $scope.MatWiseVendorListCollection1 = [].concat($scope.MatWiseVendorList1);
-                    console.log($scope.MatWiseVendorListCollection1);
-                    $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
+            if ($scope.selectedVendors.length <= 0) {
+                toastr.error("Please check a vendor first");
+                return;
+            }
 
+            // ✅ Only show selected vendors
+            $scope.MatWiseVendorList1 = [].concat($scope.selectedVendors);
+            $scope.MatWiseVendorListCollection1 = [].concat($scope.selectedVendors);
+
+            console.log($scope.MatWiseVendorListCollection1);
 
             $('#VendorInfoModal').modal('show');
         };
