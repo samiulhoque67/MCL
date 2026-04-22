@@ -350,98 +350,110 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         </div>
     </div>
 
-
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px;">
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="GridDisplayCollection" st-safe-src="masterDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
+
+                <table st-table="GridDisplayCollection" st-safe-src="masterDataSetupGridData"
+                       class="table table-condensed table-bordered table-striped table-hover pnlView">
+
                     <thead>
                         <tr style="font-size: 15px;">
-                            <th colspan="15" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                            <th colspan="16" class="text-left"
+                                style="color: black; font-weight: 100; font-family: math; background: #ffffff;text-align:left; border: 1px solid #3003eb">
                                 Work Order Item List
                             </th>
 
-                            <th style="background: #ffffff;">
-                                <button type="button" id="btnAddWoItem" ng-disabled="btnAddWoItem" ng-click="AddWoItemModal()" class="button-detail btn">
-                                    <i class="fa fa-plus" style="padding-right: 3px"></i> Add
+                            @*<th style="background: #ffffff;">
+                                <button type="button" id="btnAddWoItem" ng-disabled="btnAddWoItem"
+                                        ng-click="AddWoItemModal()" class="button-detail btn">
+                                    <i class="fa fa-plus"></i> Add
                                 </button>
-                            </th>
+                            </th>*@
                         </tr>
+
                         <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                            <th class="text-center">Item Code</th>
+                            <th class="text-center">Item Name</th>
+                            <th class="text-center">Service Category</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Delivery Date</th>
 
-                            <th style="text-align: left;" st-sort="">Item Code</th>
-                            <th style="text-align: left;" st-sort="">Item Name</th>
-                            <th style="text-align: left;" st-sort="">Service Category</th>
-                            <th style="text-align: left;" st-sort="">Description</th>
-                            @*<th style="text-align: left;" st-sort="">Delivery Location</th>*@
-                            <th style="text-align: left;" st-sort="">Delivery Date</th>
-                            @*<th style="text-align: left;" st-sort="">Delivery Mode</th>*@
-                            <th style="text-align: left;" st-sort="">QutnUnit</th>
-                            <th style="text-align: left;" st-sort="">QutnQnty</th>
-                            <th style="text-align: left;" st-sort="">QutnPrice</th>
-                            <th style="text-align: left;" st-sort="">QutnAmt</th>
+                            <th class="text-center">Quotation Unit</th>
+                            <th class="text-center">Quotation Qty</th>
+                            <th class="text-center">Quotation Price</th>
+                            <th class="text-center">Quotation Amount</th>
 
-                            <th style="text-align: left;" st-sort="">WOQnty</th>
-                            <th style="text-align: left;" st-sort="">WOPrice</th>
-                            <th style="text-align: left;" st-sort="">WOAmt</th>
+                            <th class="text-center">WO Qty</th>
+                            <th class="text-center">WO Price</th>
+                            <th class="text-center">WO Amount</th>
 
-                            <th style="text-align: left;" st-sort="">VatPerc</th>
-                            <th style="text-align: left;" st-sort="">VatAmt</th>
-                            <th style="text-align: left;" st-sort="">TolAmt</th>
-                            <th class="col-lg-2" style="text-align: left;">Action</th>
+                            <th class="text-center">VAT (%)</th>
+                            <th class="text-center">VAT Amount</th>
+                            <th class="text-center">Total Amount</th>
+
+                            <th class="text-center">Action</th>
                         </tr>
-                        @*<tr>
-                                <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-                            </tr>*@
                     </thead>
+
                     <tbody>
                         <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;">
+
+                            <!-- hidden -->
                             <td class="hidden">{{row.ClientQutnAprvItemID}}</td>
                             <td class="hidden">{{row.WOInfoItemID}}</td>
                             <td class="hidden">{{row.WOInfoID}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{ row.ServiceItemID }} </td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.ServiceCategoryName}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.Description}}</td>
-                            @*<td class="col-lg-1" style="width:6%;">{{row.DeliveryLocation}}</td>*@
-                            <td class="col-lg-1" style="width:6%;">{{row.DeliveryDate}}</td>
-                            @*<td class="col-lg-1" style="width:6%;">{{row.DeliveryMode}}</td>*@
-                            <td class="col-lg-1" style="width:5%;">{{row.QutnUnit}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnQnty | number:2}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.QutnPrice}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.QutnAmt | number:2}}</td>
 
-                            <td class="col-lg-1">
-                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.WOQnty" ng-blur="checkWOPrice(row)" />
+                            <!-- text fields -->
+                            <td class="text-left">{{row.ServiceItemID}}</td>
+                            <td class="text-left">{{row.ServiceItemName}}</td>
+                            <td class="text-left">{{row.ServiceCategoryName}}</td>
+                            <td class="text-left">{{row.Description}}</td>
+                            <td class="text-center">{{row.DeliveryDate}}</td>
+
+                            <!-- quotation -->
+                            <td class="text-left">{{row.QutnUnit}}</td>
+                            <td class="text-right">{{row.QutnQnty | number:2}}</td>
+                            <td class="text-right">{{row.QutnPrice | number:2}}</td>
+                            <td class="text-right">{{row.QutnAmt | number:2}}</td>
+
+                            <!-- WO editable -->
+                            <td>
+                                <input class="form-control text-right"
+                                       style="width:100%; height:18px;font-size:10px"
+                                       type="text" min="0"
+                                       ng-model="row.WOQnty"
+                                       ng-blur="checkWOPrice(row)" />
                             </td>
-                            <td class="col-lg-1">
-                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.WOPrice" ng-blur="checkWOPrice(row)" />
+
+                            <td>
+                                <input class="form-control text-right"
+                                       style="width:100%; height:18px;font-size:10px"
+                                       type="text" min="0"
+                                       ng-model="row.WOPrice"
+                                       ng-blur="checkWOPrice(row)" />
                             </td>
-                            <td class="col-lg-1" style="width:6%;">{{row.WOAmt | number:2}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.VatPerc | number:2}}</td>
-                            @*<td class="col-lg-1">
-                                    <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.VatPerc" ng-value="0" ng-blur="checkVatPerc(row)" />
-                                </td>*@
-                            <td class="col-lg-1" style="width:6%;">{{row.VatAmt | number:2}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.TolAmt}}</td>
-                            <td class="col-lg-2">
-                                <button type="button" ng-click="selectWoItem(row)" data-dismiss="modal" title="Select">
+
+                            <td class="text-right">{{row.WOAmt | number:2}}</td>
+
+                            <!-- VAT -->
+                            <td class="text-right">{{row.VatPerc | number:2}}</td>
+                            <td class="text-right">{{row.VatAmt | number:2}}</td>
+
+                            <!-- total -->
+                            <td class="text-right">{{row.TolAmt | number:2}}</td>
+
+                            <!-- action -->
+                            <td class="text-center">
+                                <button type="button" ng-click="selectWoItem(row)" title="Select">
                                     <i ng-show="!row.selected" class="fa fa-square-o"></i>
                                     <i ng-show="row.selected" class="fa fa-check-square-o"></i>
                                 </button>
-                                @*</td>
-                                    <td class="col-lg-1" style="width:5%;">*@
-                                <button type="button" ng-if="row.WOInfoItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" ng-if="!row.WOInfoItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqItemDelete(row,$index)"><i class="fa fa-remove"></i> </button>
                             </td>
+
                         </tr>
                     </tbody>
-                    <tfoot>
-                        @*<tr>
-                                <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-                            </tr>*@
-                    </tfoot>
+
                 </table>
             </div>
         </div>
@@ -680,81 +692,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         </div>
     </div>
 
-    <!--<div class="row">
-        <div class="col-md-12">
-            <div class="box box-info" style="border-bottom: 1px solid #d3e3e3; ">
-                <div class="box-header with-border" style="height: 40px; border-bottom: 1px solid #d3e3e3;">-->
-    @*<h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>*@
-    <!--<div class="col-lg-3 ">
-        <div class="form-group">
-            <h2 class="box-title" style="font-family: Verdana; font-size: 16px; font-weight: bold; color: #166e19;">Terms & Conditions List</h2>
-        </div>
-    </div>-->
-    @*<div class="row">*@
-    <!--<div class="col-lg-3 ">
-        <div class="form-group">
-            <label for="TermsAndConditions">Terms & Coonditions List:</label>
-        </div>
-    </div>
-    <div class="col-lg-2">
-        <div class="form-group">
-            <input id="FormName" name="FormName" type="text" data-ng-model="WOInfo.FormName" class="form-control" ng-readonly="true" />
-        </div>
-    </div>
-    <div class="col-lg-1">
-        <button type="button" data-ng-click="ShowTermsConditionsList()" class="form-control">Search</button>
-    </div>-->
-    @*</div>*@
-    <!--<div class="box-tools pull-right">
-                        <div class="col-lg-12 pull-right">
-                            <div class="btn-group pull-right" style="margin:2px;">
-                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" data-ng-click="AddReqTermModal()" class="button-detail btn"><i class="fa fa-plus" style="padding-right: 3px"></i>Add</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
-        <div class="row">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;" st-sort="">Terms Code</th>
-                            <th style="text-align: left;" st-sort="">Terms & Conditions</th>
-                            <th style="text-align: left;">Action</th>
-                        </tr>-->
-    @*<tr>
-            <th colspan="5"><input st-search="" placeholder="Search" class="input-sm form-control" type="search" /></th>
-        </tr>*@
-    <!--</thead>
-    <tbody>
-        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-            <td class="hidden">{{row.WOInfoTermsID}}</td>
-            <td class="hidden">{{row.WOInfoID}}</td>
-            <td class="hidden">{{row.TermsID}}</td>
-            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-            <td class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
-
-            <td class="col-lg-1" style="width:5%;">
-                <button type="button" ng-if="row.WOInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                <button type="button" ng-if="!row.WOInfoTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
-            </td>
-        </tr>
-    </tbody>
-    <tfoot>-->
-    @*<tr>
-            <td colspan="11" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div></td>
-        </tr>*@
-    <!--</tfoot>
-                </table>
-            </div>
-        </div>
-    </div>-->
+   
 
     <div class="row">
 
@@ -821,63 +759,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         </div>
     </div>
 
-    @* <div id="RequisitionTermModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="row">
-                            <div class="col-sm-5 col-md-5 col-lg-5">
-                                <h3 class="modal-title">Terms & Conditions Information</h3>
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-
-                            </div>
-                            <div class="col-sm-1 col-md-1 col-lg-1">
-                                <button type="button" class="close" data-dismiss="modal" ng-click="ResetReqTermModel()" aria-hidden="true" style="color:red;">x</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div ng-cloak>
-                        <div class="row">
-                            <div class="col-lg-1">
-                            </div>
-                            <div class="col-lg-2">
-                                <div class="form-group">
-                                    <label for="TermsCode">Terms & Conditions Code:</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <input id="TermsCode" type="text" name="TermsCode" ng-model="WOInfoTerm.TermsCode" class="form-control" autofocus />
-
-                                </div>
-                            </div>
-                            <div class="col-lg-2">
-                                <div class="form-group">
-                                    <label for="TermsName">Terms & Conditions:</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <input id="TermsName" type="text" name="TermsName" ng-model="WOInfoTerm.TermsName" class="form-control" autofocus />
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <div class="col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group">
-                                <div class="btn-group pull-right" style="margin:2px;">
-                                    <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>*@
 
     <div id="RequisitionTermModal" class="modal fade">
         <div class="modal-dialog">
