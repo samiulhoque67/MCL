@@ -56,6 +56,14 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
+        [HttpPost]
+        public async Task<dynamic> AvailableClientAprvInfo(string ClientID, string ClientReqID, string ReqType = null)
+        {
+            var ClientDetails = new List<OBS_ClientDetails>();  // Renamed to ClientDetails
+            await Task.Run(() => _quotationToClientService.AvailableClientAprvInfo(ClientID, ClientReqID, ReqType, out ClientDetails));
+            var result = Json(new { ClientDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
+            return result;
+        }
 
         [HttpPost]
         public async Task<dynamic> GetClientReqDataInfo(string ClientID, string ClientReqID, string ReqType)

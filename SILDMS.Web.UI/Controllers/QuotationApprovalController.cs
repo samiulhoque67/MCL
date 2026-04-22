@@ -52,10 +52,19 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
+        public async Task<dynamic> AllClientQuotationforApprvData(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action)
+        {
+            var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
+            await Task.Run(() => _quotationApprovalService.AllClientQuotationforApprvData(UserID, page, itemsPerPage, sortBy, reverse, search, type, action, out AllAvailableClientsList));
+            var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
+            return result;
+        }
+
+        [HttpPost]
         public async Task<dynamic> GetClientReqDataInfo(string ClientID, string ClientReqID)
         {
             var GetClientReqDetails = new List<ClientReqData>();  // Renamed to ClientDetails
-            await Task.Run(() => _quotationApprovalService.GetClientReqDataInfoService(ClientID, ClientReqID,  out GetClientReqDetails));
+            await Task.Run(() => _quotationApprovalService.GetClientReqDataInfoService(ClientID, ClientReqID, out GetClientReqDetails));
             var result = Json(new { GetClientReqDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
             return result;
         }
@@ -63,7 +72,7 @@ namespace SILDMS.Web.UI.Controllers
         [HttpPost]
         public async Task<dynamic> GetVendorTermList(string ClientQutnRecmID)
         {
-            
+
             var VendorTermTermList = new List<OBS_TermsItem>();  // Renamed to ClientDetails
             await Task.Run(() => _quotationApprovalService.GetVendorTermListService(ClientQutnRecmID, out VendorTermTermList));
             var result = Json(new { VendorTermTermList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
@@ -90,6 +99,25 @@ namespace SILDMS.Web.UI.Controllers
                     ClientQutnAprvID = statusarr[1];
                     status = statusarr[0];
                 }
+                TempData["ClientQutnAprvID"] = ClientQutnAprvID;
+                return Json(new { status, ClientQutnAprvID }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = "Error", message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SaveQuotToClientReport(List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl)
+        {
+            string ClientQutnAprvID = string.Empty;//, message = string.Empty;
+
+            try
+            {
+                ClientQutnAprvID = MasterData[0].ClientQutnAprvID;
+                string status = "202";
                 TempData["ClientQutnAprvID"] = ClientQutnAprvID;
                 return Json(new { status, ClientQutnAprvID }, JsonRequestBehavior.AllowGet);
             }

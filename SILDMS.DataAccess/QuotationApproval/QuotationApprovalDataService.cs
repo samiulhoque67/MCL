@@ -67,6 +67,53 @@ namespace SILDMS.DataAccess.QuotationApproval
             return AllAvailableClientsList;
         }
 
+        public List<OBS_ClientwithReqQoutn> AllClientQuotationforApprvData(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action, out string _errorNumber)
+        {
+            _errorNumber = string.Empty;
+            var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetAllClientQuotationforApprvData"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@page", SqlDbType.Int, page);
+                db.AddInParameter(dbCommandWrapper, "@itemsPerPage", SqlDbType.Int, itemsPerPage);
+                db.AddInParameter(dbCommandWrapper, "@sortBy", SqlDbType.NVarChar, sortBy);
+                db.AddInParameter(dbCommandWrapper, "@reverse", SqlDbType.Int, reverse ? 1 : 0);
+                db.AddInParameter(dbCommandWrapper, "@search", SqlDbType.NVarChar, search);
+                db.AddInParameter(dbCommandWrapper, "@type", SqlDbType.NVarChar, type.ToString());
+                db.AddInParameter(dbCommandWrapper, "@action", SqlDbType.NVarChar, action.ToString());
+                db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
+                dbCommandWrapper.CommandTimeout = 300;
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (!db.GetParameterValue(dbCommandWrapper, _spStatusParam).IsNullOrZero())
+                {
+                    _errorNumber = db.GetParameterValue(dbCommandWrapper, _spStatusParam).PrefixErrorCode();
+                }
+                else
+                {
+                    if (ds.Tables[0].Rows.Count <= 0) return AllAvailableClientsList;
+                    var dt1 = ds.Tables[0];
+                    AllAvailableClientsList = dt1.AsEnumerable().Select(reader => new OBS_ClientwithReqQoutn
+                    {
+                        ClientID = reader.GetString("ClientID"),
+                        ClientCode = reader.GetString("ClientCode"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        ClientName = reader.GetString("ClientName"),
+                        ClientReqNo = reader.GetString("ClientReqNo"),
+                        RequisitionDate = reader.GetString("RequisitionDate"),
+                        QuotationNo = reader.GetString("AutoQutnNo"),
+                        ClientAdvanceClaimDate = reader.GetString("QuotationDate"),
+                        RecmRemarks = reader.GetString("RecmRemarks"),
+                        AprvRemarks = reader.GetString("AprvRemarks")
+                    }).ToList();
+                }
+            }
+
+            return AllAvailableClientsList;
+        }
+
         public List<OBS_TermsItem> GetVendorTermListServiceData(string ClientQutnRecmID, out string _errorNumber)
         {
             _errorNumber = string.Empty;
