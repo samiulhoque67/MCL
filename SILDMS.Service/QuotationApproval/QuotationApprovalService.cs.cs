@@ -34,6 +34,15 @@ namespace SILDMS.Service.QuotationApproval
                 : ValidationResult.Success;
         }
 
+        ValidationResult IQuotationApprovalService.AllClientQuotationforApprvData(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action, out List<OBS_ClientwithReqQoutn> AllAvailableClientsList)
+        {
+            AllAvailableClientsList = _quotationApprovalDataService.AllClientQuotationforApprvData(UserId, page, itemsPerPage, sortBy, reverse, search, type, action, out _errorNumber);
+
+            return _errorNumber.Length > 0
+                ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
+                : ValidationResult.Success;
+        }
+
         ValidationResult IQuotationApprovalService.GetClientReqDataInfoService(string ClientID, string ClientReqID, out List<ClientReqData> GetClientReqDetails)
         {
             GetClientReqDetails = _quotationApprovalDataService.GetClientReqDataInfoDataService(ClientID, ClientReqID,  out _errorNumber);

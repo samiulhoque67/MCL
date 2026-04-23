@@ -44,6 +44,9 @@ namespace SILDMS.Model
         public string ServiceCategoryID { get; set; }
         public string ClientReqID { get; set; }
         public string Remarks { get; set; }
+        public string RecmRemarks { get; set; }
+        public string AprvRemarks { get; set; }
+        public string ClientQutnAprvID { get; set; }
     }
 
     public class OBS_ClientwithReqQoutn
@@ -69,6 +72,8 @@ namespace SILDMS.Model
         public string AdvancClaimAprvID { get; set; }
         public string ReqType { get; set; }
         public string AdvancClaimRcvdID { get; set; }
+        public string RecmRemarks { get; set; }
+        public string AprvRemarks { get; set; }
     }
 
 

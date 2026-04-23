@@ -11,6 +11,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
     {
         List<OBS_ClientInfo> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
         List<OBS_ClientDetails> AvailableClientDetailInfoDataService(string ClientID, string ClientReqID,string ReqType, out string _errorNumber);
+        List<OBS_ClientDetails> AvailableClientAprvInfo(string ClientID, string ClientReqID, string ReqType, out string _errorNumber);
         List<OBS_TermsItem> GetTermsConditionsListServiceData(string VendorCSAprvID, string ClientReqID, string ReqType, out string _errorNumber);
         List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, string ClientReqID, string ReqType, out string _errorNumber);
         List<ClientReqData>  GetClientReqDataItemPopupDataService(string VendorCSAprvID, string ServiceItemID, out string _errorNumber);
