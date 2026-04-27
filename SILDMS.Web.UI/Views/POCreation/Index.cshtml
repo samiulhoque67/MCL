@@ -633,17 +633,22 @@
                             </tr>
                         </thead>
                         <tbody>
-
                             <tr ng-repeat="row in SearchPOListCollection">
                                 <td class="text-center">{{$index+1}}</td>
                                 <td class="text-center">{{row.PoPreparationID}}</td>
-                                <td class="">{{row.ClientReqID}}</td>
-                                <td class="">{{row.VendorID}}</td>
-                                <td class="">{{row.VendorName}}</td>
-                                <td class="">{{row.PoDate}}</td>
-
+                                <td>{{row.ClientReqID}}</td>
+                                <td>{{row.VendorID}}</td>
+                                <td>{{row.VendorName}}</td>
+                                <td>{{row.PoDate}}</td>
                                 <td class="text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" data-ng-click="toggleCSSelect(row)">Select</a>
+                                </td>
+                            </tr>
+
+                            <!-- No Data Row -->
+                            <tr ng-if="!SearchPOListCollection || SearchPOListCollection.length === 0">
+                                <td colspan="7" class="text-center text-danger">
+                                    No item available
                                 </td>
                             </tr>
                         </tbody>
@@ -1673,7 +1678,8 @@
             row.NegoTolAmt = row.NegoAmt + row.NegoVatAmt;
         };
 
-
+        $scope.SearchPOList = [];
+        $scope.SearchPOListCollection = [];
 
         $scope.SearchPO = function () {
 
