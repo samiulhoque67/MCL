@@ -20,7 +20,7 @@
 
                     <div class="col-lg-4">
                     </div>
-                    
+
                     <div class="col-lg-2">
                         <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable()" class="button-custom pull-right" ng-disabled="loading">
                             <i class="fa fa-refresh"></i>
@@ -65,83 +65,107 @@
 
 
         /*vendorInfoModal*/
-
-
         <div id="SearchModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
+
                     <div class="modal-body table-responsive">
-                        <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
+
+                        <button type="button" class="close" data-dismiss="modal"
+                                ng-click="ResetSearchModel()" aria-hidden="true">
+                            x
+                        </button>
 
                         <div class="row">
-                            <table st-table="ListedVendorsCollection" st-safe-src="ListedVendorsList" style="width:100%" class="tableVen table-condensed table-bordered table-hover" style="font-size:smaller">
+
+                            <table st-table="ListedVendorsCollection"
+                                   st-safe-src="ListedVendorsList"
+                                   class="tableVen table-condensed table-bordered table-hover"
+                                   style="width:100%; font-size:smaller">
+
                                 <thead>
-                                    <tr style="font-size: 15px;">
-                                        <th colspan="11" style="text-align: left; color: white; font-weight: bold">Vendors</th>
-                                    </tr>
-                                    <tr style="background-color: #84c1ad; color: darkblue; font-size: 13px;">
-                                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('VendorCode')">
-                                            Vendor Code
-                                            <span ng-show="PagingInfo.sortBy == 'VendorCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                            <span ng-show="PagingInfo.sortBy == 'VendorCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                        </th>
-                                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('VendorName')">
-                                            Vendor Name
-                                            <span ng-show="PagingInfo.sortBy == 'VendorName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                            <span ng-show="PagingInfo.sortBy == 'VendorName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                        </th>
-                                        <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('VendorBussinessName')">
-                                            Vendor Business Name
-                                            <span ng-show="PagingInfo.sortBy == 'VendorBussinessName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                            <span ng-show="PagingInfo.sortBy == 'VendorBussinessName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                        </th>
-                                        <th>
-                                            Action
+                                    <tr>
+                                        <th colspan="4" style="text-align:left; font-weight:bold;">
+                                            Vendors
                                         </th>
                                     </tr>
+
+                                    <tr style="background-color:#84c1ad; color:darkblue; font-size:13px;">
+                                        <th>Vendor Code</th>
+                                        <th>Vendor Name</th>
+                                        <th>Vendor Business Name</th>
+                                        <th>Action</th>
+                                    </tr>
+
                                     <tr>
                                         <th>
-                                            <input st-search="VendorCode" placeholder="Vendor Code" class="input-sm form-control" type="search" />
+                                            <input st-search="VendorCode"
+                                                   placeholder="Vendor Code"
+                                                   class="input-sm form-control" />
                                         </th>
                                         <th>
-                                            <input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" />
+                                            <input st-search="VendorName"
+                                                   placeholder="Vendor Name"
+                                                   class="input-sm form-control" />
                                         </th>
                                         <th>
-                                            <input st-search="VendorBussinessName" placeholder="Vendor Bussiness Name" class="input-sm form-control" type="search" />
-
+                                            <input st-search="VendorBussinessName"
+                                                   placeholder="Business Name"
+                                                   class="input-sm form-control" />
                                         </th>
                                         <th></th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
                                     <tr ng-repeat="row in ListedVendorsCollection | orderBy:'IsBack':true">
                                         <td class="text-center">{{row.VendorCode}}</td>
                                         <td class="text-center">{{row.VendorName}}</td>
                                         <td class="text-center">{{row.VendorBussinessName}}</td>
-                                        <td class="col-lg-1 text-center">
-                                            <button type="button" id="btnSelect" ng-click="toggleSelectVendor(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
-                                                <span class="fa fa-search-plus"> View</span>
+
+                                        <td class="text-center">
+                                            <button type="button"
+                                                    ng-click="toggleSelectVendor(row, 'view')"
+                                                    class="button-custom">
+                                                <i class="fa fa-search-plus"></i> View
                                             </button>
                                         </td>
-
                                     </tr>
                                 </tbody>
+
+                                <!-- ✅ PAGINATION (10 items per page) -->
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <div st-pagination=""
+                                                 st-items-by-page="10"
+                                                 st-displayed-pages="10">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+
                             </table>
+
                         </div>
-                        <div ng-if="PagingInfo.totalItems > 0" class="text-center">
-                            <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" force-ellipses="true" ng-change="selectPageList()"></ul>
-                        </div>
-                        <div ng-if="PagingInfo.totalItems <= 0" class="text-center">
+
+                        <!-- NO DATA -->
+                        <div ng-if="ListedVendorsCollection.length === 0"
+                             class="text-center text-danger">
                             NO ITEM
                         </div>
+
                     </div>
+
                     <div class="modal-footer">
-                        <div class="col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-flat btn-default" data-dismiss="modal" ng-click="ResetSearchModel()">Close</button>
-                            </div>
-                        </div>
+                        <button type="button"
+                                class="button-custom"
+                                data-dismiss="modal"
+                                ng-click="ResetSearchModel()">
+                            Close
+                        </button>
                     </div>
+
                 </div>
             </div>
         </div>

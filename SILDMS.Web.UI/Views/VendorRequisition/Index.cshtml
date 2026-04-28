@@ -1749,6 +1749,10 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 .success(function (response) {
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
+
+                        setTimeout(function () {
+                            document.getElementById("H1Form").submit();
+                        }, 500); // small delay (optional)
                     } else if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
                     } else if (response.status == "S203") {
