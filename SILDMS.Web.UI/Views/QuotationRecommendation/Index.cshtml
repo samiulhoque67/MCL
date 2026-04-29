@@ -655,15 +655,21 @@
 
                     <div class="col-lg-1"></div>
 
-
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label for="QuotationNote">Project Name :</label>
                         </div>
                     </div>
+
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <input id="QuotationNote"  ng-readonly="pagefunction === 'viewmode'" autocomplete="off" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
+                            <textarea id="QuotationNote"
+                                      ng-readonly="pagefunction === 'viewmode'"
+                                      autocomplete="off"
+                                      name="QuotationNote"
+                                      data-ng-model="MasterData.QuotationNote"
+                                      class="form-control"
+                                      rows="3"></textarea>
                         </div>
                     </div>
 
@@ -1040,7 +1046,7 @@
                         ClientID: $scope.GetClientReqDetailsCollection[0].ClientID,
                         ClientReqID: $scope.GetClientReqDetailsCollection[0].ClientReqID,
                         ClientQuotationID: $scope.GetClientReqDetailsCollection[0].ClientQuotationID,
-                        
+                        QuotationNote: $scope.GetClientReqDetailsCollection[0].Remarks
                     };
 
                     $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQuotationID, action);
