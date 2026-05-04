@@ -7,24 +7,33 @@
     @using (Html.BeginForm("AgeingReport", "../Reports", System.Web.Mvc.FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
     {
         <!-- box-header -->
-        <div class="box-header with-border">
+        <div class="box-header with-border bg-light-blue-gradient" >
             <i class="fa fa-user"></i>
             <h3 class="box-title">Client Ageing Report</h3>
             <div class="box-tools pull-right">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ButtonType" value="Preview" class="btn btn-flat btn-success pull-right">
-                            <i class="fa fa-print"></i> Preview
+                <div class="box-tools pull-right">
+
+                    <div class="btn-group pull-right" style="margin: 4px;">
+                        <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable()"
+                                class="button-custom" ng-disabled="loading">
+                            <i class="fa fa-refresh" style="padding-right:5px;"></i> Refresh
                         </button>
                     </div>
-                    <div class="col-lg-4">
-                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ButtonType" value="Download" class="btn btn-flat btn-success pull-Left">
-                            <i class="fa fa-download"></i> Download
+
+                    <div class="btn-group pull-right" style="margin: 4px;">
+                        <button ng-disabled="showPrint" type="submit" id="btnDownload" name="ButtonType" value="Download"
+                                class="button-custom">
+                            <i class="fa fa-download" style="padding-right:5px;"></i> Download
                         </button>
                     </div>
-                    <div class="col-lg-4">
-                        <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Refresh</button>
+
+                    <div class="btn-group pull-right" style="margin: 4px;">
+                        <button ng-disabled="showPrint" type="submit" id="btnPreview" name="ButtonType" value="Preview"
+                                class="button-custom">
+                            <i class="fa fa-print" style="padding-right:5px;"></i> Preview
+                        </button>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -37,14 +46,14 @@
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
-                        <input type="text" id="VendorCode" maxlength="10" name="VendorCode" style="width:110px;" class="form-control" data-ng-model="vmBeneficiaryDetails.VendorCode" />
+                        <input type="text" id="VendorCode" maxlength="10" name="VendorCode" class="form-control" data-ng-model="vmBeneficiaryDetails.VendorCode" />
                     </div>
                 </div>
-                <div class="col-sm-1 col-md-1 col-lg-1">
+                <div class="col-sm-2 col-md-2 col-lg-2">
                     <input class="btn btn-flat btn-default" style="width:80px;" ng-click="ShowInvoicingPartyList()" value="Search">
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
-                    <label>Name</label>
+                    <label>Client Name</label>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">

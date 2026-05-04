@@ -294,7 +294,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 <td class="text-center">{{row.QuotationNo}}</td>
                                 <td class="text-center">{{row.ClientAdvanceClaimDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="col-lg-1 text-center">
-                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row, 'save')">Select</a>
+                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row, 'view')">Select</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -355,7 +355,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
                         <td style="width: 6%;">{{ row.QutnPrice }}</td>
                         <td style="width: 6%;">
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number" 
+                                    ng-readonly="pagefunction === 'viewmode'"
                                    ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('givenQutnPrice', row)" />
                         </td>
@@ -375,6 +376,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
+                                   ng-readonly="pagefunction === 'viewmode'"
                                    ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('GivenVatPerc', row)" />
                         </td>
@@ -665,9 +667,15 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="form-group">
-                            <input id="QuotationNote" autocomplete="off" name="QuotationNote" type="text" data-ng-model="MasterData.QuotationNote" class="form-control" />
-                        </div>
+
+                        <textarea id="QuotationNote"
+                                  ng-readonly="pagefunction === 'viewmode'"
+                                  autocomplete="off"
+                                  name="QuotationNote"
+                                  data-ng-model="MasterData.QuotationNote"
+                                  class="form-control"
+                                  rows="3">
+                        </textarea>
                     </div>
 
                 </div>
@@ -1324,7 +1332,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             }
 
             else if (action === 'view' || 'edit') {
-
+                $scope.pagefunction = 'viewmode';
                 $('#QuotationForRecom').modal('hide');
                 $scope.loading = true;
 
@@ -1364,7 +1372,9 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     $scope.MasterData = {
                         ClientID: $scope.GetClientReqDetailsCollection[0].ClientID,
                         ClientReqID: $scope.GetClientReqDetailsCollection[0].ClientReqID,
-                        ClientQutnRecmID: $scope.GetClientReqDetailsCollection[0].ClientQutnRecmID
+                        ClientQutnRecmID: $scope.GetClientReqDetailsCollection[0].ClientQutnRecmID,
+                        QuotationNote: $scope.GetClientReqDetailsCollection[0].Remarks
+                   
                     };
 
                     $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
@@ -1386,7 +1396,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     $scope.MasterData = {
                         ClientID: $scope.GetClientReqDetailsCollection[0].ClientID,
                         ClientReqID: $scope.GetClientReqDetailsCollection[0].ClientReqID,
-                        ClientQutnRecmID: $scope.GetClientReqDetailsCollection[0].ClientQutnRecmID
+                        ClientQutnRecmID: $scope.GetClientReqDetailsCollection[0].ClientQutnRecmID,
+                        QuotationNote: $scope.GetClientReqDetailsCollection[0].Remarks,
                     };
                     $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
                 }).error(function () {

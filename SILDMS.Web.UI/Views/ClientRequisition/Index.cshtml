@@ -65,7 +65,7 @@
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="btnSave">
-                        <i class="fa fa-save" style="padding-right: 5px"></i> {{ ClientReq.ClientReqID ? 'Update' : 'Save' }}
+                        <i class="fa fa-save" style="padding-right: 5px"></i> Save
                     </button>
                 </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
@@ -187,13 +187,13 @@
                         </label>
                     </div>
                 </div>
-                <div ng-show="clientReqDisplayedCollection.length <= 0" class="col-lg-3">
+                <div ng-show="!viewonlymode" class="col-lg-3">
                     <div class="form-group">
                         <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1" accept=".pdf"
                                ng-model="uploadedFile" onchange="angular.element(this).scope().fileSelected(this)" />
                     </div>
                 </div>
-                <div ng-show="clientReqDisplayedCollection.length > 0" class="col-lg-1">
+                <div ng-show="clientReqDisplayedCollection.length > 0 && viewonlymode" class="col-lg-1">
                     <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
 
                 </div>
@@ -881,7 +881,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
             ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
             DeliveryMode: "",
-            ReqType: "",
+            ReqType: "QV",
             ReqQnty: "",
             ReqUnit: ""
         }
@@ -1053,6 +1053,9 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         }
 
         $scope.ShowClientList = function () {
+
+            $scope.clearClientReq();
+
             $http.get("/ClientRequisition/GetClientInfoList")
                 .success(function (response) {
                     console.log(response);
@@ -1078,6 +1081,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         };
 
         $scope.clearClientReq = function () {
+            $scope.viewonlymode = false;
+
             $scope.ClientReq = {
                 ClientReqID: "",
                 ClientID: "",
@@ -1102,6 +1107,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 DeliveryDate: "",
                 ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
                 ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
+                ReqType: "QV",
                 DeliveryMode: "",
                 ReqQnty: "",
                 ReqUnit: ""
@@ -1197,6 +1203,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         //////////////////Search Grid List///////////////////////////////
         $scope.viewonlymode = false;
         $scope.SearchClientReqModal = function () {
+            $scope.clearClientReq();
             $scope.GetClientReqSearchList();
             $('#SearchClientReqModal').modal('show');
         };
