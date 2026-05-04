@@ -149,6 +149,9 @@
 
 
 
+
+
+
                                     <table style="width: 100%; border-collapse: collapse; font-size: smaller; margin-top: 10px;">
                                         <tr>
                                             <td style="font-weight: bold; border: 1px solid #000; padding: 5px;">PO Number:</td>
@@ -1537,9 +1540,6 @@
         //    var VendorSlip = document.getElementById("masterRow");
         //    newWin = window.open("");
         //    newWin.document.write(VendorSlip.outerHTML);
-        //    $timeout(newWin.print(), 0);
-        //    newWin.close();
-        //};
 
 
 
@@ -1968,27 +1968,27 @@
                         '<div style="position:absolute; bottom:4mm; right:0; font-size:11px; color:#555;">Page ' + (p + 1) + ' of ' + totalPages + '</div>' +
                         '</div>';
                 }
-
+                var VendorSlip = document.getElementById("masterRow");
                 // ── write iframe ─────────────────────────────────────────────────
                 var poNo = 'PO-' + (info.PONo || 'PurchaseOrder');
                 var iframe = document.createElement('iframe');
                 iframe.style.cssText = 'position:fixed;top:0;left:0;width:0;height:0;border:none;visibility:hidden;';
                 document.body.appendChild(iframe);
-
+                iframe.style.height = '0';
                 var doc = iframe.contentWindow.document;
                 doc.open();
                 doc.write('<!DOCTYPE html><html><head><title>' + poNo + '</title><style>' +
 
                     '@@page { size: A4; margin: 0; }' +
                     'body { font-family: Arial, sans-serif; font-size: 12px; margin: 8mm 10mm 8mm 10mm; padding: 0; color:#000; }' +
-
+                var doc = iframe.contentWindow.document;
                     '.page { page-break-before: always; padding: 4mm 0; position: relative; min-height: 257mm; }' +
                     '.page:first-child { page-break-before: avoid; }' +
-
+                var doc = iframe.contentWindow.document;
                     'table { width:100%; border-collapse:collapse; font-size:11px; margin-top:6px; }' +
                     'th, td { border:1px solid #ccc; padding:5px 6px; word-wrap:break-word; }' +
                     'th { background:#f0f0f0; font-weight:bold; text-align:center; font-size:11px; }' +
-
+                doc.write('<style>' +
                     '.row { display:flex; flex-wrap:wrap; }' +
                     '.col-md-3 { width:25%; box-sizing:border-box; padding:4px; }' +
                     '.col-md-4 { width:33.33%; box-sizing:border-box; padding:4px; }' +
@@ -1996,10 +1996,10 @@
                     '.col-md-12 { width:100%; box-sizing:border-box; }' +
                     'img { max-height:60px; }' +
                     'p { margin:0; font-size:12px; }' +
-
+                    'table { width: 80%;  border-collapse: collapse; }' + // Adjusted width here
                     '</style></head><body>' + pagesHTML + '</body></html>');
                 doc.close();
-
+                    '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 10px; }' +
                 // ── print after load ─────────────────────────────────────────────
                 iframe.onload = function () {
                     var originalTitle = document.title;
@@ -2007,7 +2007,7 @@
 
                     iframe.contentWindow.focus();
                     iframe.contentWindow.print();
-
+                    '.col-md-12 {width: 100%; margin: 0px; }' +
                     setTimeout(function () {
                         document.title = originalTitle;
                         if (iframe.parentNode) document.body.removeChild(iframe);
@@ -2019,6 +2019,54 @@
 
 
 
+                doc.write(VendorSlip.outerHTML);
+                    'table { width: 80%;  border-collapse: collapse; }' + // Adjusted width here
+                doc.write('</body></html>');
+                doc.close();
+                    '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 10px; }' +
+                // Wait for content to load and then trigger print
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+                    '.col-md-12 {width: 100%; margin: 0px; }' +
+                // Remove the iframe from the DOM after printing
+                document.body.removeChild(iframe);
+            }, 0); // Delay for one digest cycle
+        };
+            // Define printData function
+         
+       
+                doc.write(VendorSlip.outerHTML);
+                    'table { width: 80%;  border-collapse: collapse; }' + // Adjusted width here
+                doc.write('</body></html>');
+                doc.close();
+                    '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 10px; }' +
+                // Wait for content to load and then trigger print
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+                    '.col-md-12 {width: 100%; margin: 0px; }' +
+                // Remove the iframe from the DOM after printing
+                document.body.removeChild(iframe);
+            }, 0); // Delay for one digest cycle
+        };
+            // Define printData function
+         
+       
+                doc.write(VendorSlip.outerHTML);
+
+                doc.write('</body></html>');
+                doc.close();
+
+                // Wait for content to load and then trigger print
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+
+                // Remove the iframe from the DOM after printing
+                document.body.removeChild(iframe);
+            }, 0); // Delay for one digest cycle
+        };
+            // Define printData function
+         
+       
 
         $scope.Cancel = function () {
 
