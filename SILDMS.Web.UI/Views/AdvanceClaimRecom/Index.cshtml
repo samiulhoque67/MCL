@@ -1056,17 +1056,29 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         };
 
         function performCalculation() {
-            if ($scope.AdvanceInformmation.WOInstallmentAmt && $scope.AdvanceRecom.AdvanceClaimAmount) {
-                $scope.AdvanceRecom.RemainingAmount = $scope.AdvanceInformmation.WOInstallmentAmt - $scope.AdvanceRecom.AdvanceClaimAmount;
-            } else {
-                $scope.AdvanceRecom.RemainingAmount = 0;
+
+            var remaining = 0;
+
+            if ($scope.AdvanceInformmation.WOInstallmentAmt &&
+                $scope.AdvanceRecom.AdvanceClaimAmount) {
+
+                remaining = $scope.AdvanceInformmation.WOInstallmentAmt -
+                    $scope.AdvanceRecom.AdvanceClaimAmount;
             }
+            else {
+                remaining = 0;
+            }
+
+            $scope.AdvanceRecom.RemainingAmount =
+                parseFloat(remaining).toFixed(2);
         }
 
-        $scope.$watchGroup(['AdvanceInformmation.WorkOrderAmount', 'AdvanceRecom.AdvanceClaimAmount'], function (newValues, oldValues) {
+        $scope.$watchGroup([
+            'AdvanceInformmation.WorkOrderAmount',
+            'AdvanceRecom.AdvanceClaimAmount'
+        ], function (newValues, oldValues) {
             performCalculation();
         });
-
 
 
 
