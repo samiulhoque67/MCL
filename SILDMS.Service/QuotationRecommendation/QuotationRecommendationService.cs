@@ -34,6 +34,14 @@ namespace SILDMS.Service.QuotationRecommendation
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
                 : ValidationResult.Success;
         }
+        ValidationResult IQuotationRecommendationService.AllSavcdClientsQuotationService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out List<OBS_ClientwithReqQoutn> AllAvailableClientsList)
+        {
+            AllAvailableClientsList = _quotationRecommendationData.AllSavcdClientsQuotationDataService(UserId, page, itemsPerPage, sortBy, reverse, search, type, out _errorNumber);
+
+            return _errorNumber.Length > 0
+                ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
+                : ValidationResult.Success;
+        }
 
         public ValidationResult GetVendorTermListService(string ClientQuotationID, out List<OBS_TermsItem> VendorTermTermList)
         {

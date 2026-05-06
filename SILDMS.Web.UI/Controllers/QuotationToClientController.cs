@@ -93,31 +93,42 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> SaveQuotToClient(string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, string ReqType = null)
+        public async Task<ActionResult> SaveQuotToClient(
+     string action,
+     List<OBS_QutntoClientMaster> MasterData,
+     List<ClientReqData> DetailData,
+     List<OBS_TermsItem> AllTermsDtl,
+     string ReqType = null)
         {
-            string ClientQutnID = string.Empty;
             if (MasterData == null || !MasterData.Any() || DetailData == null || !DetailData.Any())
-            {
-                return Json(new { status = "Error", message = "MasterList is empty or null." }, JsonRequestBehavior.AllowGet);
-            }
+                return Json(new { status = "Error", message = "MasterData or DetailData is empty." },
+                            JsonRequestBehavior.AllowGet);
 
             try
             {
-                string status = _quotationToClientService.SaveQuotToClientService(UserID,  action, MasterData, DetailData, AllTermsDtl, ReqType);
-                if (status != string.Empty)
-                {
-                    string[] statusarr = status.Split(',');
-                    ClientQutnID = statusarr[1];
-                    status = statusarr[0];
-                }
-                //TempData["QuotationToClientReport"] = MasterData;
-                return Json(new { status = status, ClientQutnID }, JsonRequestBehavior.AllowGet);
+                string rawStatus = _quotationToClientService
+                                       .SaveQuotToClientService(UserID, action, MasterData,
+                                                                DetailData, AllTermsDtl, ReqType);
+
+                // Always split on the FIRST comma only – the ID or error message
+                // may itself contain commas.
+                int firstComma = rawStatus.IndexOf(',');
+
+                string status = firstComma >= 0 ? rawStatus.Substring(0, firstComma).Trim()
+                                                     : rawStatus.Trim();
+                string clientQutnID = firstComma >= 0 ? rawStatus.Substring(firstComma + 1).Trim()
+                                                      : string.Empty;
+
+                return Json(new { status, ClientQutnID = clientQutnID },
+                            JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { status = "Error", message = ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = "Error", message = ex.Message },
+                            JsonRequestBehavior.AllowGet);
             }
         }
+
 
 
         //edit and view

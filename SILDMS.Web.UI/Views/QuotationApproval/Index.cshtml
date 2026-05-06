@@ -294,7 +294,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 <td class="text-center">{{row.QuotationNo}}</td>
                                 <td class="text-center">{{row.ClientAdvanceClaimDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="col-lg-1 text-center">
-                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row, 'view')">Select</a>
+                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row, 'save')">Select</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -375,14 +375,14 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         </td>
 
                         <td style="width: 6%;">
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
                                    ng-readonly="pagefunction === 'viewmode'"
                                    ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('GivenVatPerc', row)" />
                         </td>
                         <td style="width: 6%;">{{ row.TotGivenVatAmt  | number:3}}</td>
-                        <td style="width: 6%;">{{ row.TolAmt }}</td>
-                        <td style="width: 6%; color: #126e0f;">{{ row.givenTolAmt }}</td>
+                        <td style="width: 6%;">{{ row.TolAmt   | number:3}}</td>
+                        <td style="width: 6%; color: #126e0f;">{{ row.givenTolAmt   | number:3}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -471,9 +471,9 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <th @*colspan="12"*@ style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
                                 <span>Terms & Conditions List</span>
                             </th>
-                            <th style="background: #ffffff; position: relative; padding: 5px;">
+                            <th ng-show="pagefunction === 'savemode'" style="background: #ffffff; position: relative; padding: 5px;">
                                 <div style="position: relative; display: inline-block; width: 200px;">
-                                    <input ng-show="pagefunction !== 'viewmode'" id="FormName" name="FormName" type="text"
+                                    <input id="FormName" name="FormName" type="text"
                                            data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true"
                                            style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
 
@@ -484,7 +484,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                     </button>
                                 </div>
                             </th>
-                            <th style="background: #ffffff;">
+                            <th ng-show="pagefunction === 'savemode'" style="background: #ffffff;">
                                 <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
                                     <i class="fa fa-plus" style="padding-right: 3px"></i> Add
                                 </button>
@@ -647,8 +647,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <label>Operation:</label>
                         </div>
                     </div>
-                    <div class="col-lg-2">
-                        <select data-ng-model="MasterData.Operation" class="form-control">
+                    <div class="col-lg-2" ng-hide="pagefunction === 'viewmode'">
+                        <select data-ng-model="MasterData.Operation" class="form-control" ng-readonly="pagefunction === 'viewmode'">
                             <option value="">-- None --</option>
                             <option value="Aprv">Approved</option>
                             <option value="Rec">Recommended</option>
@@ -657,6 +657,26 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <option value="Can">Cancel</option>
                         </select>
                     </div>
+
+
+                    <div class="col-lg-2" ng-show="pagefunction === 'viewmode'">
+                        <input id="Operation"
+                               name="Operation"
+                               type="text"
+                               class="form-control"
+                               style="background-color:#ffffff;"
+                               ng-value="
+                                MasterData.Operation === 'Aprv' ? 'Approved' :
+                                MasterData.Operation === 'Rec'  ? 'Recommended' :
+                                MasterData.Operation === 'Bck'  ? 'Back' :
+                                MasterData.Operation === 'Pst'  ? 'Postponed' :
+                                MasterData.Operation === 'Can'  ? 'Cancel' :
+                                MasterData.Operation"
+                               readonly />
+                    </div>
+
+
+
 
                     <div class="col-lg-1"></div>
 
@@ -728,13 +748,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
     @*edit or view modal*@
 
-    <div id="QuotationForRecom" class="modal fade">
+    <div id="AllQuotationApproved" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Quotations for Recommendation</h3>
+                    <h3 class="modal-title">All Approved Quotation</h3>
                 </div>
 
                 <!-- Modal Body -->
@@ -798,12 +818,12 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 <td class="text-center">{{row.QuotationNo}}</td>
                                 <td class="text-center">{{row.QuotationDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="col-lg-2 text-center">
-                                    <button type="button" id="btnSelect" ng-click="selectAvailableClient(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
+                                    <button type="button" id="btnSelect" ng-click="selectQuotationForRecom(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
                                         <span class="fa fa-search-plus"> View</span>
                                     </button>
-                                    <button type="button" id="btnEdit" ng-click="selectAvailableClient(row, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
+                                    @*<button type="button" id="btnEdit" ng-click="selectQuotationForRecom(row, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
                                         <span class="fa fa-edit"> Edit</span>
-                                    </button>
+                                    </button>*@
                                 </td>
                             </tr>
                         </tbody>
@@ -1333,7 +1353,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
             else if (action === 'view' || 'edit') {
                 $scope.pagefunction = 'viewmode';
-                $('#QuotationForRecom').modal('hide');
+                $('#AllQuotationApproved').modal('hide');
                 $scope.loading = true;
 
                 $http.post('/QuotationToClient/AvailableClientDetailInfo', {
@@ -1385,7 +1405,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             }
 
             else if (action === 'view' || 'edit') {
-                $http.post('/QuotationApproval/GetClientReqDataInfo', {
+                $http.post('/QuotationApproval/GetClientReqDataInfoAprv', {
                     ClientID: ClientID,
                     ClientReqID: ClientReqID
                 }).success(function (response) {
@@ -1396,9 +1416,12 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     $scope.MasterData = {
                         ClientID: $scope.GetClientReqDetailsCollection[0].ClientID,
                         ClientReqID: $scope.GetClientReqDetailsCollection[0].ClientReqID,
-                        ClientQutnRecmID: $scope.GetClientReqDetailsCollection[0].ClientQutnRecmID,
+                        ClientQutnRecmID: $scope.GetClientReqDetailsCollection[0].ClientQutnAprvID,
                         QuotationNote: $scope.GetClientReqDetailsCollection[0].Remarks,
+                        Operation: $scope.GetClientReqDetailsCollection[0].Operation,
                     };
+                    $scope.Quotation.QuotationNo = $scope.GetClientReqDetailsCollection[0].ClientQutnAprvID,
+
                     $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
                 }).error(function () {
                     $scope.loading = false;
@@ -1514,7 +1537,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
         $scope.initializeDefaults = function (row) {
             row.givenQutnPrice = row.QutnPrice || 0;
-            row.GivenVatPerc = 15;
+            row.GivenVatPerc = row.VatPerc;
 
             $scope.calculateRowFields(row);
         };
@@ -1619,7 +1642,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
             $scope.ClearEverything();
 
-            $http.post('/QuotationApproval/AllAvailableClients', {
+            $http.post('/QuotationApproval/AllClientQuotationforApprvData', {
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
                 sortBy: $scope.PagingInfo.sortBy,
@@ -1637,7 +1660,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             }).error(function () {
                 $scope.loading = false;
             });
-            $('#QuotationForRecom').modal('show');
+            $('#AllQuotationApproved').modal('show');
         };
 
 

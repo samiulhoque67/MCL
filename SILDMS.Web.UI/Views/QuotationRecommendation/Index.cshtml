@@ -330,7 +330,7 @@
                         <th style="text-align: left;">ASF Amount</th>
                         <th style="text-align: left;">Vat (%)</th>
                         <th style="text-align: left;">Vat Amount</th>
-                        <th style="text-align: left;">Total C.Quoted Amount (with vat)</th>
+                        <th style="text-align: left;" ng-hide="pagefunction === 'viewmode'">Total C.Quoted Amount (with vat)</th>
                         <th style="text-align: left;">Recom Total Amount (with vat)</th>
                     </tr>
                 </thead>
@@ -348,7 +348,7 @@
                         <td style="width: 6%; text-align: right">{{ row.QutnPrice }}</td>
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
-                                   ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"
+                                   ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"  ng-readonly="pagefunction === 'viewmode'"
                                    ng-blur="validateInput('givenQutnPrice', row)" />
                         </td>
                         <td style="width: 6%; text-align: right">{{ row.ClientQutnAmt }}</td>
@@ -364,12 +364,12 @@
                         <td style="width: 6%; text-align: right;">{{ row.TotGivenASFAmt  | number:3}}</td>
 
                         <td style="width: 6%;">
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
-                                   ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" 
+                                   ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"  ng-readonly="pagefunction === 'viewmode'"
                                    ng-blur="validateInput('GivenVatPerc', row)" />
                         </td>
                         <td style="width: 6%; text-align: right">{{ row.TotGivenVatAmt  | number:3}}</td>
-                        <td style="width: 6%; text-align: right">{{ row.TolAmt }}</td>
+                        <td style="width: 6%; text-align: right" ng-hide="pagefunction === 'viewmode'">{{ row.TolAmt }}</td>
                         <td style="width: 6%; color: #126e0f; text-align: right">{{ row.givenTolAmt }}</td>
                     </tr>
                 </tbody>
@@ -465,13 +465,13 @@
 
                                     <button type="button" ng-click="ShowTermsConditionsList()"
                                             style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
-                 padding: 0px 10px; border: 2px solid black; background: transparent;">
+                 padding: 0px 10px; border: 2px solid black; background: transparent;" ng-show="pagefunction === 'savemode'">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </div>
                             </th>
                             <th style="background: #ffffff;">
-                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
+                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn"  ng-show="pagefunction === 'savemode'">
                                     <i class="fa fa-plus" style="padding-right: 3px"></i> Add
                                 </button>
                             </th>
@@ -722,7 +722,7 @@
                         <thead>
                             <tr style="font-size: 15px;">
                                 <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
-                                    Quotations for Approval
+                                    All Save Client Quotations Recommendation
                                 </th>
                             </tr>
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
@@ -1072,7 +1072,8 @@
                         QuotationNote: $scope.GetClientReqDetailsCollection[0].Remarks,
                         Operation: $scope.GetClientReqDetailsCollection[0].Operation
                     };
-                    $scope.MasterData.QuotationNote = $scope.GetClientReqDetailsCollection[0].Remarks
+                    $scope.MasterData.QuotationNote = $scope.GetClientReqDetailsCollection[0].Remarks,
+                    $scope.Quotation.QuotationNo = $scope.GetClientReqDetailsCollection[0].ClientQutnRecmID,
 
                     $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
 
@@ -1189,7 +1190,7 @@
 
         $scope.initializeDefaults = function (row) {
             row.givenQutnPrice = row.QutnPrice || 0;
-            row.GivenVatPerc = 15;
+            row.GivenVatPerc = row.VatPerc || 0;
             row.ASFPerc = row.ASFPerc || 0;
 
             $scope.calculateRowFields(row);
@@ -1290,7 +1291,7 @@
 
             $scope.ClearEverything();
 
-            $http.post('/QuotationApproval/AllAvailableClients', {
+            $http.post('/QuotationApproval/AllSavcdClientQuotationRecommendation', {
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
                 sortBy: $scope.PagingInfo.sortBy,

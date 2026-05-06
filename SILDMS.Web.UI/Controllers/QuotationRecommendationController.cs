@@ -44,6 +44,19 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
+
+
+        [HttpPost]
+        public async Task<dynamic> AllSavcdClientsQuotation(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
+        {
+            var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
+            await Task.Run(() => _quotationRecommendationService.AllSavcdClientsQuotationService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out AllAvailableClientsList));
+            var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
+            return result;
+        }
+
+
+
         [HttpPost]
         public async Task<dynamic> GetVendorTermList(string ClientQuotationID)
         {

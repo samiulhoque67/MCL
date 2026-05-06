@@ -67,6 +67,54 @@ namespace SILDMS.DataAccess.QuotationApproval
             return AllAvailableClientsList;
         }
 
+
+        public List<OBS_ClientwithReqQoutn> AllSavcdClientQuotationRecommendationDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action, out string _errorNumber)
+        {
+            _errorNumber = string.Empty;
+            var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_AllSavcdClientQuotationRecommendationService"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@page", SqlDbType.Int, page);
+                db.AddInParameter(dbCommandWrapper, "@itemsPerPage", SqlDbType.Int, itemsPerPage);
+                db.AddInParameter(dbCommandWrapper, "@sortBy", SqlDbType.NVarChar, sortBy);
+                db.AddInParameter(dbCommandWrapper, "@reverse", SqlDbType.Int, reverse ? 1 : 0);
+                db.AddInParameter(dbCommandWrapper, "@search", SqlDbType.NVarChar, search);
+                db.AddInParameter(dbCommandWrapper, "@type", SqlDbType.NVarChar, type.ToString());
+                db.AddInParameter(dbCommandWrapper, "@action", SqlDbType.NVarChar, action.ToString());
+                db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
+                dbCommandWrapper.CommandTimeout = 300;
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (!db.GetParameterValue(dbCommandWrapper, _spStatusParam).IsNullOrZero())
+                {
+                    _errorNumber = db.GetParameterValue(dbCommandWrapper, _spStatusParam).PrefixErrorCode();
+                }
+                else
+                {
+                    if (ds.Tables[0].Rows.Count <= 0) return AllAvailableClientsList;
+                    var dt1 = ds.Tables[0];
+                    AllAvailableClientsList = dt1.AsEnumerable().Select(reader => new OBS_ClientwithReqQoutn
+                    {
+                        ClientID = reader.GetString("ClientID"),
+                        ClientCode = reader.GetString("ClientCode"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        ClientName = reader.GetString("ClientName"),
+                        ClientReqNo = reader.GetString("ClientReqNo"),
+                        RequisitionDate = reader.GetString("RequisitionDate"),
+                        QuotationNo = reader.GetString("AutoQutnNo"),
+                        ClientAdvanceClaimDate = reader.GetString("QuotationDate")
+                    }).ToList();
+
+                }
+            }
+
+            return AllAvailableClientsList;
+        }
+
+
         public List<OBS_ClientwithReqQoutn> AllClientQuotationforApprvData(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action, out string _errorNumber)
         {
             _errorNumber = string.Empty;
@@ -214,6 +262,68 @@ namespace SILDMS.DataAccess.QuotationApproval
             return GetClientReqDetails;
         }
 
+
+        public List<ClientReqData> GetClientReqDataInfoAprvDataService(string ClientID, string ClientReqID, out string _errorNumber)
+        {
+            _errorNumber = string.Empty;
+            var GetClientReqDetails = new List<ClientReqData>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientSavedApprovQDataInfo"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, ClientID);
+                db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, ClientReqID);
+                db.AddOutParameter(dbCommandWrapper, _spStatusParam, DbType.String, 10);
+                dbCommandWrapper.CommandTimeout = 300;
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (!db.GetParameterValue(dbCommandWrapper, _spStatusParam).IsNullOrZero())
+                {
+                    _errorNumber = db.GetParameterValue(dbCommandWrapper, _spStatusParam).PrefixErrorCode();
+                }
+                else
+                {
+                    if (ds.Tables[0].Rows.Count <= 0) return GetClientReqDetails;
+                    var dt1 = ds.Tables[0];
+                    GetClientReqDetails = dt1.AsEnumerable().Select(reader => new ClientReqData
+                    {
+
+                        ClientID = reader.GetString("ClientID"),
+                        ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
+                        ClientQutnAprvItemID = reader.GetString("ClientQutnAprvItemID"),
+                        ClientReqID = reader.GetString("ClientReqID"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        //TermsID = reader.GetString("TermsID"),
+                        ServiceItemCode = reader.GetString("ServiceItemCode"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        Description = reader.GetString("Description"),
+                        DeliveryLocation = reader.GetString("DeliveryLocation"),
+                        DeliveryDate = reader.GetString("DeliveryDate"),
+                        DeliveryMode = reader.GetString("DeliveryMode"),
+                        ReqUnit = reader.GetString("QutnUnit"),
+                        QutnQnty = reader.GetString("QutnQnty"),
+                        QutnPrice = reader.GetString("VenPrice"),
+                        QutnUnit = reader.GetString("QutnUnit"),
+                        /* QutnAmt = reader.GetString("QutnAmt"),*/
+                        ASFPerc = reader.GetString("ASFPerc"),
+                        ASFAmt = reader.GetString("ASFAmt"),
+
+                        ClientQutnAmt = reader.GetString("ClientQutnAmt"),
+                        VatPerc = reader.GetString("VatPerc"),
+                        VatAmt = reader.GetString("VatAmt"),
+                        TolAmt = reader.GetString("TolAmt"),
+
+                        Remarks = reader.GetString("Remarks"),
+                        Operation = reader.GetString("Operation")
+                    }).ToList();
+
+                }
+            }
+
+            return GetClientReqDetails;
+        }
         public string SaveQuotToClientServiceData(string UserID, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, out string errorNumber)
         {
             errorNumber = string.Empty;
