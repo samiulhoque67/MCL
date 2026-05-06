@@ -23,7 +23,7 @@ namespace SILDMS.Service
         string DeleteVendorCSInfoItemAndTerm(string VendorCSInfoItemID, string VendorCSInfoTermID);
         ValidationResult GetTermsConditionsList(out List<OBS_Terms> TermsConditionsList);
         ValidationResult GetAllRequisition(string userID, out List<Invitation> invitationList);
-        ValidationResult ExsitingCSPrepVendorByVenReqID(string userID, out List<Invitation> invitationList);
+        ValidationResult ExsitingCSPrepVendorByVenReqID(string VendorCSNumber, out List<Invitation> invitationList);
         ValidationResult GetMaterialByRequisition(string vendorRequisitionNumber, out List<OBS_VendorCSRecmItem> reqWiseMaterialList);
         ValidationResult GetVendorByMaterialService(string vendorReqID, string serviceItemID, out List<OBS_VendorCSRecmItem> matWiseVendorList);
         ValidationResult SearchCSService(string userID, out List<Invitation> searchCSList);
