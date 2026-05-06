@@ -554,7 +554,7 @@ namespace SILDMS.DataAccess
             return invitationList;
         }
 
-        public List<Invitation> ExsitingCSPrepVendorByVenReqID(string VendorReqID)
+        public List<Invitation> ExsitingCSPrepVendorByVenReqID(string VendorCSNumber)
         {
             var invitationList = new List<Invitation>();
 
@@ -562,7 +562,7 @@ namespace SILDMS.DataAccess
             var db = factory.CreateDefault() as SqlDatabase;
             using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_ExsitingCSPrepVendorByVenReqID"))
             {
-                db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.VarChar, VendorReqID);
+                db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.VarChar, VendorCSNumber);
                 // Execute SP.
                 var ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -694,7 +694,7 @@ namespace SILDMS.DataAccess
 
             var factory = new DatabaseProviderFactory();
             var db = factory.CreateDefault() as SqlDatabase;
-            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_SearchForCS"))
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_SearchForCSForEdit"))
             {
                 db.AddInParameter(dbCommandWrapper, "@UserId", SqlDbType.VarChar, userID);
  

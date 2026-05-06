@@ -104,10 +104,10 @@ namespace SILDMS.Service
             return ValidationResult.Success;
         }
 
-        public ValidationResult ExsitingCSPrepVendorByVenReqID(string VendorReqID, out List<Invitation> invitationList)
+        public ValidationResult ExsitingCSPrepVendorByVenReqID(string VendorCSNumber, out List<Invitation> invitationList)
         {
 
-            invitationList = clientInfoDataService.ExsitingCSPrepVendorByVenReqID(VendorReqID);
+            invitationList = clientInfoDataService.ExsitingCSPrepVendorByVenReqID(VendorCSNumber);
             return ValidationResult.Success;
         }
 

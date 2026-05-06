@@ -165,10 +165,10 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [Authorize]
-        public async Task<dynamic> ExsitingCSPrepVendorByVenReqID(string VendorReqID)
+        public async Task<dynamic> ExsitingCSPrepVendorByVenReqID(string VendorCSNumber)
         {
             var InvitationList = new List<Invitation>();
-            await Task.Run(() => _vendorCSInfoService.ExsitingCSPrepVendorByVenReqID(VendorReqID, out InvitationList));
+            await Task.Run(() => _vendorCSInfoService.ExsitingCSPrepVendorByVenReqID(VendorCSNumber, out InvitationList));
             return Json(new { InvitationList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
 
