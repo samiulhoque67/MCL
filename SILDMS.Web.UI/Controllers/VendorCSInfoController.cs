@@ -85,37 +85,47 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> GetVendorCSInfoTermList(string VendorQutnID)
         {
             var VendorCSInfoTermList = new List<OBS_VendorCSRecmTerms>();
+            // The data service SP is OBS_GetVendorQutnTermList and uses @VendorQutnID — correct
             await Task.Run(() => _vendorCSInfoService.GetVendorCSInfoTermList(VendorQutnID, out VendorCSInfoTermList));
-            var result = Json(new { VendorCSInfoTermList, msg = "VendorCSInfoTermList are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            var result = Json(new { VendorCSInfoTermList, msg = "" }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
 
-        public async Task<dynamic> SaveVendorCSInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm)
+        public async Task<dynamic> SaveVendorCSInfo(
+    OBS_VendorCSRecm vendorCS,
+    List<OBS_VendorCSRecmItem> vendorCSItem,
+    List<OBS_VendorCSRecmTerms> vendorCSTerm)
         {
-            OBS_VendorCSReport objOBS_VendorCSReport = new OBS_VendorCSReport();
+            if (vendorCS == null)
+                return Json(new { status = "Error", message = "vendorCS is null" }, JsonRequestBehavior.AllowGet);
 
             vendorCS.SetBy = UserID;
 
-            objOBS_VendorCSReport.ClientReqNo = vendorCS.ClientReqNo;
-            objOBS_VendorCSReport.RequisitionDate = vendorCS.RequisitionDate;
-            objOBS_VendorCSReport.RptQutnQty = vendorCS.RptQutnQty;
-            objOBS_VendorCSReport.RptQutnUnit = vendorCS.RptQutnUnit;
-            objOBS_VendorCSReport.ClientName = vendorCS.ClientName;
-            objOBS_VendorCSReport.VenReqItem = vendorCS.VenReqItem;
-            objOBS_VendorCSReport.Note = vendorCS.Remarks;
-            objOBS_VendorCSReport.CSRecmVendorName = vendorCS.VendorCsRecmName;
-            objOBS_VendorCSReport.RecommendedByName = SILAuthorization.GetUserFullName();
-            objOBS_VendorCSReport.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
-            objOBS_VendorCSReport.CSPrepDate = vendorCS.CSRecDate;
-            objOBS_VendorCSReport.VendorReqID = vendorCS.VendorReqID;
-            objOBS_VendorCSReport.ServiceItemID = vendorCSItem[0].ServiceItemID;
-            TempData["VendorCSprepInfo"] = objOBS_VendorCSReport;
+            // Build report object
+            OBS_VendorCSReport objReport = new OBS_VendorCSReport
+            {
+                ClientReqNo = vendorCS.ClientReqNo,
+                RequisitionDate = vendorCS.RequisitionDate,
+                RptQutnQty = vendorCS.RptQutnQty,
+                RptQutnUnit = vendorCS.RptQutnUnit,
+                ClientName = vendorCS.ClientName,
+                VenReqItem = vendorCS.VenReqItem,
+                Note = vendorCS.Remarks,
+                // FIX 4: JS model uses VendorCsRecmName (camelCase mix) — map correctly
+                CSRecmVendorName = vendorCS.VendorCsRecmName,
+                RecommendedByName = SILAuthorization.GetUserFullName(),
+                RecommendedByDesignation = SILAuthorization.GetUserDesignation(),
+                CSPrepDate = vendorCS.CSRecDate,
+                VendorReqID = vendorCS.VendorReqID
+            };
 
-            string status = string.Empty;//, message = string.Empty;
-            status = _vendorCSInfoService.SaveVendorCSInfo(vendorCS, vendorCSItem, vendorCSTerm);
+            if (vendorCSItem != null && vendorCSItem.Any())
+                objReport.ServiceItemID = vendorCSItem[0].ServiceItemID;
 
-            
+            TempData["VendorCSprepInfo"] = objReport;
+
+            string status = _vendorCSInfoService.SaveVendorCSInfo(vendorCS, vendorCSItem, vendorCSTerm);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
@@ -188,11 +198,14 @@ namespace SILDMS.Web.UI.Controllers
             return Json(new { MatWiseVendorList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         [Authorize]
         public async Task<dynamic> SearchCS()
         {
             var SearchCSList = new List<Invitation>();
             await Task.Run(() => _vendorCSInfoService.SearchCSService(UserID, out SearchCSList));
+
+            // FIX 1: return the full list (SearchCSData SP already selects VendorCSRecmName)
             return Json(new { SearchCSList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
 
@@ -201,14 +214,16 @@ namespace SILDMS.Web.UI.Controllers
         {
             var VendorCSList = new List<OBS_VendorCSRecmItem>();
             await Task.Run(() => _vendorCSInfoService.CSVendorService(UserID, CSNumber, out VendorCSList));
-            return Json(new { VendorCSList, Msg = "" }, JsonRequestBehavior.AllowGet);
+            var result = Json(new { VendorCSList, Msg = "" }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
         }
 
         public async Task<dynamic> CSVendorTerms(string CSNumber)
         {
             var VendorCSInfoTermList = new List<OBS_VendorCSRecmTerms>();
             await Task.Run(() => _vendorCSInfoService.CSVendorTerms(CSNumber, out VendorCSInfoTermList));
-            var result = Json(new { VendorCSInfoTermList, msg = "VendorCSInfoTermList are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            var result = Json(new { VendorCSInfoTermList, msg = "" }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
