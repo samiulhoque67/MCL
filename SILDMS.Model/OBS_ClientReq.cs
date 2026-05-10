@@ -28,6 +28,7 @@ namespace SILDMS.Model
         public string NoOfVendor { get; set; } 
         [Required]
         public string Status { get; set; }
+        public string ProcessStatus { get; set; }
         public string VendorCSAprvID { get; set; }
 
         public string POPreparationID { get; set; }

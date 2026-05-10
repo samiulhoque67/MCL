@@ -80,7 +80,7 @@
 
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="Post()" class="button-custom btn-primary" ng-disabled="btnSave">
-                        <i class="fa fa-save" style="padding-right: 5px;"></i> {{ VendorReq.VendorReqID ? 'Preview' : 'Save' }}
+                        <i class="fa fa-save" style="padding-right: 5px;"></i> {{ VendorReq.VendorReqID ? 'Update' : 'Save' }}
                     </button>
                 </div>
 
@@ -206,7 +206,7 @@
                             </tr>
                             <tr>
                                 <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="ClientReqNo" placeholder="Client Req.No" class="input-sm form-control" type="search" /></th>
+                                @*<th><input st-search="ClientReqNo" placeholder="Client Req.No" class="input-sm form-control" type="search" /></th>*@
                             </tr>
                         </thead>
                         <tbody>
@@ -1392,7 +1392,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorWiseItemReq.VendorID = row.VendorID;
             $scope.VendorWiseItemReq.VendorCode = row.VendorCode;
             $scope.VendorWiseItemReq.VendorName = row.VendorName;
-            $scope.VendorWiseItemReq.TransactionName = row.TransactionName;
+            //$scope.VendorWiseItemReq.TransactionName = row.TransactionName;
             $scope.VendorWiseItemReq.ContactPerson = row.ContactPerson;
             $scope.VendorWiseItemReq.ContactNumber = row.ContactNumber;
             $scope.VendorWiseItemReq.Email = row.Email;
@@ -1400,7 +1400,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorWiseItemReq.VenReqQnty = VenReqQnty;
 
             $scope.VendorInfoDisplayedCollection = $scope.VendorInfoDisplayedCollection.concat($scope.VendorWiseItemReq);
-
+            //console.log($scope.VendorInfoDisplayedCollection);
             $scope.resetVendorWiseItemReq();
 
             $('#VendorInfoModal').modal('hide');
@@ -1714,7 +1714,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             const allItems = $scope.GridDisplayCollection;
             const selectedItems = $scope.SelectedVendorForBiddingDisplayedCollection;
             const vendorItemWise = $scope.VendorInfoDisplayedCollection;
-
+            //console.log(vendorItemWise);
             // ✅ Validation 1: Must select all listed items
             if (allItems.length !== selectedItems.length) {
                 toastr.error("Please select all listed items before save.");
@@ -1738,7 +1738,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
             $scope.VendorReq.TolalItem = allItems.length;
             $scope.VendorReq.SelectedItem = selectedItems.length;
-
+            console.log(vendorItemWise);
             $http.post('/VendorRequisition/SaveVendorRequisition',
                 {
                     vendorReq: $scope.VendorReq,
