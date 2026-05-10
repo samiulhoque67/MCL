@@ -976,10 +976,12 @@
             $scope.VendorCSInfo.ServiceItemID = row.ServiceItemID;
             $scope.VendorCSInfo.ServiceItemName = row.ServiceItemName;
             $scope.VendorCSInfo.VendorCsRecmName = row.VendorCSRecmName;
+            $scope.VendorCSInfo.CSRecmVendorID = row.CSRecmVendorID;
             $scope.VendorCSInfo.Operation = row.Operation;
             $scope.VendorCSInfo.Remarks = row.Remarks;
             $scope.CSMaterial_Name = row.ServiceItemName;
             $scope.VendorCSInfo.ClientName = row.ClientName;
+
 
             // Load ALL vendors (selected + unselected) via fixed OBS_CSVendor SP
             $http.post('/VendorCSInfo/CSVendor', { CSNumber: row.VendorCSNumber })
@@ -995,6 +997,12 @@
 
                     // In edit mode, pre-populate selectedVendors with the already-saved rows
                     if (mode === 'edit') {
+                        $scope.VendorCSInfo.ServiceCategoryID = $scope.VendorCSList[0].ServiceCategoryID;
+                        $scope.VendorCSInfo.Description = $scope.VendorCSList[0].Description;
+                        $scope.VendorCSInfo.DeliveryDate = $scope.VendorCSList[0].DeliveryDate;
+                        $scope.VendorCSInfo.DeliveryLocation = $scope.VendorCSList[0].DeliveryLocation;
+                        $scope.VendorCSInfo.DeliveryMode = $scope.VendorCSList[0].DeliveryMode;
+
                         $scope.selectedVendors = $scope.VendorCSList.filter(function (v) {
                             return v.selected;
                         });

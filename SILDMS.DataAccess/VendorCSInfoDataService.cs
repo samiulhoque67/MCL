@@ -709,7 +709,8 @@ namespace SILDMS.DataAccess
                         Remarks = reader.GetString("Remarks"),
                         ClientName = reader.GetString("ClientName"),
                         // FIX 1: map VendorCSRecmName so Search modal shows it
-                        VendorCSRecmName = reader.GetString("VendorCSRecmName")
+                        VendorCSRecmName = reader.GetString("VendorCSRecmName"),
+                        CSRecmVendorID = reader.GetString("CSRecmVendorID"),
                     }).ToList();
                 }
             }
