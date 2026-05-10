@@ -107,7 +107,7 @@ namespace SILDMS.Web.UI.Controllers
             //    VendorQutnID = statusarr[1];
             //    status = statusarr[0];
             //}
-
+            string VendorQutnID = vendorQutn.VendorReqID;
             return Json(new { status, VendorQutnID }, JsonRequestBehavior.AllowGet);
         }
 
