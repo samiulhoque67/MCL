@@ -10,6 +10,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
     public interface IQuotationRecommendationData
     {
         List<OBS_ClientwithReqQoutn> AllAvailableCSVendorApprovalDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
+        List<OBS_ClientwithReqQoutn> AllSavcdClientsQuotationDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber);
         List<ClientReqData> GetClientReqDataInfoDataService(string ClientID, string ClientReqID, string ClientQutnID, out string _errorNumber);
         List<OBS_TermsItem> GetVendorTermListServiceData(string ClientQuotationID, out string _errorNumber);
             

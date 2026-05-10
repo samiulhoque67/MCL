@@ -52,7 +52,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                     var dt1 = ds.Tables[0];
                     AllAvailableClientsList = dt1.AsEnumerable().Select(reader => new OBS_ClientInfo
                     {
-                        ClientID   = reader.GetString("ClientID"),
+                        ClientID = reader.GetString("ClientID"),
                         ClientCode = reader.GetString("ClientCode"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientName = reader.GetString("ClientName"),
@@ -92,7 +92,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                     var dt1 = ds.Tables[0];
                     ClientDetails = dt1.AsEnumerable().Select(reader => new OBS_ClientDetails
                     {
-                        ClientID   = reader.GetString("ClientID"),
+                        ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         ClientTinNo = reader.GetString("ClientTinNo"),
                         ClientBinNo = reader.GetString("ClientBinNo"),
@@ -313,50 +313,52 @@ namespace SILDMS.DataAccess.QuotationToClientService
             return VendorTermTermList;
         }
 
-        public string SaveQuotToClientServiceData(string UserID, string action, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, string ReqType, out string errorNumber)
+
+        public string SaveQuotToClientServiceData(
+    string UserID,
+    string action,
+    List<OBS_QutntoClientMaster> MasterData,
+    List<ClientReqData> DetailData,
+    List<OBS_TermsItem> AllTermsDtl,
+    string ReqType,
+    out string errorNumber)
         {
             errorNumber = string.Empty;
-            string message = "";
-            string Quotation_Number = string.Empty;
-            // ################# Master Data ####################
+            string message = string.Empty;
 
+            /* ── Master DataTable ──────────────────────────────────────── */
             DataTable masterDataTable = new DataTable();
             masterDataTable.Columns.Add("ClientID", typeof(string));
-            masterDataTable.Columns.Add("ClientQuotationID", typeof(string));
             masterDataTable.Columns.Add("ClientReqID", typeof(string));
+            masterDataTable.Columns.Add("ClientQuotationID", typeof(string)); // required for edit
             masterDataTable.Columns.Add("ClientQutnRecmID", typeof(string));
             masterDataTable.Columns.Add("ClientQutnAprvID", typeof(string));
-
             masterDataTable.Columns.Add("Operation", typeof(string));
             masterDataTable.Columns.Add("BriefingDate", typeof(string));
             masterDataTable.Columns.Add("QuotationNote", typeof(string));
 
             if (MasterData != null)
             {
-                foreach (var masterItem in MasterData)
+                foreach (var m in MasterData)
                 {
-                    DataRow masterRow = masterDataTable.NewRow();
-                    masterRow["ClientID"] = string.IsNullOrEmpty(masterItem.ClientID) ? DBNull.Value : (object)masterItem.ClientID;
-                    masterRow["ClientReqID"] = string.IsNullOrEmpty(masterItem.ClientReqID) ? DBNull.Value : (object)masterItem.ClientReqID;
-                    masterRow["ClientQuotationID"] = string.IsNullOrEmpty(masterItem.ClientQuotationID) ? DBNull.Value : (object)masterItem.ClientQuotationID;
-                    masterRow["ClientQutnRecmID"] = string.IsNullOrEmpty(masterItem.ClientQutnRecmID) ? DBNull.Value : (object)masterItem.ClientQutnRecmID;
-                    masterRow["ClientQutnAprvID"] = string.IsNullOrEmpty(masterItem.ClientQutnAprvID) ? DBNull.Value : (object)masterItem.ClientQutnAprvID;
-                    masterRow["Operation"] = string.IsNullOrEmpty(masterItem.Operation) ? DBNull.Value : (object)masterItem.Operation;
-                    masterRow["BriefingDate"] = string.IsNullOrEmpty(masterItem.BriefingDate) ? DBNull.Value : (object)masterItem.BriefingDate;
-                    masterRow["QuotationNote"] = string.IsNullOrEmpty(masterItem.QuotationNote) ? DBNull.Value : (object)masterItem.QuotationNote;
-
-                    masterDataTable.Rows.Add(masterRow);
+                    DataRow r = masterDataTable.NewRow();
+                    r["ClientID"] = NullIfEmpty(m.ClientID);
+                    r["ClientReqID"] = NullIfEmpty(m.ClientReqID);
+                    r["ClientQuotationID"] = NullIfEmpty(m.ClientQuotationID); // <-- must be set in editmode
+                    r["ClientQutnRecmID"] = NullIfEmpty(m.ClientQutnRecmID);
+                    r["ClientQutnAprvID"] = NullIfEmpty(m.ClientQutnAprvID);
+                    r["Operation"] = NullIfEmpty(m.Operation);
+                    r["BriefingDate"] = NullIfEmpty(m.BriefingDate);
+                    r["QuotationNote"] = NullIfEmpty(m.QuotationNote);
+                    masterDataTable.Rows.Add(r);
                 }
             }
 
-            // ################# Detail Data ####################
-
+            /* ── Detail DataTable ──────────────────────────────────────── */
             DataTable detailDataTable = new DataTable();
             detailDataTable.Columns.Add("ClientQuotationID", typeof(string));
             detailDataTable.Columns.Add("ClientQutnRecmID", typeof(string));
             detailDataTable.Columns.Add("ClientQutnAprvID", typeof(string));
-
-
             detailDataTable.Columns.Add("ServiceCategoryID", typeof(string));
             detailDataTable.Columns.Add("TermsID", typeof(string));
             detailDataTable.Columns.Add("ServiceItemID", typeof(string));
@@ -377,89 +379,94 @@ namespace SILDMS.DataAccess.QuotationToClientService
 
             if (DetailData != null)
             {
-                foreach (var item in DetailData)
+                foreach (var d in DetailData)
                 {
-                    DataRow objDataRow = detailDataTable.NewRow();
-                    objDataRow["ClientQuotationID"] = string.IsNullOrEmpty(item.ClientQuotationID) ? DBNull.Value : (object)item.ClientQuotationID;
-                    objDataRow["ClientQutnRecmID"] = string.IsNullOrEmpty(item.ClientQutnRecmID) ? DBNull.Value : (object)item.ClientQutnRecmID;
-                    objDataRow["ClientQutnAprvID"] = string.IsNullOrEmpty(item.ClientQutnAprvID) ? DBNull.Value : (object)item.ClientQutnAprvID;
-
-
-                    objDataRow["ServiceCategoryID"] = string.IsNullOrEmpty(item.ServiceCategoryID) ? DBNull.Value : (object)item.ServiceCategoryID;
-                    objDataRow["TermsID"] = string.IsNullOrEmpty(item.TermsID) ? DBNull.Value : (object)item.TermsID;
-                    objDataRow["ServiceItemID"] = string.IsNullOrEmpty(item.ServiceItemID) ? DBNull.Value : (object)item.ServiceItemID;
-                    objDataRow["Description"] = string.IsNullOrEmpty(item.Description) ? DBNull.Value : (object)item.Description;
-                    objDataRow["DeliveryLocation"] = string.IsNullOrEmpty(item.DeliveryLocation) ? DBNull.Value : (object)item.DeliveryLocation;
-                    objDataRow["DeliveryDate"] = string.IsNullOrEmpty(item.DeliveryDate) ? DBNull.Value : (object)item.DeliveryDate;
-                    objDataRow["DeliveryMode"] = string.IsNullOrEmpty(item.DeliveryMode) ? DBNull.Value : (object)item.DeliveryMode;
-                    objDataRow["QutnQnty"] = string.IsNullOrEmpty(item.QutnQnty) ? DBNull.Value : (object)item.QutnQnty;
-                    objDataRow["QutnUnit"] = string.IsNullOrEmpty(item.QutnUnit) ? DBNull.Value : (object)item.QutnUnit;
-                    objDataRow["VenPrice"] = string.IsNullOrEmpty(item.VenPrice) ? DBNull.Value : (object)item.VenPrice;
-                    objDataRow["MclPrice"] = string.IsNullOrEmpty(item.MclPrice) ? DBNull.Value : (object)item.MclPrice;
-                    objDataRow["QutnAmt"] = string.IsNullOrEmpty(item.QutnAmt) ? DBNull.Value : (object)item.QutnAmt;
-                    objDataRow["ASFPerc"] = string.IsNullOrEmpty(item.ASFPerc) ? DBNull.Value : (object)item.ASFPerc;
-                    objDataRow["ASFAmt"] = string.IsNullOrEmpty(item.ASFAmt) ? DBNull.Value : (object)item.ASFAmt;
-                    objDataRow["VatPerc"] = string.IsNullOrEmpty(item.VatPerc) ? DBNull.Value : (object)item.VatPerc;
-                    objDataRow["VatAmt"] = string.IsNullOrEmpty(item.VatAmt) ? DBNull.Value : (object)item.VatAmt;
-                    objDataRow["TolAmt"] = string.IsNullOrEmpty(item.TolAmt) ? DBNull.Value : (object)item.TolAmt;
-
-                    detailDataTable.Rows.Add(objDataRow);
+                    DataRow r = detailDataTable.NewRow();
+                    r["ClientQuotationID"] = NullIfEmpty(d.ClientQuotationID);
+                    r["ClientQutnRecmID"] = NullIfEmpty(d.ClientQutnRecmID);
+                    r["ClientQutnAprvID"] = NullIfEmpty(d.ClientQutnAprvID);
+                    r["ServiceCategoryID"] = NullIfEmpty(d.ServiceCategoryID);
+                    r["TermsID"] = NullIfEmpty(d.TermsID);
+                    r["ServiceItemID"] = NullIfEmpty(d.ServiceItemID);
+                    r["Description"] = NullIfEmpty(d.Description);
+                    r["DeliveryLocation"] = NullIfEmpty(d.DeliveryLocation);
+                    r["DeliveryDate"] = NullIfEmpty(d.DeliveryDate);
+                    r["DeliveryMode"] = NullIfEmpty(d.DeliveryMode);
+                    r["QutnQnty"] = NullIfEmpty(d.QutnQnty);
+                    r["QutnUnit"] = NullIfEmpty(d.QutnUnit);
+                    r["VenPrice"] = NullIfEmpty(d.VenPrice);
+                    // FIX: JS sends numbers; convert to string and guard "null" strings
+                    r["MclPrice"] = NullIfNullString(d.MclPrice);
+                    r["QutnAmt"] = NullIfNullString(d.QutnAmt);
+                    r["ASFPerc"] = NullIfNullString(d.ASFPerc);
+                    r["ASFAmt"] = NullIfNullString(d.ASFAmt);
+                    r["VatPerc"] = NullIfNullString(d.VatPerc);
+                    r["VatAmt"] = NullIfNullString(d.VatAmt);
+                    r["TolAmt"] = NullIfNullString(d.TolAmt);
+                    detailDataTable.Rows.Add(r);
                 }
             }
 
-            // ################# Terms Detail Data ####################
-
-            DataTable TermsDtlTable = new DataTable(); // Renamed
-            //TermsDtlTable.Columns.Add("ClientQutnID", typeof(string));
-            //TermsDtlTable.Columns.Add("ClientQutnRecmID", typeof(string));
-            //TermsDtlTable.Columns.Add("ClientQutnAprvID", typeof(string));
-            TermsDtlTable.Columns.Add("TermsID", typeof(string));
-            TermsDtlTable.Columns.Add("TermsCode", typeof(string));
-            TermsDtlTable.Columns.Add("TermsName", typeof(string));
+            /* ── Terms DataTable ───────────────────────────────────────── */
+            DataTable termsDtlTable = new DataTable();
+            termsDtlTable.Columns.Add("TermsID", typeof(string));
+            termsDtlTable.Columns.Add("TermsCode", typeof(string));
+            termsDtlTable.Columns.Add("TermsName", typeof(string));
 
             if (AllTermsDtl != null)
             {
-                foreach (var TermsItem in AllTermsDtl)
+                foreach (var t in AllTermsDtl)
                 {
-                    DataRow TermRow = TermsDtlTable.NewRow();
-                    //TermRow["ClientQutnID"] = string.IsNullOrEmpty(TermsItem.ClientQutnID) ? DBNull.Value : (object)TermsItem.ClientQutnID;
-                    //TermRow["ClientQutnRecmID"] = string.IsNullOrEmpty(TermsItem.ClientQutnRecmID) ? DBNull.Value : (object)TermsItem.ClientQutnRecmID;
-                    //TermRow["ClientQutnAprvID"] = string.IsNullOrEmpty(TermsItem.ClientQutnAprvID) ? DBNull.Value : (object)TermsItem.ClientQutnAprvID;
-                    TermRow["TermsID"] = string.IsNullOrEmpty(TermsItem.TermsID) ? DBNull.Value : (object)TermsItem.TermsID;
-                    TermRow["TermsCode"] = string.IsNullOrEmpty(TermsItem.TermsCode) ? DBNull.Value : (object)TermsItem.TermsCode;
-                    TermRow["TermsName"] = string.IsNullOrEmpty(TermsItem.TermsName) ? DBNull.Value : (object)TermsItem.TermsName;
-
-                    TermsDtlTable.Rows.Add(TermRow); // Fixed table reference
+                    DataRow r = termsDtlTable.NewRow();
+                    r["TermsID"] = NullIfEmpty(t.TermsID);
+                    r["TermsCode"] = NullIfEmpty(t.TermsCode);
+                    r["TermsName"] = NullIfEmpty(t.TermsName);
+                    termsDtlTable.Rows.Add(r);
                 }
             }
 
+            /* ── Execute SP ────────────────────────────────────────────── */
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveQuotToClient"))
+
+            using (DbCommand cmd = db.GetStoredProcCommand("OBS_SaveQuotToClient"))
             {
-                db.AddInParameter(dbCommandWrapper, "@action", SqlDbType.VarChar, action);
-                db.AddInParameter(dbCommandWrapper, "@OBS_QtC_MasterType", SqlDbType.Structured, masterDataTable);
-                db.AddInParameter(dbCommandWrapper, "@OBS_QtC_DetailType", SqlDbType.Structured, detailDataTable);
-                db.AddInParameter(dbCommandWrapper, "@OBS_Qtc_TermsDtl", SqlDbType.Structured, TermsDtlTable);
-                db.AddInParameter(dbCommandWrapper, "@BriefingDate", SqlDbType.NVarChar, MasterData[0].BriefingDate);
-                db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, MasterData[0].ClientReqID);
-                db.AddInParameter(dbCommandWrapper, "@ReqType", SqlDbType.NVarChar, ReqType);
-                db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
-                db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
+                db.AddInParameter(cmd, "@action", SqlDbType.VarChar, action);
+                db.AddInParameter(cmd, "@OBS_QtC_MasterType", SqlDbType.Structured, masterDataTable);
+                db.AddInParameter(cmd, "@OBS_QtC_DetailType", SqlDbType.Structured, detailDataTable);
+                db.AddInParameter(cmd, "@OBS_Qtc_TermsDtl", SqlDbType.Structured, termsDtlTable);
+                db.AddInParameter(cmd, "@BriefingDate", SqlDbType.NVarChar, MasterData[0].BriefingDate);
+                db.AddInParameter(cmd, "@ClientReqID", SqlDbType.NVarChar, MasterData[0].ClientReqID);
+                db.AddInParameter(cmd, "@ReqType", SqlDbType.NVarChar, ReqType);
+                db.AddInParameter(cmd, "@SetBy", SqlDbType.VarChar, UserID);
+                db.AddOutParameter(cmd, "@p_Status", DbType.String, 1200);
 
-                var ds = db.ExecuteDataSet(dbCommandWrapper);
+                var ds = db.ExecuteDataSet(cmd);
 
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    var dt = ds.Tables[0];
-                    var dr = dt.Rows[0];
-
-                    message = dr["Status"].ToString();
-
-                }
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    message = ds.Tables[0].Rows[0]["Status"].ToString();
             }
 
-               return message;
+            return message;
         }
+
+        /* ── Private helpers ───────────────────────────────────────────────
+           Put these as private methods in the same class.
+           ─────────────────────────────────────────────────────────────────── */
+
+        /// <summary>Returns DBNull for null/empty strings.</summary>
+        private static object NullIfEmpty(string value)
+            => string.IsNullOrEmpty(value) ? (object)DBNull.Value : value;
+
+        /// <summary>
+        /// Returns DBNull for null, empty, or the literal string "null"
+        /// (which AngularJS/JSON serialiser can produce for JS null numbers).
+        /// </summary>
+        private static object NullIfNullString(string value)
+            => (string.IsNullOrEmpty(value) || value.Equals("null", StringComparison.OrdinalIgnoreCase))
+               ? (object)DBNull.Value
+               : value;
+
+
     }
 }

@@ -368,8 +368,10 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input style="text-align:right" id="ProposedAmount" name="ProposedAmount" autocomplete="off" type="text" data-ng-model="AdvanceInformmation.ProposedAmount"
-                                   class="form-control" ng-keydown="calculateRemainingAmount($event)" />
+                            <input style="text-align:right" id="ProposedAmount" name="ProposedAmount" autocomplete="off" type="text"
+                                   data-ng-model="AdvanceInformmation.ProposedAmount"
+                                   class="form-control"
+                                   ng-change="performCalculation()" />
                         </div>
                     </div>
 
@@ -625,32 +627,28 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             });
         };
 
-        $scope.calculateRemainingAmount = function (event) {
-            if (event.keyCode === 13 || event.keyCode === 9) {
-                performCalculation();
-            }
-        };
 
+        $scope.performCalculation = function () {
 
-
-        function performCalculation() {
             var proposed = parseFloat($scope.AdvanceInformmation.ProposedAmount) || 0;
             var poInstallment = parseFloat($scope.AdvanceInformmation.POInstallmentAmt) || 0;
             var demandAmount = parseFloat($scope.AdvanceInformmation.AdvanceDemandAmount) || 0;
 
+            var remaining = 0;
+
             if (poInstallment > 0 && proposed) {
-                $scope.AdvanceInformmation.RemainingAmount = poInstallment - proposed;
-            } else if (poInstallment <= 0 && proposed) {
-                $scope.AdvanceInformmation.RemainingAmount = demandAmount - proposed;
-            } else {
-                $scope.AdvanceInformmation.RemainingAmount = 0;
+                remaining = poInstallment - proposed;
             }
-        }
+            else if (poInstallment <= 0 && proposed) {
+                remaining = demandAmount - proposed;
+            }
+            else {
+                remaining = 0;
+            }
 
-        $scope.$watchGroup(['AdvanceInformmation.PurchaseOrderAmount', 'AdvanceInformmation.ProposedAmount'], function (newValues, oldValues) {
-            performCalculation();
-        });
-
+            $scope.AdvanceInformmation.RemainingAmount =
+                parseFloat(remaining).toFixed(2);
+        };
 
 
 

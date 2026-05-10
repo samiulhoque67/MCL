@@ -120,6 +120,7 @@ namespace SILDMS.Model
         public string ReqType { get; set; }
         public string VendorName { get; set; }
         public string Operation { get; set; }
+        public string ClientQutnAprvItemID { get; set; }
     }
 
     public class OBS_QutntoClientMaster

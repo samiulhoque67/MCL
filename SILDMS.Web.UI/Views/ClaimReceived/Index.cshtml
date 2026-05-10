@@ -1080,19 +1080,31 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.isBoxBodyVisible = !$scope.isBoxBodyVisible;
         };
 
-
         function performCalculation() {
-            if ($scope.AdvanceAprv.WOInstallmentAmt && $scope.AdvanceRciv.AdvanceClaimAmount) {
-                $scope.AdvanceRciv.RemainingAmount = $scope.AdvanceAprv.WOInstallmentAmt - $scope.AdvanceRciv.AdvanceClaimAmount;
-            } else {
-                $scope.AdvanceRciv.RemainingAmount = 0;
+
+            var remaining = 0;
+
+            if ($scope.AdvanceAprv.WOInstallmentAmt &&
+                $scope.AdvanceRciv.AdvanceClaimAmount) {
+
+                remaining = $scope.AdvanceAprv.WOInstallmentAmt -
+                    $scope.AdvanceRciv.AdvanceClaimAmount;
             }
+            else {
+                remaining = 0;
+            }
+
+            $scope.AdvanceRciv.RemainingAmount =
+                parseFloat(remaining).toFixed(2);
+
         }
 
-        $scope.$watchGroup(['AdvanceAprv.WOInstallmentAmt', 'AdvanceRciv.AdvanceClaimAmount'], function (newValues, oldValues) {
+        $scope.$watchGroup([
+            'AdvanceAprv.WOInstallmentAmt',
+            'AdvanceRciv.AdvanceClaimAmount'
+        ], function (newValues, oldValues) {
             performCalculation();
         });
-
 
 
 

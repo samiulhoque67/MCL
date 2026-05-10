@@ -41,6 +41,8 @@ namespace SILDMS.Model
 
     public class Invitation
     {
+        public string VendorCSRecmName;
+
         public string VendorCSRecmID { get; set; }
         public string VendorRequisitionNumber { get; set; }
         public string ClientRequisitionNumber { get; set; }

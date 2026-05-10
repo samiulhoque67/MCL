@@ -52,6 +52,15 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
+        public async Task<dynamic> AllSavcdClientQuotationRecommendation(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action)
+        {
+            var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
+            await Task.Run(() => _quotationApprovalService.AllSavcdClientQuotationRecommendationService(UserID, page, itemsPerPage, sortBy, reverse, search, type, action, out AllAvailableClientsList));
+            var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
+            return result;
+        }
+
+        [HttpPost]
         public async Task<dynamic> AllClientQuotationforApprvData(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action)
         {
             var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
@@ -68,6 +77,17 @@ namespace SILDMS.Web.UI.Controllers
             var result = Json(new { GetClientReqDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
             return result;
         }
+
+        [HttpPost]
+        public async Task<dynamic> GetClientReqDataInfoAprv(string ClientID, string ClientReqID)
+        {
+            var GetClientReqDetails = new List<ClientReqData>();  // Renamed to ClientDetails
+            await Task.Run(() => _quotationApprovalService.GetClientReqDataInfoAprvService(ClientID, ClientReqID, out GetClientReqDetails));
+            var result = Json(new { GetClientReqDetails, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);  // Renamed here too
+            return result;
+        }
+
+
 
         [HttpPost]
         public async Task<dynamic> GetVendorTermList(string ClientQutnRecmID)
