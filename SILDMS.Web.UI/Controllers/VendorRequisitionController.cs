@@ -87,6 +87,7 @@ namespace SILDMS.Web.UI.Controllers
 
             if (string.IsNullOrEmpty(vendorReq.VendorReqID))
             {
+                vendorReq.Action = "add";
                 vendorReq.SetBy = UserID;
                 status = _clientInfoService.SaveVendorRequisition(vendorReq, vendorReqItem, vendorReqTerm, vendorReqItemWise);
 
@@ -100,6 +101,9 @@ namespace SILDMS.Web.UI.Controllers
             }
             else
             {
+                vendorReq.Action = "edit";
+                vendorReq.SetBy = UserID;
+                status = _clientInfoService.SaveVendorRequisition(vendorReq, vendorReqItem, vendorReqTerm, vendorReqItemWise);
                 status = "S202";
                 TempData["VendorRequisition"] = vendorReq;
             }

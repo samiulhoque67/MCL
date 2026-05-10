@@ -313,6 +313,7 @@
                                 <td class="hidden">{{row.ClientReqID}}</td>
                                 @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.ClientCode}}</td>*@
                                 <td class="hidden">{{row.ClientID}}</td>
+                                <td class="hidden">{{row.ProcessStatus}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientReqNo}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.RequisitionDate}}</td>
@@ -1112,6 +1113,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 ReqQnty: "",
                 ReqUnit: ""
             }
+
             $scope.ClientReqTerm = {
                 ClientReqTermsID: "",
                 ClientReqID: "",
@@ -1119,6 +1121,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 TermsCode: "",
                 TermsName: ""
             }
+
             $("#DeliveryDate").val('');
             $scope.masterDataSetupGridData = [];  // base collection
             $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
@@ -1220,8 +1223,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         ////////////////////////Select for Update from Search grid ///////////////////////
 
         $scope.toggleClientReqSelect = function (tableRow) {
-            $scope.viewonlymode = true;
 
+            if (tableRow.ProcessStatus == 'Rcvd') {
+                $scope.viewonlymode = false;
+            }
+            else {
+                $scope.viewonlymode = true;
+            }
 
             $scope.ClientReq.ClientReqID = tableRow.ClientReqID;
             $scope.ClientReq.ClientID = tableRow.ClientID;
@@ -1302,20 +1310,21 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 return;
             }
 
-            if ($('#ClientReqNo').val() == "") {
-                toastr.error("Client ReqNo.  Required");
-                return;
-            }
+            //if ($('#ClientReqNo').val() == "") {
+            //    toastr.error("Client ReqNo.  Required");
+            //    return;
+            //}
 
-            if ($('#SubmissionDate').val() == "") {
-                toastr.error("Submission Date Required.");
-                return;
-            }
+            //if ($('#SubmissionDate').val() == "") {
+            //    toastr.error("Submission Date Required.");
+            //    return;
+            //}
 
             if ($('#RequisitionDate').val() == "") {
                 toastr.error("Requisition Date Date Required");
                 return;
             }
+
             $('#RequisitionTermModal').modal('show');
         };
 

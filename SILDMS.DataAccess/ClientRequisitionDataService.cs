@@ -203,6 +203,7 @@ namespace SILDMS.DataAccess
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         SubmissionDate = reader.GetString("SubmissionDate"),
                         Remarks = reader.GetString("Remarks"),
+                        ProcessStatus = reader.GetString("ProcessStatus"),
                         Status = reader.GetString("Status")
                     }).ToList();
                 }

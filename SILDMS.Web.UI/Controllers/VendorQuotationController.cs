@@ -71,16 +71,42 @@ namespace SILDMS.Web.UI.Controllers
         {
             vendorQutn.SetBy = UserID;
             string status = string.Empty;//, message = string.Empty;
-            string VendorQutnID = string.Empty;//, message = string.Empty;
 
-            status = _clientInfoService.SaveVendorQuotation(vendorQutn, vendorQutnItem, vendorQutnTerm);
-
-            if (status != string.Empty && status != "ERROR_Duplicate")
+            if (string.IsNullOrEmpty(vendorQutn.VendorQutnID))
             {
-                string[] statusarr = status.Split(',');
-                VendorQutnID = statusarr[1];
-                status = statusarr[0];
+                vendorQutn.Action = "add";
+                vendorQutn.SetBy = UserID;
+                status = _clientInfoService.SaveVendorQuotation(vendorQutn, vendorQutnItem, vendorQutnTerm);
+
+                if (status != string.Empty)
+                {
+                    string[] statusarr = status.Split(',');
+                    vendorQutn.VendorReqID = statusarr[1];
+                    status = statusarr[0];
+                }
             }
+            else
+            {
+                vendorQutn.Action = "edit";
+                vendorQutn.SetBy = UserID;
+                status = _clientInfoService.SaveVendorQuotation(vendorQutn, vendorQutnItem, vendorQutnTerm);
+                status = "S202";
+            }
+            //string status = string.Empty;//, message = string.Empty;
+            //string VendorQutnID = string.Empty;//, message = string.Empty;
+            //if (string.IsNullOrEmpty(vendorQutn.VendorQutnID))
+            //    vendorQutn.Action = "add";
+            //else
+            //    vendorQutn.Action = "edit";
+
+            //status = _clientInfoService.SaveVendorQuotation(vendorQutn, vendorQutnItem, vendorQutnTerm);
+
+            //if (status != string.Empty && status != "ERROR_Duplicate")
+            //{
+            //    string[] statusarr = status.Split(',');
+            //    VendorQutnID = statusarr[1];
+            //    status = statusarr[0];
+            //}
 
             return Json(new { status, VendorQutnID }, JsonRequestBehavior.AllowGet);
         }
