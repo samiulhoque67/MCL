@@ -711,6 +711,7 @@ namespace SILDMS.DataAccess
                         // FIX 1: map VendorCSRecmName so Search modal shows it
                         VendorCSRecmName = reader.GetString("VendorCSRecmName"),
                         CSRecmVendorID = reader.GetString("CSRecmVendorID"),
+                        ProcessStatus = reader.GetString("ProcessStatus"),
                     }).ToList();
                 }
             }

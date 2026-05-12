@@ -41,6 +41,10 @@ namespace SILDMS.Model
         public string VendorCSRecmID { get; set; }
 
         public string WIInfoID { get; set; }
-       
+
+        public string DocumentID { get; set; }
+        public string FormName { get; set; }
+        public string TermsID { get; set; }
+
     }
 }

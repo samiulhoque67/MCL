@@ -239,5 +239,17 @@ namespace SILDMS.Web.UI.Controllers
                 return new HttpStatusCodeResult(500, $"Error retrieving document: {ex.Message}");
             }
         }
+
+        public async Task<dynamic> UpdateDocumentID(string ClientReqID, string DocumentID)
+        {
+            string status = string.Empty;
+            await Task.Run(() =>
+            {
+                status = _clientInfoService.UpdateDocumentID(ClientReqID, DocumentID);
+            });
+            return Json(new { status }, JsonRequestBehavior.AllowGet);
+        }
+
+
     }
 }

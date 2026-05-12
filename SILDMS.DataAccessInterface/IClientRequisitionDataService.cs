@@ -18,5 +18,8 @@ namespace SILDMS.DataAccessInterface
         List<OBS_ClientReqTerms> GetClientReqTermAgainstFormList(string TermsID);
         string DeleteClientReqItemAndTerm(string ClientReqItemID, string ClientReqTermID);
         List<OBS_Terms> GetTermsConditionsList();
+
+        string UpdateDocumentID(string ClientReqID, string DocumentID);
+
     }
 }

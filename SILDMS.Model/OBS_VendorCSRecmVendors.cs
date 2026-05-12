@@ -78,6 +78,7 @@ namespace SILDMS.Model
         public string Remarks { get; set; }
         public string PoPreparationID { get; set; }
         public string PoDate { get; set; }
+        public string ProcessStatus { get; set; }
     }
 
 

@@ -19,5 +19,8 @@ namespace SILDMS.DataAccessInterface
         List<OBS_VendorQutnTerms> GetVendorQutnTermAgainstFormList(string TermsID);
         string DeleteVendorQutnItemAndTerm(string VendorQutnItemID, string VendorQutnTermID);
         List<OBS_Terms> GetTermsConditionsList();
+
+
+        string UpdateDocumentID(string ClientReqID, string DocumentID);
     }
 }

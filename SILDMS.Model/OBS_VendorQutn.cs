@@ -62,6 +62,8 @@ namespace SILDMS.Model
         public Int64 WOInstallmentID { get; set; }
         public double WOInstallmentAmt { get; set; }
         public decimal BaseAmount { get; set; }
+        public string ProcessStatus { get; set; }
+        public string DocumentID { get; set; }
     }
 
 
