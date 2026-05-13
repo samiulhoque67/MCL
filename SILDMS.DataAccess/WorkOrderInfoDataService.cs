@@ -281,7 +281,7 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, woInfo.Action);
                     db.AddInParameter(dbCommandWrapper, "@TolalItem", SqlDbType.Int, woInfo.TolalItem);
                     db.AddInParameter(dbCommandWrapper, "@SelectedItem", SqlDbType.Int, woInfo.SelectedItem);
-                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 500);
                     // Execute SP.
                     db.ExecuteNonQuery(dbCommandWrapper);
                     // Getting output parameters and setting response details.
@@ -301,25 +301,27 @@ namespace SILDMS.DataAccess
 
         public List<OBS_WOInfo> GetWOInfoSearchList()
         {
-            string errorNumber = string.Empty;
             List<OBS_WOInfo> WOInfoList = new List<OBS_WOInfo>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetWOInfoSearchList"))
             {
-                // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    DataTable dt1 = ds.Tables[0];
-                    WOInfoList = dt1.AsEnumerable().Select(reader => new OBS_WOInfo
+                    WOInfoList = ds.Tables[0].AsEnumerable().Select(reader => new OBS_WOInfo
                     {
                         WOInfoID = reader.GetString("WOInfoID"),
                         ClientID = reader.GetString("ClientID"),
+                        ClientQutnAprvID = reader.GetString("ClientQutnAprvID"), // ← ADD
                         ClientName = reader.GetString("ClientName"),
                         WONo = reader.GetString("WONo"),
                         WODate = reader.GetString("WODate"),
                         WOAmt = reader.GetString("WOAmt"),
+                        BillCategory = reader.GetString("BillCategory"),     // ← ADD
+                        BillType = reader.GetString("BillType"),         // ← ADD
+                        NoOfInstallment = reader.GetString("NoOfInstallment"),  // ← ADD
+                        InstallmentAmt = reader.GetString("InstallmentAmt"),   // ← ADD
                         Remarks = reader.GetString("Remarks"),
                         Status = reader.GetString("Status")
                     }).ToList();
@@ -327,24 +329,19 @@ namespace SILDMS.DataAccess
             }
             return WOInfoList;
         }
-
         public List<OBS_WOInfoItem> GetWOInfoSearchItemList(string WOInfoID)
         {
-            string errorNumber = string.Empty;
             List<OBS_WOInfoItem> WOInfoItemList = new List<OBS_WOInfoItem>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetWOInfoSearchItemList"))
             {
                 db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.VarChar, WOInfoID);
-                // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    DataTable dt1 = ds.Tables[0];
-                    WOInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_WOInfoItem
+                    WOInfoItemList = ds.Tables[0].AsEnumerable().Select(reader => new OBS_WOInfoItem
                     {
-
                         WOInfoItemID = reader.GetString("WOInfoItemID"),
                         WOInfoID = reader.GetString("WOInfoID"),
                         ServiceCategoryID = reader.GetString("ServiceCategoryID"),
@@ -361,12 +358,12 @@ namespace SILDMS.DataAccess
                         QutnPrice = reader.GetString("QutnPrice"),
                         QutnUnit = reader.GetString("QutnUnit"),
                         QutnAmt = reader.GetString("QutnAmt"),
+                        WOQnty = reader.GetString("WOQnty"),   // ← FIXED
+                        WOPrice = reader.GetString("WOPrice"),  // ← FIXED
+                        WOAmt = reader.GetString("WOAmt"),    // ← FIXED
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
-                        TolAmt = reader.GetString("TolAmt"),
-                        WOQnty = reader.GetString("ReqQnty"),
-                        WOPrice = reader.GetString("ReqUnit"),
-                        WOAmt = reader.GetString("QutnQnty")
+                        TolAmt = reader.GetString("TolAmt")
                     }).ToList();
                 }
             }

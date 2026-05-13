@@ -74,12 +74,23 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> SaveWorkOrderInfo(OBS_WOInfo woInfo, List<OBS_WOInfoItem> woInfoItem, List<OBS_WOInfoTerms> woInfoTerm)
+        public async Task<dynamic> SaveWorkOrderInfo(OBS_WOInfo woInfo,
+     List<OBS_WOInfoItem> woInfoItem, List<OBS_WOInfoTerms> woInfoTerm)
         {
             woInfo.SetBy = UserID;
-            string status = string.Empty;//, message = string.Empty;
+            string status = string.Empty;
             status = _clientInfoService.SaveWorkOrderInfo(woInfo, woInfoItem, woInfoTerm);
-            return Json(new { status }, JsonRequestBehavior.AllowGet);
+
+            // Parse WOInfoID back out if SP returns it (S201,<id> or S202,<id>)
+            string WOInfoID = woInfo.WOInfoID;
+            if (!string.IsNullOrEmpty(status) && status.Contains(","))
+            {
+                var parts = status.Split(',');
+                status = parts[0];
+                WOInfoID = parts[1];
+            }
+
+            return Json(new { status, WOInfoID }, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<dynamic> GetWOInfoSearchList()

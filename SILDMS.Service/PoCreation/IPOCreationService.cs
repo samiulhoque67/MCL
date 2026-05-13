@@ -3,6 +3,7 @@ using SILDMS.Utillity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,5 +18,6 @@ namespace SILDMS.Service.PoCreation
         ValidationResult OBS_GetPOVendorsUsingClient(string ClientReqID,string WIInfoID, out List<OBS_VendorCSRecm> cSVendorList);
         string SaveVendorPOInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem,List<OBS_VendorCSRecmTerms> vendorCSTerm, List<OBS_VendorCSRecmVendors> vendorCSItemWise);
         ValidationResult SearchPOService(string userID, out List<Invitation> searchCSList);
+        ValidationResult GetPOHeaderDetails(string PoPreparationID, out POPreparationHeader poHeader);
     }
 }

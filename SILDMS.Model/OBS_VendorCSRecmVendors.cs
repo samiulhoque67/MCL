@@ -38,7 +38,19 @@ namespace SILDMS.Model
         [Required]
         public string Status { get; set; } 
     }
-
+    public class POPreparationHeader
+    {
+        public string PoPreparationID { get; set; }
+        public string ClientReqID { get; set; }
+        public string VendorID { get; set; }
+        public string PODate { get; set; }
+        public string POAmt { get; set; }
+        public string BillType { get; set; }
+        public string BillCategory { get; set; }
+        public string Installment { get; set; }
+        public string InstallmentAmt { get; set; }
+        public string Remarks { get; set; }
+    }
     public class Invitation
     {
         public string VendorCSRecmName;
@@ -79,6 +91,7 @@ namespace SILDMS.Model
         public string PoPreparationID { get; set; }
         public string PoDate { get; set; }
         public string ProcessStatus { get; set; }
+        public string WOInfoID { get; set; }
     }
 
 

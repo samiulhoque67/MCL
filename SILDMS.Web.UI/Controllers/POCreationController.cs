@@ -81,22 +81,39 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> SaveVendorPOInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem,List<OBS_VendorCSRecmTerms> vendorCSTerm, List<OBS_VendorCSRecmVendors> vendorCSItemWise)
+        public async Task<dynamic> SaveVendorPOInfo(
+      OBS_VendorCSRecm vendorCS,
+      List<OBS_VendorCSRecmItem> vendorCSItem,
+      List<OBS_VendorCSRecmTerms> vendorCSTerm,
+      List<OBS_VendorCSRecmVendors> vendorCSItemWise)
         {
             vendorCS.RecommendedBy = UserID;
-            string status = string.Empty;//, message = string.Empty;
-            status = pOCreationService.SaveVendorPOInfo(vendorCS, vendorCSItem, vendorCSTerm, vendorCSItemWise);
+            // VendorCSInfoID is already bound from the JS model — no change needed here.
+            // The data layer reads it and sets Action accordingly.
+            string status = pOCreationService.SaveVendorPOInfo(vendorCS, vendorCSItem, vendorCSTerm, vendorCSItemWise);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         [Authorize]
         public async Task<dynamic> SearchPO()
         {
             var SearchCSList = new List<Invitation>();
             await Task.Run(() => pOCreationService.SearchPOService(UserID, out SearchCSList));
-            return Json(new { SearchCSList, Msg = "" }, JsonRequestBehavior.AllowGet);
+
+            // FIXED: was  Json(new { SearchCSList, ... })  →  JS got res.data.SearchCSList
+            // The view now reads res.data.SearchCSList || res.data.SearchPOList so both work.
+            // Optionally rename for clarity:
+            return Json(new { SearchPOList = SearchCSList, Msg = "" }, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<dynamic> GetPOHeaderDetails(string PoPreparationID)
+        {
+            var POHeader = new POPreparationHeader();
+            await Task.Run(() => pOCreationService.GetPOHeaderDetails(PoPreparationID, out POHeader));
+            var result = Json(new { POHeader }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
+        }
     }
 }
