@@ -41,5 +41,6 @@ namespace SILDMS.Model
         public string Status { get; set; }
         public int TolalItem { get; set; }
         public int SelectedItem { get; set; }
+        public string ProcessStatus { get; set; }
     }
 }

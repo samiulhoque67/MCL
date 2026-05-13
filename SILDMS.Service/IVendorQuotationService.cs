@@ -20,6 +20,9 @@ namespace SILDMS.Service
         ValidationResult GetVendorQutnTermAgainstFormList(string TermsID, out List<OBS_VendorQutnTerms> VendorQutnTermList);
         string DeleteVendorQutnItemAndTerm(string VendorQutnItemID, string VendorQutnTermID);
         ValidationResult GetTermsConditionsList(out List<OBS_Terms> TermsConditionsList);
+
+
+        string UpdateDocumentID(string ClientReqID, string DocumentID);
     }
 }
 

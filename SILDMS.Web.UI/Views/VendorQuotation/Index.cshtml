@@ -5,7 +5,7 @@
 
 <style type="text/css">
     body {
-        font-size: 12px; /* Set global font size */
+        font-size: 12px;
     }
 
     .box-body, .form-group, .btn, .form-control, .box-header {
@@ -29,10 +29,8 @@
         font-size: 12px;
     }
 
-    /* Adjust icon size */
     .fa {
         font-size: 12px;
-        /* padding-right: 3px;*/
     }
 
     .text-success {
@@ -44,118 +42,113 @@
         color: blue;
         font-size: 14px;
     }
+
+    .row-invalid {
+        background-color: #ffe0e0 !important;
+    }
 </style>
 
 <div class="box box-primary box-body" ng-controller="VendorQuotationCtrl">
+
     <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
         <h2 class="box-title" style="font-family: math; font-weight: 500;">Vendor Quotation</h2>
-
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
+
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom btn-warning" ng-disabled="btnRefresh">
+                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom btn-warning">
                         <i class="fa fa-refresh" style="padding-right: 5px"></i> Refresh
                     </button>
                 </div>
 
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="SearchVendorQutnModal()" class="button-custom btn-primary" ng-disabled="btnSearch">
+                    <button type="button" data-ng-click="SearchVendorQutnModal()" class="button-custom btn-primary">
                         <i class="fa fa-search" style="padding-right: 5px"></i> Search
                     </button>
                 </div>
 
+                @*BUG FIX: btnSave was never defined — Save disabled in viewmode, Cancel never disabled *@
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Post()" class="button-custom btn-primary" ng-disabled="btnSave">
-                        <i class="fa fa-save" style="padding-right: 5px"></i> {{ VendorQutn.VendorQutnID ? 'Update' : 'Save' }}
+                    <button type="button" data-ng-click="Post()" class="button-custom btn-primary"
+                            ng-disabled="viewmode">
+                        <i class="fa fa-save" style="padding-right: 5px"></i>
+                        {{ VendorQutn.VendorQutnID ? 'Update' : 'Save' }}
                     </button>
                 </div>
 
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Cancel()" class="button-custom btn-danger" ng-disabled="btnSave">
+                    @*BUG FIX: Cancel() was referenced but never defined *@
+                    <button type="button" data-ng-click="Cancel()" class="button-custom btn-danger">
                         <i class="fa fa-times" style="padding-right: 5px;"></i> Cancel
                     </button>
                 </div>
+
             </div>
         </div>
     </div>
 
-
-    <div class="box-body " style="margin: 1%; padding: 5px 5px 5px 5px;" data-ng-disabled="">
+    <div class="box-body" style="margin: 1%; padding: 5px;">
         <div class="row">
+
+            @*Vendor Search *@
             <div class="row">
-                <div class="col-lg-3 ">
+                <div class="col-lg-3">
                     <div class="form-group">
                         <label for="VendorName">Quoted Vendor :</label>
                     </div>
                 </div>
-
                 <div class="col-sm-4 col-md-4 col-lg-4">
                     <div style="position: relative;">
-                        <input id="VendorName" name="VendorName" type="text" data-ng-model="VendorQutn.VendorName"
+                        <input id="VendorName" name="VendorName" type="text"
+                               data-ng-model="VendorQutn.VendorName"
                                class="form-control" ng-readonly="true"
                                placeholder="Vendor Name"
                                style="height: 25px; font-size: smaller;" />
-
+                        @*BUG FIX: Hide search button in viewmode *@
                         <button type="button" data-ng-click="ShowVendorReqList()"
+                                ng-hide="viewmode"
                                 style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
-padding: 0px 10px; border: 2px solid black; background: transparent;">
+                                       padding: 0px 10px; border: 2px solid black; background: transparent;">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
                 </div>
-
-
             </div>
-            @*<div class="row">
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label>Requisition No.</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <input id="RequisitionNo" name="RequisitionNo" type="text" class="form-control" placeholder="Client Requisition No" ng-model="VendorQutn.RequisitionNo" ng-readonly="true" />
-                        </div>
-                    </div>
 
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label>Requisition Date:</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <input id="RequisitionDate" name="RequisitionDate" readonly type="text" class="form-control" placeholder="Requisition Date" ng-model="VendorQutn.RequisitionDate" ng-readonly="true" />
-                        </div>
-                    </div>
-                </div>*@
-
+            @*Client Name (readonly always) *@
             <div class="row">
-                <div class="col-lg-3 ">
+                <div class="col-lg-3">
                     <div class="form-group">
                         <label for="ClientName">Client Name :</label>
                     </div>
                 </div>
                 <div class="col-lg-8">
                     <div class="form-group">
-                        <input id="ClientName" name="ClientName" type="text" data-ng-model="VendorQutn.ClientName" class="form-control" placeholder="ClientName" ng-readonly="true" />
+                        <input id="ClientName" name="ClientName" type="text"
+                               data-ng-model="VendorQutn.ClientName"
+                               class="form-control" placeholder="Client Name" ng-readonly="true" />
                     </div>
                 </div>
             </div>
 
+            @*Project Name (readonly always) *@
             <div class="row">
-                <div class="col-lg-3 ">
+                <div class="col-lg-3">
                     <div class="form-group">
                         <label for="ProjectName">Project Name :</label>
                     </div>
                 </div>
                 <div class="col-lg-8">
                     <div class="form-group">
-                        <textarea id="ProjectName" name="ProjectName" data-ng-model="VendorQutn.ProjectName" class="form-control" placeholder="Project Name" ng-readonly="true"> </textarea>
+                        <textarea id="ProjectName" name="ProjectName"
+                                  data-ng-model="VendorQutn.ProjectName"
+                                  class="form-control" placeholder="Project Name"
+                                  ng-readonly="true"></textarea>
                     </div>
                 </div>
             </div>
 
+            @*Quotation Numbers *@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -164,10 +157,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="VendorQutnNo" autocomplete="off" name="VendorQutnNo" type="text" class="form-control" placeholder="Vendor Quotation No" ng-model="VendorQutn.VendorQutnNo" />
+                        @*BUG FIX: readonly in viewmode *@
+                        <input id="VendorQutnNo" autocomplete="off" name="VendorQutnNo" type="text"
+                               class="form-control" placeholder="Vendor Quotation No"
+                               ng-model="VendorQutn.VendorQutnNo"
+                               ng-readonly="viewmode" />
                     </div>
                 </div>
-
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label>Quotation No:</label>
@@ -175,10 +171,14 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="AutoVendorQutnNo" name="AutoVendorQutnNo" type="text" class="form-control" placeholder="Auto Quotation No" ng-model="VendorQutn.AutoVendorQutnNo" ng-readonly="true" />
+                        <input id="AutoVendorQutnNo" name="AutoVendorQutnNo"
+                               class="form-control" placeholder="Auto Quotation No"
+                               ng-model="VendorQutn.VendorQutnID" ng-readonly="true" />
                     </div>
                 </div>
             </div>
+
+            @*Dates *@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -187,10 +187,14 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="QuotationDate" name="QuotationDate" type="text" class="DatePicker form-control" autocomplete="off" placeholder="Quotation Date" ng-model="VendorQutn.QuotationDate" />
+                        @*BUG FIX: readonly in viewmode; id was correct but ng-readonly missing *@
+                        <input id="QuotationDate" name="QuotationDate" type="text"
+                               class="DatePicker form-control" autocomplete="off"
+                               placeholder="DD/MM/YYYY"
+                               ng-model="VendorQutn.QuotationDate"
+                               ng-readonly="viewmode" />
                     </div>
                 </div>
-
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label>Quotation Received Date:</label>
@@ -198,81 +202,124 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="QutnReceivedDate" name="QutnReceivedDate" type="text" class="DatePicker form-control" autocomplete="off" placeholder="Quotation Received Date" ng-model="VendorQutn.QutnReceivedDate" />
+                        @*  {{--
+        BUG FIX: Input id was "QutnReceivedDate" but validation checked "#ReceivedDate"
+        which never matched — field was always seen as empty even when filled.
+        Also ng-readonly missing for viewmode.
+                        *@
+                        <input id="QutnReceivedDate" name="QutnReceivedDate" type="text"
+                               class="DatePicker form-control" autocomplete="off"
+                               placeholder="DD/MM/YYYY"
+                               ng-model="VendorQutn.QutnReceivedDate"
+                               ng-readonly="viewmode" />
                     </div>
                 </div>
             </div>
 
+            @*Quotation For (Remarks) *@
             <div class="row">
-                <div class="col-lg-3 ">
+                <div class="col-lg-3">
                     <div class="form-group">
                         <label for="QuotationFor">Quotation For:</label>
                     </div>
                 </div>
                 <div class="col-lg-8">
                     <div class="form-group">
-                        @*<input id="Remarks" name="Remarks" type="text" data-ng-model="VendorQutn.Remarks" class="form-control" placeholder="Quotation For" />*@
-                        <textarea id="Remarks" name="Remarks" data-ng-model="VendorQutn.Remarks" class="form-control" placeholder="Quotation For"> </textarea>
+                        @*BUG FIX: readonly in viewmode *@
+                        <textarea id="Remarks" name="Remarks" data-ng-model="VendorQutn.Remarks"
+                                  class="form-control" placeholder="Quotation For"
+                                  ng-readonly="viewmode"></textarea>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="upload_documents">
-                            Upload Documents <br>
-                            (<span style="color:#ff4900;"> PDF Only, Max Size 2MB </span>)
-                        </label>
-                    </div>
-                </div>
-                <div ng-hide="viewmode" class="col-lg-3">
-                    <div class="form-group">
-                        <input type="file" style="height: 25px; float: left; margin-top: 5px;" id="FileUpload1" accept=".pdf"
-                               ng-model="uploadedFile" onchange="angular.element(this).scope().fileSelected(this)" />
-                    </div>
-                </div>
-                <div ng-show="viewmode" class="col-lg-1">
-                    <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
 
+            @*Document Upload / View *@
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="upload_documents">
+                        Upload Documents <br>
+                        (<span style="color:#ff4900;">PDF Only, Max Size 2MB</span>)
+                    </label>
+                </div>
+            </div>
+
+            <!-- File input: hide in view mode -->
+            <div ng-hide="viewmode" class="col-lg-2">
+
+                <div class="form-group">
+                    <input type="file" style="height:25px;float:left;margin-top:5px;"
+                           id="FileUpload1" accept=".pdf"
+                           ng-model="uploadedFile"
+                           onchange="angular.element(this).scope().fileSelected(this)" />
+
+                </div>
+
+            </div>
+
+
+            <div  ng-hide="viewmode" class="col-lg-2">
+
+
+                <!-- View button — only when a document exists -->
+                <button ng-show="VendorQutn.DocumentID"
+                        ng-click="ViewDocument()"
+                        class="btn button-custom btn-sm">
+                    <i class="fa fa-eye"></i> View
+                </button>
+            </div>
+
+            <!-- In edit mode: allow re-upload AND view existing doc -->
+            <div ng-show="viewmode" class="col-lg-5">
+                <div class="form-group" style="display:flex; gap:8px; align-items:center;">
+
+
+                    <!-- View button — only when a document exists -->
+                    <button ng-show="VendorQutn.DocumentID"
+                            ng-click="ViewDocument()"
+                            class="btn button-custom btn-sm">
+                        <i class="fa fa-eye"></i> View
+                    </button>
+
+                    <span ng-hide="VendorQutn.DocumentID"
+                          style="color:#999; font-size:11px;">No document attached</span>
                 </div>
             </div>
         </div>
+
+        </div>
     </div>
 
+    @*==================== VENDOR REQ SELECTION MODAL ==================== *@
     <div id="VendorReqInfoModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <!-- Modal Header -->
                 <div style="text-align: right;">
-                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                    <button type="button" class="btn-danger" data-dismiss="modal"
                             aria-hidden="true" style="color: #ffffff;">
                         <i class="fa fa-remove"></i>
                     </button>
                 </div>
-
                 <div class="modal-body table-responsive">
-                    <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <table st-table="VendorReqDisplayedCollection" st-safe-src="VendorReqList"
+                           class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr style="font-size: 15px;">
-                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
-                                    Vendor Quotation Information
+                                <th colspan="4" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Vendor Requisition Information
                                 </th>
                             </tr>
-
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('ClientName')">Client Name</th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('Remarks')">Project Name</th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('VendorName')">Vendor Name</th>
-                                @*<th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">RequisitionNo</th>
-                                    <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
-                                    <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('LastDateofQuotation')">Last Date of Quotation</th>*@
-                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>*@
-                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                                <th class="col-lg-2">Client Name</th>
+                                <th class="col-lg-2">Project Name</th>
+                                <th class="col-lg-2">Vendor Name</th>
+                                <th class="col-lg-1">Action</th>
                             </tr>
                             <tr>
                                 <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="Remarks" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
                                 <th><input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" /></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -280,30 +327,25 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="hidden">{{row.ClientReqID}}</td>
                                 <td class="hidden">{{row.ClientReqNo}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
                                 <td class="hidden">{{row.VendorID}}</td>
                                 <td class="hidden">{{row.VendorReqID}}</td>
                                 <td class="hidden">{{row.RequisitionNo}}</td>
                                 <td class="hidden">{{row.RequisitionDate}}</td>
                                 <td class="hidden">{{row.LastDateofQuotation}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.Remarks}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.VendorName}}</td>
-                                @*<td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.RequisitionNo}}</td>
-                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.RequisitionDate}}</td>
-                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.LastDateofQuotation}}</td>*@
-                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                        <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                            {{row.Status == '1'? 'Active':'InActive'}}
-                                        </span>
-                                    </td>*@
+                                <td class="text-left">{{row.ClientName}}</td>
+                                <td class="text-left">{{row.Remarks}}</td>
+                                <td class="text-left">{{row.VendorName}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorReqSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                    <button type="button" class="btn btn-sm btn-primary btn-flat"
+                                            data-ng-click="toggleVendorReqSelect(row)">
+                                        <i class="fa fa-edit"></i> Select
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="7" class="text-center">
+                                <td colspan="4" class="text-center">
                                     <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
                                 </td>
                             </tr>
@@ -314,81 +356,145 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         </div>
     </div>
 
+    @*==================== SEARCH VENDOR QUOTATION MODAL ==================== *@
     <div id="SearchVendorQutnModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <!-- Modal Header -->
                 <div style="text-align: right;">
-                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                    <button type="button" class="btn-danger" data-dismiss="modal"
                             aria-hidden="true" style="color: #ffffff;">
                         <i class="fa fa-remove"></i>
                     </button>
                 </div>
-                <div class="table-responsive" data-ng-disabled="" ng-cloak>
-                    <table st-table="vendorQutnDisplayedCollection" st-safe-src="vendorQutnSearchList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                <div class="table-responsive" ng-cloak>
+                    <table st-table="vendorQutnDisplayedCollection" st-safe-src="vendorQutnSearchList"
+                           class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr style="font-size: 15px;">
-                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                <th colspan="7" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
                                     Vendor Quotation Information
                                 </th>
                             </tr>
-
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-
-                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('ClientName')">Client Name</th>
-                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('VendorName')">Vendor Name</th>
-                                <th class="col-lg-3 col-md-3 col-sm-3" data-ng-click="sort('VendorQutnNo')">Vendor Quotation No</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('QuotationDate')">Quotation Date</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('ReceivedDate')">Received Date</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                                <th style="width:18%;">Client Name</th>
+                                <th style="width:18%;">Vendor Name</th>
+                                <th style="width:20%;">Vendor Quotation No</th>
+                                <th style="width:12%;">Quotation Date</th>
+                                <th style="width:12%;">Received Date</th>
+                                <th style="width:8%;">Status</th>
+                                <th style="width:12%;">Action</th>
                             </tr>
+
                             <tr>
-                                <th><input st-search="ClientCode" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="ClientName" placeholder="ClientName" class="input-sm form-control" type="search" /></th>
+                                <th>
+                                    <input st-search="ClientName"
+                                           placeholder="Search Client"
+                                           class="input-sm form-control"
+                                           type="search" />
+                                </th>
+
+                                <th>
+                                    <input st-search="VendorName"
+                                           placeholder="Search Vendor"
+                                           class="input-sm form-control"
+                                           type="search" />
+                                </th>
+
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
+
                             <tr ng-repeat="row in vendorQutnDisplayedCollection">
+
                                 <td class="hidden">{{row.VendorQutnID}}</td>
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="hidden">{{row.VendorID}}</td>
+                                <td class="hidden">{{row.ProcessStatus}}</td>
                                 <td class="hidden">{{row.RequisitionNo}}</td>
                                 <td class="hidden">{{row.RequisitionDate}}</td>
                                 <td class="hidden">{{row.AutoVendorQutnNo}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.ClientName}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.VendorName}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-left">{{row.VendorQutnNo}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.QuotationDate}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.QutnReceivedDate}}</td>
                                 <td class="hidden">{{row.Remarks}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                    <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                        {{row.Status == '1'? 'Active':'InActive'}}
+
+                                <td class="text-left">
+                                    {{row.ClientName}}
+                                </td>
+
+                                <td class="text-left">
+                                    {{row.VendorName}}
+                                </td>
+
+                                <td class="text-left">
+                                    {{row.VendorQutnNo}}
+                                </td>
+
+                                <td class="text-center">
+                                    {{row.QuotationDate}}
+                                </td>
+
+                                <td class="text-center">
+                                    {{row.QutnReceivedDate}}
+                                </td>
+
+                                <td class="text-center">
+                                    <span ng-class="row.Status=='1'
+                                      ? 'label label-success'
+                                      : 'label label-danger'">
+
+                                        {{row.Status == '1'
+                                    ? 'Active'
+                                    : 'InActive'}}
                                     </span>
                                 </td>
 
-                                <td>
-                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleVendorQutnSelect(row)">Select</a>
+                                <td class="text-center">
+
+                                    <!-- Edit -->
+                                    <button type="button"
+                                            class="btn btn-success btn-xs"
+                                            ng-if="row.ProcessStatus == 'Rcvd'"
+                                            ng-click="toggleVendorQutnSelect(row, 'edit')">
+
+                                        <i class="fa fa-pencil"></i> Edit
+                                    </button>
+
+                                    <!-- View -->
+                                    <button type="button"
+                                            class="btn btn-primary btn-xs"
+                                            ng-click="toggleVendorQutnSelect(row, 'view')">
+
+                                        <i class="fa fa-eye"></i> View
+                                    </button>
+
                                 </td>
+
                             </tr>
+
                         </tbody>
+
                         <tfoot>
                             <tr>
-                                <td colspan="9" class="text-center"><div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div></td>
+                                <td colspan="7" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div>
+                                </td>
                             </tr>
                         </tfoot>
-
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;">
+    @*==================== QUOTATION ITEM GRID ==================== *@
+    <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px;">
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="GridDisplayCollection" st-safe-src="masterDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                <table st-table="GridDisplayCollection" st-safe-src="masterDataSetupGridData"
+                       class="table table-condensed table-bordered table-striped table-hover pnlView">
                     <thead>
                         <tr style="font-size: 15px;">
                             <th colspan="15" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
@@ -396,254 +502,209 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             </th>
                         </tr>
                         <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-
-                            @*<th style="text-align: left;" st-sort="">Item Code</th>*@
-                            <th style="text-align: left;" st-sort="">Item Name</th>
-                            <th style="text-align: left;" st-sort="">Service Category</th>
-                            <th style="text-align: left;" st-sort="">Description</th>
-                            <th style="text-align: left;" st-sort="">Delivery Location</th>
-                            <th style="text-align: left;" st-sort="">Delivery Date</th>
-                            <th style="text-align: left;" st-sort="">Delivery Mode</th>
-                            <th style="text-align: left;" st-sort="">Req Qnty</th>
-                            <th style="text-align: left;" st-sort="">Req Unit</th>
-                            <th style="text-align: left;" st-sort="">Qutn Qnty</th>
-                            <th style="text-align: left;" st-sort="">Qutn Price</th>
-                            <th style="text-align: left;" st-sort="">Qutn Amt</th>
-                            <th style="text-align: left;" st-sort="">Vat(%)</th>
-                            <th style="text-align: left;" st-sort="">Vat Amt</th>
-                            <th style="text-align: left;" st-sort="">Tol Amt</th>
-                            @*<th style="text-align: left;">Action</th>*@
+                            <th style="text-align: left;">Item Name</th>
+                            <th style="text-align: left;">Service Category</th>
+                            <th style="text-align: left;">Description</th>
+                            <th style="text-align: left;">Delivery Location</th>
+                            <th style="text-align: left;">Delivery Date</th>
+                            <th style="text-align: left;">Delivery Mode</th>
+                            <th style="text-align: left;">Req Qnty</th>
+                            <th style="text-align: left;">Req Unit</th>
+                            <th style="text-align: left;">Qutn Qnty</th>
+                            <th style="text-align: left;">Qutn Price</th>
+                            <th style="text-align: left;">Qutn Amt</th>
+                            <th style="text-align: left;">Vat(%)</th>
+                            <th style="text-align: left;">Vat Amt</th>
+                            <th style="text-align: left;">Tot Amt</th>
                         </tr>
-
                     </thead>
                     <tbody>
-                        <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;">
+                        <tr ng-repeat="row in GridDisplayCollection" ng-cloak
+                            ng-class="{'row-invalid': row.isInvalid}"
+                            style="font-size:12px;">
                             <td class="hidden">{{row.VendorQutnItemID}}</td>
                             <td class="hidden">{{row.VendorQutnID}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ServiceItemName}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.ServiceCategoryName}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.Description}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.DeliveryLocation}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.DeliveryDate}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.DeliveryMode}}</td>
-                            <td class="col-lg-1" style="width:6%;">{{row.ReqQnty | number:2}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.ReqUnit}}</td>
+                            <td style="width:5%;">{{row.ServiceItemName}}</td>
+                            <td style="width:6%;">{{row.ServiceCategoryName}}</td>
+                            <td style="width:6%;">{{row.Description}}</td>
+                            <td style="width:6%;">{{row.DeliveryLocation}}</td>
+                            <td style="width:6%;">{{row.DeliveryDate}}</td>
+                            <td style="width:6%;">{{row.DeliveryMode}}</td>
+                            <td style="width:6%;">{{row.ReqQnty | number:2}}</td>
+                            <td style="width:5%;">{{row.ReqUnit}}</td>
+
+                            @*BUG FIX: Input fields readonly in viewmode *@
                             <td class="col-lg-1">
-                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.QutnQnty" ng-blur="checkUnitPrice(row)" ng-value="0" />
+                                <input class="form-control" style="width:100%; height:18px; font-size:10px"
+                                       type="text" min="0"
+                                       ng-model="row.QutnQnty"
+                                       ng-blur="checkUnitPrice(row)"
+                                       ng-readonly="viewmode" />
                             </td>
                             <td class="col-lg-1">
-                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.QutnPrice" ng-value="0" ng-blur="checkUnitPrice(row)" />
+                                <input class="form-control" style="width:100%; height:18px; font-size:10px"
+                                       type="text" min="0"
+                                       ng-model="row.QutnPrice"
+                                       ng-blur="checkUnitPrice(row)"
+                                       ng-readonly="viewmode" />
                             </td>
-                            <td class="col-lg-1" style="width:5%;">{{row.QutnAmt}}</td>
+                            <td style="width:5%;">{{row.QutnAmt | number:2}}</td>
                             <td class="col-lg-1">
-                                <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.VatPerc" ng-value="0" ng-blur="checkVatPerc(row)" />
+                                <input class="form-control" style="width:100%; height:18px; font-size:10px"
+                                       type="text" min="0"
+                                       ng-model="row.VatPerc"
+                                       ng-blur="checkVatPerc(row)"
+                                       ng-readonly="viewmode" />
                             </td>
-                            <td class="col-lg-1" style="width:5%;">{{row.VatAmt}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.TolAmt}}</td>
-                            @*<td class="col-lg-1" style="width:5%;">
-                                <button type="button" ng-if="row.VendorQutnItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" ng-if="!row.VendorQutnItemID" class="btn btn-xs btn-primary btn-flat btnEdit" data-ng-click="toggleReqItemEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" data-ng-click="toggleReqItemDelete(row,$index)"><i class="fa fa-remove"></i> </button>
-                            </td>*@
+                            <td style="width:5%;">{{row.VatAmt | number:2}}</td>
+                            <td style="width:5%;">{{row.TolAmt | number:2}}</td>
                         </tr>
                     </tbody>
-                    <tfoot>
-                    </tfoot>
                 </table>
             </div>
         </div>
     </div>
 
-    <div id="RequisitionItemModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="row">
-                        <div class="col-sm-5 col-md-5 col-lg-5">
-                            <h3 class="modal-title">Quotation Item Information</h3>
-                        </div>
-                    </div>
+    @*==================== DELETE REQ ITEM CONFIRM MODAL ==================== *@
+    <div class="modal fade" id="deleteReqItemModal" tabindex="-1" role="dialog"
+         style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
+                <div class="modal-header" style="height: 46px;">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">Delete Selected Item</h4>
                 </div>
-                <div ng-cloak>
-                    <div class="row">
-                        <div class="col-lg-1">
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="ServiceCategory">Service Category:</label>
-                            </div>
-                        </div>
-                        <div class=" col-lg-3">
-                            <div class="form-group">
-                                <select id="ServiceCategory" name="ServiceCategory" class="form-control" ng-model="VendorQutnItem.ServiceCategory" ng-change="ServiceCategoryChange()"
-                                        ng-options="serviceCategory as serviceCategory.ServiceCategoryName for serviceCategory in serviceCategorys track by serviceCategory.ServiceCategoryID" required="required">
-                                    <option value="" style="display: none">-- Select--</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="ServiceItem">Item Name :</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <select id="ServiceItem" name="ServiceItem" class="form-control" ng-model="VendorQutnItem.ServiceItem"
-                                        ng-options="serviceItem as serviceItem.ServiceItemName for serviceItem in serviceItems track by serviceItem.ServiceItemID" required="required">
-                                    <option value="" style="display: none">-- Select--</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-1">
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="Description">Description:</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <input id="Description" type="text" name="Description" ng-model="VendorQutnItem.Description" class="form-control" autofocus />
-
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="Delivery Location">Delivery Location:</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <input id="DeliveryLocation" type="text" name="DeliveryLocation" ng-model="VendorQutnItem.DeliveryLocation" class="form-control" autofocus />
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-1">
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="DeliveryDate">Delivery Date :</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <input id="DeliveryDate" name="DeliveryDate" readonly type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY"
-                                       ng-model="VendorQutnItem.DeliveryDate" style=" background-color:#ffffff; " />
-
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="DeliveryMode">Delivery Mode :</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <select data-ng-model="VendorQutnItem.DeliveryMode" class="form-control">
-                                <option value="">-- None --</option>
-                                <option value="Hardcopy">Hardcopy</option>
-                                <option value="Softcopy">Softcopy</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-1">
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="ReqQnty">ReqQnty :</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <input id="ReqQnty" type="text" name="ReqQnty" ng-model="VendorQutnItem.ReqQnty" class="form-control" placeholder="0.000" min="0.001" autofocus />
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="ReqUnit">ReqUnit :</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <select data-ng-model="VendorQutnItem.ReqUnit" class="form-control">
-                                <option value="">-- None --</option>
-                                <option value="Hour">Hour</option>
-                                <option value="Minute">Minute</option>
-                                <option value="Second">Second</option>
-                                <option value="Piece">Piece</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                <div class="modal-body" style="height: 80px;">Are you sure to delete this item?</div>
                 <div class="modal-footer">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <div class="btn-group pull-right" style="margin:2px;">
-                                <button type="button" id="btnAddReqItem" data-ng-click="AddReqItem()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add to Item List</button>
-                            </div>
-                        </div>
-                    </div>
+                    <button type="button" class="btn button-custom" data-dismiss="modal"
+                            style="color: white; background-color: red;"
+                            ng-click="DeleteVendorQutnItem()">
+                        Yes
+                    </button>
+                    <button type="button" class="btn button-custom" data-dismiss="modal"
+                            style="color: white">
+                        No
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
+    @*==================== TERMS & CONDITIONS GRID ==================== *@
+    <div class="row">
+        <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
+                <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData"
+                       class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+                        <tr style="font-size: 15px; border: 1px solid #3003eb; background: #ffffff;">
+                            <th style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
+                                <span>Terms & Conditions List</span>
+                            </th>
+                            @*BUG FIX: T&C search and Add button hidden in viewmode *@
+                            <th ng-hide="viewmode" style="background: #ffffff; position: relative; padding: 5px;">
+                                <div style="position: relative; display: inline-block; width: 200px;">
+                                    <input id="FormName" name="FormName" type="text"
+                                           data-ng-model="VendorQutn.FormName"
+                                           class="form-control" ng-readonly="true"
+                                           style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
+                                    <button type="button" ng-click="ShowTermsConditionsList()"
+                                            style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+                                                   padding: 0px 10px; border: 2px solid black; background: transparent;">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </th>
+                            <th ng-hide="viewmode" style="background: #ffffff;">
+                                <button type="button" ng-click="AddReqTermModal()" class="button-detail btn">
+                                    <i class="fa fa-plus" style="padding-right: 3px"></i> Add
+                                </button>
+                            </th>
+                        </tr>
+                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                            <th style="text-align: left;">Terms Code</th>
+                            <th colspan="13" style="text-align: left;">Terms & Conditions</th>
+                            @*BUG FIX: Action column hidden in viewmode *@
+                            <th ng-hide="viewmode" style="text-align: left;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td class="hidden">{{row.VendorQutnTermsID}}</td>
+                            <td class="hidden">{{row.VendorQutnID}}</td>
+                            <td class="hidden">{{row.TermsID}}</td>
+                            <td style="width:5%;">{{row.TermsCode}}</td>
+                            <td colspan="13" style="width:6%;">{{row.TermsName}}</td>
+                            <td ng-hide="viewmode" style="width:5%;">
+                                <button type="button" class="btn btn-xs btn-primary btn-flat"
+                                        ng-click="toggleReqTermEdit(row, $index)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-xs btn-danger btn-flat"
+                                        ng-click="toggleReqTermDelete(row, $index)">
+                                    <i class="fa fa-remove"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
+    @*==================== TERMS & CONDITIONS SEARCH MODAL ==================== *@
     <div id="VendorQutnTermsConditionsModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div style="text-align: right;">
-                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
+                    <button type="button" class="btn-danger" data-dismiss="modal"
                             aria-hidden="true" style="color: #ffffff;">
                         <i class="fa fa-remove"></i>
                     </button>
                 </div>
                 <div class="modal-body table-responsive">
-                    <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-
-
+                    <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList"
+                           class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr style="font-size: 15px;">
-                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                <th colspan="4" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
                                     Terms & Conditions Information
                                 </th>
                             </tr>
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormName')">Form Name</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
-                                <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                                <th>Form Code</th>
+                                <th>Form Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
                             <tr>
                                 <th><input st-search="FormCode" placeholder="Form Code" class="input-sm form-control" type="search" /></th>
                                 <th><input st-search="FormName" placeholder="Form Name" class="input-sm form-control" type="search" /></th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in TermsConditionsDisplayedCollection">
                                 <td class="hidden">{{row.TermsID}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.FormCode}}</td>
-                                <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.FormName}}</td>
-                                <td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                                    <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                        {{row.Status == '1'? 'Active':'InActive'}}
+                                <td class="text-center">{{row.FormCode}}</td>
+                                <td class="text-center">{{row.FormName}}</td>
+                                <td class="text-center">
+                                    <span ng-attr-class="{{row.Status=='1' ? 'label label-success' : 'label label-danger'}}">
+                                        {{row.Status == '1' ? 'Active' : 'InActive'}}
                                     </span>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleTermsConditionsSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                    <button type="button" class="btn btn-sm btn-primary btn-flat"
+                                            data-ng-click="toggleTermsConditionsSelect(row)">
+                                        <i class="fa fa-edit"></i> Select
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="7" class="text-center">
+                                <td colspan="4" class="text-center">
                                     <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
                                 </td>
                             </tr>
@@ -654,120 +715,35 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         </div>
     </div>
 
-
-    <div class="modal fade" id="deleteReqItemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
-                <div class="modal-header" style="height: 46px;">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Delete Selected Item</h4>
-                </div>
-                <div class="modal-body" style="height: 80px;">
-                    Are you sure to delete this item?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: red;" ng-click="DeleteVendorQutnItem()">Yes</button>
-                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-
-        <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                    <thead>
-                        <tr style="font-size: 15px; border: 1px solid #3003eb; background: #ffffff; ">
-                            <th style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
-                                <span>Terms & Conditions List</span>
-                            </th>
-
-                            <th style="background: #ffffff; position: relative; padding: 5px;">
-                                <div style="position: relative; display: inline-block; width: 200px;">
-                                    <input id="FormName" name="FormName" type="text"
-                                           data-ng-model="VendorQutn.FormName" class="form-control" ng-readonly="true"
-                                           style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
-
-                                    <button type="button" ng-click="ShowTermsConditionsList()"
-                                            style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
-padding: 0px 10px; border: 2px solid black; background: transparent;">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </div>
-                            </th>
-
-                            <th style="background: #ffffff;">
-                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
-                                    <i class="fa fa-plus" style="padding-right: 3px"></i> Add
-                                </button>
-                            </th>
-
-                        </tr>
-
-                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-
-                            <th style="text-align: left;" st-sort="">Terms Code</th>
-                            <th colspan="13" style="text-align: left;" st-sort="">Terms & Conditions</th>
-                            <th style="text-align: left;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
-                            <td class="hidden">{{row.VendorQutnTermsID}}</td>
-                            <td class="hidden">{{row.VendorQutnID}}</td>
-                            <td class="hidden">{{row.TermsID}}</td>
-                            <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
-                            <td colspan="13" class="col-lg-1" style="width:6%;">{{row.TermsName}}</td>
-
-                            <td class="col-lg-1" style="width:5%;">
-                                <button type="button" ng-if="row.VendorQutnTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" ng-if="!row.VendorQutnTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-
-
+    @*==================== REQUISITION TERM MODAL ==================== *@
     <div id="RequisitionTermModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="row">
-                        <div class="col-sm-5 col-md-5 col-lg-5">
+                        <div class="col-sm-8 col-md-8 col-lg-8">
                             <h4 class="modal-title" style="font-family: initial; font-weight: 700">Terms & Conditions Information</h4>
                         </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-
-                        </div>
                         <div style="text-align: right;">
-                            <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
-                                    aria-hidden="true" style="color: #ffffff;">
+                            <button type="button" class="btn-danger" data-dismiss="modal"
+                                    ng-click="resetVendorQutnTerm()" aria-hidden="true" style="color: #ffffff;">
                                 <i class="fa fa-remove"></i>
                             </button>
                         </div>
                     </div>
                 </div>
                 <div ng-cloak>
-                    <div class="row" style="position:relative;top:5px;">
-                        <div class="col-lg-1">
-                        </div>
+                    <div class="row" style="position:relative; top:5px;">
+                        <div class="col-lg-1"></div>
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label for="TermsCode">Terms & Conditions Code:</label>
+                                <label for="TermsCode">Terms Code:</label>
                             </div>
                         </div>
                         <div class="col-lg-3">
                             <div class="form-group">
-                                <input id="TermsCode" type="text" name="TermsCode" ng-model="VendorQutnTerm.TermsCode" class="form-control" autofocus />
-
+                                <input id="TermsCode" type="text" name="TermsCode"
+                                       ng-model="VendorQutnTerm.TermsCode" class="form-control" autofocus />
                             </div>
                         </div>
                         <div class="col-lg-2">
@@ -777,413 +753,248 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         </div>
                         <div class="col-lg-3">
                             <div class="form-group">
-                                <input id="TermsName" type="text" name="TermsName" ng-model="VendorQutnTerm.TermsName" class="form-control" autofocus />
-
+                                <input id="TermsName" type="text" name="TermsName"
+                                       ng-model="VendorQutnTerm.TermsName" class="form-control" autofocus />
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <div class="btn-group pull-right" style="margin:2px;">
-                                <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add</button>
-                            </div>
-                        </div>
+                    <div class="btn-group pull-right" style="margin:2px;">
+                        <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn">
+                            <i class="fa fa-save" style="padding-right: 3px"></i>
+                            <span id="btnAddReqTermLabel">Add</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <div class="modal fade" id="deleteReqTermModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
+    @*==================== DELETE REQ TERM CONFIRM MODAL ==================== *@
+    <div class="modal fade" id="deleteReqTermModal" tabindex="-1" role="dialog"
+         style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
         <div class="modal-dialog" role="document">
             <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
                 <div class="modal-header" style="height: 46px;">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Delete Selected Item</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">Delete Selected Term</h4>
                 </div>
-                <div class="modal-body" style="height: 80px;">
-                    Are you sure to delete this item?
-                </div>
+                <div class="modal-body" style="height: 80px;">Are you sure to delete this term?</div>
                 <div class="modal-footer">
-                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: red;" ng-click="DeleteReqTerm()">Yes</button>
-                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
+                    <button type="button" class="btn button-custom" data-dismiss="modal"
+                            style="color: white; background-color: red;"
+                            ng-click="DeleteReqTerm()">
+                        Yes
+                    </button>
+                    <button type="button" class="btn button-custom" data-dismiss="modal"
+                            style="color: white">
+                        No
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
+    @*==================== PDF VIEWER MODAL ==================== *@
     <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
             <div class="modal-content">
+                <div class="modal-header" style="padding: 5px 10px;">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">Document Viewer</h4>
+                </div>
                 <div class="modal-body" style="padding: 0; margin: 0;">
-                    <iframe id="pdfViewer"
-                            style="width: 100%; height: 100vh; border: none;"
-                            title="PDF Viewer">
-                    </iframe>
+                    <iframe id="pdfViewer" style="width: 100%; height: 100vh; border: none;"
+                            title="PDF Viewer"></iframe>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <script type="text/javascript">
+
     $(document).ready(function () {
         var today = new Date();
         var day = String(today.getDate()).padStart(2, '0');
         var month = String(today.getMonth() + 1).padStart(2, '0');
         var year = today.getFullYear();
-
         var formattedDate = day + '/' + month + '/' + year;
         $('#QuotationDate').val(formattedDate);
-    });
-    $(document).ready(function () {
-        var today = new Date();
-        var day = String(today.getDate()).padStart(2, '0');
-        var month = String(today.getMonth() + 1).padStart(2, '0');
-        var year = today.getFullYear();
-
-        var formattedDate = day + '/' + month + '/' + year;
         $('#QutnReceivedDate').val(formattedDate);
     });
-    app.controller('VendorQuotationCtrl', ['$scope', '$http', function ($scope, $http) {
+
+    app.controller('VendorQuotationCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
         $scope.vendorQutnItemArray = [];
         $scope.vendorQutnTermArray = [];
         $scope.itemsByPage = 10;
+        $scope.viewmode = false;   // BUG FIX: declare upfront
 
+        // ── Service categories ───────────────────────────────────────────────────
         $http.get('/VendorQuotation/GetServicesCategory')
             .success(function (response) {
-                $scope.loading = false;
                 $scope.serviceCategorys = response.result;
+                $scope.loading = false;
             }).error(function () { });
 
+        // ── Master model ─────────────────────────────────────────────────────────
         $scope.VendorQutn = {
             VendorQutnID: "",
             ClientID: "",
             ClientName: "",
+            VendorID: "",
+            VendorName: "",
+            VendorReqID: "",
+            ClientReqID: "",
+            ClientReqNo: "",
             TermsID: "",
             FormName: "",
             VendorQutnNo: "",
-            ReceivedDate: "",
+            AutoVendorQutnNo: "",
             QuotationDate: "",
+            QutnReceivedDate: "",   // BUG FIX: was "ReceivedDate" in some places
+            ProjectName: "",
             Remarks: "",
+            RequisitionNo: "",
+            RequisitionDate: "",
+            SubmissionDate: "",
+            LastDateofQuotation: "",
             Status: ""
-        }
+        };
 
+        // ── Item model ───────────────────────────────────────────────────────────
         $scope.VendorQutnItem = {
-            VendorQutnItemID: "",
-            Description: "",
-            DeliveryLocation: "",
-            DeliveryDate: "",
+            VendorQutnItemID: "", VendorQutnID: "",
+            Description: "", DeliveryLocation: "", DeliveryDate: "",
             ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
             ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
-            DeliveryMode: "",
-            ReqQnty: "",
-            ReqUnit: "",
-            QutnQnty: "",
-            QutnPrice: "",
-            QutnUnit: "",
-            QutnAmt: "",
-            VatPerc: "",
-            VatAmt: "",
-            TolAmt: "",
-            CsStatus: ""
-        }
+            DeliveryMode: "", ReqQnty: "", ReqUnit: "",
+            QutnQnty: "", QutnPrice: "", QutnUnit: "",
+            QutnAmt: "", VatPerc: "", VatAmt: "", TolAmt: "", CsStatus: ""
+        };
 
+        // ── Term model ───────────────────────────────────────────────────────────
+        $scope.VendorQutnTerm = {
+            VendorQutnTermsID: "", VendorQutnID: "",
+            TermsID: "", TermsCode: "", TermsName: ""
+        };
+
+        // ── Grids ────────────────────────────────────────────────────────────────
+        $scope.masterDataSetupGridData = [];
+        $scope.GridDisplayCollection = [];
+        $scope.ReqTermDataSetupGridData = [];
+        $scope.ReqTermGridDisplayCollection = [];
+
+        // ── DatePicker init ──────────────────────────────────────────────────────
         $('.DatePicker').datepicker({
             format: "dd/mm/yyyy",
             autoclose: true
-            // Set minDate to 0 to disable selecting previous dates
-        });
-
-        $('.DatePicker')
-            .on('changeDate', function (ev) {
-                $('.datepicker').hide();
-            });
-
-        $('#DeliveryDate').datepicker({
-            format: "dd/mm/yyyy",
-            autoclose: false,
-            minDate: new Date() // Set minDate to the current date to disable selecting previous dates
-        }).on('changeDate', function (ev) {
-            var EnteredDate = $('#DeliveryDate').val();
-            var today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            var date = EnteredDate.substring(0, 2);
-            var month = EnteredDate.substring(3, 5);
-            var year = EnteredDate.substring(6, 10);
-            var myDate = new Date(year, month - 1, date);
-            myDate.setHours(0, 0, 0, 0);
-
-            //if (myDate < today) {
-            //    $('#DeliveryDate').val('');
-            //    toastr.error("Purchase date should not be less than system date.");
-            //}
-
+        }).on('changeDate', function () {
             $('.datepicker').hide();
         });
+
+        // ── Calculation helpers ──────────────────────────────────────────────────
         $scope.checkUnitPrice = function (row) {
-            var QutnAmt = 0;
-            QutnAmt = (row.QutnQnty * row.QutnPrice);
-            row.QutnAmt = QutnAmt;
+            var qty = parseFloat(row.QutnQnty) || 0;
+            var price = parseFloat(row.QutnPrice) || 0;
+            row.QutnAmt = parseFloat((qty * price).toFixed(2));
+            // Recalculate VAT and total after Amt changes
+            $scope.checkVatPerc(row);
         };
 
         $scope.checkVatPerc = function (row) {
-            var VatAmt = 0;
-            VatAmt = (row.VatPerc * row.QutnAmt) / 100;
-            row.VatAmt = VatAmt;
-
-            row.TolAmt = row.QutnAmt + row.VatAmt;
-        };
-        // ################# Detail Add Modal ####################
-        $scope.AddReqItemModal = function () {
-            if ($('#ClientName').val() == "") {
-                toastr.error("Client Name Required");
-                return;
-            }
-
-            if ($('#VendorQutnNo').val() == "") {
-                toastr.error("Client ReqNo.  Required");
-                return;
-            }
-
-            if ($('#ReceivedDate').val() == "") {
-                toastr.error("Submission Date Required.");
-                return;
-            }
-
-            if ($('#QuotationDate').val() == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
-            }
-            $('#RequisitionItemModal').modal('show');
+            var vatPerc = parseFloat(row.VatPerc) || 0;
+            var qutnAmt = parseFloat(row.QutnAmt) || 0;
+            row.VatAmt = parseFloat(((vatPerc * qutnAmt) / 100).toFixed(2));
+            row.TolAmt = parseFloat((qutnAmt + row.VatAmt).toFixed(2));
         };
 
-        $scope.masterDataSetupGridData = [];  // base collection
-        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+        // ── Cancel (BUG FIX: was referenced but never defined) ───────────────────
+        $scope.Cancel = function () {
+            $scope.clearVendorQutn();
+        };
 
-        $scope.AddReqItem = function () {
+        // ── Clear / reset ────────────────────────────────────────────────────────
+        $scope.clearVendorQutn = function () {
+            $scope.viewmode = false;
 
-            if ($scope.VendorQutnItem.ServiceCategory.ServiceCategoryID == "") {
-                toastr.error("Service Category Required");
-                return;
-            }
-
-            if ($scope.VendorQutnItem.ServiceItem.ServiceItemID == "") {
-                toastr.error("Service Item  Required");
-                return;
-            }
-
-            if ($scope.VendorQutnItem.DeliveryMode == "") {
-                toastr.error("Submission Date Required.");
-                return;
-            }
-
-            if ($scope.VendorQutnItem.ReqUnit == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
-            }
-
-            if ($('#DeliveryLocation').val() == "") {
-                toastr.error("Service Category Required");
-                return;
-            }
-
-            if ($('#DeliveryDate').val() == "") {
-                toastr.error("Service Item  Required");
-                return;
-            }
-
-            if ($('#Description').val() == "") {
-                toastr.error("Submission Date Required.");
-                return;
-            }
-
-            if ($('#ReqQnty').val() == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
-            }
-
-            $scope.VendorQutnItem.ServiceCategoryID = $scope.VendorQutnItem.ServiceCategory.ServiceCategoryID;
-            $scope.VendorQutnItem.ServiceCategoryName = $scope.VendorQutnItem.ServiceCategory.ServiceCategoryName;
-            $scope.VendorQutnItem.ServiceItemID = $scope.VendorQutnItem.ServiceItem.ServiceItemID;
-            $scope.VendorQutnItem.ServiceItemName = $scope.VendorQutnItem.ServiceItem.ServiceItemName;
-
-            $scope.VendorQutnItem.DeliveryMode = $scope.VendorQutnItem.DeliveryMode;
-            $scope.VendorQutnItem.ReqUnit = $scope.VendorQutnItem.ReqUnit;
-
-            $scope.VendorQutnItem.DeliveryLocation = $('#DeliveryLocation').val();
-            $scope.VendorQutnItem.DeliveryDate = $('#DeliveryDate').val();
-            $scope.VendorQutnItem.Description = $('#Description').val();
-            $scope.VendorQutnItem.ReqQnty = $('#ReqQnty').val();
-
-            $scope.vendorQutnItemArray.push($scope.VendorQutnItem);
-
-            $scope.GridDisplayCollection = $scope.GridDisplayCollection.concat($scope.VendorQutnItem);
-
+            // inside clearVendorQutn, add to the VendorQutn reset object:
+            $scope.VendorQutn = {
+                VendorQutnID: "",
+                ClientID: "",
+                ClientName: "",
+                VendorID: "",
+                VendorName: "",
+                VendorQutnNo: "",
+                QuotationDate: "",
+                QutnReceivedDate: "",
+                Remarks: "",
+                DocumentID: "",   // ← NEW
+                Status: ""
+            };
             $scope.resetVendorQutnItem();
-            $("#btnAddReqItem").html('Add');
-            $('#RequisitionItemModal').modal('hide');
-        }
+            $scope.resetVendorQutnTerm();
+
+            $scope.masterDataSetupGridData = [];
+            $scope.GridDisplayCollection = [];
+            $scope.ReqTermDataSetupGridData = [];
+            $scope.ReqTermGridDisplayCollection = [];
+            $scope.vendorQutnItemArray = [];
+            $scope.vendorQutnTermArray = [];
+
+            $('#DeliveryDate').val('');
+            $('#FileUpload1').val('');
+            $scope.uploadedFile = null;
+
+            // Reset today's dates
+            var today = new Date();
+            var d = String(today.getDate()).padStart(2, '0');
+            var m = String(today.getMonth() + 1).padStart(2, '0');
+            var y = today.getFullYear();
+            var td = d + '/' + m + '/' + y;
+            $('#QuotationDate').val(td);
+            $('#QutnReceivedDate').val(td);
+        };
 
         $scope.resetVendorQutnItem = function () {
             $('#DeliveryDate').val('');
             $scope.VendorQutnItem = {
-                VendorQutnItemID: "",
-                VendorQutnID: "",
+                VendorQutnItemID: "", VendorQutnID: "",
                 ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
                 ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
-                Description: "",
-                DeliveryLocation: "",
-                DeliveryDate: "",
-                DeliveryMode: "",
-                ReqQnty: "",
-                ReqUnit: ""
-            }
-        }
+                Description: "", DeliveryLocation: "", DeliveryDate: "",
+                DeliveryMode: "", ReqQnty: "", ReqUnit: "",
+                QutnQnty: "", QutnPrice: "", QutnUnit: "",
+                QutnAmt: "", VatPerc: "", VatAmt: "", TolAmt: "", CsStatus: ""
+            };
+        };
 
+        $scope.resetVendorQutnTerm = function () {
+            $scope.VendorQutnTerm = {
+                VendorQutnTermsID: "", VendorQutnID: "",
+                TermsID: "", TermsCode: "", TermsName: ""
+            };
+        };
+
+        // ── Show Vendor Req List ─────────────────────────────────────────────────
         $scope.ShowVendorReqList = function () {
-
-            $scope.viewmode = false;
             $http.get("/VendorQuotation/GetShowVendorReqList")
                 .success(function (response) {
                     $scope.VendorReqList = response.VendorReqList;
                     $scope.VendorReqDisplayedCollection = [].concat($scope.VendorReqList);
                     $scope.loading = false;
-                })
-                .error(function () { });
-
+                }).error(function () { });
             $('#VendorReqInfoModal').modal('show');
         };
 
-
-        var ServiceCategoryID = "";
-        $scope.ServiceCategoryChange = function () {
-            ServiceCategoryID = $scope.VendorQutnItem.ServiceCategory.ServiceCategoryID;
-            $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + ServiceCategoryID)
-                .success(function (response) {
-                    $scope.loading = false;
-                    $scope.serviceItems = response.ServiceItemInfoSearchList;
-                })
-                .error(function () { });
-        };
-
-        $scope.clearVendorQutn = function () {
-            $scope.VendorQutn = {
-                VendorQutnID: "",
-                ClientID: "",
-                ClientCode: "",
-                ClientName: "",
-                ContactPerson: "",
-                ContactNumber: "",
-                ClientTINNo: "",
-                ClientBINNo: "",
-                ClientAddress: "",
-                VendorQutnNo: "",
-                ReceivedDate: "",
-                QuotationDate: "",
-                Remarks: ""
-            }
-
-            $scope.VendorQutnItem = {
-                VendorQutnItemID: "",
-                VendorQutnID: "",
-                Description: "",
-                DeliveryLocation: "",
-                DeliveryDate: "",
-                ServiceCategory: { ServiceCategoryID: "", ServiceCategoryName: "" },
-                ServiceItem: { ServiceItemID: "", ServiceItemName: "" },
-                DeliveryMode: "",
-                ReqQnty: "",
-                ReqUnit: ""
-            }
-            $scope.VendorQutnTerm = {
-                VendorQutnTermsID: "",
-                VendorQutnID: "",
-                TermsID: "",
-                TermsCode: "",
-                TermsName: ""
-            }
-            $("#DeliveryDate").val('');
-            $scope.masterDataSetupGridData = [];  // base collection
-            $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
-
-            $scope.ReqTermDataSetupGridData = [];  // base collection
-            $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-        }
-
-        $scope.toggleReqItemEdit = function (tableRow, $i) {
-            $('#RequisitionItemModal').modal('show');
-            $scope.resetVendorQutnItem();
-
-            $scope.VendorQutnItem.VendorQutnItemID = tableRow.VendorQutnItemID;
-
-            $scope.VendorQutnItem.ServiceCategory.ServiceCategoryID = tableRow.ServiceCategoryID;
-            $scope.VendorQutnItem.ServiceCategory.ServiceCategoryName = tableRow.ServiceCategoryName;
-            $scope.VendorQutnItem.ServiceItem.ServiceItemID = tableRow.ServiceItemID;
-            $scope.VendorQutnItem.ServiceItem.ServiceItemName = tableRow.ServiceItemName;
-
-            $scope.VendorQutnItem.DeliveryMode = tableRow.DeliveryMode;
-            $scope.VendorQutnItem.DeliveryLocation = tableRow.DeliveryLocation;
-            $scope.VendorQutnItem.DeliveryDate = tableRow.DeliveryDate;
-            $scope.VendorQutnItem.Description = tableRow.Description;
-
-            $scope.VendorQutnItem.ReqQnty = tableRow.ReqQnty;
-            $scope.VendorQutnItem.ReqUnit = tableRow.ReqUnit;
-
-            $scope.GridDisplayCollection.splice($i, 1);
-            $scope.vendorQutnItemArray.splice($i, 1);
-
-            $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + tableRow.ServiceCategoryID)
-                .success(function (response) {
-                    $scope.loading = false;
-                    $scope.serviceItems = response.ServiceItemInfoSearchList;
-                })
-                .error(function () { });
-
-            $("#btnAddReqItem").html('Update');
-        };
-
-        $scope.toggleReqItemDelete = function (tableRow, $i) {
-            if (!tableRow.VendorQutnItemID) {
-                $scope.resetVendorQutnItem();
-                $scope.GridDisplayCollection.splice($i, 1);
-                $scope.vendorQutnItemArray.splice($i, 1);
-                toastr.success('Data Deleted Successsfully');
-            }
-            else {
-                $scope.resetVendorQutnItem();
-                $scope.VendorQutnItem.VendorQutnItemID = tableRow.VendorQutnItemID;
-                $('#deleteReqItemModal').modal('show');
-            }
-        };
-
-        $scope.DeleteVendorQutnItem = function () {
-            $http.post('/VendorQuotation/DeleteVendorQutnItemAndTerm',
-                { VendorQutnItemID: $scope.VendorQutnItem.VendorQutnItemID, VendorQutnTermID: $scope.VendorQutnTerm.VendorQutnTermID })
-                .success(function (response) {
-                    if (response.status == "S203") {
-                        $scope.resetVendorQutnItem();
-                        $scope.GridDisplayCollection.splice($i, 1);
-                        $scope.vendorQutnItemArray.splice($i, 1);
-                        toastr.success('Data Deleted Successsfully');
-                        return;
-                    }
-                });
-        }
-
-        ////////////////////////Select for Update from Search grid ///////////////////////
-
+        // ── Select Vendor Req (new quotation) ────────────────────────────────────
         $scope.toggleVendorReqSelect = function (row) {
             $scope.VendorQutn.ClientID = row.ClientID;
-
             $scope.VendorQutn.ClientReqID = row.ClientReqID;
             $scope.VendorQutn.ClientReqNo = row.ClientReqNo;
-
             $scope.VendorQutn.VendorID = row.VendorID;
             $scope.VendorQutn.VendorReqID = row.VendorReqID;
             $scope.VendorQutn.ClientName = row.ClientName;
@@ -1191,35 +1002,53 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.RequisitionNo = row.RequisitionNo;
             $scope.VendorQutn.RequisitionDate = row.RequisitionDate;
             $scope.VendorQutn.SubmissionDate = row.SubmissionDate;
-            $scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;//ProjectName
+            $scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;
             $scope.VendorQutn.ProjectName = row.Remarks;
             $scope.VendorQutn.Remarks = row.Remarks;
 
-            $http.post('/VendorQuotation/GetVendorReqItemListForVenQutn', { VendorID: row.VendorID, VendorReqID: row.VendorReqID })
+            $scope.masterDataSetupGridData = [];
+            $scope.GridDisplayCollection = [];
+            $scope.vendorQutnItemArray = [];
+
+            $http.post('/VendorQuotation/GetVendorReqItemListForVenQutn',
+                { VendorID: row.VendorID, VendorReqID: row.VendorReqID })
                 .success(function (response) {
                     $scope.masterDataSetupGridData = response.VendorReqItemList;
                     $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+                    // BUG FIX: initialise calculation fields to 0 so validation doesn't fail on untouched rows
+                    $scope.GridDisplayCollection.forEach(function (item) {
+                        item.QutnQnty = item.QutnQnty || item.ReqQnty || 0;
+                        item.QutnPrice = item.QutnPrice || 0;
+                        item.QutnAmt = item.QutnAmt || 0;
+                        item.VatPerc = item.VatPerc || 0;
+                        item.VatAmt = item.VatAmt || 0;
+                        item.TolAmt = item.TolAmt || 0;
+                        item.isInvalid = false;
+                    });
                     $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
+                }).error(function () { $scope.loading = false; });
 
             $http.post('/VendorRequisition/GetVendorReqTermList', { VendorReqID: row.VendorReqID })
                 .success(function (response) {
                     $scope.ReqTermDataSetupGridData = response.VendorReqTermList;
                     $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                     $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
+                }).error(function () { $scope.loading = false; });
 
             $('#VendorReqInfoModal').modal('hide');
         };
 
-        ///////////////////////Save/Update Master///////////////////////
+        // ── Service category change ──────────────────────────────────────────────
+        $scope.ServiceCategoryChange = function () {
+            var ServiceCategoryID = $scope.VendorQutnItem.ServiceCategory.ServiceCategoryID;
+            $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + ServiceCategoryID)
+                .success(function (response) {
+                    $scope.serviceItems = response.ServiceItemInfoSearchList;
+                    $scope.loading = false;
+                }).error(function () { });
+        };
 
-        //////////////////Search Grid List///////////////////////////////
-
+        // ── Search Vendor Quotation Modal ────────────────────────────────────────
         $scope.SearchVendorQutnModal = function () {
             $scope.GetVendorQutnSearchList();
             $('#SearchVendorQutnModal').modal('show');
@@ -1228,269 +1057,263 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         $scope.GetVendorQutnSearchList = function () {
             $http.post("/VendorQuotation/GetVendorQutnSearchList")
                 .success(function (response) {
-                    console.log(response);
                     $scope.vendorQutnSearchList = response.vendorQutnSearchList;
-                    console.log($scope.vendorQutnSearchList);
                     $scope.vendorQutnDisplayedCollection = [].concat($scope.vendorQutnSearchList);
-                    console.log($scope.vendorQutnDisplayedCollection);
-                })
-                .error(function () { });
-        }
+                }).error(function () { });
+        };
 
-        ////////////////////////Select for Update from Search grid ///////////////////////
+        // ── Select Vendor Quotation (View / Edit) ────────────────────────────────
+        // BUG FIX: viewmode was hard-coded to true — should depend on ProcessStatus.
+        // Also QuotationDate/QutnReceivedDate not set into the datepicker fields.
+        $scope.toggleVendorQutnSelect = function (tableRow, mode) {
 
-        $scope.viewmode = false;
+            $scope.clearVendorQutn();
 
-        $scope.toggleVendorQutnSelect = function (tableRow) {
+            // View mode
+            $scope.viewmode = (mode === 'view');
 
-            $scope.viewmode = true;
+            // OR stricter validation:
+            // $scope.viewmode = (tableRow.ProcessStatus !== 'Rcvd' || mode === 'view');
 
             $scope.VendorQutn.VendorQutnID = tableRow.VendorQutnID;
             $scope.VendorQutn.ClientID = tableRow.ClientID;
             $scope.VendorQutn.ClientName = tableRow.ClientName;
-
             $scope.VendorQutn.VendorID = tableRow.VendorID;
             $scope.VendorQutn.VendorName = tableRow.VendorName;
-
             $scope.VendorQutn.VendorQutnNo = tableRow.VendorQutnNo;
+            $scope.VendorQutn.AutoVendorQutnNo = tableRow.AutoVendorQutnNo;
             $scope.VendorQutn.QuotationDate = tableRow.QuotationDate;
             $scope.VendorQutn.QutnReceivedDate = tableRow.QutnReceivedDate;
-
             $scope.VendorQutn.RequisitionNo = tableRow.RequisitionNo;
             $scope.VendorQutn.RequisitionDate = tableRow.RequisitionDate;
-            $scope.VendorQutn.AutoVendorQutnNo = tableRow.AutoVendorQutnNo;
-
-            $scope.VendorQutn.Remarks = tableRow.Remarks;
+            $scope.VendorQutn.VendorReqID = tableRow.VendorReqID;
+            $scope.VendorQutn.ProjectName = tableRow.Remarks;
             $scope.VendorQutn.Status = tableRow.Status;
+            $scope.VendorQutn.DocumentID = tableRow.DocumentID;
+            //VendorQutn.ProjectName
+            // Set datepicker fields
+            $timeout(function () {
 
-            $http.post('/VendorQuotation/GetVendorQutnItemList', { VendorQutnID: tableRow.VendorQutnID })
-                .success(function (response) {
-                    $scope.masterDataSetupGridData = response.VendorQutnItemList;
-                    $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
-                    $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
+                if (tableRow.QuotationDate) {
+                    $('#QuotationDate').val(tableRow.QuotationDate);
+                }
+
+                if (tableRow.QutnReceivedDate) {
+                    $('#QutnReceivedDate').val(tableRow.QutnReceivedDate);
+                }
+
+            }, 100);
+
+            // Load items
+            $http.post('/VendorQuotation/GetVendorQutnItemList', {
+                VendorQutnID: tableRow.VendorQutnID
+            }).success(function (response) {
+
+                $scope.masterDataSetupGridData = response.VendorQutnItemList;
+                $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+
+                // Recalculate total amount
+                $scope.GridDisplayCollection.forEach(function (item) {
+
+                    var qutnAmt = parseFloat(item.QutnAmt) || 0;
+                    var vatAmt = parseFloat(item.VatAmt) || 0;
+
+                    item.TolAmt = parseFloat((qutnAmt + vatAmt).toFixed(2));
+                    item.isInvalid = false;
+
                 });
 
-            $http.post('/VendorQuotation/GetVendorQutnTermList', { VendorQutnID: tableRow.VendorQutnID })
-                .success(function (response) {
-                    $scope.ReqTermDataSetupGridData = response.VendorQutnTermList;
-                    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-                    $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
+                $scope.loading = false;
+
+            }).error(function () {
+
+                $scope.loading = false;
+
+            });
+
+            // Load terms
+            $http.post('/VendorQuotation/GetVendorQutnTermList', {
+                VendorQutnID: tableRow.VendorQutnID
+            }).success(function (response) {
+
+                $scope.ReqTermDataSetupGridData = response.VendorQutnTermList;
+                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+
+                $scope.loading = false;
+
+            }).error(function () {
+
+                $scope.loading = false;
+
+            });
 
             $('#SearchVendorQutnModal').modal('hide');
         };
 
-        ///////////////////////////////////////////////
-
-        ////////////////////////Requsition Terms & Conditions ///////////////////////
-
+        // ── Terms & Conditions ───────────────────────────────────────────────────
         $scope.ShowTermsConditionsList = function () {
             $http.get("/VendorQuotation/GetTermsConditionsList")
                 .success(function (response) {
-                    console.log(response);
                     $scope.TermsConditionsList = response.termsConditionsList;
                     $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-                    console.log($scope.TermsConditionsDisplayedCollection);
                     $scope.loading = false;
-                })
-                .error(function () { });
-
+                }).error(function () { });
             $('#VendorQutnTermsConditionsModal').modal('show');
         };
 
         $scope.toggleTermsConditionsSelect = function (row) {
             $scope.VendorQutn.TermsID = row.TermsID;
-            //$scope.VendorQutn.FormCode = row.FormCode;
             $scope.VendorQutn.FormName = row.FormName;
-
             $http.post('/VendorQuotation/GetVendorQutnTermAgainstFormList', { TermsID: row.TermsID })
                 .success(function (response) {
                     $scope.ReqTermDataSetupGridData = response.VendorQutnTermList;
                     $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                     $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
-
+                }).error(function () { $scope.loading = false; });
             $('#VendorQutnTermsConditionsModal').modal('hide');
         };
 
-        $scope.VendorQutnTerm = {
-            VendorQutnTermsID: "",
-            VendorQutnID: "",
-            TermsID: "",
-            TermsCode: "",
-            TermsName: ""
-        }
-
+        // ── Add Term Modal ───────────────────────────────────────────────────────
         $scope.AddReqTermModal = function () {
-            if ($('#ClientName').val() == "") {
-                toastr.error("Client Name Required");
-                return;
+            if (!$scope.VendorQutn.VendorName) {
+                toastr.error("Vendor Name Required"); return;
             }
-
-            if ($('#VendorQutnNo').val() == "") {
-                toastr.error("Client ReqNo.  Required");
-                return;
+            if (!$scope.VendorQutn.VendorQutnNo) {
+                toastr.error("Vendor Quotation No. Required"); return;
             }
-
-            if ($('#ReceivedDate').val() == "") {
-                toastr.error("Submission Date Required.");
-                return;
+            // BUG FIX: was checking '#ReceivedDate' which doesn't exist — correct id is '#QutnReceivedDate'
+            if ($('#QutnReceivedDate').val() === "") {
+                toastr.error("Quotation Received Date Required."); return;
             }
-
-            if ($('#QuotationDate').val() == "") {
-                toastr.error("Requisition Date Date Required");
-                return;
+            if ($('#QuotationDate').val() === "") {
+                toastr.error("Quotation Date Required"); return;
             }
+            $scope.resetVendorQutnTerm();
+            $('#btnAddReqTermLabel').text('Add');
             $('#RequisitionTermModal').modal('show');
         };
 
-        $scope.ReqTermDataSetupGridData = [];  // base collection
-        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-
         $scope.AddReqTerm = function () {
-
-            if ($('#TermsCode').val() == "") {
-                toastr.error("Terms Code Required");
-                return;
+            if (!$scope.VendorQutnTerm.TermsCode) {
+                toastr.error("Terms Code Required"); return;
             }
-
-            if ($('#TermsName').val() == "") {
-                toastr.error("Terms Name Required.");
-                return;
+            if (!$scope.VendorQutnTerm.TermsName) {
+                toastr.error("Terms Name Required."); return;
             }
-
-            $scope.VendorQutnTerm.TermsCode = $('#TermsCode').val();
-            $scope.VendorQutnTerm.TermsName = $('#TermsName').val();
-
-            $scope.vendorQutnTermArray.push($scope.VendorQutnTerm);
-
-            $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection.concat($scope.VendorQutnTerm);
-
+            $scope.vendorQutnTermArray.push(angular.copy($scope.VendorQutnTerm));
+            $scope.ReqTermGridDisplayCollection = $scope.ReqTermGridDisplayCollection
+                .concat(angular.copy($scope.VendorQutnTerm));
             $scope.resetVendorQutnTerm();
-            $("#btnAddReqTerm").html('Add');
+            $('#btnAddReqTermLabel').text('Add');
             $('#RequisitionTermModal').modal('hide');
-        }
+        };
 
-        $scope.resetVendorQutnTerm = function () {
-            $scope.VendorQutnTerm = {
-                VendorQutnTermsID: "",
-                VendorQutnID: "",
-                TermsID: "",
-                TermsCode: "",
-                TermsName: ""
-            }
-        }
-
-        $scope.toggleReqTermEdit = function (tableRow, $i) {
-            $('#RequisitionTermModal').modal('show');
+        // BUG FIX: toggleReqTermEdit typo `tableRow.VendorQutnTermD` → `tableRow.VendorQutnTermID`
+        $scope.toggleReqTermEdit = function (tableRow, idx) {
             $scope.resetVendorQutnTerm();
-            $scope.VendorQutnTerm.VendorQutnTermID = tableRow.VendorQutnTermD;
+            $scope.VendorQutnTerm.VendorQutnTermsID = tableRow.VendorQutnTermID;  // BUG FIX: was VendorQutnTermD
             $scope.VendorQutnTerm.VendorQutnID = tableRow.VendorQutnID;
             $scope.VendorQutnTerm.TermsID = tableRow.TermsID;
             $scope.VendorQutnTerm.TermsCode = tableRow.TermsCode;
             $scope.VendorQutnTerm.TermsName = tableRow.TermsName;
-            $scope.ReqTermGridDisplayCollection.splice($i, 1);
-            $scope.vendorQutnTermArray.splice($i, 1);
-            $("#btnAddReqTerm").html('Update');
+            $scope.ReqTermGridDisplayCollection.splice(idx, 1);
+            $scope.vendorQutnTermArray.splice(idx, 1);
+            $('#btnAddReqTermLabel').text('Update');
+            $('#RequisitionTermModal').modal('show');
         };
 
-        $scope.toggleReqTermDelete = function (tableRow, $i) {
+        // BUG FIX: $i was undefined in delete callbacks — use stored index
+        $scope.pendingDeleteTermIndex = null;
+
+        $scope.toggleReqTermDelete = function (tableRow, idx) {
             if (!tableRow.VendorQutnTermID) {
-                $scope.resetVendorQutnTerm();
-                $scope.ReqTermGridDisplayCollection.splice($i, 1);
-                $scope.vendorQutnTermArray.splice($i, 1);
-                toastr.success('Data Deleted Successsfully');
-            }
-            else {
-                $scope.resetVendorQutnTerm();
-                $scope.VendorQutnTerm.VendorQutnTermID = tableRow.VendorQutnTermID;
+                $scope.ReqTermGridDisplayCollection.splice(idx, 1);
+                $scope.vendorQutnTermArray.splice(idx, 1);
+                toastr.success('Term Deleted Successfully');
+            } else {
+                $scope.VendorQutnTerm.VendorQutnTermsID = tableRow.VendorQutnTermID;
+                $scope.pendingDeleteTermIndex = idx;
                 $('#deleteReqTermModal').modal('show');
             }
         };
 
-        $scope.DeleteVendorQutnTerm = function () {
+        // BUG FIX: button called DeleteReqTerm() but function was DeleteVendorQutnTerm();
+        //          also $i was undefined — now uses pendingDeleteTermIndex
+        $scope.DeleteReqTerm = function () {
+            var idx = $scope.pendingDeleteTermIndex;
             $http.post('/VendorQuotation/DeleteVendorQutnItemAndTerm',
-                { VendorQutnItemID: $scope.VendorQutnItem.VendorQutnItemID, VendorQutnTermID: $scope.VendorQutnTerm.VendorQutnTermID })
+                { VendorQutnItemID: "", VendorQutnTermID: $scope.VendorQutnTerm.VendorQutnTermsID })
                 .success(function (response) {
-                    if (response.status == "S203") {
+                    if (response.status === "S203") {
+                        if (idx !== null) {
+                            $scope.ReqTermGridDisplayCollection.splice(idx, 1);
+                            $scope.vendorQutnTermArray.splice(idx, 1);
+                            $scope.pendingDeleteTermIndex = null;
+                        }
                         $scope.resetVendorQutnTerm();
-                        $scope.ReqTermGridDisplayCollection.splice($i, 1);
-                        $scope.vendorQutnTermArray.splice($i, 1);
-                        toastr.success('Data Deleted Successsfully');
-                        return;
+                        toastr.success('Term Deleted Successfully');
                     }
-                });
-        }
+                }).error(function () { toastr.error('Delete Failed'); });
+        };
 
-        ///////////////////////////////////////////////
+        // BUG FIX: DeleteVendorQutnItem also used undefined $i — stored index
+        $scope.pendingDeleteItemIndex = null;
 
+        $scope.toggleReqItemDelete = function (tableRow, idx) {
+            if (!tableRow.VendorQutnItemID) {
+                $scope.GridDisplayCollection.splice(idx, 1);
+                $scope.vendorQutnItemArray.splice(idx, 1);
+                toastr.success('Item Deleted Successfully');
+            } else {
+                $scope.VendorQutnItem.VendorQutnItemID = tableRow.VendorQutnItemID;
+                $scope.pendingDeleteItemIndex = idx;
+                $('#deleteReqItemModal').modal('show');
+            }
+        };
+
+        $scope.DeleteVendorQutnItem = function () {
+            var idx = $scope.pendingDeleteItemIndex;
+            $http.post('/VendorQuotation/DeleteVendorQutnItemAndTerm',
+                { VendorQutnItemID: $scope.VendorQutnItem.VendorQutnItemID, VendorQutnTermID: "" })
+                .success(function (response) {
+                    if (response.status === "S203") {
+                        if (idx !== null) {
+                            $scope.GridDisplayCollection.splice(idx, 1);
+                            $scope.vendorQutnItemArray.splice(idx, 1);
+                            $scope.pendingDeleteItemIndex = null;
+                        }
+                        $scope.resetVendorQutnItem();
+                        toastr.success('Item Deleted Successfully');
+                    }
+                }).error(function () { toastr.error('Delete Failed'); });
+        };
+
+        // ── File handling ────────────────────────────────────────────────────────
         $scope.uploadedFile = null;
-
         $scope.fileSelected = function (element) {
             $scope.$apply(function () {
                 $scope.uploadedFile = element.files.length > 0 ? element.files[0] : null;
             });
         };
 
-
-
+        // ── Save ─────────────────────────────────────────────────────────────────
         $scope.Post = function () {
 
-            // =========================
-            // 🔹 HEADER VALIDATION
-            // =========================
-            if (!$('#VendorName').val()) {
-                toastr.error("Vendor Name Required");
-                return;
-            }
+            if (!$('#VendorName').val()) { toastr.error("Vendor Name Required"); return; }
+            if (!$('#VendorQutnNo').val()) { toastr.error("Vendor QutnNo. Required"); return; }
+            if ($('#QuotationDate').val() == "") { toastr.error("Quotation Date Required"); return; }
+            if ($('#QutnReceivedDate').val() == "") { toastr.error("Qutn. Received Date Required"); return; }
 
-            if (!$('#VendorQutnNo').val()) {
-                toastr.error("Vendor QutnNo. Required");
-                return;
-            }
-
-            if ($('#QuotationDate').val() == "") {
-                toastr.error("Quotation Date Required");
-                return;
-            }
-
-            if ($('#QutnReceivedDate').val() == "") {
-                toastr.error("Qutn. Received Date Required");
-                return;
-            }
-
-            // Assign dates
             $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
             $scope.VendorQutn.QutnReceivedDate = $('#QutnReceivedDate').val();
-
-            // =========================
-            // 🔴 GRID VALIDATION
-            // =========================
 
             function isNumber(val) {
                 return val !== null && val !== undefined && val !== "" && !isNaN(val);
             }
 
-            var invalidRows = [];
-
-            $scope.GridDisplayCollection.forEach(function (row) {
-
-                row.isInvalid = false;
-
-                if (!isNumber(row.QutnAmt) ||
-                    !isNumber(row.VatPerc) ||
-                    !isNumber(row.VatAmt) ||
-                    !isNumber(row.TolAmt)) {
-
-                    row.isInvalid = true;
-                    invalidRows.push(row);
-                }
+            var invalidRows = $scope.GridDisplayCollection.filter(function (row) {
+                return !isNumber(row.QutnAmt) || !isNumber(row.VatPerc) ||
+                    !isNumber(row.VatAmt) || !isNumber(row.TolAmt);
             });
 
             if (invalidRows.length > 0) {
@@ -1498,47 +1321,46 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 return;
             }
 
-            // =========================
-            // 🚀 API CALL
-            // =========================
-
             $scope.loading = true;
 
-            $http.post('/VendorQuotation/SaveVendorQuotation',
-                {
-                    vendorQutn: $scope.VendorQutn,
-                    vendorQutnItem: $scope.GridDisplayCollection,
-                    vendorQutnTerm: $scope.ReqTermGridDisplayCollection
-                })
+            $http.post('/VendorQuotation/SaveVendorQuotation', {
+                vendorQutn: $scope.VendorQutn,
+                vendorQutnItem: $scope.GridDisplayCollection,
+                vendorQutnTerm: $scope.ReqTermGridDisplayCollection
+            })
                 .success(function (response) {
-
                     $scope.loading = false;
 
-                    if (response.status == "S201") {
+                    if (response.status === "S201") {
                         toastr.success("Data Saved Successfully.");
+                        $scope.VendorQutn.VendorQutnID = response.VendorQutnID; // ← keep ID live
 
                         if ($scope.uploadedFile) {
-                            $scope.SaveDocument(response.VendorQutnID);
+                            $scope.SaveDocument(response.VendorQutnID, function () {
+                                $scope.clearVendorQutn();
+                                window.location.reload();
+                            });
+                        } else {
+                            $scope.clearVendorQutn();
+                            window.location.reload();
                         }
-
-                        $scope.clearVendorQutn();
-                        window.location.reload();
                         return;
                     }
 
-                    if (response.status == "S202") {
+                    if (response.status === "S202") {
                         toastr.success("Data Updated Successfully.");
-                        $scope.clearVendorQutn();
+                        $scope.VendorQutn.VendorQutnID = response.VendorQutnID;
+
+                        if ($scope.uploadedFile) {
+                            // replace existing document
+                            $scope.SaveDocument(response.VendorQutnID, function () {
+                                $scope.viewmode = true; // stay in view/edit mode
+                            });
+                        }
                         return;
                     }
 
-                    if (response.status == "S203") {
-                        toastr.success("Data Deleted Successfully.");
-                        $scope.clearVendorQutn();
-                        return;
-                    }
-
-                    if (response.status == "ERROR_Duplicate") {
+                    if (response.status === "ERROR_Duplicate") {
                         toastr.error("This quotation no. already exists");
                         return;
                     }
@@ -1551,15 +1373,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 });
         };
 
-
-
-
-
-
-        $scope.DocCrudStatus = "";
-        $scope.SaveDocument = function (VendorQutnID) {
-            $scope.DocCrudStatus = "I";
-
+        // ── Document upload ──────────────────────────────────────────────────────
+        $scope.SaveDocument = function (VendorQutnID, callback) {
             var fileUpload = document.getElementById("FileUpload1");
             var files = fileUpload.files;
 
@@ -1571,117 +1386,93 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             var file = files[0];
             var ext = file.name.split('.').pop().toLowerCase();
 
-            var maxSizeInMB = 2;
-            if (file.size > maxSizeInMB * 1024 * 1024) {
+            if (file.size > 2 * 1024 * 1024) {
                 toastr.error("File size must be 2 MB or less.");
                 return;
             }
-
-            // Validate file extension
             if (ext !== "pdf") {
                 toastr.error("Please upload PDF files only.");
                 return;
             }
 
-            $scope.loading = true; // Show loading indicator
+            $scope.loading = true;
 
-            // FTP details
-            var ftpDetails = {
-                serverIP: "172.16.189.34",
-                ftpPort: "21",
-                ftpUserName: "ftpuser",
-                ftpPassword: "Ftp@Cbps#2k25",
-                serverUrl: "MCL/Vendor_Requisition",
-                documentID: "VR_" + VendorQutnID,
-                ext: "pdf"
-            };
+            var documentID = "VR_" + VendorQutnID;
 
-            function uploadFileToServer(file, ftpDetails) {
-                var formData = new FormData();
-                formData.append("file", file);
-                formData.append("serverIP", ftpDetails.serverIP);
-                formData.append("ftpPort", ftpDetails.ftpPort);
-                formData.append("ftpUserName", ftpDetails.ftpUserName);
-                formData.append("ftpPassword", ftpDetails.ftpPassword);
-                formData.append("serverUrl", ftpDetails.serverUrl);
-                formData.append("documentID", ftpDetails.documentID);
-                formData.append("ext", ftpDetails.ext);
+            var formData = new FormData();
+            formData.append("file", file);
+            formData.append("serverUrl", "MCL/Vendor_Requisition");
+            formData.append("documentID", documentID);
+            formData.append("ext", "pdf");
+            // serverIP/ftpPort/ftpUser/ftpPassword are read from config server-side
 
-                $.ajax({
-                    url: '/VendorQuotation/SaveDocument',
-                    type: "POST",
-                    contentType: false,
-                    processData: false,
-                    data: formData,
-                    success: function (result) {
+            $.ajax({
+                url: '/VendorQuotation/SaveDocument',
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (result) {
+                    // ← persist DocumentID into the DB row
+                    $http.post('/VendorQuotation/UpdateDocumentID', {
+                        VendorQutnID: VendorQutnID,
+                        DocumentID: documentID
+                    }).success(function () {
+                        $scope.VendorQutn.DocumentID = documentID; // keep scope in sync
                         toastr.success("Document uploaded successfully.");
-                        resetFileInput();
-                    },
-                    error: function (err) {
-                        toastr.error("Document upload failed. Please try again.");
-                        console.error(err);
-                    },
-                    complete: function () {
-                        $scope.loading = false;
-                    }
-                });
-            }
-
-            uploadFileToServer(file, ftpDetails);
-
-            // Helper to reset file input field
-            function resetFileInput() {
-                var fileInput = document.getElementById("FileUpload1");
-                fileInput.value = "";
-            }
-
+                        document.getElementById("FileUpload1").value = "";
+                        if (callback) callback();
+                    }).error(function () {
+                        toastr.warning("File uploaded but DocumentID not saved.");
+                        if (callback) callback();
+                    });
+                },
+                error: function (err) {
+                    toastr.error("Document upload failed. Please try again.");
+                    console.error(err);
+                    $scope.loading = false;
+                },
+                complete: function () {
+                    $scope.loading = false;
+                }
+            });
         };
 
+        // ── View Document ────────────────────────────────────────────────────────
         $scope.ViewDocument = function () {
-            $scope.loading = true; // Show loading indicator
-            // FTP details
-            var ftpDetails = {
-                serverIP: "172.16.189.34",
-                ftpPort: "21",
-                ftpUserName: "ftpuser",
-                ftpPassword: "Ftp@Cbps#2k25",
-                serverUrl: "MCL/Vendor_Requisition",
-                documentID: "VR_" + $scope.VendorQutn.VendorQutnID,
-                ext: "pdf"
-            };
+            // Use stored DocumentID if present, otherwise build it
+            var docID = $scope.VendorQutn.DocumentID
+                ? $scope.VendorQutn.DocumentID
+                : "VR_" + $scope.VendorQutn.VendorQutnID;
 
-            // Construct URL with query parameters
             var requestUrl = "/VendorQuotation/ViewDocument?" +
-                "serverIP=" + encodeURIComponent(ftpDetails.serverIP) +
-                "&ftpPort=" + encodeURIComponent(ftpDetails.ftpPort) +
-                "&ftpUserName=" + encodeURIComponent(ftpDetails.ftpUserName) +
-                "&ftpPassword=" + encodeURIComponent(ftpDetails.ftpPassword) +
-                "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
-                "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
-                "&ext=" + encodeURIComponent(ftpDetails.ext);
+                "serverUrl=" + encodeURIComponent("MCL/Vendor_Requisition") +
+                "&DocID=" + encodeURIComponent(docID) +
+                "&ext=pdf";
 
-            // Make GET request to fetch the PDF
+            $scope.loading = true;
+
             $http.get(requestUrl, { responseType: 'arraybuffer' })
                 .then(function (response) {
-                    var file = new Blob([response.data], { type: 'application/pdf' });
-                    var fileURL = URL.createObjectURL(file);
-                    let zoomParam = "#view=Fit";
-
-                    $("#pdfViewer").attr("src", fileURL + zoomParam);
+                    var blob = new Blob([response.data], { type: 'application/pdf' });
+                    var fileURL = URL.createObjectURL(blob);
+                    $("#pdfViewer").attr("src", fileURL + "#view=Fit");
                     $('#ShowPDFModal').modal('show');
                 })
-                .catch(function (error) {
-                    toastr.error("Failed to load the PDF.");
-                    console.error(error);
+                .catch(function () {
+                    toastr.error("Failed to load the PDF. No document may be attached.");
                 })
                 .finally(function () {
-                    $scope.loading = false; // Hide the loading indicator
+                    $scope.loading = false;
                 });
         };
 
-
+        // ── Refresh ──────────────────────────────────────────────────────────────
         $scope.toggleRefreshTable = function () {
             window.location.reload();
         };
-    }])
+
+        $scope.ResetSearchModel = function () { /* placeholder */ };
+
+    }]);
 </script>

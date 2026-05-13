@@ -67,50 +67,39 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> SaveVendorQuotation(OBS_VendorQutn vendorQutn, List<OBS_VendorQutnItem> vendorQutnItem, List<OBS_VendorQutnTerms> vendorQutnTerm)
+        public async Task<dynamic> SaveVendorQuotation(OBS_VendorQutn vendorQutn,
+     List<OBS_VendorQutnItem> vendorQutnItem, List<OBS_VendorQutnTerms> vendorQutnTerm)
         {
             vendorQutn.SetBy = UserID;
-            string status = string.Empty;//, message = string.Empty;
+            string status = string.Empty;
 
             if (string.IsNullOrEmpty(vendorQutn.VendorQutnID))
             {
                 vendorQutn.Action = "add";
-                vendorQutn.SetBy = UserID;
                 status = _clientInfoService.SaveVendorQuotation(vendorQutn, vendorQutnItem, vendorQutnTerm);
 
                 if (status != string.Empty)
                 {
                     string[] statusarr = status.Split(',');
-                    vendorQutn.VendorReqID = statusarr[1];
+                    vendorQutn.VendorQutnID = statusarr[1]; // ← fix: use VendorQutnID not VendorReqID
                     status = statusarr[0];
                 }
             }
             else
             {
                 vendorQutn.Action = "edit";
-                vendorQutn.SetBy = UserID;
                 status = _clientInfoService.SaveVendorQuotation(vendorQutn, vendorQutnItem, vendorQutnTerm);
-                status = "S202";
+                if (status != string.Empty)
+                {
+                    string[] statusarr = status.Split(',');
+                    vendorQutn.VendorQutnID = statusarr[1];
+                    status = statusarr[0];
+                }
             }
-            //string status = string.Empty;//, message = string.Empty;
-            //string VendorQutnID = string.Empty;//, message = string.Empty;
-            //if (string.IsNullOrEmpty(vendorQutn.VendorQutnID))
-            //    vendorQutn.Action = "add";
-            //else
-            //    vendorQutn.Action = "edit";
 
-            //status = _clientInfoService.SaveVendorQuotation(vendorQutn, vendorQutnItem, vendorQutnTerm);
-
-            //if (status != string.Empty && status != "ERROR_Duplicate")
-            //{
-            //    string[] statusarr = status.Split(',');
-            //    VendorQutnID = statusarr[1];
-            //    status = statusarr[0];
-            //}
-            string VendorQutnID = vendorQutn.VendorReqID;
+            string VendorQutnID = vendorQutn.VendorQutnID;
             return Json(new { status, VendorQutnID }, JsonRequestBehavior.AllowGet);
         }
-
         public async Task<dynamic> GetVendorQutnSearchList()
         {
             var vendorQutnSearchList = new List<OBS_VendorQutn>();
@@ -220,6 +209,13 @@ namespace SILDMS.Web.UI.Controllers
             }
         }
 
+
+        [HttpPost]
+        public ActionResult UpdateDocumentID(string VendorQutnID, string DocumentID)
+        {
+            string status = _clientInfoService.UpdateDocumentID(VendorQutnID, DocumentID);
+            return Json(new { status }, JsonRequestBehavior.AllowGet);
+        }
         //view pdf/
         [HttpGet]
         public ActionResult ViewDocument(string serverIP, string ftpPort, string ftpUserName, string ftpPassword, string serverUrl, string DocID, string ext)

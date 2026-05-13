@@ -65,5 +65,6 @@ namespace SILDMS.Model
         public double InstalledAmount { get; set; }
         public string BillCategory { get; set; }
         public bool IsSelected { get; set; }
+
     }
 }

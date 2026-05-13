@@ -19,5 +19,8 @@ namespace SILDMS.Service
         ValidationResult GetClientReqTermAgainstFormList(string TermsID, out List<OBS_ClientReqTerms> ClientReqTermList);
         string DeleteClientReqItemAndTerm(string ClientReqItemID, string ClientReqTermID);
         ValidationResult GetTermsConditionsList(out List<OBS_Terms> TermsConditionsList);
+
+
+        string UpdateDocumentID(string ClientReqID, string DocumentID);
     }
 }

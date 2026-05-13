@@ -307,6 +307,7 @@ namespace SILDMS.DataAccess
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         SubmissionDate = reader.GetString("SubmissionDate"),
                         LastDateofQuotation = reader.GetString("LastDateofQuotation"),
+                        ProcessStatus = reader.GetString("ProcessStatus"),
                         Remarks = reader.GetString("Remarks"),
                         Status = reader.GetString("Status")
                     }).ToList();
@@ -379,6 +380,7 @@ namespace SILDMS.DataAccess
                         DeliveryMode = reader.GetString("DeliveryMode"),
                         ReqQnty = reader.GetString("ReqQnty"),
                         ReqUnit = reader.GetString("ReqUnit"),
+                        CsStatus = reader.GetString("CsStatus"),
                         Status = reader.GetString("Status")
                     }).ToList();
                 }

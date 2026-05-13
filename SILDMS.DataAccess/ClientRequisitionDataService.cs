@@ -204,6 +204,7 @@ namespace SILDMS.DataAccess
                         SubmissionDate = reader.GetString("SubmissionDate"),
                         Remarks = reader.GetString("Remarks"),
                         ProcessStatus = reader.GetString("ProcessStatus"),
+                        DocumentID = reader.GetString("DocumentID"),   // BUG FIX: was missing
                         Status = reader.GetString("Status")
                     }).ToList();
                 }
@@ -355,5 +356,35 @@ namespace SILDMS.DataAccess
             }
             return TermsConditionsList;
         }
+
+
+        public string UpdateDocumentID(string ClientReqID, string DocumentID)
+        {
+            string errorNumber = string.Empty;
+            try
+            {
+                DatabaseProviderFactory factory = new DatabaseProviderFactory();
+                SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_UpdateClientReqDocumentID"))
+                {
+                    db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, ClientReqID);
+                    db.AddInParameter(dbCommandWrapper, "@DocumentID", SqlDbType.NVarChar, DocumentID);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 50);
+                    db.ExecuteNonQuery(dbCommandWrapper);
+
+                    if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
+                    {
+                        errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errorNumber = ex.InnerException?.Message ?? ex.Message;
+            }
+            return errorNumber;
+        }
+
+
     }
 }

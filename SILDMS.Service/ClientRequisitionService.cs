@@ -77,5 +77,11 @@ namespace SILDMS.Service
             TermsConditionsList = clientInfoDataService.GetTermsConditionsList();
             return ValidationResult.Success;
         }
+
+
+        public string UpdateDocumentID(string ClientReqID, string DocumentID)
+        {
+            return clientInfoDataService.UpdateDocumentID(ClientReqID, DocumentID);
+        }
     }
 }

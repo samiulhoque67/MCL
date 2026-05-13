@@ -84,5 +84,14 @@ namespace SILDMS.Service.PoCreation
             searchCSList = _pOCreationData.SearchPOData(userID);
             return ValidationResult.Success;
         }
+
+        public ValidationResult GetPOHeaderDetails(string poPreparationID, out POPreparationHeader poHeader)
+        {
+            poHeader = _pOCreationData.GetPOHeaderDetails(poPreparationID, out errorNumber);
+            if (errorNumber.Length > 0)
+                return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
+            return ValidationResult.Success;
+        }
+
     }
 }
