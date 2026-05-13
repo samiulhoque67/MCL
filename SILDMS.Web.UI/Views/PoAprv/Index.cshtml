@@ -618,7 +618,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <input id="PORecDate" name="PORecDate" type="text" class="DatePicker form-control" placeholder="PO Date" ng-model="VendorCSInfo.PORecDate" />
+                        <input id="PORecDate" name="PORecDate" type="text" autocomplete="off" class="DatePicker form-control" placeholder="PO Date" ng-model="VendorCSInfo.PORecDate" />
                     </div>
                 </div>
             </div>
@@ -1543,56 +1543,56 @@
 
 
 
-        //$scope.printData = function () {
-        //    // Use $timeout to ensure DOM updates are complete
-        //    $timeout(function () {
-        //        var VendorSlip = document.getElementById("masterRow");
+        $scope.printData = function () {
+            // Use $timeout to ensure DOM updates are complete
+            $timeout(function () {
+                var VendorSlip = document.getElementById("masterRow");
 
-        //        // Create an iframe dynamically
-        //        var iframe = document.createElement('iframe');
-        //        iframe.style.position = 'relative';
-        //        iframe.style.width = '0';
-        //        iframe.style.height = '0';
-        //        iframe.style.border = 'none';
-        //        document.body.appendChild(iframe);
+                // Create an iframe dynamically
+                var iframe = document.createElement('iframe');
+                iframe.style.position = 'relative';
+                iframe.style.width = '0';
+                iframe.style.height = '0';
+                iframe.style.border = 'none';
+                document.body.appendChild(iframe);
 
-        //        // Write the content to the iframe document
-        //        var doc = iframe.contentWindow.document;
-        //        doc.open();
-        //        doc.write('<html><head><title>PO Info</title>');
+                // Write the content to the iframe document
+                var doc = iframe.contentWindow.document;
+                doc.open();
+                doc.write('<html><head><title>PO Info</title>');
 
-        //        // Add custom styles for printing
-        //        doc.write('<style>' +
-        //            'body { font-family: Arial, sans-serif; margin: 0; padding: 0; }' +
-        //            '.title { margin-top: 50px; font-weight: bold; font-size: 24px; }' +
-        //            'table { width: 80%;  border-collapse: collapse; }' + // Adjusted width here
-        //            'td, th { padding: 8px; text-align: left; border: 1px solid #ddd; }' +
-        //            'p { margin: 0; font-size: 14px; }' +
-        //            '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 10px; }' +
-        //            '.col-md-5, .col-md-4, .col-md-3 { margin-left: 0px;margin-right: 20px; }' +
-        //            '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 20px; width: 100%; }' +
-        //           /* '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 20px; }' +*/
-        //            '.col-md-12 {width: 100%; margin: 0px; }' +
-        //            'table {width: 80%;  font-size: 12px; margin-top: 0px;margin-right:0px; }' +
-        //            '.flex-container { display: flex; justify-content: space-between; margin-top: 20px; width: 100%; }' +
-        //            '</style>');
+                // Add custom styles for printing
+                doc.write('<style>' +
+                    'body { font-family: Arial, sans-serif; margin: 0; padding: 0; }' +
+                    '.title { margin-top: 50px; font-weight: bold; font-size: 24px; }' +
+                    'table { width: 80%;  border-collapse: collapse; }' + // Adjusted width here
+                    'td, th { padding: 8px; text-align: left; border: 1px solid #ddd; }' +
+                    'p { margin: 0; font-size: 14px; }' +
+                    '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 10px; }' +
+                    '.col-md-5, .col-md-4, .col-md-3 { margin-left: 0px;margin-right: 20px; }' +
+                    '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 20px; width: 100%; }' +
+                   /* '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 20px; }' +*/
+                    '.col-md-12 {width: 100%; margin: 0px; }' +
+                    'table {width: 80%;  font-size: 12px; margin-top: 0px;margin-right:0px; }' +
+                    '.flex-container { display: flex; justify-content: space-between; margin-top: 20px; width: 100%; }' +
+                    '</style>');
 
-        //        doc.write('</head><body>');
+                doc.write('</head><body>');
 
-        //        // Copy content from the original div and write it into the iframe
-        //        doc.write(VendorSlip.outerHTML);
+                // Copy content from the original div and write it into the iframe
+                doc.write(VendorSlip.outerHTML);
 
-        //        doc.write('</body></html>');
-        //        doc.close();
+                doc.write('</body></html>');
+                doc.close();
 
-        //        // Wait for content to load and then trigger print
-        //        iframe.contentWindow.focus();
-        //        iframe.contentWindow.print();
+                // Wait for content to load and then trigger print
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
 
-        //        // Remove the iframe from the DOM after printing
-        //        document.body.removeChild(iframe);
-        //    }, 0); // Delay for one digest cycle
-        //};
+                // Remove the iframe from the DOM after printing
+                document.body.removeChild(iframe);
+            }, 0); // Delay for one digest cycle
+        };
         // Define printData function
 
 
@@ -1789,282 +1789,282 @@
         //};
 
 
-        $scope.printData = function () {
-            $timeout(function () {
+        //$scope.printData = function () {
+        //    $timeout(function () {
 
-                var info = $scope.VendorCSInfo || {};
-                var rows = $scope.PoPrintList || [];
-                var terms = $scope.ReqTermDataSetupGridData || [];
+        //        var info = $scope.VendorCSInfo || {};
+        //        var rows = $scope.PoPrintList || [];
+        //        var terms = $scope.ReqTermDataSetupGridData || [];
 
-                // ── grab header block (excluding line-items table) ───────────────
-                var masterEl = document.getElementById("masterRow");
-                var masterHTML = masterEl ? masterEl.outerHTML : '';
+        //        // ── grab header block (excluding line-items table) ───────────────
+        //        var masterEl = document.getElementById("masterRow");
+        //        var masterHTML = masterEl ? masterEl.outerHTML : '';
 
-                var tempDiv = document.createElement('div');
-                tempDiv.innerHTML = masterHTML;
+        //        var tempDiv = document.createElement('div');
+        //        tempDiv.innerHTML = masterHTML;
 
-                var pnlTables = tempDiv.querySelectorAll('table.pnlView');
-                pnlTables.forEach(function (t) {
-                    var parentRow = t.closest('.row');
-                    if (parentRow) parentRow.parentNode.removeChild(parentRow);
-                });
+        //        var pnlTables = tempDiv.querySelectorAll('table.pnlView');
+        //        pnlTables.forEach(function (t) {
+        //            var parentRow = t.closest('.row');
+        //            if (parentRow) parentRow.parentNode.removeChild(parentRow);
+        //        });
 
-                var headerOnlyHTML = tempDiv.innerHTML;
+        //        var headerOnlyHTML = tempDiv.innerHTML;
 
-                // ── dynamic pagination based on estimated row height ─────────────
-                var CHAR_PER_LINE = 40;
-                var LINE_HEIGHT_PX = 18;
-                var BASE_ROW_PX = 22;
-                var HEADER_RESERVE_PX = 40;
+        //        // ── dynamic pagination based on estimated row height ─────────────
+        //        var CHAR_PER_LINE = 40;
+        //        var LINE_HEIGHT_PX = 18;
+        //        var BASE_ROW_PX = 22;
+        //        var HEADER_RESERVE_PX = 40;
 
-                // Page 1 has company header + supplier info + PO details (~280px tall)
-                // Continuation pages have only mini-header (~40px)
-                var MAX_PAGE_PX_FIRST = 800;  // less space on page 1 due to big header
-                var MAX_PAGE_PX_REST = 1260;  // full space on continuation pages
+        //        // Page 1 has company header + supplier info + PO details (~280px tall)
+        //        // Continuation pages have only mini-header (~40px)
+        //        var MAX_PAGE_PX_FIRST = 800;  // less space on page 1 due to big header
+        //        var MAX_PAGE_PX_REST = 1260;  // full space on continuation pages
 
-                var rowHeights = rows.map(function (r) {
-                    var descLen = (r.Description || '').length;
-                    var nameLen = (r.ServiceItemName || '').length;
-                    var maxLen = Math.max(descLen, nameLen);
-                    var lines = Math.ceil(maxLen / CHAR_PER_LINE) || 1;
-                    return Math.max(BASE_ROW_PX, lines * LINE_HEIGHT_PX);
-                });
+        //        var rowHeights = rows.map(function (r) {
+        //            var descLen = (r.Description || '').length;
+        //            var nameLen = (r.ServiceItemName || '').length;
+        //            var maxLen = Math.max(descLen, nameLen);
+        //            var lines = Math.ceil(maxLen / CHAR_PER_LINE) || 1;
+        //            return Math.max(BASE_ROW_PX, lines * LINE_HEIGHT_PX);
+        //        });
 
-                var pages = [];
-                var currentSlice = [];
-                var currentHeight = 0;
-                var isFirstPage = true;
+        //        var pages = [];
+        //        var currentSlice = [];
+        //        var currentHeight = 0;
+        //        var isFirstPage = true;
 
-                rows.forEach(function (r, i) {
-                    var rh = rowHeights[i];
-                    var maxForThisPage = isFirstPage ? MAX_PAGE_PX_FIRST : MAX_PAGE_PX_REST;
+        //        rows.forEach(function (r, i) {
+        //            var rh = rowHeights[i];
+        //            var maxForThisPage = isFirstPage ? MAX_PAGE_PX_FIRST : MAX_PAGE_PX_REST;
 
-                    if (currentHeight + rh + HEADER_RESERVE_PX > maxForThisPage && currentSlice.length > 0) {
-                        pages.push(currentSlice);
-                        currentSlice = [];
-                        currentHeight = 0;
-                        isFirstPage = false;  // after first page is pushed, rest are continuation
-                    }
-                    currentSlice.push(r);
-                    currentHeight += rh;
-                });
-                if (currentSlice.length > 0) pages.push(currentSlice);
-                if (pages.length === 0) pages.push([]);
+        //            if (currentHeight + rh + HEADER_RESERVE_PX > maxForThisPage && currentSlice.length > 0) {
+        //                pages.push(currentSlice);
+        //                currentSlice = [];
+        //                currentHeight = 0;
+        //                isFirstPage = false;  // after first page is pushed, rest are continuation
+        //            }
+        //            currentSlice.push(r);
+        //            currentHeight += rh;
+        //        });
+        //        if (currentSlice.length > 0) pages.push(currentSlice);
+        //        if (pages.length === 0) pages.push([]);
 
-                var totalPages = pages.length;
-                var grandTotal = 0;
-                var pagesHTML = '';
+        //        var totalPages = pages.length;
+        //        var grandTotal = 0;
+        //        var pagesHTML = '';
 
-                for (var p = 0; p < totalPages; p++) {
-                    var slice = pages[p];
-                    var subTotal = 0;
-                    slice.forEach(function (r) { subTotal += parseFloat(r.NegoAmt || 0); });
-                    grandTotal += subTotal;
+        //        for (var p = 0; p < totalPages; p++) {
+        //            var slice = pages[p];
+        //            var subTotal = 0;
+        //            slice.forEach(function (r) { subTotal += parseFloat(r.NegoAmt || 0); });
+        //            grandTotal += subTotal;
 
-                    var isLastPage = (p === totalPages - 1);
+        //            var isLastPage = (p === totalPages - 1);
 
-                    // ── line number offset for sequential numbering ──────────────
-                    var lineOffset = pages.slice(0, p).reduce(function (a, pg) { return a + pg.length; }, 0);
+        //            // ── line number offset for sequential numbering ──────────────
+        //            var lineOffset = pages.slice(0, p).reduce(function (a, pg) { return a + pg.length; }, 0);
 
-                    // ── line item rows ───────────────────────────────────────────
-                    var rowsHTML = '';
-                    slice.forEach(function (r, i) {
-                        rowsHTML +=
-                            '<tr>' +
-                            '<td style="text-align:center">' + (lineOffset + i + 1) + '</td>' +
-                            '<td>' + (r.ServiceItemName || '') + '</td>' +
-                            '<td>' + (r.Description || '') + '</td>' +
-                            '<td style="text-align:center">' + (r.ReqUnit || '') + '</td>' +
-                            '<td style="text-align:right">' + parseFloat(r.NegoPrice || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
-                            '<td style="text-align:right">' + parseFloat(r.NegoQty || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
-                            '<td style="text-align:right">' + parseFloat(r.NegoAmt || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
-                            '<td style="text-align:right">' + parseFloat(r.NegoVatAmt || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
-                            '<td style="text-align:center">' + (r.PODate || '') + '</td>' +
-                            '</tr>';
-                    });
+        //            // ── line item rows ───────────────────────────────────────────
+        //            var rowsHTML = '';
+        //            slice.forEach(function (r, i) {
+        //                rowsHTML +=
+        //                    '<tr>' +
+        //                    '<td style="text-align:center">' + (lineOffset + i + 1) + '</td>' +
+        //                    '<td>' + (r.ServiceItemName || '') + '</td>' +
+        //                    '<td>' + (r.Description || '') + '</td>' +
+        //                    '<td style="text-align:center">' + (r.ReqUnit || '') + '</td>' +
+        //                    '<td style="text-align:right">' + parseFloat(r.NegoPrice || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
+        //                    '<td style="text-align:right">' + parseFloat(r.NegoQty || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
+        //                    '<td style="text-align:right">' + parseFloat(r.NegoAmt || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
+        //                    '<td style="text-align:right">' + parseFloat(r.NegoVatAmt || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
+        //                    '<td style="text-align:center">' + (r.PODate || '') + '</td>' +
+        //                    '</tr>';
+        //            });
 
-                    // ── subtotal / grand total row ───────────────────────────────
-                    if (!isLastPage) {
-                        rowsHTML +=
-                            '<tr style="background:#f5f5f5; border-top:2px solid #999;">' +
-                            '<td colspan="6" style="text-align:right; font-weight:bold;">Page Subtotal:</td>' +
-                            '<td style="text-align:right; font-weight:bold;">' + subTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
-                            '<td colspan="2"></td>' +
-                            '</tr>';
-                    }
-                    if (isLastPage) {
-                        rowsHTML +=
-                            '<tr style="background:#e8e8e8; border-top:2px solid #000;">' +
-                            '<td colspan="6" style="text-align:right; font-weight:bold;">Grand Total:</td>' +
-                            '<td style="text-align:right; font-weight:bold;">' + grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
-                            '<td colspan="2"></td>' +
-                            '</tr>';
-                    }
+        //            // ── subtotal / grand total row ───────────────────────────────
+        //            if (!isLastPage) {
+        //                rowsHTML +=
+        //                    '<tr style="background:#f5f5f5; border-top:2px solid #999;">' +
+        //                    '<td colspan="6" style="text-align:right; font-weight:bold;">Page Subtotal:</td>' +
+        //                    '<td style="text-align:right; font-weight:bold;">' + subTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
+        //                    '<td colspan="2"></td>' +
+        //                    '</tr>';
+        //            }
+        //            if (isLastPage) {
+        //                rowsHTML +=
+        //                    '<tr style="background:#e8e8e8; border-top:2px solid #000;">' +
+        //                    '<td colspan="6" style="text-align:right; font-weight:bold;">Grand Total:</td>' +
+        //                    '<td style="text-align:right; font-weight:bold;">' + grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>' +
+        //                    '<td colspan="2"></td>' +
+        //                    '</tr>';
+        //            }
 
-                    // ── mini header for pages 2+ ─────────────────────────────────
-                    var miniHeader = p > 0
-                        ? '<div style="width:100%; margin-bottom:8px; font-size:12px;">' +
-                        '<div style="display:inline-block; width:60%;"></div>' +
-                        '<div style="display:inline-block; width:40%; vertical-align:top;">' +
-                        '<div style="border:1px solid #000; padding:6px; width:100%; box-sizing:border-box;">' +
-                        '<div style="margin-bottom:4px;"><b>PO Number:</b> ' + (info.PONo || '') + '</div>' +
-                        '<div><b>PO Date:</b> ' + (info.PODate || '') + '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>'
-                        : '';
+        //            // ── mini header for pages 2+ ─────────────────────────────────
+        //            var miniHeader = p > 0
+        //                ? '<div style="width:100%; margin-bottom:8px; font-size:12px;">' +
+        //                '<div style="display:inline-block; width:60%;"></div>' +
+        //                '<div style="display:inline-block; width:40%; vertical-align:top;">' +
+        //                '<div style="border:1px solid #000; padding:6px; width:100%; box-sizing:border-box;">' +
+        //                '<div style="margin-bottom:4px;"><b>PO Number:</b> ' + (info.PONo || '') + '</div>' +
+        //                '<div><b>PO Date:</b> ' + (info.PODate || '') + '</div>' +
+        //                '</div>' +
+        //                '</div>' +
+        //                '</div>'
+        //                : '';
 
-                    var pageHeader = p === 0 ? headerOnlyHTML : miniHeader;
+        //            var pageHeader = p === 0 ? headerOnlyHTML : miniHeader;
 
-                    // ── terms & conditions + note (last page only) ───────────────
-                    var termsHTML = '';
-                    if (isLastPage) {
+        //            // ── terms & conditions + note (last page only) ───────────────
+        //            var termsHTML = '';
+        //            if (isLastPage) {
 
-                        var termsRowsHTML = '';
-                        terms.forEach(function (t) {
-                            termsRowsHTML +=
-                                '<tr>' +
-                                '<td style="width:10%; padding:5px; border:1px solid #ccc;">' + (t.TermsCode || '') + '</td>' +
-                                '<td style="padding:5px; border:1px solid #ccc;">' + (t.TermsName || '') + '</td>' +
-                                '</tr>';
-                        });
+        //                var termsRowsHTML = '';
+        //                terms.forEach(function (t) {
+        //                    termsRowsHTML +=
+        //                        '<tr>' +
+        //                        '<td style="width:10%; padding:5px; border:1px solid #ccc;">' + (t.TermsCode || '') + '</td>' +
+        //                        '<td style="padding:5px; border:1px solid #ccc;">' + (t.TermsName || '') + '</td>' +
+        //                        '</tr>';
+        //                });
 
-                        termsHTML =
-                            '<div style="margin-top:16px; border-top:1px solid #000; padding-top:8px;">' +
-                            '<div style="font-size:12px; font-weight:bold; margin-bottom:6px;">Terms &amp; Conditions</div>' +
-                            '<table style="width:100%; border-collapse:collapse; font-size:11px;">' +
-                            '<thead>' +
-                            '<tr>' +
-                            '<th style="text-align:left; padding:5px; border:1px solid #ccc; background:#f0f0f0; width:10%;">Terms Code</th>' +
-                            '<th style="text-align:left; padding:5px; border:1px solid #ccc; background:#f0f0f0;">Terms &amp; Conditions</th>' +
-                            '</tr>' +
-                            '</thead>' +
-                            '<tbody>' + termsRowsHTML + '</tbody>' +
-                            '</table>' +
-                            '<div style="margin-top:16px; font-size:11px; font-style:italic; text-align:center; border-top:1px solid #ccc; padding-top:8px;">' +
-                            'Note : This is a system-generated document. No signature is required.' +
-                            '</div>' +
-                            '</div>';
-                    }
+        //                termsHTML =
+        //                    '<div style="margin-top:16px; border-top:1px solid #000; padding-top:8px;">' +
+        //                    '<div style="font-size:12px; font-weight:bold; margin-bottom:6px;">Terms &amp; Conditions</div>' +
+        //                    '<table style="width:100%; border-collapse:collapse; font-size:11px;">' +
+        //                    '<thead>' +
+        //                    '<tr>' +
+        //                    '<th style="text-align:left; padding:5px; border:1px solid #ccc; background:#f0f0f0; width:10%;">Terms Code</th>' +
+        //                    '<th style="text-align:left; padding:5px; border:1px solid #ccc; background:#f0f0f0;">Terms &amp; Conditions</th>' +
+        //                    '</tr>' +
+        //                    '</thead>' +
+        //                    '<tbody>' + termsRowsHTML + '</tbody>' +
+        //                    '</table>' +
+        //                    '<div style="margin-top:16px; font-size:11px; font-style:italic; text-align:center; border-top:1px solid #ccc; padding-top:8px;">' +
+        //                    'Note : This is a system-generated document. No signature is required.' +
+        //                    '</div>' +
+        //                    '</div>';
+        //            }
 
-                    pagesHTML +=
-                        '<div class="page">' +
-                        pageHeader +
-                        '<table>' +
-                        '<thead><tr>' +
-                        '<th>Line</th>' +
-                        '<th>Item Name</th>' +
-                        '<th>Description</th>' +
-                        '<th>UOM</th>' +
-                        '<th>Unit Price</th>' +
-                        '<th>Quantity</th>' +
-                        '<th>Amount</th>' +
-                        '<th>VAT</th>' +
-                        '<th>Agreed Delivery Date</th>' +
-                        '</tr></thead>' +
-                        '<tbody>' + rowsHTML + '</tbody>' +
-                        '</table>' +
-                        termsHTML +
-                        '<div style="position:absolute; bottom:4mm; right:0; font-size:11px; color:#555;">Page ' + (p + 1) + ' of ' + totalPages + '</div>' +
-                        '</div>';
-                }
-                var VendorSlip = document.getElementById("masterRow");
-                // ── write iframe ─────────────────────────────────────────────────
-                var poNo = 'PO-' + (info.PONo || 'PurchaseOrder');
-                var iframe = document.createElement('iframe');
-                iframe.style.cssText = 'position:fixed;top:0;left:0;width:0;height:0;border:none;visibility:hidden;';
-                document.body.appendChild(iframe);
-                iframe.style.height = '0';
-                var doc = iframe.contentWindow.document;
-                doc.open();
-                doc.write('<!DOCTYPE html><html><head><title>' + poNo + '</title><style>' +
+        //            pagesHTML +=
+        //                '<div class="page">' +
+        //                pageHeader +
+        //                '<table>' +
+        //                '<thead><tr>' +
+        //                '<th>Line</th>' +
+        //                '<th>Item Name</th>' +
+        //                '<th>Description</th>' +
+        //                '<th>UOM</th>' +
+        //                '<th>Unit Price</th>' +
+        //                '<th>Quantity</th>' +
+        //                '<th>Amount</th>' +
+        //                '<th>VAT</th>' +
+        //                '<th>Agreed Delivery Date</th>' +
+        //                '</tr></thead>' +
+        //                '<tbody>' + rowsHTML + '</tbody>' +
+        //                '</table>' +
+        //                termsHTML +
+        //                '<div style="position:absolute; bottom:4mm; right:0; font-size:11px; color:#555;">Page ' + (p + 1) + ' of ' + totalPages + '</div>' +
+        //                '</div>';
+        //        }
+        //        var VendorSlip = document.getElementById("masterRow");
+        //        // ── write iframe ─────────────────────────────────────────────────
+        //        var poNo = 'PO-' + (info.PONo || 'PurchaseOrder');
+        //        var iframe = document.createElement('iframe');
+        //        iframe.style.cssText = 'position:fixed;top:0;left:0;width:0;height:0;border:none;visibility:hidden;';
+        //        document.body.appendChild(iframe);
+        //        iframe.style.height = '0';
+        //        var doc = iframe.contentWindow.document;
+        //        doc.open();
+        //        doc.write('<!DOCTYPE html><html><head><title>' + poNo + '</title><style>' +
 
-                    '@@page { size: A4; margin: 0; }' +
-                    'body { font-family: Arial, sans-serif; font-size: 12px; margin: 8mm 10mm 8mm 10mm; padding: 0; color:#000; }' +
-                var doc = iframe.contentWindow.document;
-                    '.page { page-break-before: always; padding: 4mm 0; position: relative; min-height: 257mm; }' +
-                    '.page:first-child { page-break-before: avoid; }' +
-                var doc = iframe.contentWindow.document;
-                    'table { width:100%; border-collapse:collapse; font-size:11px; margin-top:6px; }' +
-                    'th, td { border:1px solid #ccc; padding:5px 6px; word-wrap:break-word; }' +
-                    'th { background:#f0f0f0; font-weight:bold; text-align:center; font-size:11px; }' +
-                doc.write('<style>' +
-                    '.row { display:flex; flex-wrap:wrap; }' +
-                    '.col-md-3 { width:25%; box-sizing:border-box; padding:4px; }' +
-                    '.col-md-4 { width:33.33%; box-sizing:border-box; padding:4px; }' +
-                    '.col-md-5 { width:41.66%; box-sizing:border-box; padding:4px; }' +
-                    '.col-md-12 { width:100%; box-sizing:border-box; }' +
-                    'img { max-height:60px; }' +
-                    'p { margin:0; font-size:12px; }' +
-                    'table { width: 80%;  border-collapse: collapse; }' + // Adjusted width here
-                    '</style></head><body>' + pagesHTML + '</body></html>');
-                doc.close();
-                    '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 10px; }' +
-                // ── print after load ─────────────────────────────────────────────
-                iframe.onload = function () {
-                    var originalTitle = document.title;
-                    document.title = poNo;
+        //            '@@page { size: A4; margin: 0; }' +
+        //            'body { font-family: Arial, sans-serif; font-size: 12px; margin: 8mm 10mm 8mm 10mm; padding: 0; color:#000; }' +
+        //        var doc = iframe.contentWindow.document;
+        //            '.page { page-break-before: always; padding: 4mm 0; position: relative; min-height: 257mm; }' +
+        //            '.page:first-child { page-break-before: avoid; }' +
+        //        var doc = iframe.contentWindow.document;
+        //            'table { width:100%; border-collapse:collapse; font-size:11px; margin-top:6px; }' +
+        //            'th, td { border:1px solid #ccc; padding:5px 6px; word-wrap:break-word; }' +
+        //            'th { background:#f0f0f0; font-weight:bold; text-align:center; font-size:11px; }' +
+        //        doc.write('<style>' +
+        //            '.row { display:flex; flex-wrap:wrap; }' +
+        //            '.col-md-3 { width:25%; box-sizing:border-box; padding:4px; }' +
+        //            '.col-md-4 { width:33.33%; box-sizing:border-box; padding:4px; }' +
+        //            '.col-md-5 { width:41.66%; box-sizing:border-box; padding:4px; }' +
+        //            '.col-md-12 { width:100%; box-sizing:border-box; }' +
+        //            'img { max-height:60px; }' +
+        //            'p { margin:0; font-size:12px; }' +
+        //            'table { width: 80%;  border-collapse: collapse; }' + // Adjusted width here
+        //            '</style></head><body>' + pagesHTML + '</body></html>');
+        //        doc.close();
+        //            '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 10px; }' +
+        //        // ── print after load ─────────────────────────────────────────────
+        //        iframe.onload = function () {
+        //            var originalTitle = document.title;
+        //            document.title = poNo;
 
-                    iframe.contentWindow.focus();
-                    iframe.contentWindow.print();
-                    '.col-md-12 {width: 100%; margin: 0px; }' +
-                    setTimeout(function () {
-                        document.title = originalTitle;
-                        if (iframe.parentNode) document.body.removeChild(iframe);
-                    }, 2000);
-                };
+        //            iframe.contentWindow.focus();
+        //            iframe.contentWindow.print();
+        //            '.col-md-12 {width: 100%; margin: 0px; }' +
+        //            setTimeout(function () {
+        //                document.title = originalTitle;
+        //                if (iframe.parentNode) document.body.removeChild(iframe);
+        //            }, 2000);
+        //        };
 
-            }, 0);
-        };
+        //    }, 0);
+        //};
 
 
 
-                doc.write(VendorSlip.outerHTML);
-                    'table { width: 80%;  border-collapse: collapse; }' + // Adjusted width here
-                doc.write('</body></html>');
-                doc.close();
-                    '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 10px; }' +
-                // Wait for content to load and then trigger print
-                iframe.contentWindow.focus();
-                iframe.contentWindow.print();
-                    '.col-md-12 {width: 100%; margin: 0px; }' +
-                // Remove the iframe from the DOM after printing
-                document.body.removeChild(iframe);
-            }, 0); // Delay for one digest cycle
-        };
-            // Define printData function
+        //        doc.write(VendorSlip.outerHTML);
+        //            'table { width: 80%;  border-collapse: collapse; }' + // Adjusted width here
+        //        doc.write('</body></html>');
+        //        doc.close();
+        //            '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 10px; }' +
+        //        // Wait for content to load and then trigger print
+        //        iframe.contentWindow.focus();
+        //        iframe.contentWindow.print();
+        //            '.col-md-12 {width: 100%; margin: 0px; }' +
+        //        // Remove the iframe from the DOM after printing
+        //        document.body.removeChild(iframe);
+        //    }, 0); // Delay for one digest cycle
+        //};
+        //    // Define printData function
          
        
-                doc.write(VendorSlip.outerHTML);
-                    'table { width: 80%;  border-collapse: collapse; }' + // Adjusted width here
-                doc.write('</body></html>');
-                doc.close();
-                    '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 10px; }' +
-                // Wait for content to load and then trigger print
-                iframe.contentWindow.focus();
-                iframe.contentWindow.print();
-                    '.col-md-12 {width: 100%; margin: 0px; }' +
-                // Remove the iframe from the DOM after printing
-                document.body.removeChild(iframe);
-            }, 0); // Delay for one digest cycle
-        };
-            // Define printData function
+        //        doc.write(VendorSlip.outerHTML);
+        //            'table { width: 80%;  border-collapse: collapse; }' + // Adjusted width here
+        //        doc.write('</body></html>');
+        //        doc.close();
+        //            '.row { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 10px; }' +
+        //        // Wait for content to load and then trigger print
+        //        iframe.contentWindow.focus();
+        //        iframe.contentWindow.print();
+        //            '.col-md-12 {width: 100%; margin: 0px; }' +
+        //        // Remove the iframe from the DOM after printing
+        //        document.body.removeChild(iframe);
+        //    }, 0); // Delay for one digest cycle
+        //};
+        //    // Define printData function
          
        
-                doc.write(VendorSlip.outerHTML);
+        //        doc.write(VendorSlip.outerHTML);
 
-                doc.write('</body></html>');
-                doc.close();
+        //        doc.write('</body></html>');
+        //        doc.close();
 
-                // Wait for content to load and then trigger print
-                iframe.contentWindow.focus();
-                iframe.contentWindow.print();
+        //        // Wait for content to load and then trigger print
+        //        iframe.contentWindow.focus();
+        //        iframe.contentWindow.print();
 
-                // Remove the iframe from the DOM after printing
-                document.body.removeChild(iframe);
-            }, 0); // Delay for one digest cycle
-        };
-            // Define printData function
+        //        // Remove the iframe from the DOM after printing
+        //        document.body.removeChild(iframe);
+        //    }, 0); // Delay for one digest cycle
+        //};
+        //    // Define printData function
          
        
 

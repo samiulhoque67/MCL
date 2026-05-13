@@ -32,18 +32,6 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
-        //public async Task<dynamic> GetPOAprvDashBordData()
-        //{
-        //    List<OBS_VendorCSRecmItem> result = new List<OBS_VendorCSRecmItem>();
-        //    await Task.Run(() => poAprvService.GetPOAprvDashBordData(UserID, out result));
-        //    //var TotalPendingParking = pd.Count();
-        //    //var OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count();
-        //    //var WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count();
-
-        //    //return Json(new { TotalPendingParking = pd.Count(), OverBenchmark = pd.Where(o => Convert.ToInt32(o.BenchMark) < 0).Count(), WithinBenchMark = pd.Where(o => Convert.ToInt32(o.BenchMark) >= 0).Count() }, JsonRequestBehavior.AllowGet);
-        //    return Json(new { Message = "", result }, JsonRequestBehavior.AllowGet);
-        //}
-
         public async Task<dynamic> GetPoAprvClientInfo()
         {
             var CSClientList = new List<OBS_ClientReq>();
