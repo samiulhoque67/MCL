@@ -287,13 +287,13 @@ namespace SILDMS.Web.UI.Controllers
             reportDocument.SetParameterValue("RptQutnQty", string.IsNullOrEmpty(objVendorReq.RptQutnQty) ? string.Empty : objVendorReq.RptQutnQty);
             reportDocument.SetParameterValue("RptQutnUnit", string.IsNullOrEmpty(objVendorReq.RptQutnUnit) ? string.Empty : objVendorReq.RptQutnUnit);
             reportDocument.SetParameterValue("ClientReqNo", string.IsNullOrEmpty(objVendorReq.ClientReqNo) ? string.Empty : objVendorReq.ClientReqNo);
-            reportDocument.SetParameterValue("RequisitionDate", string.IsNullOrEmpty(objVendorReq.RequisitionDate) ? string.Empty : objVendorReq.RequisitionDate);
+            reportDocument.SetParameterValue("RequisitionDate", string.IsNullOrEmpty(objVendorReq.CSPrepDate) ? string.Empty : objVendorReq.CSPrepDate);
             reportDocument.SetParameterValue("ClientName", string.IsNullOrEmpty(objVendorReq.ClientName) ? string.Empty : objVendorReq.ClientName);
             reportDocument.SetParameterValue("VenReqItem", string.IsNullOrEmpty(objVendorReq.VenReqItem) ? string.Empty : objVendorReq.VenReqItem);
             reportDocument.SetParameterValue("CSPrepDate", string.IsNullOrEmpty(objVendorReq.CSPrepDate) ? string.Empty : objVendorReq.CSPrepDate);
             reportDocument.SetParameterValue("note", string.IsNullOrEmpty(objVendorReq.Note) ? string.Empty : objVendorReq.Note);
             reportDocument.SetParameterValue("RecmVendor", string.IsNullOrEmpty(objVendorReq.CSRecmVendorName) ? string.Empty : objVendorReq.CSRecmVendorName);
-            
+
             reportDocument.SetParameterValue("PrepBy", string.IsNullOrEmpty(objVendorReq.PrepBy) ? string.Empty : objVendorReq.PrepBy);
             reportDocument.SetParameterValue("PrepDesig", string.IsNullOrEmpty(objVendorReq.PrepDesig) ? string.Empty : objVendorReq.PrepDesig);
 

@@ -93,6 +93,7 @@ namespace SILDMS.Model
         public string VenReqItem { get; set; }
         public string Note { get; set; }
         public string CSPrepDate { get; set; }
+        public string CSRecDate { get; set; }
         public string CSRecmVendorName { get; set; }
         public string RecommendedByName { get; set; }
         public string RecommendedByDesignation { get; set; }
