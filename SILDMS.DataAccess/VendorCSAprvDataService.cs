@@ -689,6 +689,7 @@ namespace SILDMS.DataAccess
                     {
                         VendorCSRecmID = reader.GetString("VendorCSRecmID"),
                         CSRecmVendorName = reader.GetString("VendorCSRecmName"),
+                        CSRecDate = reader.GetString("CSRecDate"),
                         CSPrepNote = reader.GetString("PrepRemarks"),
                         CSRecmNote = reader.GetString("RecmRemarks"),
                         CSAccNote = reader.GetString("RecmAccRemarks"),

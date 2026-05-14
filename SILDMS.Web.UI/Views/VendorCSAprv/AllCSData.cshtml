@@ -293,6 +293,21 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
+                                <label>CS Date</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <input id="CSRecDate" autocomplete="off" name="CSRecDate" type="text" class="DatePicker form-control" placeholder="DD/MM/YYYY" ng-model="VendorCSAprv.CSRecDate" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
                                 <label>CS Recm. Vendor:</label>
                             </div>
                         </div>
@@ -747,11 +762,10 @@
                         ServiceItemID: row.ServiceItemID
                     })
                     .success(function (response) {
+                        console.log(response);
                         $scope.VendorCSAprv.CSRecmVendorName = response.MatWiseVendorList[0].CSRecmVendorName;
-                        //$scope.VendorCSAprv.Note = response.MatWiseVendorList[0].Note;
-                        //$scope.VendorCSAprv.CSRecmNote = response.MatWiseVendorList[0].CSRecmNote;
-                        //$scope.VendorCSAprv.CSAprvNote = response.MatWiseVendorList[0].CSAprvNote;
-
+                        $scope.VendorCSAprv.CSRecDate = response.MatWiseVendorList[0].CSRecDate;
+                        
                         $scope.VendorCSAprv.CSPrepNote = response.MatWiseVendorList[0].CSPrepNote;
                         $scope.VendorCSAprv.CSRecmNote = response.MatWiseVendorList[0].CSRecmNote;
                         $scope.VendorCSAprv.CSAccNote = response.MatWiseVendorList[0].CSAccNote;
