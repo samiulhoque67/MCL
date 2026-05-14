@@ -59,6 +59,8 @@ namespace SILDMS.Model
         public string VendorCSRecmID { get; set; }
         public string VendorRequisitionNumber { get; set; }
         public string ClientRequisitionNumber { get; set; }
+        public string UserFullName { get; set; }
+        public string ProjectName { get; set; }
         public string ClientReqID { get; set; }
 
         public string ClientID { get; set; }

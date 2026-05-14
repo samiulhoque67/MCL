@@ -115,7 +115,6 @@
                 </div>
             </div>
 
-            @*Client Name (readonly always) *@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -131,7 +130,6 @@
                 </div>
             </div>
 
-            @*Project Name (readonly always) *@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -148,7 +146,6 @@
                 </div>
             </div>
 
-            @*Quotation Numbers *@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -157,7 +154,6 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        @*BUG FIX: readonly in viewmode *@
                         <input id="VendorQutnNo" autocomplete="off" name="VendorQutnNo" type="text"
                                class="form-control" placeholder="Vendor Quotation No"
                                ng-model="VendorQutn.VendorQutnNo"
@@ -178,7 +174,6 @@
                 </div>
             </div>
 
-            @*Dates *@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -187,7 +182,6 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        @*BUG FIX: readonly in viewmode; id was correct but ng-readonly missing *@
                         <input id="QuotationDate" name="QuotationDate" type="text"
                                class="DatePicker form-control" autocomplete="off"
                                placeholder="DD/MM/YYYY"
@@ -202,11 +196,6 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        @*  {{--
-        BUG FIX: Input id was "QutnReceivedDate" but validation checked "#ReceivedDate"
-        which never matched — field was always seen as empty even when filled.
-        Also ng-readonly missing for viewmode.
-                        *@
                         <input id="QutnReceivedDate" name="QutnReceivedDate" type="text"
                                class="DatePicker form-control" autocomplete="off"
                                placeholder="DD/MM/YYYY"
@@ -216,7 +205,6 @@
                 </div>
             </div>
 
-            @*Quotation For (Remarks) *@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -225,7 +213,6 @@
                 </div>
                 <div class="col-lg-8">
                     <div class="form-group">
-                        @*BUG FIX: readonly in viewmode *@
                         <textarea id="Remarks" name="Remarks" data-ng-model="VendorQutn.Remarks"
                                   class="form-control" placeholder="Quotation For"
                                   ng-readonly="viewmode"></textarea>
@@ -1087,7 +1074,8 @@
             $scope.VendorQutn.RequisitionNo = tableRow.RequisitionNo;
             $scope.VendorQutn.RequisitionDate = tableRow.RequisitionDate;
             $scope.VendorQutn.VendorReqID = tableRow.VendorReqID;
-            $scope.VendorQutn.ProjectName = tableRow.Remarks;
+            $scope.VendorQutn.ProjectName = tableRow.ProjectName;
+            $scope.VendorQutn.Remarks = tableRow.Remarks;
             $scope.VendorQutn.Status = tableRow.Status;
             $scope.VendorQutn.DocumentID = tableRow.DocumentID;
             //VendorQutn.ProjectName
@@ -1344,6 +1332,7 @@
                             $scope.clearVendorQutn();
                             window.location.reload();
                         }
+                        window.location.reload();
                         return;
                     }
 
@@ -1357,6 +1346,7 @@
                                 $scope.viewmode = true; // stay in view/edit mode
                             });
                         }
+                        window.location.reload();
                         return;
                     }
 

@@ -60,12 +60,21 @@
                         <i class="fa fa-search" style="padding-right: 5px"></i> Search
                     </button>
                 </div>
-                @* BUG FIX: Save and Cancel buttons should only be disabled in viewonlymode, not by undefined btnSave *@
+
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="viewonlymode">
-                        <i class="fa fa-save" style="padding-right: 5px"></i> Save
+                    <button type="button" data-ng-click="Post()" class="button-custom btn-primary"
+                            ng-disabled="viewmode">
+                        <i class="fa fa-save" style="padding-right: 5px"></i>
+                        {{ ClientReq.ClientReqID ? 'Update' : 'Save' }}
                     </button>
                 </div>
+
+                @*<div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+            <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="viewonlymode">
+                <i class="fa fa-save" style="padding-right: 5px"></i> Save
+            </button>
+        </div>*@
+
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     @* BUG FIX: Cancel() function was missing entirely *@
                     <button type="button" data-ng-click="Cancel()" class="button-custom">

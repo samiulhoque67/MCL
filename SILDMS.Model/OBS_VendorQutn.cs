@@ -24,6 +24,7 @@ namespace SILDMS.Model
 
         public string QuotationDate { get; set; }
         public string QutnReceivedDate { get; set; }
+        public string ProjectName { get; set; }
         public string Remarks { get; set; }
         public string SetOn { get; set; }
         public string SetBy { get; set; }

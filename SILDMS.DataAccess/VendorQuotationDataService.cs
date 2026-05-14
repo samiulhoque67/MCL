@@ -271,6 +271,7 @@ namespace SILDMS.DataAccess
 
                         DocumentID = reader.GetString("DocumentID"),
                         ProcessStatus = reader.GetString("ProcessStatus"),
+                        ProjectName = reader.GetString("ProjectName"),
                         Remarks = reader.GetString("Remarks"),
                         Status = reader.GetString("Status")
                     }).ToList();

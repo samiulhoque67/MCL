@@ -548,6 +548,9 @@ namespace SILDMS.DataAccess
                     invitationList = dt1.AsEnumerable().Select(reader => new Invitation
                     {
                         //VendorCSRecmID = reader.GetString("VendorCSRecmID"),
+                        UserFullName = reader.GetString("UserFullName"),
+                        ProjectName = reader.GetString("ProjectName"),
+
                         VendorRequisitionNumber = reader.GetString("VendorReqID"),
                         ClientRequisitionNumber = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
