@@ -3,6 +3,7 @@ using SILDMS.Service;
 using SILDMS.Service.VendorCSActualAprv;
 using SILDMS.Utillity;
 using SILDMS.Utillity.Localization;
+using SILDMS.Web.UI.Areas.SecurityModule;
 using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
@@ -32,22 +33,27 @@ namespace SILDMS.Web.UI.Controllers
             UserID = SILAuthorization.GetUserID();
             UserName = SILAuthorization.GetUserFullName();
         }
-       
+
+        [SILAuthorize]
         public ActionResult AllCSRecDataforAcc()
         {
             return View();
         }
 
+        [SILAuthorize]
         public ActionResult AllCSVerifyDataforAud()
         {
             return View();
         }
 
+        [SILAuthorize]
         public ActionResult Index()
         {
             return View();
         }
 
+
+        [SILAuthorize]
         public ActionResult AllCSData()
         {
             return View();

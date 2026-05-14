@@ -1,15 +1,16 @@
-﻿using SILDMS.Service.QuotationRecommendation;
+﻿using SILDMS.Model;
+using SILDMS.Service.QuotationApproval;
+using SILDMS.Service.QuotationRecommendation;
+using SILDMS.Utillity;
+using SILDMS.Utillity.Localization;
+using SILDMS.Web.UI.Areas.SecurityModule;
+using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using SILDMS.Utillity;
-using SILDMS.Utillity.Localization;
-using SILDMS.Web.UI.Areas.SecurityModule.Models;
-using System.Web.Mvc;
-using SILDMS.Service.QuotationApproval;
-using SILDMS.Model;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace SILDMS.Web.UI.Controllers
 {
@@ -32,6 +33,8 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         // GET: QuotationApproval
+
+        [SILAuthorize]
         public ActionResult Index()
         {
             return View();

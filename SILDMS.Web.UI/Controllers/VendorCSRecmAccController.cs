@@ -1,12 +1,13 @@
 ﻿using SILDMS.Model;
 using SILDMS.Service;
 using SILDMS.Utillity;
+using SILDMS.Utillity.Localization;
+using SILDMS.Web.UI.Areas.SecurityModule;
 using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SILDMS.Utillity.Localization;
 using System.Web.Mvc;
 
 
@@ -30,6 +31,8 @@ namespace SILDMS.Web.UI.Controllers
             UserName = SILAuthorization.GetUserFullName();
         }
         // GET: /VendorCSAprv/Index
+
+        [SILAuthorize]
         public ActionResult Index()
         {
             return View();

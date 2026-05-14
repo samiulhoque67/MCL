@@ -316,7 +316,7 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
-        //[SILAuthorize]
+        [SILAuthorize]
         public ActionResult RequisitionToVendorReport()
         {
             return View();

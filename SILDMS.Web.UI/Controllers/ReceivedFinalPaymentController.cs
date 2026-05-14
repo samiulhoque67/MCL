@@ -3,6 +3,7 @@ using SILDMS.Service.ClientAprvBill;
 using SILDMS.Service.ReceivedFinalPayment;
 using SILDMS.Utillity;
 using SILDMS.Utillity.Localization;
+using SILDMS.Web.UI.Areas.SecurityModule;
 using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,8 @@ namespace SILDMS.Web.UI.Controllers
             _localizationService = localizationService;
             UserID = SILAuthorization.GetUserID();
         }
+
+        [SILAuthorize]
         public ActionResult Index()
         {
             return View();
