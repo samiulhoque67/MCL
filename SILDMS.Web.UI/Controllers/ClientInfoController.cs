@@ -30,6 +30,8 @@ namespace SILDMS.Web.UI.Controllers
             UserID = SILAuthorization.GetUserID();
         }
         // GET: /ClientInfo/Index
+
+        [SILAuthorize]
         public ActionResult Index()
         {
             return View();

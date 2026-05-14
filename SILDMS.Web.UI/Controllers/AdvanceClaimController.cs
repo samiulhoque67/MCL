@@ -1,12 +1,13 @@
 ﻿using SILDMS.Model;
 using SILDMS.Service.AdvanceClaim;
 using SILDMS.Service.AdvDemandVendor;
+using SILDMS.Utillity;
+using SILDMS.Utillity.Localization;
+using SILDMS.Web.UI.Areas.SecurityModule;
 using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SILDMS.Utillity;
-using SILDMS.Utillity.Localization;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -29,6 +30,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         // GET: AdvanceClaim
+        [SILAuthorize]
         public ActionResult Index()
         {
             return View();

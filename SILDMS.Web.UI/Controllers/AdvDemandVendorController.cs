@@ -1,15 +1,16 @@
-﻿using SILDMS.Service.AdvDemandVendor;
+﻿using SILDMS.Model;
+using SILDMS.Service.AdvDemandVendor;
+using SILDMS.Service.QuotationToClient;
+using SILDMS.Utillity;
+using SILDMS.Utillity.Localization;
+using SILDMS.Web.UI.Areas.SecurityModule;
+using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using SILDMS.Utillity;
-using SILDMS.Utillity.Localization;
-using SILDMS.Web.UI.Areas.SecurityModule.Models;
-using SILDMS.Service.QuotationToClient;
-using SILDMS.Model;
-using System.Threading.Tasks;
 
 namespace SILDMS.Web.UI.Controllers
 {
@@ -31,6 +32,7 @@ namespace SILDMS.Web.UI.Controllers
             UserID = SILAuthorization.GetUserID();
         }
         // GET: AdvDemandVendor
+        [SILAuthorize]
         public ActionResult Index()
         {
             return View();

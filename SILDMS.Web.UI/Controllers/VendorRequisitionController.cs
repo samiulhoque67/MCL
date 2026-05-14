@@ -35,6 +35,8 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         // GET: /VendorRequisition/Index
+
+        [SILAuthorize]
         public ActionResult Index()
         {
             return View();

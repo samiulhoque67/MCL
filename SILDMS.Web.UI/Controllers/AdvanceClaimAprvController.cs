@@ -1,14 +1,15 @@
-﻿using System;
+﻿using SILDMS.Model;
+using SILDMS.Service.AdvanceClaimAprvClient;
+using SILDMS.Utillity;
+using SILDMS.Utillity.Localization;
+using SILDMS.Web.UI.Areas.SecurityModule;
+using SILDMS.Web.UI.Areas.SecurityModule.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using SILDMS.Utillity.Localization;
-using SILDMS.Utillity;
-using SILDMS.Web.UI.Areas.SecurityModule.Models;
-using SILDMS.Model;
-using System.Threading.Tasks;
-using SILDMS.Service.AdvanceClaimAprvClient;
 
 namespace SILDMS.Web.UI.Controllers
 {
@@ -29,6 +30,7 @@ namespace SILDMS.Web.UI.Controllers
 
 
         // GET: AdvanceClaimAprv
+        [SILAuthorize]
         public ActionResult Index()
         {
             return View();

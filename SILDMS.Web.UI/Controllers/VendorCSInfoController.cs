@@ -2,6 +2,7 @@
 using SILDMS.Service;
 using SILDMS.Utillity;
 using SILDMS.Utillity.Localization;
+using SILDMS.Web.UI.Areas.SecurityModule;
 using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,9 @@ namespace SILDMS.Web.UI.Controllers
             UserID = SILAuthorization.GetUserID();
         }
         // GET: /VendorCSInfo/Index
+
+
+        [SILAuthorize]
         public ActionResult Index()
         {
             return View();
