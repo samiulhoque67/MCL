@@ -11,7 +11,6 @@ namespace SILDMS.Web.UI.Controllers
     {
         // GET: DashboardMCL
 
-        [SILAuthorize]
         public ActionResult Index()
         {
             return View();
