@@ -38,7 +38,10 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
+
+
         [HttpPost]
+        [Authorize]
         public async Task<dynamic> AllAvailableClients(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
         {
             var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
@@ -50,6 +53,7 @@ namespace SILDMS.Web.UI.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<dynamic> AllSavcdClientsQuotation(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type)
         {
             var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
@@ -61,6 +65,7 @@ namespace SILDMS.Web.UI.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<dynamic> GetVendorTermList(string ClientQuotationID)
         {
             var VendorTermTermList = new List<OBS_TermsItem>();  // Renamed to ClientDetails
@@ -70,6 +75,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<dynamic> GetClientReqDataInfo(string ClientID, string ClientReqID, string ClientQutnID)
         {
             var GetClientReqDetails = new List<ClientReqData>();  // Renamed to ClientDetails
@@ -79,6 +85,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> SaveQuotToClient(List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl)
         {
             string ClientQutnRecmID = string.Empty;
