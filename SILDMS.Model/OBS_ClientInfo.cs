@@ -27,6 +27,8 @@ namespace SILDMS.Model
         public string Status { get; set; }
         public string ClientReqID { get; set; }
         public string ReqType { get; set; }
+        public string ProjectName { get; set; }
+        public string UserFullName { get; set; }
     }
 
     public class OBS_ClientDetails
@@ -75,6 +77,8 @@ namespace SILDMS.Model
         public string AdvancClaimRcvdID { get; set; }
         public string RecmRemarks { get; set; }
         public string AprvRemarks { get; set; }
+        public string ProjectName { get; set; }
+        public string UserFullName { get; set; }
     }
 
 

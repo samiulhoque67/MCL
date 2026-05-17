@@ -609,6 +609,8 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
 
                     invitationList = dt1.AsEnumerable().Select(reader => new Invitation
                     {
+                        ProjectName = reader.GetString("ProjectName"),
+                        UserFullName = reader.GetString("UserFullName"),
                         VendorRequisitionNumber = reader.GetString("VendorReqID"),
                         ClientRequisitionNumber = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
@@ -650,6 +652,8 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                     invitationList = dt1.AsEnumerable().Select(reader => new Invitation
                     {
                         //VendorCSAprvID = reader.GetString("VendorCSAprvID"),
+                        ProjectName = reader.GetString("ProjectName"),
+                        UserFullName = reader.GetString("UserFullName"),
                         VendorRequisitionNumber = reader.GetString("VendorReqID"),
                         ClientRequisitionNumber = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
@@ -657,9 +661,6 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                         ClientName = reader.GetString("ClientName"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         LastDateofQuotation = reader.GetString("LastDateofQuotation")
-
-
-
                     }).ToList();
 
                 }
@@ -686,6 +687,8 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                     invitationList = dt1.AsEnumerable().Select(reader => new Invitation
                     {
                         //VendorCSAprvID = reader.GetString("VendorCSAprvID"),
+                        ProjectName = reader.GetString("ProjectName"),
+                        UserFullName = reader.GetString("UserFullName"),
                         VendorRequisitionNumber = reader.GetString("VendorReqID"),
                         ClientRequisitionNumber = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
@@ -715,6 +718,8 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                     dt1 = ds.Tables[0];
                     invitationList = dt1.AsEnumerable().Select(reader => new Invitation
                     {
+                        ProjectName = reader.GetString("ProjectName"),
+                        UserFullName = reader.GetString("UserFullName"),
                         VendorRequisitionNumber = reader.GetString("VendorReqID"),
                         ClientRequisitionNumber = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
