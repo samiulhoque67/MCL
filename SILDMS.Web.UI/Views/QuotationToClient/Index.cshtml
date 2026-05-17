@@ -208,37 +208,30 @@
                                 </th>
                             </tr>
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                                <th class="col-lg-1">Client Req.</th>
-                                <th class="col-lg-1">Client Req. No.</th>
-                                <th class="col-lg-1" data-ng-click="sortList('ClientCode')">
-                                    Client Code
-                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-1" data-ng-click="sortList('ClientName')">
-                                    Client Name
-                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-1">Quotation Type</th>
+                                <th style="text-align: left;" st-sort="">Client Name</th>
+                                <th style="text-align: left;" st-sort="">Project Name</th>
+                                <th style="text-align: left;" st-sort="">Representative</th>
                                 <th class="col-lg-1">Action</th>
                             </tr>
                             <tr>
-                                <th></th>
-                                <th></th>
-                                <th><input st-search="ClientCode" placeholder="Search Client Code" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="ClientName" placeholder="Search Client Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="ProjectName" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="UserFullName" placeholder="Representative" class="input-sm form-control" type="search" /></th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in AllAvailableClientsList | orderBy:'IsBack':true">
                                 <td class="hidden">{{row.ClientID}}</td>
-                                <td class="text-center">{{row.ClientReqID}}</td>
-                                <td class="text-center">{{row.ClientReqNo}}</td>
-                                <td class="text-center">{{row.ClientCode}}</td>
-                                <td class="text-center">{{row.ClientName}}</td>
-                                <td class="text-center">{{row.ReqType}}</td>
+                                <td class="hidden">{{row.ClientReqID}}</td>
+                                <td class="hidden">{{row.ClientReqNo}}</td>
+                                <td class="hidden">{{row.ClientCode}}</td>
+                                <td class="hidden">{{row.ReqType}}</td>
+
+                                <td class="col-lg-2">{{row.ClientName}}</td>
+                                <td class="col-lg-2">{{ row.ProjectName }} </td>
+                                <td class="col-lg-2">{{row.UserFullName}}</td>
+
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectAvailableClient(row, 'save')">Select</a>
                                 </td>
@@ -680,15 +673,32 @@
             <div class="col-sm-10 col-md-10 col-lg-10">
 
                 <div class="row">
+                    @*<div class="col-lg-2">
+                            <div class="form-group"><label for="QuotationNo">Quotation No :</label></div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <input ng-show="pagefunction === 'savemode'" id="QuotationNo" name="QuotationNo"
+                                       type="text" ng-model="Quotation.QuotationNo" readonly class="form-control" />
+                                <input ng-show="pagefunction === 'viewmode' || pagefunction === 'editmode'" id="QuotationNoSaved"
+                                       name="QuotationNoSaved" type="text" ng-model="SavedClientQutnID" readonly class="form-control" />
+                            </div>
+                        </div>*@
                     <div class="col-lg-2">
-                        <div class="form-group"><label for="QuotationNo">Quotation No :</label></div>
+                        <div class="form-group"><label for="BriefingDate">Client Briefing Date :</label></div>
                     </div>
                     <div class="col-lg-2">
-                        <div class="form-group">
-                            <input ng-show="pagefunction === 'savemode'" id="QuotationNo" name="QuotationNo"
-                                   type="text" ng-model="Quotation.QuotationNo" readonly class="form-control" />
-                            <input ng-show="pagefunction === 'viewmode' || pagefunction === 'editmode'" id="QuotationNoSaved"
-                                   name="QuotationNoSaved" type="text" ng-model="SavedClientQutnID" readonly class="form-control" />
+                        <!-- savemode & editmode: date picker -->
+                        <div ng-show="pagefunction === 'savemode' || pagefunction === 'editmode'" class="form-group">
+                            <input id="BriefingDate" name="BriefingDate" readonly type="datetime"
+                                   class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                                   ng-model="MasterData.BriefingDate" style="height: 25px; background-color:#ffffff;" />
+                        </div>
+                        <!-- viewmode: plain text -->
+                        <div ng-show="pagefunction === 'viewmode'" class="form-group">
+                            <input name="BriefingDateView" readonly type="text" placeholder="DD/MM/YYYY"
+                                   ng-model="MasterData.BriefingDate" class="form-control"
+                                   style="height: 25px; background-color:#ffffff;" />
                         </div>
                     </div>
                     <div class="col-lg-1"></div>
@@ -710,27 +720,9 @@
 
                 <div class="row">
                     <div class="col-lg-2">
-                        <div class="form-group"><label for="BriefingDate">Client Briefing Date :</label></div>
-                    </div>
-                    <div class="col-lg-2">
-                        <!-- savemode & editmode: date picker -->
-                        <div ng-show="pagefunction === 'savemode' || pagefunction === 'editmode'" class="form-group">
-                            <input id="BriefingDate" name="BriefingDate" readonly type="datetime"
-                                   class="DatePicker form-control" placeholder="DD/MM/YYYY"
-                                   ng-model="MasterData.BriefingDate" style="height: 25px; background-color:#ffffff;" />
-                        </div>
-                        <!-- viewmode: plain text -->
-                        <div ng-show="pagefunction === 'viewmode'" class="form-group">
-                            <input name="BriefingDateView" readonly type="text" placeholder="DD/MM/YYYY"
-                                   ng-model="MasterData.BriefingDate" class="form-control"
-                                   style="height: 25px; background-color:#ffffff;" />
-                        </div>
-                    </div>
-                    <div class="col-lg-1"></div>
-                    <div class="col-lg-2">
                         <div class="form-group"><label for="QuotationNote">Project Name :</label></div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-9">
                         <div class="form-group">
                             <textarea id="QuotationNote" name="QuotationNote"
                                       ng-readonly="pagefunction === 'viewmode'"

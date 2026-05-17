@@ -226,62 +226,32 @@
                             </tr>
 
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                                <!-- Columns with sorting -->
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('ClientCode')">
-                                    Client Code
-                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientName')">
-                                    Client Name
-                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientReqNo')">
-                                    Requisition No
-                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Requisition Date
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Quotation No
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Quotation Date
-                                </th>
-                                <th class="col-lg-1 col-md-1 col-sm-1">
-                                    Action
-                                </th>
+                                <th style="text-align: left;" st-sort="">Client Name</th>
+                                <th style="text-align: left;" st-sort="">Project Name</th>
+                                <th style="text-align: left;" st-sort="">Representative</th>
+                                <th class="col-lg-1">Action</th>
                             </tr>
-
-                            <!-- Search Fields -->
                             <tr>
-                                <th>
-                                    <input st-search="ClientCode" placeholder="Search Client Code" class="input-sm form-control" type="search" />
-                                </th>
-                                <th>
-                                    <input st-search="ClientName" placeholder="Search Client Name" class="input-sm form-control" type="search" />
-                                </th>
-                                <th>
-                                    <input st-search="ClientReqNo" placeholder="Search Req No" class="input-sm form-control" type="search" />
-                                </th>
-                                <th></th> <!-- No search for dates -->
-                                <th></th> <!-- No search for Quotation No -->
-                                <th></th> <!-- No search for Quotation Date -->
-                                <th></th> <!-- No search for Quotation Amount -->
+                                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="ProjectName" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="UserFullName" placeholder="Representative" class="input-sm form-control" type="search" /></th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in AllQuotationsList | orderBy:'IsBack':true">
-                                <td class="text-center">{{row.ClientCode}}</td>
-                                <td class="text-center">{{row.ClientName}}</td>
-                                <td class="text-center">{{row.ClientReqNo}}</td>
-                                <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
-                                <td class="text-center">{{row.QuotationNo}}</td>
-                                <td class="text-center">{{row.ClientAdvanceClaimDate | date:'dd/MM/yyyy'}}</td>
+
+                                <td class="hidden">{{row.ClientCode}}</td>
+                                <td class="hidden">{{row.ClientName}}</td>
+                                <td class="hidden">{{row.ClientReqNo}}</td>
+                                <td class="hidden">{{row.RequisitionDate}}</td>
+                                <td class="hidden">{{row.QuotationNo}}</td>
+                                <td class="hidden">{{row.ClientAdvanceClaimDate}}</td>
+
+                                <td class="col-lg-2">{{row.ClientName}}</td>
+                                <td class="col-lg-2">{{ row.ProjectName }} </td>
+                                <td class="col-lg-2">{{row.UserFullName}}</td>
+
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row,'save')">Select</a>
                                 </td>
@@ -348,7 +318,7 @@
                         <td style="width: 6%; text-align: right">{{ row.QutnPrice }}</td>
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
-                                   ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"  ng-readonly="pagefunction === 'viewmode'"
+                                   ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)" ng-readonly="pagefunction === 'viewmode'"
                                    ng-blur="validateInput('givenQutnPrice', row)" />
                         </td>
                         <td style="width: 6%; text-align: right">{{ row.ClientQutnAmt }}</td>
@@ -364,8 +334,8 @@
                         <td style="width: 6%; text-align: right;">{{ row.TotGivenASFAmt  | number:3}}</td>
 
                         <td style="width: 6%;">
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" 
-                                   ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"  ng-readonly="pagefunction === 'viewmode'"
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
+                                   ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)" ng-readonly="pagefunction === 'viewmode'"
                                    ng-blur="validateInput('GivenVatPerc', row)" />
                         </td>
                         <td style="width: 6%; text-align: right">{{ row.TotGivenVatAmt  | number:3}}</td>
@@ -471,7 +441,7 @@
                                 </div>
                             </th>
                             <th style="background: #ffffff;">
-                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn"  ng-show="pagefunction === 'savemode'">
+                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn" ng-show="pagefunction === 'savemode'">
                                     <i class="fa fa-plus" style="padding-right: 3px"></i> Add
                                 </button>
                             </th>
@@ -601,34 +571,16 @@
 
                 <!-- Quotation No & Date -->
                 <div class="row">
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="QuotationNo">Recommendation No :</label>
+                    @*<div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="QuotationNo">Recommendation No :</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="QuotationNo" name="QuotationNo" type="text" data-ng-model="Quotation.QuotationNo" readonly class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1"></div>
-
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="QuotationDate">Recommendation Date :</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="QuotationDate" name="QuotationDate" type="text" class="form-control" style="background-color:#ffffff;" readonly />
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quotation Note & Billing Date -->
-                <div class="row">
-
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <input id="QuotationNo" name="QuotationNo" type="text" data-ng-model="Quotation.QuotationNo" readonly class="form-control" />
+                            </div>
+                        </div>*@
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label>Operation:</label>
@@ -652,16 +604,28 @@
                                    readonly />
                         </div>
                     </div>
-
                     <div class="col-lg-1"></div>
 
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="QuotationDate">Recommendation Date :</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <input id="QuotationDate" name="QuotationDate" type="text" class="form-control" style="background-color:#ffffff;" readonly />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quotation Note & Billing Date -->
+                <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label for="QuotationNote">Project Name :</label>
                         </div>
                     </div>
-
-                    <div class="col-lg-4">
+                    <div class="col-lg-9">
                         <div class="form-group">
                             <textarea id="QuotationNote"
                                       ng-readonly="pagefunction === 'viewmode'"
@@ -672,7 +636,6 @@
                                       rows="3"></textarea>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="row">
@@ -1073,9 +1036,9 @@
                         Operation: $scope.GetClientReqDetailsCollection[0].Operation
                     };
                     $scope.MasterData.QuotationNote = $scope.GetClientReqDetailsCollection[0].Remarks,
-                    $scope.Quotation.QuotationNo = $scope.GetClientReqDetailsCollection[0].ClientQutnRecmID,
+                        $scope.Quotation.QuotationNo = $scope.GetClientReqDetailsCollection[0].ClientQutnRecmID,
 
-                    $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
+                        $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
 
 
                 }).error(function () {
@@ -1116,8 +1079,8 @@
                 if (existingItem) {
                     existingItem.MclPrice = row.givenQutnPrice
                     existingItem.ASFPerc = row.ASFPerc,
-                    existingItem.ASFAmt = row.TotGivenASFAmt,
-                    existingItem.VatPerc = row.GivenVatPerc;
+                        existingItem.ASFAmt = row.TotGivenASFAmt,
+                        existingItem.VatPerc = row.GivenVatPerc;
                     existingItem.VatAmt = row.TotGivenVatAmt;
                     existingItem.TolAmt = row.givenTolAmt;
                 } else {
@@ -1197,7 +1160,7 @@
         };
 
         $scope.calculateRowFields = function (row) {
-           
+
             row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
             row.ReqQnty = parseFloat(row.ReqQnty) || 0;
 

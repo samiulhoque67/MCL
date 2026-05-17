@@ -88,7 +88,7 @@
 
                             <button type="button" data-ng-click="SearchAvailableClients()"
                                     style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
-padding: 0px 10px; border: 2px solid black; background: transparent;">
+                                    padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
@@ -218,67 +218,31 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                     Quotations for Approval
                                 </th>
                             </tr>
-
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                                <!-- Columns with sorting -->
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('ClientCode')">
-                                    Client Code
-                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientName')">
-                                    Client Name
-                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientReqNo')">
-                                    Requisition No
-                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Requisition Date
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Quotation No
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Quotation Date
-                                </th>
-
-                                <th class="col-lg-1 col-md-1 col-sm-1">
-                                    Action
-                                </th>
+                                <th style="text-align: left;" st-sort="">Client Name</th>
+                                <th style="text-align: left;" st-sort="">Project Name</th>
+                                <th style="text-align: left;" st-sort="">Representative</th>
+                                <th class="col-lg-1">Action</th>
                             </tr>
-
-                            <!-- Search Fields -->
                             <tr>
-                                <th>
-                                    <input st-search="ClientCode" placeholder="Search Client Code" class="input-sm form-control" type="search" />
-                                </th>
-                                <th>
-                                    <input st-search="ClientName" placeholder="Search Client Name" class="input-sm form-control" type="search" />
-                                </th>
-                                <th>
-                                    <input st-search="ClientReqNo" placeholder="Search Req No" class="input-sm form-control" type="search" />
-                                </th>
-                                <th></th> <!-- No search for dates -->
-                                <th></th> <!-- No search for Quotation No -->
-                                <th></th> <!-- No search for Quotation Date -->
-                                <th></th> <!-- No search for Quotation Amount -->
+                                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="ProjectName" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="UserFullName" placeholder="Representative" class="input-sm form-control" type="search" /></th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in AllQuotationsList | orderBy:'IsBack':true">
-                                <td class="text-center">{{row.ClientCode}}</td>
-                                <td class="text-center">{{row.ClientName}}</td>
-                                <td class="text-center">{{row.ClientReqNo}}</td>
-                                <td class="hidden">{{row.RecmRemarks}}</td>
-                                <td class="hidden">{{row.AprvRemarks}}</td>
-                                <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
-                                <td class="text-center">{{row.QuotationNo}}</td>
-                                <td class="text-center">{{row.ClientAdvanceClaimDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="hidden">{{row.ClientCode}}</td>
+                                <td class="hidden">{{row.ClientName}}</td>
+                                <td class="hidden">{{row.ClientReqNo}}</td>
+                                <td class="hidden">{{row.RequisitionDate}}</td>
+                                <td class="hidden">{{row.QuotationNo}}</td>
+                                <td class="hidden">{{row.ClientAdvanceClaimDate}}</td>
+
+                                <td class="col-lg-2">{{row.ClientName}}</td>
+                                <td class="col-lg-2">{{ row.ProjectName }} </td>
+                                <td class="col-lg-2">{{row.UserFullName}}</td>
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row, 'save')">Select</a>
                                 </td>

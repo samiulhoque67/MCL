@@ -49,6 +49,8 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                     var dt1 = ds.Tables[0];
                     AllAvailableClientsList = dt1.AsEnumerable().Select(reader => new OBS_ClientwithReqQoutn
                     {
+                        ProjectName = reader.GetString("ProjectName"),
+                        UserFullName = reader.GetString("UserFullName"),
                         ClientID = reader.GetString("ClientID"),
                         ClientCode = reader.GetString("ClientCode"),
                         ClientName = reader.GetString("ClientName"),

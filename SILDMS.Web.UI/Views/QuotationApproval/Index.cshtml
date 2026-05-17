@@ -42,13 +42,13 @@
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                        @using (Html.BeginForm("ClientQuotationApproveReport", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
-                        {
-                            <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="button-custom">
-                                <i class="fa fa-print"></i> Quotation Print
-                            </button>
-                        }
-                    </div>
+                    @using (Html.BeginForm("ClientQuotationApproveReport", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+                    {
+                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="button-custom">
+                            <i class="fa fa-print"></i> Quotation Print
+                        </button>
+                    }
+                </div>
 
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom btn-warning" ng-disabled="btnRefresh">
@@ -86,7 +86,7 @@
 
                             <button type="button" data-ng-click="SearchAvailableClients()"
                                     style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
-padding: 0px 10px; border: 2px solid black; background: transparent;">
+                                    padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
@@ -236,63 +236,30 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                             </tr>
 
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                                <!-- Columns with sorting -->
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('ClientCode')">
-                                    Client Code
-                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientName')">
-                                    Client Name
-                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientReqNo')">
-                                    Requisition No
-                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Requisition Date
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Quotation No
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Quotation Date
-                                </th>
-
-                                <th class="col-lg-1 col-md-1 col-sm-1">
-                                    Action
-                                </th>
+                                <th style="text-align: left;" st-sort="">Client Name</th>
+                                <th style="text-align: left;" st-sort="">Project Name</th>
+                                <th style="text-align: left;" st-sort="">Representative</th>
+                                <th class="col-lg-1">Action</th>
                             </tr>
-
-                            <!-- Search Fields -->
                             <tr>
-                                <th>
-                                    <input st-search="ClientCode" placeholder="Search Client Code" class="input-sm form-control" type="search" />
-                                </th>
-                                <th>
-                                    <input st-search="ClientName" placeholder="Search Client Name" class="input-sm form-control" type="search" />
-                                </th>
-                                <th>
-                                    <input st-search="ClientReqNo" placeholder="Search Req No" class="input-sm form-control" type="search" />
-                                </th>
-                                <th></th> <!-- No search for dates -->
-                                <th></th> <!-- No search for Quotation No -->
-                                <th></th> <!-- No search for Quotation Date -->
-                                <th></th> <!-- No search for Quotation Amount -->
+                                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="ProjectName" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="UserFullName" placeholder="Representative" class="input-sm form-control" type="search" /></th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in AllQuotationsList | orderBy:'IsBack':true">
-                                <td class="text-center">{{row.ClientCode}}</td>
-                                <td class="text-center">{{row.ClientName}}</td>
-                                <td class="text-center">{{row.ClientReqNo}}</td>
-                                <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
-                                <td class="text-center">{{row.QuotationNo}}</td>
-                                <td class="text-center">{{row.ClientAdvanceClaimDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="hidden">{{row.ClientCode}}</td>
+                                <td class="hidden">{{row.ClientName}}</td>
+                                <td class="hidden">{{row.ClientReqNo}}</td>
+                                <td class="hidden">{{row.RequisitionDate}}</td>
+                                <td class="hidden">{{row.QuotationNo}}</td>
+                                <td class="hidden">{{row.ClientAdvanceClaimDate}}</td>
+
+                                <td class="col-lg-2">{{row.ClientName}}</td>
+                                <td class="col-lg-2">{{ row.ProjectName }} </td>
+                                <td class="col-lg-2">{{row.UserFullName}}</td>
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row, 'save')">Select</a>
                                 </td>
@@ -355,8 +322,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
                         <td style="width: 6%;">{{ row.QutnPrice }}</td>
                         <td style="width: 6%;">
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number" 
-                                    ng-readonly="pagefunction === 'viewmode'"
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
+                                   ng-readonly="pagefunction === 'viewmode'"
                                    ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('givenQutnPrice', row)" />
                         </td>
@@ -615,16 +582,46 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
                 <!-- Quotation No & Date -->
                 <div class="row">
+                    @*<div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="QuotationNo">Approve No :</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <input id="QuotationNo" name="QuotationNo" type="text" data-ng-model="Quotation.QuotationNo" readonly class="form-control" />
+                            </div>
+                        </div>*@
+
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="QuotationNo">Approve No :</label>
+                            <label>Operation:</label>
                         </div>
                     </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <input id="QuotationNo" name="QuotationNo" type="text" data-ng-model="Quotation.QuotationNo" readonly class="form-control" />
-                        </div>
+                    <div class="col-lg-2" ng-hide="pagefunction === 'viewmode'">
+                        <select data-ng-model="MasterData.Operation" class="form-control" ng-readonly="pagefunction === 'viewmode'">
+                            <option value="">-- None --</option>
+                            <option value="Aprv">Approved</option>
+                            <option value="Bck">Back</option>
+                            <option value="Pst">Postponed</option>
+                            <option value="Can">Cancel</option>
+                        </select>
                     </div>
+                    <div class="col-lg-2" ng-show="pagefunction === 'viewmode'">
+                        <input id="Operation"
+                               name="Operation"
+                               type="text"
+                               class="form-control"
+                               style="background-color:#ffffff;"
+                               ng-value="
+                                MasterData.Operation === 'Aprv' ? 'Approved' :
+                                MasterData.Operation === 'Bck'  ? 'Back' :
+                                MasterData.Operation === 'Pst'  ? 'Postponed' :
+                                MasterData.Operation === 'Can'  ? 'Cancel' :
+                                MasterData.Operation"
+                               readonly />
+                    </div>
+
 
                     <div class="col-lg-1"></div>
 
@@ -642,51 +639,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
                 <!-- Quotation Note & Billing Date -->
                 <div class="row">
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label>Operation:</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-2" ng-hide="pagefunction === 'viewmode'">
-                        <select data-ng-model="MasterData.Operation" class="form-control" ng-readonly="pagefunction === 'viewmode'">
-                            <option value="">-- None --</option>
-                            <option value="Aprv">Approved</option>
-                            <option value="Rec">Recommended</option>
-                            <option value="Bck">Back</option>
-                            <option value="Pst">Postponed</option>
-                            <option value="Can">Cancel</option>
-                        </select>
-                    </div>
-
-
-                    <div class="col-lg-2" ng-show="pagefunction === 'viewmode'">
-                        <input id="Operation"
-                               name="Operation"
-                               type="text"
-                               class="form-control"
-                               style="background-color:#ffffff;"
-                               ng-value="
-                                MasterData.Operation === 'Aprv' ? 'Approved' :
-                                MasterData.Operation === 'Rec'  ? 'Recommended' :
-                                MasterData.Operation === 'Bck'  ? 'Back' :
-                                MasterData.Operation === 'Pst'  ? 'Postponed' :
-                                MasterData.Operation === 'Can'  ? 'Cancel' :
-                                MasterData.Operation"
-                               readonly />
-                    </div>
-
-
-
-
-                    <div class="col-lg-1"></div>
-
 
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label for="QuotationNote">Approved Note :</label>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-9">
 
                         <textarea id="QuotationNote"
                                   ng-readonly="pagefunction === 'viewmode'"
@@ -822,8 +781,8 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                         <span class="fa fa-search-plus"> View</span>
                                     </button>
                                     @*<button type="button" id="btnEdit" ng-click="selectQuotationForRecom(row, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
-                                        <span class="fa fa-edit"> Edit</span>
-                                    </button>*@
+                                            <span class="fa fa-edit"> Edit</span>
+                                        </button>*@
                                 </td>
                             </tr>
                         </tbody>
@@ -1394,7 +1353,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                         ClientReqID: $scope.GetClientReqDetailsCollection[0].ClientReqID,
                         ClientQutnRecmID: $scope.GetClientReqDetailsCollection[0].ClientQutnRecmID,
                         QuotationNote: $scope.GetClientReqDetailsCollection[0].Remarks
-                   
+
                     };
 
                     $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
@@ -1422,7 +1381,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     };
                     $scope.Quotation.QuotationNo = $scope.GetClientReqDetailsCollection[0].ClientQutnAprvID,
 
-                    $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
+                        $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
                 }).error(function () {
                     $scope.loading = false;
                 });
