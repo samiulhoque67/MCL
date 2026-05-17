@@ -45,21 +45,21 @@ namespace SILDMS.Service.AdvanceClaim
         }
 
         ValidationResult IAdvanceClaimService.WoQtforAdvanClaimService(string ClientID, string WOInfoID, string WONo, out List<AdvanClaimWo> WODetails)
-         {
+        {
             WODetails = _advanceClaimData.WoQtforAdvanClaimDataService(ClientID, WOInfoID, WONo, out _errorNumber);
 
-             return _errorNumber.Length > 0
-                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
-                 : ValidationResult.Success;
-         }
+            return _errorNumber.Length > 0
+                ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
+                : ValidationResult.Success;
+        }
         ValidationResult IAdvanceClaimService.AllSavedAdvanceClaimDetailsService(string ClientID, string WOInfoID, string WONo, string AdvancClaimID, out List<AdvanClaimWo> WODetails)
-         {
+        {
             WODetails = _advanceClaimData.AllSavedAdvanceClaimDetailsDataService(ClientID, WOInfoID, WONo, AdvancClaimID, out _errorNumber);
 
-             return _errorNumber.Length > 0
-                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
-                 : ValidationResult.Success;
-         }
+            return _errorNumber.Length > 0
+                ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
+                : ValidationResult.Success;
+        }
 
         public string SaveQuotToClientService(string UserID, List<AdvanceClaimMaster> MasterData)
         {
@@ -67,6 +67,12 @@ namespace SILDMS.Service.AdvanceClaim
 
             throw new NotImplementedException();
         }
+
+        public string UpdateAdvanceClaimService(string UserID, List<AdvanceClaimMaster> MasterData)
+        {
+            return _advanceClaimData.UpdateAdvanceClaimData(UserID, MasterData, out _errorNumber);
+        }
+
 
     }
 }

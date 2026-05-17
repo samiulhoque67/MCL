@@ -80,6 +80,8 @@ namespace SILDMS.Model
 
     public class AdvanceClaimMaster
     {
+
+        public string AdvancClaimID { get; set; }
         public string ClientID { get; set; }
         public string ClientQutnAprvID { get; set; }
         public string WOInfoID { get; set; }

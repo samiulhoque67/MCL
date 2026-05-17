@@ -194,6 +194,33 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                     <div class="col-lg-1"></div>
                 </div>
 
+
+                <div class="row" ng-if="GetClientReqDetails.length > 0">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="upload_documents">
+                                Uploaded Documents <br>
+                                (<span style="color:#ff4900;"> PDF Only </span>)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <button ng-show="ClientDetails[0].DocumentID"
+                                ng-click="ViewDocument()"
+                                class="btn button-custom btn-sm">
+                            <i class="fa fa-eye"></i> View
+                        </button>
+
+                        <!-- No document text -->
+                        <span ng-hide="ClientDetails[0].DocumentID"
+                              style="color:#999; font-size:11px;">
+                            No document attached
+                        </span>
+
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -1083,6 +1110,23 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             </div>
         </div>
     </div>
+
+
+
+    @*view pdf modal*@
+    <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="padding: 0; margin: 0;">
+                    <iframe id="pdfViewer"
+                            style="width: 100%; height: 100vh; border: none;"
+                            title="PDF Viewer">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script type="text/javascript">
@@ -1661,6 +1705,96 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         //print document
 
         $scope.printData = function () {
+            var VendorSlip = document.getElementById("masterRow");
+
+            // Create an iframe dynamically
+            var iframe = document.createElement('iframe');
+            iframe.style.position = 'absolute';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = 'none';
+            document.body.appendChild(iframe);
+
+            // Write the content to the iframe document
+            var doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write('<html><head><title>Print</title>');
+
+            // Add custom styles for printing
+            doc.write('<style>' +
+                'body { font-family: Arial, sans-serif; margin: 0; padding: 0; }' +
+                'table { width: 100%; border-collapse: collapse; }' +
+                'td, th { padding: 8px; text-align: left; border: 1px solid #ddd; }' +
+                'p { margin: 0; font-size: 14px; }' + // Adjust as needed
+                '.row { display: flex; justify-content: space-between; padding: 20px; }' +
+                '.col-md-5, .col-md-4 { flex: 1; margin: 10px; }' + // Flex layout for columns
+                'table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }' +
+                '</style>');
+
+            doc.write('</head><body>');
+
+            // Copy content from the original div and write it into the iframe
+            doc.write(VendorSlip.outerHTML);
+
+            doc.write('</body></html>');
+            doc.close();
+
+            // Trigger print on the iframe content
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+
+            // Remove the iframe from the DOM after printing
+            document.body.removeChild(iframe);
+        }
+
+
+
+        $scope.ViewDocument = function () {
+            $scope.loading = true; // Show loading indicator
+
+            // FTP details
+            var ftpDetails = {
+                serverIP: "172.16.189.34",
+                ftpPort: "21",
+                ftpUserName: "ftpuser",
+                ftpPassword: "Ftp@Cbps#2k25",
+                serverUrl: "MCL/Client_Requisition",
+                documentID: "CR_" + $scope.ClientDetails[0].ClientReqID,
+                ext: "pdf"
+            };
+
+            // Construct URL with query parameters
+            var requestUrl = "/ClientRequisition/ViewDocument?" +
+                "serverIP=" + encodeURIComponent(ftpDetails.serverIP) +
+                "&ftpPort=" + encodeURIComponent(ftpDetails.ftpPort) +
+                "&ftpUserName=" + encodeURIComponent(ftpDetails.ftpUserName) +
+                "&ftpPassword=" + encodeURIComponent(ftpDetails.ftpPassword) +
+                "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
+                "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
+                "&ext=" + encodeURIComponent(ftpDetails.ext);
+
+            // Make GET request to fetch the PDF
+            $http.get(requestUrl, { responseType: 'arraybuffer' })
+                .then(function (response) {
+                    var file = new Blob([response.data], { type: 'application/pdf' });
+                    var fileURL = URL.createObjectURL(file);
+                    let zoomParam = "#view=Fit";
+
+                    $("#pdfViewer").attr("src", fileURL + zoomParam);
+                    $('#ShowPDFModal').modal('show');
+                })
+                .catch(function (error) {
+                    toastr.error("Failed to load the PDF.");
+                    console.error(error);
+                })
+                .finally(function () {
+                    $scope.loading = false; // Hide the loading indicator
+                });
+        };
+
+
+
+        $scope.printDataprintData = function () {
             var VendorSlip = document.getElementById("masterRow");
 
             // Create an iframe dynamically

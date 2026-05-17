@@ -499,7 +499,7 @@ namespace SILDMS.Web.UI.Controllers
         [Authorize]
         [HttpPost]
         [SILLogAttribute]
-        public async Task<ActionResult> ClientQuotationApproveReport(string ReportType)
+        public async Task<ActionResult> ClientQuotationApproveReport(string ClientQutnAprvID)
         {
             if (TempData["ClientQutnAprvID"] == null)
             {
@@ -507,7 +507,7 @@ namespace SILDMS.Web.UI.Controllers
                 return View();
             }
 
-            string ClientQutnAprvID = Convert.ToString(TempData["ClientQutnAprvID"]);
+            //string ClientQutnAprvID = Convert.ToString(TempData["ClientQutnAprvID"]);
 
             DataTable ds = new DataTable();
             DataTable ds1 = new DataTable();

@@ -39,7 +39,7 @@ namespace SILDMS.Web.UI.Controllers
         {
             return View();
         }
-
+        [SILAuthorize]
         public ActionResult AllClientQuotationApprovalData()
         {
             return View();

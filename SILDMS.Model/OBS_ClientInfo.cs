@@ -47,6 +47,7 @@ namespace SILDMS.Model
         public string RecmRemarks { get; set; }
         public string AprvRemarks { get; set; }
         public string ClientQutnAprvID { get; set; }
+        public string DocumentID { get; set; }
     }
 
     public class OBS_ClientwithReqQoutn

@@ -151,6 +151,7 @@
             </div>
 
             <div class="row">
+
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="upload_documents">
@@ -160,27 +161,41 @@
                     </div>
                 </div>
 
-                @* BUG FIX: Show file input only when NOT in viewonlymode*@
+                <!-- Show file input only when NOT in view mode -->
                 <div ng-show="!viewonlymode" class="col-lg-3">
                     <div class="form-group">
-                        <input type="file" style="height: 25px; float: left; margin-top: 5px;"
-                               id="FileUpload1" accept=".pdf"
+                        <input type="file"
+                               style="height:25px; float:left; margin-top:5px;"
+                               id="FileUpload1"
+                               accept=".pdf"
                                ng-model="uploadedFile"
                                onchange="angular.element(this).scope().fileSelected(this)" />
                     </div>
                 </div>
 
-                @*
-                    BUG FIX: Old condition was `clientReqDisplayedCollection.length > 0 && viewonlymode`
-                    which relied on the search modal list. Correct check is whether a ClientReqID
-                    is loaded (record was selected/saved) AND a DocumentID exists.
-                *@
-                <div ng-show="ClientReq.ClientReqID != '' && ClientReq.DocumentID != '' && ClientReq.DocumentID != null" class="col-lg-1">
-                    <button ng-click="ViewDocument()" class="btn button-custom">
-                        <i class="fa fa-eye"></i> View
-                    </button>
+                <!-- View section -->
+                <div ng-show="viewonlymode" class="col-lg-5">
+                    <div class="form-group" style="display:flex; gap:8px; align-items:center;">
+
+                        <!-- View button -->
+                        <button ng-show="ClientReq.DocumentID"
+                                ng-click="ViewDocument()"
+                                class="btn button-custom btn-sm">
+                            <i class="fa fa-eye"></i> View
+                        </button>
+
+                        <!-- No document message -->
+                        <span ng-hide="ClientReq.DocumentID"
+                              style="color:#999; font-size:11px;">
+                            No document attached
+                        </span>
+
+                    </div>
                 </div>
+
             </div>
+
+
         </div>
     </div>
 

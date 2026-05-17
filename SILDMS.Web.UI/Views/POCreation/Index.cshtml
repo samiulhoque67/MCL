@@ -768,6 +768,7 @@
                 WIInfoID: "",
                 CSRecDate: "",
                 Remarks: "",
+                ProcessStatus: "",
                 PoAmount: "",
                 BillType: "Default",
                 Installment: 1,
@@ -818,6 +819,12 @@
         };
 
         $scope.switchToEdit = function () {
+
+            if ($scope.VendorCSInfo.ProcessStatus == 'DONE') {
+                toastr.error("This PO is already Recommended, can not edit now");
+                return;
+            }
+
             $scope.pageMode = 'edit';
             $timeout(function () {
                 $('#CSRecDate').datepicker({ format: 'dd/mm/yyyy', autoclose: true })
@@ -991,6 +998,7 @@
             $scope.VendorCSInfo.VendorID = row.VendorID;
             $scope.VendorCSInfo.VendorName = row.VendorName;
             $scope.VendorCSInfo.CSRecDate = row.PoDate;
+            $scope.VendorCSInfo.ProcessStatus = row.ProcessStatus;
 
             // So Post() still has the vendor reference
             $scope.SelectedVendorForBiddingDisplayedCollection = [{

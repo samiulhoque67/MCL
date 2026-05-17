@@ -17,5 +17,8 @@ namespace SILDMS.Service.AdvanceClaim
         ValidationResult AllSavedAdvanceClaimDetailsService(string ClientID, string WOInfoID, string WONo,string AdvancClaimID, out List<AdvanClaimWo> WODetails);
 
         string SaveQuotToClientService(string UserID, List<AdvanceClaimMaster> MasterData);
+
+        string UpdateAdvanceClaimService(string UserID, List<AdvanceClaimMaster> MasterData);
+
     }
 }

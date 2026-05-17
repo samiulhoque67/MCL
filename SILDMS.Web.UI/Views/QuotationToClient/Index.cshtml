@@ -180,8 +180,19 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-lg-1">
-                        <button ng-click="ViewDocument()" class="btn button-custom"><i class="fa fa-eye"></i> View</button>
+                    <div class="col-lg-2">
+                        <button ng-show="Client.DocumentID"
+                                ng-click="ViewDocument()"
+                                class="btn button-custom btn-sm">
+                            <i class="fa fa-eye"></i> View
+                        </button>
+
+                        <!-- No document text -->
+                        <span ng-hide="Client.DocumentID"
+                              style="color:#999; font-size:11px;">
+                            No document attached
+                        </span>
+                    
                     </div>
                 </div>
             </div>
@@ -992,7 +1003,8 @@
                         ClientName: d.ClientName, ClientRequisitionNo: d.ClientReqNo,
                         ClientReqID: d.ClientReqID, ClientRequisitionDate: d.RequisitionDate,
                         ContactPerson: d.ContactPerson, ContactNumber: d.ContactNumber,
-                        ContactTIN: d.ClientTinNo, ContactBIN: d.ClientBinNo, ContactAddress: d.Address
+                        ContactTIN: d.ClientTinNo, ContactBIN: d.ClientBinNo, ContactAddress: d.Address,
+                        DocumentID: d.DocumentID
                     };
                     $scope.MasterData.QuotationNote = d.Remarks;
                     $scope.GetClientReqDataInfo(d.ClientID, d.ClientReqID, null, action);
@@ -1014,7 +1026,8 @@
                         ClientName: d.ClientName, ClientRequisitionNo: d.ClientReqNo,
                         ClientReqID: d.ClientReqID, ClientRequisitionDate: d.RequisitionDate,
                         ContactPerson: d.ContactPerson, ContactNumber: d.ContactNumber,
-                        ContactTIN: d.ClientTinNo, ContactBIN: d.ClientBinNo, ContactAddress: d.Address
+                        ContactTIN: d.ClientTinNo, ContactBIN: d.ClientBinNo, ContactAddress: d.Address,
+                        DocumentID: d.DocumentID
                     };
                     $scope.GetClientReqDataInfo(d.ClientID, d.ClientReqID, row.ClientQutnID, action);
                     $scope.loading = false;

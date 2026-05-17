@@ -56,10 +56,12 @@ namespace SILDMS.Service.PoRecom
             return ValidationResult.Success;
         }
 
-        public string SaveVendorPORecomInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm)
+        public string SaveVendorPORecomInfo(
+    OBS_VendorCSRecm vendorCS,
+    List<OBS_VendorCSRecmItem> vendorCSItem,
+    List<OBS_VendorCSRecmTerms> vendorCSTerm)
         {
             return poRecomData.SaveVendorPORecomInfo(vendorCS, vendorCSItem, vendorCSTerm);
-
         }
     }
 }
