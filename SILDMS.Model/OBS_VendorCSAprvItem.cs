@@ -49,5 +49,6 @@ namespace SILDMS.Model
         public string NegoVatAmt { get; set; }
         public string NegoAmt { get; set; }
         public string NegoTolAmt { get; set; }
+        public string DocumentID { get; set; }
     }
 }

@@ -644,6 +644,7 @@ namespace SILDMS.DataAccess
                         ReqQnty = reader.GetString("ReqQnty"),
                         ReqUnit = reader.GetString("ReqUnit"),
                         VendorQutnNo = reader.GetString("VendorQutnNo"),
+                        DocumentID = reader.GetString("DocumentID"),
                         VendorQutnID = reader.GetString("VendorQutnID"),
                         VendorID = reader.GetString("VendorID"),
                         VendorName = reader.GetString("VendorName"),

@@ -31,6 +31,15 @@ namespace SILDMS.Service.PoAprv
             }
             return ValidationResult.Success;
         }
+        public ValidationResult GetPoAprvClientInfo_Saved( out List<OBS_ClientReq> cSClientList)
+        {
+            cSClientList = poAprvData.GetPoAprvClientInfo_Saved( out errorNumber);
+            if (errorNumber.Length > 0)
+            {
+                return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
+            }
+            return ValidationResult.Success;
+        }
 
    
         public ValidationResult GetPOAprvInfoTermList(string PORecmID, out List<OBS_VendorCSRecmTerms> vendorCSInfoTermList)
@@ -63,10 +72,12 @@ namespace SILDMS.Service.PoAprv
             return ValidationResult.Success;
         }
 
-        public string SaveVendorPOAprvInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm)
+        public string SaveVendorPOAprvInfo(
+    OBS_VendorCSRecm vendorCS,
+    List<OBS_VendorCSRecmItem> vendorCSItem,
+    List<OBS_VendorCSRecmTerms> vendorCSTerm)
         {
             return poAprvData.SaveVendorPOAprvInfo(vendorCS, vendorCSItem, vendorCSTerm);
-
         }
     }
 }

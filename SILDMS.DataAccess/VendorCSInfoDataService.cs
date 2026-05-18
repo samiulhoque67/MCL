@@ -742,6 +742,7 @@ namespace SILDMS.DataAccess
                         VendorID = reader.GetString("VendorID"),
                         VendorName = reader.GetString("VendorName"),
                         VendorQutnNo = reader.GetString("VendorQutnNo"),
+                        DocumentID = reader.GetString("DocumentID"),
 
                         // Item info
                         ServiceCategoryID = reader.GetString("ServiceCategoryID"),

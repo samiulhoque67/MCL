@@ -135,6 +135,12 @@ namespace SILDMS.Service.VendorCSActualAprv
             reqWiseMaterialList = vendorCSActualAprvData.GetMaterialByRequisition(vendorRequisitionNumber);
             return ValidationResult.Success;
         }
+
+        public ValidationResult GetMaterialByRequisitionAllActualAprv(string vendorRequisitionNumber, out List<OBS_VendorCSAprvItem> reqWiseMaterialList)
+        {
+            reqWiseMaterialList = vendorCSActualAprvData.GetMaterialByRequisitionAllActualAprv(vendorRequisitionNumber);
+            return ValidationResult.Success;
+        }
         public ValidationResult GetMaterialByRequisitionAud(string vendorRequisitionNumber, out List<OBS_VendorCSAprvItem> reqWiseMaterialList)
         {
             reqWiseMaterialList = vendorCSActualAprvData.GetMaterialByRequisitionAud(vendorRequisitionNumber);

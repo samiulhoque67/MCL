@@ -43,6 +43,12 @@ namespace SILDMS.DataAccess.PoRecom
                 
                         VendorName = reader.GetString("VendorName"),
 
+                        ProcessStatus = reader.GetString("ProcessStatus"),   // ← add
+                        PORecmID = reader.GetString("PORecmID"),        // ← add
+                        RecommendedAmount = reader.GetString("RecommendedAmount"),// ← add
+                        PORecDate = reader.GetString("PORecDate"),        // ← add
+                        RecomRemarks = reader.GetString("RecomRemarks"),     // ← add
+
 
                     }).ToList();
                 }

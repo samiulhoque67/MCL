@@ -45,6 +45,13 @@ namespace SILDMS.Model
         public string DocumentID { get; set; }
         public string FormName { get; set; }
         public string TermsID { get; set; }
-
+        public string RecommendedAmount { get; set; }
+        public string PORecDate { get; set; }
+        public string RecomRemarks { get; set; }
+        public string PoAprvID { get; set; }
+        public string ApprovedAmount { get; set; }
+        public string POAprvDate { get; set; }
+        public string RecommendedBy { get; set; }
+        public string AprvRemarks { get; set; }
     }
 }

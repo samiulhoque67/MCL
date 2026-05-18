@@ -2,37 +2,6 @@
     Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
 }
 <style>
-    .dbody {
-        background-color: whitesmoke;
-    }
-
-    .global-search {
-        height: 34px;
-    }
-
-    .btn-round {
-        border-radius: 17px;
-    }
-
-    .box.box-solid.box-primary > .box-header {
-        text-align: center;
-    }
-
-    .table-header {
-        background-color: #8aa4af !important;
-        color: darkblue !important;
-        font-size: 13px;
-    }
-
-    .tableVen-striped > tbody > tr:nth-of-type(odd) {
-        background-color: rgba(23, 250, 132, 0.01);
-    }
-
-    .selected-row {
-        background-color: #dff0d8;
-    }
-
-    /* mode badge */
     .mode-badge {
         display: inline-block;
         padding: 3px 10px;
@@ -55,13 +24,17 @@
         border: 1px solid #d6e9c6;
     }
 
-    /* plain read-only field */
+    .mode-edit {
+        background: #fcf8e3;
+        color: #8a6d3b;
+        border: 1px solid #faebcc;
+    }
+
     .input-readonly {
         background-color: #ffffff !important;
         cursor: default;
     }
 
-    /* PO info header bar */
     .po-info-box {
         background: #f5f5f5;
         border: 1px solid #ddd;
@@ -74,44 +47,68 @@
         .po-info-box strong {
             color: #31708f;
         }
+
+    .status-pending {
+        color: #8a6d3b;
+        background: #fcf8e3;
+        border: 1px solid #faebcc;
+        border-radius: 3px;
+        padding: 1px 7px;
+        font-size: 11px;
+    }
+
+    .status-done {
+        color: #3c763d;
+        background: #dff0d8;
+        border: 1px solid #d6e9c6;
+        border-radius: 3px;
+        padding: 1px 7px;
+        font-size: 11px;
+    }
 </style>
 
 <div class="box box-primary box-body" ng-controller="PoRecomCtrl">
 
-    <!-- ══════════════════════════════════════════════════════════════
-         TOOLBAR
-         ══════════════════════════════════════════════════════════════ -->
+    <!-- TOOLBAR -->
     <div class="box-header with-border bg-light-blue-gradient" style="height:38px;border-radius:5px;">
         <h2 class="box-title" style="font-family:math;font-weight:500;">
             Purchase Order Recommendation
             <span ng-show="p===2" class="mode-badge mode-list">PO LIST</span>
-            <span ng-show="p===1" class="mode-badge mode-view">VIEW</span>
+            <span ng-show="p===1 && pageMode==='view'" class="mode-badge mode-view">VIEW</span>
+            <span ng-show="p===1 && pageMode==='edit'" class="mode-badge mode-edit">EDIT</span>
         </h2>
-
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
 
-                <div class="btn-group pull-right" style="margin-left:4px;margin-right:4px;">
+                <div class="btn-group pull-right" style="margin-left:4px;">
                     <button class="button-custom btn-warning" type="button"
-                            data-ng-click="toggleRefreshTable()" ng-disabled="isRefreshing">
+                            ng-click="toggleRefreshTable()" ng-disabled="isRefreshing">
                         <i class="fa fa-refresh" ng-class="{'fa-spin':isRefreshing}"
                            style="padding-right:5px"></i> Refresh
                     </button>
                 </div>
 
-                <!-- Save — only shown in p===1 (detail view) -->
-                <div class="btn-group pull-right" style="margin-left:4px;margin-right:4px;"
-                     ng-show="p===1">
+                <!-- Save/Update: hidden in view mode -->
+                <div class="btn-group pull-right" style="margin-left:4px;"
+                     ng-show="p===1 && pageMode!=='view'">
                     <button class="button-custom btn-success" type="button"
-                            data-ng-click="Post()" ng-disabled="isSaving">
+                            ng-click="Post()" ng-disabled="isSaving">
                         <i class="fa fa-save" style="padding-right:5px"></i>
-                        {{ VendorCSInfo.PORecmID ? 'Update' : 'Save' }}
+                        {{ pageMode==='edit' ? 'Update' : 'Save' }}
                     </button>
                 </div>
 
-                <!-- Back to list — only in p===1 -->
-                <div class="btn-group pull-right" style="margin-left:4px;margin-right:4px;"
-                     ng-show="p===1">
+                <!-- Edit button: only in view mode -->
+                <div class="btn-group pull-right" style="margin-left:4px;"
+                     ng-show="p===1 && pageMode==='view'">
+                    <button class="button-custom btn-warning" type="button"
+                            ng-click="switchToEdit()">
+                        <i class="fa fa-edit" style="padding-right:5px"></i> Edit
+                    </button>
+                </div>
+
+                <!-- Back -->
+                <div class="btn-group pull-right" style="margin-left:4px;" ng-show="p===1">
                     <button class="button-custom btn-primary" type="button"
                             ng-click="goBackToList()">
                         <i class="fa fa-arrow-left" style="padding-right:5px"></i> Back
@@ -122,18 +119,17 @@
         </div>
     </div>
 
-
-    <!-- ══════════════════════════════════════════════════════════════
-         p === 2  →  PO LIST  (click Details to open)
-         ══════════════════════════════════════════════════════════════ -->
+    <!-- ══════════════ p===2 : PO LIST ══════════════ -->
     <div ng-show="p===2">
-        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888888;padding:5px 10px;">
+        <div class="row" style="margin:1%;background-color:#f0f0f0;
+                                box-shadow:2px 2px 5px #888;padding:5px 10px;">
 
-            <div ng-show="CSClientDisplayedCollection.length <= 0" style="text-align:center;padding:20px;">
+            <div ng-show="CSClientDisplayedCollection.length<=0"
+                 style="text-align:center;padding:20px;">
                 <h4 style="color:red;">No PO available for recommendation!</h4>
             </div>
 
-            <div ng-show="CSClientDisplayedCollection.length > 0"
+            <div ng-show="CSClientDisplayedCollection.length>0"
                  class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
 
                 <div style="background-color:#cbd4d9;padding:0.7%;border-radius:4px;
@@ -143,38 +139,54 @@
 
                 <table st-table="CSClientDisplayedCollection" st-safe-src="CSClientList"
                        style="width:100%;"
-                       class="table table-condensed table-bordered table-striped table-hover pnlView">
+                       class="table table-condensed table-bordered table-striped table-hover">
                     <thead>
                         <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
-                            <th class="col-lg-2">PO Preparation ID</th>
-                            <th class="col-lg-3">Client Name</th>
-                            <th class="col-lg-2">Requisition No</th>
-                            <th class="col-lg-2">PO Date</th>
-                            <th class="col-lg-2">Vendor Name</th>
-                            <th class="col-lg-1">Action</th>
+                            <th>PO Preparation ID</th>
+                            <th>Client Name</th>
+                            <th>Requisition No</th>
+                            <th>PO Date</th>
+                            <th>Vendor Name</th>
+                            <th>Recom Status</th>  <!-- ← NEW -->
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in CSClientDisplayedCollection"
                             style="height:20px;font-size:13px;">
-                            <td class="hidden">{{row.ClientID}}</td>
-                            <td class="col-lg-2 text-left">{{row.POPreparationID}}</td>
-                            <td class="col-lg-3 text-left">{{row.ClientName}}</td>
-                            <td class="col-lg-2 text-left">{{row.ClientReqNo}}</td>
-                            <td class="col-lg-2 text-center">{{row.RequisitionDate}}</td>
-                            <td class="col-lg-2 text-center">{{row.VendorName}}</td>
+                            <td>{{row.POPreparationID}}</td>
+                            <td>{{row.ClientName}}</td>
+                            <td>{{row.ClientReqNo}}</td>
+                            <td class="text-center">{{row.RequisitionDate}}</td>
+                            <td class="text-center">{{row.VendorName}}</td>
+
+                            <!-- ← Status badge column -->
+                            <td class="text-center">
+                                <span ng-show="row.PORecmID" class="status-done">Recommended</span>
+                                <span ng-hide="row.PORecmID" class="status-pending">Pending</span>
+                            </td>
+
+                            <!-- ← View / Edit buttons like POCreation -->
                             <td>
                                 <button type="button"
                                         class="btn btn-sm btn-flat btn-primary"
-                                        ng-click="openDetail(row)">
-                                    <i class="fa fa-eye"></i> Details
+                                        ng-click="openDetail(row, 'view')">
+                                    <i class="fa fa-eye"></i> View
+                                </button>
+                                <!-- Edit hidden when recommendation already exists -->
+                                <button type="button"
+                                        class="btn btn-sm btn-flat btn-warning"
+                                        style="margin-left:3px;"
+                                        ng-hide="row.PORecmID"
+                                        ng-click="openDetail(row, 'edit')">
+                                    <i class="fa fa-edit"></i> Recommend
                                 </button>
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="6" class="text-center">
+                            <td colspan="7" class="text-center">
                                 <div st-pagination="" st-items-by-page="itemsByPage"
                                      st-displayed-pages="10"></div>
                             </td>
@@ -184,44 +196,34 @@
             </div>
         </div>
     </div><!-- /p===2 -->
-    <!-- ══════════════════════════════════════════════════════════════
-         p === 1  →  DETAIL / SAVE VIEW
-         ══════════════════════════════════════════════════════════════ -->
+    <!-- ══════════════ p===1 : DETAIL VIEW/EDIT ══════════════ -->
     <div ng-show="p===1">
 
-        <!-- PO summary info bar -->
+        <!-- PO summary bar -->
         <div class="row" style="margin:1%;">
             <div class="col-lg-12">
                 <div class="po-info-box">
                     <div class="row">
-                        <div class="col-lg-3">
-                            <strong>PO No:</strong>&nbsp;{{VendorCSInfo.AutoPoNo}}
-                        </div>
-                        <div class="col-lg-3">
-                            <strong>Client:</strong>&nbsp;{{VendorCSInfo.ClientName}}
-                        </div>
-                        <div class="col-lg-3">
-                            <strong>Vendor:</strong>&nbsp;{{VendorCSInfo.VendorName}}
-                        </div>
-                        <div class="col-lg-3">
-                            <strong>PO Date:</strong>&nbsp;{{VendorCSInfo.CSRecDate}}
-                        </div>
+                        <div class="col-lg-3"><strong>PO No:</strong>&nbsp;{{VendorCSInfo.AutoPoNo}}</div>
+                        <div class="col-lg-3"><strong>Client:</strong>&nbsp;{{VendorCSInfo.ClientName}}</div>
+                        <div class="col-lg-3"><strong>Vendor:</strong>&nbsp;{{VendorCSInfo.VendorName}}</div>
+                        <div class="col-lg-3"><strong>PO Date:</strong>&nbsp;{{VendorCSInfo.CSRecDate}}</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Item grid — all readonly -->
-        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888888;
+        <!-- Item grid (always readonly in recom page) -->
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;
                                 padding:5px 10px;overflow-x:auto;">
             <div class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
                 <table st-table="VenCSItemGridDisplayCollection" st-safe-src="VenCSItemList"
                        style="width:100%;font-size:12px;"
-                       class="table table-condensed table-bordered table-striped table-hover pnlView">
+                       class="table table-condensed table-bordered table-striped table-hover">
                     <thead>
-                        <tr style="font-size:15px;">
+                        <tr>
                             <th colspan="12" style="text-align:left;color:black;font-weight:100;
-                                                   font-family:math;background:#fff;border:1px solid #3003eb;">
+                                                    font-family:math;background:#fff;border:1px solid #3003eb;">
                                 Item List
                             </th>
                         </tr>
@@ -256,7 +258,7 @@
                             <td style="text-align:right;">{{row.NegoVatAmt | number:2}}</td>
                             <td style="text-align:right;">{{row.NegoTolAmt | number:2}}</td>
                         </tr>
-                        <tr ng-if="VenCSItemGridDisplayCollection.length === 0">
+                        <tr ng-if="VenCSItemGridDisplayCollection.length===0">
                             <td colspan="12" class="text-center text-danger">No items available</td>
                         </tr>
                     </tbody>
@@ -272,10 +274,11 @@
             </div>
         </div>
 
-        <!-- Recom Form fields -->
-        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888888;padding:10px;">
+        <!-- Recom Form — view vs edit mirrors POCreation pattern -->
+        <div class="row" style="margin:1%;background-color:#f0f0f0;
+                                box-shadow:2px 2px 5px #888;padding:10px;">
 
-            <!-- Row 1: Bill Category + Bill Type (readonly display) -->
+            <!-- Bill Category + Bill Type -->
             <div class="row" style="margin-bottom:8px;">
                 <div class="col-sm-1"></div>
                 <div class="col-lg-2"><label>Bill Category:</label></div>
@@ -290,9 +293,9 @@
                 </div>
             </div>
 
-            <!-- Row 2: Installment fields (conditional, readonly) -->
+            <!-- Installment (conditional) -->
             <div class="row" style="margin-bottom:8px;"
-                 ng-show="VendorCSInfo.BillType === 'Installment'">
+                 ng-show="VendorCSInfo.BillType==='Installment'">
                 <div class="col-sm-1"></div>
                 <div class="col-lg-2"><label>Installment:</label></div>
                 <div class="col-lg-3">
@@ -306,7 +309,7 @@
                 </div>
             </div>
 
-            <!-- Row 3: PO No + PO Date (readonly) -->
+            <!-- PO No + PO Date -->
             <div class="row" style="margin-bottom:8px;">
                 <div class="col-sm-1"></div>
                 <div class="col-lg-2"><label>PO No:</label></div>
@@ -321,7 +324,7 @@
                 </div>
             </div>
 
-            <!-- Row 4: PO Amount (readonly) + Recommended Amount (editable) -->
+            <!-- PO Amount + Recommended Amount -->
             <div class="row" style="margin-bottom:8px;">
                 <div class="col-sm-1"></div>
                 <div class="col-lg-2"><label>PO Amount:</label></div>
@@ -331,39 +334,54 @@
                 </div>
                 <div class="col-lg-2"><label>Recommended Amount:</label></div>
                 <div class="col-lg-3">
-                    <input type="text" class="form-control"
+                    <!-- VIEW: readonly -->
+                    <input ng-show="pageMode==='view'" type="text"
+                           class="form-control input-readonly"
+                           ng-model="VendorCSInfo.RecommendedAmount" ng-readonly="true" />
+                    <!-- EDIT: editable -->
+                    <input ng-show="pageMode==='edit'" type="text" class="form-control"
                            placeholder="Enter recommended amount"
                            ng-model="VendorCSInfo.RecommendedAmount" />
                 </div>
             </div>
 
-            <!-- Row 5: PO Recom Date (editable) + Note (editable) -->
+            <!-- Recom Date + Note -->
             <div class="row" style="margin-bottom:8px;">
                 <div class="col-sm-1"></div>
                 <div class="col-lg-2"><label>PO Recom Date:</label></div>
                 <div class="col-lg-3">
-                    <input id="PORecDate" name="PORecDate" type="text"
+                    <!-- VIEW -->
+                    <input ng-show="pageMode==='view'" type="text"
+                           class="form-control input-readonly"
+                           ng-model="VendorCSInfo.PORecDate" ng-readonly="true" />
+                    <!-- EDIT -->
+                    <input ng-show="pageMode==='edit'" id="PORecDate" type="text"
                            class="DatePicker form-control" placeholder="DD/MM/YYYY"
                            ng-model="VendorCSInfo.PORecDate" />
                 </div>
                 <div class="col-lg-2"><label>Note:</label></div>
                 <div class="col-lg-3">
-                    <input type="text" class="form-control"
+                    <!-- VIEW -->
+                    <input ng-show="pageMode==='view'" type="text"
+                           class="form-control input-readonly"
+                           ng-model="VendorCSInfo.RecomRemarks" ng-readonly="true" />
+                    <!-- EDIT -->
+                    <input ng-show="pageMode==='edit'" type="text" class="form-control"
                            placeholder="Note for recommendation"
                            ng-model="VendorCSInfo.RecomRemarks" />
                 </div>
             </div>
-
         </div>
 
-        <!-- Terms table -->
-        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888888;padding:5px 10px;">
+        <!-- Terms -->
+        <div class="row" style="margin:1%;background-color:#f0f0f0;
+                                box-shadow:2px 2px 5px #888;padding:5px 10px;">
             <div class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
                 <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData"
-                       class="table table-condensed table-bordered table-striped table-hover pnlView"
+                       class="table table-condensed table-bordered table-striped table-hover"
                        style="width:100%;">
                     <thead>
-                        <tr style="font-size:15px;">
+                        <tr>
                             <th colspan="2" style="text-align:left;color:black;font-weight:100;
                                                    font-family:math;background:#fff;border:1px solid #3003eb;">
                                 Terms &amp; Conditions
@@ -380,7 +398,7 @@
                             <td>{{row.TermsCode}}</td>
                             <td>{{row.TermsName}}</td>
                         </tr>
-                        <tr ng-if="ReqTermGridDisplayCollection.length === 0">
+                        <tr ng-if="ReqTermGridDisplayCollection.length===0">
                             <td colspan="2" class="text-center text-muted">No terms available</td>
                         </tr>
                     </tbody>
@@ -398,34 +416,24 @@
             </div>
         </div>
     </div>
+</div>
 
-</div><!-- /box -->
+
 
 <script type="text/javascript">
 
-    /* ── Datepicker ─────────────────────────────────────────────── */
-    $(document).ready(function () {
-        // set today as default for recom date
-        var t = new Date();
-        var tod = String(t.getDate()).padStart(2, '0') + '/' +
-            String(t.getMonth() + 1).padStart(2, '0') + '/' + t.getFullYear();
-        $('#PORecDate').val(tod);
-    });
-
-    /* ══════════════════════════════════════════════════════════════
-       Angular Controller
-       ══════════════════════════════════════════════════════════════ */
     app.controller('PoRecomCtrl', ['$scope', '$http', '$timeout',
         function ($scope, $http, $timeout) {
 
-            /* ── State ─────────────────────────────────────────────── */
+            /* ── State ── */
             $scope.itemsByPage = 10;
             $scope.loading = false;
             $scope.isSaving = false;
             $scope.isRefreshing = false;
-            $scope.p = 2;   // 2 = PO list,  1 = detail/save view
+            $scope.p = 2;          // 2=list, 1=detail
+            $scope.pageMode = 'view';     // 'view' | 'edit'
 
-            /* ── Collections ────────────────────────────────────────── */
+            /* ── Collections ── */
             $scope.CSClientList = [];
             $scope.CSClientDisplayedCollection = [];
             $scope.VenCSItemList = [];
@@ -433,33 +441,22 @@
             $scope.ReqTermDataSetupGridData = [];
             $scope.ReqTermGridDisplayCollection = [];
 
-            /* ── Model ──────────────────────────────────────────────── */
+            /* ── Model ── */
             function emptyInfo() {
                 return {
-                    POPreparationID: "",
-                    PORecmID: "",          // set after first save (S201→S202)
-                    ClientID: "",
-                    ClientName: "",
-                    ClientReqID: "",
-                    VendorID: "",
-                    VendorName: "",
-                    AutoPoNo: "",
-                    CSRecDate: "",          // PO Date (readonly, from PO Preparation)
-                    PORecDate: "",          // Recom Date (editable)
-                    PoAmount: "",          // PO Amount (readonly)
-                    RecommendedAmount: "",          // editable
-                    BillType: "",
-                    Category: "",
-                    Installment: "",
-                    InstalledAmount: "",
-                    Remarks: "",          // PO original note (readonly display)
-                    RecomRemarks: "",          // new note for this recommendation
-                    SetBy: ""
+                    POPreparationID: "", PORecmID: "",
+                    ClientID: "", ClientName: "",
+                    ClientReqID: "", VendorID: "", VendorName: "",
+                    AutoPoNo: "", CSRecDate: "", PORecDate: "",
+                    PoAmount: "", RecommendedAmount: "",
+                    BillType: "", Category: "",
+                    Installment: "", InstalledAmount: "",
+                    Remarks: "", RecomRemarks: "", SetBy: ""
                 };
             }
             $scope.VendorCSInfo = emptyInfo();
 
-            /* ── Initial load: PO list ─────────────────────────────── */
+            /* ── Initial load ── */
             $scope.loading = true;
             $http.post("/PORecom/GetPoRecomClientInfo/")
                 .then(function (res) {
@@ -471,13 +468,14 @@
                     toastr.error("Failed to load PO list.");
                 });
 
-            /* ── Open detail from list row ─────────────────────────── */
-            $scope.openDetail = function (row) {
+            /* ── Open detail ── */
+            $scope.openDetail = function (row, mode) {
                 $scope.loading = true;
                 $scope.p = 1;
-                $scope.VendorCSInfo = emptyInfo();    // clear previous
+                $scope.pageMode = mode;   // 'view' or 'edit'
+                $scope.VendorCSInfo = emptyInfo();
 
-                // store keys needed for save
+                // Keys always needed
                 $scope.VendorCSInfo.POPreparationID = row.POPreparationID;
                 $scope.VendorCSInfo.ClientID = row.ClientID;
                 $scope.VendorCSInfo.ClientReqID = row.ClientReqID;
@@ -485,35 +483,44 @@
                 $scope.VendorCSInfo.ClientName = row.ClientName;
                 $scope.VendorCSInfo.VendorName = row.VendorName;
 
-                // reset today's date in recom date field
-                $timeout(function () {
-                    var t = new Date();
-                    var tod = String(t.getDate()).padStart(2, '0') + '/' +
-                        String(t.getMonth() + 1).padStart(2, '0') + '/' + t.getFullYear();
-                    $('#PORecDate').val(tod);
-                    $scope.VendorCSInfo.PORecDate = tod;
+                // If an existing recommendation exists, pre-fill recom fields
+                if (row.PORecmID) {
+                    $scope.VendorCSInfo.PORecmID = row.PORecmID;
+                    $scope.VendorCSInfo.RecommendedAmount = row.RecommendedAmount;
+                    $scope.VendorCSInfo.PORecDate = row.PORecDate;
+                    $scope.VendorCSInfo.RecomRemarks = row.RecomRemarks;
+                }
 
-                    // init datepicker on the now-visible field
-                    $('#PORecDate').datepicker({ format: 'dd/mm/yyyy', autoclose: true })
-                        .off('changeDate.recom')
-                        .on('changeDate.recom', function (ev) {
-                            $scope.$apply(function () {
-                                $scope.VendorCSInfo.PORecDate = $(ev.target).val();
+                // Set today as default recom date only for new recommendation
+                $timeout(function () {
+                    if (mode === 'edit') {
+                        var t = new Date();
+                        var tod = String(t.getDate()).padStart(2, '0') + '/' +
+                            String(t.getMonth() + 1).padStart(2, '0') + '/' + t.getFullYear();
+                        var dateVal = $scope.VendorCSInfo.PORecDate || tod;
+                        $('#PORecDate').val(dateVal);
+                        $scope.VendorCSInfo.PORecDate = dateVal;
+
+                        $('#PORecDate').datepicker({ format: 'dd/mm/yyyy', autoclose: true })
+                            .off('changeDate.recom')
+                            .on('changeDate.recom', function (ev) {
+                                $scope.$apply(function () {
+                                    $scope.VendorCSInfo.PORecDate = $(ev.target).val();
+                                });
+                                $('.datepicker').hide();
                             });
-                            $('.datepicker').hide();
-                        });
+                    }
                 }, 100);
 
-                // load items — reuse existing PoRecom endpoint
+                // Load items
                 $http.post("/PoRecom/GetVendorPORecomQuotationItem", {
                     VendorID: row.VendorID,
                     ClientID: row.ClientID,
                     POPreparationID: row.POPreparationID
                 }).then(function (res) {
                     var items = res.data.VenCSItemList || [];
-
                     if (items.length > 0) {
-                        var h = items[0];   // header fields repeated on every row
+                        var h = items[0];
                         $scope.VendorCSInfo.AutoPoNo = h.PONo || "";
                         $scope.VendorCSInfo.CSRecDate = h.PODate || "";
                         $scope.VendorCSInfo.PoAmount = h.POAmt || "";
@@ -526,7 +533,6 @@
                         $scope.VendorCSInfo.Remarks = h.Remarks || "";
                         $scope.VendorCSInfo.VendorName = h.VendorName || row.VendorName;
                     }
-
                     $scope.VenCSItemList = items.map(mapItem);
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
                     $scope.loading = false;
@@ -535,7 +541,7 @@
                     toastr.error("Failed to load PO items.");
                 });
 
-                // load terms
+                // Load terms
                 $http.post('/PoRecom/GetPORecomInfoTermList', {
                     POPreparationID: row.POPreparationID
                 }).then(function (res) {
@@ -546,9 +552,34 @@
                 });
             };
 
-            /* ── Back to list ──────────────────────────────────────── */
+            /* ── Switch to edit (from view mode) ── */
+            $scope.switchToEdit = function () {
+                // Guard: if already recommended, allow edit (SP handles UPDATE via PORecmID)
+                $scope.pageMode = 'edit';
+                $timeout(function () {
+                    var dateVal = $scope.VendorCSInfo.PORecDate;
+                    if (!dateVal) {
+                        var t = new Date();
+                        dateVal = String(t.getDate()).padStart(2, '0') + '/' +
+                            String(t.getMonth() + 1).padStart(2, '0') + '/' + t.getFullYear();
+                    }
+                    $('#PORecDate').val(dateVal);
+                    $scope.VendorCSInfo.PORecDate = dateVal;
+                    $('#PORecDate').datepicker({ format: 'dd/mm/yyyy', autoclose: true })
+                        .off('changeDate.recom')
+                        .on('changeDate.recom', function (ev) {
+                            $scope.$apply(function () {
+                                $scope.VendorCSInfo.PORecDate = $(ev.target).val();
+                            });
+                            $('.datepicker').hide();
+                        });
+                }, 100);
+            };
+
+            /* ── Back to list ── */
             $scope.goBackToList = function () {
                 $scope.p = 2;
+                $scope.pageMode = 'view';
                 $scope.VendorCSInfo = emptyInfo();
                 $scope.VenCSItemList = [];
                 $scope.VenCSItemGridDisplayCollection = [];
@@ -556,7 +587,7 @@
                 $scope.ReqTermGridDisplayCollection = [];
             };
 
-            /* ── Item mapping helper ────────────────────────────────── */
+            /* ── Item mapping ── */
             function mapItem(item) {
                 item.NegoTolAmt = parseFloat(item.NegoTolAmt || 0).toFixed(2);
                 item.NegoAmt = parseFloat(item.NegoAmt || 0).toFixed(2);
@@ -567,7 +598,7 @@
                 return item;
             }
 
-            /* ── Save (Post) ────────────────────────────────────────── */
+            /* ── Save ── */
             $scope.Post = function () {
                 if (!$scope.VendorCSInfo.POPreparationID) {
                     toastr.error("No PO selected."); return;
@@ -575,13 +606,12 @@
                 if (!$scope.VendorCSInfo.RecommendedAmount) {
                     toastr.error("Recommended Amount is required."); return;
                 }
-
                 var recomDate = $('#PORecDate').val() || $scope.VendorCSInfo.PORecDate;
                 if (!recomDate) {
                     toastr.error("PO Recom Date is required."); return;
                 }
                 $scope.VendorCSInfo.PORecDate = recomDate;
-                $scope.VendorCSInfo.Remarks = $scope.VendorCSInfo.RecomRemarks;  // send new note
+                $scope.VendorCSInfo.Remarks = $scope.VendorCSInfo.RecomRemarks;
                 $scope.isSaving = true;
 
                 $http.post('/PoRecom/SaveVendorPORecomInfo', {
@@ -606,7 +636,7 @@
                 });
             };
 
-            /* ── Refresh ────────────────────────────────────────────── */
+            /* ── Refresh ── */
             $scope.toggleRefreshTable = function () {
                 $scope.isRefreshing = true;
                 $timeout(function () { window.location.reload(); }, 1200);

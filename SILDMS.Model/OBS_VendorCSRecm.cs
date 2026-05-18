@@ -17,6 +17,7 @@ namespace SILDMS.Model
         public string RptQutnQty { get; set; }
         public string RptQutnUnit { get; set; }
         public string RequisitionDate { get; set; }
+        public string PoAprvID { get; set; }
         public string ClientID { get; set; }
         [Required]
         public string ClientCode { get; set; }
