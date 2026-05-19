@@ -105,6 +105,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                         ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         Remarks = reader.GetString("Remarks"),
+                        DocumentID = reader.GetString("DocumentID")
                     }).ToList();
 
                 }
@@ -150,6 +151,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                         ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         Remarks = reader.GetString("Remarks"),
+                        DocumentID = reader.GetString("DocumentID"),
                         RecmRemarks = reader.GetString("RecmRemarks"),
                         ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
                         AprvRemarks = reader.GetString("AprvRemarks")

@@ -48,13 +48,13 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
         }
 
         [Authorize]
-        [OutputCache(Duration = 2000, VaryByParam = "none", Location = OutputCacheLocation.Client, NoStore = true)]
+        [OutputCache(Duration = 3600, VaryByParam = "none", Location = OutputCacheLocation.Client, NoStore = true)]
         public ActionResult Dashboard()
         {
             return View();
         }
 
-        [OutputCache(Duration = 2000, VaryByParam = "none", Location = OutputCacheLocation.Client, NoStore = true)]
+        [OutputCache(Duration = 3600, VaryByParam = "none", Location = OutputCacheLocation.Client, NoStore = true)]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -63,7 +63,7 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
 
         [SILAuthorize]
         [SILLogAttribute]
-        [OutputCache(Duration = 2000, VaryByParam = "none", Location = OutputCacheLocation.Client, NoStore = true)]
+        [OutputCache(Duration = 3600, VaryByParam = "none", Location = OutputCacheLocation.Client, NoStore = true)]
         public ActionResult Register()
         {
             return View("Register");
@@ -238,7 +238,7 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
 
         [HttpGet]
         [Authorize]
-        [OutputCache(Duration = 2000, VaryByParam = "none", Location = OutputCacheLocation.Client, NoStore = true)]
+        [OutputCache(Duration = 3600, VaryByParam = "none", Location = OutputCacheLocation.Client, NoStore = true)]
         public string GetDynamicMenu()
         {
 

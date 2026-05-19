@@ -11,6 +11,7 @@ namespace SILDMS.Service.PoAprv
     public interface IPoAprvService
     {
         ValidationResult GetPoAprvClientInfo( out List<OBS_ClientReq> cSClientList);
+        ValidationResult GetPoAprvClientInfo_Saved( out List<OBS_ClientReq> cSClientList);
     
         ValidationResult GetPOAprvInfoTermList(string PORecmID, out List<OBS_VendorCSRecmTerms> vendorCSInfoTermList);
         ValidationResult GetVendorPOAprvQuotationItem(string vendorID, string clientID,string PORecmID, out List<OBS_VendorCSRecmItem> venCSItemList);

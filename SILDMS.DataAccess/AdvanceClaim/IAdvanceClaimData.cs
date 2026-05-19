@@ -16,5 +16,8 @@ namespace SILDMS.DataAccess.AdvanceClaim
         List<AdvanClaimWo> AllSavedAdvanceClaimDetailsDataService(string ClientID, string WOInfoID, string WONo, string AdvancClaimID, out string _errorNumber);
         string SaveQuotToClientServiceData(string UserID, List<AdvanceClaimMaster> MasterData, out string _errorNumber);
 
+        string UpdateAdvanceClaimData(string UserID, List<AdvanceClaimMaster> MasterData, out string _errorNumber);
+
+
     }
 }

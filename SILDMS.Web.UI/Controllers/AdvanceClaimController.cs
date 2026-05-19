@@ -55,7 +55,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<dynamic> WoQtforAdvanClaim(string ClientID , string WOInfoID, string WONo)
+        public async Task<dynamic> WoQtforAdvanClaim(string ClientID, string WOInfoID, string WONo)
         {
             var WODetails = new List<AdvanClaimWo>();  // Renamed to ClientDetails
             await Task.Run(() => _advanceClaimService.WoQtforAdvanClaimService(ClientID, WOInfoID, WONo, out WODetails));
@@ -78,7 +78,7 @@ namespace SILDMS.Web.UI.Controllers
         [HttpPost]
         public async Task<ActionResult> SaveQuotToClient(List<AdvanceClaimMaster> MasterData)
         {
-           
+
             string AdvancClaimID = string.Empty;//, message = string.Empty;
 
             if (MasterData == null || !MasterData.Any())
@@ -104,6 +104,24 @@ namespace SILDMS.Web.UI.Controllers
                 return Json(new { status = "Error", message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
 
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateAdvanceClaim(List<AdvanceClaimMaster> MasterData)
+        {
+            if (MasterData == null || !MasterData.Any())
+                return Json(new { status = "Error", message = "MasterData is empty or null." }, JsonRequestBehavior.AllowGet);
+
+            try
+            {
+                string status = _advanceClaimService.UpdateAdvanceClaimService(UserID, MasterData);
+                return Json(new { status }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = "Error", message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

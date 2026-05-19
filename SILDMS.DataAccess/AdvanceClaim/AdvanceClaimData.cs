@@ -67,7 +67,7 @@ namespace SILDMS.DataAccess.AdvanceClaim
 
             return AllAvailableClientsList;
         }
-    public List<OBS_ClientwithReqQoutn> AllSavedAdvanceClaimDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber)
+        public List<OBS_ClientwithReqQoutn> AllSavedAdvanceClaimDataService(string UserId, int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, out string _errorNumber)
         {
             _errorNumber = string.Empty;
             var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
@@ -106,7 +106,7 @@ namespace SILDMS.DataAccess.AdvanceClaim
                         ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
-                       /* ClientAdvanceClaimDate = reader.GetString("QuotationAprvDate")*/
+                        ProcessStatus = reader.GetString("ProcessStatus")
                     }).ToList();
 
                 }
@@ -185,6 +185,7 @@ namespace SILDMS.DataAccess.AdvanceClaim
                     var dt1 = ds.Tables[0];
                     WODetails = dt1.AsEnumerable().Select(reader => new AdvanClaimWo
                     {
+                        AdvancClaimID = reader.GetString("AdvancClaimID"),
                         ClientID = reader.GetString("ClientID"),
                         ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
                         WOInfoID = reader.GetString("WOInfoID"),
@@ -244,7 +245,7 @@ namespace SILDMS.DataAccess.AdvanceClaim
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SaveClientAdvanceClaim"))
             {
                 db.AddInParameter(dbCommandWrapper, "@OBS_AdvanceClaim_MasterType", SqlDbType.Structured, masterDataTable);
-               db.AddInParameter(dbCommandWrapper, "@WOInstallmentNo", SqlDbType.VarChar, MasterData[0].WOInstallmentNo);
+                db.AddInParameter(dbCommandWrapper, "@WOInstallmentNo", SqlDbType.VarChar, MasterData[0].WOInstallmentNo);
                 db.AddInParameter(dbCommandWrapper, "@WOInstallmentAmt", SqlDbType.VarChar, MasterData[0].WOInstallmentAmt);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
@@ -263,6 +264,63 @@ namespace SILDMS.DataAccess.AdvanceClaim
 
             return message;
         }
+
+
+        public string UpdateAdvanceClaimData(string UserID, List<AdvanceClaimMaster> MasterData, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            string message = string.Empty;
+
+            // Build the same structured DataTable used in Save,
+            // but include AdvancClaimID so the SP knows which row to update
+            DataTable masterDataTable = new DataTable();
+            masterDataTable.Columns.Add("AdvancClaimID", typeof(string));
+            masterDataTable.Columns.Add("ClientID", typeof(string));
+            masterDataTable.Columns.Add("ClientQutnAprvID", typeof(string));
+            masterDataTable.Columns.Add("WOInfoID", typeof(string));
+            masterDataTable.Columns.Add("AdvanceClaimAmount", typeof(string));
+            masterDataTable.Columns.Add("AdvanceClaimDate", typeof(string));
+            masterDataTable.Columns.Add("RemainingAmount", typeof(string));
+            masterDataTable.Columns.Add("Note", typeof(string));
+
+            if (MasterData != null)
+            {
+                foreach (var item in MasterData)
+                {
+                    DataRow row = masterDataTable.NewRow();
+                    row["AdvancClaimID"] = string.IsNullOrEmpty(item.AdvancClaimID) ? (object)DBNull.Value : item.AdvancClaimID;
+                    row["ClientID"] = string.IsNullOrEmpty(item.ClientID) ? (object)DBNull.Value : item.ClientID;
+                    row["ClientQutnAprvID"] = string.IsNullOrEmpty(item.ClientQutnAprvID) ? (object)DBNull.Value : item.ClientQutnAprvID;
+                    row["WOInfoID"] = string.IsNullOrEmpty(item.WOInfoID) ? (object)DBNull.Value : item.WOInfoID;
+                    row["AdvanceClaimAmount"] = string.IsNullOrEmpty(item.AdvanceClaimAmount) ? (object)DBNull.Value : item.AdvanceClaimAmount;
+                    row["AdvanceClaimDate"] = string.IsNullOrEmpty(item.AdvanceClaimDate) ? (object)DBNull.Value : item.AdvanceClaimDate;
+                    row["RemainingAmount"] = string.IsNullOrEmpty(item.RemainingAmount) ? (object)DBNull.Value : item.RemainingAmount;
+                    row["Note"] = string.IsNullOrEmpty(item.Note) ? (object)DBNull.Value : item.Note;
+                    masterDataTable.Rows.Add(row);
+                }
+            }
+
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_UpdateClientAdvanceClaim"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@OBS_AdvanceClaim_UpdateType", SqlDbType.Structured, masterDataTable);
+                db.AddInParameter(dbCommandWrapper, "@WOInstallmentNo", SqlDbType.VarChar, MasterData[0].WOInstallmentNo);
+                db.AddInParameter(dbCommandWrapper, "@WOInstallmentAmt", SqlDbType.VarChar, MasterData[0].WOInstallmentAmt);
+                db.AddInParameter(dbCommandWrapper, "@ModifiedBy", SqlDbType.VarChar, UserID);
+                db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
+
+                dbCommandWrapper.CommandTimeout = 300;
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                    message = ds.Tables[0].Rows[0]["Status"].ToString();
+            }
+
+            return message;
+        }
+
 
     }
 }

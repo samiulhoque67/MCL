@@ -776,8 +776,54 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
 
             }
             return ReqWiseMaterialList;
-        } 
-        
+        }
+
+
+
+        public List<OBS_VendorCSAprvItem> GetMaterialByRequisitionAllActualAprv(string vendorRequisitionNumber)
+        {
+            var ReqWiseMaterialList = new List<OBS_VendorCSAprvItem>();
+
+            var factory = new DatabaseProviderFactory();
+            var db = factory.CreateDefault() as SqlDatabase;
+            using (var dbCommandWrapper = db.GetStoredProcCommand("OBS_GetMaterialByRequisitionAllActualAprv"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@vendorRequisitionNumber", SqlDbType.VarChar, vendorRequisitionNumber);
+
+                // Execute SP.
+
+                var ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+                    DataTable dt1 = new DataTable();
+                    dt1 = ds.Tables[0];
+
+                    ReqWiseMaterialList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSAprvItem
+                    {
+                        VendorCSInfoID = reader.GetString("VendorCSAprvID"),
+                        VendorReqID = reader.GetString("VendorReqID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        ServiceCategoryName = reader.GetString("ServicesCategoryName"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        Description = reader.GetString("Description"),
+                        DeliveryLocation = reader.GetString("DeliveryLocation"),
+                        DeliveryDate = reader.GetString("DeliveryDate"),
+                        DeliveryMode = reader.GetString("DeliveryMode"),
+                        ReqQnty = reader.GetString("ReqQnty"),
+                        ReqUnit = reader.GetString("ReqUnit"),
+
+
+
+                    }).ToList();
+                }
+
+            }
+            return ReqWiseMaterialList;
+        }
+
         public List<OBS_VendorCSAprvItem> GetMaterialByRequisitionAud(string vendorRequisitionNumber)
         {
             var ReqWiseMaterialList = new List<OBS_VendorCSAprvItem>();
@@ -898,6 +944,7 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                         ReqQnty = reader.GetString("ReqQnty"),
                         ReqUnit = reader.GetString("ReqUnit"),
                         VendorQutnNo = reader.GetString("VendorQutnNo"),
+                        DocumentID = reader.GetString("DocumentID"),
                         VendorQutnID = reader.GetString("VendorQutnID"),
                         VendorID = reader.GetString("VendorID"),
                         VendorName = reader.GetString("VendorName"),

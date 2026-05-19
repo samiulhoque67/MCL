@@ -17,6 +17,7 @@ namespace SILDMS.Model
         public string RptQutnQty { get; set; }
         public string RptQutnUnit { get; set; }
         public string RequisitionDate { get; set; }
+        public string PoAprvID { get; set; }
         public string ClientID { get; set; }
         [Required]
         public string ClientCode { get; set; }
@@ -49,6 +50,7 @@ namespace SILDMS.Model
         public string SetBy { get; set; }
         public string ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
+        public string PORecmID { get; set; }
         public string Action { get; set; }
         [Required]
         public string Status { get; set; }
@@ -56,7 +58,6 @@ namespace SILDMS.Model
 
 
         public double RecommendedAmount { get; set; }
-        public object PORecmID { get; set; }
         public string VendorQutnItemID { get; set; }
 
         public string ClientReqNo { get; set; }
@@ -97,6 +98,7 @@ namespace SILDMS.Model
         public string CSRecmVendorName { get; set; }
         public string RecommendedByName { get; set; }
         public string RecommendedByDesignation { get; set; }
+        public string PORecmID { get; set; }
 
         public string PrepBy { get; set; }
         public string PrepDesig { get; set; }

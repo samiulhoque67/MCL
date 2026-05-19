@@ -281,7 +281,7 @@
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.DeliveryDate}}</td>
 
                             <td>
-                                <button ng-click="ViewDocument(row)" class="btn button-custom"><i class="fa fa-eye" style="width:11px;"></i></button>
+                                <button ng-hide="!row.DocumentID" ng-click="ViewDocument(row)" class="btn button-custom"><i class="fa fa-eye" style="width:11px;"></i></button>
                             </td>
                         </tr>
                     </tbody>
@@ -707,7 +707,7 @@
                 $scope.VendorCSAprv.ClientName = row.ClientName;
                 $scope.VendorCSAprv.VenReqItem = row.Remarks;
 
-                $http.post('/VendorCSAprv/GetMaterialByRequisition',
+                $http.post('/VendorCSAprv/GetMaterialByRequisitionAllActualAprv',
                     { VendorRequisitionNumber: row.VendorRequisitionNumber })
                     .success(function (response) {
                         $scope.ReqWiseMaterialList = response.ReqWiseMaterialList;

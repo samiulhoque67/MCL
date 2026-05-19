@@ -43,6 +43,12 @@ namespace SILDMS.DataAccess.PoRecom
                 
                         VendorName = reader.GetString("VendorName"),
 
+                        ProcessStatus = reader.GetString("ProcessStatus"),   // ← add
+                        PORecmID = reader.GetString("PORecmID"),        // ← add
+                        RecommendedAmount = reader.GetString("RecommendedAmount"),// ← add
+                        PORecDate = reader.GetString("PORecDate"),        // ← add
+                        RecomRemarks = reader.GetString("RecomRemarks"),     // ← add
+
 
                     }).ToList();
                 }
@@ -179,143 +185,127 @@ namespace SILDMS.DataAccess.PoRecom
             return VendorCSInfoItemList;
         }
 
-        public string SaveVendorPORecomInfo(OBS_VendorCSRecm vendorCSInfo, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm)
+        public string SaveVendorPORecomInfo(
+           OBS_VendorCSRecm vendorCSInfo,
+           List<OBS_VendorCSRecmItem> vendorCSItem,
+           List<OBS_VendorCSRecmTerms> vendorCSTerm)
         {
-            string errorNumber = String.Empty;
-            DataTable VendorPOItem = new DataTable();
-            VendorPOItem.Columns.Add("VendorQutnID", typeof(string)); // Assuming VendorID is an integer
-            VendorPOItem.Columns.Add("ServiceItemID", typeof(int)); // Assuming ServiceItemID is an integer
-                                                                    //VendorPOItem.Columns.Add("ReqQnty", typeof(int)); // Uncomment and define type if needed
-            VendorPOItem.Columns.Add("QutnUnit", typeof(string)); // Assuming QutnUnit is a string
-            VendorPOItem.Columns.Add("QutnQnty", typeof(decimal)); // Assuming QutnQnty is a decimal
-            VendorPOItem.Columns.Add("QutnPrice", typeof(decimal)); // Assuming QutnPrice is a decimal
-            VendorPOItem.Columns.Add("TolAmt", typeof(decimal)); // Assuming TolAmt is a decimal
-            VendorPOItem.Columns.Add("QutnAmt", typeof(decimal)); // Assuming QutnAmt is a decimal
-            VendorPOItem.Columns.Add("VatPerc", typeof(decimal)); // Assuming VatPerc is a decimal
-            VendorPOItem.Columns.Add("VatAmt", typeof(decimal));
-            VendorPOItem.Columns.Add("ServiceItemName", typeof(string)); // Assuming ServiceItemID is an integer
-            VendorPOItem.Columns.Add("Description", typeof(string)); // Assuming ServiceItemID is an integer
-            VendorPOItem.Columns.Add("DeliveryLocation", typeof(string)); // Assuming ServiceItemID is an integer
-            VendorPOItem.Columns.Add("DeliveryMode", typeof(string)); // Assuming ServiceItemID is an integer
-            VendorPOItem.Columns.Add("DeliveryDate", typeof(string)); // Assuming ServiceItemID is an integer
-            VendorPOItem.Columns.Add("ServiceCategoryID", typeof(string)); // Assuming ServiceItemID is an integer
-            VendorPOItem.Columns.Add("VendorReqID", typeof(string)); // Assuming ServiceItemID is an integer
-            VendorPOItem.Columns.Add("VendorCSAprvID", typeof(string)); // Assuming ServiceItemID is an integer
-            VendorPOItem.Columns.Add("NegoQty");
-            VendorPOItem.Columns.Add("NegoPrice");
-            VendorPOItem.Columns.Add("NegoVatAmt");
-            VendorPOItem.Columns.Add("NegoAmt");
-            VendorPOItem.Columns.Add("NegoTolAmt");                                                            // Assuming ServiceItemID is an integer
+            // ── Build item DataTable ────────────────────────────────────────
+            DataTable dtItem = new DataTable();
+            dtItem.Columns.Add("VendorQutnID", typeof(string));
+            dtItem.Columns.Add("ServiceItemID", typeof(int));
+            dtItem.Columns.Add("QutnUnit", typeof(string));
+            dtItem.Columns.Add("QutnQnty", typeof(decimal));
+            dtItem.Columns.Add("QutnPrice", typeof(decimal));
+            dtItem.Columns.Add("TolAmt", typeof(decimal));
+            dtItem.Columns.Add("QutnAmt", typeof(decimal));
+            dtItem.Columns.Add("VatPerc", typeof(decimal));
+            dtItem.Columns.Add("VatAmt", typeof(decimal));
+            dtItem.Columns.Add("ServiceItemName", typeof(string));
+            dtItem.Columns.Add("Description", typeof(string));
+            dtItem.Columns.Add("DeliveryLocation", typeof(string));
+            dtItem.Columns.Add("DeliveryMode", typeof(string));
+            dtItem.Columns.Add("DeliveryDate", typeof(string));
+            dtItem.Columns.Add("ServiceCategoryID", typeof(string));
+            dtItem.Columns.Add("VendorReqID", typeof(string));
+            dtItem.Columns.Add("VendorCSAprvID", typeof(string));
+            dtItem.Columns.Add("NegoQty");
+            dtItem.Columns.Add("NegoPrice");
+            dtItem.Columns.Add("NegoVatAmt");
+            dtItem.Columns.Add("NegoAmt");
+            dtItem.Columns.Add("NegoTolAmt");
 
             foreach (var item in vendorCSItem)
             {
-                DataRow objDataRow = VendorPOItem.NewRow();
-                objDataRow[0] = item.VendorQutnID;
-                objDataRow[1] = item.ServiceItemID;
-                objDataRow[2] = item.QutnUnit;
-                objDataRow[3] = item.QutnQnty;
-                objDataRow[4] = item.QutnPrice;
-                objDataRow[5] = item.TolAmt;
-                objDataRow[6] = item.QutnAmt;
-                objDataRow[7] = item.VatPerc;
-                objDataRow[8] = item.VatAmt;
-                objDataRow[9] = item.ServiceItemName;
-                objDataRow[10] = item.Description;
-                objDataRow[11] = item.DeliveryLocation;
-                objDataRow[12] = item.DeliveryMode;
-                objDataRow[13] = item.DeliveryDate;
-                objDataRow[14] = item.ServiceCategoryID;
-                objDataRow[15] = item.VendorReqID;
-                objDataRow[16] = item.VendorCSAprvID;
-                objDataRow[17] = item.NegoQty;
-                objDataRow[18] = item.NegoPrice;
-                objDataRow[19] = item.NegoVatAmt;
-                objDataRow[20] = item.NegoAmt;
-                objDataRow[21] = item.NegoTolAmt;
-
-                VendorPOItem.Rows.Add(objDataRow);
+                DataRow r = dtItem.NewRow();
+                r[0] = item.VendorQutnID;
+                r[1] = item.ServiceItemID;
+                r[2] = item.QutnUnit;
+                r[3] = item.QutnQnty;
+                r[4] = item.QutnPrice;
+                r[5] = item.TolAmt;
+                r[6] = item.QutnAmt;
+                r[7] = item.VatPerc;
+                r[8] = item.VatAmt;
+                r[9] = item.ServiceItemName;
+                r[10] = item.Description;
+                r[11] = item.DeliveryLocation;
+                r[12] = item.DeliveryMode;
+                r[13] = item.DeliveryDate;
+                r[14] = item.ServiceCategoryID;
+                r[15] = item.VendorReqID;
+                r[16] = item.VendorCSAprvID;
+                r[17] = item.NegoQty;
+                r[18] = item.NegoPrice;
+                r[19] = item.NegoVatAmt;
+                r[20] = item.NegoAmt;
+                r[21] = item.NegoTolAmt;
+                dtItem.Rows.Add(r);
             }
-            DataTable VendorCSTerm = new DataTable();
-            VendorCSTerm.Columns.Add("TermsID");
-            VendorCSTerm.Columns.Add("TermsCode");
-            VendorCSTerm.Columns.Add("TermsName");
-            foreach (var item in vendorCSTerm)
+
+            // ── Build term DataTable ────────────────────────────────────────
+            DataTable dtTerm = new DataTable();
+            dtTerm.Columns.Add("TermsID");
+            dtTerm.Columns.Add("TermsCode");
+            dtTerm.Columns.Add("TermsName");
+
+            foreach (var term in vendorCSTerm)
             {
-                DataRow objDataRow = VendorCSTerm.NewRow();
-                objDataRow[0] = item.TermsID;
-                objDataRow[1] = item.TermsCode;
-                objDataRow[2] = item.TermsName;
-                VendorCSTerm.Rows.Add(objDataRow);
+                DataRow r = dtTerm.NewRow();
+                r[0] = term.TermsID;
+                r[1] = term.TermsCode;
+                r[2] = term.TermsName;
+                dtTerm.Rows.Add(r);
             }
 
-            //DataTable vendorCSVendors = new DataTable();
-            //vendorCSVendors.Columns.Add("VendorID");
-            //vendorCSVendors.Columns.Add("VendorQutnID");
-            //vendorCSVendors.Columns.Add("TolQnty");
-            //foreach (var item in vendorCSVendorsItemWise)
-            //{
-            //    DataRow objDataRow = vendorCSVendors.NewRow();
-            //    objDataRow[0] = item.VendorID;
-            //    objDataRow[1] = item.VendorQutnID;
-            //    objDataRow[2] = item.TolQnty;
-            //    vendorCSVendors.Rows.Add(objDataRow);
-            //}
+            string result = string.Empty;
 
-            //if (string.IsNullOrEmpty(vendorCSInfo.VendorCSInfoID))
-            //    vendorCSInfo.Action = "add";
-            //else
-            //    vendorCSInfo.Action = "edit";
-            //string errorNumber = String.Empty;
             try
             {
                 DatabaseProviderFactory factory = new DatabaseProviderFactory();
                 SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetVendorPORecomInfo"))
+
+                using (DbCommand cmd = db.GetStoredProcCommand("OBS_SetVendorPORecomInfo"))
                 {
-                    // Set parameters 
-                    db.AddInParameter(dbCommandWrapper, "@POPreparationID", SqlDbType.NVarChar, vendorCSInfo.POPreparationID);
-                    //db.AddInParameter(dbCommandWrapper, "@ServiceCategoryID", SqlDbType.BigInt, vendorCSInfo.ServiceCategoryID);
-                    db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.BigInt, vendorCSInfo.ClientID);
-                    db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, vendorCSInfo.ClientReqID);
-                    //db.AddInParameter(dbCommandWrapper, "@TolAmt", SqlDbType.NVarChar, vendorCSVendorsItemWise[0].TolAmt);
-                    db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.NVarChar, vendorCSItem[0].VendorID);
-                    //db.AddInParameter(dbCommandWrapper, "@VendorQutnID", SqlDbType.NVarChar, vendorCSInfo.VendorQutnID);
-                    db.AddInParameter(dbCommandWrapper, "@PoNo", SqlDbType.NVarChar, vendorCSInfo.AutoPoNo);
-                    //db.AddInParameter(dbCommandWrapper, "@CSNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.CSNo));
-                    db.AddInParameter(dbCommandWrapper, "@PODate", SqlDbType.NVarChar, vendorCSInfo.PORecDate);
-                    db.AddInParameter(dbCommandWrapper, "@PoAmount", SqlDbType.Decimal, vendorCSInfo.RecommendedAmount);
+                    db.AddInParameter(cmd, "@POPreparationID", SqlDbType.NVarChar,
+                        vendorCSInfo.POPreparationID);
 
-                    db.AddInParameter(dbCommandWrapper, "@Installment", SqlDbType.Int, vendorCSInfo.Installment);
-                    db.AddInParameter(dbCommandWrapper, "@InstalledAmount", SqlDbType.Decimal, vendorCSInfo.InstalledAmount);
-                    db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, vendorCSInfo.BillType);
-                    db.AddInParameter(dbCommandWrapper, "@Category", SqlDbType.NVarChar, vendorCSInfo.Category);
+                    // ── NEW: pass PORecmID so SP can UPDATE when non-empty ──
+                    db.AddInParameter(cmd, "@PORecmID", SqlDbType.NVarChar,
+                        DataValidation.TrimmedOrDefault(vendorCSInfo.PORecmID));
 
-                    //db.AddInParameter(dbCommandWrapper, "@POCreatedBy", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.RecommendedBy));
+                    db.AddInParameter(cmd, "@ClientID", SqlDbType.BigInt, vendorCSInfo.ClientID);
+                    db.AddInParameter(cmd, "@ClientReqID", SqlDbType.NVarChar, vendorCSInfo.ClientReqID);
+                    db.AddInParameter(cmd, "@VendorID", SqlDbType.NVarChar,
+                        vendorCSItem.Count > 0 ? vendorCSItem[0].VendorID : vendorCSInfo.VendorID);
 
-                    db.AddInParameter(dbCommandWrapper, "@Note", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
-                    db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
-                    db.AddInParameter(dbCommandWrapper, "@VendorPOItemType", SqlDbType.Structured, VendorPOItem);
-                    db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSAprvTerms", SqlDbType.Structured, VendorCSTerm);
-                    //db.AddInParameter(dbCommandWrapper, "@OBS_VendorCSRecmVendors", SqlDbType.Structured, vendorCSVendors);
-                    //db.AddInParameter(dbCommandWrapper, "@Action", SqlDbType.VarChar, vendorCSInfo.Action);
-                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 10);
+                    db.AddInParameter(cmd, "@PoNo", SqlDbType.NVarChar, vendorCSInfo.AutoPoNo);
+                    db.AddInParameter(cmd, "@PODate", SqlDbType.NVarChar, vendorCSInfo.PORecDate);
+                    db.AddInParameter(cmd, "@PoAmount", SqlDbType.Decimal, vendorCSInfo.RecommendedAmount);
+                    db.AddInParameter(cmd, "@Installment", SqlDbType.Int, vendorCSInfo.Installment);
+                    db.AddInParameter(cmd, "@InstalledAmount", SqlDbType.Decimal, vendorCSInfo.InstalledAmount);
+                    db.AddInParameter(cmd, "@BillType", SqlDbType.NVarChar, vendorCSInfo.BillType);
+                    db.AddInParameter(cmd, "@Category", SqlDbType.NVarChar, vendorCSInfo.Category);
+                    db.AddInParameter(cmd, "@Note", SqlDbType.NVarChar,
+                        DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
+                    db.AddInParameter(cmd, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
 
-                    // Execute SP.
-                    db.ExecuteNonQuery(dbCommandWrapper);
-                    // Getting output parameters and setting response details.
-                    if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
-                    {
-                        // Get the error number, if error occurred.
-                        errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
-                    }
+                    db.AddInParameter(cmd, "@VendorPOItemType", SqlDbType.Structured, dtItem);
+                    db.AddInParameter(cmd, "@OBS_VendorCSAprvTerms", SqlDbType.Structured, dtTerm);
 
+                    db.AddOutParameter(cmd, spStatusParam, SqlDbType.VarChar, 10);
+                    db.ExecuteNonQuery(cmd);
+
+                    if (!db.GetParameterValue(cmd, spStatusParam).IsNullOrZero())
+                        result = db.GetParameterValue(cmd, spStatusParam).PrefixErrorCode();
                 }
             }
             catch (Exception ex)
             {
-                errorNumber = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
+                result = ex.InnerException?.Message ?? ex.Message;
             }
-            return errorNumber;
+
+            return result;
         }
     }
     

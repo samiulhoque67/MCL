@@ -34,6 +34,11 @@ namespace SILDMS.Web.UI.Controllers
         {
             return View();
         }
+        [SILAuthorize]
+        public ActionResult AllPoAprvData()
+        {
+            return View();
+        }
 
         public async Task<dynamic> GetPoAprvClientInfo()
         {
@@ -44,7 +49,14 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-
+        public async Task<dynamic> GetPoAprvClientInfo_Saved()
+        {
+            var CSClientList = new List<OBS_ClientReq>();
+            await Task.Run(() => poAprvService.GetPoAprvClientInfo_Saved(out CSClientList));
+            var result = Json(new { CSClientList, msg = "CSClientList are loaded in the table." }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
+        }
         public async Task<dynamic> GetVendorPOAprvQuotationItem(string VendorID, string ClientID, string PORecmID)
         {
             var VenCSItemList = new List<OBS_VendorCSRecmItem>();
@@ -62,11 +74,13 @@ namespace SILDMS.Web.UI.Controllers
             return result;
         }
 
-        public async Task<dynamic> SaveVendorPOAprvInfo(OBS_VendorCSRecm vendorCS, List<OBS_VendorCSRecmItem> vendorCSItem, List<OBS_VendorCSRecmTerms> vendorCSTerm)
+        public async Task<dynamic> SaveVendorPOAprvInfo(
+            OBS_VendorCSRecm vendorCS,
+            List<OBS_VendorCSRecmItem> vendorCSItem,
+            List<OBS_VendorCSRecmTerms> vendorCSTerm)
         {
             vendorCS.SetBy = UserID;
-            string status = string.Empty;//, message = string.Empty;
-            status = poAprvService.SaveVendorPOAprvInfo(vendorCS, vendorCSItem, vendorCSTerm);
+            string status = poAprvService.SaveVendorPOAprvInfo(vendorCS, vendorCSItem, vendorCSTerm);
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
         public async Task<dynamic> GetPOAprvInfoTermList(string PORecmID)
