@@ -154,11 +154,9 @@
                             </th>
                         </tr>
                         <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
-                            <th>Vendor Requisition No</th>
-                            <th>Requisition Date</th>
-                            <th>Client Name</th>
-                            <th>Client Requisition No</th>
-                            <th>Last Quotation Date</th>
+                            <th style="text-align: left;" st-sort="">Client Name</th>
+                            <th style="text-align: left;" st-sort="">Project Name</th>
+                            <th style="text-align: left;" st-sort="">Representative</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -167,11 +165,17 @@
                             ng-class="{'selected-row': row.selected}" ng-style="getRowStyle(row)">
                             <td class="hidden">{{row.Id}}</td>
                             <td class="hidden">{{row.Remarks}}</td>
-                            <td class="col-lg-2">{{ row.VendorRequisitionNumber }}</td>
-                            <td class="col-lg-2">{{row.RequisitionDate}}</td>
+
+                            <td class="hidden">{{row.VendorRequisitionNumber}}</td>
+                            <td class="hidden">{{row.RequisitionDate}}</td>
+                            <td class="hidden">{{row.ClientName}}</td>
+                            <td class="hidden">{{row.ClientRequisitionNumber}}</td>
+                            <td class="hidden">{{row.LastDateofQuotation}}</td>
+
                             <td class="col-lg-2">{{row.ClientName}}</td>
-                            <td class="col-lg-2">{{row.ClientRequisitionNumber}}</td>
-                            <td class="col-lg-2">{{row.LastDateofQuotation}}</td>
+                            <td class="col-lg-2">{{ row.ProjectName }} </td>
+                            <td class="col-lg-2">{{row.UserFullName}}</td>
+
                             <td class="col-lg-1 text-center" style="font-weight:bold">
                                 <button type="button" ng-click="selectInvitation(row)" title="Select">
                                     <i ng-show="!row.selected" class="fa fa-square-o"></i>
