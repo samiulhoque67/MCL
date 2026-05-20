@@ -158,7 +158,7 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveDocument(string serverIP, string ftpPort, string ftpUserName, string ftpPassword, string serverUrl, string documentID, string ext, HttpPostedFileBase file)
+        public ActionResult SaveDocument(string serverUrl, string documentID, string ext, HttpPostedFileBase file)
         {
             if (file == null || file.ContentLength == 0)
             {
@@ -167,10 +167,10 @@ namespace SILDMS.Web.UI.Controllers
 
             try
             {
-                serverIP = ConfigurationManager.AppSettings["serverIP"];
-                ftpPort = ConfigurationManager.AppSettings["ftpPort"];
-                ftpUserName = ConfigurationManager.AppSettings["ftpUserName"];
-                ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
+                var serverIP = ConfigurationManager.AppSettings["serverIP"];
+                var ftpPort = ConfigurationManager.AppSettings["ftpPort"];
+                var ftpUserName = ConfigurationManager.AppSettings["ftpUserName"];
+                var ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
 
                 // Build FTP URL dynamically
                 string ftpUrl = $"ftp://{serverIP}:{ftpPort}/{serverUrl}/{documentID}.{ext}";
@@ -222,15 +222,15 @@ namespace SILDMS.Web.UI.Controllers
         }
         //view pdf/
         [HttpGet]
-        public ActionResult ViewDocument(string serverIP, string ftpPort, string ftpUserName, string ftpPassword, string serverUrl, string DocID, string ext)
+        public ActionResult ViewDocument(string serverUrl, string DocID, string ext)
         {
             try
             {
                 // Always take from config (ignore frontend values)
-                serverIP = ConfigurationManager.AppSettings["serverIP"];
-                ftpPort = ConfigurationManager.AppSettings["ftpPort"];
-                ftpUserName = ConfigurationManager.AppSettings["ftpUserName"];
-                ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
+                var serverIP = ConfigurationManager.AppSettings["serverIP"];
+                var ftpPort = ConfigurationManager.AppSettings["ftpPort"];
+                var ftpUserName = ConfigurationManager.AppSettings["ftpUserName"];
+                var ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
 
                 if (string.IsNullOrEmpty(DocID))
                     return new HttpStatusCodeResult(400, "Invalid document ID.");
