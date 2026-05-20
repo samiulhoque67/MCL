@@ -46,6 +46,14 @@
                     {
                         <input type="hidden" name="ClientQutnAprvID" ng-value="Quotation.QuotationNo" />
 
+                        <input type="hidden" name="ClntQutnPrepBy" ng-value="Quotation.ClntQutnPrepBy" />
+                        <input type="hidden" name="ClntQutnRecmBy" ng-value="Quotation.ClntQutnRecmBy" />
+                        <input type="hidden" name="ClntQutnAprvBy" ng-value="Quotation.ClntQutnAprvBy" />
+
+                        <input type="hidden" name="ClntQutnPrepDesignation" ng-value="Quotation.ClntQutnPrepDesignation" />
+                        <input type="hidden" name="ClntQutnRecmDesignation" ng-value="Quotation.ClntQutnRecmDesignation" />
+                        <input type="hidden" name="ClntQutnAprvDesignation" ng-value="Quotation.ClntQutnAprvDesignation" />
+
                         <button ng-disabled="showPrint" type="submit" class="button-custom">
                             <i class="fa fa-print"></i> Quotation Print
                         </button>
@@ -266,6 +274,13 @@
                                 <td class="hidden">{{row.RequisitionDate}}</td>
                                 <td class="hidden">{{row.QuotationNo}}</td>
                                 <td class="hidden">{{row.ClientAdvanceClaimDate}}</td>
+
+                                <td class="hidden">{{row.ClntQutnPrepBy}}</td>
+                                <td class="hidden">{{row.ClntQutnRecmBy}}</td>
+                                <td class="hidden">{{row.ClntQutnAprvBy}}</td>
+                                <td class="hidden">{{row.ClntQutnPrepDesignation}}</td>
+                                <td class="hidden">{{row.ClntQutnRecmDesignation}}</td>
+                                <td class="hidden">{{row.ClntQutnAprvDesignation}}</td>
 
                                 <td class="col-lg-2">{{row.ClientName}}</td>
                                 <td class="col-lg-2">{{ row.ProjectName }} </td>
@@ -1204,6 +1219,17 @@
 
 
         $scope.selectQuotationForRecom = function (row, action) {
+            console.log(row);
+
+            // Set hidden field or model
+            $scope.Quotation.ClntQutnPrepBy = row.ClntQutnPrepBy;
+            $scope.Quotation.ClntQutnRecmBy = row.ClntQutnRecmBy;
+            $scope.Quotation.ClntQutnAprvBy = row.ClntQutnAprvBy;
+
+            $scope.Quotation.ClntQutnPrepDesignation = row.ClntQutnPrepDesignation;
+            $scope.Quotation.ClntQutnRecmDesignation = row.ClntQutnRecmDesignation;
+            $scope.Quotation.ClntQutnAprvDesignation = row.ClntQutnAprvDesignation;
+           
             if (action === 'save') {
                 $scope.pagefunction = 'savemode';
 
@@ -1214,7 +1240,6 @@
                     ClientID: row.ClientID, ClientReqID: row.ClientReqID
                 }).success(function (response) {
                     $scope.ClientDetails = response.ClientDetails;
-
                     $scope.Client = {
                         ClientName: $scope.ClientDetails[0].ClientName,
                         ClientRequisitionNo: $scope.ClientDetails[0].ClientReqNo,

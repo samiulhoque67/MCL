@@ -60,6 +60,13 @@ namespace SILDMS.Model
         public string ClientReqNo { get; set; }
         public string RequisitionDate { get; set; }
         public string ClientQutnID { get; set; }
+
+        public string ClntQutnPrepBy { get; set; }
+        public string ClntQutnRecmBy { get; set; }
+        public string ClntQutnAprvBy { get; set; }
+        public string ClntQutnPrepDesignation { get; set; }
+        public string ClntQutnRecmDesignation { get; set; }
+        public string ClntQutnAprvDesignation { get; set; }
         public string QuotationNo { get; set; }
         public string ClientAdvanceClaimDate { get; set; }
         public string QutnAmt { get; set; }

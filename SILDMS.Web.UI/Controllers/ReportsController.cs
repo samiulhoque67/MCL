@@ -499,7 +499,9 @@ namespace SILDMS.Web.UI.Controllers
         [Authorize]
         [HttpPost]
         [SILLogAttribute]
-        public async Task<ActionResult> ClientQuotationApproveReport(string ClientQutnAprvID)
+        public async Task<ActionResult> ClientQuotationApproveReport(string ClientQutnAprvID,
+            string ClntQutnPrepBy, string ClntQutnRecmBy, string ClntQutnAprvBy,
+            string ClntQutnPrepDesignation, string ClntQutnRecmDesignation, string ClntQutnAprvDesignation)
         {
             if (TempData["ClientQutnAprvID"] == null)
             {
@@ -531,25 +533,20 @@ namespace SILDMS.Web.UI.Controllers
 
                 reportDocument.Refresh();
 
+                reportDocument.SetParameterValue("ClntQutnPrepBy", ClntQutnPrepBy);
+                reportDocument.SetParameterValue("ClntQutnRecmBy", ClntQutnRecmBy);
+                reportDocument.SetParameterValue("ClntQutnAprvBy", ClntQutnAprvBy);
+
+                reportDocument.SetParameterValue("ClntQutnPrepDesignation", ClntQutnPrepDesignation);
+                reportDocument.SetParameterValue("ClntQutnRecmDesignation", ClntQutnRecmDesignation);
+                reportDocument.SetParameterValue("ClntQutnAprvDesignation", ClntQutnAprvDesignation);
+
                 string reportName = "ClientQuotationApproveReport";
                 reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
             }
 
             return View();
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         [SILAuthorize]
         public ActionResult UserDetails()

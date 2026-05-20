@@ -263,7 +263,7 @@ namespace SILDMS.DataAccess
                         TermsCode = reader.GetString("TermsCode"),
                         TermsName = reader.GetString("TermsName"),
                         VendorID = reader.GetString("VendorID"),
-                        VendorName= reader.GetString("VendorName"),
+                        VendorName = reader.GetString("VendorName"),
                         VendorQutnID = reader.GetString("VendorQutnID"),
                     }).ToList();
                 }
@@ -292,8 +292,8 @@ namespace SILDMS.DataAccess
             VendorCSItem.Columns.Add("NegoVatAmt");
             VendorCSItem.Columns.Add("NegoAmt");
             VendorCSItem.Columns.Add("NegoTolAmt");
-        
-            
+
+
 
 
             if (vendorCSInfoItem != null && vendorCSInfoItem.Any()) // Check for null and non-empty
@@ -318,7 +318,7 @@ namespace SILDMS.DataAccess
                     objDataRow[14] = item.NegoVatAmt;
                     objDataRow[15] = item.NegoAmt;
                     objDataRow[16] = item.NegoTolAmt;
-              
+
                     VendorCSItem.Rows.Add(objDataRow);
                 }
             }
@@ -337,7 +337,7 @@ namespace SILDMS.DataAccess
                     DataRow objDataRow = VendorCSTerm.NewRow();
                     objDataRow[0] = item.TermsID;
                     objDataRow[1] = item.TermsCode;
-                    objDataRow[2] = item.TermsName;               
+                    objDataRow[2] = item.TermsName;
                     objDataRow[3] = item.VendorID;
 
                     VendorCSTerm.Rows.Add(objDataRow);
@@ -369,7 +369,7 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.BigInt, vendorCSInfo.ClientID);
                     db.AddInParameter(dbCommandWrapper, "@CSRecDate", SqlDbType.NVarChar, vendorCSInfo.CSRecDate);
                     db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.NVarChar, vendorCSInfo.Operation);
-                    db.AddInParameter(dbCommandWrapper, "@RecommendedBy", SqlDbType.NVarChar,vendorCSInfo.RecommendedBy);
+                    db.AddInParameter(dbCommandWrapper, "@RecommendedBy", SqlDbType.NVarChar, vendorCSInfo.RecommendedBy);
                     db.AddInParameter(dbCommandWrapper, "@CSRecmVendorID", SqlDbType.NVarChar, vendorCSInfo.CSRecmVendorID);
                     db.AddInParameter(dbCommandWrapper, "@VendorCSRecmName", SqlDbType.NVarChar, vendorCSInfo.VendorCsRecmName);
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, vendorCSInfo.Remarks);
@@ -513,7 +513,7 @@ namespace SILDMS.DataAccess
             }
             return TermsConditionsList;
         }
-         
+
         public List<Invitation> GetAllRequisition(string userID)
         {
             var invitationList = new List<Invitation>();
@@ -805,7 +805,7 @@ namespace SILDMS.DataAccess
                         TermsName = reader.GetString("TermsName"),
                         VendorID = reader.GetString("VendorID"),
                         VendorName = reader.GetString("VendorName"),
-                  
+
                     }).ToList();
                 }
             }

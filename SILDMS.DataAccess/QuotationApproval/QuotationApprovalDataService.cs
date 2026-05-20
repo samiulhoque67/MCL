@@ -147,6 +147,12 @@ namespace SILDMS.DataAccess.QuotationApproval
                     var dt1 = ds.Tables[0];
                     AllAvailableClientsList = dt1.AsEnumerable().Select(reader => new OBS_ClientwithReqQoutn
                     {
+                        ClntQutnPrepBy = reader.GetString("ClntQutnPrepBy"),
+                        ClntQutnRecmBy = reader.GetString("ClntQutnRecmBy"),
+                        ClntQutnAprvBy = reader.GetString("ClntQutnAprvBy"),
+                        ClntQutnPrepDesignation = reader.GetString("ClntQutnPrepDesignation"),
+                        ClntQutnRecmDesignation = reader.GetString("ClntQutnRecmDesignation"),
+                        ClntQutnAprvDesignation = reader.GetString("ClntQutnAprvDesignation"),
                         ProjectName = reader.GetString("ProjectName"),
                         UserFullName = reader.GetString("UserFullName"),
                         ClientID = reader.GetString("ClientID"),
