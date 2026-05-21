@@ -162,7 +162,7 @@
                 </div>
 
                 <!-- Show file input only when NOT in view mode -->
-                <div ng-show="!viewonlymode" class="col-lg-3">
+                <div ng-hide="viewonlymode" class="col-lg-2">
                     <div class="form-group">
                         <input type="file"
                                style="height:25px; float:left; margin-top:5px;"
@@ -174,22 +174,29 @@
                 </div>
 
                 <!-- View section -->
+                <div ng-hide="viewonlymode" class="col-lg-2">
+                    <!-- View button -->
+                    <button ng-show="ClientReq.DocumentID"
+                            ng-click="ViewDocument()"
+                            class="btn button-custom btn-sm">
+                        <i class="fa fa-eye"></i> View
+                    </button>
+
+                </div>
+
                 <div ng-show="viewonlymode" class="col-lg-5">
                     <div class="form-group" style="display:flex; gap:8px; align-items:center;">
 
-                        <!-- View button -->
+
+                        <!-- View button — only when a document exists -->
                         <button ng-show="ClientReq.DocumentID"
                                 ng-click="ViewDocument()"
                                 class="btn button-custom btn-sm">
                             <i class="fa fa-eye"></i> View
                         </button>
 
-                        <!-- No document message -->
                         <span ng-hide="ClientReq.DocumentID"
-                              style="color:#999; font-size:11px;">
-                            No document attached
-                        </span>
-
+                              style="color:#999; font-size:11px;">No document attached</span>
                     </div>
                 </div>
 
