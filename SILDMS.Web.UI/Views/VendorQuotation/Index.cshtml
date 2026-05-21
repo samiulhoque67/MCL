@@ -1324,10 +1324,7 @@
                         $scope.VendorQutn.VendorQutnID = response.VendorQutnID; // ← keep ID live
 
                         if ($scope.uploadedFile) {
-                            $scope.SaveDocument(response.VendorQutnID, function () {
-                                $scope.clearVendorQutn();
-                                window.location.reload();
-                            });
+                            $scope.SaveDocument($scope.VendorQutn.VendorQutnID)
                         } else {
                             $scope.clearVendorQutn();
                             window.location.reload();
@@ -1342,9 +1339,7 @@
 
                         if ($scope.uploadedFile) {
                             // replace existing document
-                            $scope.SaveDocument(response.VendorQutnID, function () {
-                                $scope.viewmode = true; // stay in view/edit mode
-                            });
+                            $scope.SaveDocument($scope.VendorQutn.VendorQutnID);
                         }
                         window.location.reload();
                         return;
@@ -1364,7 +1359,7 @@
         };
 
         // ── Document upload ──────────────────────────────────────────────────────
-        $scope.SaveDocument = function (VendorQutnID, callback) {
+        $scope.SaveDocument = function (VendorQutnID) {
             var fileUpload = document.getElementById("FileUpload1");
             var files = fileUpload.files;
 
@@ -1375,8 +1370,9 @@
 
             var file = files[0];
             var ext = file.name.split('.').pop().toLowerCase();
+            var maxSizeInMB = 2;
 
-            if (file.size > 2 * 1024 * 1024) {
+            if (file.size > maxSizeInMB * 1024 * 1024) {
                 toastr.error("File size must be 2 MB or less.");
                 return;
             }
@@ -1403,19 +1399,26 @@
                 processData: false,
                 data: formData,
                 success: function (result) {
-                    // ← persist DocumentID into the DB row
+                    toastr.success("Document uploaded successfully.");
+
                     $http.post('/VendorQuotation/UpdateDocumentID', {
                         VendorQutnID: VendorQutnID,
                         DocumentID: documentID
-                    }).success(function () {
-                        $scope.VendorQutn.DocumentID = documentID; // keep scope in sync
-                        toastr.success("Document uploaded successfully.");
-                        document.getElementById("FileUpload1").value = "";
-                        if (callback) callback();
+                    }).success(function (resp) {
+
+                        if (resp.status === "S200") {
+                            $scope.VendorQutn.DocumentID = documentID; // keep scope in sync
+                        }
+
                     }).error(function () {
                         toastr.warning("File uploaded but DocumentID not saved.");
-                        if (callback) callback();
                     });
+
+
+                    document.getElementById("FileUpload1").value = "";
+                    $scope.uploadedFile = null;
+                    $scope.clearVendorQutn();
+                    $scope.toggleRefreshTable();
                 },
                 error: function (err) {
                     toastr.error("Document upload failed. Please try again.");
@@ -1459,7 +1462,9 @@
 
         // ── Refresh ──────────────────────────────────────────────────────────────
         $scope.toggleRefreshTable = function () {
-            window.location.reload();
+            $timeout(function () {
+                window.location.reload();
+            }, 2000);
         };
 
         $scope.ResetSearchModel = function () { /* placeholder */ };

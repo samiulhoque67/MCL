@@ -1629,11 +1629,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
             // FTP details
             var ftpDetails = {
-
-                serverIP: "172.16.189.34",
-                ftpPort: "21",
-                ftpUserName: "silsoft",
-                ftpPassword: "s!L@123",
                 serverUrl: "MCL/Vendor_Final_BillReceived",
                 documentID: "VFBR_" + VendrFinalBilRcvdID,
                 ext: "pdf"
@@ -1643,10 +1638,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             function uploadFileToServer(file, ftpDetails) {
                 var formData = new FormData();
                 formData.append("file", file);
-                formData.append("serverIP", ftpDetails.serverIP);
-                formData.append("ftpPort", ftpDetails.ftpPort);
-                formData.append("ftpUserName", ftpDetails.ftpUserName);
-                formData.append("ftpPassword", ftpDetails.ftpPassword);
                 formData.append("serverUrl", ftpDetails.serverUrl);
                 formData.append("documentID", ftpDetails.documentID);
                 formData.append("ext", ftpDetails.ext);
@@ -1699,10 +1690,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
             // Construct URL with query parameters
             var requestUrl = "/ClientRequisition/ViewDocument?" +
-                "serverIP=" + encodeURIComponent(ftpDetails.serverIP) +
-                "&ftpPort=" + encodeURIComponent(ftpDetails.ftpPort) +
-                "&ftpUserName=" + encodeURIComponent(ftpDetails.ftpUserName) +
-                "&ftpPassword=" + encodeURIComponent(ftpDetails.ftpPassword) +
                 "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
                 "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
                 "&ext=" + encodeURIComponent(ftpDetails.ext);
