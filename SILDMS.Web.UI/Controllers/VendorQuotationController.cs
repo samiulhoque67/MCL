@@ -215,10 +215,15 @@ namespace SILDMS.Web.UI.Controllers
 
 
         [HttpPost]
-        public ActionResult UpdateDocumentID(string VendorQutnID, string DocumentID)
+        public async Task<dynamic> UpdateDocumentID(string VendorQutnID, string DocumentID)
         {
-            string status = _clientInfoService.UpdateDocumentID(VendorQutnID, DocumentID);
+            string status = string.Empty;
+            await Task.Run(() =>
+            {
+                status = _clientInfoService.UpdateDocumentID(VendorQutnID, DocumentID);
+            });
             return Json(new { status }, JsonRequestBehavior.AllowGet);
+
         }
         //view pdf/
         [HttpGet]

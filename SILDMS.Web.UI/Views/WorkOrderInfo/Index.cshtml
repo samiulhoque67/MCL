@@ -385,7 +385,6 @@
                         <th colspan="16" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb">
                             Work Order Item List
                             <small ng-show="pageMode!=='view'" style="color:#888;margin-left:10px;">
-                                (tick items to include in this work order)
                             </small>
                         </th>
                     </tr>
@@ -405,7 +404,6 @@
                         <th>VAT (%)</th>
                         <th>VAT Amount</th>
                         <th>Total Amount</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -444,14 +442,6 @@
                         <td class="text-right">{{row.VatAmt | number:2}}</td>
                         <td class="text-right">{{row.TolAmt | number:2}}</td>
 
-                        <!-- Checkbox: disabled in view mode -->
-                        <td class="text-center">
-                            <button type="button" ng-click="selectWoItem(row)"
-                                    ng-disabled="pageMode==='view'" title="Select / Deselect">
-                                <i ng-show="!row.selected" class="fa fa-square-o"></i>
-                                <i ng-show="row.selected" class="fa fa-check-square-o" style="color:green;"></i>
-                            </button>
-                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -754,22 +744,6 @@
                 $scope.WOInfo.WOAmt = total.toFixed(2);
             };
 
-            /* ── Select / deselect item ── */
-            $scope.selectWoItem = function (row) {
-                if ($scope.pageMode === 'view') return;
-
-                if (row.selected) {
-                    row.selected = false;
-                    $scope.selectedWoItems = $scope.selectedWoItems.filter(function (v) {
-                        return v.WOInfoItemID !== row.WOInfoItemID &&
-                            v.ClientQutnAprvItemID !== row.ClientQutnAprvItemID;
-                    });
-                } else {
-                    row.selected = true;
-                    $scope.selectedWoItems.push(buildSelectedItem(row));
-                }
-                $scope.recalcWOTotal();
-            };
 
             function buildSelectedItem(row) {
                 return {
@@ -807,6 +781,7 @@
             };
 
             $scope.toggleClientSelect = function (row) {
+
                 $scope.WOInfo.ClientReqID = row.ClientReqID;
                 $scope.WOInfo.ClientReqNo = row.ClientReqNo;
                 $scope.WOInfo.ClientID = row.ClientID;
@@ -823,8 +798,30 @@
                 $http.post('/WorkOrderInfo/GetWOInfoItemList',
                     { ClientQutnAprvID: row.ClientQutnAprvID })
                     .success(function (r) {
+
                         $scope.masterDataSetupGridData = r.WOInfoItemList;
+
+                        angular.forEach($scope.masterDataSetupGridData, function (item) {
+
+                            // auto selected
+                            item.selected = true;
+
+                            // default WO values
+                            item.WOQnty = item.QutnQnty;
+                            item.WOPrice = item.QutnPrice;
+                            item.WOAmt = item.QutnAmt;
+
+                            // VAT + Total
+                            item.VatAmt = ((parseFloat(item.WOAmt || 0) * parseFloat(item.VatPerc || 0)) / 100);
+                            item.TolAmt = parseFloat(item.WOAmt || 0) + parseFloat(item.VatAmt || 0);
+
+                            // auto push
+                            $scope.selectedWoItems.push(buildSelectedItem(item));
+                        });
+
                         $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+
+                        $scope.recalcWOTotal();
                     });
 
                 $http.post('/WorkOrderInfo/GetWOInfoTermList',
