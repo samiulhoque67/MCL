@@ -158,9 +158,9 @@
                         </tr>
                         <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
                             <th class="col-lg-3">Client Name</th>
-                            <th class="col-lg-2">Requisition ID</th>
-                            <th class="col-lg-2">WorkOrder ID</th>
-                            <th class="col-lg-2">Requisition Date</th>
+                            <th class="col-lg-2">Project Name</th>
+                            <th class="col-lg-2">Representative</th>
+                            <th class="col-lg-2">WO Date</th>
                             <th class="col-lg-1">Action</th>
                         </tr>
                     </thead>
@@ -170,9 +170,14 @@
                             ng-style="getRowStyle(row)"
                             style="height:20px;font-size:13px;">
                             <td class="col-lg-3 text-left">{{row.ClientName}}</td>
-                            <td class="col-lg-2 text-left">{{row.ClientReqID}}</td>
-                            <td class="col-lg-2 text-left">{{row.WIInfoID}}</td>
-                            <td class="col-lg-2 text-center">{{row.RequisitionDate}}</td>
+
+                            <td class="hidden">{{row.ClientReqID}}</td>
+                            <td class="hidden">{{row.WIInfoID}}</td>
+                            <td class="hidden">{{row.RequisitionDate}}</td>
+
+                            <td class="col-lg-2 text-left">{{row.ProjectName}}</td>
+                            <td class="col-lg-2 text-left">{{row.UserFullName}}</td>
+                            <td class="col-lg-2 text-center">{{row.WODate}}</td>
                             <td class="col-lg-1 text-center" style="font-weight:bold;">
                                 <button type="button" ng-click="ClientSelect(row)" title="Select">
                                     <i ng-show="!row.selected" class="fa fa-square-o"></i>

@@ -53,5 +53,9 @@ namespace SILDMS.Model
         public string POAprvDate { get; set; }
         public string RecommendedBy { get; set; }
         public string AprvRemarks { get; set; }
+
+        public string ProjectName { get; set; }
+        public string UserFullName { get; set; }
+        public string WODate { get; set; }
     }
 }

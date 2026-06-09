@@ -70,10 +70,10 @@
                 </div>
 
                 @*<div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-            <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="viewonlymode">
-                <i class="fa fa-save" style="padding-right: 5px"></i> Save
-            </button>
-        </div>*@
+                        <button type="button" data-ng-click="Post()" class="button-custom" ng-disabled="viewonlymode">
+                            <i class="fa fa-save" style="padding-right: 5px"></i> Save
+                        </button>
+                    </div>*@
 
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     @* BUG FIX: Cancel() function was missing entirely *@
@@ -296,16 +296,16 @@
                             </tr>
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
                                 <th class="col-lg-3" data-ng-click="sort('ClientName')">Client Name</th>
+                                <th class="col-lg-1" data-ng-click="sort('Remarks')">Project Name</th>
                                 <th class="col-lg-3" data-ng-click="sort('ClientReqNo')">Requisition No</th>
                                 <th class="col-lg-1" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
-                                <th class="col-lg-1" data-ng-click="sort('SubmissionDate')">Submission Date</th>
-                                <th class="col-lg-1" data-ng-click="sort('Status')">Status</th>
+                                @*<th class="col-lg-1" data-ng-click="sort('SubmissionDate')">Submission Date</th>
+                                    <th class="col-lg-1" data-ng-click="sort('Status')">Status</th>*@
                                 <th class="col-lg-1">Action</th>
                             </tr>
                             <tr>
-                                @* BUG FIX: Search columns were using wrong field names (ClientCode/ClientName) *@
                                 <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="ClientReqNo" placeholder="Requisition No" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="Remarks" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -314,15 +314,15 @@
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="hidden">{{row.ProcessStatus}}</td>
                                 <td class="text-left">{{row.ClientName}}</td>
+                                <td class="text-left">{{row.Remarks}}</td>
                                 <td class="text-left">{{row.ClientReqNo}}</td>
                                 <td class="text-center">{{row.RequisitionDate}}</td>
-                                <td class="text-center">{{row.SubmissionDate}}</td>
-                                <td class="hidden">{{row.Remarks}}</td>
-                                <td class="text-center">
-                                    <span ng-attr-class="{{row.Status=='1' ? 'label label-success' : 'label label-danger'}}">
-                                        {{row.Status == '1' ? 'Active' : 'InActive'}}
-                                    </span>
-                                </td>
+                                @*<td class="text-center">{{row.SubmissionDate}}</td>
+                                    <td class="text-center">
+                                        <span ng-attr-class="{{row.Status=='1' ? 'label label-success' : 'label label-danger'}}">
+                                            {{row.Status == '1' ? 'Active' : 'InActive'}}
+                                        </span>
+                                    </td>*@
                                 <td class="text-center">
 
                                     <!-- Edit Button -->
