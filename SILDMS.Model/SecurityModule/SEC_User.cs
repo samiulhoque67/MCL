@@ -42,6 +42,8 @@ namespace SILDMS.Model.SecurityModule
         public string IntmailStatus { get; set; }
         public string ExtMailAddress { get; set; }
         public string ExtMailStatus { get; set; }
+        public byte[] UserSignature { get; set; }
+        public string UserSignatureBase64 { get; set; }
         public string UserPicture { get; set; }
         public string SetOn { get; set; }
         public string Remarks { get; set; }

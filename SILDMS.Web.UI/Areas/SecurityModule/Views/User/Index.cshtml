@@ -3,12 +3,6 @@
     Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
 }
 
-@*<script src="~/Content/plugin/file-upload/jquery-ui-1.9.2.min.js"></script>
-    <script src="~/Content/plugin/file-upload/jquery.fileupload.js"></script>
-    <script src="~/Content/plugin/file-upload/jquery.fileupload-ui.js"></script>
-    <script src="~/Content/plugin/file-upload/jquery.iframe-transport.js"></script>*@
-@*<link href="~/Content/plugin/file-upload/jquery.fileupload.css" rel="stylesheet" />*@
-
 <div class="box box-primary box-body" ng-controller="ownerCtrl">
     <!-- box-header -->
     <div class="box-header with-border bg-light-blue-gradient" style="height: 38px;">
@@ -25,7 +19,6 @@
         </div>
     </div>
 
-
     <div class="box-body">
         <div class="row">
             <div class="col-sm-2 col-md-2 col-lg-2">
@@ -35,7 +28,9 @@
             </div>
             <div class="col-sm-4 col-md-4 col-lg-4">
                 <div class="form-group">
-                    <select class="form-control" ng-model="vmUser.OwnerLevel" ng-options="ownerLevel as ownerLevel.LevelName for ownerLevel in ownerLevels track by ownerLevel.OwnerLevelID" ng-change="ddOwnerLevelChange()">
+                    <select class="form-control" ng-model="vmUser.OwnerLevel"
+                            ng-options="ownerLevel as ownerLevel.LevelName for ownerLevel in ownerLevels track by ownerLevel.OwnerLevelID"
+                            ng-change="ddOwnerLevelChange()">
                         <option value="">-- Select One --</option>
                     </select>
                 </div>
@@ -47,7 +42,9 @@
             </div>
             <div class="col-sm-4 col-md-4 col-lg-4">
                 <div class="form-group">
-                    <select class="form-control" ng-model="vmUser.Owner" data-ng-options="owner as owner.OwnerName for owner in ownersForSpecificOwnerLevel track by owner.OwnerID" ng-change="ddOwnerChange()"
+                    <select class="form-control" ng-model="vmUser.Owner"
+                            data-ng-options="owner as owner.OwnerName for owner in ownersForSpecificOwnerLevel track by owner.OwnerID"
+                            ng-change="ddOwnerChange()"
                             data-ng-disabled="!vmUser.OwnerLevel">
                         <option value="">-- Select One --</option>
                     </select>
@@ -56,55 +53,46 @@
         </div>
     </div>
 
-
     <div class="table-responsive">
-        <table st-table="displayedCollection" st-safe-src="getAllUser" class="table table-condensed table-bordered table-striped table-hover pnlView">
+        <table st-table="displayedCollection" st-safe-src="getAllUser"
+               class="table table-condensed table-bordered table-striped table-hover pnlView">
             <thead>
                 <tr>
                     <th st-sort="UserName">User Name</th>
                     <th st-sort="RoleTitle">Role</th>
-                    <th st-sort="PermissionLevel">PermissionLevel</th>
-                    <th st-sort="UserLevelID">User Level</th>
-                    <th st-sort="VmSupervisorLevel">SupervisorLevel</th>
+                    <th st-sort="PermissionLevel">Permission Level</th>
+                    <th st-sort="UserFullName">User Full Name</th>
+                    <th st-sort="EmployeeID">Employee ID</th>
                     <th st-sort="Status">Status</th>
                     <th>Action</th>
                 </tr>
                 <tr>
-                    <th>
-                        <input st-search="UserName" placeholder="User Name" class="input-sm form-control" type="search" />
-                    </th>
-                    <th>
-                        <input st-search="RoleTitle" placeholder="Role" class="input-sm form-control" type="search" />
-                    </th>
-                    <th>
-                        <input st-search="PermissionLevel" placeholder="PermissionLevel" class="input-sm form-control" type="search" />
-                    </th>
-                    <th>
-                        <input st-search="UserLevelName" placeholder="Classification" class="input-sm form-control" type="search" />
-                    </th>
-                    <th>
-                        <input st-search="SupervisorLevelName" placeholder="Search" class="input-sm form-control" type="search" />
-                    </th>
-                    <th>
-                        <input st-search="Status" class="input-sm form-control" type="search" />
-                    </th>
+                    <th><input st-search="UserName" placeholder="User Name" class="input-sm form-control" type="search" /></th>
+                    <th><input st-search="RoleTitle" placeholder="Role" class="input-sm form-control" type="search" /></th>
+                    <th><input st-search="PermissionLevel" placeholder="Permission Level" class="input-sm form-control" type="search" /></th>
+                    <th><input st-search="UserFullName" placeholder="User Full Name" class="input-sm form-control" type="search" /></th>
+                    <th><input st-search="EmployeeID" placeholder="Employee ID" class="input-sm form-control" type="search" /></th>
+                    <th><input st-search="Status" class="input-sm form-control" type="search" /></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="row in displayedCollection">
-                    <td>{{row.UserName  | uppercase}}</td>
-                    <td>{{row.RoleTitle }}</td>
+                    <td>{{row.UserName | uppercase}}</td>
+                    <td>{{row.RoleTitle}}</td>
                     <td>{{row.PermissionLevel | uppercase}}</td>
-                    <td>{{row.UserLevelName}}</td>
-                    <td>{{row.SupervisorLevelName}}</td>
+                    <td>{{row.UserFullName}}</td>
+                    <td>{{row.EmployeeID}}</td>
                     <td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                        <span ng-attr-class="{{row.Status ==true? 'label label-success' : 'label label-danger' }}">
-                            {{row.Status == true? 'Active':'InActive'}}
+                        <span ng-class="row.Status == true ? 'label label-success' : 'label label-danger'">
+                            {{row.Status == true ? 'Active' : 'InActive'}}
                         </span>
                     </td>
                     <td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                        <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleEdit(row)"><i class="fa fa-edit"></i> Edit</button>
+                        <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit"
+                                data-ng-click="toggleEdit(row)">
+                            <i class="fa fa-edit"></i> Edit
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -117,391 +105,285 @@
             </tfoot>
         </table>
     </div>
-
     <!-- /Display User Table -->
-    <!-- Add User Modal -->
+    <!-- Add/Edit User Modal -->
     <form name="usrFrm" id="usrFrm" ng-submit="" enctype="multipart/form-data" novalidate>
         <div class="bs-example">
-            <!-- Modal HTML -->
             <div id="addModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
+
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <button type="button" class="close" data-dismiss="modal"
+                                    ng-click="ResetModel()" aria-hidden="true">
+                                &times;
+                            </button>
                             <h3 class="modal-title">User Form</h3>
                         </div>
 
                         <div class="modal-body">
 
+                            <!-- ===== Section 1: Personal Information ===== -->
                             <div class="box box-primary direct-chat direct-chat-warning">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">User Personal Information</h3>
                                     <div class="box-tools pull-right">
-                                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
                                     </div>
-                                </div><!-- /.box-header -->
+                                </div>
                                 <div class="box-body">
+
                                     <div class="row">
+                                        <!-- Company -->
                                         <div class="col-sm-4 col-md-4 col-lg-4">
                                             <div class="form-group">
                                                 <label for="OwnerLevel">Company</label>
-                                                <select id="OwnerLevel" name="ownerLevel" class="form-control" ng-model="vmUser.OwnerLevel"
+                                                <select id="OwnerLevel" name="ownerLevel" class="form-control"
+                                                        ng-model="vmUser.OwnerLevel"
                                                         ng-options="ownerLevel as ownerLevel.LevelName for ownerLevel in ownerLevels track by ownerLevel.OwnerLevelID"
                                                         ng-change="ddOwnerLevelChange()" required>
                                                     <option value="">-- Select One --</option>
                                                 </select>
                                                 <div ng-show="usrFrm.$submitted || usrFrm.ownerLevel.$touched">
-                                                    <span ng-show="!usrFrm.ownerLevel.$dirty && usrFrm.ownerLevel.$pristine"
-                                                          class="label label-danger">Please select an Company.</span>
+                                                    <span ng-show="usrFrm.ownerLevel.$error.required"
+                                                          class="label label-danger">Please select a Company.</span>
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <!-- Department -->
                                         <div class="col-sm-4 col-md-4 col-lg-4">
                                             <div class="form-group">
-                                                <label>Department </label>
-                                                <select name="owner" class="form-control" ng-model="vmUser.Owner" data-ng-options="owner as owner.OwnerName for owner in ownersForSpecificOwnerLevel track by owner.OwnerID"
-                                                        ng-change="ddOwnerChange()" data-ng-disabled="!vmUser.OwnerLevel" required>
+                                                <label>Department</label>
+                                                <select name="owner" class="form-control"
+                                                        ng-model="vmUser.Owner"
+                                                        data-ng-options="owner as owner.OwnerName for owner in ownersForSpecificOwnerLevel track by owner.OwnerID"
+                                                        ng-change="ddOwnerChange()"
+                                                        data-ng-disabled="!vmUser.OwnerLevel" required>
                                                     <option value="">-- Select One --</option>
                                                 </select>
                                                 <div ng-show="usrFrm.$submitted || usrFrm.owner.$touched">
-                                                    <span ng-show="!usrFrm.owner.$dirty && usrFrm.owner.$pristine"
-                                                          class="label label-danger">Please select an Department.</span>
+                                                    <span ng-show="usrFrm.owner.$error.required"
+                                                          class="label label-danger">Please select a Department.</span>
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <!-- Employee ID -->
                                         <div class="col-sm-4 col-md-4 col-lg-4">
                                             <div class="form-group">
                                                 <label>Employee ID</label>
-                                                <input type="text" data-ng-model="vmUser.EmployeeID" class="form-control" id="EmployeeID"
-                                                       name="EmployeeID" required="required"
-                                                       placeholder="Employee ID" />
+                                                <input type="text" data-ng-model="vmUser.EmployeeID"
+                                                       class="form-control" id="EmployeeID" name="EmployeeID"
+                                                       required placeholder="Employee ID" />
                                                 <div ng-show="usrFrm.$submitted || usrFrm.EmployeeID.$touched">
-                                                    <span ng-show="usrFrm.EmployeeID.$error.required" class="label label-danger">Please enter an employee id.</span>
-                                                    @*<span ng-show="usrFrm.userEmail.$error.email" class="label label-danger">Please enter an valid email address.</span>*@
+                                                    <span ng-show="usrFrm.EmployeeID.$error.required"
+                                                          class="label label-danger">Please enter an Employee ID.</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
+                                        <!-- User Full Name -->
                                         <div class="col-sm-4 col-md-4 col-lg-4">
                                             <div class="form-group">
                                                 <label>User Full Name</label>
-                                                <input type="text" maxlength="250" data-ng-model="vmUser.UserFullName" class="form-control"
-                                                       id="UserFullName" ng-maxlength="128" />
+                                                <input type="text" maxlength="250" data-ng-model="vmUser.UserFullName"
+                                                       class="form-control" id="UserFullName" ng-maxlength="128" />
                                             </div>
                                         </div>
+
+                                        <!-- Designation -->
                                         <div class="col-sm-4 col-md-4 col-lg-4">
                                             <div class="form-group">
                                                 <label>Designation</label>
-                                                <input type="text" data-ng-model="vmUser.UserDesignation" class="form-control" id="UserDesignation"
+                                                <input type="text" data-ng-model="vmUser.UserDesignation"
+                                                       class="form-control" id="UserDesignation"
                                                        name="UserDesignation" ng-maxlength="128" />
                                             </div>
                                         </div>
-                                        <!--<div class="col-sm-4 col-md-4 col-lg-4">
+
+                                        <!-- User Signature -->
+                                        <div class="col-sm-4 col-md-4 col-lg-4">
                                             <div class="form-group">
-                                                <label>Job Location</label>-->
-                                        @*<input type="text" data-ng-model="vmUser.JobLocation" class="form-control" id="JobLocation" ng-maxlength="128" />*@
-                                        <!--<select id="JobLocation" name="JobLocation" class="form-control" ng-model="vmUser.Location"
-                                                        data-ng-options="JobLocation as JobLocation.MasterDataValue for JobLocation in jobLocationList
-                                                        track by JobLocation.MasterDataID" required="required"
-                                                        ng-required="required">
-                                                    <option value="" style="display: none;">-- Select One --</option>
-                                                </select>
-                                                <div ng-show="usrFrm.$submitted || usrFrm.JobLocation.$touched">
-                                                    <span ng-show="!usrFrm.JobLocation.$dirty && usrFrm.JobLocation.$pristine"
-                                                          class="label label-danger">Please select a Job Location.</span>
+                                                <label>User Signature</label>
+                                                <input type="file" id="signatureFile"
+                                                       accept=".png,.jpg,.jpeg"
+                                                       onchange="angular.element(this).scope().uploadSignature(this)"
+                                                       style="display:none;" />
+                                                <div>
+                                                    <button type="button" class="btn btn-sm btn-default"
+                                                            onclick="document.getElementById('signatureFile').click()">
+                                                        <i class="fa fa-upload"></i> Choose Signature
+                                                    </button>
                                                 </div>
+                                                <img ng-if="vmUser.UserSignaturePreview"
+                                                     ng-src="{{vmUser.UserSignaturePreview}}"
+                                                     style="max-height:80px; margin-top:5px; display:block; border:1px solid #ddd; padding:2px;" />
                                             </div>
-                                        </div>-->
+                                        </div>
                                     </div>
-                                    <!--<div class="row">
-                                        <div class="col-sm-4 col-md-4 col-lg-4">
-                                            <div class="form-group">
-                                                <label>Default Server</label>-->
-                                    @*<input type="text" data-ng-model="vmUser.DefaultServer" class="form-control" id="DefaultServer" readonly="readonly" />*@
-                                    <!--<select id="ddServer" name="server" class="form-control" ng-model="vmUser.Server"
-                                                        data-ng-options="server as server.ServerName for server in DefaultServerList track by server.ServerID" required="required"
-                                                        data-ng-disabled="!vmUser.OwnerLevel" ng-required="required">
-                                                    <option value="">-- Select One --</option>
-                                                </select>
-                                                <div ng-show="usrFrm.$submitted || usrFrm.server.$touched">
-                                                    <span ng-show="!usrFrm.server.$dirty && usrFrm.server.$pristine"
-                                                          class="label label-danger">Please select a server.</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4 col-md-4 col-lg-4">
-                                            <div class="form-group">
-                                                <label>Email</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                                                    <input type="email" name="userEmail" data-ng-model="vmUser.IntMailAddress" class="form-control"
-                                                           id="IntMailAddress" placeholder="sample@squaregroup.com" required />
 
-                                                </div>
-                                                <div ng-show="usrFrm.$submitted || usrFrm.userEmail.$touched">
-                                                    <span ng-show="usrFrm.userEmail.$error.required" class="label label-danger">Please enter an email address.</span>
-                                                    <span ng-show="usrFrm.userEmail.$error.email" class="label label-danger">Please enter an valid email address.</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4 col-md-4 col-lg-4">
-                                            <div class="form-group">
-                                                <label>Mailing Status</label>
-                                                <select class="form-control" id="ddIntmailStatus" data-ng-model="vmUser.IntmailStatus">
-                                                    <option value="">-- Select One --</option>
-                                                    <option value="Open">Open</option>
-                                                    <option value="Restricted">Restricted</option>
-                                                    <option value="Confidential">Confidential</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>-->
-                                    @*<div class="row">
-                                            <div class="col-sm-4 col-md-4 col-lg-4">
-                                                <div class="form-group">
-                                                    <label>Contact No</label>
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-phone"></i>
-                                                        </div>
-                                                        <input type="text" data-ng-model="vmUser.ContactNo" class="form-control" id="ContactNo"
-                                                               placeholder="+8801199956823" />
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4 col-md-4 col-lg-4">
-                                                <div class="form-group">
-                                                    <label>Message Status</label>
-                                                    <select class="form-control" id="ddMessageStatus" data-ng-model="vmUser.MessageStatus">
-                                                        <option value="">-- Select One --</option>
-                                                        <option value="AllowSend">Allow Send</option>
-                                                        <option value="AllowReceive">Allow Receive</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4 col-md-4 col-lg-4">
-
-                                            </div>
-                                        </div>*@
-                                </div><!-- /.box-body -->
-                            </div>
-
-
-                            <div class="box box-primary direct-chat direct-chat-warning  collapsed-box">
+                                </div><!-- /.box-body (Personal Info) -->
+                            </div><!-- /.box (Personal Info) -->
+                            <!-- ===== Section 2: Security Information ===== -->
+                            <div class="box box-primary direct-chat direct-chat-warning collapsed-box">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">User Security Information</h3>
                                     <div class="box-tools pull-right">
-                                        <button class="btn" data-widget="collapse" ng-click="SetValue(row)"><i class="fa fa-plus"> Next</i> </button>
+                                        <button type="button" class="btn" data-widget="collapse" ng-click="SetValue()">
+                                            <i class="fa fa-plus"></i> Next
+                                        </button>
                                     </div>
-                                </div><!-- /.box-header -->
+                                </div>
                                 <div class="box-body">
+
                                     <div class="row">
+                                        <!-- User Code (readonly) -->
                                         <div class="col-sm-4 col-md-4 col-lg-4">
                                             <div class="form-group">
                                                 <label>User Code</label>
-                                                <input type="text" data-ng-model="vmUser.UserID" class="form-control" id="UserID" readonly="readonly" />
+                                                <input type="text" data-ng-model="vmUser.UserID"
+                                                       class="form-control" id="UserID" readonly="readonly" />
                                             </div>
                                         </div>
+
+                                        <!-- User No -->
                                         <div class="col-sm-4 col-md-4 col-lg-4">
                                             <div class="form-group">
                                                 <label>User No</label>
-                                                <input type="text" data-ng-model="vmUser.UserNo" class="form-control" id="UserNo" />
+                                                <input type="text" data-ng-model="vmUser.UserNo"
+                                                       class="form-control" id="UserNo" />
                                             </div>
                                         </div>
+
+                                        <!-- User Name -->
                                         <div class="col-sm-4 col-md-4 col-lg-4">
                                             <div class="form-group">
                                                 <label>User Name</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                                    <input type="text" name="userName" data-ng-model="vmUser.UserName" class="form-control" id="UserName"
-                                                           placeholder="Name" required="required" />
+                                                    <input type="text" name="userName" data-ng-model="vmUser.UserName"
+                                                           class="form-control" id="UserName"
+                                                           placeholder="Name" required />
                                                 </div>
                                                 <div ng-show="usrFrm.$submitted || usrFrm.userName.$touched">
-                                                    <span ng-show="usrFrm.userName.$error.required" class="label label-danger">Please enter an user name.</span>
+                                                    <span ng-show="usrFrm.userName.$error.required"
+                                                          class="label label-danger">Please enter a User Name.</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
+                                        <!-- Password -->
                                         <div class="col-sm-4 col-md-4 col-lg-4">
                                             <div class="form-group">
                                                 <label>Password</label>
-                                                <input name="password" type="password" data-ng-model="vmUser.UserPassword" class="form-control" id="UserPassword"
+                                                <input name="password" type="password"
+                                                       data-ng-model="vmUser.UserPassword"
+                                                       class="form-control" id="UserPassword"
                                                        placeholder="******" required />
-                                            </div>
-                                            <div ng-show="usrFrm.$submitted || usrFrm.password.$touched">
-                                                <span ng-show="usrFrm.password.$error.required" class="label label-danger">Please enter a password.</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4 col-md-4 col-lg-4">
-                                            <div class="form-group">
-                                                <label>User Role</label>
-                                                <select name="userRole" class="form-control" ng-model="vmUser.Role"
-                                                        data-ng-options="role as role.RoleTitle for role in rolesForSpecificOwnerLevel track by role.RoleID"
-                                                        data-ng-disabled="!vmUser.OwnerLevel" ng-required="true">
-                                                    <option value="">-- Select One --</option>
-                                                </select>
-                                                <div ng-show="usrFrm.$submitted || usrFrm.userRole.$touched">
-                                                    <span ng-show="!usrFrm.userRole.$dirty && usrFrm.userRole.$pristine"
-                                                          class="label label-danger">Please select an user role.</span>
+                                                <div ng-show="usrFrm.$submitted || usrFrm.password.$touched">
+                                                    <span ng-show="usrFrm.password.$error.required"
+                                                          class="label label-danger">Please enter a Password.</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        @* this is section for Supervisor----------------------------------------------------------------------------------- *@
+
+                                        <!-- User Role -->
+                                        <div class="col-sm-4 col-md-4 col-lg-4">
+                                            <div class="form-group">
+                                                <label>User Role</label>
+                                                <select name="userRole" class="form-control"
+                                                        ng-model="vmUser.Role"
+                                                        data-ng-options="role as role.RoleTitle for role in rolesForSpecificOwnerLevel track by role.RoleID"
+                                                        data-ng-disabled="!vmUser.OwnerLevel"
+                                                        ng-required="true">
+                                                    <option value="">-- Select One --</option>
+                                                </select>
+                                                <div ng-show="usrFrm.$submitted || usrFrm.userRole.$touched">
+                                                    <span ng-show="usrFrm.userRole.$error.required"
+                                                          class="label label-danger">Please select a User Role.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Supervisor -->
                                         <div class="col-sm-4 col-md-4 col-lg-4">
                                             <div class="form-group">
                                                 <label>Supervisor</label>
                                                 <div class="input-group">
-                                                    <input type="hidden" readonly="readonly" ng-model="vmUser.Supervisor" class="form-control" />
-                                                    <input type="text" readonly="readonly" class="form-control pull-right" ng-model="vmUser.SupervisorName" />
+                                                    <input type="hidden" readonly ng-model="vmUser.Supervisor" />
+                                                    <input type="text" readonly class="form-control"
+                                                           ng-model="vmUser.SupervisorName" />
                                                     <div class="input-group-btn">
-                                                        <button style="height: 32px;" ng-click="ShowEmployeeList()" class="btn btn-sm btn-primary">Employee List</button>
+                                                        <button type="button" style="height:32px;"
+                                                                ng-click="ShowEmployeeList()"
+                                                                class="btn btn-sm btn-primary">
+                                                            Employee List
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        @*<div class="row">
-                                                <div class="col-sm-4 col-md-4 col-lg-4">
-                                                    <div class="form-group">
-                                                        <label>Permission Level</label>
-                                                        <select name="permissonLevel" class="form-control" id="ddPermissionLevel"
-                                                                data-ng-model="vmUser.PermissionLevel" required>
-                                                            <option value="">-- Select One --</option>
-                                                            <option value="Owner">Owner</option>
-                                                            <option value="Data">Data</option>
-                                                        </select>
-                                                        <div ng-show="usrFrm.$submitted || usrFrm.permissonLevel.$touched">
-                                                            <span ng-show="!usrFrm.permissonLevel.$dirty && usrFrm.permissonLevel.$pristine"
-                                                                  class="label label-danger">Please select a permission level.</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4 col-md-4 col-lg-4">
-                                                    <div class="form-group">
-                                                        <label>User Level</label>
-                                                        <select id="usrLvl" name="usrLvl" class="form-control" ng-model="vmUser.VmUserLevel"
-                                                                data-ng-options="usrLevel as usrLevel.UserLevelName for usrLevel in AllVmUserLevel track by usrLevel.UserLevel"
-                                                                data-ng-disabled="!vmUser.OwnerLevel" required="required">
-                                                            <option value="">-- Select One --</option>
-                                                        </select>
-                                                        <div ng-show="usrFrm.$submitted || usrFrm.usrLvl.$touched">
-                                                            <span ng-show="!usrFrm.usrLvl.$dirty && usrFrm.usrLvl.$pristine"
-                                                                  class="label label-danger">Please select an user level.</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4 col-md-4 col-lg-4">
-                                                    <div class="form-group">
-                                                        <label>Supervisor Level</label>
-                                                        <select id="ddSupLvl" class="form-control" ng-model="vmUser.VmSupervisorLevel" data-ng-options="supLevel as supLevel.UserLevelName for supLevel in AllVmSupervisorLevel track by supLevel.UserLevel"
-                                                                data-ng-disabled="!vmUser.OwnerLevel">
-                                                            <option value="">-- Select One --</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>*@
-
-                                        @*<div class="row">
-                                                <div class="col-sm-4 col-md-4 col-lg-4">
-                                                    <div class="form-group">
-                                                        <label>Owner Access Level</label>
-
-                                                        <select id="ddAccOwner" class="form-control" ng-model="vmUser.VmAccessOwnerLevel" data-ng-options="supLevel as supLevel.LevelName for supLevel in AllVmAccessOwnerLevel track by supLevel.OwnerLevelID"
-                                                                data-ng-disabled="!vmUser.OwnerLevel">
-                                                            <option value="">-- Select One --</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4 col-md-4 col-lg-4">
-                                                    <div class="form-group">
-                                                        <label>Data Access Level</label>
-
-                                                        <select id="ddDataAccess" class="form-control" ng-model="vmUser.VmAccessDataLevel" data-ng-options="supLevel as supLevel.UserLevelName for supLevel in AllVmAccessDataLevel track by supLevel.UserLevel" data-ng-disabled="!vmUser.OwnerLevel">
-                                                            <option value="">-- Select One --</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4 col-md-4 col-lg-4">
-                                                    <div class="form-group">
-                                                        <label>Document Classification</label>
-                                                        <select id="ddDocClass" class="form-control" ng-model="vmUser.VmDocClassification" data-ng-options="supLevel as supLevel.UserLevelName for supLevel in AllVmDocClassification track by supLevel.UserLevel"
-                                                                data-ng-disabled="!vmUser.OwnerLevel">
-                                                            <option value="">-- Select One --</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>*@
-
-                                        <div class="row">
-                                            @*<div class="col-sm-4 col-md-4 col-lg-4">
-                                                    <div class="form-group">
-                                                        <label>Classification Level</label>
-                                                        <select id="ddClassLev" class="form-control" ng-model="vmUser.VmClassificationLevel" data-ng-options="supLevel as supLevel.UserLevelName for supLevel in AllVmClassificationLevel track by supLevel.UserLevel"
-                                                                data-ng-disabled="!vmUser.OwnerLevel">
-                                                            <option value="">-- Select One --</option>
-                                                        </select>
-
-                                                    </div>
-
-                                                </div>
-                                                <div class="col-sm-4 col-md-4 col-lg-4">
-                                                    <label>Security Status</label>
-                                                    <input type="text" data-ng-model="vmUser.SecurityStatus" class="form-control" id="SecurityStatus" placeholder="Suspended" readonly="readonly" />
-                                                </div>*@
-                                            <div class="col-sm-4 col-md-4 col-lg-4">
-                                                <div class="form-group">
-                                                    <label>Status</label>
-                                                    <select data-ng-model="vmUser.Status" class="form-control">
-                                                        <option value="1">Active</option>
-                                                        <option value="0">Inactive</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><!-- /.box-body -->
-                                    <div class="modal-footer box-footer">
-                                        <div class="form-group pull-right">
-                                            <button type="submit" id="btnSubmit" class="btn btn-flat btn-primary"
-                                                    ng-click="usrFrm.$setSubmitted(); usrFrm.$valid && checkDrop && Save()"
-                                                    ng-disabled="loading">
-                                                Save
-                                            </button>
-                                            <button type="button" id="btnClose" class="btn btn-flat btn-default" data-dismiss="modal"
-                                                    ng-click="ResetModel()">
-                                                Close
-                                            </button>
                                         </div>
                                     </div>
-                                </div>
+
+                                    <div class="row">
+                                        <!-- Status -->
+                                        <div class="col-sm-4 col-md-4 col-lg-4">
+                                            <div class="form-group">
+                                                <label>Status</label>
+                                                <select data-ng-model="vmUser.Status" class="form-control">
+                                                    <option ng-value="'1'">Active</option>
+                                                    <option ng-value="'0'">Inactive</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div><!-- /.box-body (Security Info) -->
+                            </div><!-- /.box (Security Info) -->
+
+                        </div><!-- /.modal-body -->
+
+                        <div class="modal-footer">
+                            <div class="form-group pull-right">
+                                <button type="submit" id="btnSubmit" class="btn btn-flat btn-primary"
+                                        ng-click="usrFrm.$setSubmitted(); usrFrm.$valid && checkDrop() && Save()"
+                                        ng-disabled="loading">
+                                    Save
+                                </button>
+                                <button type="button" id="btnClose" class="btn btn-flat btn-default"
+                                        data-dismiss="modal" ng-click="ResetModel()">
+                                    Close
+                                </button>
                             </div>
-                            @*<div class="modal-footer">
-                                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
-                                </div>*@
                         </div>
-                    </div>
-                </div>
-            </div>
+
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /#addModal -->
         </div>
     </form>
-    <!-- /Add User Modal -->
-
+    <!-- /Add/Edit User Modal -->
+    <!-- Assign Supervisor Modal -->
     <div id="InvoicingPartyModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">
+                        &times;
+                    </button>
                     <h3 class="modal-title">Assign to Employee</h3>
                 </div>
                 <div class="modal-body table-responsive">
-                    <table st-table="assignDisplayedCollection" st-safe-src="assignList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <table st-table="assignDisplayedCollection" st-safe-src="assignList"
+                           class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr>
                                 <th class="hidden">Employee Id</th>
@@ -512,8 +394,13 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <input st-search="UserFullName" placeholder="User Name" class="input-sm form-control" type="search" />
+                                    <input st-search="UserFullName" placeholder="Search by name"
+                                           class="input-sm form-control" type="search" />
                                 </th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -523,53 +410,53 @@
                                 <td>{{row.OwnerName}}</td>
                                 <td>{{row.LevelName}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                    <button type="button" class="btn btn-sm btn-primary btn-flat"
+                                            data-ng-click="toggleSelect(row)">
+                                        <i class="fa fa-check"></i> Select
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="7" class="text-center">
-                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                                <td colspan="5" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage"
+                                         st-displayed-pages="10"></div>
                                 </td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
-                        </div>
-                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
-
-
+    <!-- /Assign Supervisor Modal -->
+    <!-- Loading Overlay -->
     <div id="mydiv" data-ng-show="loading">
         <div class="overlay">
             <div class="loder">
-                <img src="~/Content/AdminLTE/img/cube.gif" /> <span class="text-bold">Loading...</span>
+                <img src="~/Content/AdminLTE/img/cube.gif" />
+                <span class="text-bold">Loading...</span>
             </div>
         </div>
     </div>
-</div>
+
+</div><!-- /.box -->
+
 
 <script type="text/javascript">
-
-    // When the document is ready
     $(document).ready(function () {
         $('#DateLimit').datepicker({
             format: "dd/mm/yyyy"
         });
     });
-</script>
 
-<script type="text/javascript">
-    $('.modal').on('hidden.bs.modal', function (e) {
-        if ($('.modal').hasClass('in')) {
+    // Keep modal-open class on body when a nested modal is still open
+    $('.modal').on('hidden.bs.modal', function () {
+        if ($('.modal.in').length > 0) {
             $('body').addClass('modal-open');
         }
     });
@@ -581,12 +468,12 @@
 
         $scope.loading = true;
         $scope.itemsByPage = 10;
-        $scope.getAllUser = [];  // base collection
-        $scope.displayedCollection = [].concat($scope.getAllUser);  // displayed collection
+        $scope.getAllUser = [];
+        $scope.displayedCollection = [].concat($scope.getAllUser);
         $scope.supervisorList = [];
 
-        $scope.vmUser =
-        {
+        // ─── Default ViewModel ───────────────────────────────────────────────
+        $scope.vmUser = {
             UserID: "",
             OwnerLevelID: "",
             LevelName: "",
@@ -596,6 +483,7 @@
             UserFullName: "",
             UserDesignation: "",
             UserName: "",
+            UserPassword: "",
             JobLocation: "",
             RoleID: "",
             RoleTitle: "",
@@ -605,6 +493,7 @@
             SecurityStatus: "",
             DateLimit: "",
             Supervisor: "",
+            SupervisorName: "",
             IntMailAddress: "",
             IntmailStatus: "",
             ExtMailAddress: "",
@@ -625,231 +514,200 @@
             UserLevelID: "",
             VmUserLevel: { UserLevel: "", UserLevelName: "" },
             Role: { RoleID: "", RoleTitle: "" },
-            Location: { MasterDataID: "", MasterDataValue: ""},
+            Location: { MasterDataID: "", MasterDataValue: "" },
             OwnerLevel: { OwnerLevelID: "", LevelName: "" },
             Owner: { OwnerID: "", OwnerName: "" },
             Server: { ServerName: "", ServerID: "" },
-            Status: ""
+            Status: "1",
+            UserSignatureBase64: null,
+            UserSignaturePreview: null
         };
 
-        //################ Bind Dropdown ###################
-        // To get all the active owner level to bind to the dropdown
+        // ─── Load Owner Levels ────────────────────────────────────────────────
         $http.get('/DocScanningModule/OwnerProperIdentity/GetOwnerLevel?_OwnerLevelID=')
             .success(function (response) {
                 $scope.ownerLevels = response.result;
                 $scope.loading = false;
             })
-            .error(function () {
-                $scope.loading = false;
-            });
+            .error(function () { $scope.loading = false; });
 
         $http.get('/DocScanningModule/OwnerProperIdentity/GetJobLocation')
-           .success(function (response) {
-               $scope.jobLocationList = response.result;
-               $scope.loading = false;
-           })
-           .error(function () {
-               $scope.loading = false;
-           });
+            .success(function (response) {
+                $scope.jobLocationList = response.result;
+                $scope.loading = false;
+            })
+            .error(function () { $scope.loading = false; });
 
+        // ─── Dropdown Change Handlers ─────────────────────────────────────────
         $scope.ddOwnerLevelChange = function () {
             if ($scope.vmUser.OwnerLevel) {
-                $http.post('/DocScanningModule/OwnerProperIdentity/GetOwnerForSpecificOwnerLevel', { _OwnerLevelID: $scope.vmUser.OwnerLevel.OwnerLevelID })
+                $http.post('/DocScanningModule/OwnerProperIdentity/GetOwnerForSpecificOwnerLevel',
+                    { _OwnerLevelID: $scope.vmUser.OwnerLevel.OwnerLevelID })
                     .success(function (response) {
                         $scope.ownersForSpecificOwnerLevel = response.result;
                         $scope.loading = false;
-                    }).error(function () {
-                        $scope.loading = false;
-                    });
-            }
-            else {
-                $scope.vmUser.Owner = [];
-
+                    })
+                    .error(function () { $scope.loading = false; });
+            } else {
+                $scope.vmUser.Owner = { OwnerID: "", OwnerName: "" };
                 $scope.getAllUser = [];
                 $scope.displayedCollection = [].concat($scope.getAllUser);
             }
         };
 
         $scope.ddOwnerChange = function () {
-            if ($scope.vmUser.Owner) {
+            if ($scope.vmUser.Owner && $scope.vmUser.Owner.OwnerID) {
                 $scope.clearFields();
-                $scope.ddGetRole();
+                $scope.ddGetRole(null);
                 $scope.loadUserTable();
                 $scope.loadServer();
-            }
-            else {
+            } else {
                 $scope.getAllUser = [];
                 $scope.displayedCollection = [].concat($scope.getAllUser);
             }
-        }
+        };
 
         $scope.loadServer = function () {
+            $http.post('/SecurityModule/User/GetServers', { _OwnerID: $scope.vmUser.Owner.OwnerID })
+                .success(function (response) {
+                    $scope.DefaultServerList = response.result;
+                    $scope.loading = false;
+                })
+                .error(function () { $scope.loading = false; });
+        };
 
-            $http.post('/SecurityModule/User/GetServers',
-             {
-                 _OwnerID: $scope.vmUser.Owner.OwnerID,
-             })
-             .success(function (response) {
-                 $scope.DefaultServerList = response.result;
-                 $scope.loading = false;
-             }).error(function () {
-                 $scope.loading = false;
-             });
-        }
-
-        $scope.ddGetRole = function () {
-
-            $http.post('/SecurityModule/User/GetRole',
-           {
-               _OwnerID: $scope.vmUser.Owner.OwnerID,
-           })
-           .success(function (response) {
-               $scope.rolesForSpecificOwnerLevel = response.result;
-               $scope.loading = false;
-           }).error(function () {
-               $scope.loading = false;
-           });
-
-
+        // FIX: optional callback so toggleEdit can resolve Role after list loads
+        $scope.ddGetRole = function (callback) {
+            $http.post('/SecurityModule/User/GetRole', { _OwnerID: $scope.vmUser.Owner.OwnerID })
+                .success(function (response) {
+                    $scope.rolesForSpecificOwnerLevel = response.result;
+                    $scope.loading = false;
+                    if (typeof callback === 'function') callback();
+                })
+                .error(function () { $scope.loading = false; });
         };
 
         $scope.ddVmUserLevel = function () {
             if (!$scope.AllVmUserLevel) {
-                //AllVmUserLevel
                 $http.get('/SecurityModule/UserLevel/GetUserLevel?id=&&levelType=UserLevel')
-                  .success(function (response) {
-                      $scope.AllVmUserLevel = response.result;
-                      $scope.loading = false;
-                  }).error(function () {
-                      $scope.loading = false;
-                  });
+                    .success(function (response) {
+                        $scope.AllVmUserLevel = response.result;
+                        $scope.loading = false;
+                    })
+                    .error(function () { $scope.loading = false; });
             }
-
-        }
-
-        $scope.loadUserTable = function () {
-            if ($scope.vmUser.Owner.OwnerID !== "") {
-                $http.get('/SecurityModule/User/GetUser?userId=' + $scope.vmUser.UserID + '&&ownerID=' + $scope.vmUser.Owner.OwnerID)
-                .success(function (response) {
-                    $scope.getAllUser = response.result;
-                    $scope.supervisorList = response.result;
-                    $scope.displayedCollection = [].concat($scope.getAllUser);
-                    applySecurity();
-                    $scope.loading = false;
-                })
-               .error(function () {
-                   $scope.loading = false;
-               });
-            }
-        }
+        };
 
         $scope.ddVmSupervisorLevel = function () {
             if (!$scope.AllVmSupervisorLevel) {
-                //AllVmUserLevel
-                //$http.get('/SecurityModule/UserLevel/GetUserLevel?id=&&levelType=SupervisorLevel')
-                //  .success(function (response) {
-                //      $scope.AllVmSupervisorLevel = response.result;
-                //      $scope.loading = false;
-                //  }).error(function () {
-                //      $scope.loading = false;
-                //  });
-
                 $http.get('/SecurityModule/UserLevel/GetUserLevel?id=&&levelType=UserLevel')
-                 .success(function (response) {
-                     $scope.AllVmSupervisorLevel = response.result;
-                     $scope.loading = false;
-                 }).error(function () {
-                     $scope.loading = false;
-                 });
+                    .success(function (response) {
+                        $scope.AllVmSupervisorLevel = response.result;
+                        $scope.loading = false;
+                    })
+                    .error(function () { $scope.loading = false; });
             }
-
-        }
+        };
 
         $scope.ddVmAccessOwnerLevel = function () {
             if (!$scope.AllVmAccessOwnerLevel) {
-                //AllVmUserLevel
                 $http.get('/DocScanningModule/OwnerLevel/GetOwnerLevel?ownerLevelId=')
-                  .success(function (response) {
-                      $scope.AllVmAccessOwnerLevel = response.result;
-                      $scope.loading = false;
-                  }).error(function () {
-                      $scope.loading = false;
-                  });
+                    .success(function (response) {
+                        $scope.AllVmAccessOwnerLevel = response.result;
+                        $scope.loading = false;
+                    })
+                    .error(function () { $scope.loading = false; });
             }
-
-        }
+        };
 
         $scope.ddVmAccessDataLevel = function () {
             if (!$scope.AllVmAccessDataLevel) {
-                //AllVmUserLevel
                 $http.get('/SecurityModule/UserLevel/GetUserLevel?id=&&levelType=DataAccessLevel')
-                  .success(function (response) {
-                      $scope.AllVmAccessDataLevel = response.result;
-                      $scope.loading = false;
-                  }).error(function () {
-                      $scope.loading = false;
-                  });
+                    .success(function (response) {
+                        $scope.AllVmAccessDataLevel = response.result;
+                        $scope.loading = false;
+                    })
+                    .error(function () { $scope.loading = false; });
             }
-
-        }
+        };
 
         $scope.ddVmDocClassification = function () {
             if (!$scope.AllVmDocClassification) {
                 $http.get('/SecurityModule/UserLevel/GetUserLevel?id=&&levelType=DocClassification')
-               .success(function (response) {
-                   $scope.AllVmDocClassification = response.result;
-                   $scope.loading = false;
-               }).error(function () {
-                   $scope.loading = false;
-               });
+                    .success(function (response) {
+                        $scope.AllVmDocClassification = response.result;
+                        $scope.loading = false;
+                    })
+                    .error(function () { $scope.loading = false; });
             }
-            //AllVmUserLevel
-
-        }
+        };
 
         $scope.ddVmClassificationLevel = function () {
             if (!$scope.AllVmClassificationLevel) {
-                //AllVmUserLevel
                 $http.get('/SecurityModule/UserLevel/GetUserLevel?id=&&levelType=ClassificationLevel')
-                  .success(function (response) {
-                      $scope.AllVmClassificationLevel = response.result;
-                      $scope.loading = false;
-                  }).error(function () {
-                      $scope.loading = false;
-                  });
+                    .success(function (response) {
+                        $scope.AllVmClassificationLevel = response.result;
+                        $scope.loading = false;
+                    })
+                    .error(function () { $scope.loading = false; });
             }
-        }
+        };
 
-        //############## Save Modal ########################
+        // ─── Load User Table ──────────────────────────────────────────────────
+        $scope.loadUserTable = function () {
+            if ($scope.vmUser.Owner && $scope.vmUser.Owner.OwnerID !== "") {
+                $http.get('/SecurityModule/User/GetUser?userId=' + $scope.vmUser.UserID +
+                    '&&ownerID=' + $scope.vmUser.Owner.OwnerID)
+                    .success(function (response) {
+                        $scope.getAllUser = response.result;
+                        $scope.supervisorList = response.result;
+                        $scope.displayedCollection = [].concat($scope.getAllUser);
+                        applySecurity();
+                        $scope.loading = false;
+                    })
+                    .error(function () { $scope.loading = false; });
+            }
+        };
 
+        // ─── checkDrop: FIXED — called as a function ──────────────────────────
         $scope.checkDrop = function () {
-            if ($scope.vmUser.Owner.OwnerID === "" || $scope.vmUser.OwnerLevel.OwnerLevelID === "" || $scope.vmUser.Server.ServerID === ""
-                || $scope.vmUser.Role.RoleID === "" || $scope.vmUser.PermissionLevel === "" || $scope.vmUser.Location.MasterDataID === "") {
-                return false;
-            }
+            // Server and Location are optional fields in many setups;
+            // adjust the conditions below to match your actual required fields.
+            if (!$scope.vmUser.Owner || $scope.vmUser.Owner.OwnerID === "") return false;
+            if (!$scope.vmUser.OwnerLevel || $scope.vmUser.OwnerLevel.OwnerLevelID === "") return false;
+            if (!$scope.vmUser.Role || $scope.vmUser.Role.RoleID === "") return false;
             return true;
         };
-        $scope.toggleAdd = function (row) {
+
+        // ─── Toggle Add ───────────────────────────────────────────────────────
+        $scope.toggleAdd = function () {
             $scope.ddVmUserLevel();
             $scope.ddVmClassificationLevel();
             $scope.ddVmDocClassification();
             $scope.ddVmAccessDataLevel();
             $scope.ddVmAccessOwnerLevel();
             $scope.ddVmSupervisorLevel();
-            $scope.ddGetRole();
-            $scope.vmUser.UserID = "";
-            $scope.vmUser.OwnerLevelID = $scope.vmUser.OwnerLevel.OwnerLevelID;
-            $scope.vmUser.OwnerID = $scope.vmUser.Owner.OwnerID;
-            $scope.vmUser.Status = "1";
+            $scope.ddGetRole(null);
+
+            var savedOwnerLevel = $scope.vmUser.OwnerLevel;
+            var savedOwner = $scope.vmUser.Owner;
+
             $scope.clearFields();
+
+            $scope.vmUser.OwnerLevel = savedOwnerLevel;
+            $scope.vmUser.Owner = savedOwner;
+            $scope.vmUser.OwnerLevelID = savedOwnerLevel ? savedOwnerLevel.OwnerLevelID : "";
+            $scope.vmUser.OwnerID = savedOwner ? savedOwner.OwnerID : "";
+            $scope.vmUser.Status = "1";
 
             $scope.usrFrm.$setPristine();
             $scope.usrFrm.$setUntouched();
-            if ($scope.vmUser.Owner.OwnerID !== "") {
+
+            if ($scope.vmUser.Owner && $scope.vmUser.Owner.OwnerID) {
                 $scope.usrFrm.owner.$setDirty();
                 $scope.usrFrm.owner.$setValidity("", true);
             }
-            if ($scope.vmUser.OwnerLevel.OwnerLevelID !== "") {
+            if ($scope.vmUser.OwnerLevel && $scope.vmUser.OwnerLevel.OwnerLevelID) {
                 $scope.usrFrm.ownerLevel.$setDirty();
                 $scope.usrFrm.ownerLevel.$setValidity("", true);
             }
@@ -857,183 +715,176 @@
             $('#addModal').modal('show');
         };
 
+        // ─── Save (Add / Update) ──────────────────────────────────────────────
         $scope.Save = function () {
-
-            $scope.vmUser.DefaultServer = $scope.vmUser.Server.ServerID;
-            var d = $("#ddServer").val();
-            //if (d == "" || d == null) {
-            //    toastr.error('Please assign a Server');
-            //    return;
-            //}
-            //$scope.vmUser.JobLocation = $scope.vmUser.Location.MasterDataID;
-            //var JobLocation = $("#JobLocation").val();
-            //if (JobLocation == "" || JobLocation == null) {
-            //    toastr.error('Please assign a Job Location');
-            //    return;
-            //}
-            $scope.vmUser.ClassificationLevel = $scope.vmUser.VmClassificationLevel == null ? "" : $scope.vmUser.VmClassificationLevel.UserLevel;
-            $scope.vmUser.DocClassification = $("#ddDocClass").val() == null ? "" : $("#ddDocClass").val();
-            $scope.vmUser.AccessDataLevel = $("#ddDataAccess").val() == null ? "" : $("#ddDataAccess").val();
-            $scope.vmUser.AccessOwnerLevel = $("#ddAccOwner").val() == null ? "" : $("#ddAccOwner").val();
-            $scope.vmUser.SupervisorLevel = $("#ddSupLvl").val() == null ? "" : $("#ddSupLvl").val();
-            $scope.vmUser.UserLevelID = $("#usrLvl").val() == null ? "" : $("#usrLvl").val();
-            $scope.vmUser.RoleID = $scope.vmUser.Role.RoleID == null ? "" : $scope.vmUser.Role.RoleID;
-            $scope.vmUser.JobLocation = $scope.vmUser.Location.MasterDataID == null ? "" : $scope.vmUser.Location.MasterDataID;
-            $scope.vmUser.OwnerID = $scope.vmUser.Owner.OwnerID == null ? "" : $scope.vmUser.Owner.OwnerID;
-            $scope.vmUser.OwnerLevelID = $scope.vmUser.OwnerLevel.OwnerLevelID == null ? "" : $scope.vmUser.OwnerLevel.OwnerLevelID;
+            $scope.vmUser.DefaultServer = $scope.vmUser.Server ? $scope.vmUser.Server.ServerID : "";
+            $scope.vmUser.ClassificationLevel = $scope.vmUser.VmClassificationLevel
+                ? $scope.vmUser.VmClassificationLevel.UserLevel : "";
+            $scope.vmUser.DocClassification = $("#ddDocClass").val() || "";
+            $scope.vmUser.AccessDataLevel = $("#ddDataAccess").val() || "";
+            $scope.vmUser.AccessOwnerLevel = $("#ddAccOwner").val() || "";
+            $scope.vmUser.SupervisorLevel = $("#ddSupLvl").val() || "";
+            $scope.vmUser.UserLevelID = $("#usrLvl").val() || "";
+            $scope.vmUser.RoleID = $scope.vmUser.Role ? $scope.vmUser.Role.RoleID : "";
+            $scope.vmUser.JobLocation = $scope.vmUser.Location ? $scope.vmUser.Location.MasterDataID : "";
+            $scope.vmUser.OwnerID = $scope.vmUser.Owner ? $scope.vmUser.Owner.OwnerID : "";
+            $scope.vmUser.OwnerLevelID = $scope.vmUser.OwnerLevel ? $scope.vmUser.OwnerLevel.OwnerLevelID : "";
             $scope.vmUser.DateLimit = $("#DateLimit").val();
-            $scope.vmUser.UserPicture = 'noimage.jpg';
-            $scope.loading = true;
-            if ($scope.vmUser.UserID) {
+            $scope.vmUser.UserPicture = $scope.vmUser.UserPicture || 'noimage.jpg';
 
-                //// Update
-                $http.post('/SecurityModule/User/UpdateUser/', JSON.stringify(convArrToObj($scope.vmUser))).success(function (data) {
+            $scope.loading = true;
+
+            var url = $scope.vmUser.UserID
+                ? '/SecurityModule/User/UpdateUser/'
+                : '/SecurityModule/User/AddUser/';
+
+            var successMsg = $scope.vmUser.UserID ? 'Update Failed.' : 'Save Failed.';
+
+            $http.post(url, JSON.stringify(convArrToObj($scope.vmUser)))
+                .success(function (data) {
                     if (data.respStatus.Status === "1") {
-                        $scope.vmUser.UserID = "";
                         $scope.loadUserTable();
                         $scope.loading = false;
                         $('#addModal').modal('hide');
                         toastr.success(data.Message);
-                    }
-                    else {
+                    } else {
                         $scope.loading = false;
                         toastr.error(data.Message);
                     }
-                }).error(function (data) {
+                })
+                .error(function () {
                     $scope.loading = false;
-                    toastr.error('Update Faild.');
+                    toastr.error(successMsg);
                 });
-            }
-            else {
-                // Save
-                $http.post('/SecurityModule/User/AddUser/', JSON.stringify(convArrToObj($scope.vmUser)))
-                   .success(function (data) {
-                       if (data.respStatus.Status === "1") {
-                           //  $scope.displayedCollection = [].concat($scope.selectedUser);
-                           $scope.loadUserTable();
-                           $scope.loading = false;
-                           $('#addModal').modal('hide');
-                           toastr.success(data.Message);
-                       }
-                       else {
-                           $scope.loading = false;
-                           toastr.error(data.Message);
-                       }
-                   }).error(function (data) {
-                       $scope.loading = false;
-                       toastr.error('Saved Faild.');
-                   });
-            }
+        };
 
-        }
-
-        // ################# Edit Modal ####################
+        // ─── Toggle Edit ──────────────────────────────────────────────────────
         $scope.toggleEdit = function (row) {
-
-            $scope.loadServer();
-            $scope.ddGetRole();
             $scope.ddVmUserLevel();
             $scope.ddVmClassificationLevel();
             $scope.ddVmDocClassification();
             $scope.ddVmAccessDataLevel();
             $scope.ddVmAccessOwnerLevel();
             $scope.ddVmSupervisorLevel();
+            $scope.loadServer();
 
+            // Set basic fields immediately
             $scope.vmUser.UserID = row.UserID;
             $scope.vmUser.OwnerLevelID = row.OwnerLevelID;
-            $scope.vmUser.OwnerID = row.OwnerID;
             $scope.vmUser.EmployeeID = row.EmployeeID;
             $scope.vmUser.UserFullName = row.UserFullName;
             $scope.vmUser.UserDesignation = row.UserDesignation;
-            $scope.vmUser.Location.MasterDataID = (row.JobLocation).toString();
+            $scope.vmUser.Location.MasterDataID = (row.JobLocation || "").toString();
             $scope.vmUser.UserNo = row.UserNo;
             $scope.vmUser.UserName = row.UserName;
             $scope.vmUser.UserPassword = row.UserPassword;
             $scope.vmUser.Supervisor = row.Supervisor;
             $scope.vmUser.SupervisorName = row.SupervisorName;
             $scope.vmUser.DateLimit = row.DateLimit;
-            //$scope.vmUser.DefaultServer = row.DefaultServer;
             $scope.vmUser.IntMailAddress = row.IntMailAddress;
             $scope.vmUser.ExtMailAddress = row.ExtMailAddress;
             $scope.vmUser.ExtMailStatus = row.ExtMailStatus;
             $scope.vmUser.ContactNo = row.ContactNo;
             $scope.vmUser.UserPicture = row.UserPicture;
             $scope.vmUser.Remarks = row.Remarks;
-            $scope.vmUser.IntmailStatus = (row.IntmailStatus).toString();
-            $scope.vmUser.MessageStatus = (row.MessageStatus).toString();
-            $scope.vmUser.Role.RoleID = (row.RoleID).toString();
-            $scope.vmUser.SecurityStatus = (row.SecurityStatus).toString();
-            $scope.vmUser.PermissionLevel = (row.PermissionLevel).toString();
-
+            $scope.vmUser.IntmailStatus = (row.IntmailStatus || "").toString();
+            $scope.vmUser.MessageStatus = (row.MessageStatus || "").toString();
+            $scope.vmUser.SecurityStatus = (row.SecurityStatus || "").toString();
+            $scope.vmUser.PermissionLevel = (row.PermissionLevel || "").toString();
             $scope.vmUser.Server.ServerID = (row.DefaultServer == null ? "" : row.DefaultServer).toString();
-            $("#usrLvl").val(row.UserLevelID);
-
             $scope.vmUser.UserLevelID = row.UserLevelID;
-            //if (row.SupervisorLevel != null || row.SupervisorLevel.toString() != "0")
-            //{.toString(); }
+            $scope.vmUser.Status = (row.Status).toString();
+
+            // Signature
+            $scope.vmUser.UserSignaturePreview = row.UserSignatureBase64
+                ? 'data:image/png;base64,' + row.UserSignatureBase64
+                : null;
+            $scope.vmUser.UserSignatureBase64 = row.UserSignatureBase64 || null;
+
+            // Dropdown selects (set by value for jQuery selects)
             $scope.vmUser.VmSupervisorLevel.UserLevel = row.SupervisorLevel;
-            $("#ddSupLvl").val(row.SupervisorLevel);
             $scope.vmUser.VmAccessOwnerLevel.AccessOwnerLevel = (row.AccessOwnerLevel == null ? "" : row.AccessOwnerLevel).toString();
-            $("#ddAccOwner").val(row.AccessOwnerLevel);
             $scope.vmUser.VmAccessDataLevel.AccessDataLevel = (row.AccessDataLevel == null ? "" : row.AccessDataLevel).toString();
-            $("#ddDataAccess").val(row.AccessDataLevel);
             $scope.vmUser.VmDocClassification.DocClassification = (row.DocClassification == null ? "" : row.DocClassification).toString();
-            $("#ddDocClass").val(row.DocClassification);
             $scope.vmUser.VmClassificationLevel.ClassificationLevel = (row.ClassificationLevel == null ? "" : row.ClassificationLevel).toString();
 
-            $scope.vmUser.Status = (row.Status).toString();
+            $("#usrLvl").val(row.UserLevelID);
+            $("#ddSupLvl").val(row.SupervisorLevel);
+            $("#ddAccOwner").val(row.AccessOwnerLevel);
+            $("#ddDataAccess").val(row.AccessDataLevel);
+            $("#ddDocClass").val(row.DocClassification);
+
+            // FIX: Resolve OwnerLevel object from list
+            $scope.vmUser.OwnerLevel = $scope.ownerLevels
+                ? $scope.ownerLevels.find(function (x) { return x.OwnerLevelID == row.OwnerLevelID; })
+                : { OwnerLevelID: "", LevelName: "" };
+
+            // FIX: Load owners for the level, then resolve Owner and Role objects
+            $http.post('/DocScanningModule/OwnerProperIdentity/GetOwnerForSpecificOwnerLevel',
+                { _OwnerLevelID: row.OwnerLevelID })
+                .success(function (response) {
+                    $scope.ownersForSpecificOwnerLevel = response.result;
+
+                    $scope.vmUser.Owner = $scope.ownersForSpecificOwnerLevel.find(function (x) {
+                        return x.OwnerID == row.OwnerID;
+                    }) || { OwnerID: "", OwnerName: "" };
+
+                    // FIX: Load roles AFTER owner is set, then resolve Role object
+                    $scope.ddGetRole(function () {
+                        $scope.vmUser.Role = $scope.rolesForSpecificOwnerLevel
+                            ? $scope.rolesForSpecificOwnerLevel.find(function (x) {
+                                return x.RoleID == row.RoleID;
+                            }) || { RoleID: "", RoleTitle: "" }
+                            : { RoleID: "", RoleTitle: "" };
+
+                        // Mark dropdowns as valid so no false errors show
+                        if ($scope.vmUser.Owner && $scope.vmUser.Owner.OwnerID) {
+                            $scope.usrFrm.owner.$setDirty();
+                            $scope.usrFrm.owner.$setValidity("", true);
+                        }
+                        if ($scope.vmUser.OwnerLevel && $scope.vmUser.OwnerLevel.OwnerLevelID) {
+                            $scope.usrFrm.ownerLevel.$setDirty();
+                            $scope.usrFrm.ownerLevel.$setValidity("", true);
+                        }
+                        if ($scope.vmUser.Role && $scope.vmUser.Role.RoleID) {
+                            $scope.usrFrm.userRole.$setDirty();
+                            $scope.usrFrm.userRole.$setValidity("", true);
+                        }
+                    });
+                });
 
             $scope.usrFrm.$setPristine();
             $scope.usrFrm.$setUntouched();
-            if ($scope.vmUser.Owner.OwnerID !== "") {
-                $scope.usrFrm.owner.$setDirty();
-                $scope.usrFrm.owner.$setValidity("", true);
-            }
-            if ($scope.vmUser.OwnerLevel.OwnerLevelID !== "") {
-                $scope.usrFrm.ownerLevel.$setDirty();
-                $scope.usrFrm.ownerLevel.$setValidity("", true);
-            }
-            //if ($scope.vmUser.Server.ServerID !== "") {
-            //    $scope.usrFrm.server.$setDirty();
-            //    $scope.usrFrm.server.$setValidity("", true);
-            //}
-            if ($scope.vmUser.Role.RoleID !== "") {
-                $scope.usrFrm.userRole.$setDirty();
-                $scope.usrFrm.userRole.$setValidity("", true);
-            }
-            //if ($scope.vmUser.PermissionLevel !== "") {
-            //    $scope.usrFrm.permissonLevel.$setDirty();
-            //    $scope.usrFrm.permissonLevel.$setValidity("", true);
-            //}
-            //if ($scope.vmUser.VmUserLevel.UserLevel !== null || $scope.vmUser.VmUserLevel.UserLevel !== "0") {
-            //    $scope.usrFrm.usrLvl.$setDirty();
-            //    $scope.usrFrm.usrLvl.$setValidity("", true);
-            //}
+
             $('#addModal').modal('show');
         };
+
+        // ─── Reset Model ──────────────────────────────────────────────────────
         $scope.ResetModel = function () {
-            //$scope.vmUser = [];
+            $scope.clearFields();
+            if ($scope.usrFrm) {
+                $scope.usrFrm.$setPristine();
+                $scope.usrFrm.$setUntouched();
+            }
         };
 
-        $scope.SetValue = function (row) {
+        // ─── SetValue (syncs jQuery selects when expanding Security section) ──
+        $scope.SetValue = function () {
             $("#usrLvl").val($scope.vmUser.UserLevelID);
             $("#ddSupLvl").val($scope.vmUser.VmSupervisorLevel.UserLevel);
             $("#ddAccOwner").val($scope.vmUser.VmAccessOwnerLevel.AccessOwnerLevel);
             $("#ddDataAccess").val($scope.vmUser.VmAccessDataLevel.AccessDataLevel);
             $("#ddDocClass").val($scope.vmUser.VmClassificationLevel.ClassificationLevel);
-            //$scope.vmUser.VmSupervisorLevel.SupervisorLevel = (row.SupervisorLevel == null ? "" : row.SupervisorLevel).toString();
-            //$scope.vmUser.VmAccessOwnerLevel.AccessOwnerLevel = (row.AccessOwnerLevel == null ? "" : row.AccessOwnerLevel).toString();
-            //$scope.vmUser.VmAccessDataLevel.AccessDataLevel = (row.AccessDataLevel == null ? "" : row.AccessDataLevel).toString();
-            //$scope.vmUser.VmDocClassification.DocClassification = (row.DocClassification == null ? "" : row.DocClassification).toString();
-            //$scope.vmUser.VmClassificationLevel.ClassificationLevel = (row.ClassificationLevel == null ? "" : row.ClassificationLevel).toString();
-        }
-        //#################### Set Dropdown ################
+        };
+
+        // ─── Refresh Table ────────────────────────────────────────────────────
         $scope.toggleRefreshTable = function () {
             $scope.loading = true;
             $scope.vmUser.UserID = "";
             $scope.loadUserTable();
         };
 
+        // ─── Clear Fields ─────────────────────────────────────────────────────
         $scope.clearFields = function () {
             $scope.vmUser.UserID = "";
             $scope.vmUser.EmployeeID = "";
@@ -1053,114 +904,74 @@
             $scope.vmUser.Remarks = "";
             $scope.vmUser.IntmailStatus = "";
             $scope.vmUser.MessageStatus = "";
-            $scope.vmUser.Role.RoleID = "";
             $scope.vmUser.SecurityStatus = "";
             $scope.vmUser.PermissionLevel = "";
+            $scope.vmUser.Supervisor = "";
+            $scope.vmUser.SupervisorName = "";
+            $scope.vmUser.Role = { RoleID: "", RoleTitle: "" };
+            $scope.vmUser.Server = { ServerName: "", ServerID: "" };
+            $scope.vmUser.Location = { MasterDataID: "", MasterDataValue: "" };
+            $scope.vmUser.VmClassificationLevel = { UserLevel: "", UserLevelName: "" };
+            $scope.vmUser.VmDocClassification = { UserLevel: "", UserLevelName: "" };
+            $scope.vmUser.VmAccessDataLevel = { UserLevel: "", UserLevelName: "" };
+            $scope.vmUser.VmAccessOwnerLevel = { OwnerLevelID: "", LevelName: "" };
+            $scope.vmUser.VmSupervisorLevel = { UserLevel: "", UserLevelName: "" };
+            $scope.vmUser.VmUserLevel = { UserLevel: "", UserLevelName: "" };
+            $scope.vmUser.UserSignatureBase64 = null;
+            $scope.vmUser.UserSignaturePreview = null;
+
+            var sigFile = document.getElementById('signatureFile');
+            if (sigFile) sigFile.value = '';
         };
 
-
+        // ─── Employee List (Supervisor picker) ───────────────────────────────
         $scope.ShowEmployeeList = function () {
             $http.get("/SecurityModule/User/GetUserSort")
-               .success(function (response) {
-                   $scope.assignList = response.result;
-                   $scope.assignDisplayedCollection = [].concat($scope.assignList);
-                   $scope.loading = false;
-               })
-               .error(function () { });
+                .success(function (response) {
+                    $scope.assignList = response.result;
+                    $scope.assignDisplayedCollection = [].concat($scope.assignList);
+                    $scope.loading = false;
+                })
+                .error(function () { $scope.loading = false; });
 
             $('#InvoicingPartyModal').modal('show');
         };
-        $scope.vmUser.SupervisorName = '';
+
         $scope.toggleSelect = function (tableRow) {
-            debugger;
             $scope.vmUser.Supervisor = tableRow.UserID;
             $scope.vmUser.SupervisorName = tableRow.UserFullName;
             $('#InvoicingPartyModal').modal('hide');
         };
+
+        // ─── Signature Upload ────────────────────────────────────────────────
+        // FIX: store only the raw base64 string (not the full data URI)
+        $scope.uploadSignature = function (input) {
+            var file = input.files[0];
+            if (!file) return;
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $scope.$apply(function () {
+                    $scope.vmUser.UserSignaturePreview = e.target.result;           // full data URI for <img>
+                    $scope.vmUser.UserSignatureBase64 = e.target.result.split(',')[1]; // raw base64 for server
+                });
+            };
+            reader.readAsDataURL(file);
+        };
+
+        // ─── Initial Page Load ────────────────────────────────────────────────
+        $scope.ShowEmployeeAllList = function () {
+            $http.get('/SecurityModule/User/GetAllUserDetails')
+                .success(function (response) {
+                    $scope.getAllUser = response.result;
+                    $scope.supervisorList = response.result;
+                    $scope.displayedCollection = [].concat($scope.getAllUser);
+                    applySecurity();
+                    $scope.loading = false;
+                })
+                .error(function () { $scope.loading = false; });
+        };
+
+        $scope.ShowEmployeeAllList();
     });
-
 </script>
-
-
-
-
-
-
-@*<script type="text/javascript">
-
-        var jqXHRData;
-
-        $(document).ready(function () {
-
-            'use strict';
-
-            $('#fu-my-simple-upload').fileupload({
-                url: '/SecurityModule/User/UploadFile',
-                dataType: 'json',
-                add: function (e, data) {
-                    jqXHRData = data
-                },
-                done: function (event, data) {
-                    if (data.result.isUploaded) {
-                        $("#tbx-file-path").val("No file chosen...");
-                    }
-                    else {
-
-                    }
-                    alert(data.result.message);
-                },
-                fail: function (event, data) {
-                    if (data.files[0].error) {
-                        alert(data.files[0].error);
-                    }
-                }
-            });
-        });
-
-        $("#btnSubmit").on('click', function () {
-            if (jqXHRData) {
-                $scope.Save();
-                jqXHRData.submit();
-            }
-            return false;
-        });
-
-        $("#fu-my-simple-upload").on('change', function () {
-            $("#tbx-file-path").val(this.files[0].name);
-        });
-
-
-    </script>*@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

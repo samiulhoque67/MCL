@@ -17,5 +17,8 @@ namespace SILDMS.Service.Users
         bool IsValidUser(string user, string password, string ip, out List<GetUserAccessPermission_Result> accessList);
 
         ValidationResult GetSupervisor(string UserID, string p, out List<SEC_User> obUser);
+
+
+        ValidationResult GetAllUserDetails(out List<SEC_User> userList);
     }
 }
