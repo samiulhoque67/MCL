@@ -39,6 +39,7 @@ using SILDMS.Model;
 using System.Web.Services.Description;
 using System.Security.Cryptography;
 using System.ServiceModel;
+using IOFile = System.IO.File;
 /////////////////////////////////////////Test///////////////////////////
 namespace SILDMS.Web.UI.Controllers
 {
@@ -247,19 +248,23 @@ namespace SILDMS.Web.UI.Controllers
         }
 
 
-        [SILAuthorize]
+        //[SILAuthorize]
         public ActionResult VendorCSApprevedReport()
         {
             return View();
         }
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         [SILLogAttribute]
         public async Task<dynamic> VendorCSApprevedReport(string ReportType)
         {
             var tempdata = TempData["VendorCSprepInfo"];
-            string VendorReqID = string.Empty, ServiceItemID = string.Empty;
+
+            string VendorReqID = string.Empty;
+            string ServiceItemID = string.Empty;
+
             ReportType = "PDF";
+
             OBS_VendorCSReport objVendorReq = new OBS_VendorCSReport();
 
             if (TempData["VendorCSprepInfo"] == null)
@@ -269,51 +274,236 @@ namespace SILDMS.Web.UI.Controllers
             else
             {
                 objVendorReq = (OBS_VendorCSReport)TempData["VendorCSprepInfo"];
+
                 VendorReqID = objVendorReq.VendorReqID;
                 ServiceItemID = objVendorReq.ServiceItemID;
             }
 
             DataTable dt = new DataTable();
 
-            await Task.Run(() => _reportService.VendorCSApprevedReport(VendorReqID, ServiceItemID, out dt));
+            await Task.Run(() =>
+                _reportService.VendorCSApprevedReport(
+                    VendorReqID,
+                    ServiceItemID,
+                    out dt));
 
             ReportDocument reportDocument = new ReportDocument();
+
             string ReportPath = Server.MapPath("~/Reports");
             ReportPath = ReportPath + "/rptVendorCSRecmInfo.rpt";
+
             reportDocument.Load(ReportPath);
             reportDocument.SetDataSource(dt);
+
+            string prepSignaturePath = string.Empty;
+            string hodSignaturePath = string.Empty;
+            string afSignaturePath = string.Empty;
+            string iadSignaturePath = string.Empty;
+            string approvedSignaturePath = string.Empty;
+
+            if (dt.Rows.Count > 0)
+            {
+                DataRow row = dt.Rows[0];
+
+                prepSignaturePath = SaveSignatureImage(
+                    row["PreparedBy"] == DBNull.Value
+                        ? string.Empty
+                        : row["PreparedBy"].ToString(),
+                    "Prep");
+
+                hodSignaturePath = SaveSignatureImage(
+                    row["UserSignatureBase64_RecommendedBy_HOD"] == DBNull.Value
+                        ? string.Empty
+                        : row["UserSignatureBase64_RecommendedBy_HOD"].ToString(),
+                    "HOD");
+
+                afSignaturePath = SaveSignatureImage(
+                    row["UserSignatureBase64_RecommendedBy_A_F"] == DBNull.Value
+                        ? string.Empty
+                        : row["UserSignatureBase64_RecommendedBy_A_F"].ToString(),
+                    "AF");
+
+                iadSignaturePath = SaveSignatureImage(
+                    row["UserSignatureBase64_Verified_By_IAD"] == DBNull.Value
+                        ? string.Empty
+                        : row["UserSignatureBase64_Verified_By_IAD"].ToString(),
+                    "IAD");
+
+                approvedSignaturePath = SaveSignatureImage(
+                    row["UserSignatureBase64_ApprovedBy"] == DBNull.Value
+                        ? string.Empty
+                        : row["UserSignatureBase64_ApprovedBy"].ToString(),
+                    "APP");
+            }
+
             reportDocument.Refresh();
 
-            reportDocument.SetParameterValue("RptQutnQty", string.IsNullOrEmpty(objVendorReq.RptQutnQty) ? string.Empty : objVendorReq.RptQutnQty);
-            reportDocument.SetParameterValue("RptQutnUnit", string.IsNullOrEmpty(objVendorReq.RptQutnUnit) ? string.Empty : objVendorReq.RptQutnUnit);
-            reportDocument.SetParameterValue("ClientReqNo", string.IsNullOrEmpty(objVendorReq.ClientReqNo) ? string.Empty : objVendorReq.ClientReqNo);
-            reportDocument.SetParameterValue("RequisitionDate", string.IsNullOrEmpty(objVendorReq.CSPrepDate) ? string.Empty : objVendorReq.CSPrepDate);
-            reportDocument.SetParameterValue("ClientName", string.IsNullOrEmpty(objVendorReq.ClientName) ? string.Empty : objVendorReq.ClientName);
-            reportDocument.SetParameterValue("VenReqItem", string.IsNullOrEmpty(objVendorReq.VenReqItem) ? string.Empty : objVendorReq.VenReqItem);
-            reportDocument.SetParameterValue("CSPrepDate", string.IsNullOrEmpty(objVendorReq.CSPrepDate) ? string.Empty : objVendorReq.CSPrepDate);
-            reportDocument.SetParameterValue("note", string.IsNullOrEmpty(objVendorReq.Note) ? string.Empty : objVendorReq.Note);
-            reportDocument.SetParameterValue("RecmVendor", string.IsNullOrEmpty(objVendorReq.CSRecmVendorName) ? string.Empty : objVendorReq.CSRecmVendorName);
+            reportDocument.SetParameterValue("RptQutnQty",
+                string.IsNullOrEmpty(objVendorReq.RptQutnQty)
+                    ? string.Empty
+                    : objVendorReq.RptQutnQty);
 
-            reportDocument.SetParameterValue("PrepBy", string.IsNullOrEmpty(objVendorReq.PrepBy) ? string.Empty : objVendorReq.PrepBy);
-            reportDocument.SetParameterValue("PrepDesig", string.IsNullOrEmpty(objVendorReq.PrepDesig) ? string.Empty : objVendorReq.PrepDesig);
+            reportDocument.SetParameterValue("RptQutnUnit",
+                string.IsNullOrEmpty(objVendorReq.RptQutnUnit)
+                    ? string.Empty
+                    : objVendorReq.RptQutnUnit);
 
-            reportDocument.SetParameterValue("RecmBy", string.IsNullOrEmpty(objVendorReq.RecomenBy) ? string.Empty : objVendorReq.RecomenBy);
-            reportDocument.SetParameterValue("RecmDesig", string.IsNullOrEmpty(objVendorReq.RecomenDesig) ? string.Empty : objVendorReq.RecomenDesig);
+            reportDocument.SetParameterValue("ClientReqNo",
+                string.IsNullOrEmpty(objVendorReq.ClientReqNo)
+                    ? string.Empty
+                    : objVendorReq.ClientReqNo);
 
-            reportDocument.SetParameterValue("RecmAccBy", string.IsNullOrEmpty(objVendorReq.RecmAccBy) ? string.Empty : objVendorReq.RecmAccBy);
-            reportDocument.SetParameterValue("RecmAccDesig", string.IsNullOrEmpty(objVendorReq.RecmAccDesig) ? string.Empty : objVendorReq.RecmAccDesig);
+            reportDocument.SetParameterValue("RequisitionDate",
+                string.IsNullOrEmpty(objVendorReq.CSPrepDate)
+                    ? string.Empty
+                    : objVendorReq.CSPrepDate);
 
-            reportDocument.SetParameterValue("VerifyBy", string.IsNullOrEmpty(objVendorReq.VerifyBy) ? string.Empty : objVendorReq.VerifyBy);
-            reportDocument.SetParameterValue("VerifyDesig", string.IsNullOrEmpty(objVendorReq.VerifyDesig) ? string.Empty : objVendorReq.VerifyDesig);
+            reportDocument.SetParameterValue("ClientName",
+                string.IsNullOrEmpty(objVendorReq.ClientName)
+                    ? string.Empty
+                    : objVendorReq.ClientName);
 
-            reportDocument.SetParameterValue("ApprovBy", string.IsNullOrEmpty(objVendorReq.ApprovedBy) ? string.Empty : objVendorReq.ApprovedBy);
-            reportDocument.SetParameterValue("ApprovDesg", string.IsNullOrEmpty(objVendorReq.ApprovedDesig) ? string.Empty : objVendorReq.ApprovedDesig);
+            reportDocument.SetParameterValue("VenReqItem",
+                string.IsNullOrEmpty(objVendorReq.VenReqItem)
+                    ? string.Empty
+                    : objVendorReq.VenReqItem);
 
-            string reportName = "VendorCSApprevedReport";
-            reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+            reportDocument.SetParameterValue("CSPrepDate",
+                string.IsNullOrEmpty(objVendorReq.CSPrepDate)
+                    ? string.Empty
+                    : objVendorReq.CSPrepDate);
+
+            reportDocument.SetParameterValue("note",
+                string.IsNullOrEmpty(objVendorReq.Note)
+                    ? string.Empty
+                    : objVendorReq.Note);
+
+            reportDocument.SetParameterValue("RecmVendor",
+                string.IsNullOrEmpty(objVendorReq.CSRecmVendorName)
+                    ? string.Empty
+                    : objVendorReq.CSRecmVendorName);
+
+            reportDocument.SetParameterValue("PrepBy",
+                string.IsNullOrEmpty(objVendorReq.PrepBy)
+                    ? string.Empty
+                    : objVendorReq.PrepBy);
+
+            reportDocument.SetParameterValue("PrepDesig",
+                string.IsNullOrEmpty(objVendorReq.PrepDesig)
+                    ? string.Empty
+                    : objVendorReq.PrepDesig);
+
+            reportDocument.SetParameterValue("RecmBy",
+                string.IsNullOrEmpty(objVendorReq.RecomenBy)
+                    ? string.Empty
+                    : objVendorReq.RecomenBy);
+
+            reportDocument.SetParameterValue("RecmDesig",
+                string.IsNullOrEmpty(objVendorReq.RecomenDesig)
+                    ? string.Empty
+                    : objVendorReq.RecomenDesig);
+
+            reportDocument.SetParameterValue("RecmAccBy",
+                string.IsNullOrEmpty(objVendorReq.RecmAccBy)
+                    ? string.Empty
+                    : objVendorReq.RecmAccBy);
+
+            reportDocument.SetParameterValue("RecmAccDesig",
+                string.IsNullOrEmpty(objVendorReq.RecmAccDesig)
+                    ? string.Empty
+                    : objVendorReq.RecmAccDesig);
+
+            reportDocument.SetParameterValue("VerifyBy",
+                string.IsNullOrEmpty(objVendorReq.VerifyBy)
+                    ? string.Empty
+                    : objVendorReq.VerifyBy);
+
+            reportDocument.SetParameterValue("VerifyDesig",
+                string.IsNullOrEmpty(objVendorReq.VerifyDesig)
+                    ? string.Empty
+                    : objVendorReq.VerifyDesig);
+
+            reportDocument.SetParameterValue("ApprovBy",
+                string.IsNullOrEmpty(objVendorReq.ApprovedBy)
+                    ? string.Empty
+                    : objVendorReq.ApprovedBy);
+
+            reportDocument.SetParameterValue("ApprovDesg",
+                string.IsNullOrEmpty(objVendorReq.ApprovedDesig)
+                    ? string.Empty
+                    : objVendorReq.ApprovedDesig);
+
+            // Signature parameters
+            reportDocument.SetParameterValue("PrepBySignature", prepSignaturePath);
+            reportDocument.SetParameterValue("HODSignature", hodSignaturePath);
+            reportDocument.SetParameterValue("AFSignature", afSignaturePath);
+            reportDocument.SetParameterValue("IADSignature", iadSignaturePath);
+            reportDocument.SetParameterValue("ApprovedSignature", approvedSignaturePath);
+
+            string reportName = "VendorCSApprovedReport";
+
+            reportDocument.ExportToHttpResponse(
+                ExportFormatType.PortableDocFormat,
+                System.Web.HttpContext.Current.Response,
+                false,
+                reportName);
+
             reportDocument.Close();
             reportDocument.Dispose();
+
+            var filesToDelete = new[]
+            {
+        prepSignaturePath,
+        hodSignaturePath,
+        afSignaturePath,
+        iadSignaturePath,
+        approvedSignaturePath
+    };
+
+            foreach (var file in filesToDelete)
+            {
+                if (!string.IsNullOrWhiteSpace(file) &&
+                    System.IO.File.Exists(file))
+                {
+                    try
+                    {
+                        System.IO.File.Delete(file);
+                    }
+                    catch
+                    {
+                        // Ignore cleanup errors
+                    }
+                }
+            }
+
             return View();
+        }
+
+        private string SaveSignatureImage(string base64, string prefix)
+        {
+            if (string.IsNullOrWhiteSpace(base64))
+                return string.Empty;
+
+            try
+            {
+                byte[] signatureBytes = Convert.FromBase64String(base64);
+
+                string tempFolder = Server.MapPath("~/TempSignatures/");
+
+                if (!Directory.Exists(tempFolder))
+                    Directory.CreateDirectory(tempFolder);
+
+                string fileName = $"{prefix}_{DateTime.Now.Ticks}.png";
+                string filePath = Path.Combine(tempFolder, fileName);
+
+                System.IO.File.WriteAllBytes(filePath, signatureBytes);
+
+                return filePath;
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         [SILAuthorize]

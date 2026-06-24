@@ -198,6 +198,7 @@ namespace SILDMS.Web.UI.Controllers
         //view pdf/
         [HttpGet]
         public ActionResult ViewDocument(string serverUrl, string DocID, string ext)
+        
         {
             try
             {

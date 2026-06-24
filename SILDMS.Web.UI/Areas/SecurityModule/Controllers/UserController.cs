@@ -105,6 +105,7 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
                 ExtMailAddress = x.ExtMailAddress,
                 ExtMailStatus = x.ExtMailStatus,
                 UserPicture = x.UserPicture,
+               UserSignatureBase64 = x.UserSignatureBase64,
                 UserLevelID = x.UserLevelID,
                 Remarks = x.Remarks,
                 ClassificationLevel = x.ClassificationLevel,
@@ -151,6 +152,14 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
         [SILLogAttribute]
         public async Task<dynamic> AddUser(SEC_User objUser)
         {
+            if (!string.IsNullOrEmpty(objUser.UserSignatureBase64))
+            {
+                string base64 = objUser.UserSignatureBase64.Split(',')[1];
+
+                objUser.UserSignature =
+                    Convert.FromBase64String(base64);
+            }
+
             if (ModelState.IsValid)
             {
                 action = "add";
@@ -173,6 +182,24 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
         [SILLogAttribute]
         public async Task<dynamic> UpdateUser(SEC_User objUser)
         {
+            if (!string.IsNullOrEmpty(objUser.UserSignatureBase64))
+            {
+                string base64;
+
+                // If it still contains the data URI prefix, strip it
+                if (objUser.UserSignatureBase64.Contains(","))
+                {
+                    base64 = objUser.UserSignatureBase64.Split(',')[1];
+                }
+                else
+                {
+                    // Already a raw base64 string (new frontend behaviour)
+                    base64 = objUser.UserSignatureBase64;
+                }
+
+                objUser.UserSignature = Convert.FromBase64String(base64);
+            }
+
             if (ModelState.IsValid)
             {
                 action = "edit";
@@ -300,7 +327,65 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
              return Json(new { obUser, Msg = "" }, JsonRequestBehavior.AllowGet);
          }
 
-        
 
-	}
+
+        [HttpGet]
+        [Authorize]
+        public async Task<dynamic> GetAllUserDetails()
+        {
+            List<SEC_User> obUser = null;
+            await Task.Run(() => _userService.GetAllUserDetails(out obUser));
+            var result = obUser.Select(x => new
+            {
+
+                UserID = x.UserID,
+                Supervisor = x.Supervisor,
+                SupervisorName = x.SupervisorName,
+                UserPassword = StringEncription.Decrypt(x.UserPassword, true),
+                OwnerLevelID = x.OwnerLevelID,
+                LevelName = x.LevelName,
+                OwnerID = x.OwnerID,
+                OwnerName = x.OwnerName,
+                RoleTitle = x.RoleTitle,
+                RoleID = x.RoleID,
+                EmployeeID = x.EmployeeID,
+                UserFullName = x.UserFullName,
+                UserDesignation = x.UserDesignation,
+                JobLocation = x.JobLocation,
+                UserNo = x.UserNo,
+                UserName = x.UserName,
+                PermissionLevel = x.PermissionLevel,
+                AccessOwnerLevel = x.AccessOwnerLevel,
+                AccessDataLevel = x.AccessDataLevel,
+                DocClassification = x.DocClassification,
+                SecurityStatus = x.SecurityStatus,
+                DateLimit = string.Format(x.DateLimit, "dd/MM/yyyy"),
+                DefaultServer = x.DefaultServer,
+                IntMailAddress = x.IntMailAddress,
+                IntmailStatus = x.IntmailStatus,
+                ExtMailAddress = x.ExtMailAddress,
+                ExtMailStatus = x.ExtMailStatus,
+                UserPicture = x.UserPicture,
+                UserSignatureBase64 = x.UserSignatureBase64,
+                UserLevelID = x.UserLevelID,
+                Remarks = x.Remarks,
+                ClassificationLevel = x.ClassificationLevel,
+                SetOn = x.SetOn,
+                SupervisorLevel = x.SupervisorLevel,
+                MessageStatus = x.MessageStatus,
+                ContactNo = x.ContactNo,
+                SupervisorLevelName = x.SupervisorLevelName,
+                AccessDataLevelName = x.AccessDataLevelName,
+                UserLevelName = x.UserLevelName,
+                ClassificationLevelName = x.ClassificationLevelName,
+                DocClassificationName = x.DocClassificationName,
+
+                Status = x.Status
+            }).OrderBy(u => u.UserName);
+
+            return Json(new { Msg = "", result }, JsonRequestBehavior.AllowGet);
+        }
+
+
+    }
 }

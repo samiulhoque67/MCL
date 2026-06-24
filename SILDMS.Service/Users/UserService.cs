@@ -28,11 +28,11 @@ namespace SILDMS.Service.Users
             this.userDataService = repository;
             this.localizationService = localizationService;
         }
-       
+
         #endregion
 
         #region Methods
-        public ValidationResult GetAllUser(string id,string ownerID, out List<SEC_User> userList)
+        public ValidationResult GetAllUser(string id, string ownerID, out List<SEC_User> userList)
         {
             userList = userDataService.GetAllUser(id, ownerID, out errorNumber);
             if (errorNumber.Length > 0)
@@ -41,7 +41,7 @@ namespace SILDMS.Service.Users
             }
             return ValidationResult.Success;
         }
- 
+
         #endregion
 
 
@@ -67,15 +67,26 @@ namespace SILDMS.Service.Users
         }
 
 
-        public bool IsValidUser(string user, string password,string ip, out List<GetUserAccessPermission_Result> accessList)
+        public bool IsValidUser(string user, string password, string ip, out List<GetUserAccessPermission_Result> accessList)
         {
-           return userDataService.IsValidUser(user,  password, ip, out accessList);
+            return userDataService.IsValidUser(user, password, ip, out accessList);
         }
 
 
         public ValidationResult GetSupervisor(string UserID, string p, out List<SEC_User> obUser)
         {
             obUser = userDataService.GetSupervisor(UserID, p, out errorNumber);
+            if (errorNumber.Length > 0)
+            {
+                return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
+
+        public ValidationResult GetAllUserDetails(out List<SEC_User> userList)
+        {
+            userList = userDataService.GetAllUserDetails(out errorNumber);
             if (errorNumber.Length > 0)
             {
                 return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));

@@ -75,6 +75,7 @@ namespace SILDMS.DataAccess.Users
                             ExtMailAddress = reader.GetString("ExtMailAddress"),
                             ExtMailStatus = reader.GetString("ExtMailStatus"),
                             UserPicture = reader.GetString("UserPicture"),
+                            UserSignatureBase64 = reader.GetString("UserSignatureBase64"),
                             SupervisorLevel = reader.GetString("SupervisorLevel"),
                             Remarks = reader.GetString("Remarks"),
                             SetOn = string.Format("{0:dd/mm/yyyy}", Convert.ToString(reader.GetDateTime("SetOn"), CultureInfo.InvariantCulture)),
@@ -134,7 +135,7 @@ namespace SILDMS.DataAccess.Users
 
                     db.AddInParameter(dbCommandWrapper, "@ContactNo", SqlDbType.NVarChar, objUser.ContactNo);
                     db.AddInParameter(dbCommandWrapper, "@MessageStatus", SqlDbType.NVarChar, objUser.MessageStatus==null?"": objUser.MessageStatus.Trim());
-
+                    db.AddInParameter(dbCommandWrapper, "@UserSignature", SqlDbType.VarBinary,objUser.UserSignature);
                     db.AddInParameter(dbCommandWrapper, "@UserPicture ", SqlDbType.NVarChar, objUser.UserPicture == null ? "/noimage.jpg" : objUser.UserPicture.Trim());
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, objUser.Remarks);
 
@@ -259,5 +260,82 @@ namespace SILDMS.DataAccess.Users
             }
             return userList;
         }
+
+
+        public List<SEC_User> GetAllUserDetails(out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            List<SEC_User> userList = new List<SEC_User>();
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("GetAllUserDetails"))
+            {
+                // Set parameters 
+                db.AddOutParameter(dbCommandWrapper, "@p_Error", DbType.Int32, 10);
+                // Execute SP.
+                DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
+
+                if (!db.GetParameterValue(dbCommandWrapper, "@p_Error").IsNullOrZero())
+                {
+                    // Get the error number, if error occurred.
+                    errorNumber = db.GetParameterValue(dbCommandWrapper, "@p_Error").PrefixErrorCode();
+                }
+                else
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        DataTable dt1 = ds.Tables[0];
+
+                        userList = dt1.AsEnumerable().Select(reader => new SEC_User
+                        {
+                            UserID = reader.GetString("UserID"),
+                            Supervisor = reader.GetString("ParentUserID"),
+                            SupervisorName = reader.GetString("SupervisorName"),
+                            OwnerLevelID = reader.GetString("OwnerLevelID"),
+                            LevelName = reader.GetString("LevelName"),
+                            OwnerID = reader.GetString("OwnerID"),
+                            OwnerName = reader.GetString("OwnerName"),
+                            RoleTitle = reader.GetString("RoleTitle"),
+                            RoleID = reader.GetString("RoleID"),
+                            EmployeeID = reader.GetString("EmployeeID"),
+                            UserFullName = reader.GetString("UserFullName"),
+                            UserDesignation = reader.GetString("UserDesignation"),
+                            JobLocation = reader.GetString("JobLocation"),
+                            UserNo = reader.GetString("UserNo"),
+                            UserName = reader.GetString("UserName"),
+                            PermissionLevel = reader.GetString("PermissionLevel"),
+                            AccessOwnerLevel = reader.GetString("AccessOwnerLevel"),
+                            UserLevelID = reader.GetString("UserLevelID"),
+                            AccessDataLevel = reader.GetString("AccessDataLevel"),
+                            DocClassification = reader.GetString("DocClassification"),
+                            ClassificationLevel = reader.GetString("ClassificationLevel"),
+                            SecurityStatus = reader.GetString("SecurityStatus"),
+                            DateLimit = string.Format(reader.GetDateTime("DateLimit").ToShortDateString(), "dd/MM/yyyy"),
+                            DefaultServer = reader.GetString("DefaultServer"),
+                            IntMailAddress = reader.GetString("IntMailAddress"),
+                            IntmailStatus = reader.GetString("IntmailStatus"),
+                            ExtMailAddress = reader.GetString("ExtMailAddress"),
+                            ExtMailStatus = reader.GetString("ExtMailStatus"),
+                            UserPicture = reader.GetString("UserPicture"),
+                            UserSignatureBase64 = reader.GetString("UserSignatureBase64"),
+                            SupervisorLevel = reader.GetString("SupervisorLevel"),
+                            Remarks = reader.GetString("Remarks"),
+                            SetOn = string.Format("{0:dd/mm/yyyy}", Convert.ToString(reader.GetDateTime("SetOn"), CultureInfo.InvariantCulture)),
+                            AccessDataLevelName = reader.GetString("AccessDataLevelName"),
+                            UserLevelName = reader.GetString("UserLevelName"),
+                            SupervisorLevelName = reader.GetString("SupervisorLevelName"),
+                            ClassificationLevelName = reader.GetString("ClassificationLevelName"),
+                            DocClassificationName = reader.GetString("DocClassificationName"),
+                            ContactNo = reader.GetString("ContactNo"),
+                            MessageStatus = reader.GetString("MessageStatus"),
+                            UserPassword = reader.GetString("UserPassword"),
+                            Status = reader.GetString("Status")
+                        }).ToList();
+                    }
+                }
+            }
+            return userList;
+        }
+
     }
 }

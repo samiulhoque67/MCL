@@ -15,5 +15,8 @@ namespace SILDMS.DataAccessInterface.Users
         bool IsValidUser(string user, string password, string ip, out List<GetUserAccessPermission_Result> accessList);
 
         List<SEC_User> GetSupervisor(string UserID, string p, out string errorNumber);
+
+
+        List<SEC_User> GetAllUserDetails(out string errorNumber);
     }
 }
