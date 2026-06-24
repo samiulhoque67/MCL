@@ -221,44 +221,31 @@
             </div>
 
             @*Document Upload / View *@
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <label for="upload_documents">
-                        Upload Documents <br>
-                        (<span style="color:#ff4900;">PDF Only, Max Size 2MB</span>)
-                    </label>
-                </div>
-            </div>
-
-            <!-- File input: hide in view mode -->
-            <div ng-hide="viewmode" class="col-lg-2">
-
-                <div class="form-group">
-                    <input type="file" style="height:25px;float:left;margin-top:5px;"
-                           id="FileUpload1" accept=".pdf"
-                           ng-model="uploadedFile"
-                           onchange="angular.element(this).scope().fileSelected(this)" />
-
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="upload_documents">
+                            Upload Documents <br>
+                            (<span style="color:#ff4900;">PDF Only, Max Size 2MB</span>)
+                        </label>
+                    </div>
                 </div>
 
-            </div>
+                <!-- File input: hide in view mode -->
+                <div ng-hide="viewmode" class="col-lg-2">
+
+                    <div class="form-group">
+                        <input type="file" style="height:25px;float:left;margin-top:5px;"
+                               id="FileUpload1" accept=".pdf"
+                               ng-model="uploadedFile"
+                               onchange="angular.element(this).scope().fileSelected(this)" />
+
+                    </div>
+
+                </div>
 
 
-            <div  ng-hide="viewmode" class="col-lg-2">
-
-
-                <!-- View button — only when a document exists -->
-                <button ng-show="VendorQutn.DocumentID"
-                        ng-click="ViewDocument()"
-                        class="btn button-custom btn-sm">
-                    <i class="fa fa-eye"></i> View
-                </button>
-            </div>
-
-            <!-- In edit mode: allow re-upload AND view existing doc -->
-            <div ng-show="viewmode" class="col-lg-5">
-                <div class="form-group" style="display:flex; gap:8px; align-items:center;">
+                <div ng-hide="viewmode" class="col-lg-2">
 
 
                     <!-- View button — only when a document exists -->
@@ -267,12 +254,25 @@
                             class="btn button-custom btn-sm">
                         <i class="fa fa-eye"></i> View
                     </button>
+                </div>
 
-                    <span ng-hide="VendorQutn.DocumentID"
-                          style="color:#999; font-size:11px;">No document attached</span>
+                <!-- In edit mode: allow re-upload AND view existing doc -->
+                <div ng-show="viewmode" class="col-lg-5">
+                    <div class="form-group" style="display:flex; gap:8px; align-items:center;">
+
+
+                        <!-- View button — only when a document exists -->
+                        <button ng-show="VendorQutn.DocumentID"
+                                ng-click="ViewDocument()"
+                                class="btn button-custom btn-sm">
+                            <i class="fa fa-eye"></i> View
+                        </button>
+
+                        <span ng-hide="VendorQutn.DocumentID"
+                              style="color:#999; font-size:11px;">No document attached</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
         </div>
     </div>
@@ -1330,11 +1330,10 @@
                             $scope.clearVendorQutn();
                             window.location.reload();
                         }
-                        window.location.reload();
                         return;
                     }
 
-                    if (response.status === "S202") {
+                    else if (response.status === "S202") {
                         toastr.success("Data Updated Successfully.");
                         $scope.VendorQutn.VendorQutnID = response.VendorQutnID;
 
@@ -1342,11 +1341,10 @@
                             // replace existing document
                             $scope.SaveDocument($scope.VendorQutn.VendorQutnID);
                         }
-                        window.location.reload();
                         return;
                     }
 
-                    if (response.status === "ERROR_Duplicate") {
+                    else if (response.status === "ERROR_Duplicate") {
                         toastr.error("This quotation no. already exists");
                         return;
                     }
