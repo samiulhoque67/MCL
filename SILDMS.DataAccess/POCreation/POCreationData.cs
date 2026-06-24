@@ -73,8 +73,10 @@ namespace SILDMS.DataAccess.POCreation
 
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
+                        ProjectName = reader.GetString("ProjectName"),
+                        UserFullName = reader.GetString("UserFullName"),
+                        WODate = reader.GetString("WODate"),
                         WIInfoID = reader.GetString("WOInfoID"),
-                        //ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
 

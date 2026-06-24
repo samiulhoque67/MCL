@@ -29,7 +29,7 @@ namespace SILDMS.Model
         public string InstallmentAmt { get; set; }
         public string RequisitionDate { get; set; }
         public string AprvNo { get; set; }
-        public string AprvDate { get; set; } 
+        public string AprvDate { get; set; }
         public string Remarks { get; set; }
         public string TolalItem { get; set; }
         public string SelectedItem { get; set; }
@@ -48,5 +48,8 @@ namespace SILDMS.Model
         public string VendorQutnID { get; set; }
         public string VendorName { get; set; }
         public string PORecmID { get; set; }
+
+        public string ProjectName { get; set; }
+        public string UserFullName { get; set; }
     }
 }

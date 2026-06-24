@@ -34,6 +34,7 @@ namespace SILDMS.DataAccess.PoAprv
                     {
                         PORecmID = reader.GetString("PORecmID"),
                         POPreparationID = reader.GetString("POPreparationID"),
+                        ProjectName = reader.GetString("ProjectName"),
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
@@ -78,6 +79,7 @@ namespace SILDMS.DataAccess.PoAprv
                     {
                         PORecmID = reader.GetString("PORecmID"),
                         POPreparationID = reader.GetString("POPreparationID"),
+                        ProjectName = reader.GetString("ProjectName"),
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
@@ -139,7 +141,7 @@ namespace SILDMS.DataAccess.PoAprv
             {
                 db.AddInParameter(dbCommandWrapper, "@VendorID", SqlDbType.VarChar, vendorID);
                 db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.VarChar, clientID);
-              
+
                 db.AddInParameter(dbCommandWrapper, "@PORecmID", SqlDbType.VarChar, PORecmID);
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
@@ -154,7 +156,7 @@ namespace SILDMS.DataAccess.PoAprv
                         VendorName = reader.GetString("VendorName"),
                         POAmt = reader.GetString("RecomAmnt"),
                         POCreatedBy = reader.GetString("RecommendedBy"),
-                        PODate =reader.GetString("PORecomDate"),
+                        PODate = reader.GetString("PORecomDate"),
                         PONo = reader.GetString("PONo"),
                         Remarks = reader.GetString("Remarks"),
                         BillType = reader.GetString("BillType"),
@@ -202,7 +204,7 @@ namespace SILDMS.DataAccess.PoAprv
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_PoPrintItem"))
             {
-            
+
 
                 db.AddInParameter(dbCommandWrapper, "@PORecmID", SqlDbType.VarChar, pORecmID);
                 // Execute SP. 

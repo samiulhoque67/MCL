@@ -16,7 +16,7 @@ namespace SILDMS.DataAccess.PoRecom
     {
         private readonly string spStatusParam = "@p_Status";
 
-        public List<OBS_ClientReq> GetPoRecomClientInfo( out string errorNumber)
+        public List<OBS_ClientReq> GetPoRecomClientInfo(out string errorNumber)
         {
             errorNumber = string.Empty;
             List<OBS_ClientReq> VendorInfoList = new List<OBS_ClientReq>();
@@ -24,7 +24,7 @@ namespace SILDMS.DataAccess.PoRecom
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetPORecomVendorCSClientInfo"))
             {
-               
+
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -32,15 +32,15 @@ namespace SILDMS.DataAccess.PoRecom
                     DataTable dt1 = ds.Tables[0];
                     VendorInfoList = dt1.AsEnumerable().Select(reader => new OBS_ClientReq
                     {
-                       
                         POPreparationID = reader.GetString("POPreparationID"),
+                        ProjectName = reader.GetString("ProjectName"),
                         ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("PODate"),
                         VendorID = reader.GetString("VendorID"),
-                
+
                         VendorName = reader.GetString("VendorName"),
 
                         ProcessStatus = reader.GetString("ProcessStatus"),   // ← add
@@ -149,9 +149,9 @@ namespace SILDMS.DataAccess.PoRecom
                         PODate = (reader.GetString("PODate")),
                         PONo = reader.GetString("PONo"),
                         Remarks = reader.GetString("Remarks"),
-                        BillType=reader.GetString("BillType"),
+                        BillType = reader.GetString("BillType"),
                         BillCategory = reader.GetString("BillCategory"),
-                        Installment=reader.GetInt32("Installment"),
+                        Installment = reader.GetInt32("Installment"),
                         InstalledAmount = reader.GetDouble("InstallmentAmt"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         //ServiceItemCode = reader.GetString("ServiceItemCode"),
@@ -308,5 +308,5 @@ namespace SILDMS.DataAccess.PoRecom
             return result;
         }
     }
-    
+
 }

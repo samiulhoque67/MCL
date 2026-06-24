@@ -75,6 +75,8 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     ClientInfoList = dt1.AsEnumerable().Select(reader => new OBS_WOInfo
                     {
+                        ProjectName = reader.GetString("ProjectName"),
+                        UserFullName = reader.GetString("UserFullName"),
                         ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
                         ClientID = reader.GetString("ClientID"),
                         ClientReqID = reader.GetString("ClientReqID"),

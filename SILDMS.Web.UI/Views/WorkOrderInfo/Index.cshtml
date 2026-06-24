@@ -254,17 +254,15 @@
                             </tr>
                             <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
                                 <th>Client Name</th>
-                                <th>Aprv No</th>
-                                <th>Aprv Date</th>
-                                <th>Contact Number</th>
-                                <th>Address</th>
-                                <th>Status</th>
+                                <th>ProjectName</th>
+                                <th>Representive</th>
+                                <th>Qutn. Aprv Date</th>
                                 <th>Action</th>
                             </tr>
                             <tr>
                                 <!-- FIX: correct st-search field names -->
                                 <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="AprvNo" placeholder="Aprv No" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="ProjectName" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -273,16 +271,20 @@
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="hidden">{{row.ClientReqID}}</td>
                                 <td class="hidden">{{row.ClientReqNo}}</td>
+                                <td class="hidden">{{row.AprvNo}}</td>
+                                <td class="hidden">{{row.ContactNumber}}</td>
+                                <td class="hidden">{{row.Address}}</td>
+
                                 <td class="text-center">{{row.ClientName}}</td>
-                                <td class="text-center">{{row.AprvNo}}</td>
+                                <td class="text-center">{{row.ProjectName}}</td>
+                                <td class="text-center">{{row.UserFullName}}</td>
                                 <td class="text-center">{{row.AprvDate}}</td>
-                                <td class="text-center">{{row.ContactNumber}}</td>
-                                <td class="text-center">{{row.Address}}</td>
-                                <td class="text-center">
-                                    <span ng-attr-class="{{row.Status=='1'?'label label-success':'label label-danger'}}">
-                                        {{row.Status=='1'?'Active':'InActive'}}
-                                    </span>
-                                </td>
+
+                                @*<td class="text-center">
+                                        <span ng-attr-class="{{row.Status=='1'?'label label-success':'label label-danger'}}">
+                                            {{row.Status=='1'?'Active':'InActive'}}
+                                        </span>
+                                    </td>*@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-primary btn-flat"
                                             data-ng-click="toggleClientSelect(row)">
