@@ -241,7 +241,7 @@ namespace SILDMS.Web.UI.Areas.SecurityModule.Controllers
         [OutputCache(Duration = 3600, VaryByParam = "none", Location = OutputCacheLocation.Client, NoStore = true)]
         public string GetDynamicMenu()
         {
-
+            Session.Timeout = 300;
             var d = DateTime.Now.AddMinutes(Session.Timeout);
             List<SEC_Menu> lstMenu = (List<SEC_Menu>)Session["SEC_Menu"];
             if (lstMenu == null)

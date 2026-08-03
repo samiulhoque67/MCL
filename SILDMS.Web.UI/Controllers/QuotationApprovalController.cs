@@ -50,7 +50,15 @@ namespace SILDMS.Web.UI.Controllers
         {
             var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
             await Task.Run(() => _quotationApprovalService.AllAvailableCSVendorApprovalService(UserID, page, itemsPerPage, sortBy, reverse, search, type, action, out AllAvailableClientsList));
-            var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
+
+            int totalItems = AllAvailableClientsList.Any() ? AllAvailableClientsList.First().TotalPages : 0;
+
+            var result = Json(new
+            {
+                AllAvailableClientsList,
+                TotalItems = totalItems,
+                msg = "loaded in the table."
+            }, JsonRequestBehavior.AllowGet);
             return result;
         }
 
@@ -59,16 +67,32 @@ namespace SILDMS.Web.UI.Controllers
         {
             var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
             await Task.Run(() => _quotationApprovalService.AllSavcdClientQuotationRecommendationService(UserID, page, itemsPerPage, sortBy, reverse, search, type, action, out AllAvailableClientsList));
-            var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
+
+            int totalItems = AllAvailableClientsList.Any() ? AllAvailableClientsList.First().TotalPages : 0;
+
+            var result = Json(new
+            {
+                AllAvailableClientsList,
+                TotalItems = totalItems,
+                msg = "loaded in the table."
+            }, JsonRequestBehavior.AllowGet);
             return result;
         }
-
         [HttpPost]
         public async Task<dynamic> AllClientQuotationforApprvData(int page, int itemsPerPage, string sortBy, bool reverse, string search, string type, string action)
         {
             var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
             await Task.Run(() => _quotationApprovalService.AllClientQuotationforApprvData(UserID, page, itemsPerPage, sortBy, reverse, search, type, action, out AllAvailableClientsList));
-            var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
+
+            int totalItems = AllAvailableClientsList.Any() ? AllAvailableClientsList.First().TotalPages : 0;
+
+            var result = Json(new
+            {
+                AllAvailableClientsList,
+                TotalItems = totalItems,
+                msg = "loaded in the table."
+            }, JsonRequestBehavior.AllowGet);
+
             return result;
         }
 

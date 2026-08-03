@@ -231,6 +231,59 @@
                            placeholder="Remarks" ng-readonly="pageMode==='view'" />
                 </div>
             </div>
+
+
+            <div class="row">
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="upload_documents">
+                            Upload Documents <br>
+                            (<span style="color:#ff4900;">PDF Only, Max Size 2MB</span>)
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Show file input only when NOT in view mode -->
+                <div  ng-hide="pageMode==='view'" class="col-lg-2">
+                    <div class="form-group">
+                        <input type="file"
+                               style="height:25px; float:left; margin-top:5px;"
+                               id="FileUpload1"
+                               accept=".pdf"
+                               ng-model="uploadedFile"
+                               onchange="angular.element(this).scope().fileSelected(this)" />
+                    </div>
+                </div>
+
+                <!-- View section -->
+                <div ng-hide="viewonlymode" class="col-lg-2">
+                    <!-- View button -->
+                    <button ng-show="WOInfo.DocumentID"
+                            ng-click="ViewDocument()"
+                            class="btn button-custom btn-sm">
+                        <i class="fa fa-eye"></i> View
+                    </button>
+
+                </div>
+
+                <div ng-show="viewonlymode" class="col-lg-5">
+                    <div class="form-group" style="display:flex; gap:8px; align-items:center;">
+
+
+                        <!-- View button — only when a document exists -->
+                        <button ng-show="WOInfo.DocumentID"
+                                ng-click="ViewDocument()"
+                                class="btn button-custom btn-sm">
+                            <i class="fa fa-eye"></i> View
+                        </button>
+
+                        <span ng-hide="ClientReq.DocumentID"
+                              style="color:#999; font-size:11px;">No document attached</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 
@@ -613,6 +666,25 @@
         </div>
     </div>
 
+
+    @* ==================== PDF VIEWER MODAL ==================== *@
+    <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="padding: 5px 10px;">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">Document Viewer</h4>
+                </div>
+                <div class="modal-body" style="padding: 0; margin: 0;">
+                    <iframe id="pdfViewer" style="width: 100%; height: 100vh; border: none;" title="PDF Viewer"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <!-- ── Delete Term Confirm Modal ── -->
     <div class="modal fade" id="deleteReqTermModal" tabindex="-1" role="dialog"
          style="position:fixed;top:38%;left:50%;transform:translate(-38%,-50%);background:rgba(0,0,0,0)!important">
@@ -699,6 +771,10 @@
                 $scope.GridDisplayCollection = [];
                 $scope.ReqTermDataSetupGridData = [];
                 $scope.ReqTermGridDisplayCollection = [];
+
+                // Reset file input
+                $('#FileUpload1').val('');
+                $scope.uploadedFile = null;
             };
 
             /* ── Installment ── */
@@ -865,6 +941,7 @@
                 $scope.WOInfo.InstallmentAmt = tableRow.InstallmentAmt || '';
                 $scope.WOInfo.Remarks = tableRow.Remarks;
                 $scope.WOInfo.Status = tableRow.Status;
+                $scope.WOInfo.DocumentID = tableRow.DocumentID || "";
 
                 // Load saved items — all pre-selected (they were saved = chosen)
                 $http.post('/WorkOrderInfo/GetWOInfoSearchItemList',
@@ -987,13 +1064,48 @@
 
             /* ── Save / Update ── */
             $scope.Post = function () {
-                if (!$scope.WOInfo.ClientName) { toastr.error("Client Name Required"); return; }
-                if (!$('#WONo').val()) { toastr.error("Work Order No. Required"); return; }
-                if (!$('#WODate').val()) { toastr.error("Work Order Date Required"); return; }
+
+                if (!$scope.WOInfo.ClientName) {
+                    toastr.error("Client Name Required");
+                    return;
+                }
+
+                if (!$('#WONo').val()) {
+                    toastr.error("Work Order No. Required");
+                    return;
+                }
+
+                if (!$('#WODate').val()) {
+                    toastr.error("Work Order Date Required");
+                    return;
+                }
 
                 if ($scope.selectedWoItems.length === 0) {
                     toastr.error("Must select at least one item to save");
                     return;
+                }
+
+                // Validate file BEFORE save/update
+                if ($scope.uploadedFile) {
+
+                    var fileInput = document.getElementById("FileUpload1");
+
+                    if (fileInput && fileInput.files.length > 0) {
+
+                        var file = fileInput.files[0];
+                        var ext = file.name.split('.').pop().toLowerCase();
+                        var maxSizeInMB = 2;
+
+                        if (ext !== "pdf") {
+                            toastr.error("Please upload PDF files only.");
+                            return;
+                        }
+
+                        if (file.size > (maxSizeInMB * 1024 * 1024)) {
+                            toastr.error("File size must be 2 MB or less.");
+                            return;
+                        }
+                    }
                 }
 
                 $scope.WOInfo.WODate = $('#WODate').val();
@@ -1001,39 +1113,207 @@
                 $scope.WOInfo.SelectedItem = $scope.selectedWoItems.length;
 
                 $scope.loading = true;
+
                 $http.post('/WorkOrderInfo/SaveWorkOrderInfo', {
                     woInfo: $scope.WOInfo,
                     woInfoItem: $scope.selectedWoItems,
                     woInfoTerm: $scope.ReqTermGridDisplayCollection
                 })
                     .success(function (r) {
+
                         $scope.loading = false;
 
                         if (r.status === 'S201') {
+
                             toastr.success("Data Saved Successfully.");
-                            // Keep the ID so a subsequent edit works without reload
-                            $scope.WOInfo.WOInfoID = r.WOInfoID;
-                            $scope.clearWOInfo();
-                            $timeout(function () { window.location.reload(); }, 1500);
+
+                            if ($scope.uploadedFile) {
+                                $scope.SaveDocument(r.WOInfoID);
+                            } else {
+                                $scope.clearWOInfo();
+                                $timeout(function () {
+                                    window.location.reload();
+                                }, 1500);
+                            }
+
                             return;
                         }
+
                         if (r.status === 'S202') {
+
                             toastr.success("Data Updated Successfully.");
-                            // Stay in view mode with the same WOInfoID
-                            $scope.WOInfo.WOInfoID = r.WOInfoID;
-                            $scope.pageMode = 'view';
+
+                            if ($scope.uploadedFile) {
+                                $scope.SaveDocument(r.WOInfoID);
+                            } else {
+                                $scope.clearWOInfo();
+                                $scope.toggleRefreshTable();
+                            }
+
                             return;
                         }
+
                         if (r.status === 'S203') {
                             toastr.success("Data Deleted Successfully.");
                             $scope.clearWOInfo();
                             return;
                         }
+
                         toastr.error("Data Save Failed. Status: " + r.status);
                     })
                     .error(function () {
                         $scope.loading = false;
                         toastr.error("Data Save Failed.");
+                    });
+            };
+
+
+            $scope.uploadedFile = null;
+            $scope.fileSelected = function (element) {
+                $scope.$apply(function () {
+                    $scope.uploadedFile = element.files.length > 0 ? element.files[0] : null;
+                });
+            };
+
+            $scope.SaveDocument = function (WOInfoID) {
+
+                var fileInput = document.getElementById("FileUpload1");
+
+                if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                    toastr.error("Please select a PDF file.");
+                    return;
+                }
+
+                var file = fileInput.files[0];
+                var ext = file.name.split('.').pop().toLowerCase();
+                var maxSizeInMB = 2;
+
+                // File validation
+                if (ext !== "pdf") {
+                    toastr.error("Only PDF files are allowed.");
+                    return;
+                }
+
+                if (file.size > (maxSizeInMB * 1024 * 1024)) {
+                    toastr.error("File size must be 2 MB or less.");
+                    return;
+                }
+
+                $scope.loading = true;
+
+                var documentID = "WO_" + WOInfoID;
+
+                var formData = new FormData();
+                formData.append("file", file);
+                formData.append("serverUrl", "MCL/WorkOrder");
+                formData.append("documentID", documentID);
+                formData.append("ext", "pdf");
+
+                $.ajax({
+                    url: "/WorkOrderInfo/SaveDocument",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+
+                    success: function (result) {
+
+                        if (result && result.Message &&
+                            result.Message.toLowerCase().indexOf("success") > -1) {
+
+                            $http.post("/WorkOrderInfo/UpdateDocumentID", {
+                                WOInfoID: WOInfoID,
+                                DocumentID: documentID
+                            })
+                                .success(function (resp) {
+
+                                    if (resp.status === "S200") {
+
+                                        $scope.WOInfo.DocumentID = documentID;
+
+                                        toastr.success("Document uploaded successfully.");
+
+                                        fileInput.value = "";
+                                        $scope.uploadedFile = null;
+
+                                        $scope.clearWOInfo();
+                                        $scope.toggleRefreshTable();
+                                    }
+                                    else {
+                                        toastr.error(resp.message || "Failed to save document information.");
+                                    }
+                                })
+                                .error(function () {
+                                    toastr.error("Document uploaded, but failed to update database record.");
+                                });
+                        }
+                        else {
+                            toastr.error(result.Message || "File upload failed.");
+                        }
+
+                        $scope.$applyAsync();
+                    },
+
+                    error: function (xhr) {
+
+                        var errorMessage = "Document upload failed.";
+
+                        if (xhr.responseJSON) {
+
+                            if (xhr.responseJSON.Exception) {
+                                errorMessage += " " + xhr.responseJSON.Exception;
+                            }
+
+                            if (xhr.responseJSON.Status) {
+                                errorMessage += " (" + xhr.responseJSON.Status + ")";
+                            }
+                        }
+
+                        toastr.error(errorMessage);
+                        console.error(xhr);
+
+                        $scope.$applyAsync();
+                    },
+
+                    complete: function () {
+                        $scope.loading = false;
+                        $scope.$applyAsync();
+                    }
+                });
+            };
+
+            // ── View Document ───────────────────────────────────────────────────────
+            $scope.ViewDocument = function () {
+                if (!$scope.WOInfo.WOInfoID) {
+                    toastr.error("No record selected to view document.");
+                    return;
+                }
+
+                $scope.loading = true;
+
+                // BUG FIX: Use DocumentID from ClientReq model if available, otherwise fall back to CR_ + ID
+                var docID = ($scope.WOInfo.DocumentID && $scope.WOInfo.DocumentID !== "")
+                    ? $scope.WOInfo.DocumentID
+                    : "CR_" + $scope.WOInfo.ClientReqID;
+
+                var requestUrl = "/WorkOrderInfo/ViewDocument?" +
+                    "&serverUrl=" + encodeURIComponent("MCL/WorkOrder") +
+                    "&DocID=" + encodeURIComponent(docID) +
+                    "&ext=" + encodeURIComponent("pdf");
+
+                $http.get(requestUrl, { responseType: 'arraybuffer' })
+                    .then(function (response) {
+                        var file = new Blob([response.data], { type: 'application/pdf' });
+                        var fileURL = URL.createObjectURL(file);
+                        $("#pdfViewer").attr("src", fileURL + "#view=Fit");
+                        $('#ShowPDFModal').modal('show');
+                    })
+                    .catch(function (error) {
+                        toastr.error("Failed to load the PDF. The document may not have been uploaded yet.");
+                        console.error(error);
+                    })
+                    .finally(function () {
+                        $scope.loading = false;
                     });
             };
 

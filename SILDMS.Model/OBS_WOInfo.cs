@@ -51,5 +51,6 @@ namespace SILDMS.Model
 
         public string ProjectName { get; set; }
         public string UserFullName { get; set; }
+        public string DocumentID { get; set; }
     }
 }

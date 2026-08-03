@@ -60,7 +60,8 @@ namespace SILDMS.DataAccess.QuotationApproval
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         QuotationNo = reader.GetString("AutoQutnNo"),
-                        ClientAdvanceClaimDate = reader.GetString("QuotationDate")
+                        ClientAdvanceClaimDate = reader.GetString("QuotationDate"),
+                        TotalPages = reader.Field<int>("TotalPages")
                     }).ToList();
 
                 }
@@ -105,9 +106,11 @@ namespace SILDMS.DataAccess.QuotationApproval
                         ClientReqID = reader.GetString("ClientReqID"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
+                        ProjectName = reader.GetString("ProjectName"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         QuotationNo = reader.GetString("AutoQutnNo"),
-                        ClientAdvanceClaimDate = reader.GetString("QuotationDate")
+                        ClientAdvanceClaimDate = reader.GetString("QuotationDate"),
+                        TotalPages = reader.Field<int>("TotalPages"),
                     }).ToList();
 
                 }
@@ -153,6 +156,9 @@ namespace SILDMS.DataAccess.QuotationApproval
                         ClntQutnPrepDesignation = reader.GetString("ClntQutnPrepDesignation"),
                         ClntQutnRecmDesignation = reader.GetString("ClntQutnRecmDesignation"),
                         ClntQutnAprvDesignation = reader.GetString("ClntQutnAprvDesignation"),
+                        ClntQutnPrepBySignature = GetSafeString(reader, "ClntQutnPrepBySignature"),
+                        ClntQutnRecmBySignature = GetSafeString(reader, "ClntQutnRecmBySignature"),
+                        ClntQutnAprvBySignature = GetSafeString(reader, "ClntQutnAprvBySignature"),
                         ProjectName = reader.GetString("ProjectName"),
                         UserFullName = reader.GetString("UserFullName"),
                         ClientID = reader.GetString("ClientID"),
@@ -164,14 +170,20 @@ namespace SILDMS.DataAccess.QuotationApproval
                         QuotationNo = reader.GetString("AutoQutnNo"),
                         ClientAdvanceClaimDate = reader.GetString("QuotationDate"),
                         RecmRemarks = reader.GetString("RecmRemarks"),
-                        AprvRemarks = reader.GetString("AprvRemarks")
+                        AprvRemarks = reader.GetString("AprvRemarks"),
+                        TotalPages = reader.Field<int>("TotalPages")   // <-- add this
                     }).ToList();
                 }
             }
 
             return AllAvailableClientsList;
         }
-
+        private static string GetSafeString(DataRow reader, string columnName)
+        {
+            return reader[columnName] == DBNull.Value
+                ? string.Empty
+                : reader[columnName].ToString();
+        }
         public List<OBS_TermsItem> GetVendorTermListServiceData(string ClientQutnRecmID, out string _errorNumber)
         {
             _errorNumber = string.Empty;

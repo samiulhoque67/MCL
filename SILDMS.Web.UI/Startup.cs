@@ -11,6 +11,21 @@ namespace SILDMS.Web.UI
 {
     public partial class Startup
     {
+        //public void Configuration(IAppBuilder app)
+        //{
+        //    HttpConfiguration config = new HttpConfiguration();
+        //    ConfigureOAuth(app);
+        //    WebApiConfig.Register(config);
+        //    app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+        //    app.UseWebApi(config);
+
+        //    app.UseCookieAuthentication(new CookieAuthenticationOptions
+        //    {
+        //        AuthenticationType = "ApplicationCookie",
+        //        LoginPath = new PathString("/SecurityModule/Account/UnAuthorized")
+        //    });
+        //}
+
         public void Configuration(IAppBuilder app)
         {
             HttpConfiguration config = new HttpConfiguration();
@@ -22,16 +37,19 @@ namespace SILDMS.Web.UI
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = "ApplicationCookie",
-                LoginPath = new PathString("/SecurityModule/Account/UnAuthorized")
+                CookieName = ".App2.Auth",
+                LoginPath = new PathString("/SecurityModule/Account/UnAuthorized"),
+
             });
         }
+
         public void ConfigureOAuth(IAppBuilder app)
         {
             OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(300),
                 Provider = new SimpleAuthorizationServerProvider(),
                 RefreshTokenProvider = new SimpleRefreshTokenProvider()
             };

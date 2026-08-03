@@ -29,6 +29,7 @@ namespace SILDMS.Model
         public string ReqType { get; set; }
         public string ProjectName { get; set; }
         public string UserFullName { get; set; }
+        public int TotalPages { get; set; }
     }
 
     public class OBS_ClientDetails
@@ -54,6 +55,8 @@ namespace SILDMS.Model
 
     public class OBS_ClientwithReqQoutn
     {
+        public string ClntQutnPrepBySignature;
+
         public string ClientID { get; set; }
         public string ClientCode { get; set; }
         public string ClientName { get; set; }
@@ -86,6 +89,9 @@ namespace SILDMS.Model
         public string AprvRemarks { get; set; }
         public string ProjectName { get; set; }
         public string UserFullName { get; set; }
+        public string ClntQutnRecmBySignature { get; set; }
+        public string ClntQutnAprvBySignature { get; set; }
+        public int TotalPages { get; set; }
     }
 
 

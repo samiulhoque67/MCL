@@ -690,8 +690,9 @@ namespace SILDMS.Web.UI.Controllers
         [HttpPost]
         [SILLogAttribute]
         public async Task<ActionResult> ClientQuotationApproveReport(string ClientQutnAprvID,
-            string ClntQutnPrepBy, string ClntQutnRecmBy, string ClntQutnAprvBy,
-            string ClntQutnPrepDesignation, string ClntQutnRecmDesignation, string ClntQutnAprvDesignation)
+    string ClntQutnPrepBy, string ClntQutnRecmBy, string ClntQutnAprvBy,
+    string ClntQutnPrepDesignation, string ClntQutnRecmDesignation, string ClntQutnAprvDesignation,
+    string ClntQutnPrepBySignature, string ClntQutnRecmBySignature, string ClntQutnAprvBySignature)
         {
             if (TempData["ClientQutnAprvID"] == null)
             {
@@ -699,18 +700,12 @@ namespace SILDMS.Web.UI.Controllers
                 return View();
             }
 
-            //string ClientQutnAprvID = Convert.ToString(TempData["ClientQutnAprvID"]);
-
             DataTable ds = new DataTable();
             DataTable ds1 = new DataTable();
             DataTable ds2 = new DataTable();
             await Task.Run(() => _reportService.ClientQuotationApproveReport(ClientQutnAprvID, out ds));
             await Task.Run(() => _reportService.ClientQuotationApproveReport1(ClientQutnAprvID, out ds1));
             await Task.Run(() => _reportService.ClientQuotationApproveReport2(ClientQutnAprvID, out ds2));
-
-            //////DataTable dt1 = ds.Tables.Count > 0 ? ds.Tables[0] : new DataTable();
-            //////DataTable dt2 = ds.Tables.Count > 1 ? ds.Tables[1] : new DataTable();
-            //////DataTable dt3 = ds.Tables.Count > 2 ? ds.Tables[2] : new DataTable();
 
             using (ReportDocument reportDocument = new ReportDocument())
             {
@@ -731,8 +726,30 @@ namespace SILDMS.Web.UI.Controllers
                 reportDocument.SetParameterValue("ClntQutnRecmDesignation", ClntQutnRecmDesignation);
                 reportDocument.SetParameterValue("ClntQutnAprvDesignation", ClntQutnAprvDesignation);
 
+                // reuse the existing private helper — no need to redefine it
+                string prepSignaturePath = SaveSignatureImage(ClntQutnPrepBySignature, "CQAPrep");
+                string recmSignaturePath = SaveSignatureImage(ClntQutnRecmBySignature, "CQARecm");
+                string aprvSignaturePath = SaveSignatureImage(ClntQutnAprvBySignature, "CQAAprv");
+
+                reportDocument.SetParameterValue("ClntQutnPrepBySignature", prepSignaturePath);
+                reportDocument.SetParameterValue("ClntQutnRecmBySignature", recmSignaturePath);
+                reportDocument.SetParameterValue("ClntQutnAprvBySignature", aprvSignaturePath);
+
                 string reportName = "ClientQuotationApproveReport";
                 reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
+
+                reportDocument.Close();
+                reportDocument.Dispose();
+
+                var filesToDelete = new[] { prepSignaturePath, recmSignaturePath, aprvSignaturePath };
+                foreach (var file in filesToDelete)
+                {
+                    if (!string.IsNullOrWhiteSpace(file) && System.IO.File.Exists(file))
+                    {
+                        try { System.IO.File.Delete(file); }
+                        catch { /* ignore cleanup errors */ }
+                    }
+                }
             }
 
             return View();

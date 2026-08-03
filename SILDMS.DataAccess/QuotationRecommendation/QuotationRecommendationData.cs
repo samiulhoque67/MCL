@@ -57,13 +57,12 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
-                        //ReqType = reader.GetString("ReqType"),
                         QuotationNo = reader.GetString("AutoQutnNo"),
                         ClientAdvanceClaimDate = reader.GetString("QuotationDate"),
                         ClientQutnID = reader.GetString("ClientQutnID"),
-                        ProcessStatus = reader.GetString("ProcessStatus")
+                        ProcessStatus = reader.GetString("ProcessStatus"),
+                        TotalPages = reader.Field<int>("TotalPages")   // added
                     }).ToList();
-
                 }
             }
 
@@ -102,22 +101,21 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                         ClientCode = reader.GetString("ClientCode"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
+                        ProjectName = reader.GetString("Remarks"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
-                        //ReqType = reader.GetString("ReqType"),
                         QuotationNo = reader.GetString("AutoQutnNo"),
                         ClientAdvanceClaimDate = reader.GetString("QuotationDate"),
                         ClientQutnID = reader.GetString("ClientQutnID"),
-                        ProcessStatus = reader.GetString("ProcessStatus")
+                        ProcessStatus = reader.GetString("ProcessStatus"),
+                        TotalPages = reader.Field<int>("TotalPages")   // added
                     }).ToList();
-
                 }
             }
 
             return AllAvailableClientsList;
         }
-
-         public List<OBS_TermsItem> GetVendorTermListServiceData(string ClientQuotationID, out string _errorNumber)
+        public List<OBS_TermsItem> GetVendorTermListServiceData(string ClientQuotationID, out string _errorNumber)
         {
             _errorNumber = string.Empty;
             var VendorTermTermList = new List<OBS_TermsItem>();

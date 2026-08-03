@@ -324,6 +324,7 @@ namespace SILDMS.DataAccess
                         BillType = reader.GetString("BillType"),         // ← ADD
                         NoOfInstallment = reader.GetString("NoOfInstallment"),  // ← ADD
                         InstallmentAmt = reader.GetString("InstallmentAmt"),   // ← ADD
+                        DocumentID = reader.GetString("DocumentID"),   // ← ADD
                         Remarks = reader.GetString("Remarks"),
                         Status = reader.GetString("Status")
                     }).ToList();
@@ -478,6 +479,34 @@ namespace SILDMS.DataAccess
                 }
             }
             return TermsConditionsList;
+        }
+
+
+        public string UpdateDocumentID(string WOInfoID, string DocumentID)
+        {
+            string errorNumber = string.Empty;
+            try
+            {
+                DatabaseProviderFactory factory = new DatabaseProviderFactory();
+                SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+                using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_UpdateWOInfoDocumentID"))
+                {
+                    db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.NVarChar, WOInfoID);
+                    db.AddInParameter(dbCommandWrapper, "@DocumentID", SqlDbType.NVarChar, DocumentID);
+                    db.AddOutParameter(dbCommandWrapper, spStatusParam, SqlDbType.VarChar, 50);
+                    db.ExecuteNonQuery(dbCommandWrapper);
+
+                    if (!db.GetParameterValue(dbCommandWrapper, spStatusParam).IsNullOrZero())
+                    {
+                        errorNumber = db.GetParameterValue(dbCommandWrapper, spStatusParam).PrefixErrorCode();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errorNumber = ex.InnerException?.Message ?? ex.Message;
+            }
+            return errorNumber;
         }
     }
 }

@@ -46,9 +46,18 @@ namespace SILDMS.Web.UI.Controllers
         {
             var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
             await Task.Run(() => _quotationRecommendationService.AllAvailableCSVendorApprovalService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out AllAvailableClientsList));
-            var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
+
+            int totalItems = AllAvailableClientsList.Any() ? AllAvailableClientsList.First().TotalPages : 0;
+
+            var result = Json(new
+            {
+                AllAvailableClientsList,
+                TotalItems = totalItems,
+                msg = "loaded in the table."
+            }, JsonRequestBehavior.AllowGet);
             return result;
         }
+
 
 
 
@@ -58,10 +67,17 @@ namespace SILDMS.Web.UI.Controllers
         {
             var AllAvailableClientsList = new List<OBS_ClientwithReqQoutn>();
             await Task.Run(() => _quotationRecommendationService.AllSavcdClientsQuotationService(UserID, page, itemsPerPage, sortBy, reverse, search, type, out AllAvailableClientsList));
-            var result = Json(new { AllAvailableClientsList, msg = "loaded in the table." }, JsonRequestBehavior.AllowGet);
+
+            int totalItems = AllAvailableClientsList.Any() ? AllAvailableClientsList.First().TotalPages : 0;
+
+            var result = Json(new
+            {
+                AllAvailableClientsList,
+                TotalItems = totalItems,
+                msg = "loaded in the table."
+            }, JsonRequestBehavior.AllowGet);
             return result;
         }
-
 
 
         [HttpPost]

@@ -20,5 +20,7 @@ namespace SILDMS.DataAccessInterface
         List<OBS_WOInfoTerms> GetWOInfoTermAgainstFormList(string TermsID);
         string DeleteWOInfoItemAndTerm(string WOInfoItemID, string WOInfoTermID);
         List<OBS_Terms> GetTermsConditionsList();
+
+        string UpdateDocumentID(string WOInfoID, string DocumentID);
     }
 }

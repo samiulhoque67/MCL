@@ -60,6 +60,7 @@ namespace SILDMS.DataAccess.QuotationToClientService
                         ClientName = reader.GetString("ClientName"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         ReqType = reader.GetString("ReqTypeSummary"),
+                        TotalPages = reader.Field<int>("TotalPages")
                     }).ToList();
 
                 }

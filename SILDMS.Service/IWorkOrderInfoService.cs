@@ -21,5 +21,8 @@ namespace SILDMS.Service
         ValidationResult GetWOInfoTermAgainstFormList(string TermsID, out List<OBS_WOInfoTerms> WOInfoTermList);
         string DeleteWOInfoItemAndTerm(string WOInfoItemID, string WOInfoTermID);
         ValidationResult GetTermsConditionsList(out List<OBS_Terms> TermsConditionsList);
+
+
+        string UpdateDocumentID(string WOInfoID, string DocumentID);
     }
 }

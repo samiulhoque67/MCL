@@ -249,10 +249,15 @@
                                 <th class="col-lg-1">Action</th>
                             </tr>
                             <tr>
-                                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="ProjectName" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="UserFullName" placeholder="Representative" class="input-sm form-control" type="search" /></th>
-                                <th></th>
+                            <tr>
+                                <th colspan="4">
+                                    <input type="search"
+                                           ng-model="PagingInfo.search"
+                                           ng-model-options="{ debounce: 400 }"
+                                           ng-change="SearchAvailableClients()"
+                                           placeholder="Search Client / Project / Representative..."
+                                           class="input-sm form-control" />
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -728,12 +733,6 @@
                     <table st-table="AllQuotationsCollection" st-safe-src="AllQuotationsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr>
-                                <!-- Columns with sorting -->
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('ClientCode')">
-                                    Client Code
-                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientName')">
                                     Client Name
                                     <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
@@ -745,14 +744,15 @@
                                     <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
                                 </th>
                                 <th class="col-lg-2 col-md-2 col-sm-2">
+                                    Project Name
+                                </th>
+                                <th class="col-lg-2 col-md-2 col-sm-2">
                                     Requisition Date
                                 </th>
                                 <th class="col-lg-1 col-md-1 col-sm-1">
                                     Quotation No
                                 </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Quotation Date
-                                </th>
+                                
                                 <th class="col-lg-2 col-md-2 col-sm-2">
                                     Action
                                 </th>
@@ -760,29 +760,23 @@
 
                             <!-- Search Fields -->
                             <tr>
-                                <th>
-                                    <input st-search="ClientCode" placeholder="Search Client Code" class="input-sm form-control" type="search" />
+                                <th colspan="7">
+                                    <input type="search"
+                                           ng-model="PagingInfo.search"
+                                           ng-model-options="{ debounce: 400 }"
+                                           ng-change="SearchSaveClients()"
+                                           placeholder="Search Client Code / Name / Req No..."
+                                           class="input-sm form-control" />
                                 </th>
-                                <th>
-                                    <input st-search="ClientName" placeholder="Search Client Name" class="input-sm form-control" type="search" />
-                                </th>
-                                <th>
-                                    <input st-search="ClientReqNo" placeholder="Search Req No" class="input-sm form-control" type="search" />
-                                </th>
-                                <th></th> <!-- No search for dates -->
-                                <th></th> <!-- No search for Quotation No -->
-                                <th></th> <!-- No search for Quotation Date -->
-                                <th></th> <!-- No search for Quotation Amount -->
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in AllQuotationsList | orderBy:'IsBack':true">
-                                <td class="text-center">{{row.ClientCode}}</td>
                                 <td class="text-center">{{row.ClientName}}</td>
                                 <td class="text-center">{{row.ClientReqNo}}</td>
+                                <td class="text-center">{{row.AprvRemarks}}</td>
                                 <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="text-center">{{row.QuotationNo}}</td>
-                                <td class="text-center">{{row.QuotationDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="col-lg-2 text-center">
                                     <button type="button" id="btnSelect" ng-click="selectQuotationForRecom(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
                                         <span class="fa fa-search-plus"> View</span>
@@ -1232,6 +1226,7 @@
         $scope.ClientQutnRecmID = '';
 
         $scope.SearchAvailableClients = function () {
+            $scope.PagingInfo.page = 1;                 // reset to first page on new search
             $scope.ClearEverything();
 
             $http.post('/QuotationApproval/AllAvailableClients', {
@@ -1242,10 +1237,10 @@
                 search: $scope.PagingInfo.search,
                 type: "isBack",
                 action: 'AvailableSearch'
-
             }).success(function (response) {
                 $scope.AllQuotationsList = response.AllAvailableClientsList;
                 $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsList);
+                $scope.PagingInfo.totalItems = response.TotalItems || 0;   // <-- added
                 $scope.loading = false;
             }).error(function () {
                 $scope.loading = false;
@@ -1255,7 +1250,6 @@
 
         $scope.selectPageList = function () {
             $http.post('/QuotationApproval/AllAvailableClients', {
-
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
                 sortBy: $scope.PagingInfo.sortBy,
@@ -1263,10 +1257,10 @@
                 search: $scope.PagingInfo.search,
                 type: "isBack",
                 action: 'AvailableSearch'
-
             }).success(function (response) {
                 $scope.AllQuotationsList = response.AllAvailableClientsList;
-                $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsCollection);
+                $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsList);   // fixed
+                $scope.PagingInfo.totalItems = response.TotalItems || 0;                // added
                 $scope.loading = false;
             })
                 .error(function () {
@@ -1605,7 +1599,7 @@
         };
 
         $scope.SearchSaveClients = function () {
-
+            $scope.PagingInfo.page = 1;
             $scope.ClearEverything();
 
             $http.post('/QuotationApproval/AllClientQuotationforApprvData', {
@@ -1616,12 +1610,12 @@
                 search: $scope.PagingInfo.search,
                 type: "isBack",
                 action: 'SaveSearch'
-
             }).success(function (response) {
                 $scope.AllQuotationsList = response.AllAvailableClientsList;
                 $scope.AllQuotationsCollection = $scope.AllQuotationsList.filter(function (item) {
                     return item.ProcessStatus == null || item.ProcessStatus === '';
                 });
+                $scope.PagingInfo.totalItems = response.TotalItems || 0;   // added
                 $scope.loading = false;
             }).error(function () {
                 $scope.loading = false;
@@ -1631,8 +1625,7 @@
 
 
         $scope.selectSavePageList = function () {
-            $http.post('/QuotationApproval/AllAvailableClients', {
-
+            $http.post('/QuotationApproval/AllClientQuotationforApprvData', {   // matches SearchSaveClients
                 page: $scope.PagingInfo.page,
                 itemsPerPage: $scope.PagingInfo.itemsPerPage,
                 sortBy: $scope.PagingInfo.sortBy,
@@ -1640,12 +1633,12 @@
                 search: $scope.PagingInfo.search,
                 type: "isBack",
                 action: 'SaveSearch'
-
             }).success(function (response) {
                 $scope.AllQuotationsList = response.AllAvailableClientsList;
                 $scope.AllQuotationsCollection = $scope.AllQuotationsList.filter(function (item) {
                     return item.ProcessStatus == null || item.ProcessStatus === '';
                 });
+                $scope.PagingInfo.totalItems = response.TotalItems || 0;   // added
                 $scope.loading = false;
             })
                 .error(function () {
@@ -1853,10 +1846,7 @@
 
             // FTP details
             var ftpDetails = {
-                serverIP: "172.16.189.34",
-                ftpPort: "21",
-                ftpUserName: "ftpuser",
-                ftpPassword: "Ftp@Cbps#2k25",
+                
                 serverUrl: "MCL/Client_Requisition",
                 documentID: "CR_" + $scope.ClientDetails[0].ClientReqID,
                 ext: "pdf"
@@ -1886,6 +1876,12 @@
                     $scope.loading = false; // Hide the loading indicator
                 });
         };
+
+
+        $scope.toggleRefreshTable = function () {
+            window.location.reload();
+        }
+
     }
     )
 

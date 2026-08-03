@@ -54,6 +54,10 @@
                         <input type="hidden" name="ClntQutnRecmDesignation" ng-value="Quotation.ClntQutnRecmDesignation" />
                         <input type="hidden" name="ClntQutnAprvDesignation" ng-value="Quotation.ClntQutnAprvDesignation" />
 
+                        <input type="hidden" name="ClntQutnPrepBySignature" ng-value="Quotation.ClntQutnPrepBySignature" />
+                        <input type="hidden" name="ClntQutnRecmBySignature" ng-value="Quotation.ClntQutnRecmBySignature" />
+                        <input type="hidden" name="ClntQutnAprvBySignature" ng-value="Quotation.ClntQutnAprvBySignature" />
+
                         <button ng-disabled="showPrint" type="submit" class="button-custom">
                             <i class="fa fa-print"></i> Quotation Print
                         </button>
@@ -66,11 +70,11 @@
                     </button>
                 </div>
 
-                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                @*<div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="SearchSaveClients()" class="button-custom btn-primary" ng-disabled="btnSearch">
                         <i class="fa fa-search" style="padding-right: 5px;"></i> Search
                     </button>
-                </div>
+                </div>*@
             </div>
         </div>
     </div>
@@ -245,7 +249,7 @@
                 </div>
 
                 <!-- Modal Body -->
-                <div class="modal-body table-responsive" data-ng-disabled="" ng-cloak>
+                <div class="modal-body table-responsive" ng-cloak>
                     <table st-table="AllQuotationsCollection" st-safe-src="AllQuotationsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr style="font-size: 15px;">
@@ -257,20 +261,24 @@
                                 <th style="text-align: left;" st-sort="">Client Name</th>
                                 <th style="text-align: left;" st-sort="">Project Name</th>
                                 <th style="text-align: left;" st-sort="">Representative</th>
+                                <th style="text-align: left;" st-sort="">Client Req No</th>
                                 <th class="col-lg-1">Action</th>
                             </tr>
                             <tr>
-                                <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="ProjectName" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="UserFullName" placeholder="Representative" class="input-sm form-control" type="search" /></th>
-                                <th></th>
+                                <th colspan="4">
+                                    <input type="search"
+                                           ng-model="PagingInfo.search"
+                                           ng-model-options="{ debounce: 400 }"
+                                           ng-change="SearchAvailableClients()"
+                                           placeholder="Search Client Name / Req No / Representative..."
+                                           class="input-sm form-control" />
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in AllQuotationsList | orderBy:'IsBack':true">
                                 <td class="hidden">{{row.ClientCode}}</td>
                                 <td class="hidden">{{row.ClientName}}</td>
-                                <td class="hidden">{{row.ClientReqNo}}</td>
                                 <td class="hidden">{{row.RequisitionDate}}</td>
                                 <td class="hidden">{{row.QuotationNo}}</td>
                                 <td class="hidden">{{row.ClientAdvanceClaimDate}}</td>
@@ -285,6 +293,8 @@
                                 <td class="col-lg-2">{{row.ClientName}}</td>
                                 <td class="col-lg-2">{{ row.ProjectName }} </td>
                                 <td class="col-lg-2">{{row.UserFullName}}</td>
+                                <td class="col-lg-2">{{row.ClientReqNo}}</td>
+
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row, 'save')">Select</a>
                                 </td>
@@ -293,10 +303,10 @@
                     </table>
 
                     <!-- Pagination and No Item Message -->
-                    <div ng-if="PagingInfo.totalItems > 0" class="text-center">
-                        <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" force-ellipses="true" ng-change="selectPageList()"></ul>
+                    <div ng-if="AllQuotationsList.length > 0" class="text-center">
+                        <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true"  ng-change="selectPageList()"></ul>
                     </div>
-                    <div ng-if="PagingInfo.totalItems <= 0" class="text-center">
+                    <div ng-if="AllQuotationsList.length <= 0" class="text-center">
                         NO ITEM
                     </div>
                 </div>
@@ -706,9 +716,6 @@
                                     Quotation No
                                 </th>
                                 <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Quotation Date
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
                                     Action
                                 </th>
                             </tr>
@@ -739,7 +746,6 @@
                                 <td class="hidden">{{row.AprvRemarks}}</td>
                                 <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="text-center">{{row.QuotationNo}}</td>
-                                <td class="text-center">{{row.QuotationDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="col-lg-2 text-center">
                                     <button type="button" id="btnSelect" ng-click="selectAvailableClient(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
                                         <span class="fa fa-search-plus"> View</span>
@@ -1160,8 +1166,8 @@
         }
 
         $scope.ClientQutnRecmID = '';
-
         $scope.SearchAvailableClients = function () {
+            $scope.PagingInfo.page = 1;   // reset to first page on new search
             $scope.ClearEverything();
 
             $http.post('/QuotationApproval/AllClientQuotationforApprvData', {
@@ -1172,10 +1178,10 @@
                 search: $scope.PagingInfo.search,
                 type: "isBack",
                 action: 'AvailableSearch'
-
             }).success(function (response) {
                 $scope.AllQuotationsList = response.AllAvailableClientsList;
                 $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsList);
+                $scope.PagingInfo.totalItems = response.TotalItems || 0;
                 $scope.loading = false;
             }).error(function () {
                 $scope.loading = false;
@@ -1219,7 +1225,7 @@
 
 
         $scope.selectQuotationForRecom = function (row, action) {
-            console.log(row);
+            console.log($scope.AllQuotationsList);
 
             // Set hidden field or model
             $scope.Quotation.ClntQutnPrepBy = row.ClntQutnPrepBy;
@@ -1229,6 +1235,10 @@
             $scope.Quotation.ClntQutnPrepDesignation = row.ClntQutnPrepDesignation;
             $scope.Quotation.ClntQutnRecmDesignation = row.ClntQutnRecmDesignation;
             $scope.Quotation.ClntQutnAprvDesignation = row.ClntQutnAprvDesignation;
+
+            $scope.Quotation.ClntQutnPrepBySignature = row.ClntQutnPrepBySignature;
+            $scope.Quotation.ClntQutnRecmBySignature = row.ClntQutnRecmBySignature;
+            $scope.Quotation.ClntQutnAprvBySignature = row.ClntQutnAprvBySignature;
            
             if (action === 'save') {
                 $scope.pagefunction = 'savemode';
@@ -1743,10 +1753,7 @@
 
             // FTP details
             var ftpDetails = {
-                serverIP: "172.16.189.34",
-                ftpPort: "21",
-                ftpUserName: "ftpuser",
-                ftpPassword: "Ftp@Cbps#2k25",
+                
                 serverUrl: "MCL/Client_Requisition",
                 documentID: "CR_" + $scope.ClientDetails[0].ClientReqID,
                 ext: "pdf"
@@ -1869,6 +1876,12 @@
             $scope.ClientReq.TermsID = "";
             $scope.ClientReq.FormName = "";
         }
+
+
+        $scope.toggleRefreshTable = function () {
+            window.location.reload();
+        }
+
     }
-    )
+  )
 </script>

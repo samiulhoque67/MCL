@@ -6,7 +6,10 @@ using SILDMS.Web.UI.Areas.SecurityModule;
 using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -149,6 +152,124 @@ namespace SILDMS.Web.UI.Controllers
             var result = Json(new { WOInfoTermList, msg = "WOInfoTermList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;
+        }
+
+
+
+
+        [HttpPost]
+        public ActionResult SaveDocument(string serverUrl, string documentID, string ext, HttpPostedFileBase file)
+        {
+            if (file == null || file.ContentLength == 0)
+            {
+                return Json(new { Message = "No file uploaded." }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                var serverIP = ConfigurationManager.AppSettings["serverIP"];
+                var ftpPort = ConfigurationManager.AppSettings["ftpPort"];
+                var ftpUserName = ConfigurationManager.AppSettings["ftpUserName"];
+                var ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
+                // Build FTP URL dynamically
+                string ftpUrl = $"ftp://{serverIP}:{ftpPort}/{serverUrl}/{documentID}.{ext}";
+
+                // Create an FTP request
+                FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpUrl);
+                ftpRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
+                ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
+                ftpRequest.UseBinary = true;
+                ftpRequest.KeepAlive = false;
+
+                // Read file data
+                byte[] fileData;
+                using (var binaryReader = new BinaryReader(file.InputStream))
+                {
+                    fileData = binaryReader.ReadBytes(file.ContentLength);
+                }
+
+                // Upload file data to the FTP server
+                using (Stream requestStream = ftpRequest.GetRequestStream())
+                {
+                    requestStream.Write(fileData, 0, fileData.Length);
+                }
+
+                return Json(new { Message = "File uploaded successfully." }, JsonRequestBehavior.AllowGet);
+            }
+            catch (WebException webEx)
+            {
+                var response = (FtpWebResponse)webEx.Response;
+                return Json(new
+                {
+                    Message = "Error uploading file to FTP server.",
+                    Status = response?.StatusDescription,
+                    Exception = webEx.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Message = "Error uploading file.", Exception = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        //view pdf/
+        [HttpGet]
+        public ActionResult ViewDocument(string serverUrl, string DocID, string ext)
+
+        {
+            try
+            {
+                var serverIP = ConfigurationManager.AppSettings["serverIP"];
+                var ftpPort = ConfigurationManager.AppSettings["ftpPort"];
+                var ftpUserName = ConfigurationManager.AppSettings["ftpUserName"];
+                var ftpPassword = ConfigurationManager.AppSettings["ftpPassword"];
+
+                // Ensure the extension starts with a dot
+                if (!ext.StartsWith(".")) ext = "." + ext;
+
+                // Construct the FTP URL correctly
+                string ftpUrl = $"ftp://{serverIP}:{ftpPort}/{serverUrl}/{DocID}{ext}";
+
+                // Create an FTP request to download the file
+                FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(ftpUrl);
+                ftpRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
+                ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+                ftpRequest.UseBinary = true;
+                ftpRequest.KeepAlive = false;
+
+                using (FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse())
+                using (Stream responseStream = ftpResponse.GetResponseStream())
+                {
+                    if (responseStream == null)
+                        return new HttpStatusCodeResult(404, "File not found on the FTP server.");
+
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+                        responseStream.CopyTo(memoryStream);
+                        byte[] fileData = memoryStream.ToArray();
+
+                        return File(fileData, "application/pdf");
+                    }
+                }
+            }
+            catch (WebException webEx)
+            {
+                return new HttpStatusCodeResult(500, $"FTP error: {webEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, $"Error retrieving document: {ex.Message}");
+            }
+        }
+
+        public async Task<dynamic> UpdateDocumentID(string WOInfoID, string DocumentID)
+        {
+            string status = string.Empty;
+            await Task.Run(() =>
+            {
+                status = _clientInfoService.UpdateDocumentID(WOInfoID, DocumentID);
+            });
+            return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
     }
 }
