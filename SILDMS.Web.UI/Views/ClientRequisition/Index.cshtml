@@ -1340,6 +1340,9 @@
 
         // ── Save / Post ─────────────────────────────────────────────────────────
         $scope.Post = function () {
+            if (!$scope.uploadedFile) {
+                toastr.error("Document is required to proceed"); return;
+            }
             if (!$scope.ClientReq.ClientName) {
                 toastr.error("Client Name Required"); return;
             }
