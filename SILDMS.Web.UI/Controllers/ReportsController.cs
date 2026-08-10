@@ -514,25 +514,29 @@ namespace SILDMS.Web.UI.Controllers
         [Authorize]
         [HttpPost]
         [SILLogAttribute]
-        public async Task<dynamic> RequisitionToVendorReport(string ReportType)
+        public async Task<dynamic> RequisitionToVendorReport(string ReportType, string VendorReqID)
         {
-            var tempdata = TempData["VendorRequisition"];
-            string VendorReqID = string.Empty, VendorID = string.Empty;
             ReportType = "PDF";
-
             OBS_VendorReq objVendorReq = new OBS_VendorReq();
 
-            if (TempData["VendorRequisition"] == null)
+            // BUG FIX: previously only TempData was checked, so Print only worked
+            // right after a Save/Update. Now: prefer the posted VendorReqID (works
+            // for View too); fall back to TempData for the post-save flow.
+            if (!string.IsNullOrEmpty(VendorReqID))
             {
-                ViewBag.Title = "No valid data.";
-                //return View();
+                objVendorReq.VendorReqID = VendorReqID;
             }
-            else
+            else if (TempData["VendorRequisition"] != null)
             {
                 objVendorReq = (OBS_VendorReq)TempData["VendorRequisition"];
                 VendorReqID = objVendorReq.VendorReqID;
-                VendorID = objVendorReq.VendorID;
             }
+            else
+            {
+                ViewBag.Title = "No valid data.";
+                return View(); // BUG FIX: was falling through and crashing below with empty VendorReqID
+            }
+
 
             DataTable dt = new DataTable();
             DataTable dt1 = new DataTable();
@@ -554,14 +558,43 @@ namespace SILDMS.Web.UI.Controllers
             //reportDocument.SetParameterValue("submittedby", objVendorReq.Submittedby);
             //reportDocument.SetParameterValue("submittedbyDesig", objVendorReq.SubmittedbyDesig);
 
+            // Signature handling — same pattern as VendorCSApprevedReport
+            string submittedBySignaturePath = string.Empty;
+
+            if (dt.Rows.Count > 0)
+            {
+                DataRow row = dt.Rows[0];
+
+                submittedBySignaturePath = SaveSignatureImage(
+                    row["SubmittedBySignature"] == DBNull.Value
+                        ? string.Empty
+                        : row["SubmittedBySignature"].ToString(),
+                    "VendorReqSubmit");
+            }
+
+            reportDocument.SetParameterValue("SubmittedBySignature", submittedBySignaturePath);
+
             string reportName = "rptVendorRequisition";
             reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
             reportDocument.Close();
             reportDocument.Dispose();
+
+            // Cleanup temp signature file
+            if (!string.IsNullOrWhiteSpace(submittedBySignaturePath) &&
+                System.IO.File.Exists(submittedBySignaturePath))
+            {
+                try
+                {
+                    System.IO.File.Delete(submittedBySignaturePath);
+                }
+                catch
+                {
+                    // Ignore cleanup errors
+                }
+            }
+
             return View();
         }
-
-
         [SILAuthorize]
         public ActionResult AgeingReport()
         {

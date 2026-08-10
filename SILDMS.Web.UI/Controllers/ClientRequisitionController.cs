@@ -67,22 +67,31 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> SaveClientRequisition(OBS_ClientReq clientReq, List<OBS_ClientReqItem> clientReqItem, List<OBS_ClientReqTerms> clientReqTerm)
         {
             clientReq.SetBy = UserID;
-            string status = string.Empty;//, message = string.Empty;
-            string ClientReqID = string.Empty;//, message = string.Empty;
+            string status = string.Empty;
+            string ClientReqID = string.Empty;
+            string duplicateSince = string.Empty;
 
             status = _clientInfoService.SaveClientRequisition(clientReq, clientReqItem, clientReqTerm);
 
-            if (status != string.Empty && status != "ERROR_Duplicate")
+            if (!string.IsNullOrEmpty(status))
             {
                 string[] statusarr = status.Split(',');
-                ClientReqID = statusarr[1];
-                /*clientReq.ClientReqID = statusarr[1];*/
-                status = statusarr[0];
-            }
-            /*TempData["ClientRequisition"] = clientReq;*/
-            return Json(new { status, ClientReqID }, JsonRequestBehavior.AllowGet);
-        }
 
+                if (statusarr[0] == "E405")               // NEW: duplicate detected by the SP
+                {
+                    ClientReqID = statusarr.Length > 1 ? statusarr[1] : string.Empty; // existing req's ID
+                    duplicateSince = statusarr.Length > 2 ? statusarr[2] : string.Empty;
+                    status = "ERROR_Duplicate";
+                }
+                else if (status != "ERROR_Duplicate")
+                {
+                    ClientReqID = statusarr[1];
+                    status = statusarr[0];
+                }
+            }
+
+            return Json(new { status, ClientReqID, duplicateSince }, JsonRequestBehavior.AllowGet);
+        }
         public async Task<dynamic> GetClientReqSearchList()
         {
             var clientReqSearchList = new List<OBS_ClientReq>();

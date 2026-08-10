@@ -883,7 +883,7 @@
             $scope.vendorReqTermArray = [];
 
             $('#DeliveryDate').val('');
-
+            $('#hfVendorReqID').val('');
             // Reset today's date on SubmissionDate
             var today = new Date();
             var d = String(today.getDate()).padStart(2, '0');
@@ -1146,6 +1146,7 @@
             $scope.VendorReq.Status = tableRow.Status;
             $scope.VendorReq.ClientReqNo = tableRow.ClientReqNo;
 
+            $('#hfVendorReqID').val(tableRow.VendorReqID);
             // Set submission date
             $timeout(function () {
                 if (tableRow.SubmissionDate) {

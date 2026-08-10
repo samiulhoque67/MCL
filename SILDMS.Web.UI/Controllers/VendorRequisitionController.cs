@@ -118,44 +118,6 @@ namespace SILDMS.Web.UI.Controllers
             return View();
         }
 
-        [Authorize]
-        [HttpPost]
-        [SILLogAttribute]
-        public async Task<dynamic> RptRequisitionToVendorReport(string ReportType)
-        {
-            var tempdata = TempData["VendorRequisition"];
-
-            ReportType = "PDF";
-            if (TempData["VendorRequisition"] == null)
-            {
-                ViewBag.Title = "No valid data.";
-                return View();
-            }
-
-            OBS_VendorReq objVendorReq = new OBS_VendorReq();
-            objVendorReq = (OBS_VendorReq)TempData["VendorRequisition"];
-            string VendorReqID = objVendorReq.VendorReqID;
-            DataSet ds = new DataSet();
-            await Task.Run(() => _clientInfoService.rptRequisitionToVendorReport(VendorReqID, "", out ds));
-
-            // Load main report
-            ReportDocument reportDocument = new ReportDocument();
-            string ReportPath = Server.MapPath("~/Reports/rptVendorRequisition.rpt");
-            reportDocument.Load(ReportPath);
-
-            // Set main report data source
-            DataTable dtVR = ds.Tables[0];
-            reportDocument.SetDataSource(dtVR);
-            reportDocument.Refresh();
-
-            string reportName = "VendorRequisition";
-            reportDocument.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, false, reportName);
-
-            reportDocument.Close();
-            reportDocument.Dispose();
-            return View();
-        }
-
         public async Task<dynamic> GetVendorReqSearchList()
         {
             var vendorReqSearchList = new List<OBS_VendorReq>();

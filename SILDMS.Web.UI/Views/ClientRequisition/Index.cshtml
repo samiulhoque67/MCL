@@ -1171,6 +1171,7 @@
 
             // view mode control
             $scope.viewonlymode = (mode === 'view');
+            $scope.editmode = (mode === 'edit');
 
             // OR if you still want ProcessStatus check:
             // $scope.viewonlymode = (tableRow.ProcessStatus !== 'Rcvd' || mode === 'view');
@@ -1340,7 +1341,7 @@
 
         // ── Save / Post ─────────────────────────────────────────────────────────
         $scope.Post = function () {
-            if (!$scope.uploadedFile) {
+            if (!$scope.uploadedFile && !$scope.editmode) {
                 toastr.error("Document is required to proceed"); return;
             }
             if (!$scope.ClientReq.ClientName) {
@@ -1355,9 +1356,7 @@
             if ($('#RequisitionDate').val() == "") {
                 toastr.error("Requisition Date Required"); return;
             }
-
             $scope.ClientReq.RequisitionDate = $('#RequisitionDate').val();
-
             $http.post('/ClientRequisition/SaveClientRequisition',
                 {
                     clientReq: $scope.ClientReq,
@@ -1368,7 +1367,6 @@
                     if (response.status == "S201") {
                         toastr.success("Data Saved Successfully.");
                         $scope.ClientReq.ClientReqID = response.ClientReqID;
-
                         // BUG FIX: upload document for both insert AND update
                         if ($scope.uploadedFile) {
                             $scope.SaveDocument(response.ClientReqID);
@@ -1378,7 +1376,6 @@
                         }
                     } else if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
-
                         // BUG FIX: also upload/replace document on edit
                         if ($scope.uploadedFile) {
                             $scope.SaveDocument($scope.ClientReq.ClientReqID);
@@ -1387,7 +1384,15 @@
                             $scope.toggleRefreshTable();
                         }
                     } else if (response.status == "ERROR_Duplicate") {
-                        toastr.error("This requisition no. already exists");
+                        // NEW: build a more informative message using what the SP found
+                        var msg = "This requisition no. already exists";
+                        if (response.ClientReqID) {
+                            msg += " (Ref: " + response.ClientReqID + ")";
+                        }
+                        if (response.duplicateSince) {
+                            msg += ", submitted on " + response.duplicateSince;
+                        }
+                        toastr.error(msg);
                     } else {
                         toastr.error("Data Save Failed.");
                     }
