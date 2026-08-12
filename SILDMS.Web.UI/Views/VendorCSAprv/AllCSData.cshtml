@@ -83,6 +83,35 @@
     .selected-row {
         background-color: #dff0d8; /* Light green color to indicate selection */
     }
+
+
+    .status-badge {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 8px;
+        font-size: 9.5px;
+        font-weight: bold;
+        color: white;
+        min-width: 64px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .status-Pending {
+        background-color: #f0ad4e;
+    }
+
+    .status-Approve {
+        background-color: #2e8b57;
+    }
+
+    .status-Reject {
+        background-color: #d9534f;
+    }
+
+    .status-NoResponse {
+        background-color: #777777;
+    }
 </style>
 
 <div class="box box-primary box-body" ng-controller="VendorCSAprvCtrl">
@@ -122,62 +151,152 @@
             </div>
             <div ng-show="GridDisplayCollection.length >0" class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
 
-                <table st-table="GridDisplayCollection" st-safe-src="Invitation" style="width:100%;" class="tableVen table-condensed table-bordered  table-hover pnlView">
+                <table st-table="GridDisplayCollection"
+                       st-safe-src="Invitation"
+                       style="width:100%; table-layout: fixed;"
+                       class="tableVen table-condensed table-bordered table-hover pnlView">
+
+                    <colgroup>
+                        <col style="width: 24%;">
+                        <col style="width: 24%;">
+                        <col style="width: 19%;">
+                        <col style="width: 8%;">
+                        <col style="width: 8%;">
+                        <col style="width: 8%;">
+                        <col style="width: 9%;">
+                    </colgroup>
 
                     <thead>
+
+                        <!-- Table Title -->
                         <tr style="font-size: 15px;">
-                            <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
-                                Requisition To Vendor List
+                            <th colspan="7"
+                                style="text-align: left;
+           color: black;
+           font-weight: 100;
+           font-family: math;
+           background: #ffffff;
+           border: 1px solid #3003eb">
+                                All CS Recom List
                             </th>
                         </tr>
-                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                            <th style="text-align: left;" st-sort="">Client Name</th>
-                            <th style="text-align: left;" st-sort="">Project Name</th>
-                            <th style="text-align: left;" st-sort="">Representative</th>
-                            <th style="text-align: left;" st-sort="">Action</th>
+
+                        <!-- Main Header -->
+                        <tr style="background-color: #82b0c9;
+color: #010823;
+font-size: 11px;">
+
+                            <th rowspan="2" style="text-align: left; vertical-align: middle;">Client Name</th>
+                            <th rowspan="2" style="text-align: left; vertical-align: middle;">Project Name</th>
+                            <th rowspan="2" style="text-align: left; vertical-align: middle;">Representative</th>
+
+                            <th colspan="3" style="text-align: center; vertical-align: middle; padding: 2px;">Status</th>
+
+                            <th rowspan="2" style="text-align: center; vertical-align: middle;">Action</th>
+
                         </tr>
+
+                        <!-- Status Sub Columns -->
+                        <tr style="background-color: #82b0c9;
+color: #010823;
+font-size: 9px;">
+
+                            <th style="text-align: center; padding: 2px 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Recom Acc</th>
+                            <th style="text-align: center; padding: 2px 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">CS Verify</th>
+                            <th style="text-align: center; padding: 2px 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">CS Approval</th>
+
+                        </tr>
+
+                        <!-- Search Row -->
                         <tr>
-                            <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                            <th><input st-search="ProjectName" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
-                            <th><input st-search="UserFullName" placeholder="Representative" class="input-sm form-control" type="search" /></th>
+                            <th>
+                                <input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" />
+                            </th>
+                            <th>
+                                <input st-search="ProjectName" placeholder="Project Name" class="input-sm form-control" type="search" />
+                            </th>
+                            <th>
+                                <input st-search="UserFullName" placeholder="Representative" class="input-sm form-control" type="search" />
+                            </th>
+                            <th colspan="3"></th>
                             <th></th>
                         </tr>
+
                     </thead>
+
                     <tbody>
+
                         <tr ng-repeat="row in GridDisplayCollection"
                             ng-cloak
                             style="height:20px; font-size:13px;"
                             ng-class="{'selected-row': row.selected}"
                             ng-style="getRowStyle(row)">
+
+                            <!-- Hidden Fields -->
                             <td class="hidden">{{row.Id}}</td>
                             <td class="hidden">{{row.VendorRequisitionNumber}}</td>
                             <td class="hidden">{{row.RequisitionDate}}</td>
                             <td class="hidden">{{row.ClientRequisitionNumber}}</td>
                             <td class="hidden">{{row.LastDateofQuotation}}</td>
 
-                            <td class="col-lg-2">{{row.ClientName}}</td>
-                            <td class="col-lg-2">{{ row.ProjectName }} </td>
-                            <td class="col-lg-2">{{row.UserFullName}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1 text-center" style="font-weight:bold">
+                            <td style="overflow: hidden; text-overflow: ellipsis;" title="{{row.ClientName}}">
+                                {{row.ClientName}}
+                            </td>
+
+                            <td style="overflow: hidden; text-overflow: ellipsis;" title="{{row.ProjectName}}">
+                                {{row.ProjectName}}
+                            </td>
+
+                            <td style="overflow: hidden; text-overflow: ellipsis;" title="{{row.UserFullName}}">
+                                {{row.UserFullName}}
+                            </td>
+
+                            <!-- Recom Acc -->
+                            <td class="text-center" style="padding: 3px 1px;">
+                                <span class="status-badge" ng-class="getStatusClass(row.RecomAccOperation)">
+                                    {{getStatusLabel(row.RecomAccOperation)}}
+                                </span>
+                            </td>
+
+                            <!-- CS Verify -->
+                            <td class="text-center" style="padding: 3px 1px;">
+                                <span class="status-badge" ng-class="getStatusClass(row.VerifyOperation)">
+                                    {{getStatusLabel(row.VerifyOperation)}}
+                                </span>
+                            </td>
+
+                            <!-- CS Approval -->
+                            <td class="text-center" style="padding: 3px 1px;">
+                                <span class="status-badge" ng-class="getStatusClass(row.ApprovalOperation)">
+                                    {{getStatusLabel(row.ApprovalOperation)}}
+                                </span>
+                            </td>
+
+                            <!-- Action -->
+                            <td class="text-center" style="font-weight:bold">
                                 <button type="button" ng-click="selectInvitation(row)" data-dismiss="modal" title="Select">
                                     <i ng-show="!row.selected" class="fa fa-square-o"></i>
                                     <i ng-show="row.selected" class="fa fa-check-square-o"></i>
                                 </button>
                             </td>
+
                         </tr>
+
                     </tbody>
+
                     <tfoot>
                         <tr>
-                            <td colspan="4" class="text-center">
-                                <div st-pagination
-                                     st-items-by-page="itemsByPage"
-                                     st-displayed-pages="7">
-                                </div>
+                            <td colspan="7" class="text-center">
+                                <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
                             </td>
                         </tr>
                     </tfoot>
+
                 </table>
+
             </div>
+
+
         </div>
         <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isRowSelected">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
@@ -687,6 +806,35 @@
             }).error(function () {
                 $scope.loading = false;
             });
+
+        // Status badge helpers — used by RecomAcc / CSVerify / CSApproval columns
+        $scope.getStatusLabel = function (opCode) {
+            switch (opCode) {
+                case 'Rec': return 'Recommended';
+                case 'Vrf': return 'Verified';
+                case 'Aprv': return 'Approved';
+                case 'Bck': return 'Back';
+                case 'Pst': return 'Postponed';
+                case 'Can': return 'Cancelled';
+                default: return 'No Response';
+            }
+        };
+
+        $scope.getStatusClass = function (opCode) {
+            switch (opCode) {
+                case 'Rec':
+                case 'Vrf':
+                case 'Aprv':
+                    return 'status-Approve';
+                case 'Bck':
+                case 'Can':
+                    return 'status-Reject';
+                case 'Pst':
+                    return 'status-Pending';
+                default:
+                    return 'status-NoResponse';
+            }
+        };
 
         $scope.isRowSelected = false;
 

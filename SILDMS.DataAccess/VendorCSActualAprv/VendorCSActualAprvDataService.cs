@@ -411,6 +411,7 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                 {
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@VendorCSAprvID", SqlDbType.NVarChar, vendorCSInfo.VendorCSRecmID);
+                    db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.NVarChar, vendorCSInfo.Operation);
                     db.AddInParameter(dbCommandWrapper, "@CSRecDate", SqlDbType.NVarChar, vendorCSInfo.CSRecDate);
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
@@ -445,6 +446,7 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                 {
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@VendorCSAprvID", SqlDbType.NVarChar, vendorCSInfo.VendorCSRecmID);
+                    db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.NVarChar, vendorCSInfo.Operation);
                     db.AddInParameter(dbCommandWrapper, "@CSRecDate", SqlDbType.NVarChar, vendorCSInfo.CSRecDate);
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
@@ -727,7 +729,10 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                         ClientName = reader.GetString("ClientName"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         LastDateofQuotation = reader.GetString("LastDateofQuotation"),
-                        Remarks = reader.GetString("Remarks")
+                        Remarks = reader.GetString("Remarks"),
+                        RecomAccOperation = reader.IsNull("RecomAccOperation") ? null : reader.GetString("RecomAccOperation"),
+                        VerifyOperation = reader.IsNull("VerifyOperation") ? null : reader.GetString("VerifyOperation"),
+                        ApprovalOperation = reader.IsNull("ApprovalOperation") ? null : reader.GetString("ApprovalOperation")
                     }).ToList();
                 }
             }

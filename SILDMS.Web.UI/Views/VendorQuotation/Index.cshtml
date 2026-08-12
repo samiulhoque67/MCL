@@ -1304,6 +1304,17 @@
                 return val !== null && val !== undefined && val !== "" && !isNaN(val);
             }
 
+            // Qutn Price must be greater than zero
+            var invalidPriceRow = ($scope.GridDisplayCollection || []).find(function (row) {
+                return !isNumber(row.QutnPrice) || parseFloat(row.QutnPrice) <= 0;
+            });
+
+            if (invalidPriceRow) {
+                toastr.error("Quotation Price must be greater than zero for all items.");
+                return;
+            }
+
+
             var invalidRows = $scope.GridDisplayCollection.filter(function (row) {
                 return !isNumber(row.QutnAmt) || !isNumber(row.VatPerc) ||
                     !isNumber(row.VatAmt) || !isNumber(row.TolAmt);

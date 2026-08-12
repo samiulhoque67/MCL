@@ -94,6 +94,9 @@ namespace SILDMS.Model
         public string PoDate { get; set; }
         public string ProcessStatus { get; set; }
         public string WOInfoID { get; set; }
+        public string RecomAccOperation { get; set; }
+        public string VerifyOperation { get; set; }
+        public string ApprovalOperation { get; set; }
     }
 
 
