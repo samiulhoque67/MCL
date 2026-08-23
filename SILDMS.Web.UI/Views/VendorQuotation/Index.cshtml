@@ -255,8 +255,8 @@
                         <i class="fa fa-eye"></i> View
                     </button>
 
-                    <span ng-hide="VendorQutn.DocumentID"
-                          style="color:#999; font-size:11px;">No document attached</span>
+                    @*<span ng-hide="VendorQutn.DocumentID"
+                          style="color:#999; font-size:11px;">No document attached</span>*@
                 </div>
 
                 <!-- In edit mode: allow re-upload AND view existing doc -->
@@ -295,7 +295,7 @@
                            class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr style="font-size: 15px;">
-                                <th colspan="4" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                <th colspan="5" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
                                     Vendor Requisition Information
                                 </th>
                             </tr>
@@ -336,7 +336,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="4" class="text-center">
+                                <td colspan="5" class="text-center">
                                     <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
                                 </td>
                             </tr>
@@ -802,7 +802,13 @@
             </div>
         </div>
     </div>
-
+    <div id="mydiv" data-ng-show="loading">
+        <div class="overlay">
+            <div class="loder">
+                <img src="~/Content/AdminLTE/img/cube.gif" /> <span class="text-bold">Loading...</span>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -1062,7 +1068,7 @@
 
             // View mode
             $scope.viewmode = (mode === 'view');
-
+            $scope.editmode = (mode === 'edit');
             // OR stricter validation:
             // $scope.viewmode = (tableRow.ProcessStatus !== 'Rcvd' || mode === 'view');
 
@@ -1291,7 +1297,7 @@
         // ── Save ─────────────────────────────────────────────────────────────────
         $scope.Post = function () {
 
-            if (!$scope.uploadedFile) {toastr.error("Document is required to proceed"); return;}
+            if (!$scope.uploadedFile && !$scope.editmode) {toastr.error("Document is required to proceed"); return;}
             if (!$('#VendorName').val()) { toastr.error("Vendor Name Required"); return; }
             if (!$('#VendorQutnNo').val()) { toastr.error("Vendor QutnNo. Required"); return; }
             if ($('#QuotationDate').val() == "") { toastr.error("Quotation Date Required"); return; }
@@ -1419,28 +1425,36 @@
                         VendorQutnID: VendorQutnID,
                         DocumentID: documentID
                     }).success(function (resp) {
-
                         if (resp.status === "S200") {
-                            $scope.VendorQutn.DocumentID = documentID; // keep scope in sync
+                            $scope.VendorQutn.DocumentID = documentID;
                         }
-
                     }).error(function () {
                         toastr.warning("File uploaded but DocumentID not saved.");
                     });
 
-
                     document.getElementById("FileUpload1").value = "";
-                    $scope.uploadedFile = null;
-                    $scope.clearVendorQutn();
-                    $scope.toggleRefreshTable();
+
+                    // BUG FIX: force Angular to notice these scope changes
+                    $timeout(function () {
+                        $scope.uploadedFile = null;
+                        $scope.clearVendorQutn();
+                        $scope.toggleRefreshTable();
+                    });
                 },
                 error: function (err) {
                     toastr.error("Document upload failed. Please try again.");
                     console.error(err);
-                    $scope.loading = false;
+                    // BUG FIX
+                    $timeout(function () {
+                        $scope.loading = false;
+                    });
                 },
                 complete: function () {
-                    $scope.loading = false;
+                    // BUG FIX: complete may fire after success/error already resolved;
+                    // wrapping in $timeout ensures Angular picks up the final state
+                    $timeout(function () {
+                        $scope.loading = false;
+                    });
                 }
             });
         };

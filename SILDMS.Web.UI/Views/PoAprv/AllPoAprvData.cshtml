@@ -5,7 +5,23 @@
     .global-search {
         height: 34px;
     }
+    .status-pending {
+        color: #8a6d3b;
+        background: #fcf8e3;
+        border: 1px solid #faebcc;
+        border-radius: 3px;
+        padding: 1px 7px;
+        font-size: 11px;
+    }
 
+    .status-done {
+        color: #3c763d;
+        background: #dff0d8;
+        border: 1px solid #d6e9c6;
+        border-radius: 3px;
+        padding: 1px 7px;
+        font-size: 11px;
+    }
     .btn-round {
         border-radius: 17px;
     }
@@ -154,7 +170,10 @@
                             <td class="col-lg-2 text-left">{{row.ClientReqNo}}</td>
                             <td class="col-lg-2 text-center">{{row.RequisitionDate}}</td>
                             <td class="col-lg-2 text-center">{{row.VendorName}}</td>
-                            <td class="col-lg-2 text-center">{{row.VendorName}}</td>
+                            <td class="text-center">
+                                <span ng-show="row.PoAprvID" class="status-done">Approved</span>
+                                <span ng-hide="row.PoAprvID" class="status-pending">Pending</span>
+                            </td>
                             <td>
                                 <button type="button"
                                         class="btn btn-sm btn-flat btn-primary"

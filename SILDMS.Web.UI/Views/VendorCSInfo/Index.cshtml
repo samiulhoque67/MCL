@@ -80,6 +80,26 @@
         color: #3c763d;
         border: 1px solid #d6e9c6;
     }
+
+    #mydiv {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 99999;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        #mydiv .loder {
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 6px;
+            text-align: center;
+        }
 </style>
 
 <div class="box box-primary box-body" ng-controller="VendorCSInfoCtrl">
@@ -1080,6 +1100,12 @@
 
         /* ── Save / Update ───────────────────────────────────────── */
         $scope.Post = function () {
+
+            // BUG FIX: guard against double-submit (double-click / slow network)
+            if ($scope.btnSave) {
+                return;
+            }
+
             if ($scope.pageMode === 'new') {
                 if ($scope.selectedVendors.length <= 0) { toastr.error("Please select at least one vendor"); return; }
                 if (!$scope.VendorCSInfo.VendorCsRecmName) { toastr.error("CS Recm. Vendor is Required"); return; }
@@ -1096,23 +1122,33 @@
                 $scope.VendorCSInfo.CSRecDate = csDateEdit;
                 if (!$scope.VendorCSInfo.Operation) { toastr.error("Please select an Operation"); return; }
 
-                // In edit mode selectedVendors holds the currently-ticked rows
                 if ($scope.selectedVendors.length <= 0) { toastr.error("Please select at least one vendor"); return; }
             }
 
+            // BUG FIX: lock the button before the request goes out
+            $scope.btnSave = true;
             $scope.loading = true;
+
             $http.post('/VendorCSInfo/SaveVendorCSInfo', {
                 vendorCS: $scope.VendorCSInfo,
-                vendorCSItem: $scope.selectedVendors,          // only ticked rows
+                vendorCSItem: $scope.selectedVendors,
                 vendorCSTerm: $scope.ReqTermGridDisplayCollection
             })
                 .success(function (r) {
                     $scope.loading = false;
-                    if (r.status === 'S201') { toastr.success("Data Saved Successfully."); $scope.toggleRefreshTable(); }
+                    $scope.btnSave = false;   // BUG FIX: unlock on success
+                    if (r.status === 'S201') {
+                    $scope.startNewCS();
+                        toastr.success("Data Saved Successfully."); $scope.toggleRefreshTable();
+                    }
                     else if (r.status === 'S202') { toastr.success("Data Updated Successfully."); $scope.toggleRefreshTable(); }
                     else { toastr.error("Save Failed. Status: " + r.status); }
                 })
-                .error(function () { $scope.loading = false; toastr.error("Data Save Failed."); });
+                .error(function () {
+                    $scope.loading = false;
+                    $scope.btnSave = false;   // BUG FIX: unlock on error too, or user is stuck forever
+                    toastr.error("Data Save Failed.");
+                });
         };
 
         /* ── Nego calculations ───────────────────────────────────── */
