@@ -5,6 +5,7 @@
     .global-search {
         height: 34px;
     }
+
     .status-pending {
         color: #8a6d3b;
         background: #fcf8e3;
@@ -22,6 +23,7 @@
         padding: 1px 7px;
         font-size: 11px;
     }
+
     .btn-round {
         border-radius: 17px;
     }
@@ -232,7 +234,7 @@
                               table-hover pnlView">
                     <thead>
                         <tr style="font-size:15px;">
-                            <th colspan="12" style="text-align:left;color:black;font-weight:100;
+                            <th colspan="13" style="text-align:left;color:black;font-weight:100;
                                                    font-family:math;background:#fff;
                                                    border:1px solid #3003eb;">
                                 Item List
@@ -240,6 +242,7 @@
                         </tr>
                         <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
                             <th>Item Name</th>
+                            <th>Description</th>
                             <th style="text-align:right;">QutnQnty</th>
                             <th>Unit</th>
                             <th style="text-align:right;">QutnPrice</th>
@@ -257,6 +260,7 @@
                         <tr ng-repeat="row in VenCSItemGridDisplayCollection"
                             ng-cloak style="font-size:12px;">
                             <td>{{row.ServiceItemName}}</td>
+                            <td>{{row.Description}}</td>
                             <td style="text-align:right;">{{row.QutnQnty | number:2}}</td>
                             <td>{{row.QutnUnit}}</td>
                             <td style="text-align:right;">{{row.QutnPrice | number:2}}</td>
@@ -421,175 +425,109 @@
             </div>
         </div>
 
-    </div><!-- /p===1 -->
-    <!-- ══════════════════════════════════════════════════════════════
-         PRINT SLIP  (hidden div, rendered into iframe on print)
-         ══════════════════════════════════════════════════════════════ -->
-    <div id="masterRow" style="display:none;">
+    </div>
+
+
+    <div id="masterRow" style="display: none; margin-top: 150px">
+
         <div class="row">
-            <p style="font-weight:bold;font-size:22px;text-align:center;">
-                Purchase Order
+            <p style="font-weight: bold; font-size: 25px; text-align: center; border-bottom: 5px solid #000;" >
+                Puchase Order
             </p>
         </div>
-        <div class="row">
-            <!-- Left: company + supplier -->
-            <div class="col-md-5">
-                <div>
-                    <img src="../../Content/AdminLTE/img/mediacom-logomini.png"
-                         style="height:20px;margin-left:-35px;" />
-                    <p style="font-weight:bold;margin:0;">MEDIACOM LIMITED</p>
-                    <p style="margin:0;">SAMSON CENTER</p>
-                    <p style="margin:0;">Levels - 5 to 7</p>
-                    <p style="margin:0;">43 South Avenue, Road-126, Plot-CES (G) 5A,</p>
-                    <p style="margin:0;">Gulshan 1, Dhaka – 1212</p>
-                    <p style="margin:5px 0;color:orangered;font-weight:bold;">
-                        IP No. 09610939393 extn: 1200/1205<br />
-                        email: mediacombd.com, www.mediacombd.com
-                    </p>
-                </div>
-                <br />
-                <div>
-                    <p style="font-weight:bold;margin:0;">Corporate Headquarters</p>
-                    <p style="margin:0;">SQUARE CENTRE</p>
-                    <p style="margin:0;">48, Mohakhali C/A, Dhaka – 1212</p>
-                </div>
-                <br />
-                <div>
-                    <p style="font-weight:bold;">Supplier Information</p>
-                    <br />
-                    <table>
-                        <tr>
-                            <td style="font-weight:bold;">Supplier No.:</td>
-                            <td>{{VendorCSInfo.VendorID}}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight:bold;">Name:</td>
-                            <td>{{VendorCSInfo.VendorName}}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight:bold;">Address:</td>
-                            <td>{{VendorCSInfo.VendorAddress}}</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
 
-            <!-- Middle: PO metadata -->
-            <div class="col-md-3">
-                <table style="width:100%;border-collapse:collapse;font-size:smaller;margin-top:10px;">
-                    <tr>
-                        <td style="font-weight:bold;border:1px solid #000;padding:5px;">PO Number:</td>
-                        <td style="border:1px solid #000;padding:5px;">{{VendorCSInfo.PONo}}</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:bold;border:1px solid #000;padding:5px;">Revision:</td>
-                        <td style="border:1px solid #000;padding:5px;">-</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:bold;border:1px solid #000;padding:5px;">Created by:</td>
-                        <td style="border:1px solid #000;padding:5px;">-</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:bold;border:1px solid #000;padding:5px;">PR No:</td>
-                        <td style="border:1px solid #000;padding:5px;">-</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:bold;border:1px solid #000;padding:5px;">WO Ref:</td>
-                        <td style="border:1px solid #000;padding:5px;">{{VendorCSInfo.WIInfoID}}</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:bold;border:1px solid #000;padding:5px;">PO Hand over date:</td>
-                        <td style="border:1px solid #000;padding:5px;">{{VendorCSInfo.PODate}}</td>
-                    </tr>
-                </table>
-            </div>
-
-            <!-- Right: ship/bill info -->
-            <div class="col-md-4">
-
-                <table style="width: 100%; border-collapse: collapse;">
-                    <tr>
-                        <td style="font-weight: bold; padding: 8px;">Ship To:</td>
-                        <td style="padding: 8px;">SAMSON CENTER</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: bold; padding: 8px;">Bill To:</td>
-                        <td style="padding: 8px;">SAMSON CENTER</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: bold; padding: 8px;">Requester:</td>
-                        <td style="padding: 8px;">Md Simon Islam Shawon</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: bold; padding: 8px;">Confirm To:</td>
-                        <td style="padding: 8px;">Vendor/supplier</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: bold; padding: 8px;">Task Name:</td>
-                        <td style="padding: 8px;">TVC Correction / Update</td>
-                    </tr>
-                </table>
-            </div>
+        <!-- Ref No / Date -->
+        <div class="row" style="display: flex; justify-content: space-between; margin-top: 25px">
+            <p style="margin:0;"><strong>{{VendorCSInfo.PONo}}</strong></p>
+        </div>
+        <div class="row" style="display:flex;justify-content:space-between;">
+            <p style="margin:0;"><strong>Date:</strong> {{VendorCSInfo.PODate}}</p>
         </div>
 
-        <!-- Line items -->
-        <div class="row">
+        <!-- Vendor (recipient) block -->
+        <div class="row" style="margin-top:14px;">
+            <p style="margin:0;font-weight:bold;">{{VendorCSInfo.VendorName}}</p>
+        </div>
+        <div class="row" style="margin-top:14px;">
+            <p style="margin:0;">{{VendorCSInfo.VendorAddress}}</p>
+        </div>
+
+        <!-- Subject line -->
+        <div class="row" style="margin-top:10px;">
+            <p style="margin:0;">
+                <strong> Subject: Work Order for {{VendorCSInfo.Remarks}}</strong> 
+            </p>
+        </div>
+
+        <!-- Item table -->
+        <div class="row" style="margin-top:5px;">
             <div class="col-md-12">
-                <table st-table="PoPrintCollection" st-safe-src="PoPrintList"
-                       style="width:100%;"
-                       class="table table-condensed table-bordered table-striped
-                              table-hover pnlView">
+                <table style="width:100%;border-collapse:collapse;">
                     <thead>
                         <tr>
-                            <th>Line</th>
-                            <th>Item Name</th>
-                            <th>Description</th>
-                            <th>UOM</th>
-                            <th>Unit Price</th>
-                            <th>Quantity</th>
-                            <th>Amount</th>
-                            <th>Vat</th>
-                            <th>Agreed Delivery Date</th>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:left;">Item Description</th>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:left;">UOM</th>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:center;">QTY</th>
+                            <th style="border: 1px solid #555; padding: 6px 8px; text-align: center;">Unit Price</th>
+                            <th style="border: 1px solid #555; padding: 6px 8px; text-align: center;">Amount</th>
+                            <th style="border: 1px solid #555; padding: 6px 8px; text-align: center;">Vat(%)</th>
+                            <th style="border: 1px solid #555; padding: 6px 8px; text-align: center;">Vat Amout</th>
+                            <th style="border: 1px solid #555; padding: 6px 8px; text-align: center;">Total Amount</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in PoPrintCollection" ng-cloak style="font-size:12px;">
-                            <td>{{$index + 1}}</td>
-                            <td>{{row.ServiceItemName}}</td>
-                            <td>{{row.Description}}</td>
-                            <td>{{row.ReqUnit}}</td>
-                            <td>{{row.NegoPrice | number:2}}</td>
-                            <td>{{row.NegoQty | number:2}}</td>
-                            <td>{{row.NegoAmt | number:2}}</td>
-                            <td>{{row.NegoVatAmt | number:2}}</td>
-                            <td>{{row.PODate}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;">
+                                <div style="font-weight:bold;">{{row.ServiceItemName}}</div>
+                                <div style="white-space:pre-line;">{{row.Description}}</div>
+                            </td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:center;">{{row.QutnUnit}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.NegoQty | number:2}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.NegoPrice | number:2}}</td>
+
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.NegoAmt | number:2}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.VatPerc | number:2}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.VatAmt | number:2}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.TolAmt | number:2}}</td>
+
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7" style="border:1px solid #555;padding:6px 8px;text-align:right;font-weight:bold;"></td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;font-weight:bold;">{{PoPrintGrandTotal | number:2}}</td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
 
-        <!-- Terms in print -->
+        <!-- In words -->
+        <div class="row" style="margin-top:5px;">
+            <p style="margin:0;"><strong>In words:</strong> {{PoPrintGrandTotalWords}} Taka Only</p>
+        </div>
+
+        <!-- Notes (from Terms & Conditions) -->
+        <div class="row" style="margin-top:16px;">
+            <p style="margin:0;font-weight:bold;">Notes:</p>
+        </div>
         <div class="row">
-            <div class="col-md-12">
-                <table st-table="ReqTermGridDisplayCollection"
-                       st-safe-src="ReqTermDataSetupGridData"
-                       class="table table-condensed table-bordered table-striped
-                              table-hover pnlView">
-                    <thead>
-                        <tr>
-                            <th>Terms Code</th>
-                            <th>Terms &amp; Conditions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in ReqTermGridDisplayCollection"
-                            ng-cloak style="font-size:12px;">
-                            <td>{{row.TermsCode}}</td>
-                            <td>{{row.TermsName}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <ol style="margin-top:4px;padding-left:20px;">
+                <li ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:14px;">
+                    {{row.TermsName}}
+                </li>
+            </ol>
+        </div>
+
+        <!-- Signatures -->
+        <div class="row" style="margin-top:70px;display:flex;justify-content:space-between;">
+            <div style="text-align:center;width:45%;">
+                <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
+                <div>Client Relations Department</div>
+            </div>
+            <div style="text-align:center;width:45%;">
+                <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
+                <div>Accounts Department</div>
             </div>
         </div>
     </div><!-- /masterRow -->
@@ -616,6 +554,43 @@
         $('#PORecDate').val(tod);
     });
 
+    /* ── Number → Words (South Asian / Lakh-Crore system) ─────────── */
+    function numberToWordsTaka(num) {
+        num = Math.round(parseFloat(num) || 0);
+        if (num === 0) return 'Zero';
+
+        var belowTwenty = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+            'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen',
+            'Eighteen', 'Nineteen'];
+        var tensWords = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+        function twoDigits(n) {
+            if (n < 20) return belowTwenty[n];
+            return tensWords[Math.floor(n / 10)] + (n % 10 ? ' ' + belowTwenty[n % 10] : '');
+        }
+        function threeDigits(n) {
+            var h = Math.floor(n / 100);
+            var r = n % 100;
+            var s = '';
+            if (h) s += belowTwenty[h] + ' Hundred';
+            if (r) s += (s ? ' ' : '') + twoDigits(r);
+            return s;
+        }
+
+        var crore = Math.floor(num / 10000000); num %= 10000000;
+        var lakh = Math.floor(num / 100000); num %= 100000;
+        var thousand = Math.floor(num / 1000); num %= 1000;
+        var rest = num;
+
+        var parts = [];
+        if (crore) parts.push(threeDigits(crore) + ' Crore');
+        if (lakh) parts.push(threeDigits(lakh) + ' Lakh');
+        if (thousand) parts.push(threeDigits(thousand) + ' Thousand');
+        if (rest) parts.push(threeDigits(rest));
+
+        return parts.join(' ');
+    }
+
     /* ══════════════════════════════════════════════════════════════
        Angular Controller
        ══════════════════════════════════════════════════════════════ */
@@ -638,6 +613,8 @@
             $scope.ReqTermGridDisplayCollection = [];
             $scope.PoPrintList = [];
             $scope.PoPrintCollection = [];
+            $scope.PoPrintGrandTotal = 0;
+            $scope.PoPrintGrandTotalWords = '';
 
             /* ── Model ──────────────────────────────────────────────── */
             function emptyInfo() {
@@ -654,6 +631,7 @@
                     AutoPoNo: "",
                     PONo: "",
                     WIInfoID: "",
+                    TaskName: "",   // used in print slip "Subject:" line
                     CSRecDate: "",   // Recom date (readonly)
                     PORecDate: "",   // Approval date (editable)
                     PODate: "",   // used in print slip
@@ -777,6 +755,8 @@
                 $scope.ReqTermGridDisplayCollection = [];
                 $scope.PoPrintList = [];
                 $scope.PoPrintCollection = [];
+                $scope.PoPrintGrandTotal = 0;
+                $scope.PoPrintGrandTotalWords = '';
             };
 
             /* ── Item mapping helper ────────────────────────────────── */
@@ -788,6 +768,30 @@
                 item.QutnPrice = parseFloat(item.QutnPrice || 0).toFixed(2);
                 item.QutnAmt = parseFloat(item.QutnAmt || 0).toFixed(2);
                 return item;
+            }
+
+            /* ── Populate header + totals used by the print slip ──────── */
+            function applyPrintHeader(printList) {
+                $scope.PoPrintList = printList || [];
+                $scope.PoPrintCollection = [].concat($scope.PoPrintList);
+
+                if ($scope.PoPrintList.length > 0) {
+                    var h = $scope.PoPrintList[0];
+                    $scope.VendorCSInfo.VendorID = h.VendorID || "";
+                    $scope.VendorCSInfo.VendorName = h.VendorName || "";
+                    $scope.VendorCSInfo.VendorAddress = h.VendorAddress || "";
+                    $scope.VendorCSInfo.PONo = h.PONo || "";
+                    $scope.VendorCSInfo.PODate = h.PODate || "";
+                    $scope.VendorCSInfo.WIInfoID = h.WIInfoID || "";
+                    $scope.VendorCSInfo.TaskName = h.TaskName || $scope.VendorCSInfo.TaskName || "";
+                }
+
+                var grandTotal = 0;
+                $scope.PoPrintList.forEach(function (row) {
+                    grandTotal += parseFloat(row.TolAmt || 0);
+                });
+                $scope.PoPrintGrandTotal = grandTotal;
+                $scope.PoPrintGrandTotalWords = numberToWordsTaka(grandTotal);
             }
 
             /* ── Save / Post ────────────────────────────────────────── */
@@ -834,18 +838,7 @@
             $scope.PoPrint = function () {
                 $http.post("/PoAprv/PoPrint", { PORecmID: $scope.VendorCSInfo.PORecmID })
                     .then(function (res) {
-                        $scope.PoPrintList = res.data.PoPrintList || [];
-                        $scope.PoPrintCollection = [].concat($scope.PoPrintList);
-
-                        if ($scope.PoPrintList.length > 0) {
-                            var h = $scope.PoPrintList[0];
-                            $scope.VendorCSInfo.VendorID = h.VendorID || "";
-                            $scope.VendorCSInfo.VendorName = h.VendorName || "";
-                            $scope.VendorCSInfo.VendorAddress = h.VendorAddress || "";
-                            $scope.VendorCSInfo.PONo = h.PONo || "";
-                            $scope.VendorCSInfo.PODate = h.PODate || "";
-                            $scope.VendorCSInfo.WIInfoID = h.WIInfoID || "";
-                        }
+                        applyPrintHeader(res.data.PoPrintList);
 
                         // wait one digest so ng-repeat renders into masterRow,
                         // then show masterRow, print, hide again
@@ -876,19 +869,7 @@
                     PORecmID: $scope.VendorCSInfo.PORecmID
                 })
                     .then(function (res) {
-                        $scope.PoPrintList = res.data.PoPrintList || [];
-                        $scope.PoPrintCollection = [].concat($scope.PoPrintList);
-
-                        // Populate header info
-                        if ($scope.PoPrintList.length > 0) {
-                            var h = $scope.PoPrintList[0];
-                            $scope.VendorCSInfo.VendorID = h.VendorID || "";
-                            $scope.VendorCSInfo.VendorName = h.VendorName || "";
-                            $scope.VendorCSInfo.VendorAddress = h.VendorAddress || "";
-                            $scope.VendorCSInfo.PONo = h.PONo || "";
-                            $scope.VendorCSInfo.PODate = h.PODate || "";
-                            $scope.VendorCSInfo.WIInfoID = h.WIInfoID || "";
-                        }
+                        applyPrintHeader(res.data.PoPrintList);
 
                         $timeout(function () {
                             document.getElementById('masterRow').style.display = 'block';
@@ -916,7 +897,7 @@
 
                 var doc = iframe.contentWindow.document;
                 doc.open();
-                doc.write('<html><head><title>Purchase Order - ' + ($scope.VendorCSInfo.PONo || '') + '</title>');
+                doc.write('<html><head><title>Work Order - ' + ($scope.VendorCSInfo.PONo || '') + '</title>');
                 doc.write(`
                     <style>
                         body{font-family:Arial, sans-serif; margin:20px; padding:0;}

@@ -437,12 +437,13 @@
                    class="table table-condensed table-bordered table-striped table-hover pnlView">
                 <thead>
                     <tr style="font-size:15px;">
-                        <th colspan="16" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb">
+                        <th colspan="17" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb">
                             Work Order Item List
                             <small ng-show="pageMode!=='view'" style="color:#888;margin-left:10px;">
                             </small>
                         </th>
                     </tr>
+                    <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
                     <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
                         <th>Item Code</th>
                         <th>Item Name</th>
@@ -453,49 +454,139 @@
                         <th>Quotation Qty</th>
                         <th>Quotation Price</th>
                         <th>Quotation Amount</th>
+
                         <th>WO Qty</th>
                         <th>WO Price</th>
                         <th>WO Amount</th>
+
+                        <th>ASF (%)</th>
+                        <th>ASF Amount</th>
+
                         <th>VAT (%)</th>
                         <th>VAT Amount</th>
                         <th>Total Amount</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="row in GridDisplayCollection" ng-cloak style="font-size:12px;"
+                    <tr ng-repeat="row in GridDisplayCollection"
+                        ng-cloak
+                        style="font-size:12px;"
                         ng-class="{'selected-row': row.selected}">
+
                         <td class="hidden">{{row.ClientQutnAprvItemID}}</td>
                         <td class="hidden">{{row.WOInfoItemID}}</td>
                         <td class="hidden">{{row.WOInfoID}}</td>
+
                         <td class="text-left">{{row.ServiceItemID}}</td>
                         <td class="text-left">{{row.ServiceItemName}}</td>
                         <td class="text-left">{{row.ServiceCategoryName}}</td>
                         <td class="text-left">{{row.Description}}</td>
                         <td class="text-center">{{row.DeliveryDate}}</td>
                         <td class="text-left">{{row.QutnUnit}}</td>
-                        <td class="text-right">{{row.QutnQnty | number:2}}</td>
-                        <td class="text-right">{{row.QutnPrice | number:2}}</td>
-                        <td class="text-right">{{row.QutnAmt | number:2}}</td>
 
-                        <!-- WO fields: editable in new/edit, readonly in view -->
+                        <!-- Quotation Quantity -->
+                        <td class="text-right">
+                            {{row.QutnQnty | number:2}}
+                        </td>
+
+                        <!-- Quotation Price -->
+                        <td class="text-right">
+                            {{row.QutnPrice | number:2}}
+                        </td>
+
+                        <!-- Quotation Amount -->
+                        <td class="text-right">
+                            {{row.QutnAmt | number:2}}
+                        </td>
+
+
+                        <!-- ================= WO FIELDS ================= -->
+                        <!-- WO Quantity -->
                         <td>
-                            <span ng-show="pageMode==='view'">{{row.WOQnty | number:2}}</span>
-                            <input ng-hide="pageMode==='view'" class="form-control text-right"
-                                   style="width:100%;height:18px;font-size:10px" type="text"
-                                   ng-model="row.WOQnty" ng-blur="checkWOPrice(row)"
+                            <span ng-show="pageMode==='view'">
+                                {{row.WOQnty | number:2}}
+                            </span>
+
+                            <input ng-hide="pageMode==='view'"
+                                   class="form-control text-right"
+                                   style="width:100%;height:18px;font-size:10px"
+                                   type="number"
+                                   ng-model="row.WOQnty"
+                                   ng-change="checkWOPrice(row)"
                                    ng-disabled="!row.selected" />
                         </td>
+
+
+                        <!-- WO Price -->
                         <td>
-                            <span ng-show="pageMode==='view'">{{row.WOPrice | number:2}}</span>
-                            <input ng-hide="pageMode==='view'" class="form-control text-right"
-                                   style="width:100%;height:18px;font-size:10px" type="text"
-                                   ng-model="row.WOPrice" ng-blur="checkWOPrice(row)"
+                            <span ng-show="pageMode==='view'">
+                                {{row.WOPrice | number:2}}
+                            </span>
+
+                            <input ng-hide="pageMode==='view'"
+                                   class="form-control text-right"
+                                   style="width:100%;height:18px;font-size:10px"
+                                   type="number"
+                                   ng-model="row.WOPrice"
+                                   ng-change="checkWOPrice(row)"
                                    ng-disabled="!row.selected" />
                         </td>
-                        <td class="text-right">{{row.WOAmt | number:2}}</td>
-                        <td class="text-right">{{row.VatPerc | number:2}}</td>
-                        <td class="text-right">{{row.VatAmt | number:2}}</td>
-                        <td class="text-right">{{row.TolAmt | number:2}}</td>
+
+
+                        <!-- WO Amount -->
+                        <td class="text-right" style="color:#126e0f;">
+                            {{row.WOAmt | number:2}}
+                        </td>
+
+
+
+                        <!-- ASF % -->
+                        <td>
+                            <span ng-show="pageMode==='view'">
+                                {{row.ASFPerc | number:2}}
+                            </span>
+
+                            <input ng-hide="pageMode==='view'"
+                                   class="form-control text-right"
+                                   style="width:100%;height:18px;font-size:10px"
+                                   type="number"
+                                   ng-model="row.ASFPerc"
+                                   ng-change="checkWOPrice(row)"
+                                   ng-disabled="!row.selected" />
+                        </td>
+
+                        <!-- ASF Amount -->
+                        <td class="text-right">
+                            {{row.TotGivenASFAmt | number:2}}
+                        </td>
+
+
+                        <!-- VAT % -->
+                        <td>
+                            <span ng-show="pageMode==='view'">
+                                {{row.VatPerc | number:2}}
+                            </span>
+
+                            <input ng-hide="pageMode==='view'"
+                                   class="form-control text-right"
+                                   style="width:100%;height:18px;font-size:10px"
+                                   type="number"
+                                   ng-model="row.VatPerc"
+                                   ng-change="checkWOPrice(row)"
+                                   ng-disabled="!row.selected" />
+                        </td>
+
+
+                        <!-- VAT Amount -->
+                        <td class="text-right">
+                            {{row.VatAmt | number:2}}
+                        </td>
+
+
+                        <!-- Total Amount -->
+                        <td class="text-right" style="color:#126e0f;">
+                            {{row.TolAmt | number:2}}
+                        </td>
 
                     </tr>
                 </tbody>
@@ -787,38 +878,80 @@
             };
 
             /* ── WO price calc ── */
+            /* ── WO Calculation ── */
             $scope.checkWOPrice = function (row) {
-                row.WOAmt = (parseFloat(row.WOQnty) || 0) * (parseFloat(row.WOPrice) || 0);
-                $scope.checkVatPerc(row);
+
+                row.WOQnty = parseFloat(row.WOQnty) || 0;
+                row.WOPrice = parseFloat(row.WOPrice) || 0;
+                row.ASFPerc = parseFloat(row.ASFPerc) || 0;
+                row.VatPerc = parseFloat(row.VatPerc) || 0;
+
+                // 1. Base Amount
+                row.WOAmt =
+                    row.WOPrice * row.WOQnty;
+
+                // 2. ASF Amount
+                row.TotGivenASFAmt =
+                    row.WOAmt * (row.ASFPerc / 100);
+
+                // 3. VAT on Base + ASF
+                var basePlusASF =
+                    row.WOAmt + row.TotGivenASFAmt;
+
+                row.VatAmt =
+                    basePlusASF * (row.VatPerc / 100);
+
+                // 4. Total
+                row.TolAmt =
+                    row.WOAmt +
+                    row.TotGivenASFAmt +
+                    row.VatAmt;
+
+                // Update selected item
                 $scope.syncSelectedWoItem(row);
+
+                // Update overall WO amount
                 $scope.recalcWOTotal();
             };
 
-            $scope.checkVatPerc = function (row) {
-                var vatAmt = ((parseFloat(row.VatPerc) || 0) * (parseFloat(row.WOAmt) || 0)) / 100;
-                row.VatAmt = vatAmt;
-                row.TolAmt = (parseFloat(row.WOAmt) || 0) + vatAmt;
-            };
+            //$scope.checkVatPerc = function (row) {
+            //    var vatAmt = ((parseFloat(row.VatPerc) || 0) * (parseFloat(row.WOAmt) || 0)) / 100;
+            //    row.VatAmt = vatAmt;
+            //    row.TolAmt = (parseFloat(row.WOAmt) || 0) + vatAmt;
+            //};
 
             $scope.syncSelectedWoItem = function (row) {
+
                 var match = $scope.selectedWoItems.find(function (v) {
                     return v.WOInfoItemID === row.WOInfoItemID ||
                         v.ClientQutnAprvItemID === row.ClientQutnAprvItemID;
                 });
+
                 if (match) {
+
                     match.WOQnty = row.WOQnty;
                     match.WOPrice = row.WOPrice;
                     match.WOAmt = row.WOAmt;
+
+                    match.ASFPerc = row.ASFPerc;
+                    match.TotGivenASFAmt = row.TotGivenASFAmt;
+
+                    match.VatPerc = row.VatPerc;
                     match.VatAmt = row.VatAmt;
+
                     match.TolAmt = row.TolAmt;
                 }
             };
 
+
             $scope.recalcWOTotal = function () {
+
                 var total = 0;
+
                 $scope.selectedWoItems.forEach(function (item) {
                     total += parseFloat(item.TolAmt) || 0;
                 });
+
                 $scope.WOInfo.WOAmt = total.toFixed(2);
             };
 
@@ -827,6 +960,7 @@
                 return {
                     ClientQutnAprvItemID: row.ClientQutnAprvItemID || '',
                     WOInfoItemID: row.WOInfoItemID || '',
+
                     ServiceItemID: row.ServiceItemID,
                     ServiceItemName: row.ServiceItemName,
                     ServiceCategoryID: row.ServiceCategoryID,
@@ -835,19 +969,29 @@
                     DeliveryLocation: row.DeliveryLocation,
                     DeliveryDate: row.DeliveryDate,
                     DeliveryMode: row.DeliveryMode,
+
                     QutnUnit: row.QutnUnit,
                     QutnQnty: row.QutnQnty,
                     QutnPrice: row.QutnPrice,
                     QutnAmt: row.QutnAmt,
+
+                    // WO
                     WOQnty: row.WOQnty,
                     WOPrice: row.WOPrice,
                     WOAmt: row.WOAmt,
+
+                    // ASF
+                    ASFPerc: row.ASFPerc,
+                    TotGivenASFAmt: row.TotGivenASFAmt,
+
+                    // VAT
                     VatPerc: row.VatPerc,
                     VatAmt: row.VatAmt,
+
+                    // Total
                     TolAmt: row.TolAmt
                 };
             }
-
             /* ── Client picker ── */
             $scope.ShowClientList = function () {
                 $http.get("/WorkOrderInfo/GetClientInfoList")
@@ -881,23 +1025,35 @@
 
                         angular.forEach($scope.masterDataSetupGridData, function (item) {
 
-                            // auto selected
                             item.selected = true;
 
-                            // default WO values
-                            item.WOQnty = item.QutnQnty;
-                            item.WOPrice = item.QutnPrice;
-                            item.WOAmt = item.QutnAmt;
+                            item.WOQnty = parseFloat(item.QutnQnty) || 0;
+                            item.WOPrice = parseFloat(item.QutnPrice) || 0;
 
-                            // VAT + Total
-                            item.VatAmt = ((parseFloat(item.WOAmt || 0) * parseFloat(item.VatPerc || 0)) / 100);
-                            item.TolAmt = parseFloat(item.WOAmt || 0) + parseFloat(item.VatAmt || 0);
+                            // Calculate values
+                            item.WOAmt = item.WOPrice * item.WOQnty;
 
-                            // auto push
+                            item.ASFPerc = parseFloat(item.ASFPerc) || 0;
+                            item.TotGivenASFAmt =
+                                item.WOAmt * (item.ASFPerc / 100);
+
+                            item.VatPerc = parseFloat(item.VatPerc) || 0;
+
+                            item.VatAmt =
+                                (item.WOAmt + item.TotGivenASFAmt) *
+                                (item.VatPerc / 100);
+
+                            item.TolAmt =
+                                item.WOAmt +
+                                item.TotGivenASFAmt +
+                                item.VatAmt;
+
+                            // Push fully calculated item
                             $scope.selectedWoItems.push(buildSelectedItem(item));
                         });
 
-                        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
+                        $scope.GridDisplayCollection =
+                            [].concat($scope.masterDataSetupGridData);
 
                         $scope.recalcWOTotal();
                     });

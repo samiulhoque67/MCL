@@ -46,5 +46,8 @@ namespace SILDMS.Model
         public string Action { get; set; }
         [Required]
         public string Status { get; set; }
+        public string ASFPerc { get; set; }
+        public string ASFAmt { get; set; }
+        public decimal? TotGivenASFAmt { get; set; }
     }
 }
