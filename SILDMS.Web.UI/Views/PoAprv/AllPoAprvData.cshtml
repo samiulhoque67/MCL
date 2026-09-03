@@ -428,11 +428,11 @@
     </div>
 
 
-    <div id="masterRow" style="display: none; margin-top: 150px">
+    <div id="masterRow" style="display: none; margin-top: 150px; margin-left:30px">
 
         <div class="row">
-            <p style="font-weight: bold; font-size: 25px; text-align: center; border-bottom: 5px solid #000;" >
-                Puchase Order
+            <p style="font-weight: bold; font-size: 25px; text-align: center; border-bottom: 5px solid #000;">
+                Purchase Order
             </p>
         </div>
 
@@ -455,7 +455,7 @@
         <!-- Subject line -->
         <div class="row" style="margin-top:10px;">
             <p style="margin:0;">
-                <strong> Subject: Work Order for {{VendorCSInfo.Remarks}}</strong> 
+                <strong> Subject: Work Order for {{VendorCSInfo.Remarks}}</strong>
             </p>
         </div>
 
@@ -900,7 +900,23 @@
                 doc.write('<html><head><title>Work Order - ' + ($scope.VendorCSInfo.PONo || '') + '</title>');
                 doc.write(`
                     <style>
-                        body{font-family:Arial, sans-serif; margin:20px; padding:0;}
+                        /* Removing the page margin removes the space Chrome/Edge use
+                           to draw the default print header (date/title) and
+                           footer (url/page number) — this hides them without
+                           touching the browser's print-dialog checkbox. */
+                        @@page {
+                            size: auto;
+                            margin: 0;
+                        }
+                        html, body {
+                            margin: 0;
+                            padding: 0;
+                        }
+                        body {
+                            font-family: Arial, sans-serif;
+                            padding: 20px;
+                            box-sizing: border-box;
+                        }
                         table{border-collapse:collapse; width:100%; margin:10px 0;}
                         td, th{padding:6px 8px; border:1px solid #555; font-size:12px;}
                         th{background:#f0f0f0;}

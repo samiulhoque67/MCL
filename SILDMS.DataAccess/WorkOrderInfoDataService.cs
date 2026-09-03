@@ -75,7 +75,7 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     ClientInfoList = dt1.AsEnumerable().Select(reader => new OBS_WOInfo
                     {
-                        ProjectName = reader.GetString("ProjectName"),
+                        Remarks = reader.GetString("ProjectName"),
                         UserFullName = reader.GetString("UserFullName"),
                         ClientQutnAprvID = reader.GetString("ClientQutnAprvID"),
                         ClientID = reader.GetString("ClientID"),
@@ -326,6 +326,7 @@ namespace SILDMS.DataAccess
                         ClientID = reader.GetString("ClientID"),
                         ClientQutnAprvID = reader.GetString("ClientQutnAprvID"), // ← ADD
                         ClientName = reader.GetString("ClientName"),
+                        Address = reader.GetString("Address"),
                         WONo = reader.GetString("WONo"),
                         WODate = reader.GetString("WODate"),
                         WOAmt = reader.GetString("WOAmt"),
@@ -375,7 +376,9 @@ namespace SILDMS.DataAccess
                         WOAmt = reader.GetString("WOAmt"),    // ← FIXED
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
-                        TolAmt = reader.GetString("TolAmt")
+                        TolAmt = reader.GetString("TolAmt"),
+                        ASFPerc = reader.GetString("ASFPerc"),
+                        TotGivenASFAmt = reader.GetToDecimal("TotGivenASFAmt")
                     }).ToList();
                 }
             }

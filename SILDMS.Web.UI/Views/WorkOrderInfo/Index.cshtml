@@ -68,6 +68,11 @@
         color: #31708f;
         border: 1px solid #bce8f1;
     }
+
+    /* ── Print slip container ── */
+    #masterRow {
+        position: relative;
+    }
 </style>
 
 <div class="box box-primary box-body" ng-controller="WorkOrderInfoCtrl">
@@ -89,6 +94,12 @@
                 <div class="btn-group pull-right" style="margin-left:4px;margin-right:4px;">
                     <button class="button-custom btn-primary" type="button" data-ng-click="SearchWOInfoModal()">
                         <i class="fa fa-search" style="padding-right:5px"></i> Search
+                    </button>
+                </div>
+                <!-- Print button — only meaningful once a WO is loaded (view/edit) -->
+                <div class="btn-group pull-right" style="margin-left:4px;margin-right:4px;" ng-show="pageMode==='view' || pageMode==='edit'">
+                    <button class="button-custom btn-primary" type="button" data-ng-click="printCurrentWO()">
+                        <i class="fa fa-print" style="padding-right:5px"></i> Print WO
                     </button>
                 </div>
                 <!-- Save/Update hidden in view mode -->
@@ -245,7 +256,7 @@
                 </div>
 
                 <!-- Show file input only when NOT in view mode -->
-                <div  ng-hide="pageMode==='view'" class="col-lg-2">
+                <div ng-hide="pageMode==='view'" class="col-lg-2">
                     <div class="form-group">
                         <input type="file"
                                style="height:25px; float:left; margin-top:5px;"
@@ -797,9 +808,160 @@
             </div>
         </div>
     </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         PRINT SLIP  (hidden div, rendered into iframe on print)
+         Same layout style as the PO Approval "Work Order" slip:
+           Title  →  Ref No / Date  →  Client block  →  Subject
+           →  Item table (with ASF & VAT columns)  →  Total
+           →  In words  →  Notes  →  Signatures
+         ══════════════════════════════════════════════════════════════ -->
+    <div id="masterRow" style="display:none;margin-top:150px;">
+
+        <div class="row">
+            <p style="font-weight:bold;font-size:25px;text-align:center;border-bottom:5px solid #000;">
+                Work Order
+            </p>
+        </div>
+
+        <!-- Ref No / Date -->
+        <div class="row" style="display:flex;justify-content:space-between;margin-top:25px;">
+            <p style="margin:0;"><strong>{{WOInfo.WONo}}</strong></p>
+        </div>
+        <div class="row" style="display:flex;justify-content:space-between;">
+            <p style="margin:0;"><strong>Date:</strong> {{WOInfo.WODate}}</p>
+        </div>
+
+        <!-- Client block -->
+        <div class="row" style="margin-top:14px;">
+            <p style="margin:0;font-weight:bold;">{{WOInfo.ClientName}}</p>
+        </div>
+        <div class="row" style="margin-top:4px;">
+            <p style="margin:0;">{{WOInfo.Address}}</p>
+        </div>
+
+        <!-- Subject line -->
+        <div class="row" style="margin-top:10px;">
+            <p style="margin:0;">
+                <strong>Subject: Work Order for {{WOInfo.Remarks}}</strong>
+            </p>
+        </div>
+
+        <!-- Item table -->
+        <div class="row" style="margin-top:5px;">
+            <div class="col-md-12">
+                <table style="width:100%;border-collapse:collapse;">
+                    <thead>
+                        <tr>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:left;">Item Description</th>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:left;">UOM</th>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:center;">QTY</th>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:center;">Unit Price</th>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:center;">Amount</th>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:center;">ASF (%)</th>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:center;">ASF Amount</th>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:center;">Vat (%)</th>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:center;">Vat Amount</th>
+                            <th style="border:1px solid #555;padding:6px 8px;text-align:center;">Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in PoPrintCollection" ng-cloak style="font-size:12px;">
+                            <td style="border:1px solid #555;padding:6px 8px;">
+                                <div style="font-weight:bold;">{{row.ServiceItemName}}</div>
+                                <div style="white-space:pre-line;">{{row.Description}}</div>
+                            </td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:center;">{{row.QutnUnit}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.WOQnty | number:2}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.WOPrice | number:2}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.WOAmt | number:2}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.ASFPerc | number:2}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.TotGivenASFAmt | number:2}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.VatPerc | number:2}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.VatAmt | number:2}}</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.TolAmt | number:2}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9" style="border:1px solid #555;padding:6px 8px;text-align:right;font-weight:bold;">Total</td>
+                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;font-weight:bold;">{{PoPrintGrandTotal | number:2}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <!-- In words -->
+        <div class="row" style="margin-top:5px;">
+            <p style="margin:0;"><strong>In words:</strong> {{PoPrintGrandTotalWords}} Taka Only</p>
+        </div>
+
+        <!-- Notes (from Terms & Conditions) -->
+        <div class="row" style="margin-top:16px;">
+            <p style="margin:0;font-weight:bold;">Notes:</p>
+        </div>
+        <div class="row">
+            <ol style="margin-top:4px;padding-left:20px;">
+                <li ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:14px;">
+                    {{row.TermsName}}
+                </li>
+            </ol>
+        </div>
+
+        <!-- Signatures -->
+        <div class="row" style="margin-top:70px;display:flex;justify-content:space-between;">
+            <div style="text-align:center;width:45%;">
+                <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
+                <div>Client Relations Department</div>
+            </div>
+            <div style="text-align:center;width:45%;">
+                <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
+                <div>Accounts Department</div>
+            </div>
+        </div>
+    </div><!-- /masterRow -->
+
 </div>
 
 <script type="text/javascript">
+
+    /* ── Number → Words (South Asian / Lakh-Crore system) ─────────── */
+    function numberToWordsTaka(num) {
+        num = Math.round(parseFloat(num) || 0);
+        if (num === 0) return 'Zero';
+
+        var belowTwenty = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+            'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen',
+            'Eighteen', 'Nineteen'];
+        var tensWords = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+        function twoDigits(n) {
+            if (n < 20) return belowTwenty[n];
+            return tensWords[Math.floor(n / 10)] + (n % 10 ? ' ' + belowTwenty[n % 10] : '');
+        }
+        function threeDigits(n) {
+            var h = Math.floor(n / 100);
+            var r = n % 100;
+            var s = '';
+            if (h) s += belowTwenty[h] + ' Hundred';
+            if (r) s += (s ? ' ' : '') + twoDigits(r);
+            return s;
+        }
+
+        var crore = Math.floor(num / 10000000); num %= 10000000;
+        var lakh = Math.floor(num / 100000); num %= 100000;
+        var thousand = Math.floor(num / 1000); num %= 1000;
+        var rest = num;
+
+        var parts = [];
+        if (crore) parts.push(threeDigits(crore) + ' Crore');
+        if (lakh) parts.push(threeDigits(lakh) + ' Lakh');
+        if (thousand) parts.push(threeDigits(thousand) + ' Thousand');
+        if (rest) parts.push(threeDigits(rest));
+
+        return parts.join(' ');
+    }
 
     app.controller('WorkOrderInfoCtrl', ['$scope', '$http', '$timeout',
         function ($scope, $http, $timeout) {
@@ -810,6 +972,11 @@
             $scope.loading = false;
             $scope.selectedWoItems = [];
             $scope._pendingDeleteTermIndex = -1;
+
+            /* ── Print state ── */
+            $scope.PoPrintCollection = [];
+            $scope.PoPrintGrandTotal = 0;
+            $scope.PoPrintGrandTotalWords = '';
 
             /* ── Date picker ── */
             $timeout(function () {
@@ -862,6 +1029,10 @@
                 $scope.GridDisplayCollection = [];
                 $scope.ReqTermDataSetupGridData = [];
                 $scope.ReqTermGridDisplayCollection = [];
+
+                $scope.PoPrintCollection = [];
+                $scope.PoPrintGrandTotal = 0;
+                $scope.PoPrintGrandTotalWords = '';
 
                 // Reset file input
                 $('#FileUpload1').val('');
@@ -1008,7 +1179,9 @@
                 $scope.WOInfo.ClientReqNo = row.ClientReqNo;
                 $scope.WOInfo.ClientID = row.ClientID;
                 $scope.WOInfo.ClientName = row.ClientName;
+                $scope.WOInfo.Address = row.Address;
                 $scope.WOInfo.ClientQutnAprvID = row.ClientQutnAprvID;
+                $scope.WOInfo.Remarks = row.Remarks;
 
                 $scope.masterDataSetupGridData = [];
                 $scope.GridDisplayCollection = [];
@@ -1088,6 +1261,7 @@
                 $scope.WOInfo.ClientID = tableRow.ClientID;
                 $scope.WOInfo.ClientQutnAprvID = tableRow.ClientQutnAprvID;
                 $scope.WOInfo.ClientName = tableRow.ClientName;
+                $scope.WOInfo.Address = tableRow.Address;
                 $scope.WOInfo.WONo = tableRow.WONo;
                 $scope.WOInfo.WODate = tableRow.WODate;
                 $scope.WOInfo.WOAmt = tableRow.WOAmt;
@@ -1479,6 +1653,86 @@
                 if (!id) return;
                 $http.post("/ServiceItemInfo/GetServiceItemInfoSearchList?ServiceItemCategoryID=" + id)
                     .success(function (r) { $scope.serviceItems = r.ServiceItemInfoSearchList; });
+            };
+
+            /* ── Print current Work Order ─────────────────────────────── */
+            $scope.printCurrentWO = function () {
+                if ($scope.selectedWoItems.length === 0) {
+                    toastr.error("No items to print for this Work Order.");
+                    return;
+                }
+
+                $scope.PoPrintCollection = [].concat($scope.selectedWoItems);
+
+                var grandTotal = 0;
+                $scope.PoPrintCollection.forEach(function (row) {
+                    grandTotal += parseFloat(row.TolAmt || 0);
+                });
+                $scope.PoPrintGrandTotal = grandTotal;
+                $scope.PoPrintGrandTotalWords = numberToWordsTaka(grandTotal);
+
+                $scope.loading = true;
+
+                $timeout(function () {
+                    document.getElementById('masterRow').style.display = 'block';
+                    $scope.printData();
+
+                    $timeout(function () {
+                        document.getElementById('masterRow').style.display = 'none';
+                        $scope.loading = false;
+                    }, 800);
+                }, 200);
+            };
+
+            /* ── Actual Print via Iframe ─────────────────────────────── */
+            $scope.printData = function () {
+                var slip = document.getElementById("masterRow");
+                if (!slip) return;
+
+                var iframe = document.createElement('iframe');
+                iframe.style.cssText = 'position:absolute;width:0;height:0;border:none;';
+                document.body.appendChild(iframe);
+
+                var doc = iframe.contentWindow.document;
+                doc.open();
+                doc.write('<html><head><title>Work Order - ' + ($scope.WOInfo.WONo || '') + '</title>');
+                doc.write(`
+                    <style>
+                        /* Removing the page margin removes the space Chrome/Edge use
+                           to draw the default print header (date/title) and
+                           footer (url/page number) — this hides them without
+                           touching the browser's print-dialog checkbox. */
+                        @@page {
+                            size: auto;
+                            margin: 0;
+                        }
+                        html, body {
+                            margin: 0;
+                            padding: 0;
+                        }
+                        body {
+                            font-family: Arial, sans-serif;
+                            padding: 20px;
+                            box-sizing: border-box;
+                        }
+                        table{border-collapse:collapse; width:100%; margin:10px 0;}
+                        td, th{padding:6px 8px; border:1px solid #555; font-size:12px;}
+                        th{background:#f0f0f0;}
+                        .row{display:flex; flex-wrap:wrap; justify-content:space-between;}
+                        p{margin:3px 0;}
+                        .text-center{text-align:center;}
+                    </style>
+                `);
+                doc.write('</head><body>');
+                doc.write(slip.outerHTML);
+                doc.write('</body></html>');
+                doc.close();
+
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+
+                // Cleanup
+                setTimeout(() => document.body.removeChild(iframe), 1000);
             };
 
             /* ── Refresh ── */
