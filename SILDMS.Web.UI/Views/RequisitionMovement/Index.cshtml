@@ -1,0 +1,850 @@
+﻿@{
+    ViewBag.Title = "Requisition Movement";
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+
+<style type="text/css">
+    label {
+        margin-bottom: 2px;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .form-control {
+        height: 25px;
+        font-size: smaller;
+        padding: 3px 6px 3px;
+    }
+
+    .movement-card {
+        margin: 10px 1%;
+        background-color: #f0f0f0;
+        box-shadow: 2px 2px 5px #888888;
+        padding: 10px;
+    }
+
+    .movement-title {
+        font-family: Verdana;
+        font-size: 16px;
+        font-weight: bold;
+        color: #166e19;
+    }
+
+    .movement-table {
+        font-size: 12px;
+    }
+
+        .movement-table th {
+            background-color: #82b0c9;
+            color: #010823;
+            font-size: 11px;
+            text-align: center;
+            vertical-align: middle !important;
+        }
+
+        .movement-table td {
+            vertical-align: middle !important;
+        }
+
+    .status-done {
+        color: green;
+        font-weight: bold;
+    }
+
+    .status-pending {
+        color: #d58512;
+        font-weight: bold;
+    }
+
+    .status-na {
+        color: #999;
+    }
+</style>
+
+<div class="box box-primary box-body"
+     ng-controller="RequisitionMovementCtrl">
+
+    <!-- MASTER HEADER -->
+    <div class="box-header with-border bg-light-blue-gradient"
+         style="height:38px;">
+
+        <h2 class="box-title"
+            style="font-family: math; font-weight: 500;">
+            Requisition Movement Report
+        </h2>
+
+        <div class="box-tools pull-right">
+
+            <div class="btn-group pull-right"
+                 style="margin-left:4px; margin-right:4px;">
+
+                <button type="button"
+                        class="button-custom"
+                        ng-click="Refresh()"
+                        ng-disabled="loading">
+
+                    <i class="fa fa-refresh"
+                       style="padding-right:5px"></i>
+
+                    Refresh
+                </button>
+
+                <button type="button"
+                        class="button-custom"
+                        ng-click="PreviewReport()"
+                        ng-disabled="movementData.length == 0">
+
+                    <i class="fa fa-print"
+                       style="padding-right:5px"></i>
+
+                    Preview Report
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- SEARCH -->
+    <div class="row"
+         style="margin-right:-15px;
+                margin-left:20px;
+                margin-top:20px;">
+
+        <div class="col-sm-2 col-md-2 col-lg-2">
+
+            <div class="form-group">
+
+                <label for="ClientReqID">
+                    Client Requisition ID:
+                </label>
+
+                <label style="font-size:larger;color:red;">
+                    *
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-sm-4 col-md-4 col-lg-4">
+
+            <div style="position:relative;">
+
+                <input id="ClientReqID"
+                       type="text"
+                       class="form-control"
+                       autocomplete="off"
+                       autofocus
+                       ng-model="clientReqId"
+                       placeholder="Client Requisition ID"
+                       ng-keypress="KeyPress($event)" />
+
+                <button type="button"
+                        class="btn-group pull-right"
+                        ng-click="GetMovement()"
+                        ng-disabled="loading"
+                        style="
+                            position:absolute;
+                            right:1px;
+                            top:50%;
+                            transform:translateY(-50%);
+                            padding:0px 10px;
+                            border:2px solid black;
+                            background:transparent;">
+
+                    <i class="fa fa-search"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ERROR -->
+    <div ng-show="errorMessage"
+         class="row"
+         style="
+            margin:20px 1%;
+            background-color:#f0f0f0;
+            box-shadow:2px 2px 5px #888888;
+            padding:10px;">
+
+        <div class="col-sm-12 text-center">
+
+            <h4 style="color:red;">
+                {{errorMessage}}
+            </h4>
+
+        </div>
+
+    </div>
+
+
+    <!-- REQUISITION INFORMATION -->
+    <div ng-show="movementData.length > 0"
+         class="box-body"
+         style="margin:1%; padding:5px;">
+
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <div class="box box-info"
+                     style="border-bottom:1px solid #d3e3e3;">
+
+                    <div class="box-header with-border"
+                         style="
+                            height:40px;
+                            border-bottom:1px solid #d3e3e3;">
+
+                        <h2 class="box-title movement-title">
+                            Requisition Information
+                        </h2>
+
+                    </div>
+
+
+                    <div class="box-body">
+
+                        <div class="row">
+
+                            <div class="col-sm-2">
+                                <label>Client:</label>
+                            </div>
+
+                            <div class="col-sm-4">
+                                {{movementData[0].ClientName}}
+                            </div>
+
+                            <div class="col-sm-2">
+                                <label>Requisition No:</label>
+                            </div>
+
+                            <div class="col-sm-4">
+                                {{movementData[0].ClientReqNo}}
+                            </div>
+
+                        </div>
+
+
+                        <div class="row"
+                             style="margin-top:8px;">
+
+                            <div class="col-sm-2">
+                                <label>Requisition Date:</label>
+                            </div>
+
+                            <div class="col-sm-4">
+                                {{movementData[0].RequisitionDate}}
+                            </div>
+
+                            <div class="col-sm-2">
+                                <label>Status:</label>
+                            </div>
+
+                            <div class="col-sm-4">
+                                {{movementData[0].ClientReqStatus}}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- ITEM MOVEMENT -->
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <div class="box box-info"
+                     style="border-bottom:1px solid #d3e3e3;">
+
+                    <div class="box-header with-border"
+                         style="
+                            height:40px;
+                            border-bottom:1px solid #d3e3e3;">
+
+                        <h2 class="box-title movement-title">
+                            Requisition Movement Details
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row"
+             style="
+                margin:1%;
+                background-color:#f0f0f0;
+                box-shadow:2px 2px 5px #888888;
+                padding:5px 10px 10px 10px;">
+
+            <div class="row"
+                 style="
+                    padding:11px;
+                    margin-right:15px;
+                    margin-left:15px;">
+
+                <table class="table table-condensed
+                              table-bordered
+                              table-striped
+                              table-hover
+                              pnlView movement-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th style="width:4%;">
+                                S/N
+                            </th>
+
+                            <th style="width:15%;">
+                                Service Item
+                            </th>
+
+                            <th style="width:8%;">
+                                Type
+                            </th>
+
+                            <th style="width:12%;">
+                                Client Requisition
+                            </th>
+
+                            <th style="width:12%;">
+                                Vendor Requisition
+                            </th>
+
+                            <th style="width:12%;">
+                                Vendor Quotation
+                            </th>
+
+                            <th style="width:12%;">
+                                Comparative Statement
+                            </th>
+
+                            <th style="width:12%;">
+                                Work Order
+                            </th>
+
+                            <th style="width:12%;">
+                                Purchase Order
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr ng-repeat="item in movementData">
+
+                            <td style="text-align:center;">
+                                {{$index + 1}}
+                            </td>
+
+
+                            <td>
+                                <strong>
+                                    {{item.ServiceItemName}}
+                                </strong>
+                            </td>
+
+
+                            <td style="text-align:center;">
+                                {{item.ReqType}}
+                            </td>
+
+
+                            <!-- CLIENT REQUISITION -->
+                            <td>
+
+                                <span class="status-done">
+                                    <i class="fa fa-check-circle"></i>
+                                    Completed
+                                </span>
+
+                                <br />
+
+                                <small>
+                                    {{item.RequisitionDate}}
+                                </small>
+
+                            </td>
+
+
+                            <!-- VENDOR REQUISITION -->
+                            <td>
+
+                                <span ng-if="item.ReqType == 'QC'"
+                                      class="status-na">
+                                    N/A
+                                </span>
+
+                                <span ng-if="item.ReqType != 'QC' &&
+                                             item.VendorReqRaised"
+                                      class="status-done">
+
+                                    <i class="fa fa-check-circle"></i>
+                                    Completed
+
+                                    <br />
+
+                                    <small>
+                                        {{item.VendorReqDate}}
+                                    </small>
+
+                                </span>
+
+                                <span ng-if="item.ReqType != 'QC' &&
+                                             !item.VendorReqRaised"
+                                      class="status-pending">
+
+                                    <i class="fa fa-clock-o"></i>
+                                    Pending
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- VENDOR QUOTATION -->
+                            <td>
+
+                                <span ng-if="item.ReqType == 'QC'"
+                                      class="status-na">
+                                    N/A
+                                </span>
+
+                                <span ng-if="item.ReqType != 'QC' &&
+                                             item.VendorQutnReceived"
+                                      class="status-done">
+
+                                    <i class="fa fa-check-circle"></i>
+                                    Received
+
+                                    <br />
+
+                                    <small>
+                                        {{item.FirstVendorQutnDate}}
+                                    </small>
+
+                                </span>
+
+                                <span ng-if="item.ReqType != 'QC' &&
+                                             !item.VendorQutnReceived"
+                                      class="status-pending">
+
+                                    <i class="fa fa-clock-o"></i>
+                                    Pending
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- CS -->
+                            <td>
+
+                                <span ng-if="item.ReqType == 'QC' ||
+                                             item.CsStatus == 'NCS'"
+                                      class="status-na">
+                                    N/A
+                                </span>
+
+                                <span ng-if="item.ReqType != 'QC' &&
+                                             item.CsStatus != 'NCS'">
+
+                                    <span ng-if="item.CSActualApproved"
+                                          class="status-done">
+
+                                        <i class="fa fa-check-circle"></i>
+                                        Approved
+
+                                        <br />
+
+                                        <small>
+                                            {{item.CSActualAprvDate}}
+                                        </small>
+
+                                    </span>
+
+                                    <span ng-if="!item.CSActualApproved"
+                                          class="status-pending">
+
+                                        <i class="fa fa-clock-o"></i>
+                                        In Progress
+
+                                    </span>
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- WORK ORDER -->
+                            <td>
+
+                                <span ng-if="item.WorkOrderRaised"
+                                      class="status-done">
+
+                                    <i class="fa fa-check-circle"></i>
+                                    Raised
+
+                                    <br />
+
+                                    <small>
+                                        {{item.WODate}}
+                                    </small>
+
+                                </span>
+
+                                <span ng-if="!item.WorkOrderRaised"
+                                      class="status-pending">
+
+                                    <i class="fa fa-clock-o"></i>
+                                    Pending
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- PURCHASE ORDER -->
+                            <td>
+
+                                <span ng-if="item.ReqType == 'QC'"
+                                      class="status-na">
+                                    N/A
+                                </span>
+
+                                <span ng-if="item.ReqType != 'QC' &&
+                                             item.PurchaseOrderRaised"
+                                      class="status-done">
+
+                                    <i class="fa fa-check-circle"></i>
+                                    Raised
+
+                                    <br />
+
+                                    <small>
+                                        {{item.PODate}}
+                                    </small>
+
+                                </span>
+
+                                <span ng-if="item.ReqType != 'QC' &&
+                                             !item.PurchaseOrderRaised"
+                                      class="status-pending">
+
+                                    <i class="fa fa-clock-o"></i>
+                                    Pending
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    app.controller('RequisitionMovementCtrl',
+        ['$scope', '$http', function ($scope, $http) {
+
+            $scope.clientReqId = "";
+            $scope.movementData = [];
+            $scope.errorMessage = "";
+            $scope.loading = false;
+
+
+            $scope.GetMovement = function () {
+
+                $scope.errorMessage = "";
+                $scope.movementData = [];
+
+                if (!$scope.clientReqId ||
+                    $scope.clientReqId.trim() == "") {
+
+                    toastr.error("Client Requisition ID Required");
+                    return;
+                }
+
+                $scope.loading = true;
+
+                $http.post(
+                    "/RequisitionMovement/GetMovement",
+                    {
+                        clientReqId: $scope.clientReqId
+                    }
+                )
+                    .success(function (response) {
+
+                        $scope.loading = false;
+
+                        if (response.status == "S") {
+
+                            $scope.movementData =
+                                response.data;
+
+                        }
+                        else {
+
+                            $scope.errorMessage =
+                                response.message;
+
+                            toastr.error(response.message);
+                        }
+
+                    })
+                    .error(function () {
+
+                        $scope.loading = false;
+
+                        $scope.errorMessage =
+                            "Failed to load requisition movement information.";
+
+                        toastr.error(
+                            "Failed to load requisition movement information."
+                        );
+
+                    });
+            };
+
+
+            $scope.KeyPress = function ($event) {
+
+                if ($event.which === 13) {
+                    $scope.GetMovement();
+                }
+
+            };
+
+
+            $scope.Refresh = function () {
+
+                window.location.reload();
+
+            };
+
+
+            $scope.PreviewReport = function () {
+
+    if (!$scope.movementData || $scope.movementData.length === 0) {
+        toastr.error("No data available for report.");
+        return;
+    }
+
+    var data = $scope.movementData;
+    var header = data[0];
+
+    var reportHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Requisition Movement Report</title>
+
+    <style>
+        body{
+            font-family:Arial;
+            margin:20px;
+            font-size:12px;
+        }
+
+        h2{
+            text-align:center;
+            margin-bottom:20px;
+        }
+
+        .info-table{
+            width:100%;
+            margin-bottom:20px;
+        }
+
+        .info-table td{
+            padding:5px;
+            border:1px solid #ddd;
+        }
+
+        .movement-table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        .movement-table th{
+            background:#82b0c9;
+            border:1px solid #000;
+            padding:6px;
+            text-align:center;
+        }
+
+        .movement-table td{
+            border:1px solid #000;
+            padding:6px;
+        }
+
+        .done{
+            color:green;
+            font-weight:bold;
+        }
+
+        .pending{
+            color:#d58512;
+            font-weight:bold;
+        }
+
+        .na{
+            color:gray;
+        }
+
+        @@media print{
+            .no-print{
+                display:none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="no-print" style="text-align:right;margin-bottom:10px;">
+        <button onclick="window.print()">Print</button>
+    </div>
+
+    <h2>REQUISITION MOVEMENT REPORT</h2>
+
+    <table class="info-table">
+        <tr>
+            <td><b>Client</b></td>
+            <td>${header.ClientName || ''}</td>
+
+            <td><b>Requisition No</b></td>
+            <td>${header.ClientReqNo || ''}</td>
+        </tr>
+
+        <tr>
+            <td><b>Requisition Date</b></td>
+            <td>${header.RequisitionDate || ''}</td>
+
+            <td><b>Status</b></td>
+            <td>${header.ClientReqStatus || ''}</td>
+        </tr>
+    </table>
+
+    <table class="movement-table">
+        <thead>
+            <tr>
+                <th>S/N</th>
+                <th>Service Item</th>
+                <th>Type</th>
+                <th>Client Req.</th>
+                <th>Vendor Req.</th>
+                <th>Vendor Quotation</th>
+                <th>CS</th>
+                <th>WO</th>
+                <th>PO</th>
+            </tr>
+        </thead>
+
+        <tbody>
+`;
+
+    angular.forEach(data, function (item, index) {
+
+        reportHtml += `
+        <tr>
+            <td style="text-align:center">${index + 1}</td>
+            <td>${item.ServiceItemName || ''}</td>
+            <td style="text-align:center">${item.ReqType || ''}</td>
+
+            <td class="done">
+                Completed<br/>
+                ${item.RequisitionDate || ''}
+            </td>
+
+            <td>
+                ${item.ReqType == 'QC'
+                    ? '<span class="na">N/A</span>'
+                    : item.VendorReqRaised
+                        ? '<span class="done">Completed</span><br/>' + (item.VendorReqDate || '')
+                        : '<span class="pending">Pending</span>'
+                }
+            </td>
+
+            <td>
+                ${item.ReqType == 'QC'
+                    ? '<span class="na">N/A</span>'
+                    : item.VendorQutnReceived
+                        ? '<span class="done">Received</span><br/>' + (item.FirstVendorQutnDate || '')
+                        : '<span class="pending">Pending</span>'
+                }
+            </td>
+
+            <td>
+                ${(item.ReqType == 'QC' || item.CsStatus == 'NCS')
+                    ? '<span class="na">N/A</span>'
+                    : item.CSActualApproved
+                        ? '<span class="done">Approved</span><br/>' + (item.CSActualAprvDate || '')
+                        : '<span class="pending">In Progress</span>'
+                }
+            </td>
+
+            <td>
+                ${item.WorkOrderRaised
+                    ? '<span class="done">Raised</span><br/>' + (item.WODate || '')
+                    : '<span class="pending">Pending</span>'
+                }
+            </td>
+
+            <td>
+                ${item.ReqType == 'QC'
+                    ? '<span class="na">N/A</span>'
+                    : item.PurchaseOrderRaised
+                        ? '<span class="done">Raised</span><br/>' + (item.PODate || '')
+                        : '<span class="pending">Pending</span>'
+                }
+            </td>
+        </tr>
+        `;
+    });
+
+    reportHtml += `
+        </tbody>
+    </table>
+
+</body>
+</html>`;
+
+    var reportWindow = window.open('', '_blank');
+    reportWindow.document.write(reportHtml);
+    reportWindow.document.close();
+};
+
+        }]);
+
+</script>

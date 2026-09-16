@@ -1258,7 +1258,10 @@
                 toastr.error('Please enter a Briefing Date');
             } else if ($scope.selectedRows.some(function (i) { return !i.MclPrice || i.MclPrice <= 0; })) {
                 toastr.error('Given Quotation Amount must be greater than 0.');
-            } else {
+            } else if ($scope.selectedRows.some(function (i) { return !i.ASFPerc || i.ASFPerc <= 0; })) {
+                toastr.error('ASF (%) must be greater than 0.');
+            }
+            else {
                 $scope.SaveQuotToClient(action);
             }
         };

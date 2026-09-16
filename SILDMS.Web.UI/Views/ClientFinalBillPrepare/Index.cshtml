@@ -19,11 +19,11 @@
     .custom-hr {
         border: none;
         height: 2px;
-        background-color: #007bff; /* Bootstrap primary color */
+        background-color: #007bff; 
         margin: 15px 0;
     }
     body {
-        font-size: 12px; /* Set global font size */
+        font-size: 12px;
     }
 
     .box-body, .form-group, .btn, .form-control, .box-header {
@@ -47,10 +47,8 @@
         font-size: 12px;
     }
 
-    /* Adjust icon size */
     .fa {
         font-size: 12px;
-        /* padding-right: 3px;*/
     }
 
     .text-success {
@@ -203,7 +201,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <label for="WOAmt">Wo Amount:</label>
+                        <label for="WOAmt">Wo Total Amount (with VAT & ASF):</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -284,7 +282,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        @*<input id="RemainingAmnt" name="RemainingAmnt" type="text" class="form-control" placeholder="Remaining Amount" ng-model="VendorQutn.RemainingAmnt" ng-readonly="true" ng-change="calculateAmounts()" />*@
                         <input id="RemainingAmnt" name="RemainingAmnt" type="text" class="form-control" placeholder="Remaining Amount" ng-model="VendorQutn.RemainingAmnt" ng-readonly="true" />
                     </div>
                 </div>
@@ -332,7 +329,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        @*<input id="RemainingAmnt" name="RemainingAmnt" type="text" class="form-control" placeholder="Remaining Amount" ng-model="VendorQutn.RemainingAmnt" ng-readonly="true" ng-change="calculateAmounts()" />*@
                         <input id="BillAmount" name="BillAmount" type="text" class="form-control" placeholder="Bill Amount" ng-model="VendorQutn.BillAmount" ng-readonly="true" />
                     </div>
                 </div>
@@ -355,7 +351,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <label>Commission (%):</label>
+                        <label>ASF / Commission (%):</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -367,7 +363,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <label>Commission Amount:</label>
+                        <label>ASF / Commission Amount:</label>
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -546,14 +542,9 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionNo')">Work Order No</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('RequisitionDate')">Work Order Date</th>
                                 <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sort('LastDateofQuotation')">Work Order Amount</th>
-                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Address')">Address</th>*@
-                                @*<th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>*@
+                               
                                 <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
                             </tr>
-                            @*<tr>
-            <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-            <th><input st-search="VendorName" placeholder="Vendor Name" class="input-sm form-control" type="search" /></th>
-        </tr>*@
                         </thead>
                         <tbody>
 
@@ -567,12 +558,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.WONo}}</td>
                                 <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.WODate}}</td>
                                 <td class="col-lg-2 col-md-2 col-sm-2 text-center">{{row.WOAmt}}</td>
-                                @*<td class="hidden">{{row.ClientAddressID}}</td>*@
-                                @*<td class="col-lg-1 col-md-1 col-sm-1 text-center">
-                            <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
-                                {{row.Status == '1'? 'Active':'InActive'}}
-                            </span>
-                        </td>*@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleVendorQutnSelect(row)"><i class="fa fa-edit"></i> Select</button>
                                 </td>
@@ -623,12 +608,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         $scope.clientReqItemArray = [];
         $scope.clientReqTermArray = [];
         $scope.itemsByPage = 10;
-
-        //$http.get('/VendorQuotation/GetServicesCategory')
-        //    .success(function (response) {
-        //        $scope.loading = false;
-        //        $scope.serviceCategorys = response.result;
-        //    }).error(function () { });
 
 
         $scope.vendor = {
@@ -728,28 +707,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 $('.datepicker').hide();
             });
 
-        //$('#DeliveryDate').datepicker({
-        //    format: "dd/mm/yyyy",
-        //    autoclose: false,
-        //    minDate: new Date() // Set minDate to the current date to disable selecting previous dates
-        //}).on('changeDate', function (ev) {
-        //    var EnteredDate = $('#DeliveryDate').val();
-        //    var today = new Date();
-        //    today.setHours(0, 0, 0, 0);
-
-        //    var date = EnteredDate.substring(0, 2);
-        //    var month = EnteredDate.substring(3, 5);
-        //    var year = EnteredDate.substring(6, 10);
-        //    var myDate = new Date(year, month - 1, date);
-        //    myDate.setHours(0, 0, 0, 0);
-
-        //    //if (myDate < today) {
-        //    //    $('#DeliveryDate').val('');
-        //    //    toastr.error("Purchase date should not be less than system date.");
-        //    //}
-
-        //    $('.datepicker').hide();
-        //});
+       
         $scope.checkUnitPrice = function (row) {
             var QutnAmt = 0;
             QutnAmt = (row.ReqQnty * row.QutnPrice);
@@ -1015,12 +973,21 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.WODate = row.WODate;
             $scope.VendorQutn.RemainingAmnt = row.WOInstallmentAmt - row.AdvancClaimRcvAmt;
 
+            $scope.VendorQutn.BillAmount = row.BillAmount;
+            $scope.VendorQutn.CommissionPercentage = row.CommissionPercentage;
+            $scope.VendorQutn.CommissionAmount = row.CommissionAmount;
+            $scope.VendorQutn.VATPercentage = row.VATPercentage;
+            $scope.VendorQutn.VATAmount = row.VATAmount;
+            $scope.VendorQutn.TotalBillAmount = row.WOAmt;
+            $scope.VendorQutn.NetPayableAmount = row.WOAmt;
+
+
             if (row.BillCategory === 'PlusMinus') {
                 $scope.VendorQutn.BillAmount = parseFloat(((row.BaseAmount / 115) * 100).toFixed(3));
             }
             else { 
 
-            $scope.VendorQutn.BillAmount = row.WOInstallmentAmt;
+                $scope.VendorQutn.BillAmount = row.BillAmount;
         }
             //$scope.VendorQutn.RemainingAmnt = row.RemainingAmnt;
             $scope.VendorQutn.AdvancClaimRcvAmt = row.AdvancClaimRcvAmt;
@@ -1038,31 +1005,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
 
            
-
-      /*      $scope.VendorQutn.AdvancePaidAmount = 0;*/
-          /*  $scope.VendorQutn.BillAmount = row.POAmount - $scope.VendorQutn.AdvancePaidAmount;*/
-
-            //$scope.VendorQutn.SubmissionDate = row.SubmissionDate;
-            //$scope.VendorQutn.LastDateofQuotation = row.LastDateofQuotation;
-
-            //$http.post('/VendorRequisition/GetVendorReqItemList', { VendorReqID: row.VendorReqID })
-            //    .success(function (response) {
-            //        $scope.masterDataSetupGridData = response.VendorReqItemList;
-            //        $scope.GridDisplayCollection = [].concat($scope.masterDataSetupGridData);
-            //        $scope.loading = false;
-            //    }).error(function () {
-            //        $scope.loading = false;
-            //    });
-
-            //$http.post('/VendorRequisition/GetVendorReqTermList', { VendorReqID: row.VendorReqID })
-            //    .success(function (response) {
-            //        $scope.ReqTermDataSetupGridData = response.VendorReqTermList;
-            //        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-            //        $scope.loading = false;
-            //    }).error(function () {
-            //        $scope.loading = false;
-            //    });
-
             $('#VendorReqInfoModal').modal('hide');
         };
 
@@ -1077,7 +1019,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
             // Calculate the total bill amount (bill amount + VAT amount)
             $scope.VendorQutn.TotalBillAmount = parseFloat((totalbillAmount + $scope.VendorQutn.VATAmount).toFixed(3));
-        /*    $scope.VendorQutn.NetPayableAmount = parseFloat((totalbillAmount + $scope.VendorQutn.VATAmount).toFixed(3));*/
             $scope.VendorQutn.NetPayableAmount = parseFloat(($scope.VendorQutn.TotalBillAmount - $scope.VendorQutn.AdvancClaimRcvAmt).toFixed(3));
            
         };
@@ -1091,8 +1032,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             // Calculate the VAT amount
             $scope.VendorQutn.CommissionAmount = (billAmount * cmsnPercentage) / 100;
 
-            // Calculate the total bill amount (bill amount + VAT amount)
-      /*      $scope.VendorQutn.TotalBillAmount = billAmount + $scope.VendorQutn.CommissionAmount;*/
             $scope.VendorQutn.CommissionAmount = parseFloat(((billAmount * cmsnPercentage) / 100).toFixed(3));
             $scope.VendorQutn.TotalBillAmount = parseFloat((billAmount + $scope.VendorQutn.CommissionAmount).toFixed(3));
             $scope.calculateAmounts();
@@ -1123,21 +1062,13 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
         $scope.toggleVendorQutnSelect = function (tableRow) {
             $scope.VendorQutn.VendorQutnID = tableRow.VendorQutnID;
-            //$scope.VendorQutn.VendorID = tableRow.VendorID;
-            //$scope.VendorQutn.VendorName = tableRow.VendorName;
             $scope.VendorQutn.ClientID = tableRow.ClientID;
             $scope.VendorQutn.ClientName = tableRow.ClientName;
-            //$scope.VendorQutn.TermsID = tableRow.TermsID;
-            //$scope.VendorQutn.FormName = tableRow.FormName;
             $scope.VendorQutn.VendorQutnNo = tableRow.VendorQutnNo;
             $scope.VendorQutn.RequisitionDate = tableRow.RequiDate;
             $scope.VendorQutn.RequisitionNo = tableRow.RequisitionNo;
             $scope.VendorQutn.QuotationDate = tableRow.QuotatDate;
             $scope.VendorQutn.Remarks = tableRow.Remarks;
-         /*   $scope.VendorQutn.Status = tableRow.Status;*/
-      /*      $scope.VendorQutn.POAmount = tableRow.POAmount;*/
-      /*      $scope.VendorQutn.AdvancePaidAmount = tableRow.AdvancePaidAmount;*/
-          /*  $scope.VendorQutn.BillAmount = tableRow.BillAmount;*/
             $scope.VendorQutn.VendorBillNo = tableRow.VendorBillNo;
             $scope.VendorQutn.VendorBillDate = tableRow.VendorBillDate;
             $scope.VendorQutn.BillReceiveDate = tableRow.BillReceiveDate;
@@ -1148,7 +1079,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $scope.VendorQutn.TotalBillAmount = tableRow.TotalBillAmount;
             $scope.VendorQutn.NetPayableAmount = tableRow.NetPayableAmount;
             $scope.VendorQutn.Note = tableRow.Note;
-  /*          $scope.VendorQutn.VendrFinalBilRcvdID = tableRow.VendrFinalBilRcvdID;*/
             $scope.VendorQutn.WONo = tableRow.WONo;
             $scope.VendorQutn.WODate = tableRow.WODate;
             $scope.VendorQutn.WOAmt = tableRow.WOAmt;
@@ -1190,7 +1120,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
 
         $scope.toggleTermsConditionsSelect = function (row) {
             $scope.VendorQutn.TermsID = row.TermsID;
-            //$scope.VendorQutn.FormCode = row.FormCode;
             $scope.VendorQutn.FormName = row.FormName;
 
             $http.post('/VendorQuotation/GetVendorQutnTermAgainstFormList', { TermsID: row.TermsID })
@@ -1236,7 +1165,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
             $('#RequisitionTermModal').modal('show');
         };
 
-        $scope.ReqTermDataSetupGridData = [];  // base collection
+        $scope.ReqTermDataSetupGridData = [];
         $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
 
         $scope.AddReqTerm = function () {
@@ -1328,18 +1257,7 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
                 return;
             }
 
-            //if ($('#ReceivedDate').val() == "") {
-            //    toastr.error("Submission Date Required.");
-            //    return;
-            //}
-
-            //if ($('#QuotationDate').val() == "") {
-            //    toastr.error("Requisition Date Date Required");
-            //    return;
-            //}
-
             $scope.VendorQutn.QuotationDate = $('#QuotationDate').val();
-       /*     $scope.VendorQutn.ReceivedDate = $('#ReceivedDate').val();*/
             $scope.VendorQutn.VendorBillDate = $('#VendorBillDate').val();
             $scope.VendorQutn.BillReceiveDate = $('#BillReceiveDate').val();
 
@@ -1386,7 +1304,6 @@ padding: 0px 10px; border: 2px solid black; background: transparent;">
         $scope.toggleRefreshTable = function () {
 
             $timeout(function () {
-                // Reload the current page
                 window.location.reload();
             }, 2000);
 

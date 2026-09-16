@@ -65,6 +65,11 @@ namespace SILDMS.Model
         public decimal BaseAmount { get; set; }
         public string ProcessStatus { get; set; }
         public string DocumentID { get; set; }
+        public decimal BillAmount { get; set; }
+        public decimal CommissionPercentage { get; set; }
+        public decimal CommissionAmount { get; set; }
+        public decimal VATAmount { get; set; }
+        public decimal VATPercentage { get; set; }
     }
 
 

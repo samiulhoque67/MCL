@@ -103,6 +103,14 @@ namespace SILDMS.DataAccess.ClientFinalBillPrepare
                         WOInstallmentNo = reader.GetInt32("WOInstallmentNo"),
                         WOInstallmentID = reader.GetInt64("WOInstallmentID"),
                         WOInstallmentAmt = reader.GetDouble("WOInstallmentAmt"),
+
+                        BillAmount = reader.GetToDecimal("WOPrice"),
+                        CommissionPercentage = reader.GetToDecimal("ASFPerc"),
+                        CommissionAmount = reader.GetToDecimal("TotGivenASFAmt"),
+                        VATPercentage = reader.GetToDecimal("VatPerc"),
+                        VATAmount = reader.GetToDecimal("VatAmt"),
+
+
                         BillType = reader.GetString("BillType"),
                         BillCategory = reader.GetString("BillCategory"),
 
