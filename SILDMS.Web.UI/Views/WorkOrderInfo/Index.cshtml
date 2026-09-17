@@ -134,29 +134,36 @@
                 <div class="col-lg-2">
                     <div class="form-group"><label>Client Name :</label></div>
                 </div>
-                <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="col-sm-3 col-md-3 col-lg-3">
                     <div style="position:relative;">
                         <input id="ClientName" name="ClientName" type="text"
                                data-ng-model="WOInfo.ClientName" class="form-control"
                                ng-readonly="true" placeholder="Client Name"
                                style="height:25px;font-size:smaller;" />
-                        <!-- Search only available in new mode -->
+
                         <button type="button" data-ng-click="ShowClientList()"
                                 ng-hide="pageMode==='view' || pageMode==='edit'"
                                 style="position:absolute;right:1px;top:50%;transform:translateY(-50%);
-                                       padding:0px 10px;border:2px solid black;background:transparent;">
+                                   padding:0px 10px;border:2px solid black;background:transparent;">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
                 </div>
+
+                <div class="col-lg-1">
+                </div>
+
+
                 <div class="col-lg-2">
                     <div class="form-group"><label>Bill Category:</label></div>
                 </div>
+
                 <div class="col-lg-3">
                     <div class="form-group">
                         <input type="radio" ng-model="WOInfo.BillCategory" name="BillCategory"
                                value="Normal" ng-disabled="pageMode==='view'" />
                         <label>Normal</label>
+
                         <input type="radio" ng-model="WOInfo.BillCategory" name="BillCategory"
                                value="PlusMinus" ng-disabled="pageMode==='view'" />
                         <label>Plus-minus</label>
@@ -164,51 +171,41 @@
                 </div>
             </div>
 
-            <!-- WO No + Bill Type -->
-            <div class="row">
-                <div class="col-lg-2">
-                    <div class="form-group"><label>Work Order No.</label></div>
-                </div>
-                <div class="col-lg-3">
-                    <input id="WONo" name="WONo" type="text" class="form-control"
-                           placeholder="WONo" ng-model="WOInfo.WONo"
-                           ng-readonly="pageMode==='view'" />
-                </div>
-                <div class="col-lg-1"></div>
-                <div class="col-lg-2">
-                    <div class="form-group"><label>Bill Type:</label></div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <input type="radio" ng-model="WOInfo.BillType" name="BillType"
-                               value="Default" ng-disabled="pageMode==='view'" />
-                        <label>Default</label>
-                        <input type="radio" ng-model="WOInfo.BillType" name="BillType"
-                               value="Installment" ng-disabled="pageMode==='view'" />
-                        <label>Installment</label>
-                    </div>
-                </div>
-            </div>
+            <!-- Bill Type (Work Order No Removed) -->
+           
 
             <!-- WO Amount + Installment -->
             <div class="row">
                 <div class="col-lg-2">
                     <div class="form-group"><label>Work Order Amount:</label></div>
                 </div>
+
                 <div class="col-lg-3">
                     <input id="WOAmt" name="WOAmt" style="text-align:right" readonly
                            type="text" class="form-control" placeholder="0.00"
                            ng-model="WOInfo.WOAmt" />
                 </div>
-                <div class="col-lg-2" ng-show="WOInfo.BillType==='Installment'">
-                    <div class="form-group"><label>No of Installment:</label></div>
+
+                <div class="col-lg-1">
+                   
                 </div>
-                <div class="col-lg-3" ng-show="WOInfo.BillType==='Installment'">
-                    <input id="NoOfInstallment" name="NoOfInstallment" type="text"
-                           class="form-control" placeholder="No of Installment"
-                           ng-model="WOInfo.NoOfInstallment" ng-change="calculateAmounts()"
-                           ng-readonly="pageMode==='view'" />
+                <div class="col-lg-2">
+                    <div class="form-group"><label>Bill Type:</label></div>
                 </div>
+
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <input type="radio" ng-model="WOInfo.BillType" name="BillType"
+                               value="Default" ng-disabled="pageMode==='view'" />
+                        <label>Default</label>
+
+                        <input type="radio" ng-model="WOInfo.BillType" name="BillType"
+                               value="Installment" ng-disabled="pageMode==='view'"
+                               style="margin-left:15px;" />
+                        <label>Installment</label>
+                    </div>
+                </div>
+
             </div>
 
             <!-- WO Date + Installment Amount -->
@@ -216,34 +213,60 @@
                 <div class="col-lg-2">
                     <div class="form-group"><label>Work Order Date:</label></div>
                 </div>
+
                 <div class="col-lg-3">
-                    <input id="WODate" name="WODate" type="text" class="DatePicker form-control"
-                           placeholder="DD/MM/YYYY" ng-model="WOInfo.WODate"
+                    <input id="WODate" name="WODate" type="text"
+                           class="DatePicker form-control"
+                           placeholder="DD/MM/YYYY"
+                           ng-model="WOInfo.WODate"
                            ng-readonly="pageMode==='view'" />
                 </div>
+
+
                 <div class="col-lg-2" ng-show="WOInfo.BillType==='Installment'">
-                    <div class="form-group"><label>Installment Amount:</label></div>
+                    <div class="form-group"><label>No of Installment:</label></div>
                 </div>
+
                 <div class="col-lg-3" ng-show="WOInfo.BillType==='Installment'">
-                    <input id="InstallmentAmt" name="InstallmentAmt" type="text"
-                           class="form-control" placeholder="0.00"
-                           ng-readonly="true" ng-model="WOInfo.InstallmentAmt" />
+                    <input id="NoOfInstallment" name="NoOfInstallment" type="text"
+                           class="form-control" placeholder="No of Installment"
+                           ng-model="WOInfo.NoOfInstallment"
+                           ng-change="calculateAmounts()"
+                           ng-readonly="pageMode==='view'" />
                 </div>
+
+
             </div>
 
-            <!-- Remarks -->
+            <!-- Remarks (Smaller Width) -->
             <div class="row">
                 <div class="col-lg-2">
                     <div class="form-group"><label>Remarks:</label></div>
                 </div>
-                <div class="col-lg-8">
+
+                <div class="col-lg-3">
                     <input id="Remarks" name="Remarks" type="text"
-                           data-ng-model="WOInfo.Remarks" class="form-control"
-                           placeholder="Remarks" ng-readonly="pageMode==='view'" />
+                           data-ng-model="WOInfo.Remarks"
+                           class="form-control"
+                           placeholder="Remarks"
+                           ng-readonly="pageMode==='view'" />
+                </div>
+
+
+                <div class="col-lg-2" ng-show="WOInfo.BillType==='Installment'">
+                    <div class="form-group"><label>Installment Amount:</label></div>
+                </div>
+
+                <div class="col-lg-3" ng-show="WOInfo.BillType==='Installment'">
+                    <input id="InstallmentAmt" name="InstallmentAmt" type="text"
+                           class="form-control"
+                           placeholder="0.00"
+                           ng-readonly="true"
+                           ng-model="WOInfo.InstallmentAmt" />
                 </div>
             </div>
 
-
+            <!-- Upload Documents -->
             <div class="row">
 
                 <div class="col-lg-2">
@@ -255,7 +278,6 @@
                     </div>
                 </div>
 
-                <!-- Show file input only when NOT in view mode -->
                 <div ng-hide="pageMode==='view'" class="col-lg-2">
                     <div class="form-group">
                         <input type="file"
@@ -267,22 +289,17 @@
                     </div>
                 </div>
 
-                <!-- View section -->
                 <div ng-hide="viewonlymode" class="col-lg-2">
-                    <!-- View button -->
                     <button ng-show="WOInfo.DocumentID"
                             ng-click="ViewDocument()"
                             class="btn button-custom btn-sm">
                         <i class="fa fa-eye"></i> View
                     </button>
-
                 </div>
 
                 <div ng-show="viewonlymode" class="col-lg-5">
                     <div class="form-group" style="display:flex; gap:8px; align-items:center;">
 
-
-                        <!-- View button — only when a document exists -->
                         <button ng-show="WOInfo.DocumentID"
                                 ng-click="ViewDocument()"
                                 class="btn button-custom btn-sm">
@@ -290,11 +307,14 @@
                         </button>
 
                         <span ng-hide="ClientReq.DocumentID"
-                              style="color:#999; font-size:11px;">No document attached</span>
+                              style="color:#999; font-size:11px;">
+                            No document attached
+                        </span>
                     </div>
                 </div>
 
             </div>
+
         </div>
     </div>
 
@@ -826,7 +846,7 @@
 
         <!-- Ref No / Date -->
         <div class="row" style="display:flex;justify-content:space-between;margin-top:25px;">
-            <p style="margin:0;"><strong>{{WOInfo.WONo}}</strong></p>
+            <p style="margin:0;"><strong>Ref: WO-{{WOInfo.WOInfoID}}</strong></p>
         </div>
         <div class="row" style="display:flex;justify-content:space-between;">
             <p style="margin:0;"><strong>Date:</strong> {{WOInfo.WODate}}</p>
@@ -1695,7 +1715,7 @@
 
                 var doc = iframe.contentWindow.document;
                 doc.open();
-                doc.write('<html><head><title>Work Order - ' + ($scope.WOInfo.WONo || '') + '</title>');
+                doc.write('<html><head><title>Work Order - ' + ($scope.WOInfo.WOInfoID || '') + '</title>');
                 doc.write(`
                     <style>
                         /* Removing the page margin removes the space Chrome/Edge use

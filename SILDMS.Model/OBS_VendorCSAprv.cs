@@ -73,6 +73,11 @@ namespace SILDMS.Model
         public string VerifyDesig { get; set; }
         public string ApprovedBy { get; set; }
         public string ApprovedDesig { get; set; }
-
+        public string PrepBySignature { get; set; }
+        public string RecomenBySignature { get; set; }
+        public string RecmAccBySignature { get; set; }
+        public string VerifyBySignature { get; set; }
+        public string ApprovedBySignature { get; set; }
+        public string VendorCSActualAprvID { get; set; }
     }
 }

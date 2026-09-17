@@ -84,7 +84,7 @@
             left:0;
             width:100%;
             height:100%;
-            background:red;
+            background:none;
             z-index:99999;">
         TEST LOADER
     </div>
@@ -204,22 +204,26 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Client Requisition Information</h3>
-                </div>
+                 </div>
                 <div class="table-responsive" ng-cloak>
                     <table st-table="ClientDisplayedCollection" st-safe-src="ClientList"
                            class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
-                            <tr>
-                                <th class="col-lg-3" data-ng-click="sort('ClientName')">Client Name</th>
-                                <th class="col-lg-1" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
+                            <tr style="font-size: 15px;">
+                                <th colspan="4" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                    Client Requisition Information
+                                </th>
+                            </tr>
+                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                                <th class="col-lg-2" data-ng-click="sort('ClientName')">Client Name</th>
                                 <th class="col-lg-3" data-ng-click="sort('Remarks')">Project Name</th>
+                                <th class="col-lg-1" data-ng-click="sort('RequisitionDate')">Requisition Date</th>
                                 <th class="col-lg-1">Action</th>
                             </tr>
                             <tr>
                                 <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                                <th></th>
-                                <th></th>
+                                <th><input st-search="Remarks" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="RequisitionDate" placeholder="Requisition Date" class="input-sm form-control" type="search" /></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -228,10 +232,10 @@
                                 <td class="hidden">{{row.ClientReqID}}</td>
                                 <td class="hidden">{{row.ClientID}}</td>
                                 <td class="text-left">{{row.ClientName}}</td>
-                                <td class="text-center">{{row.RequisitionDate}}</td>
                                 <td class="text-left">{{row.Remarks}}</td>
+                                <td class="text-center">{{row.RequisitionDate}}</td>
                                 <td>
-                                    <a class="btn btn-sm btn-flat btn-success" ng-href="#"
+                                    <a class="btn btn-sm btn-flat btn-success"
                                        data-ng-click="toggleClientReqSelect(row)">Select</a>
                                 </td>
                             </tr>
@@ -353,7 +357,7 @@
                             <tr>
                                 <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
                                 <th><input st-search="Remarks" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
-                                <th></th>
+                                <th><input st-search="SubmissionDate" placeholder="Submission Date" class="input-sm form-control" type="search" /></th>
                                 <th></th>
                             </tr>
                         </thead>

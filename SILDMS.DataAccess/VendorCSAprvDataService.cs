@@ -691,6 +691,8 @@ namespace SILDMS.DataAccess
                     DataTable dt1 = ds.Tables[0];
                     VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSAprv
                     {
+                        VendorCSActualAprvID = reader.GetString("VendorCSActualAprvID"),
+
                         VendorCSRecmID = reader.GetString("VendorCSRecmID"),
                         CSRecmVendorName = reader.GetString("VendorCSRecmName"),
                         CSRecDate = reader.GetString("CSRecDate"),
@@ -705,7 +707,7 @@ namespace SILDMS.DataAccess
 
                         RecomenBy = reader.GetString("RecomenBy"),
                         RecomenDesig = reader.GetString("RecomenDesig"),
-                       
+
                         RecmAccBy = reader.GetString("RecmAccBy"),
                         RecmAccDesig = reader.GetString("RecmAccDesig"),
 
@@ -713,7 +715,16 @@ namespace SILDMS.DataAccess
                         VerifyDesig = reader.GetString("VerifyDesig"),
 
                         ApprovedBy = reader.GetString("ApprovedBy"),
-                        ApprovedDesig = reader.GetString("ApprovedDesig")
+                        ApprovedDesig = reader.GetString("ApprovedDesig"),
+
+
+
+                        // Signatures
+                        PrepBySignature = reader.GetString("PrepBySignature"),
+                        RecomenBySignature = reader.GetString("RecomenBySignature"),
+                        RecmAccBySignature = reader.GetString("RecmAccBySignature"),
+                        VerifyBySignature = reader.GetString("VerifyBySignature"),
+                        ApprovedBySignature = reader.GetString("ApprovedBySignature")
                     }).ToList();
                 }
             }
