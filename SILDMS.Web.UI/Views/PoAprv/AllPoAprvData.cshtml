@@ -176,8 +176,9 @@
                                 <span ng-show="row.PoAprvID" class="status-done">Approved</span>
                                 <span ng-hide="row.PoAprvID" class="status-pending">Pending</span>
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <button type="button"
+                                        ng-show="row.PoAprvID"
                                         class="btn btn-sm btn-flat btn-primary"
                                         ng-click="openDetail(row)">
                                     <i class="fa fa-eye"></i> Details
@@ -426,93 +427,111 @@
         </div>
 
     </div>
+    <div id="masterRow" style="display:none;">
 
+        <!-- Logo + Company Address (description below logo) -->
+        <div style="margin-bottom:18px;">
+            <img src="/Content/AdminLTE/img/MCL-logo.png"
+                 alt="MCL Logo"
+                 style="max-height:85px; max-width:130px; display:block; margin-bottom:6px;" />
+            <div style="font-size:11px; line-height:1.35; color:#222;">
+                <strong style="font-size:13px;">MEDIACOM LIMITED</strong><br />
+                SAMSON CENTER<br />
+                Levels - 5 to 7<br />
+                43 South Avenue, Road-126, Plot-CES (G) 5A,<br />
+                Gulshan 1, Dhaka – 1212<br />
+                IP No. 09610939393 extn: 1200/1205<br />
+                email: mediacombd.com, www.mediacombd.com
+            </div>
+        </div>
 
-    <div id="masterRow" style="display: none; margin-top: 150px; margin-left:30px">
-
-        <div class="row">
-            <p style="font-weight: bold; font-size: 25px; text-align: center; border-bottom: 5px solid #000;">
+        <!-- Title - left aligned with black underline (matches image) -->
+        <div style="margin-bottom:18px;">
+            <p style="font-weight:bold; font-size:25px; text-align:left;
+                  border-bottom:5px solid #000; display:inline-block; margin:0; padding-bottom:2px;">
                 Purchase Order
             </p>
         </div>
 
-        <!-- Ref No / Date -->
-        <div class="row" style="display: flex; justify-content: space-between; margin-top: 25px">
-            <p style="margin:0;">Ref: <strong>PO-{{VendorCSInfo.PONo}}</strong></p>
-        </div>
-        <div class="row" style="display:flex;justify-content:space-between;">
-            <p style="margin:0;"><strong>Date:</strong> {{VendorCSInfo.PODate}}</p>
-        </div>
+        <!-- Two-column header: Left = Supplier info, Right = Ref + Date -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:10px;">
 
-        <!-- Vendor (recipient) block -->
-        <div class="row" style="margin-top:14px;">
-            <p style="margin:0;font-weight:bold;">{{VendorCSInfo.VendorName}}</p>
-        </div>
-        <div class="row" style="margin-top:14px;">
-            <p style="margin:0;">{{VendorCSInfo.VendorAddress}}</p>
-        </div>
+            <!-- LEFT column -->
+            <div style="flex:1; padding-right:20px;">
+                <p style="margin:2px 0;">
+                    <strong>Supplier No:</strong>
+                    {{ VendorCSInfo.VendorTinNo ? (VendorCSInfo.VendorTinNo | limitTo:-4) : '' }}
+                </p>
+                <p style="margin:2px 0;">
+                    <strong>Name:</strong> {{VendorCSInfo.VendorName}}
+                </p>
+                <p style="margin:2px 0;">
+                    <strong>Address:</strong> {{VendorCSInfo.VendorAddress}}
+                </p>
+                <p style="margin:8px 0 2px 0;">
+                    <strong>Subject:</strong> Purchase Order for {{currentproject}}
+                </p>
+            </div>
 
-        <!-- Subject line -->
-        <div class="row" style="margin-top:10px;">
-            <p style="margin:0;">
-                <strong> Subject: Work Order for {{VendorCSInfo.Remarks}}</strong>
-            </p>
-        </div>
-
-        <!-- Item table -->
-        <div class="row" style="margin-top:5px;">
-            <div class="col-md-12">
-                <table style="width:100%;border-collapse:collapse;">
-                    <thead>
-                        <tr>
-                            <th style="border:1px solid #555;padding:6px 8px;text-align:left;">Item Description</th>
-                            <th style="border:1px solid #555;padding:6px 8px;text-align:left;">UOM</th>
-                            <th style="border:1px solid #555;padding:6px 8px;text-align:center;">QTY</th>
-                            <th style="border: 1px solid #555; padding: 6px 8px; text-align: center;">Unit Price</th>
-                            <th style="border: 1px solid #555; padding: 6px 8px; text-align: center;">Amount</th>
-                            <th style="border: 1px solid #555; padding: 6px 8px; text-align: center;">Vat(%)</th>
-                            <th style="border: 1px solid #555; padding: 6px 8px; text-align: center;">Vat Amout</th>
-                            <th style="border: 1px solid #555; padding: 6px 8px; text-align: center;">Total Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in PoPrintCollection" ng-cloak style="font-size:12px;">
-                            <td style="border:1px solid #555;padding:6px 8px;">
-                                <div style="font-weight:bold;">{{row.ServiceItemName}}</div>
-                                <div style="white-space:pre-line;">{{row.Description}}</div>
-                            </td>
-                            <td style="border:1px solid #555;padding:6px 8px;text-align:center;">{{row.QutnUnit}}</td>
-                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.NegoQty | number:2}}</td>
-                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.NegoPrice | number:2}}</td>
-
-                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.NegoAmt | number:2}}</td>
-                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.VatPerc | number:2}}</td>
-                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.VatAmt | number:2}}</td>
-                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.TolAmt | number:2}}</td>
-
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="7" style="border:1px solid #555;padding:6px 8px;text-align:right;font-weight:bold;"></td>
-                            <td style="border:1px solid #555;padding:6px 8px;text-align:right;font-weight:bold;">{{PoPrintGrandTotal | number:2}}</td>
-                        </tr>
-                    </tfoot>
-                </table>
+            <!-- RIGHT column -->
+            <div style="text-align:right; min-width:180px;">
+                <p style="margin:2px 0;">
+                    <strong>Ref:</strong> PO-{{VendorCSInfo.PONo}}
+                </p>
+                <p style="margin:2px 0;">
+                    <strong>Date:</strong> {{VendorCSInfo.PODate}}
+                </p>
             </div>
         </div>
 
+        <!-- Item table -->
+        <div style="margin-top:18px;">
+            <table style="width:100%; border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th style="border:1px solid #555; padding:6px 8px; text-align:left;">Item Description</th>
+                        <th style="border:1px solid #555; padding:6px 8px; text-align:left;">UOM</th>
+                        <th style="border:1px solid #555; padding:6px 8px; text-align:center;">QTY</th>
+                        <th style="border:1px solid #555; padding:6px 8px; text-align:center;">Unit Price</th>
+                        <th style="border:1px solid #555; padding:6px 8px; text-align:center;">Amount</th>
+                        <th style="border:1px solid #555; padding:6px 8px; text-align:center;">Vat (%)</th>
+                        <th style="border:1px solid #555; padding:6px 8px; text-align:center;">Vat Amount</th>
+                        <th style="border:1px solid #555; padding:6px 8px; text-align:center;">Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in PoPrintCollection" ng-cloak style="font-size:12px;">
+                        <td style="border:1px solid #555; padding:6px 8px;">
+                            <div style="font-weight:bold;">{{row.ServiceItemName}}</div>
+                            <div style="white-space:pre-line;">{{row.Description}}</div>
+                        </td>
+                        <td style="border:1px solid #555; padding:6px 8px; text-align:center;">{{row.QutnUnit}}</td>
+                        <td style="border:1px solid #555; padding:6px 8px; text-align:right;">{{row.NegoQty | number:2}}</td>
+                        <td style="border:1px solid #555; padding:6px 8px; text-align:right;">{{row.NegoPrice | number:2}}</td>
+                        <td style="border:1px solid #555; padding:6px 8px; text-align:right;">{{row.NegoAmt | number:2}}</td>
+                        <td style="border:1px solid #555; padding:6px 8px; text-align:right;">{{row.VatPerc | number:2}}</td>
+                        <td style="border:1px solid #555; padding:6px 8px; text-align:right;">{{row.VatAmt | number:2}}</td>
+                        <td style="border:1px solid #555; padding:6px 8px; text-align:right;">{{row.TolAmt | number:2}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="7" style="border:1px solid #555; padding:6px 8px; text-align:right; font-weight:bold;">Total</td>
+                        <td style="border:1px solid #555; padding:6px 8px; text-align:right; font-weight:bold;">{{PoPrintGrandTotal | number:2}}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
         <!-- In words -->
-        <div class="row" style="margin-top:5px;">
+        <div style="margin-top:8px;">
             <p style="margin:0;"><strong>In words:</strong> {{PoPrintGrandTotalWords}} Taka Only</p>
         </div>
 
-        <!-- Notes (from Terms & Conditions) -->
-        <div class="row" style="margin-top:16px;">
-            <p style="margin:0;font-weight:bold;">Notes:</p>
-        </div>
-        <div class="row">
-            <ol style="margin-top:4px;padding-left:20px;">
+        <!-- Notes -->
+        <div style="margin-top:16px;">
+            <p style="margin:0; font-weight:bold;">Notes:</p>
+            <ol style="margin-top:4px; padding-left:20px;">
                 <li ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:14px;">
                     {{row.TermsName}}
                 </li>
@@ -520,19 +539,60 @@
         </div>
 
         <!-- Signatures -->
-        <div class="row" style="margin-top:70px;display:flex;justify-content:space-between;">
-            <div style="text-align:center;width:45%;">
-                <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
-                <div>Client Relations Department</div>
+        <div style="margin-top:50px; display:flex; justify-content:space-between; flex-wrap:wrap;">
+            <!-- Prepared By -->
+            <div style="text-align:center; width:30%;">
+                <div style="height:45px;">
+                    <img ng-if="PoPrintCollection.length && PoPrintCollection[0].PoPrepSignature"
+                         ng-src="{{toSignatureSrc(PoPrintCollection[0].PoPrepSignature)}}"
+                         style="max-height:45px; max-width:100%;" />
+                </div>
+                <div style="border-top:1px solid #000; margin-top:5px; padding-top:4px; font-weight:bold; font-size:12px;">
+                    PO Prepared By
+                </div>
+                <div style="font-size:12px;">{{PoPrintCollection[0].PoPrepBy}}</div>
+                <div style="font-size:11px; color:#555;"
+                     ng-show="PoPrintCollection[0].PoPrepDesignation">
+                    {{PoPrintCollection[0].PoPrepDesignation}}
+                </div>
             </div>
-            <div style="text-align:center;width:45%;">
-                <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
-                <div>Accounts Department</div>
-            </div>
+            <!-- Recommended By -->
+            @*<div style="text-align:center; width:30%;">
+                    <div style="height:45px;">
+                        <img ng-if="PoPrintCollection.length && PoPrintCollection[0].PoRecomSignature"
+                             ng-src="{{toSignatureSrc(PoPrintCollection[0].PoRecomSignature)}}"
+                             style="max-height:45px; max-width:100%;" />
+                    </div>
+                    <div style="border-top:1px solid #000; margin-top:5px; padding-top:4px; font-weight:bold; font-size:12px;">
+                        PO Recommended By
+                    </div>
+                    <div style="font-size:12px;">{{PoPrintCollection[0].PoRecomBy}}</div>
+                    <div style="font-size:11px; color:#555;"
+                         ng-show="PoPrintCollection[0].PoRecomDesignation">
+                        {{PoPrintCollection[0].PoRecomDesignation}}
+                    </div>
+                </div>*@
+            <!-- Approved By -->
+            @*<div style="text-align:center; width:30%;">
+                    <div style="height:45px;">
+                        <img ng-if="PoPrintCollection.length && PoPrintCollection[0].PoAprvSignature"
+                             ng-src="{{toSignatureSrc(PoPrintCollection[0].PoAprvSignature)}}"
+                             style="max-height:45px; max-width:100%;" />
+                    </div>
+                    <div style="border-top:1px solid #000; margin-top:5px; padding-top:4px; font-weight:bold; font-size:12px;">
+                        PO Approved By
+                    </div>
+                    <div style="font-size:12px;">{{PoPrintCollection[0].PoAprvBy}}</div>
+                    <div style="font-size:11px; color:#555;"
+                         ng-show="PoPrintCollection[0].PoAprvDesignation">
+                        {{PoPrintCollection[0].PoAprvDesignation}}
+                    </div>
+                </div>*@
+
         </div>
 
         <div style="margin-top:30px">
-            <p style="font-style: italic; font-weight: bold;">
+            <p style="font-style:italic; font-weight:bold;">
                 **This is a system generated document.**
             </p>
         </div>
@@ -597,6 +657,14 @@
         return parts.join(' ');
     }
 
+    /* ── Signature helper: turns a raw/base64 string into an <img> src ── */
+    function toSignatureSrc(raw) {
+        if (!raw) return '';
+        if (raw.indexOf('data:image') === 0) return raw;
+        return 'data:image/png;base64,' + raw;
+    }
+
+
     /* ══════════════════════════════════════════════════════════════
        Angular Controller
        ══════════════════════════════════════════════════════════════ */
@@ -621,6 +689,8 @@
             $scope.PoPrintCollection = [];
             $scope.PoPrintGrandTotal = 0;
             $scope.PoPrintGrandTotalWords = '';
+
+            $scope.toSignatureSrc = toSignatureSrc;
 
             /* ── Model ──────────────────────────────────────────────── */
             function emptyInfo() {
@@ -681,8 +751,12 @@
                 $scope.VendorCSInfo.VendorID = row.VendorID;
                 $scope.VendorCSInfo.ClientName = row.ClientName;
                 $scope.VendorCSInfo.VendorName = row.VendorName;
+                $scope.VendorCSInfo.VendorTinNo = row.VendorTinNo;
                 $scope.VendorCSInfo.RecommendedAmount = row.ApprovedAmount;
                 $scope.VendorCSInfo.AprvRemarks = row.AprvRemarks;
+
+                $scope.currentproject = row.ProjectName;
+
 
                 // default today for approval date
                 $timeout(function () {
@@ -763,6 +837,7 @@
                 $scope.PoPrintCollection = [];
                 $scope.PoPrintGrandTotal = 0;
                 $scope.PoPrintGrandTotalWords = '';
+                $scope.currentproject = '';
             };
 
             /* ── Item mapping helper ────────────────────────────────── */

@@ -81,6 +81,7 @@ namespace SILDMS.Model
         public string Category { get; set; }
         public string VenReqItem { get; set; }
         public string Note { get; set; }
+        public string ServicesCategoryName { get; set; }
     }
     public class OBS_VendorCSReport
     {

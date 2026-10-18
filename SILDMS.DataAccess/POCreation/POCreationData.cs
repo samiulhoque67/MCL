@@ -52,17 +52,17 @@ namespace SILDMS.DataAccess.POCreation
             return servicesCategoryList;
         }
 
-      
+
 
         public List<OBS_ClientReq> GetPoCreationClientInfo(out string errorNumber)
         {
-             errorNumber = string.Empty;
+            errorNumber = string.Empty;
             List<OBS_ClientReq> VendorInfoList = new List<OBS_ClientReq>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientRequest"))
             {
-              
+
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -87,11 +87,11 @@ namespace SILDMS.DataAccess.POCreation
         }
 
 
-        
 
-        public List<OBS_VendorCSRecm> OBS_GetPOVendorsUsingClient(string ClientReqId,string WIInfoID, out string errorNumber)
+
+        public List<OBS_VendorCSRecm> OBS_GetPOVendorsUsingClient(string ClientReqId, string WIInfoID, out string errorNumber)
         {
-             errorNumber = string.Empty;
+            errorNumber = string.Empty;
             List<OBS_VendorCSRecm> VendorCSInfoList = new List<OBS_VendorCSRecm>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
@@ -99,7 +99,7 @@ namespace SILDMS.DataAccess.POCreation
             {
                 db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.VarChar, ClientReqId);
                 db.AddInParameter(dbCommandWrapper, "@WIInfoID", SqlDbType.VarChar, WIInfoID);
-       
+
                 // Execute SP. 
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -107,7 +107,7 @@ namespace SILDMS.DataAccess.POCreation
                     DataTable dt1 = ds.Tables[0];
                     VendorCSInfoList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecm
                     {
-                        ClientID= reader.GetString("ClientID"),
+                        ClientID = reader.GetString("ClientID"),
                         ClientName = reader.GetString("ClientName"),
                         ClientReqID = reader.GetString("ClientReqID"),
                         VendorID = reader.GetString("VendorID"),
@@ -116,8 +116,8 @@ namespace SILDMS.DataAccess.POCreation
                         ContactPerson = reader.GetString("ContactPerson"),
                         Email = reader.GetString("Email"),
                         CurrentAddress = reader.GetString("CurrentAddress"),
-                        ItemCount=reader.GetString("ServiceItemCount"),
-                        WIInfoID=reader.GetString("WOInfoID"),
+                        ItemCount = reader.GetString("ServiceItemCount"),
+                        WIInfoID = reader.GetString("WOInfoID"),
 
 
                         //,
@@ -130,7 +130,7 @@ namespace SILDMS.DataAccess.POCreation
             return VendorCSInfoList;
         }
 
-        public List<OBS_VendorCSRecmItem> GetVendorPOQuotationItem(string vendorID, string ClientReqID,string WIInfoID, out string errorNumber)
+        public List<OBS_VendorCSRecmItem> GetVendorPOQuotationItem(string vendorID, string ClientReqID, string WIInfoID, out string errorNumber)
         {
             errorNumber = string.Empty;
             List<OBS_VendorCSRecmItem> VendorCSInfoItemList = new List<OBS_VendorCSRecmItem>();
@@ -149,13 +149,13 @@ namespace SILDMS.DataAccess.POCreation
                     DataTable dt1 = ds.Tables[0];
                     VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
-                        
+
                         VendorID = reader.GetString("VendorID"),
                         VendorReqID = reader.GetString("VendorReqID"),
                         VendorQutnID = reader.GetString("VendorQutnID"),
                         VendorCSAprvID = reader.GetString("VendorCSAprvID"),
                         ServiceCategoryID = reader.GetString("ServiceCategoryID"),
-                        //ServiceCategoryName = reader.GetString("ServicesCategoryName"),
+                        ServiceCategoryName = reader.GetString("ServicesCategoryName"),
                         ServiceItemID = reader.GetString("ServiceItemID"),
                         ServiceItemName = reader.GetString("ServiceItemName"),
                         Description = reader.GetString("Description"),
@@ -180,7 +180,7 @@ namespace SILDMS.DataAccess.POCreation
                         NegoVatAmt = reader.GetString("VatAmt"),
                         NegoTolAmt = reader.GetString("VendorTotalAmount"),
                         RemainingQty = reader.GetString("RemainingQty"),
-                        RemainingVendorQty= reader.GetString("RemainingVendorQty")
+                        RemainingVendorQty = reader.GetString("RemainingVendorQty")
                         // ,
 
                         //Status = reader.GetString("Status")
@@ -192,7 +192,7 @@ namespace SILDMS.DataAccess.POCreation
 
         public List<OBS_VendorCSRecmTerms> GetVendorPOInfoTermList(string vendorID, string ClientReqID, string WIInfoID, out string errorNumber)
         {
-             errorNumber = string.Empty;
+            errorNumber = string.Empty;
             List<OBS_VendorCSRecmTerms> VendorCSInfoItemList = new List<OBS_VendorCSRecmTerms>();
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
@@ -287,13 +287,16 @@ namespace SILDMS.DataAccess.POCreation
             VendorCSTerm.Columns.Add("TermsCode", typeof(string));
             VendorCSTerm.Columns.Add("TermsName", typeof(string));
 
-            foreach (var item in vendorCSRecmTerms)
+            if (vendorCSRecmTerms != null)
             {
-                DataRow row = VendorCSTerm.NewRow();
-                row[0] = TryParseLong(item.TermsID);
-                row[1] = item.TermsCode;
-                row[2] = item.TermsName;
-                VendorCSTerm.Rows.Add(row);
+                foreach (var item in vendorCSRecmTerms)
+                {
+                    DataRow row = VendorCSTerm.NewRow();
+                    row[0] = TryParseLong(item.TermsID);
+                    row[1] = item.TermsCode;
+                    row[2] = item.TermsName;
+                    VendorCSTerm.Rows.Add(row);
+                }
             }
 
             // ── Action ──────────────────────────────────────────────────
@@ -399,8 +402,8 @@ namespace SILDMS.DataAccess.POCreation
                         VendorID = reader.GetString("VendorID"),
                         ClientID = reader.GetString("ClientID"),
                         VendorName = reader.GetString("VendorName"),
-                        PoDate= reader.GetString("PoDate"),
-                        ProcessStatus= reader.GetString("ProcessStatus")
+                        PoDate = reader.GetString("PoDate"),
+                        ProcessStatus = reader.GetString("ProcessStatus")
 
 
 

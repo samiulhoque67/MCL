@@ -5,6 +5,7 @@ using SILDMS.Utillity;
 using SILDMS.Utillity.Localization;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,7 +54,7 @@ namespace SILDMS.Service.QuotationApproval
 
         ValidationResult IQuotationApprovalService.GetClientReqDataInfoService(string ClientID, string ClientReqID, out List<ClientReqData> GetClientReqDetails)
         {
-            GetClientReqDetails = _quotationApprovalDataService.GetClientReqDataInfoDataService(ClientID, ClientReqID,  out _errorNumber);
+            GetClientReqDetails = _quotationApprovalDataService.GetClientReqDataInfoDataService(ClientID, ClientReqID, out _errorNumber);
 
             return _errorNumber.Length > 0
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
@@ -83,6 +84,13 @@ namespace SILDMS.Service.QuotationApproval
             throw new NotImplementedException();
         }
 
-
+        public DataSet GetClientQuotationApprovedPrintData(
+         string ClientQutnAprvID,
+         out string errorNumber)
+        {
+            return _quotationApprovalDataService.GetClientQuotationApprovedPrintData(
+                ClientQutnAprvID,
+                out errorNumber);
+        }
     }
 }

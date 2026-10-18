@@ -45,6 +45,7 @@ namespace SILDMS.DataAccess.RequisitionMovement
                     movementList = dt1.AsEnumerable().Select(reader => new OBS_RequisitionMovementInfo
                     {
                         ClientReqID = reader.GetString("ClientReqID"),
+                        ProjectName = reader.GetString("ProjectName"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         ClientReqStatus = reader.GetString("ClientReqStatus"),
@@ -73,6 +74,12 @@ namespace SILDMS.DataAccess.RequisitionMovement
                         CSApproved = reader.GetString("CSApproved") == "1",
                         CSAprvDate = reader.GetString("CSAprvDate"),
 
+                        CSRecomAcc = reader.GetString("CSRecomAcc") == "1",
+                        RecomAccDate = reader.GetString("RecomAccDate"),
+
+                        CSVerify = reader.GetString("CSVerify") == "1",
+                        CSVerifyDate = reader.GetString("CSVerifyDate"),
+
                         CSActualApproved = reader.GetString("CSActualApproved") == "1",
                         CSActualAprvDate = reader.GetString("CSActualAprvDate"),
 
@@ -80,7 +87,53 @@ namespace SILDMS.DataAccess.RequisitionMovement
                         WODate = reader.GetString("WODate"),
 
                         PurchaseOrderRaised = reader.GetString("PurchaseOrderRaised") == "1",
-                        PODate = reader.GetString("PODate")
+                        PODate = reader.GetString("PODate"),
+
+                        // After PO – Vendor
+                        VendorDemandRaised = reader.GetString("VendorDemandRaised") == "1",
+                        VendorDemandDate = reader.GetString("VendorDemandDate"),
+                        VendorFinalBillRaised = reader.GetString("VendorFinalBillRaised") == "1",
+                        VendorFinalBillDate = reader.GetString("VendorFinalBillDate"),
+                        VendorFinalBillCount = string.IsNullOrEmpty(reader.GetString("VendorFinalBillCount")) ? 0 : Convert.ToInt32(reader.GetString("VendorFinalBillCount")),
+                        VendorPaymentDone = reader.GetString("VendorPaymentDone") == "1",
+                        VendorPaymentDate = reader.GetString("VendorPaymentDate"),
+                        VendorPaymentCount = string.IsNullOrEmpty(reader.GetString("VendorPaymentCount")) ? 0 : Convert.ToInt32(reader.GetString("VendorPaymentCount")),
+                        VendorSettlementStatus = reader.GetString("VendorSettlementStatus"),
+                        VendorSettlementDate = reader.GetString("VendorSettlementDate"),
+
+                        // After WO – Client
+                        ClientClaimRaised = reader.GetString("ClientClaimRaised") == "1",
+                        ClientClaimDate = reader.GetString("ClientClaimDate"),
+                        ClientClaimAmount = string.IsNullOrEmpty(reader.GetString("ClientClaimAmount")) ? 0 : Convert.ToDecimal(reader.GetString("ClientClaimAmount")),
+                        ClientFinalBillRaised = reader.GetString("ClientFinalBillRaised") == "1",
+                        ClientFinalBillDate = reader.GetString("ClientFinalBillDate"),
+                        ClientFinalBillCount = string.IsNullOrEmpty(reader.GetString("ClientFinalBillCount")) ? 0 : Convert.ToInt32(reader.GetString("ClientFinalBillCount")),
+                        ClientCollectionDone = reader.GetString("ClientCollectionDone") == "1",
+                        ClientCollectionDate = reader.GetString("ClientCollectionDate"),
+                        ClientCollectionCount = string.IsNullOrEmpty(reader.GetString("ClientCollectionCount")) ? 0 : Convert.ToInt32(reader.GetString("ClientCollectionCount")),
+                        ClientSettlementStatus = reader.GetString("ClientSettlementStatus"),
+                        ClientSettlementDate = reader.GetString("ClientSettlementDate"),
+
+
+
+
+                        // Client Quotation layers
+                        ClientQutnPrepared = reader.GetString("ClientQutnPrepared") == "1",
+                        ClientQutnPrepDate = reader.GetString("ClientQutnPrepDate"),
+                        ClientQutnRecommended = reader.GetString("ClientQutnRecommended") == "1",
+                        ClientQutnRecmDate = reader.GetString("ClientQutnRecmDate"),
+                        ClientQutnApproved = reader.GetString("ClientQutnApproved") == "1",
+                        ClientQutnAprvDate = reader.GetString("ClientQutnAprvDate"),
+
+                        // Purchase Order layers
+                        POPrepCount = string.IsNullOrEmpty(reader.GetString("POPrepCount")) ? 0 : Convert.ToInt32(reader.GetString("POPrepCount")),
+                        POPrepDate = reader.GetString("POPrepDate"),
+                        PORecmCount = string.IsNullOrEmpty(reader.GetString("PORecmCount")) ? 0 : Convert.ToInt32(reader.GetString("PORecmCount")),
+                        PORecmDate = reader.GetString("PORecmDate"),
+                        POAprvCount = string.IsNullOrEmpty(reader.GetString("POAprvCount")) ? 0 : Convert.ToInt32(reader.GetString("POAprvCount")),
+                        POAprvDate = reader.GetString("POAprvDate"),
+
+                        ClientClaimApplicable = reader.GetString("ClientClaimApplicable") == "1"
                     }).ToList();
                 }
             }

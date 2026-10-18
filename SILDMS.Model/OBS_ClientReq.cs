@@ -9,9 +9,9 @@ namespace SILDMS.Model
 {
     public class OBS_ClientReq
     {
-        public string ClientReqID { get; set; } 
+        public string ClientReqID { get; set; }
         public string ClientID { get; set; }
-        public string ClientName { get; set; } 
+        public string ClientName { get; set; }
         [Required]
         public string AutoClientReqNo { get; set; }
         [Required]
@@ -25,7 +25,7 @@ namespace SILDMS.Model
         public string ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
         public string Action { get; set; }
-        public string NoOfVendor { get; set; } 
+        public string NoOfVendor { get; set; }
         [Required]
         public string Status { get; set; }
         public string ProcessStatus { get; set; }
@@ -57,5 +57,6 @@ namespace SILDMS.Model
         public string ProjectName { get; set; }
         public string UserFullName { get; set; }
         public string WODate { get; set; }
+        public string VendorTinNo { get; set; }
     }
 }

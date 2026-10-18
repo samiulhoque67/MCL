@@ -88,6 +88,7 @@ namespace SILDMS.DataAccess.PoAprv
                         VendorID = reader.GetString("VendorID"),
 
 
+                        VendorTinNo = reader.GetString("VendorTinNo"),
                         VendorName = reader.GetString("VendorName"),
 
 
@@ -199,19 +200,22 @@ namespace SILDMS.DataAccess.PoAprv
         public List<OBS_VendorCSRecmItem> PoPrint(string pORecmID, out string errorNumber)
         {
             errorNumber = string.Empty;
+
             List<OBS_VendorCSRecmItem> VendorCSInfoItemList = new List<OBS_VendorCSRecmItem>();
+
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
             SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+
             using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_PoPrintItem"))
             {
-
-
                 db.AddInParameter(dbCommandWrapper, "@PORecmID", SqlDbType.VarChar, pORecmID);
-                // Execute SP. 
+
                 DataSet ds = db.ExecuteDataSet(dbCommandWrapper);
-                if (ds.Tables[0].Rows.Count > 0)
+
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     DataTable dt1 = ds.Tables[0];
+
                     VendorCSInfoItemList = dt1.AsEnumerable().Select(reader => new OBS_VendorCSRecmItem
                     {
                         VendorID = reader.GetString("VendorID"),
@@ -220,6 +224,7 @@ namespace SILDMS.DataAccess.PoAprv
                         VendorAddress = reader.GetString("CurrentAddress"),
                         VendorCSAprvID = reader.GetString("VendorCSAprvID"),
                         VendorName = reader.GetString("VendorName"),
+
                         POAmt = reader.GetString("AprvAmnt"),
                         POCreatedBy = reader.GetString("RecommendedBy"),
                         PODate = reader.GetString("PoAprvDate"),
@@ -231,10 +236,12 @@ namespace SILDMS.DataAccess.PoAprv
                         ServiceItemName = reader.GetString("ServiceItemName"),
                         ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         ServiceCategoryName = reader.GetString("ServicesCategoryName"),
+
                         Description = reader.GetString("Description"),
                         DeliveryLocation = reader.GetString("DeliveryLocation"),
                         DeliveryDate = reader.GetString("DeliveryDate"),
                         DeliveryMode = reader.GetString("DeliveryMode"),
+
                         ReqUnit = reader.GetString("QutnUnit"),
                         QutnQnty = reader.GetString("QutnQnty"),
                         QutnPrice = reader.GetString("QutnPrice"),
@@ -244,17 +251,62 @@ namespace SILDMS.DataAccess.PoAprv
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
                         TolAmt = reader.GetString("TolAmt"),
+
                         NegoQty = reader.GetString("NegoQty"),
                         NegoPrice = reader.GetString("NegoPrice"),
                         NegoAmt = reader.GetString("NegoAmt"),
                         NegoVatAmt = reader.GetString("NegoVatAmt"),
                         NegoTolAmt = reader.GetString("NegoTolAmt"),
-                        // ,
 
-                        //Status = reader.GetString("Status")
+                        // ==========================
+                        // Prepared By
+                        // ==========================
+                        PoPrepBy = reader["PoPrepBy"] == DBNull.Value
+                            ? ""
+                            : reader["PoPrepBy"].ToString(),
+
+                        PoPrepDesignation = reader["PoPrepDesignation"] == DBNull.Value
+                            ? ""
+                            : reader["PoPrepDesignation"].ToString(),
+
+                        PoPrepSignature = reader["PoPrepSignature"] == DBNull.Value
+                            ? ""
+                            : reader["PoPrepSignature"].ToString(),
+
+                        // ==========================
+                        // Recommended By
+                        // ==========================
+                        PoRecomBy = reader["PoRecomBy"] == DBNull.Value
+                            ? ""
+                            : reader["PoRecomBy"].ToString(),
+
+                        PoRecomDesignation = reader["PoRecomDesignation"] == DBNull.Value
+                            ? ""
+                            : reader["PoRecomDesignation"].ToString(),
+
+                        PoRecomSignature = reader["PoRecomSignature"] == DBNull.Value
+                            ? ""
+                            : reader["PoRecomSignature"].ToString(),
+
+                        // ==========================
+                        // Approved By
+                        // ==========================
+                        PoAprvBy = reader["PoAprvBy"] == DBNull.Value
+                            ? ""
+                            : reader["PoAprvBy"].ToString(),
+
+                        PoAprvDesignation = reader["PoAprvDesignation"] == DBNull.Value
+                            ? ""
+                            : reader["PoAprvDesignation"].ToString(),
+
+                        PoAprvSignature = reader["PoAprvSignature"] == DBNull.Value
+                            ? ""
+                            : reader["PoAprvSignature"].ToString()
+
                     }).ToList();
                 }
             }
+
             return VendorCSInfoItemList;
         }
 

@@ -252,9 +252,11 @@
                             </tr>
                             <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
                                 <th>Item Name</th>
-                                <th style="text-align:right;">ReqQnty</th>
-                                <th style="text-align:right;">RemainingQty</th>
-                                <th style="text-align:right;">RemainingVendorQty</th>
+                                <th>Description</th>
+                                <th>Services Category</th>
+                                @*<th style="text-align:right;">ReqQnty</th>*@
+                                @*<th style="text-align:right;">RemainingQty</th>
+                                <th style="text-align:right;">RemainingVendorQty</th>*@
                                 <th>ReqUnit</th>
                                 <th style="text-align:right;">QutnQnty</th>
                                 <th>POQnty</th>
@@ -265,21 +267,23 @@
                                 <th style="text-align:right;">Vat%</th>
                                 <th style="text-align:right;">VatAmt</th>
                                 <th>PoVatAmt</th>
-                                <th style="text-align:right;">TolAmt</th>
-                                <th>PoTotalAmt</th>
+                                <th style="text-align:center;">PoTotalAmt</th>
+                                @*<th>PoTotalAmt</th>*@
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in VenCSItemGridDisplayCollection" ng-cloak style="font-size:12px;">
                                 <td>{{row.ServiceItemName}}</td>
-                                <td style="text-align:right;">{{row.ReqQnty | number:2}}</td>
-                                <td style="text-align:right;">{{row.RemainingQty}}</td>
-                                <td style="text-align:right;">{{row.RemainingVendorQty}}</td>
+                                <td>{{row.Description}}</td>
+                                <td>{{row.ServiceCategoryName}}</td>
+                                @*<td style="text-align:right;">{{row.ReqQnty | number:2}}</td>*@
+                                @*<td style="text-align:right;">{{row.RemainingQty}}</td>
+                                <td style="text-align:right;">{{row.RemainingVendorQty}}</td>*@
                                 <td>{{row.ReqUnit}}</td>
                                 <td style="text-align:right;">{{row.QutnQnty | number:2}}</td>
                                 <td>
                                     <input class="form-control" style="width:80px;height:18px;font-size:10px;"
-                                           type="text" ng-model="row.NegoQty" ng-blur="validateNegoQty(row)" />
+                                           type="text" ng-model="row.QutnQnty" ng-blur="validateNegoQty(row)" />
                                 </td>
                                 <td style="text-align:right;">{{row.QutnPrice | number:2}}</td>
                                 <td>
@@ -289,7 +293,7 @@
                                 <td style="text-align:right;">{{row.QutnAmt | number:2}}</td>
                                 <td>
                                     <input class="form-control" style="width:80px;height:18px;font-size:10px;"
-                                           type="text" ng-model="row.NegoAmt" ng-readonly="true" />
+                                           type="text" ng-model="row.QutnAmt" ng-readonly="true" />
                                 </td>
                                 <td style="text-align:right;">{{row.VatPerc | number:2}}</td>
                                 <td style="text-align:right;">{{row.VatAmt | number:2}}</td>
@@ -298,10 +302,10 @@
                                            type="text" ng-model="row.NegoVatAmt" ng-readonly="true" />
                                 </td>
                                 <td style="text-align:right;">{{row.TolAmt | number:2}}</td>
-                                <td>
+                                @*<td>
                                     <input class="form-control" style="width:80px;height:18px;font-size:10px;"
                                            type="text" ng-model="row.NegoTolAmt" ng-readonly="true" />
-                                </td>
+                                </td>*@
                             </tr>
                             <tr ng-if="VenCSItemGridDisplayCollection.length === 0">
                                 <td colspan="16" class="text-center text-danger">No items available</td>
@@ -378,8 +382,13 @@
                            class="tableVen table-condensed table-bordered table-hover pnlView" style="width:100%;">
                         <thead>
                             <tr style="font-size:15px;">
-                                <th colspan="3" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb">
+                                <th colspan="2" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb">
                                     Terms &amp; Conditions
+                                </th>
+                                <th ng-hide="pageMode==='view'" style="background:#fff;border:1px solid #3003eb;text-align:right;width:8%;">
+                                    <button type="button" ng-click="AddPOTermModal()" class="button-detail btn">
+                                        <i class="fa fa-plus" style="padding-right:3px"></i> Add
+                                    </button>
                                 </th>
                             </tr>
                             <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
@@ -602,8 +611,13 @@
                        class="tableVen table-condensed table-bordered table-hover pnlView" style="width:100%;">
                     <thead>
                         <tr style="font-size:15px;">
-                            <th colspan="3" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb">
+                            <th colspan="2" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb">
                                 Terms &amp; Conditions
+                            </th>
+                            <th ng-hide="pageMode==='view'" style="background:#fff;border:1px solid #3003eb;text-align:right;width:8%;">
+                                <button type="button" ng-click="AddPOTermModal()" class="button-detail btn">
+                                    <i class="fa fa-plus" style="padding-right:3px"></i> Add
+                                </button>
                             </th>
                         </tr>
                         <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
@@ -705,6 +719,88 @@
         </div>
     </div>
 
+
+    <!-- ── Add Term Modal ── -->
+    <div id="POTermModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <h4 class="modal-title" style="font-family:initial;font-weight:700">Terms &amp; Conditions Information</h4>
+                        </div>
+                        <div style="text-align:right;">
+                            <button type="button" class="btn-danger" data-dismiss="modal" aria-hidden="true" style="color:#fff;">
+                                <i class="fa fa-remove"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div ng-cloak>
+                    <div class="row" style="position:relative;top:5px;padding-bottom:10px;">
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-3"><label>Vendor Name:</label></div>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control input-readonly"
+                                   ng-model="VendorCSInfo.VendorName" ng-readonly="true" />
+                        </div>
+                    </div>
+                    <div class="row" style="position:relative;top:5px;padding-bottom:10px;">
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-3"><label>Terms &amp; Conditions:</label></div>
+                        <div class="col-lg-7">
+                            <textarea class="form-control" rows="3" ng-model="POTerm.TermsName"
+                                      placeholder="Enter terms &amp; conditions"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-group pull-right" style="margin:2px;">
+                        <button type="button" ng-click="AddPOTerm()" class="button-detail btn">
+                            <i class="fa fa-save" style="padding-right:3px"></i> Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- #region Confirmation Modal -->
+    <div id="confirmModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="border-radius:4px;overflow:hidden;">
+                <div class="modal-header" style="background-color:#3c8dbc;color:#fff;padding:12px 15px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#fff;opacity:1;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" style="font-weight:600;">
+                        <i class="fa fa-exclamation-triangle"></i> Confirmation
+                    </h4>
+                </div>
+                <div class="modal-body" style="padding:25px 20px;text-align:center;">
+                    <div style="font-size:45px;color:#f39c12;margin-bottom:12px;">
+                        <i style="font-size:50px" class="fa fa-exclamation-circle"></i>
+                    </div>
+                    <p style="font-size:15px;margin-bottom:5px;">
+                        You have not added any <strong>Terms &amp; Conditions</strong>.
+                    </p>
+                    <p style="font-size:14px;color:#777;margin-bottom:0;">
+                        Are you sure you want to proceed?
+                    </p>
+                </div>
+                <div class="modal-footer" style="padding:10px 15px;">
+                    <button type="button" class="btn btn-flat btn-sm btn-default" data-dismiss="modal">
+                        <i class="fa fa-times"></i> Cancel
+                    </button>
+                    <button type="button" class="btn btn-flat btn-sm btn-warning" ng-click="ConfirmSaveWithoutTerms()">
+                        <i class="fa fa-check"></i> Proceed
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #endregion -->
+
 </div><!-- /box -->
 
 <script type="text/javascript">
@@ -783,6 +879,11 @@
         }
         $scope.VendorCSInfo = emptyInfo();
 
+        function emptyTerm() {
+            return { TermsName: "" };
+        }
+        $scope.POTerm = emptyTerm();
+
         /* ── Reset helper ─────────────────────────────────────────── */
         function resetCollections() {
             $scope.isClientSelected = false;
@@ -795,6 +896,7 @@
             $scope.ReqTermGridDisplayCollection = [];
             $scope.SelectedVendorForBiddingDisplayedCollection = [];
             $scope.selectedClientRow = null;
+            $scope.POTerm = emptyTerm();
             if ($scope.CSClientList) {
                 $scope.CSClientList.forEach(function (c) { c.selected = false; });
                 $scope.CSClientDisplayedCollection = [].concat($scope.CSClientList);
@@ -910,14 +1012,17 @@
                 $scope.loading = false;
             }, function () { $scope.loading = false; toastr.error("Failed to load items."); });
 
-            $http.post('/POCreation/GetVendorPOInfoTermList', {
-                VendorID: row.VendorID,
-                ClientReqID: $scope.VendorCSInfo.ClientReqID,
-                WIInfoID: $scope.VendorCSInfo.WIInfoID
-            }).then(function (res) {
-                $scope.ReqTermDataSetupGridData = res.data.VendorCSInfoTermList || [];
-                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-            }, function () { toastr.error("Failed to load terms."); });
+            //$http.post('/POCreation/GetVendorPOInfoTermList', {
+            //    VendorID: row.VendorID,
+            //    ClientReqID: $scope.VendorCSInfo.ClientReqID,
+            //    WIInfoID: $scope.VendorCSInfo.WIInfoID
+            //}).then(function (res) {
+            //    $scope.ReqTermDataSetupGridData = res.data.VendorCSInfoTermList || [];
+            //    $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+            //}, function () { toastr.error("Failed to load terms."); });
+
+            $scope.ReqTermDataSetupGridData = [];
+            $scope.ReqTermGridDisplayCollection = [];
         };
 
         /* ── Item mapping helper ──────────────────────────────────── */
@@ -1071,6 +1176,7 @@
 
 
         /* ── Save / Update ────────────────────────────────────────── */
+        /* ── Save / Update ── */
         $scope.Post = function () {
             if (!$scope.VendorCSInfo.ClientReqID) {
                 toastr.error("Please select a Client Requisition first."); return;
@@ -1088,6 +1194,22 @@
             if (!$scope.VendorCSInfo.PoAmount) { toastr.error("PO Amount is required."); return; }
 
             $scope.VendorCSInfo.CSRecDate = poDate;
+
+            // Warn if no Terms & Conditions
+            if (!$scope.ReqTermGridDisplayCollection || $scope.ReqTermGridDisplayCollection.length === 0) {
+                $('#confirmModal').modal('show');
+                return;
+            }
+
+            $scope.SavePO();
+        };
+
+        $scope.ConfirmSaveWithoutTerms = function () {
+            $('#confirmModal').modal('hide');
+            $scope.SavePO();
+        };
+
+        $scope.SavePO = function () {
             $scope.isSaving = true;
 
             $http.post('/POCreation/SaveVendorPOInfo', {
@@ -1102,7 +1224,6 @@
                     toastr.success("Purchase Order saved successfully.");
                     $scope.toggleRefreshTable();
                 } else if (s === 'S202') {
-                    // FIX: was falling into the error branch before
                     toastr.success("Purchase Order updated successfully.");
                     $scope.toggleRefreshTable();
                 } else {
@@ -1119,6 +1240,36 @@
             $scope.isRefreshing = true;
             $timeout(function () { window.location.reload(); }, 1200);
         };
+
+
+
+        /* ── Terms: add only ── */
+        $scope.AddPOTermModal = function () {
+            if ($scope.pageMode === 'new' && !$scope.VendorCSInfo.VendorID) {
+                toastr.error("Please select a Vendor first.");
+                return;
+            }
+            $scope.POTerm = emptyTerm();
+            $('#POTermModal').modal('show');
+        };
+
+        $scope.AddPOTerm = function () {
+            var name = ($scope.POTerm.TermsName || '').trim();
+            if (!name) { toastr.error("Terms & Conditions Required."); return; }
+
+            var term = {
+                VendorName: $scope.VendorCSInfo.VendorName,   // auto-populated
+                TermsCode: 'T' + ($scope.ReqTermDataSetupGridData.length + 1),  // auto-numbered
+                TermsName: name
+            };
+
+            $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.concat(term);
+            $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+
+            $scope.POTerm = emptyTerm();
+            $('#POTermModal').modal('hide');
+        };
+
 
     }]);
 </script>

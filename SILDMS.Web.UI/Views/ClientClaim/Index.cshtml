@@ -1,0 +1,557 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+<style>
+    .mode-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+
+    .mode-list {
+        background: #d9edf7;
+        color: #31708f;
+        border: 1px solid #bce8f1;
+    }
+
+    .mode-view {
+        background: #dff0d8;
+        color: #3c763d;
+        border: 1px solid #d6e9c6;
+    }
+
+    .mode-edit {
+        background: #fcf8e3;
+        color: #8a6d3b;
+        border: 1px solid #faebcc;
+    }
+
+    .input-readonly {
+        background-color: #ffffff !important;
+        cursor: default;
+    }
+
+    .po-info-box {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 8px 14px;
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+
+        .po-info-box strong {
+            color: #31708f;
+        }
+
+    .status-pending {
+        color: #8a6d3b;
+        background: #fcf8e3;
+        border: 1px solid #faebcc;
+        border-radius: 3px;
+        padding: 1px 7px;
+        font-size: 11px;
+    }
+
+    .status-done {
+        color: #3c763d;
+        background: #dff0d8;
+        border: 1px solid #d6e9c6;
+        border-radius: 3px;
+        padding: 1px 7px;
+        font-size: 11px;
+    }
+
+    .remaining-highlight {
+        font-weight: bold;
+        color: #31708f;
+    }
+</style>
+
+<div class="box box-primary box-body" ng-controller="ClientClaimCtrl">
+
+    <!-- TOOLBAR -->
+    <div class="box-header with-border bg-light-blue-gradient" style="height:38px;border-radius:5px;">
+        <h2 class="box-title" style="font-family:math;font-weight:500;">
+            Client Advance Claim
+            <span ng-show="p===2" class="mode-badge mode-list">WO LIST</span>
+            <span ng-show="p===1 && pageMode==='view'" class="mode-badge mode-view">VIEW</span>
+            <span ng-show="p===1 && pageMode==='edit'" class="mode-badge mode-edit">{{ isEditingExisting ? 'EDIT' : 'ADD CLAIM' }}</span>
+        </h2>
+        <div class="box-tools pull-right">
+            <div class="col-lg-12 pull-right">
+
+                <div class="btn-group pull-right" style="margin-left:4px;">
+                    <button class="button-custom btn-warning" type="button"
+                            ng-click="toggleRefreshTable()" ng-disabled="isRefreshing">
+                        <i class="fa fa-refresh" ng-class="{'fa-spin':isRefreshing}" style="padding-right:5px"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="btn-group pull-right" style="margin-left:4px;" ng-show="p===1 && pageMode!=='view'">
+                    <button class="button-custom btn-success" type="button"
+                            ng-click="Post()" ng-disabled="isSaving">
+                        <i class="fa fa-check" style="padding-right:5px"></i>
+                        {{ isEditingExisting ? 'Update Claim' : 'Save Claim' }}
+                    </button>
+                </div>
+
+                <div class="btn-group pull-right" style="margin-left:4px;" ng-show="p===1">
+                    <button class="button-custom btn-default" type="button" ng-click="goBackToList()">
+                        <i class="fa fa-arrow-left" style="padding-right:5px"></i> Back
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ p===2 : WO LIST ══════════════ -->
+    <div ng-show="p===2">
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:5px 10px;">
+
+            <div ng-show="WOListDisplayedCollection.length<=0" style="text-align:center;padding:20px;">
+                <h4 style="color:red;">
+                    No Work Order is eligible for an Advance Claim right now.
+                    <br /><small>A Client Advance Claim only opens once a Vendor Advance Demand has been raised for the requisition.</small>
+                </h4>
+            </div>
+
+            <div ng-show="WOListDisplayedCollection.length>0" class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
+
+                <div style="background-color:#cbd4d9;padding:0.7%;border-radius:4px;font-size:15px;font-weight:bold;margin-bottom:6px;">
+                    Client Advance Claim List
+                </div>
+
+                <table st-table="WOListDisplayedCollection" st-safe-src="WOList"
+                       style="width:100%;"
+                       class="table table-condensed table-bordered table-striped table-hover">
+                    <thead>
+                        <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
+                            <th>Client Name</th>
+                            <th>Project Name</th>
+                            <th>Requisition No</th>
+                            <th>WO No</th>
+                            <th style="text-align:right;">Total WO Amount</th>
+                            <th style="text-align:right;">Claim Amount</th>
+                            <th style="text-align:right;">Remaining WO Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in WOListDisplayedCollection" style="height:20px;font-size:13px;">
+                            <td>{{row.ClientName}}</td>
+                            <td>{{row.ProjectName}}</td>
+                            <td class="text-center">{{row.ClientReqNo}}</td>
+                            <td class="text-center">{{row.WONo}}</td>
+                            <td style="text-align:right;">{{row.TotalWOAmount | number:2}}</td>
+                            <td style="text-align:right;">{{row.ClientClaimID ? (row.ClaimAmount | number:2) : '-'}}</td>
+                            <td style="text-align:right;">{{row.ClientClaimID ? (row.RemainingWOAmount | number:2) : (row.TotalWOAmount | number:2)}}</td>
+
+                            <td class="text-center">
+                                <span ng-show="row.ClientClaimID && row.IsFullPayment==='1'" class="status-done">Full Advance</span>
+                                <span ng-show="row.ClientClaimID && row.IsFullPayment!=='1'" class="status-done">Partial Advance</span>
+                                <span ng-hide="row.ClientClaimID" class="status-pending">Pending</span>
+                            </td>
+
+                            <td>
+                                <button type="button" class="btn btn-sm btn-flat btn-primary"
+                                        ng-click="openDetail(row, 'view')">
+                                    <i class="fa fa-eye"></i> View
+                                </button>
+                                <button type="button" class="btn btn-sm btn-flat btn-success" style="margin-left:3px;"
+                                        ng-hide="row.ClientClaimID"
+                                        ng-click="openDetail(row, 'edit')">
+                                    <i class="fa fa-plus"></i> Add Claim
+                                </button>
+                                <button type="button" class="btn btn-sm btn-flat btn-warning" style="margin-left:3px;"
+                                        ng-show="row.ClientClaimID"
+                                        ng-click="openDetail(row, 'edit')">
+                                    <i class="fa fa-edit"></i> Edit
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9" class="text-center">
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div><!-- /p===2 -->
+    <!-- ══════════════ p===1 : DETAIL VIEW / EDIT ══════════════ -->
+    <div ng-show="p===1">
+
+        <!-- Summary bar -->
+        <div class="row" style="margin:1%;">
+            <div class="col-lg-12">
+                <div class="po-info-box">
+                    <div class="row">
+                        <div class="col-lg-3"><strong>WO No:</strong>&nbsp;{{ClientClaim.WONo}}</div>
+                        <div class="col-lg-3"><strong>Client:</strong>&nbsp;{{ClientClaim.ClientName}}</div>
+                        <div class="col-lg-3"><strong>Project:</strong>&nbsp;{{ClientClaim.ProjectName}}</div>
+                        <div class="col-lg-3"><strong>Requisition No:</strong>&nbsp;{{ClientClaim.ClientReqNo}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item grid — always readonly -->
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:5px 10px;overflow-x:auto;">
+            <div class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
+                <table style="width:100%;font-size:12px;"
+                       class="table table-condensed table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th colspan="7" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb;">
+                                Item List
+                            </th>
+                        </tr>
+                        <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
+                            <th>Description</th>
+                            <th style="text-align:right;">Qty</th>
+                            <th style="text-align:right;">Price</th>
+                            <th style="text-align:right;">Amount (excl. ASF/VAT)</th>
+                            <th style="text-align:right;">ASF%</th>
+                            <th style="text-align:right;">Vat%</th>
+                            <th style="text-align:right;">Total (with ASF/VAT)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in ItemGridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td>{{row.Description}}</td>
+                            <td style="text-align:right;">{{row.WOQnty | number:2}}</td>
+                            <td style="text-align:right;">{{row.WOPrice | number:2}}</td>
+                            <td style="text-align:right;">{{row.WOAmtWithoutASFVat | number:2}}</td>
+                            <td style="text-align:right;">{{row.ASFPerc | number:2}}</td>
+                            <td style="text-align:right;">{{row.VatPerc | number:2}}</td>
+                            <td style="text-align:right;">{{row.WOAmtWithASFVat | number:2}}</td>
+                        </tr>
+                        <tr ng-if="ItemGridDisplayCollection.length===0">
+                            <td colspan="7" class="text-center text-danger">No items available</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Claim Form -->
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:10px;">
+
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2"><label>Total WO Amount:</label></div>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control input-readonly"
+                           ng-model="ClientClaim.TotalWOAmount" ng-readonly="true" />
+                </div>
+            </div>
+
+            <!-- Full Payment convenience toggle (edit mode) / indicator (view mode) -->
+            <div class="row" style="margin-bottom:8px;" ng-show="pageMode==='edit'">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-11">
+                    <label style="font-weight:normal;">
+                        <input type="checkbox" ng-model="ClientClaim.IsFullPayment"
+                               ng-true-value="'1'" ng-false-value="'0'"
+                               ng-change="onFullPaymentToggle()" />
+                        Full payment claimed in advance
+                    </label>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom:8px;" ng-show="pageMode==='view' && ClientClaim.IsFullPayment==='1'">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-11">
+                    <span class="status-done">Full payment was claimed in advance for this WO</span>
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2"><label>Claim Amount:</label></div>
+                <div class="col-lg-3">
+                    <input ng-show="pageMode==='view'" type="text" class="form-control input-readonly"
+                           ng-model="ClientClaim.ClaimAmount" ng-readonly="true" />
+                    <input ng-show="pageMode==='edit'" type="number" min="0" step="0.01" class="form-control"
+                           placeholder="Enter claim amount"
+                           ng-model="ClientClaim.ClaimAmount"
+                           ng-disabled="ClientClaim.IsFullPayment==='1'"
+                           ng-change="recalculateRemaining()" />
+                </div>
+                <div class="col-lg-2"><label>Remaining WO Amount:</label></div>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control input-readonly remaining-highlight"
+                           ng-model="ClientClaim.RemainingWOAmount" ng-readonly="true" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2"><label>Claim Date:</label></div>
+                <div class="col-lg-3">
+                    <input ng-show="pageMode==='view'" type="text" class="form-control input-readonly"
+                           ng-model="ClientClaim.ClaimDate" ng-readonly="true" />
+                    <input ng-show="pageMode==='edit'" id="ClaimDate" type="text" autocomplete="off"
+                           class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                           ng-model="ClientClaim.ClaimDate" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2"><label>Remarks:</label></div>
+                <div class="col-lg-3">
+                    <input ng-show="pageMode==='view'" type="text" class="form-control input-readonly"
+                           ng-model="ClientClaim.Remarks" ng-readonly="true" />
+                    <input ng-show="pageMode==='edit'" type="text" class="form-control"
+                           placeholder="Note for this claim"
+                           ng-model="ClientClaim.Remarks" />
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Terms table -->
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:5px 10px;">
+            <div class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
+                <table style="width:100%;"
+                       class="table table-condensed table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th colspan="2" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb;">
+                                Terms &amp; Conditions
+                            </th>
+                        </tr>
+                        <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
+                            <th style="width:10%;">Terms Code</th>
+                            <th style="width:90%;">Terms &amp; Conditions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in TermGridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td>{{row.TermsCode}}</td>
+                            <td>{{row.TermsName}}</td>
+                        </tr>
+                        <tr ng-if="TermGridDisplayCollection.length===0">
+                            <td colspan="2" class="text-center text-muted">No terms available</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div><!-- /p===1 -->
+    <!-- Loading overlay -->
+    <div id="mydiv" data-ng-show="loading">
+        <div class="overlay">
+            <div class="loder">
+                <img src="~/Content/AdminLTE/img/cube.gif" />
+                <span class="text-bold">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /box -->
+
+<script type="text/javascript">app.controller('ClientClaimCtrl', ['$scope', '$http', '$timeout',
+        function ($scope, $http, $timeout) {
+
+            $scope.itemsByPage = 10;
+            $scope.loading = false;
+            $scope.isSaving = false;
+            $scope.isRefreshing = false;
+            $scope.p = 2;
+            $scope.pageMode = 'view';
+            $scope.isEditingExisting = false;
+
+            $scope.WOList = [];
+            $scope.WOListDisplayedCollection = [];
+            $scope.ItemList = [];
+            $scope.ItemGridDisplayCollection = [];
+            $scope.TermList = [];
+            $scope.TermGridDisplayCollection = [];
+
+            function emptyClaim() {
+                return {
+                    ClientClaimID: "", WOInfoID: "",
+                    ClientReqID: "", ClientID: "",
+                    ClientName: "", ProjectName: "", ClientReqNo: "", WONo: "",
+                    TotalWOAmount: "0.00",
+                    ClaimAmount: "",
+                    RemainingWOAmount: "0.00",
+                    ClaimDate: "",
+                    Remarks: "",
+                    IsFullPayment: "0"
+                };
+            }
+            $scope.ClientClaim = emptyClaim();
+
+            /* ── Initial load ── */
+            $scope.loading = true;
+            $http.post("/ClientClaim/GetClientClaimClientInfo/")
+                .then(function (res) {
+                    $scope.WOList = res.data.ClientClaimList || [];
+                    $scope.WOListDisplayedCollection = [].concat($scope.WOList);
+                    $scope.loading = false;
+                }, function () {
+                    $scope.loading = false;
+                    toastr.error("Failed to load WO list.");
+                });
+
+            /* ── Full Payment toggle: force amount to Total WO Amount ── */
+            $scope.onFullPaymentToggle = function () {
+                if ($scope.ClientClaim.IsFullPayment === '1') {
+                    $scope.ClientClaim.ClaimAmount = $scope.ClientClaim.TotalWOAmount;
+                }
+                $scope.recalculateRemaining();
+            };
+
+            /* ── Recompute Remaining WO Amount live ── */
+            $scope.recalculateRemaining = function () {
+                var total = parseFloat($scope.ClientClaim.TotalWOAmount) || 0;
+                var claim = parseFloat($scope.ClientClaim.ClaimAmount) || 0;
+                $scope.ClientClaim.RemainingWOAmount = (total - claim).toFixed(2);
+            };
+
+            /* ── Open detail ── */
+            $scope.openDetail = function (row, mode) {
+                $scope.loading = true;
+                $scope.p = 1;
+                $scope.pageMode = mode;
+                $scope.isEditingExisting = !!row.ClientClaimID;
+
+                $scope.ClientClaim = emptyClaim();
+                $scope.ClientClaim.WOInfoID = row.WOInfoID;
+                $scope.ClientClaim.ClientReqID = row.ClientReqID;
+                $scope.ClientClaim.ClientID = row.ClientID;
+                $scope.ClientClaim.ClientName = row.ClientName;
+                $scope.ClientClaim.ProjectName = row.ProjectName;
+                $scope.ClientClaim.ClientReqNo = row.ClientReqNo;
+                $scope.ClientClaim.WONo = row.WONo;
+                $scope.ClientClaim.TotalWOAmount = parseFloat(row.TotalWOAmount || 0).toFixed(2);
+
+                if (row.ClientClaimID) {
+                    $scope.ClientClaim.ClientClaimID = row.ClientClaimID;
+                    $scope.ClientClaim.ClaimAmount = parseFloat(row.ClaimAmount || 0).toFixed(2);
+                    $scope.ClientClaim.RemainingWOAmount = parseFloat(row.RemainingWOAmount || 0).toFixed(2);
+                    $scope.ClientClaim.ClaimDate = row.ClaimDate;
+                    $scope.ClientClaim.Remarks = row.ClaimRemarks;
+                    $scope.ClientClaim.IsFullPayment = row.IsFullPayment || "0";
+                } else {
+                    $scope.ClientClaim.RemainingWOAmount = $scope.ClientClaim.TotalWOAmount;
+                }
+
+                $timeout(function () {
+                    if (mode === 'edit') {
+                        var dateVal = $scope.ClientClaim.ClaimDate;
+                        if (!dateVal) {
+                            var t = new Date();
+                            dateVal = String(t.getDate()).padStart(2, '0') + '/' +
+                                String(t.getMonth() + 1).padStart(2, '0') + '/' + t.getFullYear();
+                        }
+                        $('#ClaimDate').val(dateVal);
+                        $scope.ClientClaim.ClaimDate = dateVal;
+
+                        $('#ClaimDate').datepicker({ format: 'dd/mm/yyyy', autoclose: true })
+                            .off('changeDate.claim')
+                            .on('changeDate.claim', function (ev) {
+                                $scope.$apply(function () {
+                                    $scope.ClientClaim.ClaimDate = $(ev.target).val();
+                                });
+                                $('.datepicker').hide();
+                            });
+                    }
+                }, 100);
+
+                $http.post("/ClientClaim/GetClientClaimItem", { WOInfoID: row.WOInfoID })
+                    .then(function (res) {
+                        $scope.ItemList = res.data.ClientClaimItemList || [];
+                        $scope.ItemGridDisplayCollection = [].concat($scope.ItemList);
+                        $scope.loading = false;
+                    }, function () {
+                        $scope.loading = false;
+                        toastr.error("Failed to load items.");
+                    });
+
+                $http.post("/ClientClaim/GetClientClaimTermList", { WOInfoID: row.WOInfoID })
+                    .then(function (res) {
+                        $scope.TermList = res.data.ClientClaimTermList || [];
+                        $scope.TermGridDisplayCollection = [].concat($scope.TermList);
+                    }, function () {
+                        toastr.error("Failed to load terms.");
+                    });
+            };
+
+            /* ── Back to list ── */
+            $scope.goBackToList = function () {
+                $scope.p = 2;
+                $scope.pageMode = 'view';
+                $scope.ClientClaim = emptyClaim();
+                $scope.ItemList = [];
+                $scope.ItemGridDisplayCollection = [];
+                $scope.TermList = [];
+                $scope.TermGridDisplayCollection = [];
+            };
+
+            /* ── Save / Post ── */
+            $scope.Post = function () {
+                if (!$scope.ClientClaim.WOInfoID) {
+                    toastr.error("No WO selected."); return;
+                }
+                if (!$scope.ClientClaim.ClaimAmount || parseFloat($scope.ClientClaim.ClaimAmount) <= 0) {
+                    toastr.error("Claim Amount is required."); return;
+                }
+                $scope.recalculateRemaining();
+                if (parseFloat($scope.ClientClaim.ClaimAmount) > parseFloat($scope.ClientClaim.TotalWOAmount)) {
+                    toastr.error("Claim Amount cannot exceed the Total WO Amount."); return;
+                }
+                var claimDate = $('#ClaimDate').val() || $scope.ClientClaim.ClaimDate;
+                if (!claimDate) {
+                    toastr.error("Claim Date is required."); return;
+                }
+                $scope.ClientClaim.ClaimDate = claimDate;
+                $scope.isSaving = true;
+
+                $http.post('/ClientClaim/SaveClientClaimInfo', $scope.ClientClaim)
+                    .then(function (res) {
+                        $scope.isSaving = false;
+                        var s = res.data.status;
+                        if (s === 'S201') {
+                            toastr.success("Client Claim Saved Successfully.");
+                            $scope.toggleRefreshTable();
+                        } else if (s === 'S202') {
+                            toastr.success("Client Claim Updated Successfully.");
+                            $scope.toggleRefreshTable();
+                        } else if (s === 'E400') {
+                            toastr.error("Claim Amount cannot exceed the Total WO Amount.");
+                        } else if (s === 'E401') {
+                            toastr.error("Please enter a valid Claim Amount.");
+                        } else if (s === 'E404') {
+                            toastr.error("WO not found.");
+                        } else if (s === 'E407') {
+                            toastr.error("No Vendor Advance Demand exists for this requisition — Client Advance Claim is not allowed.");
+                        } else {
+                            toastr.error("Save Failed. Status: " + (s || "unknown"));
+                        }
+                    }, function () {
+                        $scope.isSaving = false;
+                        toastr.error("Save Failed.");
+                    });
+            };
+
+            /* ── Refresh ── */
+            $scope.toggleRefreshTable = function () {
+                $scope.isRefreshing = true;
+                $timeout(function () { window.location.reload(); }, 1200);
+            };
+
+        }]);</script>

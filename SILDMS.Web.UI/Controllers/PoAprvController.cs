@@ -68,7 +68,7 @@ namespace SILDMS.Web.UI.Controllers
         public async Task<dynamic> PoPrint(string PORecmID)
         {
             var PoPrintList = new List<OBS_VendorCSRecmItem>();
-            await Task.Run(() => poAprvService.PoPrint( PORecmID, out PoPrintList));
+            await Task.Run(() => poAprvService.PoPrint(PORecmID, out PoPrintList));
             var result = Json(new { PoPrintList, msg = "PoPrintList are loaded in the table." }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
             return result;

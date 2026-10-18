@@ -172,8 +172,6 @@
             </div>
 
             <!-- Bill Type (Work Order No Removed) -->
-           
-
             <!-- WO Amount + Installment -->
             <div class="row">
                 <div class="col-lg-2">
@@ -187,7 +185,7 @@
                 </div>
 
                 <div class="col-lg-1">
-                   
+
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group"><label>Bill Type:</label></div>
@@ -346,7 +344,7 @@
                             <tr>
                                 <!-- FIX: correct st-search field names -->
                                 <th><input st-search="ClientName" placeholder="Client Name" class="input-sm form-control" type="search" /></th>
-                                <th><input st-search="ProjectName" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
+                                <th><input st-search="Remarks" placeholder="Project Name" class="input-sm form-control" type="search" /></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -360,7 +358,7 @@
                                 <td class="hidden">{{row.Address}}</td>
 
                                 <td class="text-center">{{row.ClientName}}</td>
-                                <td class="text-center">{{row.ProjectName}}</td>
+                                <td class="text-left">{{row.Remarks}}</td>
                                 <td class="text-center">{{row.UserFullName}}</td>
                                 <td class="text-center">{{row.AprvDate}}</td>
 
@@ -832,11 +830,29 @@
     <!-- ══════════════════════════════════════════════════════════════
          PRINT SLIP  (hidden div, rendered into iframe on print)
          Same layout style as the PO Approval "Work Order" slip:
+           Logo + Company Address
            Title  →  Ref No / Date  →  Client block  →  Subject
            →  Item table (with ASF & VAT columns)  →  Total
            →  In words  →  Notes  →  Signatures
          ══════════════════════════════════════════════════════════════ -->
-    <div id="masterRow" style="display:none;margin-top:150px;">
+    <div id="masterRow" style="display:none;">
+
+        <!-- Logo + Company Address (description below logo) -->
+        <div style="margin-bottom:18px;">
+            <img src="/Content/AdminLTE/img/MCL-logo.png"
+                 alt="MCL Logo"
+                 style="max-height:85px; max-width:130px; display:block; margin-bottom:6px;" />
+
+            <div style="font-size:11px; line-height:1.35; color:#222;">
+                <strong style="font-size:13px;">MEDIACOM LIMITED</strong><br />
+                SAMSON CENTER<br />
+                Levels - 5 to 7<br />
+                43 South Avenue, Road-126, Plot-CES (G) 5A,<br />
+                Gulshan 1, Dhaka – 1212<br />
+                IP No. 09610939393 extn: 1200/1205<br />
+                email: mediacombd.com, www.mediacombd.com
+            </div>
+        </div>
 
         <div class="row">
             <p style="font-weight:bold;font-size:25px;text-align:center;border-bottom:5px solid #000;">
@@ -930,17 +946,16 @@
         </div>
 
         <!-- Signatures -->
-        <div class="row" style="margin-top:70px;display:flex;justify-content:space-between;">
-            <div style="text-align:center;width:45%;">
-                <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
-                <div>Client Relations Department</div>
-            </div>
-            <div style="text-align:center;width:45%;">
-                <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
-                <div>Accounts Department</div>
-            </div>
-        </div>
-
+        @*<div class="row" style="margin-top:70px;display:flex;justify-content:space-between;">
+                <div style="text-align:center;width:45%;">
+                    <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
+                    <div>Client Relations Department</div>
+                </div>
+                <div style="text-align:center;width:45%;">
+                    <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
+                    <div>Accounts Department</div>
+                </div>
+            </div>*@
 
         <div style="margin-top:30px">
             <p style="font-style: italic; font-weight: bold;">
@@ -1420,15 +1435,11 @@
             };
 
             /* ── Save / Update ── */
+            /* ── Save / Update ── */
             $scope.Post = function () {
 
                 if (!$scope.WOInfo.ClientName) {
                     toastr.error("Client Name Required");
-                    return;
-                }
-
-                if (!$('#WONo').val()) {
-                    toastr.error("Work Order No. Required");
                     return;
                 }
 
@@ -1444,11 +1455,8 @@
 
                 // Validate file BEFORE save/update
                 if ($scope.uploadedFile) {
-
                     var fileInput = document.getElementById("FileUpload1");
-
                     if (fileInput && fileInput.files.length > 0) {
-
                         var file = fileInput.files[0];
                         var ext = file.name.split('.').pop().toLowerCase();
                         var maxSizeInMB = 2;
@@ -1457,7 +1465,6 @@
                             toastr.error("Please upload PDF files only.");
                             return;
                         }
-
                         if (file.size > (maxSizeInMB * 1024 * 1024)) {
                             toastr.error("File size must be 2 MB or less.");
                             return;
@@ -1481,32 +1488,38 @@
                         $scope.loading = false;
 
                         if (r.status === 'S201') {
-
                             toastr.success("Data Saved Successfully.");
 
+                            // Keep the returned ID so the print slip shows the correct Ref
+                            if (r.WOInfoID) {
+                                $scope.WOInfo.WOInfoID = r.WOInfoID;
+                            }
+
+                            // Upload document if any, then print
                             if ($scope.uploadedFile) {
-                                $scope.SaveDocument(r.WOInfoID);
+                                $scope.SaveDocument(r.WOInfoID, true);   // true = also print after upload
                             } else {
-                                $scope.clearWOInfo();
+                                $scope.printCurrentWO();                 // print immediately
                                 $timeout(function () {
+                                    $scope.clearWOInfo();
                                     window.location.reload();
                                 }, 1500);
                             }
-
                             return;
                         }
 
                         if (r.status === 'S202') {
-
                             toastr.success("Data Updated Successfully.");
 
                             if ($scope.uploadedFile) {
-                                $scope.SaveDocument(r.WOInfoID);
+                                $scope.SaveDocument(r.WOInfoID, true);   // true = also print after upload
                             } else {
-                                $scope.clearWOInfo();
-                                $scope.toggleRefreshTable();
+                                $scope.printCurrentWO();                 // print immediately
+                                $timeout(function () {
+                                    $scope.clearWOInfo();
+                                    $scope.toggleRefreshTable();
+                                }, 1500);
                             }
-
                             return;
                         }
 
@@ -1585,16 +1598,21 @@
                                 .success(function (resp) {
 
                                     if (resp.status === "S200") {
-
                                         $scope.WOInfo.DocumentID = documentID;
-
                                         toastr.success("Document uploaded successfully.");
 
                                         fileInput.value = "";
                                         $scope.uploadedFile = null;
 
-                                        $scope.clearWOInfo();
-                                        $scope.toggleRefreshTable();
+                                        // Print if requested
+                                        if (shouldPrint) {
+                                            $scope.printCurrentWO();
+                                        }
+
+                                        $timeout(function () {
+                                            $scope.clearWOInfo();
+                                            $scope.toggleRefreshTable();
+                                        }, 1500);
                                     }
                                     else {
                                         toastr.error(resp.message || "Failed to save document information.");

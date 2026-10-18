@@ -192,7 +192,7 @@
                               style="color:#999; font-size:11px;">
                             No document attached
                         </span>
-                    
+
                     </div>
                 </div>
             </div>
@@ -892,6 +892,79 @@
             </div>
         </div>
     </div>
+
+
+    <!-- #region Confirmation Modal -->
+    <div id="confirmModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="border-radius: 4px; overflow: hidden;">
+
+                <!-- Header -->
+                <div class="modal-header" style="background-color: #3c8dbc; color: #fff; padding: 12px 15px;">
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                            style="color: #fff; opacity: 1;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                    <h4 class="modal-title" style="font-weight: 600;">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        Confirmation
+                    </h4>
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body" style="padding: 25px 20px; text-align: center;">
+
+                    <div style="font-size: 45px; color: #f39c12; margin-bottom: 12px;">
+                        <i style="font-size:50px" class="fa fa-exclamation-circle"></i>
+                    </div>
+
+                    <p style="font-size: 15px; margin-bottom: 5px;">
+                        You have set <strong>ASF (%)</strong> to
+                        <strong style="color: #dd4b39;">0 (Zero)</strong>.
+                    </p>
+
+                    <p style="font-size: 14px; color: #777; margin-bottom: 0;">
+                        Are you sure you want to proceed?
+                    </p>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer" style="padding: 10px 15px;">
+
+                    <button type="button"
+                            class="btn btn-flat btn-sm btn-default"
+                            data-dismiss="modal">
+                        <i class="fa fa-times"></i>
+                        Cancel
+                    </button>
+
+                    <button ng-show="pagefunction === 'savemode'"
+                            type="button"
+                            class="btn btn-flat btn-sm btn-warning"
+                            ng-click="SaveQuotToClient('save')">
+                        <i class="fa fa-check"></i>
+                        Proceed
+                    </button>
+
+                    <button ng-show="pagefunction === 'editmode'"
+                            type="button"
+                            class="btn btn-flat btn-sm btn-warning"
+                            ng-click="SaveQuotToClient('edit')">
+                        <i class="fa fa-check"></i>
+                        Proceed
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- #endregion -->
+
 </div>
 
 <script type="text/javascript">
@@ -1259,7 +1332,7 @@
             } else if ($scope.selectedRows.some(function (i) { return !i.MclPrice || i.MclPrice <= 0; })) {
                 toastr.error('Given Quotation Amount must be greater than 0.');
             } else if ($scope.selectedRows.some(function (i) { return !i.ASFPerc || i.ASFPerc <= 0; })) {
-                toastr.error('ASF (%) must be greater than 0.');
+                $("#confirmModal").modal("show");
             }
             else {
                 $scope.SaveQuotToClient(action);
@@ -1267,6 +1340,7 @@
         };
 
         $scope.SaveQuotToClient = function (action) {
+            $("#confirmModal").modal("hide");
             $scope.MasterData.BriefingDate = $('#BriefingDate').val();
 
             var matches = $scope.ReqType ? $scope.ReqType.match(/\b(QV|QC)\b/g) : [];
@@ -1287,7 +1361,7 @@
 
                     if (s === 'Successfully Submitted' || s === 'Operation Done') {
                         toastr.success('Data Saved Successfully');
-                        
+
                         // For save: show the new ID.  For edit: show the existing ID.
                         $scope.Quotation.QuotationNo = response.ClientQutnID;
                         $scope.SavedClientQutnID = response.ClientQutnID;
@@ -1434,7 +1508,7 @@
         $scope.ViewDocument = function () {
             $scope.loading = true;
             var ftpDetails = {
-                
+
                 serverUrl: "MCL/Client_Requisition",
                 documentID: "CR_" + $scope.ClientDetails[0].ClientReqID, ext: "pdf"
             };

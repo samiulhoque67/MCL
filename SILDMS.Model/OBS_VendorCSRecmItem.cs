@@ -66,5 +66,17 @@ namespace SILDMS.Model
         public string BillCategory { get; set; }
         public bool IsSelected { get; set; }
         public string DocumentID { get; set; }
+
+        public string PoPrepBy { get; set; }
+        public string PoPrepDesignation { get; set; }
+        public string PoPrepSignature { get; set; }
+
+        public string PoRecomBy { get; set; }
+        public string PoRecomDesignation { get; set; }
+        public string PoRecomSignature { get; set; }
+
+        public string PoAprvBy { get; set; }
+        public string PoAprvDesignation { get; set; }
+        public string PoAprvSignature { get; set; }
     }
 }

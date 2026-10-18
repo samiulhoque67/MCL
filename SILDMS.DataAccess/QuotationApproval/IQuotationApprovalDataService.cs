@@ -1,6 +1,7 @@
 ﻿using SILDMS.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,10 @@ namespace SILDMS.DataAccess.QuotationApproval
 
 
         string SaveQuotToClientServiceData(string UserID, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl, out string _errorNumber);
+
+        DataSet GetClientQuotationApprovedPrintData(
+                string ClientQutnAprvID,
+                out string errorNumber);
 
     }
 }

@@ -1,0 +1,547 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+<style>
+    .mode-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+
+    .mode-list {
+        background: #d9edf7;
+        color: #31708f;
+        border: 1px solid #bce8f1;
+    }
+
+    .mode-view {
+        background: #dff0d8;
+        color: #3c763d;
+        border: 1px solid #d6e9c6;
+    }
+
+    .mode-edit {
+        background: #fcf8e3;
+        color: #8a6d3b;
+        border: 1px solid #faebcc;
+    }
+
+    .input-readonly {
+        background-color: #ffffff !important;
+        cursor: default;
+    }
+
+    .po-info-box {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 8px 14px;
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+
+        .po-info-box strong {
+            color: #31708f;
+        }
+
+    .status-pending {
+        color: #8a6d3b;
+        background: #fcf8e3;
+        border: 1px solid #faebcc;
+        border-radius: 3px;
+        padding: 1px 7px;
+        font-size: 11px;
+    }
+
+    .status-done {
+        color: #3c763d;
+        background: #dff0d8;
+        border: 1px solid #d6e9c6;
+        border-radius: 3px;
+        padding: 1px 7px;
+        font-size: 11px;
+    }
+
+    .remaining-highlight {
+        font-weight: bold;
+        color: #31708f;
+    }
+</style>
+
+<div class="box box-primary box-body" ng-controller="VendorDemandCtrl">
+
+    <!-- TOOLBAR -->
+    <div class="box-header with-border bg-light-blue-gradient" style="height:38px;border-radius:5px;">
+        <h2 class="box-title" style="font-family:math;font-weight:500;">
+            Advance Demand from Vendor
+            <span ng-show="p===2" class="mode-badge mode-list">PO LIST</span>
+            <span ng-show="p===1 && pageMode==='view'" class="mode-badge mode-view">VIEW</span>
+            <span ng-show="p===1 && pageMode==='edit'" class="mode-badge mode-edit">{{ isEditingExisting ? 'EDIT' : 'ADD DEMAND' }}</span>
+        </h2>
+        <div class="box-tools pull-right">
+            <div class="col-lg-12 pull-right">
+
+                <div class="btn-group pull-right" style="margin-left:4px;">
+                    <button class="button-custom btn-warning" type="button"
+                            ng-click="toggleRefreshTable()" ng-disabled="isRefreshing">
+                        <i class="fa fa-refresh" ng-class="{'fa-spin':isRefreshing}" style="padding-right:5px"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="btn-group pull-right" style="margin-left:4px;" ng-show="p===1 && pageMode!=='view'">
+                    <button class="button-custom btn-success" type="button"
+                            ng-click="Post()" ng-disabled="isSaving">
+                        <i class="fa fa-check" style="padding-right:5px"></i>
+                        {{ isEditingExisting ? 'Update Demand' : 'Save Demand' }}
+                    </button>
+                </div>
+
+                <div class="btn-group pull-right" style="margin-left:4px;" ng-show="p===1">
+                    <button class="button-custom btn-default" type="button" ng-click="goBackToList()">
+                        <i class="fa fa-arrow-left" style="padding-right:5px"></i> Back
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ p===2 : PO LIST ══════════════ -->
+    <div ng-show="p===2">
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:5px 10px;">
+
+            <div ng-show="POListDisplayedCollection.length<=0" style="text-align:center;padding:20px;">
+                <h4 style="color:red;">No approved PO available!</h4>
+            </div>
+
+            <div ng-show="POListDisplayedCollection.length>0" class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
+
+                <div style="background-color:#cbd4d9;padding:0.7%;border-radius:4px;font-size:15px;font-weight:bold;margin-bottom:6px;">
+                    Vendor Advance Demand List
+                </div>
+
+                <table st-table="POListDisplayedCollection" st-safe-src="POList"
+                       style="width:100%;"
+                       class="table table-condensed table-bordered table-striped table-hover">
+                    <thead>
+                        <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
+                            <th>Client Name</th>
+                            <th>Project Name</th>
+                            <th>Requisition No</th>
+                            <th>Vendor Name</th>
+                            <th>PO No</th>
+                            <th style="text-align:right;">Total PO Amount</th>
+                            <th style="text-align:right;">Demand Amount</th>
+                            <th style="text-align:right;">Remaining PO Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in POListDisplayedCollection" style="height:20px;font-size:13px;">
+                            <td>{{row.ClientName}}</td>
+                            <td>{{row.ProjectName}}</td>
+                            <td class="text-center">{{row.ClientReqNo}}</td>
+                            <td class="text-center">{{row.VendorName}}</td>
+                            <td class="text-center">{{row.PoNo}}</td>
+                            <td style="text-align:right;">{{row.TotalPOAmount | number:2}}</td>
+                            <td style="text-align:right;">{{row.VendorDemandID ? (row.DemandAmount | number:2) : '-'}}</td>
+                            <td style="text-align:right;">{{row.VendorDemandID ? (row.RemainingPOAmount | number:2) : (row.TotalPOAmount | number:2)}}</td>
+
+                            <td class="text-center">
+                                <span ng-show="row.VendorDemandID" class="status-done">Demand Added</span>
+                                <span ng-hide="row.VendorDemandID" class="status-pending">Pending</span>
+                            </td>
+
+                            <td>
+                                <button type="button" class="btn btn-sm btn-flat btn-primary"
+                                        ng-click="openDetail(row, 'view')">
+                                    <i class="fa fa-eye"></i> View
+                                </button>
+                                <button type="button" class="btn btn-sm btn-flat btn-success" style="margin-left:3px;"
+                                        ng-hide="row.VendorDemandID"
+                                        ng-click="openDetail(row, 'edit')">
+                                    <i class="fa fa-plus"></i> Add Demand
+                                </button>
+                                <button type="button" class="btn btn-sm btn-flat btn-warning" style="margin-left:3px;"
+                                        ng-show="row.VendorDemandID"
+                                        ng-click="openDetail(row, 'edit')">
+                                    <i class="fa fa-edit"></i> Edit
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="10" class="text-center">
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div><!-- /p===2 -->
+    <!-- ══════════════ p===1 : DETAIL VIEW / EDIT ══════════════ -->
+    <div ng-show="p===1">
+
+        <!-- Summary bar -->
+        <div class="row" style="margin:1%;">
+            <div class="col-lg-12">
+                <div class="po-info-box">
+                    <div class="row">
+                        <div class="col-lg-3"><strong>PO No:</strong>&nbsp;{{VendorDemand.PoNo}}</div>
+                        <div class="col-lg-3"><strong>Client:</strong>&nbsp;{{VendorDemand.ClientName}}</div>
+                        <div class="col-lg-3"><strong>Vendor:</strong>&nbsp;{{VendorDemand.VendorName}}</div>
+                        <div class="col-lg-3"><strong>PO Approve Date:</strong>&nbsp;{{VendorDemand.PoAprvDate}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item grid — always readonly, reused from PO -->
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:5px 10px;overflow-x:auto;">
+            <div class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
+                <table st-table="ItemGridDisplayCollection" st-safe-src="ItemList"
+                       style="width:100%;font-size:12px;"
+                       class="table table-condensed table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th colspan="7" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb;">
+                                Item List
+                            </th>
+                        </tr>
+                        <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
+                            <th>Item Name</th>
+                            <th style="text-align:right;">Quantity</th>
+                            <th style="text-align:right;">Unit Price</th>
+                            <th style="text-align:right;">Amount (excl. Vat)</th>
+                            <th style="text-align:right;">Vat%</th>
+                            <th style="text-align:right;">Vat Amount</th>
+                            <th style="text-align:right;">Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in ItemGridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td>{{row.ServiceItemName}}</td>
+                            <td style="text-align:right;">{{row.Quantity | number:2}}</td>
+                            <td style="text-align:right;">{{row.UnitPrice | number:2}}</td>
+                            <td style="text-align:right;">{{row.UnitPriceWithoutVat | number:2}}</td>
+                            <td style="text-align:right;">{{row.VatPerc | number:2}}</td>
+                            <td style="text-align:right;">{{row.VatAmount | number:2}}</td>
+                            <td style="text-align:right;">{{row.TotalAmountWithVat | number:2}}</td>
+                        </tr>
+                        <tr ng-if="ItemGridDisplayCollection.length===0">
+                            <td colspan="7" class="text-center text-danger">No items available</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Demand Form -->
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:10px;">
+
+            <!-- Total PO Amount (always readonly) -->
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2"><label>Total PO Amount:</label></div>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control input-readonly"
+                           ng-model="VendorDemand.TotalPOAmount" ng-readonly="true" />
+                </div>
+            </div>
+
+            <!-- Demand Amount (editable) + Remaining PO Amount (always readonly, computed live) -->
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2"><label>Demand Amount:</label></div>
+                <div class="col-lg-3">
+                    <input ng-show="pageMode==='view'" type="text" class="form-control input-readonly"
+                           ng-model="VendorDemand.DemandAmount" ng-readonly="true" />
+                    <input ng-show="pageMode==='edit'" type="number" min="0" step="0.01" class="form-control"
+                           placeholder="Enter advance amount"
+                           ng-model="VendorDemand.DemandAmount"
+                           ng-change="recalculateRemaining()" />
+                </div>
+                <div class="col-lg-2"><label>Remaining PO Amount:</label></div>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control input-readonly remaining-highlight"
+                           ng-model="VendorDemand.RemainingPOAmount" ng-readonly="true" />
+                </div>
+            </div>
+            <div class="row" style="margin-bottom:8px;" ng-show="pageMode==='edit' && demandExceedsPO">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-11">
+                    <span class="text-danger">Demand Amount cannot exceed the Total PO Amount.</span>
+                </div>
+            </div>
+
+            <!-- Demand Date -->
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2"><label>Demand Date:</label></div>
+                <div class="col-lg-3">
+                    <input ng-show="pageMode==='view'" type="text" class="form-control input-readonly"
+                           ng-model="VendorDemand.DemandDate" ng-readonly="true" />
+                    <input ng-show="pageMode==='edit'" id="DemandDate" type="text" autocomplete="off"
+                           class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                           ng-model="VendorDemand.DemandDate" />
+                </div>
+            </div>
+
+            <!-- Remarks -->
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2"><label>Remarks:</label></div>
+                <div class="col-lg-3">
+                    <input ng-show="pageMode==='view'" type="text" class="form-control input-readonly"
+                           ng-model="VendorDemand.Remarks" ng-readonly="true" />
+                    <input ng-show="pageMode==='edit'" type="text" class="form-control"
+                           placeholder="Note for this demand"
+                           ng-model="VendorDemand.Remarks" />
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Terms table -->
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:5px 10px;">
+            <div class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
+                <table st-table="TermGridDisplayCollection" st-safe-src="TermList"
+                       class="table table-condensed table-bordered table-striped table-hover" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th colspan="2" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb;">
+                                Terms &amp; Conditions
+                            </th>
+                        </tr>
+                        <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
+                            <th style="width:10%;">Terms Code</th>
+                            <th style="width:90%;">Terms &amp; Conditions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in TermGridDisplayCollection" ng-cloak style="font-size:12px;">
+                            <td>{{row.TermsCode}}</td>
+                            <td>{{row.TermsName}}</td>
+                        </tr>
+                        <tr ng-if="TermGridDisplayCollection.length===0">
+                            <td colspan="2" class="text-center text-muted">No terms available</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div><!-- /p===1 -->
+    <!-- Loading overlay -->
+    <div id="mydiv" data-ng-show="loading">
+        <div class="overlay">
+            <div class="loder">
+                <img src="~/Content/AdminLTE/img/cube.gif" />
+                <span class="text-bold">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /box -->
+
+<script type="text/javascript">app.controller('VendorDemandCtrl', ['$scope', '$http', '$timeout',
+        function ($scope, $http, $timeout) {
+
+            /* ── State ── */
+            $scope.itemsByPage = 10;
+            $scope.loading = false;
+            $scope.isSaving = false;
+            $scope.isRefreshing = false;
+            $scope.p = 2;
+            $scope.pageMode = 'view';
+            $scope.isEditingExisting = false;
+            $scope.demandExceedsPO = false;
+
+            /* ── Collections ── */
+            $scope.POList = [];
+            $scope.POListDisplayedCollection = [];
+            $scope.ItemList = [];
+            $scope.ItemGridDisplayCollection = [];
+            $scope.TermList = [];
+            $scope.TermGridDisplayCollection = [];
+
+            function emptyDemand() {
+                return {
+                    VendorDemandID: "", POAprvID: "",
+                    ClientReqID: "", ClientID: "", VendorID: "",
+                    ClientName: "", VendorName: "", PoNo: "", PoAprvDate: "",
+                    TotalPOAmount: "0.00",
+                    DemandAmount: "",
+                    RemainingPOAmount: "0.00",
+                    DemandDate: "",
+                    Remarks: ""
+                };
+            }
+            $scope.VendorDemand = emptyDemand();
+
+            /* ── Initial load ── */
+            $scope.loading = true;
+            $http.post("/VendorDemand/GetVendorDemandClientInfo/")
+                .then(function (res) {
+                    $scope.POList = res.data.VendorDemandList || [];
+                    $scope.POListDisplayedCollection = [].concat($scope.POList);
+                    $scope.loading = false;
+                }, function () {
+                    $scope.loading = false;
+                    toastr.error("Failed to load PO list.");
+                });
+
+            /* ── Recompute Remaining PO Amount live as the user types ── */
+            $scope.recalculateRemaining = function () {
+                var total = parseFloat($scope.VendorDemand.TotalPOAmount) || 0;
+                var demand = parseFloat($scope.VendorDemand.DemandAmount) || 0;
+                $scope.demandExceedsPO = demand > total;
+                $scope.VendorDemand.RemainingPOAmount = (total - demand).toFixed(2);
+            };
+
+            /* ── Open detail ── */
+            $scope.openDetail = function (row, mode) {
+                $scope.loading = true;
+                $scope.p = 1;
+                $scope.pageMode = mode;
+                $scope.isEditingExisting = !!row.VendorDemandID;
+                $scope.demandExceedsPO = false;
+
+                $scope.VendorDemand = emptyDemand();
+                $scope.VendorDemand.POAprvID = row.POAprvID;
+                $scope.VendorDemand.ClientReqID = row.ClientReqID;
+                $scope.VendorDemand.ClientID = row.ClientID;
+                $scope.VendorDemand.VendorID = row.VendorID;
+                $scope.VendorDemand.ClientName = row.ClientName;
+                $scope.VendorDemand.VendorName = row.VendorName;
+                $scope.VendorDemand.PoNo = row.PoNo;
+                $scope.VendorDemand.PoAprvDate = row.PoAprvDate;
+                $scope.VendorDemand.TotalPOAmount = parseFloat(row.TotalPOAmount || 0).toFixed(2);
+
+                if (row.VendorDemandID) {
+                    $scope.VendorDemand.VendorDemandID = row.VendorDemandID;
+                    $scope.VendorDemand.DemandAmount = parseFloat(row.DemandAmount || 0).toFixed(2);
+                    $scope.VendorDemand.RemainingPOAmount = parseFloat(row.RemainingPOAmount || 0).toFixed(2);
+                    $scope.VendorDemand.DemandDate = row.DemandDate;
+                    $scope.VendorDemand.Remarks = row.DemandRemarks;
+                } else {
+                    $scope.VendorDemand.RemainingPOAmount = $scope.VendorDemand.TotalPOAmount;
+                }
+
+                // Default today's date only when adding a fresh demand
+                $timeout(function () {
+                    if (mode === 'edit') {
+                        var dateVal = $scope.VendorDemand.DemandDate;
+                        if (!dateVal) {
+                            var t = new Date();
+                            dateVal = String(t.getDate()).padStart(2, '0') + '/' +
+                                String(t.getMonth() + 1).padStart(2, '0') + '/' + t.getFullYear();
+                        }
+                        $('#DemandDate').val(dateVal);
+                        $scope.VendorDemand.DemandDate = dateVal;
+
+                        $('#DemandDate').datepicker({ format: 'dd/mm/yyyy', autoclose: true })
+                            .off('changeDate.demand')
+                            .on('changeDate.demand', function (ev) {
+                                $scope.$apply(function () {
+                                    $scope.VendorDemand.DemandDate = $(ev.target).val();
+                                });
+                                $('.datepicker').hide();
+                            });
+                    }
+                }, 100);
+
+                // Items (read-only)
+                $http.post("/VendorDemand/GetVendorDemandItem", { POAprvID: row.POAprvID })
+                    .then(function (res) {
+                        $scope.ItemList = res.data.VendorDemandItemList || [];
+                        $scope.ItemGridDisplayCollection = [].concat($scope.ItemList);
+                        $scope.loading = false;
+                    }, function () {
+                        $scope.loading = false;
+                        toastr.error("Failed to load items.");
+                    });
+
+                // Terms
+                $http.post("/VendorDemand/GetVendorDemandTermList", { POAprvID: row.POAprvID })
+                    .then(function (res) {
+                        $scope.TermList = res.data.VendorDemandTermList || [];
+                        $scope.TermGridDisplayCollection = [].concat($scope.TermList);
+                    }, function () {
+                        toastr.error("Failed to load terms.");
+                    });
+            };
+
+            /* ── Back to list ── */
+            $scope.goBackToList = function () {
+                $scope.p = 2;
+                $scope.pageMode = 'view';
+                $scope.VendorDemand = emptyDemand();
+                $scope.ItemList = [];
+                $scope.ItemGridDisplayCollection = [];
+                $scope.TermList = [];
+                $scope.TermGridDisplayCollection = [];
+            };
+
+            /* ── Save / Post ── */
+            $scope.Post = function () {
+                if (!$scope.VendorDemand.POAprvID) {
+                    toastr.error("No PO selected."); return;
+                }
+                if (!$scope.VendorDemand.DemandAmount || parseFloat($scope.VendorDemand.DemandAmount) <= 0) {
+                    toastr.error("Demand Amount is required."); return;
+                }
+                $scope.recalculateRemaining();
+                if ($scope.demandExceedsPO) {
+                    toastr.error("Demand Amount cannot exceed the Total PO Amount."); return;
+                }
+                var demandDate = $('#DemandDate').val() || $scope.VendorDemand.DemandDate;
+                if (!demandDate) {
+                    toastr.error("Demand Date is required."); return;
+                }
+                $scope.VendorDemand.DemandDate = demandDate;
+                $scope.isSaving = true;
+
+                $http.post('/VendorDemand/SaveVendorDemandInfo', $scope.VendorDemand)
+                    .then(function (res) {
+                        $scope.isSaving = false;
+                        var s = res.data.status;
+                        if (s === 'S201') {
+                            toastr.success("Vendor Demand Saved Successfully.");
+                            $scope.toggleRefreshTable();
+                        } else if (s === 'S202') {
+                            toastr.success("Vendor Demand Updated Successfully.");
+                            $scope.toggleRefreshTable();
+                        } else if (s === 'E400') {
+                            toastr.error("Demand Amount cannot exceed the Total PO Amount.");
+                        } else if (s === 'E401') {
+                            toastr.error("Please enter a valid Demand Amount.");
+                        } else if (s === 'E404') {
+                            toastr.error("PO not found.");
+                        }
+                        else if (s === 'E405') {
+                            toastr.error("A Final Bill already exists for this PO. Advance Demand can no longer be raised.");
+                        }
+                        else {
+                            toastr.error("Save Failed. Status: " + (s || "unknown"));
+                        }
+                    }, function () {
+                        $scope.isSaving = false;
+                        toastr.error("Save Failed.");
+                    });
+            };
+
+            /* ── Refresh ── */
+            $scope.toggleRefreshTable = function () {
+                $scope.isRefreshing = true;
+                $timeout(function () { window.location.reload(); }, 1200);
+            };
+
+        }]);</script>

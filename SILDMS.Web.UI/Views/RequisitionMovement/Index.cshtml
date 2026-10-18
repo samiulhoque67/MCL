@@ -2,7 +2,6 @@
     ViewBag.Title = "Requisition Movement";
     Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
 }
-
 <style type="text/css">
     label {
         margin-bottom: 2px;
@@ -16,13 +15,6 @@
         padding: 3px 6px 3px;
     }
 
-    .movement-card {
-        margin: 10px 1%;
-        background-color: #f0f0f0;
-        box-shadow: 2px 2px 5px #888888;
-        padding: 10px;
-    }
-
     .movement-title {
         font-family: Verdana;
         font-size: 16px;
@@ -30,543 +22,343 @@
         color: #166e19;
     }
 
+    .movement-wrap {
+        overflow-x: auto;
+        width: 100%;
+    }
+
     .movement-table {
-        font-size: 12px;
+        font-size: 11px !important;
+        table-layout: fixed;
+        width: max-content; /* important */
+        min-width: 100%;
     }
 
-        .movement-table th {
-            background-color: #82b0c9;
-            color: #010823;
-            font-size: 11px;
+        /* ===== Headers ===== */
+        .movement-table thead th {
+            background-color: #5B9BA8 !important;
+            color: #fff !important;
+            font-size: 10px !important;
+            font-weight: 600;
+            padding: 4px 2px !important;
+            vertical-align: middle !important;
             text-align: center;
-            vertical-align: middle !important;
+            border: 1px solid #3d7a88 !important;
+            line-height: 1.2;
         }
 
+        /* Group headers */
+        .movement-table th.grp-sourcing {
+            background: #6aa6d6 !important;
+        }
+
+        .movement-table th.grp-order {
+            background: #5cb85c !important;
+        }
+
+        .movement-table th.grp-vendor {
+            background: #e6a15c !important;
+        }
+
+        .movement-table th.grp-client {
+            background: #7e8fd6 !important;
+        }
+
+        /* Sub-headers */
+        .movement-table th.sub-head {
+            background-color: #4A8A97 !important;
+            font-weight: normal;
+            font-size: 9.5px !important;
+            padding: 3px 1px !important;
+        }
+
+        .movement-table small.opt-tag {
+            font-weight: normal;
+            color: #e8f4f8;
+            font-size: 9px;
+        }
+
+        /* ===== Cells ===== */
+        .movement-table th,
         .movement-table td {
+            padding: 3px 2px !important;
             vertical-align: middle !important;
+            text-align: center;
+            border: 1px solid #3d7a88 !important;
+            word-break: break-word;
+            line-height: 1.2;
         }
 
-    .status-done {
-        color: green;
+            /* ===== Service Item – controlled width ===== */
+            .movement-table th.item-col,
+            .movement-table td.item-name {
+                width: 60px !important;
+                min-width: 60px !important;
+                max-width: 60px !important;
+                text-align: left !important;
+                padding-left: 6px !important;
+                font-size: 11px;
+                white-space: normal;
+            }
+
+            /* ===== All other columns – short & forced ===== */
+            .movement-table th:not(.item-col),
+            .movement-table td:not(.item-name) {
+                width: 35px !important;
+                min-width: 35px !important;
+                max-width: 35px !important;
+            }
+
+        /* Icons & dates */
+        .movement-table .fa {
+            font-size: 11px;
+        }
+
+        .movement-table small {
+            font-size: 9px !important;
+            display: block;
+            line-height: 1.1;
+        }
+
+    /* ===== Cell states ===== */
+    .cell-done {
+        color: #3c763d;
         font-weight: bold;
+        background: #f4faf4;
     }
 
-    .status-pending {
+    .cell-partial {
+        color: #31708f;
+        font-weight: bold;
+        background: #f1f8fc;
+    }
+
+    .cell-pending {
         color: #d58512;
         font-weight: bold;
     }
 
-    .status-na {
+    .cell-na {
         color: #999;
+        background: #f7f7f7;
+    }
+
+    .cell-opt {
+        color: #7a8aa0;
+        font-style: italic;
+        background: #f7f9fc;
+    }
+
+    /* Legend */
+    .legend {
+        margin: 6px 1% 8px 1%;
+        font-size: 12px;
+    }
+
+        .legend span {
+            margin-right: 14px;
+            white-space: nowrap;
+        }
+
+    .type-tag {
+        display: inline-block;
+        padding: 0 6px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    .type-QV {
+        background: #d9edf7;
+        color: #31708f;
+    }
+
+    .type-QC {
+        background: #fcf8e3;
+        color: #8a6d3b;
     }
 </style>
 
-<div class="box box-primary box-body"
-     ng-controller="RequisitionMovementCtrl">
+<div class="box box-primary box-body" ng-controller="RequisitionMovementCtrl">
 
     <!-- MASTER HEADER -->
-    <div class="box-header with-border bg-light-blue-gradient"
-         style="height:38px;">
-
-        <h2 class="box-title"
-            style="font-family: math; font-weight: 500;">
+    <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
+        <h2 class="box-title" style="font-family: math; font-weight: 500;">
             Requisition Movement Report
         </h2>
 
         <div class="box-tools pull-right">
-
-            <div class="btn-group pull-right"
-                 style="margin-left:4px; margin-right:4px;">
-
-                <button type="button"
-                        class="button-custom"
-                        ng-click="Refresh()"
-                        ng-disabled="loading">
-
-                    <i class="fa fa-refresh"
-                       style="padding-right:5px"></i>
-
-                    Refresh
+            <div class="btn-group pull-right" style="margin-left:4px; margin-right:4px;">
+                <button type="button" class="button-custom" ng-click="Refresh()" ng-disabled="loading">
+                    <i class="fa fa-refresh" style="padding-right:5px"></i> Refresh
                 </button>
-
-                <button type="button"
-                        class="button-custom"
-                        ng-click="PreviewReport()"
-                        ng-disabled="movementData.length == 0">
-
-                    <i class="fa fa-print"
-                       style="padding-right:5px"></i>
-
-                    Preview Report
+                <button type="button" class="button-custom" ng-click="PreviewReport()" ng-disabled="movementData.length == 0">
+                    <i class="fa fa-print" style="padding-right:5px"></i> Preview Report
                 </button>
-
             </div>
         </div>
     </div>
-
 
     <!-- SEARCH -->
-    <div class="row"
-         style="margin-right:-15px;
-                margin-left:20px;
-                margin-top:20px;">
-
-        <div class="col-sm-2 col-md-2 col-lg-2">
-
+    <div class="row" style="margin-right:-15px; margin-left:20px; margin-top:20px;">
+        <div class="col-sm-3 col-md-3 col-lg-3">
             <div class="form-group">
-
-                <label for="ClientReqID">
-                    Client Requisition ID/NO:
-                </label>
-
-                <label style="font-size:larger;color:red;">
-                    *
-                </label>
-
+                <label for="ClientReqID">Client Requisition ID/ NO/ Project :</label>
+                <label style="font-size:larger;color:red;">*</label>
             </div>
-
         </div>
-
 
         <div class="col-sm-4 col-md-4 col-lg-4">
-
             <div style="position:relative;">
-
-                <input id="ClientReqID"
-                       type="text"
-                       class="form-control"
-                       autocomplete="off"
-                       autofocus
+                <input id="ClientReqID" type="text" class="form-control" autocomplete="off" autofocus
                        ng-model="clientReqId"
-                       placeholder="Client Requisition ID/NO"
+                       placeholder="Client Requisition ID/ NO/ Project Name"
                        ng-keypress="KeyPress($event)" />
 
-                <button type="button"
-                        class="btn-group pull-right"
-                        ng-click="GetMovement()"
-                        ng-disabled="loading"
-                        style="
-                            position:absolute;
-                            right:1px;
-                            top:50%;
-                            transform:translateY(-50%);
-                            padding:0px 10px;
-                            border:2px solid black;
-                            background:transparent;">
-
+                <button type="button" class="btn-group pull-right"
+                        ng-click="GetMovement()" ng-disabled="loading"
+                        style="position:absolute; right:1px; top:50%; transform:translateY(-50%);
+                               padding:0px 10px; border:2px solid black; background:transparent;">
                     <i class="fa fa-search"></i>
-
                 </button>
-
             </div>
-
         </div>
-
     </div>
-
 
     <!-- ERROR -->
-    <div ng-show="errorMessage"
-         class="row"
-         style="
-            margin:20px 1%;
-            background-color:#f0f0f0;
-            box-shadow:2px 2px 5px #888888;
-            padding:10px;">
-
+    <div ng-show="errorMessage" class="row"
+         style="margin:20px 1%; background-color:#f0f0f0; box-shadow:2px 2px 5px #888888; padding:10px;">
         <div class="col-sm-12 text-center">
-
-            <h4 style="color:red;">
-                {{errorMessage}}
-            </h4>
-
+            <h4 style="color:red;">{{errorMessage}}</h4>
         </div>
-
     </div>
 
+    <!-- RESULT -->
+    <div ng-show="movementData.length > 0" class="box-body" style="margin:1%; padding:5px;">
 
-    <!-- REQUISITION INFORMATION -->
-    <div ng-show="movementData.length > 0"
-         class="box-body"
-         style="margin:1%; padding:5px;">
-
+        <!-- REQUISITION INFORMATION -->
         <div class="row">
-
             <div class="col-md-12">
-
-                <div class="box box-info"
-                     style="border-bottom:1px solid #d3e3e3;">
-
-                    <div class="box-header with-border"
-                         style="
-                            height:40px;
-                            border-bottom:1px solid #d3e3e3;">
-
-                        <h2 class="box-title movement-title">
-                            Requisition Information
-                        </h2>
-
+                <div class="box box-info" style="border-bottom:1px solid #d3e3e3;">
+                    <div class="box-header with-border" style="height:40px; border-bottom:1px solid #d3e3e3;">
+                        <h2 class="box-title movement-title">Requisition Information</h2>
                     </div>
-
 
                     <div class="box-body">
-
                         <div class="row">
-
-                            <div class="col-sm-2">
-                                <label>Client:</label>
-                            </div>
-
-                            <div class="col-sm-4">
-                                {{movementData[0].ClientName}}
-                            </div>
-
-                            <div class="col-sm-2">
-                                <label>Requisition No:</label>
-                            </div>
-
-                            <div class="col-sm-4">
-                                {{movementData[0].ClientReqNo}}
-                            </div>
-
+                            <div class="col-sm-2"><label>Client:</label></div>
+                            <div class="col-sm-4">{{movementData[0].ClientName}}</div>
+                            <div class="col-sm-2"><label>Requisition No:</label></div>
+                            <div class="col-sm-4">{{movementData[0].ClientReqNo}}</div>
                         </div>
 
-
-                        <div class="row"
-                             style="margin-top:8px;">
-
-                            <div class="col-sm-2">
-                                <label>Requisition Date:</label>
-                            </div>
-
-                            <div class="col-sm-4">
-                                {{movementData[0].RequisitionDate}}
-                            </div>
-
-                            <div class="col-sm-2">
-                                <label>Status:</label>
-                            </div>
-
-                            <div class="col-sm-4">
-                                {{movementData[0].ClientReqStatus}}
-                            </div>
-
+                        <div class="row" style="margin-top:8px;">
+                            <div class="col-sm-2"><label>Requisition Date:</label></div>
+                            <div class="col-sm-4">{{movementData[0].RequisitionDate}}</div>
+                            <div class="col-sm-2"><label>Requisition Raised by:</label></div>
+                            <div class="col-sm-4">{{movementData[0].ClientReqStatus}}</div>
                         </div>
 
+                        <div class="row" style="margin-top:8px;">
+                            <div class="col-sm-2"><label>Items:</label></div>
+                            <div class="col-sm-4">{{movementData.length}}</div>
+                            <div class="col-sm-2"><label>Request Types:</label></div>
+                            <div class="col-sm-4">
+                                <span ng-show="qvCount > 0">{{qvCount}} Quotation to Vendor (QV)</span>
+                                <span ng-show="qvCount > 0 && qcCount > 0"> &nbsp;|&nbsp; </span>
+                                <span ng-show="qcCount > 0">{{qcCount}} Quotation to Client (QC)</span>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top:8px;">
+                            <div class="col-sm-2"><label>Project Name:</label></div>
+                            <div class="col-sm-4">{{movementData[0].ProjectName}}</div>
+                        </div>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-        <!-- ITEM MOVEMENT -->
+
+        <!-- MOVEMENT DETAILS -->
         <div class="row">
-
             <div class="col-md-12">
-
-                <div class="box box-info"
-                     style="border-bottom:1px solid #d3e3e3;">
-
-                    <div class="box-header with-border"
-                         style="
-                            height:40px;
-                            border-bottom:1px solid #d3e3e3;">
-
-                        <h2 class="box-title movement-title">
-                            Requisition Movement Details
-                        </h2>
-
+                <div class="box box-info" style="border-bottom:1px solid #d3e3e3;">
+                    <div class="box-header with-border" style="height:40px; border-bottom:1px solid #d3e3e3;">
+                        <h2 class="box-title movement-title">Requisition Movement Details</h2>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
 
-
-        <div class="row"
-             style="
-                margin:1%;
-                background-color:#f0f0f0;
-                box-shadow:2px 2px 5px #888888;
-                padding:5px 10px 10px 10px;">
-
-            <div class="row"
-                 style="
-                    padding:11px;
-                    margin-right:15px;
-                    margin-left:15px;">
-
-                <table class="table table-condensed
-                              table-bordered
-                              table-striped
-                              table-hover
-                              pnlView movement-table">
-
-                    <thead>
-
-                        <tr>
-
-                            <th style="width:4%;">
-                                S/N
-                            </th>
-
-                            <th style="width:15%;">
-                                Service Item
-                            </th>
-
-                            <th style="width:8%;">
-                                Type
-                            </th>
-
-                            <th style="width:12%;">
-                                Client Requisition
-                            </th>
-
-                            <th style="width:12%;">
-                                Vendor Requisition
-                            </th>
-
-                            <th style="width:12%;">
-                                Vendor Quotation
-                            </th>
-
-                            <th style="width:12%;">
-                                Comparative Statement
-                            </th>
-
-                            <th style="width:12%;">
-                                Work Order
-                            </th>
-
-                            <th style="width:12%;">
-                                Purchase Order
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody>
-
-                        <tr ng-repeat="item in movementData">
-
-                            <td style="text-align:center;">
-                                {{$index + 1}}
-                            </td>
-
-
-                            <td>
-                                <strong>
-                                    {{item.ServiceItemName}}
-                                </strong>
-                            </td>
-
-
-                            <td style="text-align:center;">
-                                {{item.ReqType}}
-                            </td>
-
-
-                            <!-- CLIENT REQUISITION -->
-                            <td>
-
-                                <span class="status-done">
-                                    <i class="fa fa-check-circle"></i>
-                                    Completed
-                                </span>
-
-                                <br />
-
-                                <small>
-                                    {{item.RequisitionDate}}
-                                </small>
-
-                            </td>
-
-
-                            <!-- VENDOR REQUISITION -->
-                            <td>
-
-                                <span ng-if="item.ReqType == 'QC'"
-                                      class="status-na">
-                                    N/A
-                                </span>
-
-                                <span ng-if="item.ReqType != 'QC' &&
-                                             item.VendorReqRaised"
-                                      class="status-done">
-
-                                    <i class="fa fa-check-circle"></i>
-                                    Completed
-
-                                    <br />
-
-                                    <small>
-                                        {{item.VendorReqDate}}
-                                    </small>
-
-                                </span>
-
-                                <span ng-if="item.ReqType != 'QC' &&
-                                             !item.VendorReqRaised"
-                                      class="status-pending">
-
-                                    <i class="fa fa-clock-o"></i>
-                                    Pending
-
-                                </span>
-
-                            </td>
-
-
-                            <!-- VENDOR QUOTATION -->
-                            <td>
-
-                                <span ng-if="item.ReqType == 'QC'"
-                                      class="status-na">
-                                    N/A
-                                </span>
-
-                                <span ng-if="item.ReqType != 'QC' &&
-                                             item.VendorQutnReceived"
-                                      class="status-done">
-
-                                    <i class="fa fa-check-circle"></i>
-                                    Received
-
-                                    <br />
-
-                                    <small>
-                                        {{item.FirstVendorQutnDate}}
-                                    </small>
-
-                                </span>
-
-                                <span ng-if="item.ReqType != 'QC' &&
-                                             !item.VendorQutnReceived"
-                                      class="status-pending">
-
-                                    <i class="fa fa-clock-o"></i>
-                                    Pending
-
-                                </span>
-
-                            </td>
-
-
-                            <!-- CS -->
-                            <td>
-
-                                <span ng-if="item.ReqType == 'QC' ||
-                                             item.CsStatus == 'NCS'"
-                                      class="status-na">
-                                    N/A
-                                </span>
-
-                                <span ng-if="item.ReqType != 'QC' &&
-                                             item.CsStatus != 'NCS'">
-
-                                    <span ng-if="item.CSActualApproved"
-                                          class="status-done">
-
-                                        <i class="fa fa-check-circle"></i>
-                                        Approved
-
-                                        <br />
-
-                                        <small>
-                                            {{item.CSActualAprvDate}}
-                                        </small>
-
-                                    </span>
-
-                                    <span ng-if="!item.CSActualApproved"
-                                          class="status-pending">
-
-                                        <i class="fa fa-clock-o"></i>
-                                        In Progress
-
-                                    </span>
-
-                                </span>
-
-                            </td>
-
-
-                            <!-- WORK ORDER -->
-                            <td>
-
-                                <span ng-if="item.WorkOrderRaised"
-                                      class="status-done">
-
-                                    <i class="fa fa-check-circle"></i>
-                                    Raised
-
-                                    <br />
-
-                                    <small>
-                                        {{item.WODate}}
-                                    </small>
-
-                                </span>
-
-                                <span ng-if="!item.WorkOrderRaised"
-                                      class="status-pending">
-
-                                    <i class="fa fa-clock-o"></i>
-                                    Pending
-
-                                </span>
-
-                            </td>
-
-
-                            <!-- PURCHASE ORDER -->
-                            <td>
-
-                                <span ng-if="item.ReqType == 'QC'"
-                                      class="status-na">
-                                    N/A
-                                </span>
-
-                                <span ng-if="item.ReqType != 'QC' &&
-                                             item.PurchaseOrderRaised"
-                                      class="status-done">
-
-                                    <i class="fa fa-check-circle"></i>
-                                    Raised
-
-                                    <br />
-
-                                    <small>
-                                        {{item.PODate}}
-                                    </small>
-
-                                </span>
-
-                                <span ng-if="item.ReqType != 'QC' &&
-                                             !item.PurchaseOrderRaised"
-                                      class="status-pending">
-
-                                    <i class="fa fa-clock-o"></i>
-                                    Pending
-
-                                </span>
-
-                            </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
+        <div class="legend">
+            <span class="cell-done">&#10003; Done (date)</span>
+            <span class="cell-partial">&#9680; Partly done (e.g. 1/2 POs)</span>
+            <span class="cell-pending"><i class="fa fa-clock-o"></i> Pending</span>
+            <span class="cell-opt">Optional &mdash; not taken</span>
+            <span class="cell-na">N/A &mdash; does not apply to this item</span>
+        </div>
+
+        <div class="movement-wrap">
+            <table class="table table-condensed table-bordered table-hover movement-table">
+                <thead>
+                    <!-- Row 1: Groups -->
+                    <tr>
+                        <th rowspan="4" class="item-col">Service Item</th>
+                        <th ng-repeat="g in HeadGroups"
+                            ng-attr-colspan="{{g.span}}"
+                            ng-class="'grp-' + g.cls">
+                            {{g.label}}
+                        </th>
+                    </tr>
+
+                    <!-- Row 2: Stages -->
+                    <tr>
+                        <th ng-repeat="s in HeadStages"
+                            ng-attr-colspan="{{s.colspan}}"
+                            ng-attr-rowspan="{{s.rowspan}}">
+                            {{s.label}}
+                            <br ng-if="s.note" />
+                            <small class="opt-tag" ng-if="s.note">({{s.note}})</small>
+                        </th>
+                    </tr>
+
+                    <!-- Row 3: Recommended / Approved / Final Approved -->
+                    <tr>
+                        <th ng-repeat="s in HeadSubStages"
+                            ng-attr-colspan="{{s.colspan}}"
+                            ng-attr-rowspan="{{s.rowspan}}"
+                            class="sub-head">
+                            {{s.label}}
+                        </th>
+                    </tr>
+
+                    <!-- Row 4: A B C (and empty cells) -->
+                    <tr>
+                        <th ng-repeat="b in HeadSubs track by $index" class="sub-head">
+                            {{b}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in movementData">
+                        <td class="item-name">{{item.ServiceItemName}}</td>
+                        <td ng-repeat="c in item.Cells track by $index" ng-class="'cell-' + c.state" title="{{c.title}}">
+                            <span ng-if="c.state === 'done'">
+                                <i class="fa fa-check-circle"></i> {{c.text}}
+                                <br ng-if="c.date" /><small>{{c.date}}</small>
+                            </span>
+                            <span ng-if="c.state === 'partial'">
+                                <i class="fa fa-adjust"></i> {{c.text}}
+                                <br ng-if="c.date" /><small>{{c.date}}</small>
+                            </span>
+                            <span ng-if="c.state === 'pending'"><i class="fa fa-clock-o"></i></span>
+                            <span ng-if="c.state === 'na'">{{c.text || 'N/A'}}</span>
+                            <span ng-if="c.state === 'opt'">{{c.text || 'Optional'}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
         </div>
 
     </div>
@@ -582,268 +374,399 @@
             $scope.movementData = [];
             $scope.errorMessage = "";
             $scope.loading = false;
+            $scope.qvCount = 0;
+            $scope.qcCount = 0;
 
+            /* ══════════ Column layout — the ONE place that defines the stages.
+                   A stage with `subs` gets sub-columns (its approval layers);
+                   the on-screen header, the cells and the print preview are all
+                   generated from this list, so they can never drift apart. ══════════ */
+            var CONFIG = [
+                {
+                    group: 'Sourcing', cls: 'sourcing', items: [
+                        { key: 'vreq', label: 'Vendor Requisition' },
+                        { key: 'vqutn', label: 'Vendor Quotation' },
+                        {
+                            label: 'Comparative Statement', note: 'WCS only', nested: true,
+                            parts: [
+                                { key: 'csRecm', label: 'Prep', span: 1 },
+                                { key: 'csAprv', label: 'Recom', span: 3, children: ['Recom','Acc', 'Adt'] },
+                                { key: 'csFinal', label: 'Aprv', span: 1 }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    group: 'Quotation & Order', cls: 'order', items: [
+                        {
+                            label: 'Client Quotation', subs: [
+                                { key: 'cqPrep', label: 'Prepared' },
+                                { key: 'cqRecm', label: 'Recommended' },
+                                { key: 'cqAprv', label: 'Approved' }
+                            ]
+                        },
+                        { key: 'wo', label: 'Work Order' },
+                        {
+                            label: 'Purchase Order', subs: [
+                                { key: 'poPrep', label: 'Prepared' },
+                                { key: 'poRecm', label: 'Recommended' },
+                                { key: 'poAprv', label: 'Approved' }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    group: 'Vendor Side (after PO)', cls: 'vendor', items: [
+                        { key: 'vdem', label: 'Vendor Demand', note: 'optional' },
+                        { key: 'vbill', label: 'Vendor Final Bill' },
+                        { key: 'vpay', label: 'Vendor Payment' },
+                        { key: 'vset', label: 'Vendor Settlement' }
+                    ]
+                },
+                {
+                    group: 'Client Side (after WO)', cls: 'client', items: [
+                        { key: 'cclaim', label: 'Client Claim', note: 'optional' },
+                        { key: 'cbill', label: 'Client Final Bill' },
+                        { key: 'ccoll', label: 'Client Collection' },
+                        { key: 'cset', label: 'Client Settlement' }
+                    ]
+                }
+            ];
 
+            // ========== Build 4 header rows ==========
+            $scope.HeadGroups = [];
+            $scope.HeadStages = [];
+            $scope.HeadSubStages = [];   // Recommended / Approved / Final Approved
+            $scope.HeadSubs = [];   // ONLY the real lowest-level cells (A B C + normal subs)
+            var colKeys = [];
+
+            CONFIG.forEach(function (g) {
+                var groupSpan = 0;
+
+                g.items.forEach(function (s) {
+
+                    // ---------- Nested Comparative Statement ----------
+                    if (s.nested) {
+                        var totalCols = 0;
+                        s.parts.forEach(function (p) { totalCols += p.span; });
+
+                        $scope.HeadStages.push({
+                            label: s.label,
+                            note: s.note,
+                            colspan: totalCols,
+                            rowspan: 1
+                        });
+
+                        s.parts.forEach(function (p) {
+                            $scope.HeadSubStages.push({
+                                label: p.label,
+                                colspan: p.span,
+                                rowspan: p.children ? 1 : 2
+                            });
+
+                            if (p.children) {
+                                // only these go into the 4th row
+                                p.children.forEach(function (child, idx) {
+                                    $scope.HeadSubs.push(child);
+                                    colKeys.push(p.key + (idx + 1)); // csAprv1, csAprv2, csAprv3
+                                    groupSpan++;
+                                });
+                            } else {
+                                // Recommended & Final Approved → NO cell in 4th row
+                                colKeys.push(p.key);
+                                groupSpan++;
+                            }
+                        });
+                    }
+                    // ---------- Normal stage with flat subs ----------
+                    else if (s.subs) {
+                        $scope.HeadStages.push({
+                            label: s.label,
+                            note: s.note,
+                            colspan: s.subs.length,
+                            rowspan: 1
+                        });
+
+                        // placeholders in SubStages row (they will be empty)
+                        s.subs.forEach(function () {
+                            $scope.HeadSubStages.push({ label: '', colspan: 1, rowspan: 1 });
+                        });
+
+                        s.subs.forEach(function (b) {
+                            $scope.HeadSubs.push(b.label);
+                            colKeys.push(b.key);
+                            groupSpan++;
+                        });
+                    }
+                    // ---------- Simple stage ----------
+                    else {
+                        $scope.HeadStages.push({
+                            label: s.label,
+                            note: s.note,
+                            colspan: 1,
+                            rowspan: 3
+                        });
+                        colKeys.push(s.key);
+                        groupSpan++;
+                    }
+                });
+
+                $scope.HeadGroups.push({ label: g.group, cls: g.cls, span: groupSpan });
+            });
+
+            /* ══════════ Cell logic ══════════ */
+            function cell(state, text, date, title) {
+                return { state: state, text: text || '', date: date || '', title: title || '' };
+            }
+            function done(text, date) { return cell('done', text, date); }
+            function partial(text, date) { return cell('partial', text, date); }
+            function pending() { return cell('pending'); }
+            function na(text, title) { return cell('na', text, '', title); }
+            function opt(text) { return cell('opt', text); }
+            function n(v) { return parseInt(v, 10) || 0; }
+
+            // A layer that may be reached by only some of several records (e.g. 1 of 2 POs)
+            function layer(count, total, date) {
+                count = n(count); total = n(total);
+                if (count > 0 && count >= total) return done(total > 1 ? count + '/' + total : '', date);
+                if (count > 0) return partial(count + '/' + total, date);
+                return pending();
+            }
+
+            // Settlement status (same wording the Client & Vendor Settlement page uses)
+            function settlement(status, date) {
+                if (status === 'Settled') return done('Settled', date);
+                if (status === 'Partially Settled') return partial('Partial', date);
+                if (status === 'Nothing to Settle') return na('Not required', 'No AIT / TDS or VAT / VDS to settle');
+                return pending();   // No Bill, Collection/Payment Pending, Pending
+            }
+
+            function buildCells(it) {
+                var isQC = it.ReqType === 'QC';        // QC: quoted straight to the client, no vendor at all
+                var noCS = isQC || it.CsStatus === 'NCS';   // single-quote vendor items skip the CS layer
+                var c = {};
+
+                // Sourcing
+                c.vreq = isQC ? na() : (it.VendorReqRaised ? done('', it.VendorReqDate) : pending());
+                c.vqutn = isQC ? na() : (it.VendorQutnReceived ? done('', it.FirstVendorQutnDate) : pending());
+                // Comparative Statement
+                c.csRecm = noCS ? na() : (it.CSRecommended ? done('', it.CSRecmDate) : pending());
+                c.csAprv1 = noCS ? na() : (it.CSApproved ? done('', it.CSAprvDate) : pending()); // A
+                c.csAprv2 = noCS ? na() : (it.CSRecomAcc ? done('', it.RecomAccDate) : pending());                                                        // B
+                c.csAprv3 = noCS ? na() : (it.CSVerify ? done('', it.CSVerifyDate) : pending());                                                         // C
+                c.csFinal = noCS ? na() : (it.CSActualApproved ? done('', it.CSActualAprvDate) : pending());
+                // Client Quotation
+                c.cqPrep = it.ClientQutnPrepared ? done('', it.ClientQutnPrepDate) : pending();
+                c.cqRecm = it.ClientQutnRecommended ? done('', it.ClientQutnRecmDate) : pending();
+                c.cqAprv = it.ClientQutnApproved ? done('', it.ClientQutnAprvDate) : pending();
+
+                // Work Order
+                c.wo = it.WorkOrderRaised ? done('', it.WODate) : pending();
+
+                // Purchase Order (counts: one PO per vendor)
+                c.poPrep = isQC ? na() : (n(it.POPrepCount) > 0 ? done(n(it.POPrepCount) > 1 ? n(it.POPrepCount) + ' POs' : '', it.POPrepDate) : pending());
+                c.poRecm = isQC ? na() : layer(it.PORecmCount, it.POPrepCount, it.PORecmDate);
+                c.poAprv = isQC ? na() : layer(it.POAprvCount, it.POPrepCount, it.POAprvDate);
+
+                // Vendor side
+                c.vdem = isQC ? na() : (it.VendorDemandRaised ? done('', it.VendorDemandDate) : opt('Optional'));
+                c.vbill = isQC ? na() : (it.VendorFinalBillRaised ? done(it.VendorFinalBillCount + ' Bill(s)', it.VendorFinalBillDate) : pending());
+                c.vpay = isQC ? na() : (it.VendorPaymentDone
+                    ? (n(it.VendorPaymentCount) < n(it.VendorFinalBillCount)
+                        ? partial(it.VendorPaymentCount + '/' + it.VendorFinalBillCount + ' paid', it.VendorPaymentDate)
+                        : done('Paid', it.VendorPaymentDate))
+                    : pending());
+                c.vset = isQC ? na() : settlement(it.VendorSettlementStatus, it.VendorSettlementDate);
+
+                // Client side — a claim only opens when a vendor advance demand exists
+                c.cclaim = it.ClientClaimRaised ? done('', it.ClientClaimDate)
+                    : (it.ClientClaimApplicable ? opt('Optional')
+                        : na('N/A', 'Client advance claim opens only when a vendor advance demand exists'));
+                c.cbill = it.ClientFinalBillRaised ? done(it.ClientFinalBillCount + ' Bill(s)', it.ClientFinalBillDate) : pending();
+                c.ccoll = it.ClientCollectionDone
+                    ? (n(it.ClientCollectionCount) < n(it.ClientFinalBillCount)
+                        ? partial(it.ClientCollectionCount + '/' + it.ClientFinalBillCount + ' collected', it.ClientCollectionDate)
+                        : done('Collected', it.ClientCollectionDate))
+                    : pending();
+                c.cset = settlement(it.ClientSettlementStatus, it.ClientSettlementDate);
+
+                return colKeys.map(function (k) { return c[k]; });
+            }
+
+            /* ══════════ Load ══════════ */
             $scope.GetMovement = function () {
 
                 $scope.errorMessage = "";
                 $scope.movementData = [];
 
-                if (!$scope.clientReqId ||
-                    $scope.clientReqId.trim() == "") {
-
+                if (!$scope.clientReqId || $scope.clientReqId.trim() == "") {
                     toastr.error("Client Requisition ID Required");
                     return;
                 }
 
                 $scope.loading = true;
 
-                $http.post(
-                    "/RequisitionMovement/GetMovement",
-                    {
-                        clientReqId: $scope.clientReqId
-                    }
-                )
+                $http.post("/RequisitionMovement/GetMovement", { clientReqId: $scope.clientReqId })
                     .success(function (response) {
 
                         $scope.loading = false;
 
                         if (response.status == "S") {
-
-                            $scope.movementData =
-                                response.data;
-
+                            var rows = response.data || [];
+                            rows.forEach(function (it) { it.Cells = buildCells(it); });
+                            $scope.movementData = rows;
+                            $scope.qvCount = rows.filter(function (r) { return r.ReqType === 'QV'; }).length;
+                            $scope.qcCount = rows.filter(function (r) { return r.ReqType === 'QC'; }).length;
                         }
                         else {
-
-                            $scope.errorMessage =
-                                response.message;
-
+                            $scope.errorMessage = response.message;
                             toastr.error(response.message);
                         }
-
                     })
                     .error(function () {
-
                         $scope.loading = false;
-
-                        $scope.errorMessage =
-                            "Failed to load requisition movement information.";
-
-                        toastr.error(
-                            "Failed to load requisition movement information."
-                        );
-
+                        $scope.errorMessage = "Failed to load requisition movement information.";
+                        toastr.error("Failed to load requisition movement information.");
                     });
             };
 
-
             $scope.KeyPress = function ($event) {
-
-                if ($event.which === 13) {
-                    $scope.GetMovement();
-                }
-
+                if ($event.which === 13) { $scope.GetMovement(); }
             };
 
+            $scope.Refresh = function () { window.location.reload(); };
 
-            $scope.Refresh = function () {
-
-                window.location.reload();
-
-            };
-
-
-            $scope.PreviewReport = function () {
-
-    if (!$scope.movementData || $scope.movementData.length === 0) {
-        toastr.error("No data available for report.");
-        return;
-    }
-
-    var data = $scope.movementData;
-    var header = data[0];
-
-    var reportHtml = `
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Requisition Movement Report</title>
-
-    <style>
-        body{
-            font-family:Arial;
-            margin:20px;
-            font-size:12px;
-        }
-
-        h2{
-            text-align:center;
-            margin-bottom:20px;
-        }
-
-        .info-table{
-            width:100%;
-            margin-bottom:20px;
-        }
-
-        .info-table td{
-            padding:5px;
-            border:1px solid #ddd;
-        }
-
-        .movement-table{
-            width:100%;
-            border-collapse:collapse;
-        }
-
-        .movement-table th{
-            background:#82b0c9;
-            border:1px solid #000;
-            padding:6px;
-            text-align:center;
-        }
-
-        .movement-table td{
-            border:1px solid #000;
-            padding:6px;
-        }
-
-        .done{
-            color:green;
-            font-weight:bold;
-        }
-
-        .pending{
-            color:#d58512;
-            font-weight:bold;
-        }
-
-        .na{
-            color:gray;
-        }
-
-        @@media print{
-            .no-print{
-                display:none;
+            /* ══════════ Print preview — built from the same config + cells ══════════ */
+            function esc(s) {
+                return String(s == null ? '' : s)
+                    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             }
-        }
-    </style>
-</head>
-<body>
 
-    <div class="no-print" style="text-align:right;margin-bottom:10px;">
-        <button onclick="window.print()">Print</button>
-    </div>
-
-    <h2>REQUISITION MOVEMENT REPORT</h2>
-
-    <table class="info-table">
-        <tr>
-            <td><b>Client</b></td>
-            <td>${header.ClientName || ''}</td>
-
-            <td><b>Requisition No</b></td>
-            <td>${header.ClientReqNo || ''}</td>
-        </tr>
-
-        <tr>
-            <td><b>Requisition Date</b></td>
-            <td>${header.RequisitionDate || ''}</td>
-
-            <td><b>Status</b></td>
-            <td>${header.ClientReqStatus || ''}</td>
-        </tr>
-    </table>
-
-    <table class="movement-table">
-        <thead>
-            <tr>
-                <th>S/N</th>
-                <th>Service Item</th>
-                <th>Type</th>
-                <th>Client Req.</th>
-                <th>Vendor Req.</th>
-                <th>Vendor Quotation</th>
-                <th>CS</th>
-                <th>WO</th>
-                <th>PO</th>
-            </tr>
-        </thead>
-
-        <tbody>
-`;
-
-    angular.forEach(data, function (item, index) {
-
-        reportHtml += `
-        <tr>
-            <td style="text-align:center">${index + 1}</td>
-            <td>${item.ServiceItemName || ''}</td>
-            <td style="text-align:center">${item.ReqType || ''}</td>
-
-            <td class="done">
-                Completed<br/>
-                ${item.RequisitionDate || ''}
-            </td>
-
-            <td>
-                ${item.ReqType == 'QC'
-                    ? '<span class="na">N/A</span>'
-                    : item.VendorReqRaised
-                        ? '<span class="done">Completed</span><br/>' + (item.VendorReqDate || '')
-                        : '<span class="pending">Pending</span>'
+            function cellHtml(c) {
+                var d = c.date ? '<br/><small>' + esc(c.date) + '</small>' : '';
+                if (c.state === 'done') return '<span class="done">&#10003; ' + esc(c.text) + '</span>' + d;
+                if (c.state === 'partial') return '<span class="partial">&#9680; ' + esc(c.text) + '</span>' + d;
+                if (c.state === 'pending') return '<span class="pending">Pending</span>';
+                if (c.state === 'na') return '<span class="na">' + esc(c.text || 'N/A') + '</span>';
+                return '<span class="opt">' + esc(c.text || 'Optional') + '</span>';
+            }
+            $scope.PreviewReport = function () {
+                if (!$scope.movementData || $scope.movementData.length === 0) {
+                    toastr.error("No data available for report.");
+                    return;
                 }
-            </td>
 
-            <td>
-                ${item.ReqType == 'QC'
-                    ? '<span class="na">N/A</span>'
-                    : item.VendorQutnReceived
-                        ? '<span class="done">Received</span><br/>' + (item.FirstVendorQutnDate || '')
-                        : '<span class="pending">Pending</span>'
+                var data = $scope.movementData;
+                var header = data[0];
+
+                function esc(s) {
+                    return String(s == null ? '' : s)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
                 }
-            </td>
 
-            <td>
-                ${(item.ReqType == 'QC' || item.CsStatus == 'NCS')
-                    ? '<span class="na">N/A</span>'
-                    : item.CSActualApproved
-                        ? '<span class="done">Approved</span><br/>' + (item.CSActualAprvDate || '')
-                        : '<span class="pending">In Progress</span>'
+                function cellHtml(c) {
+                    var d = c.date ? '<br/><small>' + esc(c.date) + '</small>' : '';
+                    if (c.state === 'done') return '<span class="done">&#10003; ' + esc(c.text) + '</span>' + d;
+                    if (c.state === 'partial') return '<span class="partial">&#9680; ' + esc(c.text) + '</span>' + d;
+                    if (c.state === 'pending') return '<span class="pending">Pending</span>';
+                    if (c.state === 'na') return '<span class="na">' + esc(c.text || 'N/A') + '</span>';
+                    return '<span class="opt">' + esc(c.text || 'Optional') + '</span>';
                 }
-            </td>
 
-            <td>
-                ${item.WorkOrderRaised
-                    ? '<span class="done">Raised</span><br/>' + (item.WODate || '')
-                    : '<span class="pending">Pending</span>'
-                }
-            </td>
+                var html = '';
+                html += '<!DOCTYPE html><html><head><title>Requisition Movement Report</title><style>';
+                html += 'body{font-family:Arial;margin:12px;font-size:10px;}';
+                html += 'h2{text-align:center;margin:0 0 10px 0;}';
+                html += '.info-table{width:100%;margin-bottom:10px;border-collapse:collapse;}';
+                html += '.info-table td{padding:4px 6px;border:1px solid #ddd;font-size:11px;}';
+                html += '.movement-table{width:100%;border-collapse:collapse;}';
+                html += '.movement-table th{background:#5B9BA8;color:#fff;border:1px solid #000;padding:3px 2px;text-align:center;font-size:9px;}';
+                html += '.movement-table th.sub{background:#4A8A97;font-weight:normal;}';
+                html += '.movement-table th.g-sourcing{background:#6aa6d6;}';
+                html += '.movement-table th.g-order{background:#5cb85c;}';
+                html += '.movement-table th.g-vendor{background:#e6a15c;}';
+                html += '.movement-table th.g-client{background:#7e8fd6;}';
+                html += '.movement-table td{border:1px solid #000;padding:3px 2px;text-align:center;vertical-align:middle;font-size:9px;}';
+                html += '.movement-table td.left{text-align:left;}';
+                html += '.done{color:green;font-weight:bold;} .partial{color:#31708f;font-weight:bold;}';
+                html += '.pending{color:#d58512;font-weight:bold;} .na{color:gray;} .opt{color:#7a8aa0;font-style:italic;}';
+                html += 'small{font-size:8px;}';
+                html += '@@page{size:A4 landscape;margin:8mm;}';
+                html += '@@media print{.no-print{display:none;}}';
+                html += '</style></head><body>';
 
-            <td>
-                ${item.ReqType == 'QC'
-                    ? '<span class="na">N/A</span>'
-                    : item.PurchaseOrderRaised
-                        ? '<span class="done">Raised</span><br/>' + (item.PODate || '')
-                        : '<span class="pending">Pending</span>'
-                }
-            </td>
-        </tr>
-        `;
-    });
+                html += '<div class="no-print" style="text-align:right;margin-bottom:8px;"><button onclick="window.print()">Print</button></div>';
+                html += '<h2>REQUISITION MOVEMENT REPORT</h2>';
 
-    reportHtml += `
-        </tbody>
-    </table>
+                // Info table
+                html += '<table class="info-table"><tr>';
+                html += '<td><b>Client</b></td><td>' + esc(header.ClientName) + '</td>';
+                html += '<td><b>Requisition No</b></td><td>' + esc(header.ClientReqNo) + '</td></tr><tr>';
+                html += '<td><b>Requisition Date</b></td><td>' + esc(header.RequisitionDate) + '</td>';
+                html += '<td><b>Requisition Raised by</b></td><td>' + esc(header.ClientReqStatus) + '</td></tr></table>';
 
-</body>
-</html>`;
+                // ========== 4-row header (same structure as the screen) ==========
+                html += '<table class="movement-table"><thead>';
 
-    var reportWindow = window.open('', '_blank');
-    reportWindow.document.write(reportHtml);
-    reportWindow.document.close();
-};
+                // Row 1 – Groups
+                html += '<tr>';
+                html += '<th rowspan="4">S/N</th>';
+                html += '<th rowspan="4">Service Item</th>';
+                html += '<th rowspan="4">Type</th>';
+                $scope.HeadGroups.forEach(function (g) {
+                    html += '<th class="g-' + g.cls + '" colspan="' + g.span + '">' + esc(g.label) + '</th>';
+                });
+                html += '</tr>';
+
+                // Row 2 – Stages
+                html += '<tr>';
+                $scope.HeadStages.forEach(function (s) {
+                    html += '<th colspan="' + s.colspan + '" rowspan="' + s.rowspan + '">' +
+                        esc(s.label) +
+                        (s.note ? '<br/><small>(' + esc(s.note) + ')</small>' : '') +
+                        '</th>';
+                });
+                html += '</tr>';
+
+                // Row 3 – Sub-stages (Recommended / Approved / Final Approved)
+                html += '<tr>';
+                $scope.HeadSubStages.forEach(function (s) {
+                    if (s.label || s.colspan > 1 || s.rowspan > 1) {   // skip pure empty placeholders
+                        html += '<th class="sub" colspan="' + s.colspan + '" rowspan="' + s.rowspan + '">' +
+                            esc(s.label) + '</th>';
+                    }
+                });
+                html += '</tr>';
+
+                // Row 4 – deepest level (A B C + normal subs)
+                html += '<tr>';
+                $scope.HeadSubs.forEach(function (b) {
+                    html += '<th class="sub">' + esc(b) + '</th>';
+                });
+                html += '</tr>';
+
+                html += '</thead><tbody>';
+
+                // Data rows
+                data.forEach(function (item, index) {
+                    html += '<tr>';
+                    html += '<td>' + (index + 1) + '</td>';
+                    html += '<td class="left">' + esc(item.ServiceItemName) + '</td>';
+                    html += '<td>' + esc(item.ReqType) + '</td>';
+                    item.Cells.forEach(function (c) {
+                        html += '<td>' + cellHtml(c) + '</td>';
+                    });
+                    html += '</tr>';
+                });
+
+                html += '</tbody></table></body></html>';
+
+                var reportWindow = window.open('', '_blank');
+                reportWindow.document.write(html);
+                reportWindow.document.close();
+            };
 
         }]);
 

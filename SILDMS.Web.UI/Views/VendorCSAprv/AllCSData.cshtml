@@ -274,7 +274,13 @@ font-size: 9px;">
 
                             <!-- Action -->
                             <td class="text-center" style="font-weight:bold">
-                                <button type="button" ng-click="selectInvitation(row)" data-dismiss="modal" title="Select">
+                                <button type="button"
+                                        ng-show="row.RecomAccOperation === 'Rec'
+                  && row.VerifyOperation === 'Vrf'
+                  && row.ApprovalOperation === 'Aprv'"
+                                        ng-click="selectInvitation(row)"
+                                        data-dismiss="modal"
+                                        title="Select">
                                     <i ng-show="!row.selected" class="fa fa-square-o"></i>
                                     <i ng-show="row.selected" class="fa fa-check-square-o"></i>
                                 </button>
@@ -780,7 +786,35 @@ font-size: 9px;">
            Approved Service Provider / Quantity / Total Price (in words)
            Notes — the recommended vendor's Terms & Conditions only
          ══════════════════════════════════════════════════════════════ -->
-    <div id="masterRow" style="display:none;margin-top:150px;">
+    <!-- ══════════════════════════════════════════════════════════════
+      PRINT SLIP  (hidden div, rendered into iframe on print)
+      Matches the "Comparative Statement" layout exactly:
+        Title / CS No / Date
+        Subject: Comparative Statement for {ProjectName}
+        Item table — Item Description | Vendor Name | UOM | QTY |
+                     Unit Price | Amount | Vat(%) | Vat Amount | Total Amount
+        Approved Service Provider / Quantity / Total Price (in words)
+        Notes — the recommended vendor's Terms & Conditions only
+      ══════════════════════════════════════════════════════════════ -->
+    <div id="masterRow" style="display:none;">
+
+        <!-- Logo + Company Address (left side of top free space) -->
+        <div style="margin-bottom:18px;">
+            <img src="/Content/AdminLTE/img/MCL-logo.png"
+                 alt="MCL Logo"
+                 style="max-height:85px; max-width:130px; display:block; margin-bottom:6px;" />
+
+            <div style="font-size:11px; line-height:1.35; color:#222;">
+                <strong style="font-size:13px;">MEDIACOM LIMITED</strong><br />
+                SAMSON CENTER<br />
+                Levels - 5 to 7<br />
+                43 South Avenue, Road-126, Plot-CES (G) 5A,<br />
+                Gulshan 1, Dhaka – 1212<br />
+                IP No. 09610939393 extn: 1200/1205<br />
+                email: mediacombd.com, www.mediacombd.com
+            </div>
+        </div>
+
         <div class="row">
             <p style="font-weight:bold;font-size:25px;text-align:left;border-bottom:5px solid #000;display:inline-block;margin:0;">
                 Comparative Statement
@@ -794,8 +828,8 @@ font-size: 9px;">
             <p style="margin-top:20px;">
                 Subject: Comparative Statement for {{VendorCSAprv.ProjectName}}
             </p>
-
         </div>
+
         <table style="width:100%;border-collapse:collapse;margin-top:10px;">
             <thead>
                 <tr>
@@ -865,8 +899,8 @@ font-size: 9px;">
         </div>
 
         <!-- Signatures — Prepared → Recommended by HOD → Recommended by A&F →
-     Verified by IAD → Approved. Image on top, static role caption,
-     then the person's name and designation underneath. -->
+        Verified by IAD → Approved. Image on top, static role caption,
+        then the person's name and designation underneath. -->
         <div style="margin-top:50px;display:flex;justify-content:space-between;flex-wrap:wrap;">
 
             <div style="text-align:center;width:19%;">
@@ -879,45 +913,45 @@ font-size: 9px;">
                 <div style="font-size:11px;color:#555;" ng-show="VendorCSAprv.PrepDesig">{{VendorCSAprv.PrepDesig}}</div>
             </div>
 
-            <div style="text-align:center;width:19%;">
-                <div style="height:45px;">
-                    <img ng-if="VendorCSAprv.RecomenBySignature" ng-src="{{toSignatureSrc(VendorCSAprv.RecomenBySignature)}}"
-                         style="max-height:45px;max-width:100%;" />
-                </div>
-                <div style="padding-top:4px;font-weight:bold;font-size:12px;">Recommended by HO</div>
-                <div style="font-size:12px;">{{VendorCSAprv.RecomenBy}}</div>
-                <div style="font-size:11px;color:#555;" ng-show="VendorCSAprv.RecomenDesig">{{VendorCSAprv.RecomenDesig}}</div>
-            </div>
+            @*<div style="text-align:center;width:19%;">
+                    <div style="height:45px;">
+                        <img ng-if="VendorCSAprv.RecomenBySignature" ng-src="{{toSignatureSrc(VendorCSAprv.RecomenBySignature)}}"
+                             style="max-height:45px;max-width:100%;" />
+                    </div>
+                    <div style="padding-top:4px;font-weight:bold;font-size:12px;">Recommended by HO</div>
+                    <div style="font-size:12px;">{{VendorCSAprv.RecomenBy}}</div>
+                    <div style="font-size:11px;color:#555;" ng-show="VendorCSAprv.RecomenDesig">{{VendorCSAprv.RecomenDesig}}</div>
+                </div>*@
 
-            <div style="text-align:center;width:19%;">
-                <div style="height:45px;">
-                    <img ng-if="VendorCSAprv.RecmAccBySignature" ng-src="{{toSignatureSrc(VendorCSAprv.RecmAccBySignature)}}"
-                         style="max-height:45px;max-width:100%;" />
-                </div>
-                <div style="padding-top:4px;font-weight:bold;font-size:12px;">Recommended by A&amp;F</div>
-                <div style="font-size:12px;">{{VendorCSAprv.RecmAccBy}}</div>
-                <div style="font-size:11px;color:#555;" ng-show="VendorCSAprv.RecmAccDesig">{{VendorCSAprv.RecmAccDesig}}</div>
-            </div>
+            @*<div style="text-align:center;width:19%;">
+                    <div style="height:45px;">
+                        <img ng-if="VendorCSAprv.RecmAccBySignature" ng-src="{{toSignatureSrc(VendorCSAprv.RecmAccBySignature)}}"
+                             style="max-height:45px;max-width:100%;" />
+                    </div>
+                    <div style="padding-top:4px;font-weight:bold;font-size:12px;">Recommended by A&amp;F</div>
+                    <div style="font-size:12px;">{{VendorCSAprv.RecmAccBy}}</div>
+                    <div style="font-size:11px;color:#555;" ng-show="VendorCSAprv.RecmAccDesig">{{VendorCSAprv.RecmAccDesig}}</div>
+                </div>*@
 
-            <div style="text-align:center;width:19%;">
-                <div style="height:45px;">
-                    <img ng-if="VendorCSAprv.VerifyBySignature" ng-src="{{toSignatureSrc(VendorCSAprv.VerifyBySignature)}}"
-                         style="max-height:45px;max-width:100%;" />
-                </div>
-                <div style="padding-top:4px;font-weight:bold;font-size:12px;">Verified by IAD</div>
-                <div style="font-size:12px;">{{VendorCSAprv.VerifyBy}}</div>
-                <div style="font-size:11px;color:#555;" ng-show="VendorCSAprv.VerifyDesig">{{VendorCSAprv.VerifyDesig}}</div>
-            </div>
+            @*<div style="text-align:center;width:19%;">
+                    <div style="height:45px;">
+                        <img ng-if="VendorCSAprv.VerifyBySignature" ng-src="{{toSignatureSrc(VendorCSAprv.VerifyBySignature)}}"
+                             style="max-height:45px;max-width:100%;" />
+                    </div>
+                    <div style="padding-top:4px;font-weight:bold;font-size:12px;">Verified by IAD</div>
+                    <div style="font-size:12px;">{{VendorCSAprv.VerifyBy}}</div>
+                    <div style="font-size:11px;color:#555;" ng-show="VendorCSAprv.VerifyDesig">{{VendorCSAprv.ApprovedDesig}}</div>
+                </div>*@
 
-            <div style="text-align:center;width:19%;">
-                <div style="height:45px;">
-                    <img ng-if="VendorCSAprv.ApprovedBySignature" ng-src="{{toSignatureSrc(VendorCSAprv.ApprovedBySignature)}}"
-                         style="max-height:45px;max-width:100%;" />
-                </div>
-                <div style="padding-top:4px;font-weight:bold;font-size:12px;">Approved by</div>
-                <div style="font-size:12px;">{{VendorCSAprv.ApprovedBy}}</div>
-                <div style="font-size:11px;color:#555;" ng-show="VendorCSAprv.ApprovedDesig">{{VendorCSAprv.ApprovedDesig}}</div>
-            </div>
+            @*<div style="text-align:center;width:19%;">
+                    <div style="height:45px;">
+                        <img ng-if="VendorCSAprv.ApprovedBySignature" ng-src="{{toSignatureSrc(VendorCSAprv.ApprovedBySignature)}}"
+                             style="max-height:45px;max-width:100%;" />
+                    </div>
+                    <div style="padding-top:4px;font-weight:bold;font-size:12px;">Approved by</div>
+                    <div style="font-size:12px;">{{VendorCSAprv.ApprovedBy}}</div>
+                    <div style="font-size:11px;color:#555;" ng-show="VendorCSAprv.ApprovedDesig">{{VendorCSAprv.ApprovedDesig}}</div>
+                </div>*@
 
         </div>
 

@@ -458,105 +458,113 @@
     </div>
 
     @*==================== VENDOR ITEM WISE GRID ==================== *@
-    <div class="row">
-        <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-            <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="VendorInfoDisplayedCollection" st-safe-src="ReqWiseVendorList"
-                       class="table table-condensed table-bordered table-striped table-hover pnlView">
-                    <thead>
-                        <tr style="font-size: 15px; border: 1px solid #3003eb; background: #ffffff;">
-                            <th style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
-                                <span>Item</span>
-                            </th>
-                            <th style="background: #ffffff; position: relative; padding: 5px;">
-                                <div style="position: relative; display: inline-block; width: 200px;">
-                                    <input id="SelectedItemName" name="SelectedItemName" type="text"
-                                           data-ng-model="VendorReq.SelectedItemName"
-                                           class="form-control" ng-readonly="true"
-                                           style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
-                                </div>
-                            </th>
-                            <th style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
-                                <span>Vendor List</span>
-                            </th>
-                            <th style="background: #ffffff; position: relative; padding: 5px;">
-                                <div style="position: relative; display: inline-block; width: 200px;">
-                                    <input id="VendorName" name="VendorName" type="text"
-                                           data-ng-model="VendorReq.VendorName"
-                                           class="form-control" ng-readonly="true"
-                                           style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
-                                    @*BUG FIX: Hide vendor search in viewonlymode *@
-                                    <button type="button" ng-click="ShowVendorList()"
-                                            ng-hide="viewonlymode"
-                                            style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
-                                                   padding: 0px 10px; border: 2px solid black; background: transparent;">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </div>
-                            </th>
-                            <th style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
-                                <span>CS Status</span>
-                                <label style="font-size: 8px; color:red;">*</label>
-                            </th>
-                            <th style="background: #ffffff; position: relative; padding: 5px;">
-                                @*BUG FIX: readonly in viewonlymode *@
-                                <select id="CsStatus" name="CsStatus"
-                                        style="background-color: #ffffff; width: 120px; height: 26px; font-size: 12px; line-height: 26px; padding: 0;"
-                                        class="form-control p-0" ng-model="VendorReq.CsStatus"
-                                        ng-disabled="viewonlymode">
-                                    <option value="WCS">With CS</option>
-                                    <option value="NCS">Without CS</option>
-                                </select>
-                            </th>
-                        </tr>
-                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                            <th>Item Name</th>
-                            <th>Vendor Code</th>
-                            <th>Vendor Name</th>
-                            <th>Contact Person</th>
-                            <th>Contact Number</th>
-                            <th>Address</th>
-                            <th>Quantity</th>
-                            @*BUG FIX: Action col hidden in viewonlymode *@
-                            <th ng-hide="viewonlymode">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in VendorInfoDisplayedCollection">
-                            <td class="hidden">{{row.VendorReqItemWiseID}}</td>
-                            <td class="hidden">{{row.VendorID}}</td>
-                            <td class="hidden">{{row.ServiceItemID}}</td>
-                            <td class="text-center">{{row.ServiceItemName}}</td>
-                            <td class="text-center">{{row.VendorCode}}</td>
-                            <td class="text-center">{{row.VendorName}}</td>
-                            <td class="text-center">{{row.ContactPerson}}</td>
-                            <td class="text-center">{{row.ContactNumber}}</td>
-                            <td class="text-center">{{row.Address}}</td>
-                            <td>
-                                @*BUG FIX: readonly in viewonlymode *@
-                                <input class="form-control" style="width:100%; height:18px; font-size:10px"
-                                       type="text" min="0" ng-model="row.VenReqQnty"
-                                       ng-readonly="viewonlymode" />
-                            </td>
-                            <td ng-hide="viewonlymode">
-                                <button type="button" class="btn btn-xs btn-danger btn-flat"
-                                        data-ng-click="toggleVendorWiseItemReqDelete(row, $index)">
-                                    <i class="fa fa-remove"></i>
+<div class="row">
+    <div class="col-md-12" style="padding: 11px 15px;">
+        <div class="table-responsive">
+            <!-- KEY FIX -->
+            <table st-table="VendorInfoDisplayedCollection"
+                   st-safe-src="ReqWiseVendorList"
+                   class="table table-condensed table-bordered table-striped table-hover pnlView"
+                   style="min-width: 900px; margin-bottom: 0;">
+
+                <thead>
+                    <!-- Filter / Header row -->
+                    <tr style="font-size: 15px; border: 1px solid #3003eb; background: #ffffff;">
+                        <th style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; white-space: nowrap;">
+                            <span>Item</span>
+                        </th>
+                        <th style="background: #ffffff; padding: 5px; min-width: 180px;">
+                            <input id="SelectedItemName" name="SelectedItemName" type="text"
+                                   data-ng-model="VendorReq.SelectedItemName"
+                                   class="form-control" ng-readonly="true"
+                                   style="width: 100%; height: 25px; font-size: smaller;" />
+                        </th>
+                        <th style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; white-space: nowrap;">
+                            <span>Vendor List</span>
+                        </th>
+                        <th style="background: #ffffff; padding: 5px; min-width: 180px; position: relative;">
+                            <div style="position: relative;">
+                                <input id="VendorName" name="VendorName" type="text"
+                                       data-ng-model="VendorReq.VendorName"
+                                       class="form-control" ng-readonly="true"
+                                       style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
+                                <button type="button" ng-click="ShowVendorList()"
+                                        ng-hide="viewonlymode"
+                                        style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
+                                               padding: 0 8px; border: 2px solid black; background: transparent;">
+                                    <i class="fa fa-search"></i>
                                 </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="8" class="text-center">
-                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+                            </div>
+                        </th>
+                        <th style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; white-space: nowrap;">
+                            <span>CS Status</span>
+                            <label style="font-size: 8px; color:red;">*</label>
+                        </th>
+                        <th style="background: #ffffff; padding: 5px;">
+                            <select id="CsStatus" name="CsStatus"
+                                    style="background-color: #ffffff; width: 100%; min-width: 110px; height: 26px; font-size: 12px; padding: 0;"
+                                    class="form-control p-0"
+                                    ng-model="VendorReq.CsStatus"
+                                    ng-disabled="viewonlymode">
+                                <option value="WCS">With CS</option>
+                                <option value="NCS">Without CS</option>
+                            </select>
+                        </th>
+                        <!-- Empty cells to match column count -->
+                        <th colspan="2" style="background: #ffffff;"></th>
+                    </tr>
+
+                    <!-- Column headers -->
+                    <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                        <th>Item Name</th>
+                        <th>Vendor Code</th>
+                        <th>Vendor Name</th>
+                        <th>Contact Person</th>
+                        <th>Contact Number</th>
+                        <th>Address</th>
+                        <th>Quantity</th>
+                        <th ng-hide="viewonlymode">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="row in VendorInfoDisplayedCollection">
+                        <td class="hidden">{{row.VendorReqItemWiseID}}</td>
+                        <td class="hidden">{{row.VendorID}}</td>
+                        <td class="hidden">{{row.ServiceItemID}}</td>
+                        <td class="text-center">{{row.ServiceItemName}}</td>
+                        <td class="text-center">{{row.VendorCode}}</td>
+                        <td class="text-center">{{row.VendorName}}</td>
+                        <td class="text-center">{{row.ContactPerson}}</td>
+                        <td class="text-center">{{row.ContactNumber}}</td>
+                        <td class="text-center">{{row.Address}}</td>
+                        <td>
+                            <input class="form-control"
+                                   style="width:100%; height:18px; font-size:10px"
+                                   type="text" min="0"
+                                   ng-model="row.VenReqQnty"
+                                   ng-readonly="viewonlymode" />
+                        </td>
+                        <td ng-hide="viewonlymode" class="text-center">
+                            <button type="button" class="btn btn-xs btn-danger btn-flat"
+                                    data-ng-click="toggleVendorWiseItemReqDelete(row, $index)">
+                                <i class="fa fa-remove"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <td colspan="8" class="text-center">
+                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
+</div>
 
     @*==================== TERMS & CONDITIONS GRID ==================== *@
     <div class="row">

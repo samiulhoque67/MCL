@@ -327,34 +327,22 @@
     <Compile Include="Areas\SecurityModule\SILLogAttribute.cs" />
     <Compile Include="Areas\Test77\Test77AreaRegistration.cs" />
     <Compile Include="Controllers\ActivityCategoryController.cs" />
-    <Compile Include="Controllers\AdvanceApprovalController.cs" />
-    <Compile Include="Controllers\AdvanceClaimAprvController.cs" />
-    <Compile Include="Controllers\AdvanceClaimController.cs" />
-    <Compile Include="Controllers\AdvanceClaimRecomController.cs" />
-    <Compile Include="Controllers\AdvancePaymentController.cs" />
-    <Compile Include="Controllers\AdvanceRecommendationController.cs" />
-    <Compile Include="Controllers\AdvDemandVendorController.cs" />
     <Compile Include="Controllers\apiLcEmailScheduleController.cs" />
-    <Compile Include="Controllers\AprvFinalBillRcvdController.cs" />
-    <Compile Include="Controllers\ClaimReceivedController.cs" />
-    <Compile Include="Controllers\ClientAprvBillController.cs" />
-    <Compile Include="Controllers\ClientBillRcmdController.cs" />
-    <Compile Include="Controllers\ClientFinalBillPrepareController.cs" />
+    <Compile Include="Controllers\ClientBillCollectionController.cs" />
+    <Compile Include="Controllers\ClientClaimController.cs" />
+    <Compile Include="Controllers\ClientFinalBillController.cs" />
     <Compile Include="Controllers\ClientInfoController.cs" />
     <Compile Include="Controllers\ClientRequisitionController.cs" />
     <Compile Include="Controllers\ClientSettlementController.cs" />
+    <Compile Include="Controllers\CombinedSettlementController.cs" />
     <Compile Include="Controllers\DashboardMCLController.cs" />
-    <Compile Include="Controllers\FinalSettlementController.cs" />
-    <Compile Include="Controllers\MonthWiseVendorFinalBillPaymentController.cs" />
     <Compile Include="Controllers\PoAprvController.cs" />
     <Compile Include="Controllers\POCreationController.cs" />
     <Compile Include="Controllers\PoRecomController.cs" />
     <Compile Include="Controllers\QuotationApprovalController.cs" />
     <Compile Include="Controllers\QuotationRecommendationController.cs" />
     <Compile Include="Controllers\QuotationToClientController.cs" />
-    <Compile Include="Controllers\RcmdFinalBillRcvdController.cs" />
     <Compile Include="Controllers\QuotationToClientRevisedController.cs" />
-    <Compile Include="Controllers\ReceivedFinalPaymentController.cs" />
     <Compile Include="Controllers\RequisitionMovementController.cs" />
     <Compile Include="Controllers\ServiceItemInfoController.cs" />
     <Compile Include="Controllers\TermsController.cs" />
@@ -362,13 +350,14 @@
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\VendorBillPaymentController.cs" />
     <Compile Include="Controllers\VendorCSAprvController.cs" />
     <Compile Include="Controllers\VendorCSRecmAccController.cs" />
     <Compile Include="Controllers\VendorCSRecmController.cs" />
     <Compile Include="Controllers\VendorCSInfoController.cs" />
     <Compile Include="Controllers\VendorCSVerifyController.cs" />
-    <Compile Include="Controllers\VendorFinalBillReceivedController.cs" />
-    <Compile Include="Controllers\VendorFinalBilPaymentController.cs" />
+    <Compile Include="Controllers\VendorDemandController.cs" />
+    <Compile Include="Controllers\VendorFinalBillController.cs" />
     <Compile Include="Controllers\VendorInfoController.cs" />
     <Compile Include="Controllers\VendorQuotationController.cs" />
     <Compile Include="Controllers\VendorRequisitionController.cs" />
@@ -398,13 +387,6 @@
       <DependentUpon>CQA_SubReport1.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reports\RptClientAgeing.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RptClientAgeing.rpt</DependentUpon>
-      <SubType>Component</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Reports\rptTDSVDS.cs">
       <DependentUpon>rptTDSVDS.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -419,13 +401,6 @@
       <SubType>Component</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Reports\rptClientAprvBill.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptClientAprvBill.rpt</DependentUpon>
-      <SubType>Component</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Reports\MonthWiseVendorFinalBillPayment.cs">
       <DependentUpon>MonthWiseVendorFinalBillPayment.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -437,20 +412,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>rptClientQuotationApprove.rpt</DependentUpon>
-      <SubType>Component</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Reports\rptClientFinalDueBillPayment.cs">
-      <DependentUpon>rptClientFinalDueBillPayment.rpt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
-      <DesignTime>True</DesignTime>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Reports\rptClientFinalBillPayment.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptClientFinalBillPayment.rpt</DependentUpon>
       <SubType>Component</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -1628,20 +1589,68 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Home\OriginalDocSearching.cshtml" />
-    <Content Include="Views\Home\VersioningOriginalDoc.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\ActivityCategory\Index.cshtml" />
+    <Content Include="Views\AdminLte\Colors.cshtml" />
+    <Content Include="Views\AdminLte\Index.cshtml" />
+    <Content Include="Views\ClientInfo\Index.cshtml" />
+    <Content Include="Views\ClientRequisition\Index.cshtml" />
+    <Content Include="Views\DashboardMCL\Index.cshtml" />
+    <Content Include="Views\Home\AttendanceGeoData.cshtml" />
+    <Content Include="Views\Home\BadRequest.cshtml" />
+    <Content Include="Views\Home\DocumentDistribution.cshtml" />
     <Content Include="Views\Home\DocumentScanning.cshtml" />
-    <Content Include="Views\Shared\Lockout.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Shared\_AdminLteTopMenu.cshtml" />
-    <Content Include="Views\Shared\_AdminLteLeftMenu.cshtml" />
-    <Content Include="Views\Shared\_AdminLteLayout.cshtml" />
-    <Content Include="Views\Shared\_AdminLteBreadcrumb.cshtml" />
+    <Content Include="Views\Home\DocumentSharing.cshtml" />
+    <Content Include="Views\Home\NotFound.cshtml" />
+    <Content Include="Views\Home\OriginalDocSearching.cshtml" />
+    <Content Include="Views\Home\VersionDocSearching.cshtml" />
+    <Content Include="Views\Home\VersioningOriginalDoc.cshtml" />
+    <Content Include="Views\Home\VersioningVersionedDoc.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\PoAprv\AllPoAprvData.cshtml" />
+    <Content Include="Views\PoAprv\Index.cshtml" />
+    <Content Include="Views\POCreation\Index.cshtml" />
+    <Content Include="Views\PoRecom\Index.cshtml" />
+    <Content Include="Views\QuotationApproval\AllClientQuotationApprovalData.cshtml" />
+    <Content Include="Views\QuotationApproval\Index.cshtml" />
+    <Content Include="Views\QuotationRecommendation\Index.cshtml" />
+    <Content Include="Views\QuotationToClientRevised\Index.cshtml" />
+    <Content Include="Views\QuotationToClient\Index.cshtml" />
+    <Content Include="Views\Reports\AgeingReport.cshtml" />
+    <Content Include="Views\Reports\AITVDSReport.cshtml" />
+    <Content Include="Views\Reports\ClientQuotationApproveReport.cshtml" />
+    <Content Include="Views\Reports\FinalClientBillReport.cshtml" />
+    <Content Include="Views\Reports\FinalClientDueBillReport.cshtml" />
+    <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\Reports\OutputVatStatementReport.cshtml" />
+    <Content Include="Views\Reports\OwnerList.cshtml" />
+    <Content Include="Views\Reports\QuotationToClientReport.cshtml" />
+    <Content Include="Views\Reports\RequisitionMovementInfo.cshtml" />
+    <Content Include="Views\Reports\RoleList.cshtml" />
+    <Content Include="Views\Reports\TDSVDSReport.cshtml" />
+    <Content Include="Views\Reports\UserActivityStatus.cshtml" />
+    <Content Include="Views\Reports\UserActivityStatusReport.cshtml" />
+    <Content Include="Views\Reports\UserDetails.cshtml" />
+    <Content Include="Views\Reports\VendorAgeingReport.cshtml" />
+    <Content Include="Views\Reports\VendorCSApprevedReport.cshtml" />
+    <Content Include="Views\RequisitionMovement\Index.cshtml" />
+    <Content Include="Views\ServiceItemInfo\Index.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\CanonicalHelperModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MenuHelperModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MetaRobotsHelperModel.cshtml" />
@@ -1650,81 +1659,39 @@
     <Content Include="Views\Shared\DisplayTemplates\SiteMapNodeModelList.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapTitleHelperModel.cshtml" />
-    <Content Include="Views\Home\VersionDocSearching.cshtml" />
-    <Content Include="Views\Home\VersioningVersionedDoc.cshtml" />
-    <Content Include="Views\Home\NotFound.cshtml" />
-    <Content Include="Views\Home\BadRequest.cshtml" />
-    <Content Include="Views\Home\DocumentDistribution.cshtml" />
-    <Content Include="Views\Home\DocumentSharing.cshtml" />
-    <Content Include="Views\Reports\UserActivityStatus.cshtml" />
-    <Content Include="Views\Reports\UserDetails.cshtml" />
-    <Content Include="Views\Reports\OwnerList.cshtml" />
-    <Content Include="Views\Reports\RoleList.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\Reports\UserActivityStatusReport.cshtml" />
-    <Content Include="Views\Home\AttendanceGeoData.cshtml" />
-    <Content Include="Views\Reports\Index.cshtml" />
-    <Content Include="Views\ActivityCategory\Index.cshtml" />
-    <Content Include="Views\ClientInfo\Index.cshtml" />
-    <Content Include="Views\VendorInfo\Index.cshtml" />
-    <Content Include="Views\ServiceItemInfo\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_AdminLteBreadcrumb.cshtml" />
+    <Content Include="Views\Shared\_AdminLteLayout.cshtml" />
+    <Content Include="Views\Shared\_AdminLteLeftMenu.cshtml" />
+    <Content Include="Views\Shared\_AdminLteTopMenu.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Terms\Index.cshtml" />
-    <Content Include="Views\ClientRequisition\Index.cshtml" />
-    <Content Include="Views\VendorRequisition\Index.cshtml" />
-    <Content Include="Views\VendorQuotation\Index.cshtml" />
-    <Content Include="Views\VendorCSInfo\Index.cshtml" />
-    <Content Include="Views\VendorCSRecm\Index.cshtml" />
-    <Content Include="Views\POCreation\Index.cshtml" />
-    <Content Include="Views\PoRecom\Index.cshtml" />
-    <Content Include="Views\PoAprv\Index.cshtml" />
-    <Content Include="Views\QuotationToClient\Index.cshtml" />
-    <Content Include="Views\QuotationApproval\Index.cshtml" />
-    <Content Include="Views\QuotationRecommendation\Index.cshtml" />
-    <Content Include="Views\AdvDemandVendor\Index.cshtml" />
-    <Content Include="Views\AdvanceApproval\Index.cshtml" />
-    <Content Include="Views\AdvanceRecommendation\Index.cshtml" />
-    <Content Include="Views\VendorFinalBillReceived\Index.cshtml" />
-    <Content Include="Views\RcmdFinalBillRcvd\Index.cshtml" />
-    <Content Include="Views\AprvFinalBillRcvd\Index.cshtml" />
-    <Content Include="Views\WorkOrderInfo\Index.cshtml" />
-    <Content Include="Views\AdvanceClaim\Index.cshtml" />
-    <Content Include="Views\ClientFinalBillPrepare\Index.cshtml" />
-    <Content Include="Views\ClientBillRcmd\Index.cshtml" />
-    <Content Include="Views\DashboardMCL\Index.cshtml" />
-    <Content Include="Views\Reports\VendorCSApprevedReport.cshtml" />
-    <Content Include="Views\ClientAprvBill\Index.cshtml" />
-    <Content Include="Views\ReceivedFinalPayment\Index.cshtml" />
-    <Content Include="Views\QuotationToClientRevised\Index.cshtml" />
-    <Content Include="Views\VendorRequisition\RptRequisitionToVendorReport.cshtml" />
-    <Content Include="Views\Reports\QuotationToClientReport.cshtml" />
-    <Content Include="Views\Reports\RequisitionMovementInfo.cshtml" />
-    <Content Include="Views\FinalSettlement\Index.cshtml" />
-    <Content Include="Views\ClientSettlement\Index.cshtml" />
-    <Content Include="Views\VendorSettlement\Index.cshtml" />
-    <Content Include="Views\AdvanceClaimRecom\Index.cshtml" />
-    <Content Include="Views\AdvanceClaimAprv\Index.cshtml" />
-    <Content Include="Views\ClaimReceived\Index.cshtml" />
-    <Content Include="Views\AdvancePayment\Index.cshtml" />
-    <Content Include="Views\VendorFinalBilPayment\Index.cshtml" />
-    <Content Include="Views\VendorCSAprv\Index.cshtml" />
-    <Content Include="Views\Reports\FinalClientBillReport.cshtml" />
-    <Content Include="Views\Reports\FinalClientDueBillReport.cshtml" />
-    <Content Include="Views\Reports\AgeingReport.cshtml" />
-    <Content Include="Views\Reports\OutputVatStatementReport.cshtml" />
-    <Content Include="Views\Reports\AITVDSReport.cshtml" />
-    <Content Include="Views\Reports\TDSVDSReport.cshtml" />
-    <Content Include="Views\MonthWiseVendorFinalBillPayment\Index.cshtml" />
-    <Content Include="Views\Reports\VendorAgeingReport.cshtml" />
-    <Content Include="Views\VendorCSRecmAcc\Index.cshtml" />
-    <Content Include="Views\VendorCSVerify\Index.cshtml" />
     <Content Include="Views\VendorCSAprv\AllCSData.cshtml" />
     <Content Include="Views\VendorCSAprv\AllCSRecDataforAcc.cshtml" />
     <Content Include="Views\VendorCSAprv\AllCSVerifyDataforAud.cshtml" />
-    <Content Include="Views\QuotationApproval\AllClientQuotationApprovalData.cshtml" />
-    <Content Include="Views\Reports\ClientQuotationApproveReport.cshtml" />
-    <Content Include="Views\PoAprv\AllPoAprvData.cshtml" />
-    <Content Include="Views\RequisitionMovement\Index.cshtml" />
+    <Content Include="Views\VendorCSAprv\Index.cshtml" />
+    <Content Include="Views\VendorCSInfo\Index.cshtml" />
+    <Content Include="Views\VendorCSRecmAcc\Index.cshtml" />
+    <Content Include="Views\VendorCSRecm\Index.cshtml" />
+    <Content Include="Views\VendorCSVerify\Index.cshtml" />
+    <Content Include="Views\VendorInfo\Index.cshtml" />
+    <Content Include="Views\VendorQuotation\Index.cshtml" />
+    <Content Include="Views\VendorRequisition\Index.cshtml" />
+    <Content Include="Views\VendorRequisition\RptRequisitionToVendorReport.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\WorkOrderInfo\Index.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\VendorDemand\Index.cshtml" />
+    <Content Include="Views\VendorFinalBill\Index.cshtml" />
+    <Content Include="Views\ClientClaim\Index.cshtml" />
+    <Content Include="Views\ClientFinalBill\Index.cshtml" />
+    <Content Include="Views\ClientBillCollection\Index.cshtml" />
+    <Content Include="Views\ClientSettlement\Index.cshtml" />
+    <Content Include="Views\VendorBillPayment\Index.cshtml" />
+    <Content Include="Views\VendorSettlement\Index.cshtml" />
+    <Content Include="Views\CombinedSettlement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1747,7 +1714,6 @@
     <Folder Include="Controllers\Content\plugin\ionic-v1.2.4\__MACOSX\js\" />
     <Folder Include="Controllers\Content\templates\" />
     <Folder Include="Views\Default\" />
-    <Folder Include="Views\VendorWiseItem\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -1797,11 +1763,6 @@
       <LastGenOutput>rptVendorRequisitionVendors.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Reports\RptClientAgeing.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>RptClientAgeing.cs</LastGenOutput>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Reports\rptTDSVDS.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptTDSVDS.cs</LastGenOutput>
@@ -1810,21 +1771,6 @@
     <Content Include="Reports\rptAITVDS.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptAITVDS.cs</LastGenOutput>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Reports\rptClientAprvBill.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptClientAprvBill1.cs</LastGenOutput>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Reports\rptClientFinalDueBillPayment.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptClientFinalDueBillPayment.cs</LastGenOutput>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Reports\rptClientFinalBillPayment.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptClientFinalBillPayment.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Reports\MonthWiseVendorFinalBillPayment.rpt">

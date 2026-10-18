@@ -7,6 +7,7 @@ using SILDMS.Web.UI.Areas.SecurityModule;
 using SILDMS.Web.UI.Areas.SecurityModule.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -173,6 +174,71 @@ namespace SILDMS.Web.UI.Controllers
                 return Json(new { status = "Error", message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
 
+        }
+
+
+
+        [HttpPost]
+        public JsonResult GetClientQuotationApprovedPrintData(string ClientQutnAprvID)
+        {
+            string err;
+            DataSet ds = _quotationApprovalService.GetClientQuotationApprovedPrintData(ClientQutnAprvID, out err);
+
+            object header = null;
+            if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                DataRow r = ds.Tables[0].Rows[0];
+                header = new
+                {
+                    ClientQutnAprvID = r["ClientQutnAprvID"]?.ToString(),
+                    ClientCode = r["ClientCode"]?.ToString(),
+                    ClientName = r["ClientName"]?.ToString(),
+                    Address = r["Address"]?.ToString(),
+                    ClientReqNo = r["ClientReqNo"]?.ToString(),
+                    QuotationNo = r["QuotationNo"]?.ToString(),
+                    BriefingDate = r["BriefingDate"]?.ToString(),
+                    QuotationSubmissionDate = r["QuotationSubmissionDate"]?.ToString(),
+                    CreatedBy = r["CreatedBy"]?.ToString()
+                };
+            }
+
+            var items = new List<object>();
+            if (ds.Tables.Count > 1)
+            {
+                foreach (DataRow r in ds.Tables[1].Rows)
+                {
+                    items.Add(new
+                    {
+                        ServiceItemCode = r["ServiceItemCode"]?.ToString(),
+                        ServiceItemName = r["ServiceItemName"]?.ToString(),
+                        Description = r["Description"]?.ToString(),
+                        QutnUnit = r["QutnUnit"]?.ToString(),
+                        AprvPrice = r["AprvPrice"]?.ToString(),
+                        QutnQnty = r["QutnQnty"]?.ToString(),
+                        AprvAmt = r["AprvAmt"]?.ToString(),
+                        ASFPerc = r["ASFPerc"]?.ToString(),
+                        ASFAmt = r["ASFAmt"]?.ToString(),
+                        VatPerc = r["VatPerc"]?.ToString(),
+                        VatAmt = r["VatAmt"]?.ToString(),
+                        TolAmt = r["TolAmt"]?.ToString()
+                    });
+                }
+            }
+
+            var terms = new List<object>();
+            if (ds.Tables.Count > 2)
+            {
+                foreach (DataRow r in ds.Tables[2].Rows)
+                {
+                    terms.Add(new
+                    {
+                        TermsCode = r["TermsCode"]?.ToString(),
+                        TermsName = r["TermsName"]?.ToString()
+                    });
+                }
+            }
+
+            return Json(new { Header = header, Items = items, Terms = terms });
         }
     }
 }

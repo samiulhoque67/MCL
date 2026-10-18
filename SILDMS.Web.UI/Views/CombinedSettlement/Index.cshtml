@@ -1,0 +1,737 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+<style>
+    .mode-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+
+    .mode-list {
+        background: #d9edf7;
+        color: #31708f;
+        border: 1px solid #bce8f1;
+    }
+
+    .mode-view {
+        background: #dff0d8;
+        color: #3c763d;
+        border: 1px solid #d6e9c6;
+    }
+
+    .section-title {
+        background-color: #cbd4d9;
+        padding: 0.6%;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 6px;
+    }
+
+    .po-info-box {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 8px 14px;
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+
+        .po-info-box strong {
+            color: #31708f;
+        }
+
+    /* status badges */
+    .st {
+        display: inline-block;
+        border-radius: 3px;
+        padding: 1px 7px;
+        font-size: 11px;
+        border: 1px solid;
+        white-space: nowrap;
+    }
+
+    .st-done {
+        color: #3c763d;
+        background: #dff0d8;
+        border-color: #d6e9c6;
+    }
+
+    .st-part {
+        color: #31708f;
+        background: #d9edf7;
+        border-color: #bce8f1;
+    }
+
+    .st-pend {
+        color: #8a6d3b;
+        background: #fcf8e3;
+        border-color: #faebcc;
+    }
+
+    .st-na {
+        color: #777;
+        background: #eee;
+        border-color: #ddd;
+    }
+
+    /* two-sided list header */
+    th.side-client {
+        background: #6aa6d6 !important;
+        color: #fff;
+        text-align: center;
+    }
+
+    th.side-vendor {
+        background: #e6a15c !important;
+        color: #fff;
+        text-align: center;
+    }
+
+    td.cell-client {
+        background: #f2f8fd;
+    }
+
+    td.cell-vendor {
+        background: #fdf6ee;
+    }
+
+    /* detail: side panels */
+    .side-panel {
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 15px;
+    }
+
+        .side-panel .side-head {
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 15px;
+            color: #fff;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .side-panel.client .side-head {
+            background: #3c8dbc;
+        }
+
+        .side-panel.vendor .side-head {
+            background: #e08e0b;
+        }
+
+        .side-panel .side-body {
+            padding: 10px;
+        }
+
+    .amt-strip {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .amt-box {
+        flex: 1;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 6px 10px;
+        background: #fafafa;
+    }
+
+        .amt-box .lbl {
+            font-size: 11px;
+            color: #777;
+            text-transform: uppercase;
+        }
+
+        .amt-box .val {
+            font-size: 18px;
+            font-weight: bold;
+            color: #31708f;
+        }
+
+    .bill-card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        background: #fcfcfc;
+    }
+
+        .bill-card .bill-head {
+            padding: 6px 10px;
+            background: #eef1f4;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+        }
+
+        .bill-card .bill-body {
+            padding: 8px 10px;
+        }
+
+    table.kv {
+        width: 100%;
+        font-size: 12.5px;
+    }
+
+        table.kv td {
+            padding: 2px 4px;
+            border-bottom: 1px dotted #e3e3e3;
+        }
+
+            table.kv td.v {
+                text-align: right;
+                font-weight: bold;
+            }
+
+    table.mini {
+        width: 100%;
+        font-size: 12px;
+        margin-top: 6px;
+    }
+
+    .pending-note {
+        color: #8a6d3b;
+        background: #fcf8e3;
+        border: 1px solid #faebcc;
+        border-radius: 3px;
+        padding: 6px 10px;
+        font-size: 12.5px;
+    }
+
+    .due {
+        font-weight: bold;
+        color: #a94442;
+    }
+
+    .overall-banner {
+        border-radius: 4px;
+        padding: 8px 14px;
+        margin: 0 15px 12px 15px;
+        font-weight: bold;
+        border: 1px solid;
+    }
+</style>
+
+<div class="box box-primary box-body" ng-controller="CombinedSettlementCtrl">
+
+    <!-- TOOLBAR -->
+    <div class="box-header with-border bg-light-blue-gradient" style="height:38px;border-radius:5px;">
+        <h2 class="box-title" style="font-family:math;font-weight:500;">
+            Client &amp; Vendor Settlement
+            <span ng-show="p===2" class="mode-badge mode-list">WO LIST</span>
+            <span ng-show="p===1" class="mode-badge mode-view">SIDE BY SIDE</span>
+        </h2>
+        <div class="box-tools pull-right">
+            <div class="col-lg-12 pull-right">
+                <div class="btn-group pull-right" style="margin-left:4px;">
+                    <button class="button-custom btn-warning" type="button" ng-click="toggleRefreshTable()" ng-disabled="isRefreshing">
+                        <i class="fa fa-refresh" ng-class="{'fa-spin':isRefreshing}" style="padding-right:5px"></i> Refresh
+                    </button>
+                </div>
+                <div class="btn-group pull-right" style="margin-left:4px;" ng-show="p===1">
+                    <button class="button-custom btn-default" type="button" ng-click="goBackToList()">
+                        <i class="fa fa-arrow-left" style="padding-right:5px"></i> Back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ p===2 : LIST ══════════════ -->
+    <div ng-show="p===2">
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:5px 10px;overflow-x:auto;">
+
+            <div class="row" style="padding:8px 15px 0 15px;">
+                <div class="col-lg-3">
+                    <label>Show:</label>
+                    <select class="form-control" ng-model="Filter.code" ng-change="applyFilter()">
+                        <option value="">All</option>
+                        <option value="BothSettled">Both settled</option>
+                        <option value="ClientSettled">Client settled, Vendor pending</option>
+                        <option value="VendorSettled">Vendor settled, Client pending</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+            </div>
+
+            <div ng-show="ListDisplayedCollection.length<=0" style="text-align:center;padding:20px;">
+                <h4 style="color:red;">No Work Order to show.</h4>
+            </div>
+
+            <div ng-show="ListDisplayedCollection.length>0" class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
+                <div class="section-title">Settlement Overview (Client Side | Vendor Side)</div>
+
+                <table st-table="ListDisplayedCollection" st-safe-src="List"
+                       style="width:100%;"
+                       class="table table-condensed table-bordered table-hover">
+                    <thead>
+                        <tr style="font-size:11px;">
+                            <th colspan="4" style="background:#82b0c9;color:#010823;">Requisition</th>
+                            <th colspan="3" class="side-client">CLIENT SIDE</th>
+                            <th colspan="3" class="side-vendor">VENDOR SIDE</th>
+                            <th colspan="2" style="background:#82b0c9;color:#010823;"></th>
+                        </tr>
+                        <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
+                            <th>Client Name</th>
+                            <th>Project Name</th>
+                            <th>Requisition No</th>
+                            <th>WO No</th>
+                            <th style="text-align:right;">WO Amount</th>
+                            <th style="text-align:right;">Collection Amount</th>
+                            <th>Settlement</th>
+                            <th style="text-align:right;">PO Amount</th>
+                            <th style="text-align:right;">Payable Amount</th>
+                            <th>Settlement</th>
+                            <th>Overall</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in ListDisplayedCollection" style="height:20px;font-size:13px;">
+                            <td>{{row.ClientName}}</td>
+                            <td>{{row.ProjectName}}</td>
+                            <td class="text-center">{{row.ClientReqNo}}</td>
+                            <td class="text-center">{{row.WONo}}</td>
+
+                            <td class="cell-client" style="text-align:right;">{{row.WOAmount | number:2}}</td>
+                            <td class="cell-client" style="text-align:right;">{{row.CollectionAmount | number:2}}</td>
+                            <td class="cell-client text-center">
+                                <span class="st" ng-class="statusClass(row.ClientSettlementStatus)">{{row.ClientSettlementStatus}}</span>
+                            </td>
+
+                            <td class="cell-vendor" style="text-align:right;">{{row.PoAmount | number:2}}</td>
+                            <td class="cell-vendor" style="text-align:right;">{{row.PayableAmount | number:2}}</td>
+                            <td class="cell-vendor text-center">
+                                <span class="st" ng-class="statusClass(row.VendorSettlementStatus)">{{row.VendorSettlementStatus}}</span>
+                            </td>
+
+                            <td class="text-center">
+                                <span class="st" ng-class="overallClass(row.OverallCode)">{{row.OverallStatus}}</span>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-flat btn-primary" ng-click="openDetail(row)">
+                                    <i class="fa fa-columns"></i> View
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="12" class="text-center">
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div><!-- /p===2 -->
+    <!-- ══════════════ p===1 : SIDE BY SIDE ══════════════ -->
+    <div ng-show="p===1">
+
+        <div class="row" style="margin:1%;">
+            <div class="col-lg-12">
+                <div class="po-info-box">
+                    <div class="row">
+                        <div class="col-lg-3"><strong>Client:</strong>&nbsp;{{Current.ClientName}}</div>
+                        <div class="col-lg-3"><strong>Project:</strong>&nbsp;{{Current.ProjectName}}</div>
+                        <div class="col-lg-3"><strong>Requisition No:</strong>&nbsp;{{Current.ClientReqNo}}</div>
+                        <div class="col-lg-3"><strong>WO No:</strong>&nbsp;{{Current.WONo}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="overall-banner st" ng-class="overallClass(Current.OverallCode)">
+            {{Current.OverallStatus}}
+            <span style="font-weight:normal;font-size:12px;">
+                &nbsp;—&nbsp;Client: {{Current.ClientSettlementStatus}} &nbsp;|&nbsp; Vendor: {{Current.VendorSettlementStatus}}
+            </span>
+        </div>
+
+        <div class="row" style="margin:0 1%;">
+
+            <!-- ───────────── CLIENT SIDE ───────────── -->
+            <div class="col-md-6">
+                <div class="side-panel client">
+                    <div class="side-head">
+                        Client Side — Collection &amp; Settlement
+                        <span class="st pull-right" ng-class="statusClass(Current.ClientSettlementStatus)">{{Current.ClientSettlementStatus}}</span>
+                    </div>
+                    <div class="side-body">
+
+                        <div class="amt-strip">
+                            <div class="amt-box"><div class="lbl">WO Amount</div><div class="val">{{Current.WOAmount | number:2}}</div></div>
+                            <div class="amt-box"><div class="lbl">Collection Amount</div><div class="val">{{Current.CollectionAmount | number:2}}</div></div>
+                        </div>
+
+                        <div ng-show="ClientBills.length===0" class="pending-note">No Client Final Bill has been raised for this WO yet.</div>
+
+                        <div class="bill-card" ng-repeat="b in ClientBills" ng-cloak>
+                            <div class="bill-head">
+                                Bill {{b.ClientFinalBillID}}
+                                <small class="text-muted">&nbsp;{{b.BillDate}}</small>
+                                <span class="st pull-right" ng-class="statusClass(b.SettlementStatus)">{{b.SettlementStatus}}</span>
+                            </div>
+                            <div class="bill-body">
+                                <table class="kv">
+                                    <tr><td>Bill Total (with ASF &amp; VAT)</td><td class="v">{{b.BillItemsAmount | number:2}}</td></tr>
+                                    <tr ng-show="b.AdvanceAdjustedAmt > 0"><td>Advance adjusted</td><td class="v">{{b.AdvanceAdjustedAmt | number:2}}</td></tr>
+                                    <tr ng-show="b.ClientBillCollectionID"><td>AIT paid by Client</td><td class="v">{{b.AITAmount | number:2}}</td></tr>
+                                    <tr ng-show="b.ClientBillCollectionID">
+                                        <td>VAT paid by {{b.VATPaidBy==='Client' ? 'Client' : 'Media Com'}}</td>
+                                        <td class="v">{{b.VATPaidBy==='Client' ? (b.VATAmount | number:2) : '—'}}</td>
+                                    </tr>
+                                    <tr ng-show="b.ClientBillCollectionID"><td><strong>Collection Amount</strong></td><td class="v">{{b.CollectionAmount | number:2}}</td></tr>
+                                    <tr ng-show="b.ClientBillCollectionID"><td>Money Receipt No</td><td class="v">{{b.MoneyReceiptNo}}</td></tr>
+                                    <tr ng-show="b.ClientBillCollectionID">
+                                        <td>Payment Mode</td>
+                                        <td class="v">{{b.PaymentMode}}<span ng-show="b.PaymentRefNo"> ({{b.PaymentRefNo}})</span></td>
+                                    </tr>
+                                    <tr ng-show="b.ClientBillCollectionID"><td>Receive Date</td><td class="v">{{b.ReceiveDate}}</td></tr>
+                                </table>
+
+                                <div ng-hide="b.ClientBillCollectionID" class="pending-note" style="margin-top:6px;">Collection not recorded yet.</div>
+
+                                <!-- settlement totals + entries -->
+                                <div ng-show="b.ClientBillCollectionID && (b.AITAmount > 0 || b.VATAmount > 0)">
+                                    <table class="table table-condensed table-bordered mini">
+                                        <thead>
+                                            <tr style="background:#eef1f4;">
+                                                <th>Settlement</th>
+                                                <th style="text-align:right;">Amount</th>
+                                                <th style="text-align:right;">Received</th>
+                                                <th style="text-align:right;">Due</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-show="b.AITAmount > 0">
+                                                <td>AIT (challan)</td>
+                                                <td style="text-align:right;">{{b.AITAmount | number:2}}</td>
+                                                <td style="text-align:right;">{{b.AITReceived | number:2}}</td>
+                                                <td style="text-align:right;" ng-class="{'due': b.AITDue > 0}">{{b.AITDue | number:2}}</td>
+                                            </tr>
+                                            <tr ng-show="b.VATAmount > 0">
+                                                <td>VAT (Mushak)</td>
+                                                <td style="text-align:right;">{{b.VATAmount | number:2}}</td>
+                                                <td style="text-align:right;">{{b.MushakReceived | number:2}}</td>
+                                                <td style="text-align:right;" ng-class="{'due': b.MushakDue > 0}">{{b.MushakDue | number:2}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table table-condensed table-bordered mini" ng-show="b.Entries.length > 0">
+                                        <thead>
+                                            <tr style="background:#eef1f4;">
+                                                <th>Entered</th>
+                                                <th>Type</th>
+                                                <th style="text-align:right;">Received</th>
+                                                <th>No</th>
+                                                <th>Date</th>
+                                                <th>Document</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat-start="e in b.Entries" ng-show="e.AITChallanReceiveAmt > 0">
+                                                <td>{{e.SetOn}}</td>
+                                                <td>AIT Challan</td>
+                                                <td style="text-align:right;">{{e.AITChallanReceiveAmt | number:2}}</td>
+                                                <td>{{e.AITChallanNo}}</td>
+                                                <td>{{e.AITChallanDate}}</td>
+                                                <td>
+                                                    <a ng-show="e.HasAITDoc==='1'" target="_blank"
+                                                       ng-href="/ClientSettlement/DownloadSettlementDocument?ClientSettlementID={{e.ClientSettlementID}}&DocType=AIT">
+                                                        <i class="fa fa-paperclip"></i> {{e.AITDocName}}
+                                                    </a>
+                                                    <span ng-hide="e.HasAITDoc==='1'" class="text-muted">—</span>
+                                                </td>
+                                            </tr>
+                                            <tr ng-repeat-end ng-show="e.MushakReceiveAmt > 0">
+                                                <td>{{e.SetOn}}</td>
+                                                <td>Mushak</td>
+                                                <td style="text-align:right;">{{e.MushakReceiveAmt | number:2}}</td>
+                                                <td>{{e.MushakNo}}</td>
+                                                <td>{{e.MushakDate}}</td>
+                                                <td>
+                                                    <a ng-show="e.HasMushakDoc==='1'" target="_blank"
+                                                       ng-href="/ClientSettlement/DownloadSettlementDocument?ClientSettlementID={{e.ClientSettlementID}}&DocType=Mushak">
+                                                        <i class="fa fa-paperclip"></i> {{e.MushakDocName}}
+                                                    </a>
+                                                    <span ng-hide="e.HasMushakDoc==='1'" class="text-muted">—</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="pending-note" ng-show="b.Entries.length === 0">No challan / Mushak recorded yet.</div>
+                                </div>
+                                <div class="text-muted" style="font-size:12px;margin-top:4px;"
+                                     ng-show="b.ClientBillCollectionID && b.AITAmount <= 0 && b.VATAmount <= 0">
+                                    Nothing to settle on this bill (no AIT, VAT paid by Media Com).
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ───────────── VENDOR SIDE ───────────── -->
+            <div class="col-md-6">
+                <div class="side-panel vendor">
+                    <div class="side-head">
+                        Vendor Side — Payment &amp; Settlement
+                        <span class="st pull-right" ng-class="statusClass(Current.VendorSettlementStatus)">{{Current.VendorSettlementStatus}}</span>
+                    </div>
+                    <div class="side-body">
+
+                        <div class="amt-strip">
+                            <div class="amt-box"><div class="lbl">PO Amount</div><div class="val">{{Current.PoAmount | number:2}}</div></div>
+                            <div class="amt-box"><div class="lbl">Payable Amount</div><div class="val">{{Current.PayableAmount | number:2}}</div></div>
+                        </div>
+
+                        <div ng-show="VendorBills.length===0 && Current.PoCount == 0" class="pending-note">No PO for this requisition (no vendor side).</div>
+                        <div ng-show="VendorBills.length===0 && Current.PoCount > 0" class="pending-note">No Vendor Final Bill has been raised yet.</div>
+
+                        <div class="bill-card" ng-repeat="b in VendorBills" ng-cloak>
+                            <div class="bill-head">
+                                {{b.VendorName}} — PO {{b.PoNo}}
+                                <small class="text-muted">&nbsp;Bill {{b.VendorFinalBillID}} · {{b.BillDate}}</small>
+                                <span class="st pull-right" ng-class="statusClass(b.SettlementStatus)">{{b.SettlementStatus}}</span>
+                            </div>
+                            <div class="bill-body">
+                                <table class="kv">
+                                    <tr><td>PO Amount</td><td class="v">{{b.POAmount | number:2}}</td></tr>
+                                    <tr><td>Bill Total (with VAT)</td><td class="v">{{b.BillItemsAmount | number:2}}</td></tr>
+                                    <tr ng-show="b.AdvanceAdjustedAmt > 0"><td>Advance adjusted</td><td class="v">{{b.AdvanceAdjustedAmt | number:2}}</td></tr>
+                                    <tr ng-show="b.VendorBillPaymentID"><td>TDS paid by Media Com ({{b.TDSPerc | number:2}}%)</td><td class="v">{{b.TDSAmount | number:2}}</td></tr>
+                                    <tr ng-show="b.VendorBillPaymentID">
+                                        <td>VDS paid by {{b.VDSPaidBy==='Vendor' ? 'Vendor' : 'Media Com'}}</td>
+                                        <td class="v">{{b.VDSPaidBy==='Vendor' ? (b.VDSAmount | number:2) : '—'}}</td>
+                                    </tr>
+                                    <tr ng-show="b.VendorBillPaymentID"><td><strong>Payable Amount</strong></td><td class="v">{{b.PayableAmount | number:2}}</td></tr>
+                                    <tr ng-show="b.VendorBillPaymentID"><td>Money Receipt No</td><td class="v">{{b.MoneyReceiptNo}}</td></tr>
+                                    <tr ng-show="b.VendorBillPaymentID">
+                                        <td>Payment Mode</td>
+                                        <td class="v">{{b.PaymentMode}}<span ng-show="b.PaymentRefNo"> ({{b.PaymentRefNo}})</span></td>
+                                    </tr>
+                                    <tr ng-show="b.VendorBillPaymentID"><td>Payment Date</td><td class="v">{{b.PaymentDate}}</td></tr>
+                                </table>
+
+                                <div ng-hide="b.VendorBillPaymentID" class="pending-note" style="margin-top:6px;">Payment not recorded yet.</div>
+
+                                <div ng-show="b.VendorBillPaymentID && (b.TDSAmount > 0 || b.VDSAmount > 0)">
+                                    <table class="table table-condensed table-bordered mini">
+                                        <thead>
+                                            <tr style="background:#eef1f4;">
+                                                <th>Settlement</th>
+                                                <th style="text-align:right;">Amount</th>
+                                                <th style="text-align:right;">Received</th>
+                                                <th style="text-align:right;">Due</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-show="b.TDSAmount > 0">
+                                                <td>TDS (challan)</td>
+                                                <td style="text-align:right;">{{b.TDSAmount | number:2}}</td>
+                                                <td style="text-align:right;">{{b.TDSReceived | number:2}}</td>
+                                                <td style="text-align:right;" ng-class="{'due': b.TDSDue > 0}">{{b.TDSDue | number:2}}</td>
+                                            </tr>
+                                            <tr ng-show="b.VDSAmount > 0">
+                                                <td>VDS (Mushak)</td>
+                                                <td style="text-align:right;">{{b.VDSAmount | number:2}}</td>
+                                                <td style="text-align:right;">{{b.MushakReceived | number:2}}</td>
+                                                <td style="text-align:right;" ng-class="{'due': b.VDSDue > 0}">{{b.VDSDue | number:2}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table table-condensed table-bordered mini" ng-show="b.Entries.length > 0">
+                                        <thead>
+                                            <tr style="background:#eef1f4;">
+                                                <th>Entered</th>
+                                                <th>Type</th>
+                                                <th style="text-align:right;">Received</th>
+                                                <th>No</th>
+                                                <th>Date</th>
+                                                <th>Document</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat-start="e in b.Entries" ng-show="e.TDSChallanReceiveAmt > 0">
+                                                <td>{{e.SetOn}}</td>
+                                                <td>TDS Challan</td>
+                                                <td style="text-align:right;">{{e.TDSChallanReceiveAmt | number:2}}</td>
+                                                <td>{{e.TDSChallanNo}}</td>
+                                                <td>{{e.TDSChallanDate}}</td>
+                                                <td>
+                                                    <a ng-show="e.HasTDSDoc==='1'" target="_blank"
+                                                       ng-href="/VendorSettlement/DownloadSettlementDocument?VendorSettlementID={{e.VendorSettlementID}}&DocType=TDS">
+                                                        <i class="fa fa-paperclip"></i> {{e.TDSDocName}}
+                                                    </a>
+                                                    <span ng-hide="e.HasTDSDoc==='1'" class="text-muted">—</span>
+                                                </td>
+                                            </tr>
+                                            <tr ng-repeat-end ng-show="e.MushakReceiveAmt > 0">
+                                                <td>{{e.SetOn}}</td>
+                                                <td>Mushak</td>
+                                                <td style="text-align:right;">{{e.MushakReceiveAmt | number:2}}</td>
+                                                <td>{{e.MushakNo}}</td>
+                                                <td>{{e.MushakDate}}</td>
+                                                <td>
+                                                    <a ng-show="e.HasMushakDoc==='1'" target="_blank"
+                                                       ng-href="/VendorSettlement/DownloadSettlementDocument?VendorSettlementID={{e.VendorSettlementID}}&DocType=Mushak">
+                                                        <i class="fa fa-paperclip"></i> {{e.MushakDocName}}
+                                                    </a>
+                                                    <span ng-hide="e.HasMushakDoc==='1'" class="text-muted">—</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="pending-note" ng-show="b.Entries.length === 0">No challan / Mushak recorded yet.</div>
+                                </div>
+                                <div class="text-muted" style="font-size:12px;margin-top:4px;"
+                                     ng-show="b.VendorBillPaymentID && b.TDSAmount <= 0 && b.VDSAmount <= 0">
+                                    Nothing to settle on this bill (no TDS, VDS paid by Media Com).
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div><!-- /p===1 -->
+    <!-- Loading overlay -->
+    <div id="mydiv" data-ng-show="loading">
+        <div class="overlay">
+            <div class="loder">
+                <img src="~/Content/AdminLTE/img/cube.gif" />
+                <span class="text-bold">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /box -->
+
+<script type="text/javascript">app.controller('CombinedSettlementCtrl', ['$scope', '$http', '$timeout', '$q',
+        function ($scope, $http, $timeout, $q) {
+
+            $scope.itemsByPage = 10;
+            $scope.loading = false;
+            $scope.isRefreshing = false;
+            $scope.p = 2;
+
+            $scope.AllRows = [];
+            $scope.List = [];
+            $scope.ListDisplayedCollection = [];
+            $scope.Filter = { code: '' };
+
+            $scope.Current = {};
+            $scope.ClientBills = [];
+            $scope.VendorBills = [];
+
+            $scope.statusClass = function (s) {
+                switch (s) {
+                    case 'Settled': return 'st-done';
+                    case 'Partially Settled': return 'st-part';
+                    case 'Nothing to Settle':
+                    case 'No PO':
+                    case 'No Bill': return 'st-na';
+                    default: return 'st-pend';   // Pending, Collection Pending, Payment Pending
+                }
+            };
+
+            $scope.overallClass = function (code) {
+                switch (code) {
+                    case 'BothSettled': return 'st-done';
+                    case 'ClientSettled':
+                    case 'VendorSettled': return 'st-part';
+                    default: return 'st-pend';
+                }
+            };
+
+            $scope.applyFilter = function () {
+                var c = $scope.Filter.code;
+                $scope.List = $scope.AllRows.filter(function (r) {
+                    if (!c) return true;
+                    if (c === 'Pending') return r.OverallCode === 'BothPending' || r.OverallCode === 'ClientPendingNoVendor';
+                    return r.OverallCode === c;
+                });
+                $scope.ListDisplayedCollection = [].concat($scope.List);
+            };
+
+            /* ── Initial load ── */
+            $scope.loading = true;
+            $http.post("/CombinedSettlement/GetCombinedSettlementList/")
+                .then(function (res) {
+                    $scope.AllRows = res.data.CombinedSettlementList || [];
+                    $scope.applyFilter();
+                    $scope.loading = false;
+                }, function () {
+                    $scope.loading = false;
+                    toastr.error("Failed to load settlement overview.");
+                });
+
+            /* ── Open one WO: both sides load in parallel; entries are grouped under their bill ── */
+            $scope.openDetail = function (row) {
+                $scope.loading = true;
+                $scope.p = 1;
+                $scope.Current = row;
+                $scope.ClientBills = [];
+                $scope.VendorBills = [];
+
+                var client = $q.all([
+                    $http.post("/CombinedSettlement/GetCombinedClientBills", { WOInfoID: row.WOInfoID }),
+                    $http.post("/CombinedSettlement/GetCombinedClientEntries", { WOInfoID: row.WOInfoID })
+                ]).then(function (r) {
+                    var bills = r[0].data.CombinedClientBills || [];
+                    var entries = r[1].data.CombinedClientEntries || [];
+                    bills.forEach(function (b) {
+                        b.Entries = b.ClientBillCollectionID
+                            ? entries.filter(function (e) { return e.ClientBillCollectionID === b.ClientBillCollectionID; })
+                            : [];
+                    });
+                    $scope.ClientBills = bills;
+                });
+
+                var vendor = $q.all([
+                    $http.post("/CombinedSettlement/GetCombinedVendorBills", { ClientReqID: row.ClientReqID }),
+                    $http.post("/CombinedSettlement/GetCombinedVendorEntries", { ClientReqID: row.ClientReqID })
+                ]).then(function (r) {
+                    var bills = r[0].data.CombinedVendorBills || [];
+                    var entries = r[1].data.CombinedVendorEntries || [];
+                    bills.forEach(function (b) {
+                        b.Entries = b.VendorBillPaymentID
+                            ? entries.filter(function (e) { return e.VendorBillPaymentID === b.VendorBillPaymentID; })
+                            : [];
+                    });
+                    $scope.VendorBills = bills;
+                });
+
+                $q.all([client, vendor]).then(function () {
+                    $scope.loading = false;
+                }, function () {
+                    $scope.loading = false;
+                    toastr.error("Failed to load one or both sides.");
+                });
+            };
+
+            $scope.goBackToList = function () {
+                $scope.p = 2;
+                $scope.Current = {};
+                $scope.ClientBills = [];
+                $scope.VendorBills = [];
+            };
+
+            $scope.toggleRefreshTable = function () {
+                $scope.isRefreshing = true;
+                $timeout(function () { window.location.reload(); }, 1200);
+            };
+
+        }]);</script>

@@ -2,6 +2,7 @@
 using SILDMS.Utillity;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,10 @@ namespace SILDMS.Service.QuotationApproval
         ValidationResult GetVendorTermListService(string ClientQutnRecmID, out List<OBS_TermsItem> VendorTermTermList);
 
         string SaveQuotToClientService(string UserID, List<OBS_QutntoClientMaster> MasterData, List<ClientReqData> DetailData, List<OBS_TermsItem> AllTermsDtl);
+
+        DataSet GetClientQuotationApprovedPrintData(
+       string ClientQutnAprvID,
+       out string errorNumber);
 
     }
 }

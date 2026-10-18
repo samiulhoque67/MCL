@@ -186,9 +186,9 @@ namespace SILDMS.DataAccess.PoRecom
         }
 
         public string SaveVendorPORecomInfo(
-           OBS_VendorCSRecm vendorCSInfo,
-           List<OBS_VendorCSRecmItem> vendorCSItem,
-           List<OBS_VendorCSRecmTerms> vendorCSTerm)
+      OBS_VendorCSRecm vendorCSInfo,
+      List<OBS_VendorCSRecmItem> vendorCSItem,
+      List<OBS_VendorCSRecmTerms> vendorCSTerm)
         {
             // ── Build item DataTable ────────────────────────────────────────
             DataTable dtItem = new DataTable();
@@ -243,28 +243,29 @@ namespace SILDMS.DataAccess.PoRecom
                 dtItem.Rows.Add(r);
             }
 
-            // ── Build term DataTable ────────────────────────────────────────
+            // ── Build term DataTable (null-safe) ────────────────────────────
             DataTable dtTerm = new DataTable();
             dtTerm.Columns.Add("TermsID");
             dtTerm.Columns.Add("TermsCode");
             dtTerm.Columns.Add("TermsName");
 
-            foreach (var term in vendorCSTerm)
+            if (vendorCSTerm != null)
             {
-                DataRow r = dtTerm.NewRow();
-                r[0] = term.TermsID;
-                r[1] = term.TermsCode;
-                r[2] = term.TermsName;
-                dtTerm.Rows.Add(r);
+                foreach (var term in vendorCSTerm)
+                {
+                    DataRow r = dtTerm.NewRow();
+                    r[0] = term.TermsID;
+                    r[1] = term.TermsCode;
+                    r[2] = term.TermsName;
+                    dtTerm.Rows.Add(r);
+                }
             }
 
             string result = string.Empty;
-
             try
             {
                 DatabaseProviderFactory factory = new DatabaseProviderFactory();
                 SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-
                 using (DbCommand cmd = db.GetStoredProcCommand("OBS_SetVendorPORecomInfo"))
                 {
                     db.AddInParameter(cmd, "@POPreparationID", SqlDbType.NVarChar,
@@ -278,7 +279,6 @@ namespace SILDMS.DataAccess.PoRecom
                     db.AddInParameter(cmd, "@ClientReqID", SqlDbType.NVarChar, vendorCSInfo.ClientReqID);
                     db.AddInParameter(cmd, "@VendorID", SqlDbType.NVarChar,
                         vendorCSItem.Count > 0 ? vendorCSItem[0].VendorID : vendorCSInfo.VendorID);
-
                     db.AddInParameter(cmd, "@PoNo", SqlDbType.NVarChar, vendorCSInfo.AutoPoNo);
                     db.AddInParameter(cmd, "@PODate", SqlDbType.NVarChar, vendorCSInfo.PORecDate);
                     db.AddInParameter(cmd, "@PoAmount", SqlDbType.Decimal, vendorCSInfo.RecommendedAmount);
@@ -289,10 +289,8 @@ namespace SILDMS.DataAccess.PoRecom
                     db.AddInParameter(cmd, "@Note", SqlDbType.NVarChar,
                         DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
                     db.AddInParameter(cmd, "@UserID ", SqlDbType.NVarChar, vendorCSInfo.SetBy);
-
                     db.AddInParameter(cmd, "@VendorPOItemType", SqlDbType.Structured, dtItem);
                     db.AddInParameter(cmd, "@OBS_VendorCSAprvTerms", SqlDbType.Structured, dtTerm);
-
                     db.AddOutParameter(cmd, spStatusParam, SqlDbType.VarChar, 10);
                     db.ExecuteNonQuery(cmd);
 
@@ -304,7 +302,6 @@ namespace SILDMS.DataAccess.PoRecom
             {
                 result = ex.InnerException?.Message ?? ex.Message;
             }
-
             return result;
         }
     }

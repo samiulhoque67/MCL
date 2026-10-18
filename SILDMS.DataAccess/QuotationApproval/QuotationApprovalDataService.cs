@@ -490,5 +490,20 @@ namespace SILDMS.DataAccess.QuotationApproval
 
             return message;
         }
+
+
+        public DataSet GetClientQuotationApprovedPrintData(string ClientQutnAprvID, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+            using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_GetClientQuotationApprovedPrintData"))
+            {
+                db.AddInParameter(dbCommandWrapper, "@ClientQutnAprvID", SqlDbType.VarChar, ClientQutnAprvID);
+
+                // ds.Tables[0] = Header (one row), ds.Tables[1] = Items, ds.Tables[2] = Terms
+                return db.ExecuteDataSet(dbCommandWrapper);
+            }
+        }
     }
 }

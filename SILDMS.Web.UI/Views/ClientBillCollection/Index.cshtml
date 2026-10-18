@@ -1,0 +1,618 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+<style>
+    .mode-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+
+    .mode-list {
+        background: #d9edf7;
+        color: #31708f;
+        border: 1px solid #bce8f1;
+    }
+
+    .mode-view {
+        background: #dff0d8;
+        color: #3c763d;
+        border: 1px solid #d6e9c6;
+    }
+
+    .mode-edit {
+        background: #fcf8e3;
+        color: #8a6d3b;
+        border: 1px solid #faebcc;
+    }
+
+    .input-readonly {
+        background-color: #ffffff !important;
+        cursor: default;
+    }
+
+    .po-info-box {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 8px 14px;
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+
+        .po-info-box strong {
+            color: #31708f;
+        }
+
+    .section-title {
+        background-color: #cbd4d9;
+        padding: 0.6%;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 6px;
+    }
+
+    .status-pending {
+        color: #8a6d3b;
+        background: #fcf8e3;
+        border: 1px solid #faebcc;
+        border-radius: 3px;
+        padding: 1px 7px;
+        font-size: 11px;
+    }
+
+    .status-done {
+        color: #3c763d;
+        background: #dff0d8;
+        border: 1px solid #d6e9c6;
+        border-radius: 3px;
+        padding: 1px 7px;
+        font-size: 11px;
+    }
+
+    .calc-box {
+        background: #eef6fb;
+        border: 1px solid #bce8f1;
+        border-radius: 4px;
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+        .calc-box table {
+            width: 100%;
+        }
+
+        .calc-box td {
+            padding: 3px 4px;
+        }
+
+            .calc-box td.amt {
+                text-align: right;
+                font-weight: bold;
+                color: #31708f;
+                width: 160px;
+            }
+
+        .calc-box tr.total td {
+            border-top: 2px solid #31708f;
+            font-size: 16px;
+        }
+
+        .calc-box .minus {
+            color: #a94442;
+        }
+</style>
+
+<div class="box box-primary box-body" ng-controller="ClientBillCollectionCtrl">
+
+    <!-- TOOLBAR -->
+    <div class="box-header with-border bg-light-blue-gradient" style="height:38px;border-radius:5px;">
+        <h2 class="box-title" style="font-family:math;font-weight:500;">
+            Client Final Bill Collection
+            <span ng-show="p===2" class="mode-badge mode-list">BILL LIST</span>
+            <span ng-show="p===1 && pageMode==='view'" class="mode-badge mode-view">VIEW</span>
+            <span ng-show="p===1 && pageMode==='edit'" class="mode-badge mode-edit">{{ isEditingExisting ? 'EDIT COLLECTION' : 'NEW COLLECTION' }}</span>
+        </h2>
+        <div class="box-tools pull-right">
+            <div class="col-lg-12 pull-right">
+
+                <div class="btn-group pull-right" style="margin-left:4px;">
+                    <button class="button-custom btn-warning" type="button"
+                            ng-click="toggleRefreshTable()" ng-disabled="isRefreshing">
+                        <i class="fa fa-refresh" ng-class="{'fa-spin':isRefreshing}" style="padding-right:5px"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="btn-group pull-right" style="margin-left:4px;" ng-show="p===1 && pageMode==='edit'">
+                    <button class="button-custom btn-success" type="button" ng-click="Post()" ng-disabled="isSaving">
+                        <i class="fa fa-check" style="padding-right:5px"></i>
+                        {{ isEditingExisting ? 'Update Collection' : 'Save Collection' }}
+                    </button>
+                </div>
+
+                <div class="btn-group pull-right" style="margin-left:4px;" ng-show="p===1">
+                    <button class="button-custom btn-default" type="button" ng-click="goBackToList()">
+                        <i class="fa fa-arrow-left" style="padding-right:5px"></i> Back
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ p===2 : BILL LIST ══════════════ -->
+    <div ng-show="p===2">
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:5px 10px;overflow-x:auto;">
+
+            <div ng-show="BillListDisplayedCollection.length<=0" style="text-align:center;padding:20px;">
+                <h4 style="color:red;">No Client Final Bill available for collection!</h4>
+            </div>
+
+            <div ng-show="BillListDisplayedCollection.length>0" class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
+                <div class="section-title">Client Final Bill Collection List</div>
+
+                <table st-table="BillListDisplayedCollection" st-safe-src="BillList"
+                       style="width:100%;"
+                       class="table table-condensed table-bordered table-striped table-hover">
+                    <thead>
+                        <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
+                            <th>Client Name</th>
+                            <th>Project Name</th>
+                            <th>Requisition No</th>
+                            <th>WO No</th>
+                            <th>Bill Date</th>
+                            <th style="text-align:right;">Bill Total</th>
+                            <th style="text-align:right;">Collection Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in BillListDisplayedCollection" style="height:20px;font-size:13px;">
+                            <td>{{row.ClientName}}</td>
+                            <td>{{row.ProjectName}}</td>
+                            <td class="text-center">{{row.ClientReqNo}}</td>
+                            <td class="text-center">{{row.WONo}}</td>
+                            <td class="text-center">{{row.BillDate}}</td>
+                            <td style="text-align:right;">{{row.BillItemsAmount | number:2}}</td>
+                            <td style="text-align:right;">{{row.ClientBillCollectionID ? (row.CollectionAmount | number:2) : '-'}}</td>
+                            <td class="text-center">
+                                <span ng-show="row.ClientBillCollectionID" class="status-done">Collected</span>
+                                <span ng-hide="row.ClientBillCollectionID" class="status-pending">Pending</span>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-flat btn-primary" ng-click="openDetail(row, 'view')">
+                                    <i class="fa fa-eye"></i> View
+                                </button>
+                                <button type="button" class="btn btn-sm btn-flat btn-success" style="margin-left:3px;"
+                                        ng-hide="row.ClientBillCollectionID" ng-click="openDetail(row, 'edit')">
+                                    <i class="fa fa-plus"></i> Collect
+                                </button>
+                                <button type="button" class="btn btn-sm btn-flat btn-warning" style="margin-left:3px;"
+                                        ng-show="row.ClientBillCollectionID && row.HasSettlement!=='1'"
+                                        ng-click="openDetail(row, 'edit')">
+                                    <i class="fa fa-edit"></i> Edit
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9" class="text-center">
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div><!-- /p===2 -->
+    <!-- ══════════════ p===1 : DETAIL ══════════════ -->
+    <div ng-show="p===1">
+
+        <!-- Summary bar -->
+        <div class="row" style="margin:1%;">
+            <div class="col-lg-12">
+                <div class="po-info-box">
+                    <div class="row">
+                        <div class="col-lg-3"><strong>WO No:</strong>&nbsp;{{Collection.WONo}}</div>
+                        <div class="col-lg-3"><strong>Client:</strong>&nbsp;{{Collection.ClientName}}</div>
+                        <div class="col-lg-3"><strong>Project:</strong>&nbsp;{{Collection.ProjectName}}</div>
+                        <div class="col-lg-3"><strong>Bill Date:</strong>&nbsp;{{Collection.BillDate}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bill against this WO — read-only, unchanged figures the collection is calculated from -->
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:5px 10px;overflow-x:auto;">
+            <div class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
+                <div class="section-title">Bill Against This WO</div>
+                <table style="width:100%;font-size:12px;"
+                       class="table table-condensed table-bordered table-striped table-hover">
+                    <thead>
+                        <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
+                            <th>Description</th>
+                            <th style="text-align:right;">Qty</th>
+                            <th style="text-align:right;">Price</th>
+                            <th style="text-align:right;">Amount (excl. ASF/VAT)</th>
+                            <th style="text-align:right;">ASF (%)</th>
+                            <th style="text-align:right;">ASF Amt</th>
+                            <th style="text-align:right;">VAT (%)</th>
+                            <th style="text-align:right;">VAT Amt</th>
+                            <th style="text-align:right;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in ItemList" ng-cloak>
+                            <td>{{row.Description}}</td>
+                            <td style="text-align:right;">{{row.BillQty | number:2}}</td>
+                            <td style="text-align:right;">{{row.BillPrice | number:2}}</td>
+                            <td style="text-align:right;">{{row.BillAmt | number:2}}</td>
+                            <td style="text-align:right;">{{row.BillASFPerc | number:2}}%</td>
+                            <td style="text-align:right;">{{row.BillASFAmt | number:2}}</td>
+                            <td style="text-align:right;">{{row.BillVatPerc | number:2}}%</td>
+                            <td style="text-align:right;">{{row.BillVatAmt | number:2}}</td>
+                            <td style="text-align:right;">{{row.BillTotalAmt | number:2}}</td>
+                        </tr>
+                        <tr ng-if="ItemList.length===0">
+                            <td colspan="9" class="text-center text-danger">No items found for this bill</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr style="font-weight:bold;background:#f9f9f9;">
+                            <td colspan="3" class="text-right">Bill Total</td>
+                            <td style="text-align:right;">{{Collection.BillItemsAmountWithoutASFVat | number:2}}</td>
+                            <td style="text-align:right;">{{Collection.ASFPerc | number:2}}%</td>
+                            <td style="text-align:right;">{{Collection.BillItemsASFAmt | number:2}}</td>
+                            <td style="text-align:right;">{{Collection.VatPerc | number:2}}%</td>
+                            <td style="text-align:right;">{{Collection.BillItemsVatAmt | number:2}}</td>
+                            <td style="text-align:right;">{{Collection.BillItemsAmount | number:2}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <!-- AIT / VAT scenario inputs + calculation -->
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:10px;">
+
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2"><label>AIT Paid By:</label></div>
+                <div class="col-lg-3">
+                    <label style="font-weight:normal;margin-top:6px;">
+                        <input type="checkbox" checked="checked" disabled="disabled" />
+                        Client ({{Collection.ClientName}})
+                    </label>
+                </div>
+                <div class="col-lg-2"><label>AIT Amount:</label></div>
+                <div class="col-lg-3">
+                    <input ng-show="pageMode==='view'" type="text" class="form-control input-readonly"
+                           ng-model="Collection.AITAmount" ng-readonly="true" />
+                    <input ng-show="pageMode==='edit'" type="number" min="0" step="0.01" class="form-control"
+                           placeholder="0.00" ng-model="Collection.AITAmount" ng-change="recalculate()" />
+                    <div class="text-danger" ng-show="aitExceeds" style="font-size:11px;margin-top:2px;">
+                        AIT cannot exceed the ASF amount ({{Collection.BillItemsASFAmt | number:2}}).
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2"><label>VAT Paid By:</label></div>
+                <div class="col-lg-3">
+                    <select class="form-control" ng-model="Collection.VATPaidBy"
+                            ng-disabled="pageMode==='view'" ng-change="recalculate()">
+                        <option value="MediaCom">Media Com</option>
+                        <option value="Client">Client ({{Collection.ClientName}})</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-10">
+                    <div class="calc-box">
+                        <table>
+                            <tr>
+                                <td>Bill Total (with ASF {{Collection.ASFPerc | number:2}}% and VAT {{Collection.VatPerc | number:2}}%)</td>
+                                <td class="amt">{{Collection.BillItemsAmount | number:2}}</td>
+                            </tr>
+                            <tr ng-show="Collection.AdvanceAdjustedAmt > 0">
+                                <td class="minus">less: Advance already received (adjusted in this bill)</td>
+                                <td class="amt minus">- {{Collection.AdvanceAdjustedAmt | number:2}}</td>
+                            </tr>
+                            <tr>
+                                <td class="minus">
+                                    less: AIT paid by Client
+                                    <span class="text-muted" style="font-size:12px;">
+                                        (ASF {{Collection.BillItemsASFAmt | number:2}} - AIT {{aitValue | number:2}} = Net ASF {{netASF | number:2}})
+                                    </span>
+                                </td>
+                                <td class="amt minus">- {{aitValue | number:2}}</td>
+                            </tr>
+                            <tr ng-show="Collection.VATPaidBy==='Client'">
+                                <td class="minus">less: VAT ({{Collection.VatPerc | number:2}}%) paid directly by Client</td>
+                                <td class="amt minus">- {{vatDeducted | number:2}}</td>
+                            </tr>
+                            <tr class="total">
+                                <td>Collection Amount</td>
+                                <td class="amt">{{collectionAmount | number:2}}</td>
+                            </tr>
+                        </table>
+                        <div class="text-danger" ng-show="collectionFloored" style="font-size:12px;margin-top:4px;">
+                            Deductions are larger than the amount still receivable — Collection Amount is held at 0.00.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment details: the 5 common fields -->
+        <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888;padding:10px;">
+            <div class="section-title" style="margin:0 15px 10px 15px;">Payment Details</div>
+
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2"><label>Money Receipt No:</label></div>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" ng-class="{'input-readonly':pageMode==='view'}"
+                           ng-readonly="pageMode==='view'" maxlength="50"
+                           ng-model="Collection.MoneyReceiptNo" />
+                </div>
+                <div class="col-lg-2"><label>Payment Mode:</label></div>
+                <div class="col-lg-3">
+                    <select class="form-control" ng-model="Collection.PaymentMode"
+                            ng-disabled="pageMode==='view'" ng-change="onPaymentModeChange()">
+                        <option value="">-- Select --</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="EFT">EFT</option>
+                        <option value="Cash">Cash</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2">
+                    <label ng-show="Collection.PaymentMode==='Cheque' || Collection.PaymentMode==='EFT'">{{Collection.PaymentMode}} No:</label>
+                </div>
+                <div class="col-lg-3">
+                    <input ng-show="Collection.PaymentMode==='Cheque' || Collection.PaymentMode==='EFT'"
+                           type="text" class="form-control" ng-class="{'input-readonly':pageMode==='view'}"
+                           ng-readonly="pageMode==='view'" maxlength="50"
+                           ng-model="Collection.PaymentRefNo" />
+                </div>
+                <div class="col-lg-2"><label>Receive Date:</label></div>
+                <div class="col-lg-3">
+                    <input ng-show="pageMode==='view'" type="text" class="form-control input-readonly"
+                           ng-model="Collection.ReceiveDate" ng-readonly="true" />
+                    <input ng-show="pageMode==='edit'" id="ReceiveDate" type="text" autocomplete="off"
+                           class="DatePicker form-control" placeholder="DD/MM/YYYY"
+                           ng-model="Collection.ReceiveDate" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-1"></div>
+                <div class="col-lg-2"><label>Note:</label></div>
+                <div class="col-lg-8">
+                    <input type="text" class="form-control" ng-class="{'input-readonly':pageMode==='view'}"
+                           ng-readonly="pageMode==='view'" maxlength="500"
+                           ng-model="Collection.Note" />
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /p===1 -->
+    <!-- Loading overlay -->
+    <div id="mydiv" data-ng-show="loading">
+        <div class="overlay">
+            <div class="loder">
+                <img src="~/Content/AdminLTE/img/cube.gif" />
+                <span class="text-bold">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /box -->
+
+<script type="text/javascript">app.controller('ClientBillCollectionCtrl', ['$scope', '$http', '$timeout',
+        function ($scope, $http, $timeout) {
+
+            $scope.itemsByPage = 10;
+            $scope.loading = false;
+            $scope.isSaving = false;
+            $scope.isRefreshing = false;
+            $scope.p = 2;
+            $scope.pageMode = 'view';
+            $scope.isEditingExisting = false;
+
+            $scope.BillList = [];
+            $scope.BillListDisplayedCollection = [];
+            $scope.ItemList = [];
+
+            $scope.aitValue = 0;
+            $scope.netASF = 0;
+            $scope.vatDeducted = 0;
+            $scope.collectionAmount = 0;
+            $scope.aitExceeds = false;
+            $scope.collectionFloored = false;
+
+            function num(v) { return parseFloat(v) || 0; }
+            function round2(v) { return Math.round(v * 100) / 100; }
+
+            function emptyCollection() {
+                return {
+                    ClientBillCollectionID: "", ClientFinalBillID: "",
+                    WOInfoID: "", ClientReqID: "", ClientID: "",
+                    ClientName: "", ProjectName: "", ClientReqNo: "", WONo: "", BillDate: "",
+                    BillItemsAmountWithoutASFVat: "0", BillItemsASFAmt: "0", ASFPerc: "0",
+                    BillItemsVatAmt: "0", VatPerc: "0", BillItemsAmount: "0",
+                    AdvanceAdjustedAmt: "0", NetReceivableAmt: "0",
+                    AITAmount: "", VATPaidBy: "MediaCom",
+                    MoneyReceiptNo: "", PaymentMode: "", PaymentRefNo: "", ReceiveDate: "", Note: ""
+                };
+            }
+            $scope.Collection = emptyCollection();
+
+            /* ── Initial load ── */
+            $scope.loading = true;
+            $http.post("/ClientBillCollection/GetClientBillCollectionList/")
+                .then(function (res) {
+                    $scope.BillList = res.data.ClientBillCollectionList || [];
+                    $scope.BillListDisplayedCollection = [].concat($scope.BillList);
+                    $scope.loading = false;
+                }, function () {
+                    $scope.loading = false;
+                    toastr.error("Failed to load bill list.");
+                });
+
+            /* ── Live calculation. Mirrors OBS_SetClientBillCollectionInfo, which
+                   re-derives every figure again on save.
+                   Collection = Bill Total - Advance - AIT - (VAT, only if paid by Client) ── */
+            $scope.recalculate = function () {
+                var c = $scope.Collection;
+                var asf = num(c.BillItemsASFAmt);
+                var ait = num(c.AITAmount);
+
+                $scope.aitValue = ait;
+                $scope.aitExceeds = ait > asf || ait < 0;
+                $scope.netASF = round2(asf - ait);
+                $scope.vatDeducted = c.VATPaidBy === 'Client' ? num(c.BillItemsVatAmt) : 0;
+
+                var raw = round2(num(c.BillItemsAmount) - num(c.AdvanceAdjustedAmt) - ait - $scope.vatDeducted);
+                $scope.collectionFloored = raw < 0;
+                $scope.collectionAmount = raw < 0 ? 0 : raw;
+            };
+
+            $scope.onPaymentModeChange = function () {
+                if ($scope.Collection.PaymentMode === 'Cash') $scope.Collection.PaymentRefNo = "";
+            };
+
+            /* ── Open detail ── */
+            $scope.openDetail = function (row, mode) {
+                $scope.loading = true;
+                $scope.p = 1;
+                $scope.pageMode = mode;
+                $scope.isEditingExisting = !!row.ClientBillCollectionID;
+
+                var c = emptyCollection();
+                ['ClientBillCollectionID', 'ClientFinalBillID', 'WOInfoID', 'ClientReqID', 'ClientID',
+                 'ClientName', 'ProjectName', 'ClientReqNo', 'WONo', 'BillDate',
+                 'BillItemsAmountWithoutASFVat', 'BillItemsASFAmt', 'ASFPerc', 'BillItemsVatAmt', 'VatPerc',
+                 'BillItemsAmount', 'AdvanceAdjustedAmt', 'NetReceivableAmt'].forEach(function (k) { c[k] = row[k]; });
+
+                if (row.ClientBillCollectionID) {
+                    c.AITAmount = parseFloat(row.AITAmount || 0).toFixed(2);
+                    c.VATPaidBy = row.VATPaidBy || "MediaCom";
+                    c.MoneyReceiptNo = row.MoneyReceiptNo;
+                    c.PaymentMode = row.PaymentMode;
+                    c.PaymentRefNo = row.PaymentRefNo;
+                    c.ReceiveDate = row.ReceiveDate;
+                    c.Note = row.Note;
+                } else {
+                    c.AITAmount = "0.00";
+                }
+                $scope.Collection = c;
+                $scope.recalculate();
+
+                if (mode === 'edit') {
+                    $timeout(function () {
+                        var dateVal = $scope.Collection.ReceiveDate;
+                        if (!dateVal) {
+                            var t = new Date();
+                            dateVal = String(t.getDate()).padStart(2, '0') + '/' +
+                                String(t.getMonth() + 1).padStart(2, '0') + '/' + t.getFullYear();
+                        }
+                        $('#ReceiveDate').val(dateVal);
+                        $scope.Collection.ReceiveDate = dateVal;
+                        $('#ReceiveDate').datepicker({ format: 'dd/mm/yyyy', autoclose: true })
+                            .off('changeDate.rcv')
+                            .on('changeDate.rcv', function (ev) {
+                                $scope.$apply(function () {
+                                    $scope.Collection.ReceiveDate = $(ev.target).val();
+                                });
+                                $('.datepicker').hide();
+                            });
+                    }, 100);
+                }
+
+                $http.post("/ClientBillCollection/GetClientBillCollectionItem", { ClientFinalBillID: row.ClientFinalBillID })
+                    .then(function (res) {
+                        $scope.ItemList = res.data.ClientBillCollectionItemList || [];
+                        $scope.loading = false;
+                    }, function () {
+                        $scope.loading = false;
+                        toastr.error("Failed to load bill items.");
+                    });
+            };
+
+            $scope.goBackToList = function () {
+                $scope.p = 2;
+                $scope.pageMode = 'view';
+                $scope.Collection = emptyCollection();
+                $scope.ItemList = [];
+                $scope.recalculate();
+            };
+
+            var statusMessages = {
+                E404: "Bill or collection not found.",
+                E408: "Please choose who pays the VAT.",
+                E409: "Settlement has already started for this collection, so it can no longer be edited.",
+                E410: "Please choose a Payment Mode.",
+                E411: "Cheque / EFT number is required.",
+                E412: "Money Receipt No is required.",
+                E413: "Receive Date is required.",
+                E414: "AIT cannot exceed the ASF amount.",
+                E415: "A collection already exists for this bill."
+            };
+
+            /* ── Save ── */
+            $scope.Post = function () {
+                var c = $scope.Collection;
+                if (!c.ClientFinalBillID) { toastr.error("No bill selected."); return; }
+                $scope.recalculate();
+                if ($scope.aitExceeds) { toastr.error(statusMessages.E414); return; }
+                if (!c.MoneyReceiptNo || !c.MoneyReceiptNo.trim()) { toastr.error(statusMessages.E412); return; }
+                if (!c.PaymentMode) { toastr.error(statusMessages.E410); return; }
+                if ((c.PaymentMode === 'Cheque' || c.PaymentMode === 'EFT') && (!c.PaymentRefNo || !c.PaymentRefNo.trim())) {
+                    toastr.error(statusMessages.E411); return;
+                }
+                var rd = $('#ReceiveDate').val() || c.ReceiveDate;
+                if (!rd) { toastr.error(statusMessages.E413); return; }
+                c.ReceiveDate = rd;
+                if (!c.AITAmount) c.AITAmount = "0";
+
+                $scope.isSaving = true;
+                $http.post('/ClientBillCollection/SaveClientBillCollectionInfo', c)
+                    .then(function (res) {
+                        $scope.isSaving = false;
+                        var s = res.data.status;
+                        if (s === 'S201') {
+                            toastr.success("Collection saved. Collection Amount: " + $scope.collectionAmount.toFixed(2));
+                            $scope.toggleRefreshTable();
+                        } else if (s === 'S202') {
+                            toastr.success("Collection updated.");
+                            $scope.toggleRefreshTable();
+                        } else {
+                            toastr.error(statusMessages[s] || ("Save Failed. Status: " + (s || "unknown")));
+                        }
+                    }, function () {
+                        $scope.isSaving = false;
+                        toastr.error("Save Failed.");
+                    });
+            };
+
+            $scope.toggleRefreshTable = function () {
+                $scope.isRefreshing = true;
+                $timeout(function () { window.location.reload(); }, 1200);
+            };
+
+        }]);</script>
