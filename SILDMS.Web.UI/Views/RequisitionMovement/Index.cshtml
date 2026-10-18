@@ -699,13 +699,21 @@
 
                 html += '<div class="no-print" style="text-align:right;margin-bottom:8px;"><button onclick="window.print()">Print</button></div>';
                 html += '<h2>REQUISITION MOVEMENT REPORT</h2>';
-
                 // Info table
-                html += '<table class="info-table"><tr>';
+                // Info table
+                html += '<table class="info-table">';
+                html += '<tr>';
                 html += '<td><b>Client</b></td><td>' + esc(header.ClientName) + '</td>';
-                html += '<td><b>Requisition No</b></td><td>' + esc(header.ClientReqNo) + '</td></tr><tr>';
+                html += '<td><b>Requisition No</b></td><td>' + esc(header.ClientReqNo) + '</td>';
+                html += '</tr>';
+                html += '<tr>';
                 html += '<td><b>Requisition Date</b></td><td>' + esc(header.RequisitionDate) + '</td>';
-                html += '<td><b>Requisition Raised by</b></td><td>' + esc(header.ClientReqStatus) + '</td></tr></table>';
+                html += '<td><b>Requisition Raised by</b></td><td>' + esc(header.ClientReqStatus) + '</td>';
+                html += '</tr>';
+                html += '<tr>';
+                html += '<td><b>Project Name</b></td><td colspan="3">' + esc(header.ProjectName || '') + '</td>';
+                html += '</tr>';
+                html += '</table>';
 
                 // ========== 4-row header (same structure as the screen) ==========
                 html += '<table class="movement-table"><thead>';
