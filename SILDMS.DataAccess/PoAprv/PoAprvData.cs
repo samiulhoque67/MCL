@@ -317,7 +317,7 @@ namespace SILDMS.DataAccess.PoAprv
         {
             string errorNumber = string.Empty;
 
-            // ── Build item DataTable (unchanged from original) ──────────────
+            // ── Build item DataTable ────────────────────────────────────────
             DataTable VendorPOItem = new DataTable();
             VendorPOItem.Columns.Add("VendorQutnID", typeof(string));
             VendorPOItem.Columns.Add("ServiceItemID", typeof(int));
@@ -370,26 +370,28 @@ namespace SILDMS.DataAccess.PoAprv
                 VendorPOItem.Rows.Add(r);
             }
 
-            // ── Build term DataTable (unchanged) ────────────────────────────
+            // ── Build term DataTable (null-safe) ────────────────────────────
             DataTable VendorCSTerm = new DataTable();
             VendorCSTerm.Columns.Add("TermsID");
             VendorCSTerm.Columns.Add("TermsCode");
             VendorCSTerm.Columns.Add("TermsName");
 
-            foreach (var item in vendorCSTerm)
+            if (vendorCSTerm != null)
             {
-                DataRow r = VendorCSTerm.NewRow();
-                r[0] = item.TermsID;
-                r[1] = item.TermsCode;
-                r[2] = item.TermsName;
-                VendorCSTerm.Rows.Add(r);
+                foreach (var item in vendorCSTerm)
+                {
+                    DataRow r = VendorCSTerm.NewRow();
+                    r[0] = item.TermsID;
+                    r[1] = item.TermsCode;
+                    r[2] = item.TermsName;
+                    VendorCSTerm.Rows.Add(r);
+                }
             }
 
             try
             {
                 DatabaseProviderFactory factory = new DatabaseProviderFactory();
                 SqlDatabase db = factory.CreateDefault() as SqlDatabase;
-
                 using (DbCommand cmd = db.GetStoredProcCommand("OBS_SetVendorPOAprvInfo"))
                 {
                     db.AddInParameter(cmd, "@PoRecmID", SqlDbType.NVarChar,
@@ -405,7 +407,6 @@ namespace SILDMS.DataAccess.PoAprv
                         vendorCSInfo.ClientReqID);
                     db.AddInParameter(cmd, "@VendorID", SqlDbType.NVarChar,
                         vendorCSItem.Count > 0 ? vendorCSItem[0].VendorID : vendorCSInfo.VendorID);
-
                     db.AddInParameter(cmd, "@PoNo", SqlDbType.NVarChar,
                         vendorCSInfo.AutoPoNo);
                     db.AddInParameter(cmd, "@PODate", SqlDbType.NVarChar,
@@ -426,10 +427,8 @@ namespace SILDMS.DataAccess.PoAprv
                         DataValidation.TrimmedOrDefault(vendorCSInfo.Remarks));
                     db.AddInParameter(cmd, "@UserID ", SqlDbType.NVarChar,
                         vendorCSInfo.SetBy);
-
                     db.AddInParameter(cmd, "@VendorPOItemType", SqlDbType.Structured, VendorPOItem);
                     db.AddInParameter(cmd, "@OBS_VendorCSAprvTerms", SqlDbType.Structured, VendorCSTerm);
-
                     db.AddOutParameter(cmd, spStatusParam, SqlDbType.VarChar, 10);
                     db.ExecuteNonQuery(cmd);
 
@@ -441,7 +440,6 @@ namespace SILDMS.DataAccess.PoAprv
             {
                 errorNumber = ex.InnerException?.Message ?? ex.Message;
             }
-
             return errorNumber;
         }
     }
