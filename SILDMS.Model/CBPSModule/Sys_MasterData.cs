@@ -29,7 +29,7 @@ namespace SILDMS.Model.CBPSModule
         public bool? Permission { get; set; }
 
         public ddlDSMOwner Owner { get; set; }
-        public SILDMS.Model.CBPSModule.Sys_MasterDataType.ddlMasterDataType MasterDataType { get; set; }
+        public CBPSModule.Sys_MasterDataType MasterDataType { get; set; }
 
         public ddlMasterData ParentID { get; set; }
         public class ddlMasterData

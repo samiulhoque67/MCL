@@ -238,6 +238,8 @@
                     <thead>
                         <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
                             <th>Item Name</th>
+                            <th>Description</th>
+                            <th>Service Category</th>
                             <th style="text-align:right;">Qty</th>
                             <th style="text-align:right;">Unit Price</th>
                             <th style="text-align:right;">Amount (excl. VAT)</th>
@@ -249,6 +251,8 @@
                     <tbody>
                         <tr ng-repeat="row in ItemList" ng-cloak>
                             <td>{{row.ServiceItemName}}</td>
+                            <td>{{row.Description}}</td>
+                            <td>{{row.ServicesCategoryName}}</td>
                             <td style="text-align:right;">{{row.BillQty | number:2}}</td>
                             <td style="text-align:right;">{{row.BillPrice | number:2}}</td>
                             <td style="text-align:right;">{{row.BillAmt | number:2}}</td>
@@ -262,7 +266,7 @@
                     </tbody>
                     <tfoot>
                         <tr style="font-weight:bold;background:#f9f9f9;">
-                            <td colspan="3" class="text-right">Bill Total</td>
+                            <td colspan="5" class="text-right">Bill Total</td>
                             <td style="text-align:right;">{{Payment.BillItemsAmountWithoutVat | number:2}}</td>
                             <td style="text-align:right;">{{Payment.VatPerc | number:2}}%</td>
                             <td style="text-align:right;">{{Payment.BillVatAmt | number:2}}</td>

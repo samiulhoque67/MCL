@@ -161,6 +161,56 @@
                             <th class="col-lg-1">Approve Status</th>
                             <th class="col-lg-1">Action</th>
                         </tr>
+
+                        <!-- Individual Column Search -->
+                        <tr>
+                            <th>
+                                <input type="text"
+                                       st-search="ClientName"
+                                       placeholder="Search Client"
+                                       class="form-control input-sm" />
+                            </th>
+
+                            <th>
+                                <input type="text"
+                                       st-search="ProjectName"
+                                       placeholder="Search Project"
+                                       class="form-control input-sm" />
+                            </th>
+
+                            <th>
+                                <input type="text"
+                                       st-search="ClientReqNo"
+                                       placeholder="Search Req No"
+                                       class="form-control input-sm" />
+                            </th>
+
+                            <th>
+                                <input type="text"
+                                       st-search="RequisitionDate"
+                                       placeholder="Search Date"
+                                       class="form-control input-sm" />
+                            </th>
+
+                            <th>
+                                <input type="text"
+                                       st-search="VendorName"
+                                       placeholder="Search Vendor"
+                                       class="form-control input-sm" />
+                            </th>
+
+                            <th>
+                                <select class="form-control input-sm"
+                                        ng-model="poApproveStatusFilter"
+                                        ng-change="filterPOApproveStatus()">
+                                    <option value="">All</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Pending">Pending</option>
+                                </select>
+                            </th>
+
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in CSClientDisplayedCollection"
@@ -245,17 +295,18 @@
                             <th>Item Name</th>
                             <th>Description</th>
                             <th>Service Category</th>
-                            <th style="text-align:right;">QutnQnty</th>
                             <th>Unit</th>
-                            <th style="text-align:right;">QutnPrice</th>
-                            <th style="text-align:right;">QutnAmt</th>
-                            <th style="text-align:right;">POQnty</th>
+
+                            <th style="text-align:right;">PO Qnty</th>
+                            <th style="text-align:right;">PO Price</th>
+                            <th style="text-align:right;">PO Amt</th>
+                            @*<th style="text-align:right;">POQnty</th>
                             <th style="text-align:right;">PoPrice</th>
-                            <th style="text-align:right;">PoAmt</th>
+                            <th style="text-align:right;">PoAmt</th>*@
                             <th style="text-align:right;">Vat%</th>
                             <th style="text-align:right;">VatAmt</th>
-                            <th style="text-align:right;">PoVatAmt</th>
-                            <th style="text-align:right;">PoTotalAmt</th>
+                            @*<th style="text-align:right;">PoVatAmt</th>*@
+                            <th style="text-align:right;">Po Total Amt</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -264,17 +315,18 @@
                             <td>{{row.ServiceItemName}}</td>
                             <td>{{row.Description}}</td>
                             <td>{{row.ServiceCategoryName}}</td>
-                            <td style="text-align:right;">{{row.QutnQnty | number:2}}</td>
                             <td>{{row.QutnUnit}}</td>
+
+                            <td style="text-align:right;">{{row.QutnQnty | number:2}}</td>
                             <td style="text-align:right;">{{row.QutnPrice | number:2}}</td>
                             <td style="text-align:right;">{{row.QutnAmt | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoQty | number:2}}</td>
+                            @*<td style="text-align:right;">{{row.NegoQty | number:2}}</td>
                             <td style="text-align:right;">{{row.NegoPrice | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoAmt | number:2}}</td>
+                            <td style="text-align:right;">{{row.NegoAmt | number:2}}</td>*@
                             <td style="text-align:right;">{{row.VatPerc | number:2}}</td>
                             <td style="text-align:right;">{{row.VatAmt | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoVatAmt | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoTolAmt | number:2}}</td>
+                            @*<td style="text-align:right;">{{row.NegoVatAmt | number:2}}</td>*@
+                            <td style="text-align:right;">{{row.TolAmt | number:2}}</td>
                         </tr>
                         <tr ng-if="VenCSItemGridDisplayCollection.length === 0">
                             <td colspan="12" class="text-center text-danger">
@@ -345,14 +397,14 @@
                 <div class="col-lg-2"><label>PO Amount:</label></div>
                 <div class="col-lg-3">
                     <input type="text" class="form-control input-readonly"
-                           ng-model="VendorCSInfo.PoAmount" ng-readonly="true" />
+                           ng-model="VendorCSInfo.TolAmt" ng-readonly="true" />
                 </div>
-                <div class="col-lg-2"><label>Approved Amount:</label></div>
+                @*<div class="col-lg-2"><label>Approved Amount:</label></div>
                 <div class="col-lg-3">
                     <input type="text" class="form-control"
                            placeholder="Enter approved amount"
                            ng-model="VendorCSInfo.RecommendedAmount" />
-                </div>
+                </div>*@
             </div>
 
             <!-- Row 5: PO Date (readonly) + PO Approve Date (editable) -->
@@ -714,6 +766,7 @@
                     PORecDate: "",   // Approval date (editable)
                     PODate: "",   // used in print slip
                     PoAmount: "",   // readonly
+                    TolAmt: "",   // readonly
                     RecommendedAmount: "",   // editable → approved amount
                     BillType: "",
                     Category: "",
@@ -797,7 +850,7 @@
                         items.forEach(function (i) {
                             total += parseFloat(i.NegoTolAmt || 0);
                         });
-                        $scope.VendorCSInfo.PoAmount = total.toFixed(2);
+                        $scope.VendorCSInfo.TolAmt = total.toFixed(2);
                         $scope.VendorCSInfo.BillType = h.BillType || "";
                         $scope.VendorCSInfo.Category = h.BillCategory || "";
                         $scope.VendorCSInfo.Installment = h.Installment || "";
@@ -811,6 +864,8 @@
 
                     $scope.VenCSItemList = items.map(mapItem);
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
+
+                    $scope.VendorCSInfo.TolAmt = $scope.VenCSItemGridDisplayCollection[0].TolAmt;
                     $scope.loading = false;
                 }, function () {
                     $scope.loading = false;
@@ -969,6 +1024,28 @@
                     });
             };
 
+
+            $scope.poApproveStatusFilter = "";
+
+            $scope.filterPOApproveStatus = function () {
+                var status = $scope.poApproveStatusFilter;
+
+                if (status === "Approved") {
+                    $scope.CSClientDisplayedCollection = $scope.CSClientList.filter(
+                        function (row) {
+                            return !!row.PoAprvID;
+                        }
+                    );
+                } else if (status === "Pending") {
+                    $scope.CSClientDisplayedCollection = $scope.CSClientList.filter(
+                        function (row) {
+                            return !row.PoAprvID;
+                        }
+                    );
+                } else {
+                    $scope.CSClientDisplayedCollection = [].concat($scope.CSClientList);
+                }
+            };
             /* ── Actual Print via Iframe ─────────────────────────────── */
             $scope.printData = function () {
                 var slip = document.getElementById("masterRow");

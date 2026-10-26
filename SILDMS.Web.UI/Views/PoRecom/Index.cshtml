@@ -143,12 +143,51 @@
                     <thead>
                         <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
                             <th>Client Name</th>
-                            <th>Project Name</th>
                             <th>Requisition No</th>
+                            <th>Project Name</th>
                             <th>PO Date</th>
                             <th>Vendor Name</th>
-                            <th>Recom Status</th>  <!-- ← NEW -->
+                            <th>Recom Status</th>
                             <th>Action</th>
+                        </tr>
+
+                        <!-- Individual Column Search -->
+                        <tr>
+                            <th>
+                                <input type="text" st-search="ClientName"
+                                       placeholder="Search Client"
+                                       class="form-control input-sm" />
+                            </th>
+                            <th>
+                                <input type="text" st-search="ClientReqNo"
+                                       placeholder="Search Req No"
+                                       class="form-control input-sm" />
+                            </th>
+                            <th>
+                                <input type="text" st-search="ProjectName"
+                                       placeholder="Search Project"
+                                       class="form-control input-sm" />
+                            </th>
+                            <th>
+                                <input type="text" st-search="RequisitionDate"
+                                       placeholder="Search PO Date"
+                                       class="form-control input-sm" />
+                            </th>
+                            <th>
+                                <input type="text" st-search="VendorName"
+                                       placeholder="Search Vendor"
+                                       class="form-control input-sm" />
+                            </th>
+                            <th>
+                                <select class="form-control input-sm"
+                                        ng-model="poStatusFilter"
+                                        ng-change="filterPOStatus()">
+                                    <option value="">All Status</option>
+                                    <option value="Recommended">Recommended</option>
+                                    <option value="Pending">Pending</option>
+                                </select>
+                            </th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -156,8 +195,9 @@
                             style="height:20px;font-size:13px;">
                             <td class="hidden">{{row.POPreparationID}}</td>
                             <td>{{row.ClientName}}</td>
-                            <td>{{row.ProjectName}}</td>
                             <td>{{row.ClientReqNo}}</td>
+
+                            <td>{{row.ProjectName}}</td>
                             <td class="text-center">{{row.RequisitionDate}}</td>
                             <td class="text-center">{{row.VendorName}}</td>
 
@@ -231,19 +271,21 @@
                         <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
                             <th>Item Name</th>
                             <th>Description</th>
-                            <th style="text-align:right;">Service Category</th>
-
-                            <th style="text-align:right;">QutnQnty</th>
+                            <th style="text-align:left;">Service Category</th>
                             <th>Unit</th>
-                            <th style="text-align:right;">QutnPrice</th>
-                            <th style="text-align:right;">QutnAmt</th>
-                            <th style="text-align:right;">POQnty</th>
-                            <th style="text-align:right;">PoPrice</th>
-                            <th style="text-align:right;">PoAmt</th>
+
+                            <th style="text-align:right;">PO Qnty</th>
+                            <th style="text-align:right;">PO Unit/Price</th>
+                            <th style="text-align:right;">PO Amt</th>
+                            @*<th style="text-align:right;">POQnty</th>*@
+                            @*<th style="text-align:right;">PoPrice</th>*@
+                            @*<th style="text-align:right;">PoAmt</th>*@
                             <th style="text-align:right;">Vat%</th>
                             <th style="text-align:right;">VatAmt</th>
-                            <th style="text-align:right;">PoVatAmt</th>
-                            <th style="text-align:right;">PoTotalAmt</th>
+                            <th style="text-align:right;">PO Total Amt</th>
+                            @*<th style="text-align:right;">PoVatAmt</th>*@
+                            @*<th style="text-align:right;">PoTotalAmt</th>*@
+
                         </tr>
                     </thead>
                     <tbody>
@@ -252,17 +294,19 @@
                             <td>{{row.ServiceItemName}}</td>
                             <td>{{row.Description}}</td>
                             <td>{{row.ServiceCategoryName}}</td>
-                            <td style="text-align:right;">{{row.QutnQnty | number:2}}</td>
                             <td>{{row.QutnUnit}}</td>
+
+                            <td style="text-align:right;">{{row.QutnQnty | number:2}}</td>
                             <td style="text-align:right;">{{row.QutnPrice | number:2}}</td>
                             <td style="text-align:right;">{{row.QutnAmt | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoQty | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoPrice | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoAmt | number:2}}</td>
+                            @*<td style="text-align:right;">{{row.NegoQty | number:2}}</td>*@
+                            @*<td style="text-align:right;">{{row.NegoPrice | number:2}}</td>*@
+                            @*<td style="text-align:right;">{{row.NegoAmt | number:2}}</td>*@
                             <td style="text-align:right;">{{row.VatPerc | number:2}}</td>
                             <td style="text-align:right;">{{row.VatAmt | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoVatAmt | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoTolAmt | number:2}}</td>
+                            <td style="text-align:right;">{{row.TolAmt | number:2}}</td>
+                            @*<td style="text-align:right;">{{row.NegoVatAmt | number:2}}</td>*@
+                            @*<td style="text-align:right;">{{row.NegoTolAmt | number:2}}</td>*@
                         </tr>
                         <tr ng-if="VenCSItemGridDisplayCollection.length===0">
                             <td colspan="12" class="text-center text-danger">No items available</td>
@@ -336,19 +380,19 @@
                 <div class="col-lg-2"><label>PO Amount:</label></div>
                 <div class="col-lg-3">
                     <input type="text" class="form-control input-readonly"
-                           ng-model="VendorCSInfo.PoAmount" ng-readonly="true" />
+                           ng-model="VendorCSInfo.TolAmt" ng-readonly="true" />
                 </div>
-                <div class="col-lg-2"><label>Recommended Amount:</label></div>
-                <div class="col-lg-3">
+                <!--<div class="col-lg-2"><label>Recommended Amount:</label></div>
+                <div class="col-lg-3">-->
                     <!-- VIEW: readonly -->
-                    <input ng-show="pageMode==='view'" type="text"
+                    <!--<input ng-show="pageMode==='view'" type="text"
                            class="form-control input-readonly"
-                           ng-model="VendorCSInfo.RecommendedAmount" ng-readonly="true" />
+                           ng-model="VendorCSInfo.RecommendedAmount" ng-readonly="true" />-->
                     <!-- EDIT: editable -->
-                    <input ng-show="pageMode==='edit'" type="text" class="form-control"
+                    <!--<input ng-show="pageMode==='edit'" type="text" class="form-control"
                            placeholder="Enter recommended amount"
                            ng-model="VendorCSInfo.RecommendedAmount" />
-                </div>
+                </div>-->
             </div>
 
             <!-- Recom Date + Note -->
@@ -455,6 +499,7 @@
                     ClientReqID: "", VendorID: "", VendorName: "",
                     AutoPoNo: "", CSRecDate: "", PORecDate: "",
                     PoAmount: "", RecommendedAmount: "",
+                    TolAmt: "", RecommendedAmount: "",
                     BillType: "", Category: "",
                     Installment: "", InstalledAmount: "",
                     Remarks: "", RecomRemarks: "", SetBy: ""
@@ -473,6 +518,29 @@
                     $scope.loading = false;
                     toastr.error("Failed to load PO list.");
                 });
+
+            $scope.poStatusFilter = "";
+
+            $scope.filterPOStatus = function () {
+                var status = $scope.poStatusFilter;
+
+                if (status === "Recommended") {
+                    $scope.CSClientDisplayedCollection = $scope.CSClientList.filter(
+                        function (row) {
+                            return !!row.PORecmID;
+                        }
+                    );
+                } else if (status === "Pending") {
+                    $scope.CSClientDisplayedCollection = $scope.CSClientList.filter(
+                        function (row) {
+                            return !row.PORecmID;
+                        }
+                    );
+                } else {
+                    $scope.CSClientDisplayedCollection = [].concat($scope.CSClientList);
+                }
+            };
+
 
             /* ── Open detail ── */
             $scope.openDetail = function (row, mode) {
@@ -529,7 +597,7 @@
                         var h = items[0];
                         $scope.VendorCSInfo.AutoPoNo = h.PONo || "";
                         $scope.VendorCSInfo.CSRecDate = h.PODate || "";
-                        $scope.VendorCSInfo.PoAmount = h.POAmt || "";
+                        $scope.VendorCSInfo.TolAmt = h.TolAmt || "";
                         $scope.VendorCSInfo.RecommendedAmount = h.POAmt || "";
                         $scope.VendorCSInfo.BillType = h.BillType || "";
                         $scope.VendorCSInfo.Category = h.BillCategory || "";
@@ -648,6 +716,7 @@
                 $scope.isRefreshing = true;
                 $timeout(function () { window.location.reload(); }, 1200);
             };
+        
 
-        }]);
+ }]);
 </script>

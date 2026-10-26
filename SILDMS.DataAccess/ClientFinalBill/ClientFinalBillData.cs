@@ -65,6 +65,8 @@ namespace SILDMS.DataAccess.ClientFinalBill
                     {
                         WOInfoItemID = reader.GetString("WOInfoItemID"),
                         WOInfoID = reader.GetString("WOInfoID"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        ServicesCategoryName = reader.GetString("ServicesCategoryName"),
                         Description = reader.GetString("Description"),
                         DeliveryLocation = reader.GetString("DeliveryLocation"),
                         DeliveryMode = reader.GetString("DeliveryMode"),

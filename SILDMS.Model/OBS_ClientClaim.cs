@@ -52,6 +52,8 @@ namespace SILDMS.Model
         public string VatPerc { get; set; }
         public string VatAmt { get; set; }
         public string WOAmtWithASFVat { get; set; }
+        public string ServiceItemName { get; set; }
+        public string ServicesCategoryName { get; set; }
     }
 
     public class OBS_ClientAdvanceClaimHistoryRow
@@ -132,6 +134,8 @@ namespace SILDMS.Model
         public string BillASFAmt { get; set; }
         public string BillVatAmt { get; set; }
         public string BillTotalAmt { get; set; }
+        public string ServiceItemName { get; set; }
+        public string ServicesCategoryName { get; set; }
     }
 
     public class OBS_ClientFinalBillHistoryRow

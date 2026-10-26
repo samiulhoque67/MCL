@@ -160,8 +160,47 @@
                             <th>Requisition No</th>
                             <th>Requisition Date</th>
                             <th>Vendor Name</th>
-                            <th>Approval Status</th>   <!-- ← NEW -->
+                            <th>Approval Status</th>
                             <th>Action</th>
+                        </tr>
+
+                        <!-- Individual Column Search -->
+                        <tr>
+                            <th>
+                                <input type="text" st-search="ClientName"
+                                       placeholder="Search Client"
+                                       class="form-control input-sm" />
+                            </th>
+                            <th>
+                                <input type="text" st-search="ProjectName"
+                                       placeholder="Search Project"
+                                       class="form-control input-sm" />
+                            </th>
+                            <th>
+                                <input type="text" st-search="ClientReqNo"
+                                       placeholder="Search Req No"
+                                       class="form-control input-sm" />
+                            </th>
+                            <th>
+                                <input type="text" st-search="RequisitionDate"
+                                       placeholder="Search Date"
+                                       class="form-control input-sm" />
+                            </th>
+                            <th>
+                                <input type="text" st-search="VendorName"
+                                       placeholder="Search Vendor"
+                                       class="form-control input-sm" />
+                            </th>
+                            <th>
+                                <select class="form-control input-sm"
+                                        ng-model="poApprovalStatusFilter"
+                                        ng-change="filterPOApprovalStatus()">
+                                    <option value="">All Status</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Pending">Pending</option>
+                                </select>
+                            </th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -254,17 +293,18 @@
                             <th>Item Name</th>
                             <th>Description</th>
                             <th>Services Category</th>
-                            <th style="text-align:right;">QutnQnty</th>
                             <th>Unit</th>
-                            <th style="text-align:right;">QutnPrice</th>
-                            <th style="text-align:right;">QutnAmt</th>
-                            <th style="text-align:right;">POQnty</th>
-                            <th style="text-align:right;">PoPrice</th>
-                            <th style="text-align:right;">PoAmt</th>
+
+                            <th style="text-align:right;">PO Qnty</th>
+                            <th style="text-align:right;">PO Price</th>
+                            <th style="text-align:right;">PO Amt</th>
+                            @*<th style="text-align:right;">PO Qnty</th>*@
+                            @*<th style="text-align:right;">Po Price</th>*@
+                            @*<th style="text-align:right;">PoAmt</th>*@
                             <th style="text-align:right;">Vat%</th>
                             <th style="text-align:right;">VatAmt</th>
-                            <th style="text-align:right;">PoVatAmt</th>
-                            <th style="text-align:right;">PoTotalAmt</th>
+                            @*<th style="text-align:right;">PoVatAmt</th>*@
+                            <th style="text-align:right;">Po Total Amt</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -273,17 +313,18 @@
                             <td>{{row.ServiceItemName}}</td>
                             <td>{{row.Description}}</td>
                             <td>{{row.ServiceCategoryName}}</td>
-                            <td style="text-align:right;">{{row.QutnQnty  | number:2}}</td>
                             <td>{{row.QutnUnit}}</td>
+
+                            <td style="text-align:right;">{{row.QutnQnty  | number:2}}</td>
                             <td style="text-align:right;">{{row.QutnPrice | number:2}}</td>
                             <td style="text-align:right;">{{row.QutnAmt   | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoQty   | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoPrice | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoAmt   | number:2}}</td>
+                            @*<td style="text-align:right;">{{row.NegoQty   | number:2}}</td>*@
+                            @*<td style="text-align:right;">{{row.NegoPrice | number:2}}</td>*@
+                            @*<td style="text-align:right;">{{row.NegoAmt   | number:2}}</td>*@
                             <td style="text-align:right;">{{row.VatPerc   | number:2}}</td>
                             <td style="text-align:right;">{{row.VatAmt    | number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoVatAmt| number:2}}</td>
-                            <td style="text-align:right;">{{row.NegoTolAmt| number:2}}</td>
+                            @*<td style="text-align:right;">{{row.NegoVatAmt| number:2}}</td>*@
+                            <td style="text-align:right;">{{row.TolAmt| number:2}}</td>
                         </tr>
                         <tr ng-if="VenCSItemGridDisplayCollection.length===0">
                             <td colspan="12" class="text-center text-danger">No items available</td>
@@ -352,9 +393,9 @@
                 <div class="col-lg-2"><label>PO Amount:</label></div>
                 <div class="col-lg-3">
                     <input type="text" class="form-control input-readonly"
-                           ng-model="VendorCSInfo.PoAmount" ng-readonly="true" />
+                           ng-model="VendorCSInfo.TolAmt" ng-readonly="true" />
                 </div>
-                <div class="col-lg-2"><label>Approved Amount:</label></div>
+                @*<div class="col-lg-2"><label>Approved Amount:</label></div>
                 <div class="col-lg-3">
                     <input ng-show="pageMode==='view'" type="text"
                            class="form-control input-readonly"
@@ -362,7 +403,7 @@
                     <input ng-show="pageMode==='edit'" type="text" class="form-control"
                            placeholder="Enter approved amount"
                            ng-model="VendorCSInfo.RecommendedAmount" />
-                </div>
+                </div>*@
             </div>
 
             <!-- PO Date (readonly) + Approve Date (view/edit) -->
@@ -650,6 +691,7 @@
                     PORecDate: "",          // Approve date (editable)
                     PODate: "",             // used in print
                     PoAmount: "",           // readonly — sum of items
+                    TolAmt: "",           // readonly — sum of items
                     RecommendedAmount: "",  // editable → approved amount
                     BillType: "", Category: "",
                     Installment: "", InstalledAmount: "",
@@ -729,6 +771,7 @@
                     if (items.length > 0) {
                         var h = items[0];
                         $scope.VendorCSInfo.AutoPoNo = h.PONo || "";
+                        $scope.VendorCSInfo.TolAmt = h.TolAmt || "";
                         $scope.VendorCSInfo.PONo = h.PONo || "";
                         $scope.VendorCSInfo.CSRecDate = h.PODate || "";
                         $scope.VendorCSInfo.BillType = h.BillType || "";
@@ -749,11 +792,13 @@
                         items.forEach(function (i) {
                             total += parseFloat(i.NegoTolAmt || 0);
                         });
-                        $scope.VendorCSInfo.PoAmount = total.toFixed(2);
+                        $scope.VendorCSInfo.TolAmt = total.toFixed(2);
                         $scope.VendorCSInfo.RecommendedAmount = total.toFixed(2);
                     }
                     $scope.VenCSItemList = items.map(mapItem);
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
+
+                    $scope.VendorCSInfo.TolAmt = $scope.VenCSItemGridDisplayCollection[0].TolAmt;
                     $scope.loading = false;
                 }, function () {
                     $scope.loading = false;
@@ -808,7 +853,7 @@
 
             /* ── Item mapping ── */
             function mapItem(item) {
-                item.NegoTolAmt = parseFloat(item.NegoTolAmt || 0).toFixed(2);
+                item.TolAmt = parseFloat(item.TolAmt || 0).toFixed(2);
                 item.NegoAmt = parseFloat(item.NegoAmt || 0).toFixed(2);
                 item.NegoVatAmt = parseFloat(item.NegoVatAmt || 0).toFixed(2);
                 item.QutnQnty = parseFloat(item.QutnQnty || 0).toFixed(2);
@@ -917,6 +962,28 @@
                         $scope.loading = false;
                         toastr.error("Failed to load print data.");
                     });
+            };
+
+            $scope.poApprovalStatusFilter = "";
+
+            $scope.filterPOApprovalStatus = function () {
+                var status = $scope.poApprovalStatusFilter;
+
+                if (status === "Approved") {
+                    $scope.CSClientDisplayedCollection = $scope.CSClientList.filter(
+                        function (row) {
+                            return !!row.PoAprvID;
+                        }
+                    );
+                } else if (status === "Pending") {
+                    $scope.CSClientDisplayedCollection = $scope.CSClientList.filter(
+                        function (row) {
+                            return !row.PoAprvID;
+                        }
+                    );
+                } else {
+                    $scope.CSClientDisplayedCollection = [].concat($scope.CSClientList);
+                }
             };
 
             /* ── Iframe print ── */

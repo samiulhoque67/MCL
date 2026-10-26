@@ -52,6 +52,7 @@ using SILDMS.DataAccess.VendorSettlement;
 using SILDMS.DataAccess.VersionDocSearching;
 using SILDMS.DataAccess.VersioningOfOriginalDoc;
 using SILDMS.DataAccess.VersioningVersionedDoc;
+using SILDMS.DataAccess.WorkDashboard;
 using SILDMS.DataAccessInterface;
 using SILDMS.DataAccessInterface.AutoValueConf;
 using SILDMS.DataAccessInterface.AutoValueSetup;
@@ -147,6 +148,7 @@ using SILDMS.Service.VendorSettlement;
 using SILDMS.Service.VersionDocSearching;
 using SILDMS.Service.VersioningOfOriginalDoc;
 using SILDMS.Service.VersioningVersionedDoc;
+using SILDMS.Service.WorkDashboard;
 using SILDMS.Utillity.Localization;
 
 namespace SILDMS.InfraStructure
@@ -339,7 +341,7 @@ namespace SILDMS.InfraStructure
             kernel.Bind<IClientClaimService>().To<ClientClaimService>();
 
 
-            kernel.Bind <IClientBillCollectionData>().To<ClientBillCollectionData>();
+            kernel.Bind<IClientBillCollectionData>().To<ClientBillCollectionData>();
             kernel.Bind<IClientBillCollectionService>().To<ClientBillCollectionService>();
 
             kernel.Bind<IClientSettlementData>().To<ClientSettlementData>();
@@ -353,6 +355,10 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<ICombinedSettlementData>().To<CombinedSettlementData>();
             kernel.Bind<ICombinedSettlementService>().To<CombinedSettlementService>();
+
+
+            kernel.Bind<IWorkDashboardData>().To<WorkDashboardData>();
+            kernel.Bind<IWorkDashboardService>().To<WorkDashboardService>();
         }
     }
 }

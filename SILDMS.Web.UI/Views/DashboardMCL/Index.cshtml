@@ -1,55 +1,599 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "My Work Dashboard";
     Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
 }
 
-<style>
-    .welcome-text {
+<style type="text/css">
+    .dash-tiles {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 80vh;
-        font-size: 2.8em;
-        font-weight: bold;
-        color: #4A90E2;
-        text-align: center;
-        opacity: 1;
-        transform: scale(1);
-        font-family: 'Times New Roman', Times, serif;
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-        transition: opacity 2s ease-in-out, transform 2s ease-in-out;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 12px 1% 6px 1%;
     }
 
-    .fade-out {
-        opacity: 0;
-        transform: scale(0.9);
+    .dash-tile {
+        flex: 1;
+        min-width: 180px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px 14px;
+        box-shadow: 1px 1px 3px #ccc;
     }
 
-    .welcome-text img {
-        height: 1.8em;
-        margin-left: -1em;
-        margin-right: -1em;
-    }
-</style>
-
-<div class="welcome-text" id="welcomeText">
-    Welcome to
-    <a target="_blank" href="https://mediacombd.com/">
-        <img src="../../Content/AdminLTE/img/MCL-mainlogo.png" alt="MCL Logo" />
-    </a>
-    Dashboard
-</div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const welcomeText = document.getElementById("welcomeText");
-
-        // Function to toggle fade-out class
-        function toggleFade() {
-            welcomeText.classList.toggle('fade-out');
+        .dash-tile .t-val {
+            font-size: 26px;
+            font-weight: bold;
+            color: #31708f;
+            line-height: 1.1;
         }
 
-        // Toggle fade every 3 seconds (2s fade effect + 1s pause)
-        setInterval(toggleFade, 700);
-    });
+        .dash-tile .t-lbl {
+            font-size: 11px;
+            color: #777;
+            text-transform: uppercase;
+        }
+
+        .dash-tile.t-late .t-val {
+            color: #a94442;
+        }
+
+    .dash-bar {
+        margin: 8px 1%;
+        font-size: 12.5px;
+    }
+
+        .dash-bar label {
+            font-weight: normal;
+            margin-right: 18px;
+            cursor: pointer;
+        }
+
+    .dash-tabs {
+        margin: 8px 1% 0 1%;
+        border-bottom: 2px solid #3c8dbc;
+    }
+
+        .dash-tabs button {
+            border: 0;
+            background: #eef1f4;
+            padding: 7px 18px;
+            margin-right: 3px;
+            font-weight: bold;
+            color: #555;
+            border-radius: 4px 4px 0 0;
+        }
+
+            .dash-tabs button.active {
+                background: #3c8dbc;
+                color: #fff;
+            }
+
+    .grp-title {
+        margin: 14px 1% 6px 1%;
+        font-weight: bold;
+        color: #166e19;
+        font-size: 14px;
+        border-bottom: 1px solid #d3e3e3;
+        padding-bottom: 3px;
+    }
+
+    .stage-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 0 1%;
+    }
+
+    .stage-card {
+        position: relative;
+        width: 235px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-left: 5px solid #bbb;
+        border-radius: 4px;
+        padding: 8px 30px 8px 12px;
+        cursor: pointer;
+        box-shadow: 1px 1px 3px #ddd;
+    }
+
+        .stage-card:hover {
+            box-shadow: 2px 2px 6px #aaa;
+        }
+
+        .stage-card.selected {
+            outline: 2px solid #3c8dbc;
+        }
+
+        .stage-card .sc-count {
+            font-size: 26px;
+            font-weight: bold;
+            line-height: 1.1;
+        }
+
+        .stage-card .sc-title {
+            font-weight: bold;
+            font-size: 12.5px;
+        }
+
+        .stage-card .sc-meta {
+            font-size: 11px;
+            color: #777;
+        }
+
+        .stage-card .sc-open {
+            position: absolute;
+            top: 8px;
+            right: 9px;
+            color: #777;
+        }
+
+        .stage-card.age-ok {
+            border-left-color: #5cb85c;
+        }
+
+            .stage-card.age-ok .sc-count {
+                color: #3c763d;
+            }
+
+        .stage-card.age-warn {
+            border-left-color: #f0ad4e;
+        }
+
+            .stage-card.age-warn .sc-count {
+                color: #c77c11;
+            }
+
+        .stage-card.age-late {
+            border-left-color: #d9534f;
+        }
+
+            .stage-card.age-late .sc-count {
+                color: #a94442;
+            }
+
+        .stage-card.sc-none {
+            border-left-color: #ccc;
+            background: #fafafa;
+        }
+
+            .stage-card.sc-none .sc-count {
+                color: #bbb;
+            }
+
+        .stage-card.sc-optional {
+            border-style: dashed;
+            border-left-style: solid;
+        }
+
+    .opt-badge {
+        font-size: 9.5px;
+        background: #eef1f4;
+        color: #7a8aa0;
+        border-radius: 3px;
+        padding: 0 4px;
+        font-weight: normal;
+    }
+
+    .detail-box {
+        margin: 14px 1%;
+        background: #f0f0f0;
+        box-shadow: 2px 2px 5px #888;
+        padding: 10px 14px;
+    }
+
+        .detail-box h4 {
+            margin: 0 0 4px 0;
+            font-weight: bold;
+        }
+
+        .detail-box .means {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+    .dash-table {
+        font-size: 12px;
+    }
+
+        .dash-table th {
+            background: #82b0c9;
+            color: #010823;
+            font-size: 11px;
+            text-align: center;
+        }
+
+    .age-badge {
+        display: inline-block;
+        min-width: 38px;
+        padding: 1px 6px;
+        border-radius: 3px;
+        font-weight: bold;
+        font-size: 11px;
+        text-align: center;
+    }
+
+        .age-badge.age-ok {
+            background: #dff0d8;
+            color: #3c763d;
+        }
+
+        .age-badge.age-warn {
+            background: #fcf8e3;
+            color: #8a6d3b;
+        }
+
+        .age-badge.age-late {
+            background: #f2dede;
+            color: #a94442;
+        }
+
+    .chip {
+        display: inline-block;
+        background: #eef1f4;
+        border: 1px solid #d6dde4;
+        border-radius: 10px;
+        padding: 0 8px;
+        margin: 1px 3px 1px 0;
+        font-size: 11px;
+    }
+
+    .mine-dot {
+        color: #3c8dbc;
+    }
+
+    .quick-links {
+        margin: 14px 1% 20px 1%;
+    }
+
+        .quick-links a {
+            display: inline-block;
+            margin: 0 8px 8px 0;
+            padding: 5px 12px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color: #31708f;
+            font-size: 12px;
+        }
+
+            .quick-links a:hover {
+                background: #eef6fb;
+                text-decoration: none;
+            }
+</style>
+
+<div class="box box-primary box-body" ng-controller="WorkDashboardCtrl">
+
+    <!-- HEADER -->
+    <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
+        <h2 class="box-title" style="font-family: math; font-weight: 500;">
+            My Work Dashboard
+            <small style="color:#fff;margin-left:10px;" ng-show="loadedAt">updated {{loadedAt}}</small>
+        </h2>
+        <div class="box-tools pull-right">
+            <div class="btn-group pull-right" style="margin-left:4px; margin-right:4px;">
+                <button type="button" class="button-custom" ng-click="load()" ng-disabled="loading">
+                    <i class="fa fa-refresh" ng-class="{'fa-spin': loading}" style="padding-right:5px"></i> Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="dash-tiles">
+        <div class="dash-tile"><div class="t-val">{{Totals.pending}}</div><div class="t-lbl">Items waiting</div></div>
+        <div class="dash-tile"><div class="t-val">{{Totals.stagesWithWork}}</div><div class="t-lbl">Stages with work</div></div>
+        <div class="dash-tile"><div class="t-val">{{Totals.requisitions}}</div><div class="t-lbl">Requisitions in progress</div></div>
+        <div class="dash-tile" ng-class="{'t-late': Totals.late > 0}"><div class="t-val">{{Totals.late}}</div><div class="t-lbl">Waiting {{LATE}}+ days</div></div>
+        <div class="dash-tile"><div class="t-val">{{Totals.oldest}}<small> d</small></div><div class="t-lbl">Longest wait</div></div>
+    </div>
+    <div class="dash-bar">
+        <label><input type="checkbox" ng-model="onlyMine" ng-change="load()" /> Only requisitions I raised</label>
+        @*<label><input type="checkbox" ng-model="hideEmpty" /> Hide stages with nothing waiting</label>
+        <span class="text-muted">Optional stages (advance demand / claim) are shown but not counted above.</span>*@
+    </div>
+
+    <div ng-show="!loading && QueueStages.length === 0" class="detail-box text-center">
+        <h4 style="color:#a94442;">No stages available for your login.</h4>
+    </div>
+
+    <!-- TABS -->
+    <div class="dash-tabs" ng-show="QueueStages.length > 0">
+        @*<button type="button" ng-class="{active: tab==='stage'}" ng-click="tab='stage'"><i class="fa fa-th-large"></i> By Stage</button>*@
+        <button type="button" ng-class="{active: tab==='req'}" ng-click="tab='req'"><i class="fa fa-list-alt"></i> By Requisition</button>
+    </div>
+
+    <!-- ══════════ TAB 1 : BY STAGE ══════════ -->
+    <!--<div ng-show="tab==='stage'">
+
+        <div ng-repeat="g in Groups" ng-show="groupVisible(g)">
+            <div class="grp-title">{{g.name}}</div>
+            <div class="stage-grid">
+                <div ng-repeat="s in g.stages" ng-show="!hideEmpty || s.Count > 0"
+                     ng-class="cardClass(s)" ng-click="selectStage(s)" title="{{s.PendingMeans}}">
+                    <div class="sc-count">{{s.Count}}</div>
+                    <div class="sc-title">{{s.StageTitle}} <span class="opt-badge" ng-if="s.optional">optional</span></div>
+                    <div class="sc-meta">
+                        <span ng-if="s.Count > 0">{{s.ReqCount}} requisition(s) &middot; oldest {{s.MaxDays}}d</span>
+                        <span ng-if="s.Count === 0">Nothing waiting</span>
+                    </div>
+                    <a class="sc-open" ng-href="{{s.Url}}" ng-click="$event.stopPropagation()" title="Open {{s.StageTitle}}">
+                        <i class="fa fa-external-link"></i>
+                    </a>
+                </div>
+            </div>
+        </div>-->
+    <!-- selected stage -->
+    <!--<div class="detail-box" ng-show="selected">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h4>{{selected.StageTitle}} <small>&mdash; {{selected.Count}} waiting</small></h4>
+                    <div class="means">{{selected.PendingMeans}}</div>
+                </div>
+                <div class="col-sm-4 text-right">
+                    <a class="btn btn-sm btn-primary" ng-href="{{selected.Url}}"><i class="fa fa-external-link"></i> Open {{selected.StageTitle}}</a>
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-4"><input type="text" class="form-control" placeholder="Search requisition, client, project, PO / WO..." ng-model="search" /></div>
+                <div class="col-sm-3">
+                    <select class="form-control" ng-model="sortBy">
+                        <option value="-DaysWaiting">Longest waiting first</option>
+                        <option value="DaysWaiting">Newest first</option>
+                        <option value="ClientReqNo">Requisition No</option>
+                        <option value="ClientName">Client</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="overflow-x:auto;">
+                <table class="table table-condensed table-bordered table-striped table-hover dash-table">
+                    <thead>
+                        <tr>
+                            <th>Requisition No</th>
+                            <th>Client</th>
+                            <th>Project</th>
+                            <th>Reference</th>
+                            <th>What is waiting</th>
+                            <th>Waiting since</th>
+                            <th>Days</th>
+                            <th>Raised by</th>
+                            <th>Track</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="i in (filtered = (StageItems | filter:search | orderBy:sortBy)) | limitTo:limit">
+                            <td class="text-center">{{i.ClientReqNo}} <i class="fa fa-user mine-dot" ng-if="i.IsMine==='1'" title="Raised by you"></i></td>
+                            <td>{{i.ClientName}}</td>
+                            <td>{{i.ProjectName}}</td>
+                            <td class="text-center">{{i.RefNo}}</td>
+                            <td>{{i.Detail}}</td>
+                            <td class="text-center">{{i.WaitingSince}}</td>
+                            <td class="text-center"><span class="age-badge" ng-class="ageClass(i.DaysWaiting)">{{i.DaysWaiting}}</span></td>
+                            <td>{{i.RaisedBy}}</td>
+                            <td class="text-center"><a ng-href="/RequisitionMovement/index?req={{enc(i.ClientReqNo)}}" target="_blank" title="Open in Bill Movement Status"><i class="fa fa-road"></i></a></td>
+                        </tr>
+                        <tr ng-if="StageItems.length === 0"><td colspan="9" class="text-center text-muted">Nothing is waiting in this stage.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center" ng-show="filtered.length > limit">
+                <button type="button" class="btn btn-sm btn-default" ng-click="limit = limit + 50">Show more ({{filtered.length - limit}} left)</button>
+            </div>
+        </div>
+
+        <div class="detail-box text-muted" ng-hide="selected || QueueStages.length === 0">
+            Click a stage card to see exactly which requisitions are waiting there. Use the
+            <i class="fa fa-external-link"></i> icon on a card to open that stage's page.
+        </div>
+    </div>-->
+    <!-- ══════════ TAB 2 : BY REQUISITION ══════════ -->
+    <div ng-show="tab==='req'">
+        <div class="detail-box">
+            <h4>Requisitions and where each one is waiting</h4>
+            <div class="means">Every requisition that has work waiting in one or more of your stages, longest wait first.</div>
+            <div class="row" style="margin-bottom:8px;">
+                <div class="col-sm-4"><input type="text" class="form-control" placeholder="Search requisition, client, project..." ng-model="reqSearch" /></div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="table table-condensed table-bordered table-striped table-hover dash-table">
+                    <thead>
+                        <tr><th>Requisition No</th><th>Client</th><th>Project</th><th>Raised by</th><th>Waiting at</th><th>Longest wait</th><th>Track</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="r in (reqFiltered = (ReqGroups | filter:reqSearch)) | limitTo:reqLimit">
+                            <td class="text-center">{{r.ClientReqNo}} <i class="fa fa-user mine-dot" ng-if="r.mine" title="Raised by you"></i></td>
+                            <td>{{r.ClientName}}</td>
+                            <td>{{r.ProjectName}}</td>
+                            <td>{{r.RaisedBy}}</td>
+                            <td>
+                                <span class="chip" ng-repeat="c in r.stages">{{c.title}} <small>{{c.days}}d</small></span>
+                            </td>
+                            <td class="text-center"><span class="age-badge" ng-class="ageClass(r.maxDays)">{{r.maxDays}}</span></td>
+                            <td class="text-center"><a ng-href="/RequisitionMovement/index?req={{enc(r.ClientReqNo)}}" target="_blank" title="Open in Bill Movement Status"><i class="fa fa-road"></i></a></td>
+                        </tr>
+                        <tr ng-if="ReqGroups.length === 0"><td colspan="7" class="text-center text-muted">Nothing waiting.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center" ng-show="reqFiltered.length > reqLimit">
+                <button type="button" class="btn btn-sm btn-default" ng-click="reqLimit = reqLimit + 50">Show more ({{reqFiltered.length - reqLimit}} left)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    @*<div class="quick-links" ng-show="LinkStages.length > 0">
+            <div class="grp-title" style="margin-left:0;margin-right:0;">Quick Links</div>
+            <a ng-repeat="l in LinkStages" ng-href="{{l.Url}}"><i class="fa fa-arrow-circle-right"></i> {{l.StageTitle}}</a>
+        </div>*@
+
+    <!-- loading overlay -->
+    <div id="mydiv" data-ng-show="loading">
+        <div class="overlay">
+            <div class="loder">
+                <img src="~/Content/AdminLTE/img/cube.gif" />
+                <span class="text-bold">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    app.controller('WorkDashboardCtrl', ['$scope', '$http', function ($scope, $http) {
+
+        // Aging thresholds (days a piece of work has been waiting)
+        var WARN = 7, LATE = 15;
+        $scope.LATE = LATE;
+
+        $scope.loading = false;
+        $scope.loadedAt = '';
+        $scope.onlyMine = true;
+        $scope.hideEmpty = false;
+        $scope.tab = 'req';
+
+        $scope.QueueStages = [];
+        $scope.LinkStages = [];
+        $scope.Groups = [];
+        $scope.Items = [];
+        $scope.StageItems = [];
+        $scope.ReqGroups = [];
+        $scope.Totals = { pending: 0, stagesWithWork: 0, requisitions: 0, late: 0, oldest: 0 };
+
+        $scope.selected = null;
+        $scope.search = '';
+        $scope.sortBy = '-DaysWaiting';
+        $scope.limit = 50;
+        $scope.reqSearch = '';
+        $scope.reqLimit = 50;
+
+        $scope.enc = function (v) { return encodeURIComponent(v || ''); };
+
+        $scope.ageClass = function (d) {
+            d = parseInt(d, 10) || 0;
+            return d >= LATE ? 'age-late' : (d >= WARN ? 'age-warn' : 'age-ok');
+        };
+
+        $scope.cardClass = function (s) {
+            var c = 'stage-card ' + (s.Count === 0 ? 'sc-none' : $scope.ageClass(s.MaxDays));
+            if (s.optional) c += ' sc-optional';
+            if ($scope.selected && $scope.selected.StageCode === s.StageCode) c += ' selected';
+            return c;
+        };
+
+        $scope.groupVisible = function (g) {
+            return g.stages.some(function (s) { return !$scope.hideEmpty || s.Count > 0; });
+        };
+
+        $scope.selectStage = function (s) {
+            $scope.selected = s;
+            $scope.search = '';
+            $scope.limit = 50;
+            $scope.StageItems = $scope.Items.filter(function (i) { return i.StageCode === s.StageCode; });
+        };
+
+        function build(data) {
+            var stages = data.Stages || [];
+            var items = data.Items || [];
+            var byCode = {};
+
+            stages.forEach(function (s) {
+                s.optional = s.IsOptional === '1';
+                s.isQueue = s.IsQueue === '1';
+                s.Count = 0; s.MaxDays = 0; s._reqs = {};
+                byCode[s.StageCode] = s;
+            });
+
+            items.forEach(function (i) {
+                i.DaysWaiting = parseInt(i.DaysWaiting, 10) || 0;
+                var s = byCode[i.StageCode];
+                if (!s) return;
+                s.Count++;
+                s._reqs[i.ClientReqID] = true;
+                if (i.DaysWaiting > s.MaxDays) s.MaxDays = i.DaysWaiting;
+            });
+            stages.forEach(function (s) { s.ReqCount = Object.keys(s._reqs).length; });
+
+            $scope.QueueStages = stages.filter(function (s) { return s.isQueue; });
+            $scope.LinkStages = stages.filter(function (s) { return !s.isQueue; });
+            $scope.Items = items;
+
+            // groups, in menu order
+            var groups = [], idx = {};
+            $scope.QueueStages.forEach(function (s) {
+                if (!(s.GroupName in idx)) { idx[s.GroupName] = groups.length; groups.push({ name: s.GroupName, stages: [] }); }
+                groups[idx[s.GroupName]].stages.push(s);
+            });
+            $scope.Groups = groups;
+
+            // headline totals — optional layers are not "remaining work"
+            var counted = $scope.QueueStages.filter(function (s) { return !s.optional; });
+            var countedItems = items.filter(function (i) { return byCode[i.StageCode] && !byCode[i.StageCode].optional; });
+            var reqs = {};
+            countedItems.forEach(function (i) { reqs[i.ClientReqID] = true; });
+
+            $scope.Totals = {
+                pending: counted.reduce(function (a, s) { return a + s.Count; }, 0),
+                stagesWithWork: counted.filter(function (s) { return s.Count > 0; }).length,
+                requisitions: Object.keys(reqs).length,
+                late: countedItems.filter(function (i) { return i.DaysWaiting >= LATE; }).length,
+                oldest: counted.reduce(function (a, s) { return Math.max(a, s.MaxDays); }, 0)
+            };
+
+            // by-requisition view
+            var map = {}, list = [];
+            countedItems.forEach(function (i) {
+                var r = map[i.ClientReqID];
+                if (!r) {
+                    r = map[i.ClientReqID] = {
+                        ClientReqID: i.ClientReqID, ClientReqNo: i.ClientReqNo, ClientName: i.ClientName,
+                        ProjectName: i.ProjectName, RaisedBy: i.RaisedBy, mine: i.IsMine === '1',
+                        stages: [], maxDays: 0
+                    };
+                    list.push(r);
+                }
+                var st = byCode[i.StageCode];
+                var found = r.stages.filter(function (c) { return c.code === i.StageCode; })[0];
+                if (!found) { found = { code: i.StageCode, title: st.StageTitle, days: 0 }; r.stages.push(found); }
+                if (i.DaysWaiting > found.days) found.days = i.DaysWaiting;
+                if (i.DaysWaiting > r.maxDays) r.maxDays = i.DaysWaiting;
+            });
+            //list.sort(function (a, b) { return b.maxDays - a.maxDays; });
+            //$scope.ReqGroups = list;
+
+            list.sort(function (a, b) {
+                return new Date(b.RequisitionDate) - new Date(a.RequisitionDate);
+            });
+
+            $scope.ReqGroups = list;
+
+            // keep the open stage open across a refresh
+            if ($scope.selected) {
+                var again = byCode[$scope.selected.StageCode];
+                if (again) { $scope.selectStage(again); } else { $scope.selected = null; $scope.StageItems = []; }
+            }
+        }
+
+        $scope.load = function () {
+            $scope.loading = true;
+            $http.post('/DashboardMCL/GetWorkDashboard', { OnlyMine: $scope.onlyMine })
+                .then(function (res) {
+                    build(res.data);
+                    $scope.loadedAt = res.data.LoadedAt || '';
+                    $scope.loading = false;
+                }, function () {
+                    $scope.loading = false;
+                    toastr.error('Failed to load the dashboard.');
+                });
+        };
+
+        $scope.load();
+    }]);
+
 </script>
+

@@ -182,6 +182,8 @@ namespace SILDMS.DataAccess.VendorFinalBill
             DataTable itemTable = new DataTable();
             itemTable.Columns.Add("POAprvItemID", typeof(string));
             itemTable.Columns.Add("ServiceItemID", typeof(int));
+            itemTable.Columns.Add("ServiceCategoryName", typeof(string));
+            itemTable.Columns.Add("Description", typeof(string));
             itemTable.Columns.Add("BillQty", typeof(decimal));
             itemTable.Columns.Add("BillPrice", typeof(decimal));
             itemTable.Columns.Add("BillVatPerc", typeof(decimal));

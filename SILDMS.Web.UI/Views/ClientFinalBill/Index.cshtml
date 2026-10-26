@@ -292,6 +292,8 @@
                        class="table table-condensed table-bordered table-striped table-hover">
                     <thead>
                         <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
+                            <th>Service Item</th>
+                            <th>Services Category</th>
                             <th>Description</th>
                             <th style="text-align:right;">WO Qty</th>
                             <th style="text-align:right;">Already Billed</th>
@@ -309,6 +311,8 @@
                     <tbody>
                         <tr ng-repeat="row in ItemGridDisplayCollection" ng-cloak
                             ng-class="{'qty-exceeded': row.BillQty > row.RemainingQty}">
+                            <td>{{row.ServiceItemName}}</td>
+                            <td>{{row.ServicesCategoryName}}</td>
                             <td>{{row.Description}}</td>
                             <td style="text-align:right;">{{row.WOQty | number:2}}</td>
                             <td style="text-align:right;">{{row.AlreadyBilledQty | number:2}}</td>

@@ -78,6 +78,7 @@ namespace SILDMS.DataAccess.POCreation
                         WODate = reader.GetString("WODate"),
                         WIInfoID = reader.GetString("WOInfoID"),
                         ClientReqID = reader.GetString("ClientReqID"),
+                        ClientReqNo = reader.GetString("ClientReqNo"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
 
                     }).ToList();
@@ -174,13 +175,13 @@ namespace SILDMS.DataAccess.POCreation
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
                         TolAmt = reader.GetString("TolAmt"),
-                        NegoQty = reader.GetString("RemainingVendorQty"),
+                       // NegoQty = reader.GetString("RemainingVendorQty"),
                         NegoPrice = reader.GetString("QutnPrice"),
-                        NegoAmt = reader.GetString("VendorAmount"),
+                       // NegoAmt = reader.GetString("VendorAmount"),
                         NegoVatAmt = reader.GetString("VatAmt"),
-                        NegoTolAmt = reader.GetString("VendorTotalAmount"),
-                        RemainingQty = reader.GetString("RemainingQty"),
-                        RemainingVendorQty = reader.GetString("RemainingVendorQty")
+                        // NegoTolAmt = reader.GetString("VendorTotalAmount"),
+                        //RemainingQty = reader.GetString("RemainingQty"),
+                      //  RemainingVendorQty = reader.GetString("RemainingVendorQty")
                         // ,
 
                         //Status = reader.GetString("Status")
