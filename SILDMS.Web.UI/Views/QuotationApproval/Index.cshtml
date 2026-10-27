@@ -42,13 +42,13 @@
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
                 @*<div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    @using (Html.BeginForm("ClientQuotationApproveReport", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
-                    {
-                        <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="button-custom">
-                            <i class="fa fa-print"></i> Quotation Print
-                        </button>
-                    }
-                </div>*@
+                        @using (Html.BeginForm("ClientQuotationApproveReport", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+                        {
+                            <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="button-custom">
+                                <i class="fa fa-print"></i> Quotation Print
+                            </button>
+                        }
+                    </div>*@
 
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom btn-warning" ng-disabled="btnRefresh">
@@ -336,7 +336,9 @@
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
                                    ng-readonly="pagefunction === 'viewmode'"
-                                   ng-model="row.givenQutnPrice" ng-change="calculateRowFields(row)"
+                                   ng-model="row.givenQutnPrice"
+                                   ng-focus="storeOriginalValue(row, 'givenQutnPrice')"
+                                   ng-change="askConfirmChange(row, 'givenQutnPrice')"
                                    ng-blur="validateInput('givenQutnPrice', row)" />
                         </td>
                         <td style="width: 6%;">{{ row.ClientQutnAmt }}</td>
@@ -346,8 +348,9 @@
                                    type="text"
                                    ng-readonly="pagefunction === 'viewmode'"
                                    ng-model="row.ASFPerc"
-                                   ng-change="calculateRowFields(row)"
-                                   ng-blur="validateInput('GivenASFPerc', row)" />
+                                   ng-focus="storeOriginalValue(row, 'ASFPerc')"
+                                   ng-change="askConfirmChange(row, 'ASFPerc')"
+                                   ng-blur="validateInput('ASFPerc', row)" />
                         </td>
                         <td style="width: 6%; text-align: right;">
                             {{ row.TotGivenASFAmt | number:3 }}
@@ -356,7 +359,9 @@
                         <td style="width: 6%;">
                             <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
                                    ng-readonly="pagefunction === 'viewmode'"
-                                   ng-model="row.GivenVatPerc" ng-change="calculateRowFields(row)"
+                                   ng-model="row.GivenVatPerc"
+                                   ng-focus="storeOriginalValue(row, 'GivenVatPerc')"
+                                   ng-change="askConfirmChange(row, 'GivenVatPerc')"
                                    ng-blur="validateInput('GivenVatPerc', row)" />
                         </td>
                         <td style="width: 6%;">{{ row.TotGivenVatAmt  | number:3}}</td>
@@ -752,7 +757,7 @@
                                 <th class="col-lg-1 col-md-1 col-sm-1">
                                     Quotation No
                                 </th>
-                                
+
                                 <th class="col-lg-2 col-md-2 col-sm-2">
                                     Action
                                 </th>
@@ -1140,7 +1145,39 @@
         </div>
     </div>
 
-
+    <!-- Confirmation Modal for Price / ASF / VAT change -->
+    <div class="modal fade" id="ConfirmPriceChangeModal" tabindex="-1" role="dialog"
+         style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px; width: 480px;">
+                <div class="modal-header" style="height: 46px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Warning – Value Change</h4>
+                </div>
+                <div class="modal-body" style="padding: 20px;">
+                    <p style="font-size: 14px; margin: 0;">
+                        This value was prepared for <strong>Client Quotation Recommendation</strong>.<br>
+                        Are you sure you want to change it?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn button-custom"
+                            style="color: white; background-color: darkgreen;"
+                            ng-click="confirmPriceChange()">
+                        Yes, Change
+                    </button>
+                    <button type="button" class="btn button-custom"
+                            style="color: white; background-color: darkred;"
+                            data-dismiss="modal"
+                            ng-click="cancelPriceChange()">
+                        No, Keep Original
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     @*view pdf modal*@
@@ -1423,7 +1460,9 @@
                 var existingItem = $scope.selectedRows.find(item => item.ClientQutnRecmItemID === row.ClientQutnRecmItemID);
 
                 if (existingItem) {
-                    existingItem.MclPrice = row.givenQutnPrice
+                    existingItem.MclPrice = row.givenQutnPrice;
+                    existingItem.ASFPerc = row.ASFPerc;              // ← was missing
+                    existingItem.ASFAmt = row.TotGivenASFAmt;       // ← was missing
                     existingItem.VatPerc = row.GivenVatPerc;
                     existingItem.VatAmt = row.TotGivenVatAmt;
                     existingItem.TolAmt = row.givenTolAmt;
@@ -1877,6 +1916,63 @@
                     $scope.loading = false; // Hide the loading indicator
                 });
         };
+
+
+        // ===== Price / ASF / VAT change confirmation =====
+        $scope.originalValues = {};          // stores original values
+        $scope.pendingChange = null;         // { row, field, originalValue, key }
+
+        $scope.storeOriginalValue = function (row, field) {
+            // Use a unique key per row + field
+            var key = (row.ServiceItemID || row.ClientQutnRecmItemID || Math.random()) + '_' + field;
+            $scope.originalValues[key] = row[field];
+        };
+
+        $scope.askConfirmChange = function (row, field) {
+            var key = (row.ServiceItemID || row.ClientQutnRecmItemID || Math.random()) + '_' + field;
+            var original = $scope.originalValues[key];
+
+            // Only show modal when the value really changed
+            if (row[field] != original && original !== undefined) {
+                $scope.pendingChange = {
+                    row: row,
+                    field: field,
+                    originalValue: original,
+                    key: key
+                };
+                $('#ConfirmPriceChangeModal').modal('show');
+            } else {
+                // No real change → just recalculate
+                $scope.calculateRowFields(row);
+            }
+        };
+
+        $scope.confirmPriceChange = function () {
+            if (!$scope.pendingChange) return;
+
+            var row = $scope.pendingChange.row;
+            var field = $scope.pendingChange.field;
+
+            // Update the stored original so future changes are detected correctly
+            $scope.originalValues[$scope.pendingChange.key] = row[field];
+
+            // Proceed with calculation
+            $scope.calculateRowFields(row);
+
+            $scope.pendingChange = null;
+            $('#ConfirmPriceChangeModal').modal('hide');
+        };
+
+        $scope.cancelPriceChange = function () {
+            if (!$scope.pendingChange) return;
+
+            // Revert to the original value
+            $scope.pendingChange.row[$scope.pendingChange.field] = $scope.pendingChange.originalValue;
+
+            $scope.pendingChange = null;
+            // Modal is closed by data-dismiss
+        };
+
 
 
         $scope.toggleRefreshTable = function () {

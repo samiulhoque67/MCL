@@ -440,9 +440,9 @@
                                     <a class="btn btn-sm btn-flat btn-primary" ng-click="toggleWOInfoSelect(row, 'view')">
                                         <i class="fa fa-eye"></i> View
                                     </a>
-                                    <a class="btn btn-sm btn-flat btn-warning" ng-click="toggleWOInfoSelect(row, 'edit')" style="margin-left:3px;">
+                                    @*<a class="btn btn-sm btn-flat btn-warning" ng-click="toggleWOInfoSelect(row, 'edit')" style="margin-left:3px;">
                                         <i class="fa fa-edit"></i> Edit
-                                    </a>
+                                    </a>*@
                                 </td>
                             </tr>
                         </tbody>
@@ -479,10 +479,10 @@
                         <th>Service Category</th>
                         <th>Description</th>
                         <th>Delivery Date</th>
-                        <th>Quotation Unit</th>
-                        <th>Quotation Qty</th>
+                        <th>WO Unit</th>
+                        @*<th>Quotation Qty</th>
                         <th>Quotation Price</th>
-                        <th>Quotation Amount</th>
+                        <th>Quotation Amount</th>*@
 
                         <th>WO Qty</th>
                         <th>WO Price</th>
@@ -514,21 +514,17 @@
                         <td class="text-left">{{row.QutnUnit}}</td>
 
                         <!-- Quotation Quantity -->
-                        <td class="text-right">
+                        <!--<td class="text-right">
                             {{row.QutnQnty | number:2}}
-                        </td>
-
-                        <!-- Quotation Price -->
-                        <td class="text-right">
+                        </td>-->
+                                            <!-- Quotation Price -->
+                                            <!--<td class="text-right">
                             {{row.QutnPrice | number:2}}
-                        </td>
-
-                        <!-- Quotation Amount -->
-                        <td class="text-right">
+                        </td>-->
+                                            <!-- Quotation Amount -->
+                                            <!--<td class="text-right">
                             {{row.QutnAmt | number:2}}
-                        </td>
-
-
+                        </td>-->
                         <!-- ================= WO FIELDS ================= -->
                         <!-- WO Quantity -->
                         <td>
@@ -541,10 +537,9 @@
                                    style="width:100%;height:18px;font-size:10px"
                                    type="number"
                                    ng-model="row.WOQnty"
-                                   ng-change="checkWOPrice(row)"
+                                   ng-change="confirmWOValueChange(row, 'WOQnty')"
                                    ng-disabled="!row.selected" />
                         </td>
-
 
                         <!-- WO Price -->
                         <td>
@@ -557,17 +552,14 @@
                                    style="width:100%;height:18px;font-size:10px"
                                    type="number"
                                    ng-model="row.WOPrice"
-                                   ng-change="checkWOPrice(row)"
+                                   ng-change="confirmWOValueChange(row, 'WOPrice')"
                                    ng-disabled="!row.selected" />
                         </td>
-
 
                         <!-- WO Amount -->
                         <td class="text-right" style="color:#126e0f;">
                             {{row.WOAmt | number:2}}
                         </td>
-
-
 
                         <!-- ASF % -->
                         <td>
@@ -580,7 +572,7 @@
                                    style="width:100%;height:18px;font-size:10px"
                                    type="number"
                                    ng-model="row.ASFPerc"
-                                   ng-change="checkWOPrice(row)"
+                                   ng-change="confirmWOValueChange(row, 'ASFPerc')"
                                    ng-disabled="!row.selected" />
                         </td>
 
@@ -588,7 +580,6 @@
                         <td class="text-right">
                             {{row.TotGivenASFAmt | number:2}}
                         </td>
-
 
                         <!-- VAT % -->
                         <td>
@@ -601,16 +592,14 @@
                                    style="width:100%;height:18px;font-size:10px"
                                    type="number"
                                    ng-model="row.VatPerc"
-                                   ng-change="checkWOPrice(row)"
+                                   ng-change="confirmWOValueChange(row, 'VatPerc')"
                                    ng-disabled="!row.selected" />
                         </td>
-
 
                         <!-- VAT Amount -->
                         <td class="text-right">
                             {{row.VatAmt | number:2}}
                         </td>
-
 
                         <!-- Total Amount -->
                         <td class="text-right" style="color:#126e0f;">
@@ -947,15 +936,73 @@
 
         <!-- Signatures -->
         @*<div class="row" style="margin-top:70px;display:flex;justify-content:space-between;">
-                <div style="text-align:center;width:45%;">
-                    <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
-                    <div>Client Relations Department</div>
+            <div style="text-align:center;width:45%;">
+                <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
+                <div>Client Relations Department</div>
+            </div>
+            <div style="text-align:center;width:45%;">
+                <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
+                <div>Accounts Department</div>
+            </div>
+        </div>*@
+
+
+        <div class="modal"
+             ng-show="showWOValueWarning"
+             ng-cloak
+             style="display:block; background:rgba(0,0,0,0.4);"
+             role="dialog">
+
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Confirm Value Change
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>
+                            This value differs from the value approved for
+                            the Client Quotation.
+                        </p>
+
+                        <p>
+                            <strong>Field:</strong>
+                            {{pendingWOChange.fieldLabel}}
+                        </p>
+
+                        <p>
+                            <strong>Approved Value:</strong>
+                            {{pendingWOChange.approvedValue | number:2}}
+                        </p>
+
+                        <p>
+                            <strong>New Value:</strong>
+                            {{pendingWOChange.newValue | number:2}}
+                        </p>
+
+                        <p>Do you want to continue with this change?</p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-default"
+                                ng-click="cancelWOValueChange()">
+                            Cancel
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-warning"
+                                ng-click="acceptWOValueChange()">
+                            Yes, Change It
+                        </button>
+                    </div>
+
                 </div>
-                <div style="text-align:center;width:45%;">
-                    <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
-                    <div>Accounts Department</div>
-                </div>
-            </div>*@
+            </div>
+        </div>
 
         <div style="margin-top:30px">
             <p style="font-style: italic; font-weight: bold;">
@@ -1779,6 +1826,145 @@
                 // Cleanup
                 setTimeout(() => document.body.removeChild(iframe), 1000);
             };
+
+
+
+
+            $scope.showWOValueWarning = false;
+
+            $scope.pendingWOChange = {
+                row: null,
+                field: '',
+                fieldLabel: '',
+                oldValue: 0,
+                newValue: 0,
+                approvedValue: 0
+            };
+
+            function getApprovedValue(row, field) {
+                switch (field) {
+                    case 'WOQnty':
+                        return parseFloat(row._approvedWOQnty) || 0;
+
+                    case 'WOPrice':
+                        return parseFloat(row._approvedWOPrice) || 0;
+
+                    case 'ASFPerc':
+                        return parseFloat(row._approvedASFPerc) || 0;
+
+                    case 'VatPerc':
+                        return parseFloat(row._approvedVatPerc) || 0;
+
+                    default:
+                        return 0;
+                }
+            }
+
+            function getLastAcceptedValue(row, field) {
+                var key = '_lastAccepted_' + field;
+                return parseFloat(row[key]) || 0;
+            }
+
+            function getFieldLabel(field) {
+                switch (field) {
+                    case 'WOQnty': return 'WO Quantity';
+                    case 'WOPrice': return 'WO Price';
+                    case 'ASFPerc': return 'ASF %';
+                    case 'VatPerc': return 'VAT %';
+                    default: return field;
+                }
+            }
+
+            $scope.confirmWOValueChange = function (row, field) {
+                if (!row || !row.selected) {
+                    return;
+                }
+
+                var newValue = parseFloat(row[field]);
+
+                if (isNaN(newValue)) {
+                    newValue = 0;
+                }
+
+                var approvedValue = getApprovedValue(row, field);
+                var lastAcceptedValue = getLastAcceptedValue(row, field);
+
+                // No warning if the value matches the approved value.
+                if (Math.abs(newValue - approvedValue) < 0.000001) {
+                    row['_lastAccepted_' + field] = newValue;
+                    $scope.checkWOPrice(row);
+                    return;
+                }
+
+                // No warning if the user has not changed the accepted value.
+                if (Math.abs(newValue - lastAcceptedValue) < 0.000001) {
+                    $scope.checkWOPrice(row);
+                    return;
+                }
+
+                $scope.pendingWOChange = {
+                    row: row,
+                    field: field,
+                    fieldLabel: getFieldLabel(field),
+                    oldValue: lastAcceptedValue,
+                    newValue: newValue,
+                    approvedValue: approvedValue
+                };
+
+                // Restore the previous value until the user confirms.
+                row[field] = lastAcceptedValue;
+
+                $scope.showWOValueWarning = true;
+            };
+
+            $scope.cancelWOValueChange = function () {
+                var pending = $scope.pendingWOChange;
+
+                if (pending.row && pending.field) {
+                    pending.row[pending.field] = pending.oldValue;
+                    $scope.checkWOPrice(pending.row);
+                }
+
+                $scope.showWOValueWarning = false;
+
+                $scope.pendingWOChange = {
+                    row: null,
+                    field: '',
+                    fieldLabel: '',
+                    oldValue: 0,
+                    newValue: 0,
+                    approvedValue: 0
+                };
+            };
+
+            $scope.acceptWOValueChange = function () {
+                var pending = $scope.pendingWOChange;
+
+                if (!pending.row || !pending.field) {
+                    $scope.showWOValueWarning = false;
+                    return;
+                }
+
+                var row = pending.row;
+                var field = pending.field;
+
+                row[field] = pending.newValue;
+                row['_lastAccepted_' + field] = pending.newValue;
+
+                $scope.showWOValueWarning = false;
+
+                $scope.pendingWOChange = {
+                    row: null,
+                    field: '',
+                    fieldLabel: '',
+                    oldValue: 0,
+                    newValue: 0,
+                    approvedValue: 0
+                };
+
+                $scope.checkWOPrice(row);
+            };
+
 
             /* ── Refresh ── */
             $scope.toggleRefreshTable = function () {

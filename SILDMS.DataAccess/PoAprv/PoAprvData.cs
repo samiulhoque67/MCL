@@ -155,7 +155,7 @@ namespace SILDMS.DataAccess.PoAprv
                         VendorReqID = reader.GetString("VendorReqID"),
                         VendorCSAprvID = reader.GetString("VendorCSAprvID"),
                         VendorName = reader.GetString("VendorName"),
-                        POAmt = reader.GetString("RecomAmnt"),
+                        RecomAmnt = reader.GetString("RecomAmnt"),
                         POCreatedBy = reader.GetString("RecommendedBy"),
                         PODate = reader.GetString("PORecomDate"),
                         PONo = reader.GetString("PONo"),

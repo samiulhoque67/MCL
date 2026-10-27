@@ -1189,7 +1189,7 @@
 
         $scope.GetClientReqDataInfo = function (ClientID, ClientReqID, action) {
             if (action === 'save') {
-                $http.post('/QuotationApproval/GetClientReqDataInfo', {
+                $http.post('/QuotationApproval/GetClientReqDataInfoAprv', {
                     ClientID: ClientID,
                     ClientReqID: ClientReqID
                 }).success(function (response) {
@@ -1205,7 +1205,7 @@
             }
 
             else if (action === 'view' || 'edit') {
-                $http.post('/QuotationApproval/GetClientReqDataInfo', {
+                $http.post('/QuotationApproval/GetClientReqDataInfoAprv', {
                     ClientID: ClientID,
                     ClientReqID: ClientReqID
                 }).success(function (response) {
@@ -1398,7 +1398,7 @@
 
                 if (response.status === "Successfully Submitted" || response.status === "Operation Done" || response.status === "202") {
 
-                    toastr.success('Saved Successfully');
+                    toastr.success('Previewed Successfully');
 
                     // Set hidden field or model
                     $scope.Quotation.QuotationNo = response.ClientQutnAprvID;

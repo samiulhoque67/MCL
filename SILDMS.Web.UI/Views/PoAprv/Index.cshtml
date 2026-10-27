@@ -2,6 +2,11 @@
     Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
 }
 <style>
+
+    [ng-cloak] {
+        display: none !important;
+    }
+
     .mode-badge {
         display: inline-block;
         padding: 3px 10px;
@@ -295,16 +300,16 @@
                             <th>Services Category</th>
                             <th>Unit</th>
 
-                            <th style="text-align:right;">PO Qnty</th>
-                            <th style="text-align:right;">PO Price</th>
-                            <th style="text-align:right;">PO Amt</th>
+                            <th style="text-align: left;">PO Qnty</th>
+                            <th style="text-align: left;">PO Price</th>
+                            <th style="text-align: left;">PO Amt</th>
                             @*<th style="text-align:right;">PO Qnty</th>*@
                             @*<th style="text-align:right;">Po Price</th>*@
                             @*<th style="text-align:right;">PoAmt</th>*@
-                            <th style="text-align:right;">Vat%</th>
-                            <th style="text-align:right;">VatAmt</th>
+                            <th style="text-align: left;">Vat%</th>
+                            <th style="text-align:left;">VatAmt</th>
                             @*<th style="text-align:right;">PoVatAmt</th>*@
-                            <th style="text-align:right;">Po Total Amt</th>
+                            <th style="text-align:left;">Po Total Amt</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -390,12 +395,12 @@
             <!-- PO Amount (readonly) + Approved Amount (view/edit) -->
             <div class="row" style="margin-bottom:8px;">
                 <div class="col-sm-1"></div>
-                <div class="col-lg-2"><label>PO Amount:</label></div>
+                <div class="col-lg-2"><label>PO Recommendation Amount:</label></div>
                 <div class="col-lg-3">
                     <input type="text" class="form-control input-readonly"
-                           ng-model="VendorCSInfo.TolAmt" ng-readonly="true" />
+                           ng-model="VendorCSInfo.RecomAmnt" ng-readonly="true" />
                 </div>
-                @*<div class="col-lg-2"><label>Approved Amount:</label></div>
+                <div class="col-lg-2"><label>Approved Amount:</label></div>
                 <div class="col-lg-3">
                     <input ng-show="pageMode==='view'" type="text"
                            class="form-control input-readonly"
@@ -403,7 +408,7 @@
                     <input ng-show="pageMode==='edit'" type="text" class="form-control"
                            placeholder="Enter approved amount"
                            ng-model="VendorCSInfo.RecommendedAmount" />
-                </div>*@
+                </div>
             </div>
 
             <!-- PO Date (readonly) + Approve Date (view/edit) -->
@@ -642,6 +647,70 @@
             </div>
         </div>
     </div><!-- /masterRow -->
+    <!-- Approved Amount Warning Modal -->
+    <div class="modal fade"
+         ng-cloak
+         ng-show="showAmountWarning"
+         ng-class="{ 'in': showAmountWarning }"
+         ng-style="showAmountWarning && {
+         'display': 'block',
+         'background': 'rgba(0,0,0,0.45)'
+     }"
+         style="z-index:1050;"
+         role="dialog">
+
+        <div class="modal-dialog modal-sm" style="margin-top:150px;">
+            <div class="modal-content">
+
+                <div class="modal-header"
+                     style="background:#fcf8e3; color:#8a6d3b;">
+                    <button type="button" class="close"
+                            ng-click="cancelAmountWarning()">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        Amount Warning
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>
+                        <strong>Warning!</strong> Approved Amount
+                        is different from PO Recommendation Amount.
+                    </p>
+
+                    <p>
+                        <strong>PO Recommendation Amount:</strong>
+                        {{VendorCSInfo.RecomAmnt | number:2}}
+                    </p>
+
+                    <p>
+                        <strong>Approved Amount:</strong>
+                        {{VendorCSInfo.RecommendedAmount | number:2}}
+                    </p>
+
+                    <p>Do you want to continue with approval?</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            ng-click="cancelAmountWarning()">
+                        Cancel
+                    </button>
+
+                    <button type="button" class="btn btn-warning"
+                            ng-click="confirmAmountWarning()"
+                            ng-disabled="isSaving">
+                        <i class="fa fa-check"></i> Continue
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
     <!-- Loading overlay -->
     <div id="mydiv" data-ng-show="loading">
         <div class="overlay">
@@ -680,6 +749,9 @@
             $scope.PoPrintList = [];
             $scope.PoPrintCollection = [];
 
+            $scope.showAmountWarning = false;
+            $scope.pendingApprovalSave = false;
+
             /* ── Model ── */
             function emptyInfo() {
                 return {
@@ -692,6 +764,7 @@
                     PODate: "",             // used in print
                     PoAmount: "",           // readonly — sum of items
                     TolAmt: "",           // readonly — sum of items
+                    RecomAmnt: "",           // readonly — sum of items
                     RecommendedAmount: "",  // editable → approved amount
                     BillType: "", Category: "",
                     Installment: "", InstalledAmount: "",
@@ -772,6 +845,7 @@
                         var h = items[0];
                         $scope.VendorCSInfo.AutoPoNo = h.PONo || "";
                         $scope.VendorCSInfo.TolAmt = h.TolAmt || "";
+                        $scope.VendorCSInfo.RecomAmnt = h.RecomAmnt || "";
                         $scope.VendorCSInfo.PONo = h.PONo || "";
                         $scope.VendorCSInfo.CSRecDate = h.PODate || "";
                         $scope.VendorCSInfo.BillType = h.BillType || "";
@@ -793,12 +867,17 @@
                             total += parseFloat(i.NegoTolAmt || 0);
                         });
                         $scope.VendorCSInfo.TolAmt = total.toFixed(2);
-                        $scope.VendorCSInfo.RecommendedAmount = total.toFixed(2);
+                        // Default Approved Amount to PO Recommendation Amount
+                        if (!$scope.VendorCSInfo.PoAprvID) {
+                            $scope.VendorCSInfo.RecommendedAmount =
+                                $scope.VendorCSInfo.RecomAmnt || "0.00";
+                        }
                     }
                     $scope.VenCSItemList = items.map(mapItem);
                     $scope.VenCSItemGridDisplayCollection = [].concat($scope.VenCSItemList);
 
                     $scope.VendorCSInfo.TolAmt = $scope.VenCSItemGridDisplayCollection[0].TolAmt;
+                    $scope.VendorCSInfo.RecomAmnt = $scope.VenCSItemGridDisplayCollection[0].RecomAmnt;
                     $scope.loading = false;
                 }, function () {
                     $scope.loading = false;
@@ -854,6 +933,7 @@
             /* ── Item mapping ── */
             function mapItem(item) {
                 item.TolAmt = parseFloat(item.TolAmt || 0).toFixed(2);
+                item.RecomAmnt = parseFloat(item.RecomAmnt || 0).toFixed(2);
                 item.NegoAmt = parseFloat(item.NegoAmt || 0).toFixed(2);
                 item.NegoVatAmt = parseFloat(item.NegoVatAmt || 0).toFixed(2);
                 item.QutnQnty = parseFloat(item.QutnQnty || 0).toFixed(2);
@@ -863,19 +943,80 @@
             }
 
             /* ── Save / Post ── */
+
+            /* Save / Post */
             $scope.Post = function () {
+
                 if (!$scope.VendorCSInfo.PORecmID) {
-                    toastr.error("No PO Recommendation selected."); return;
+                    toastr.error("No PO Recommendation selected.");
+                    return;
                 }
-                if (!$scope.VendorCSInfo.RecommendedAmount) {
-                    toastr.error("Approved Amount is required."); return;
+
+                if ($scope.VendorCSInfo.RecommendedAmount === "" ||
+                    $scope.VendorCSInfo.RecommendedAmount === null ||
+                    $scope.VendorCSInfo.RecommendedAmount === undefined) {
+                    toastr.error("Approved Amount is required.");
+                    return;
                 }
-                var aprvDate = $('#PORecDate').val() || $scope.VendorCSInfo.PORecDate;
+
+                var aprvDate = $('#PORecDate').val() ||
+                    $scope.VendorCSInfo.PORecDate;
+
                 if (!aprvDate) {
-                    toastr.error("PO Approve Date is required."); return;
+                    toastr.error("PO Approve Date is required.");
+                    return;
                 }
+
                 $scope.VendorCSInfo.PORecDate = aprvDate;
                 $scope.VendorCSInfo.Remarks = $scope.VendorCSInfo.AprvRemarks;
+
+                // Compare PO Recommendation Amount and Approved Amount
+                var recomAmount = parseFloat(
+                    String($scope.VendorCSInfo.RecomAmnt || 0).replace(/,/g, '')
+                );
+
+                var approvedAmount = parseFloat(
+                    String($scope.VendorCSInfo.RecommendedAmount).replace(/,/g, '')
+                );
+
+                // Warn if amounts are different
+                if (!isNaN(recomAmount) &&
+                    !isNaN(approvedAmount) &&
+                    Math.abs(recomAmount - approvedAmount) > 0.000001) {
+
+                    $scope.showAmountWarning = true;
+                    $scope.pendingApprovalSave = true;
+                    return;
+                }
+
+                // Amounts match: save directly
+                saveApproval();
+            };
+
+
+            /* Cancel warning */
+            $scope.cancelAmountWarning = function () {
+                $scope.showAmountWarning = false;
+                $scope.pendingApprovalSave = false;
+            };
+
+
+            /* Confirm warning and continue approval */
+            $scope.confirmAmountWarning = function () {
+                if (!$scope.pendingApprovalSave || $scope.isSaving) {
+                    return;
+                }
+
+                $scope.showAmountWarning = false;
+                $scope.pendingApprovalSave = false;
+
+                saveApproval();
+            };
+
+
+            /* Actual save operation */
+            function saveApproval() {
+
                 $scope.isSaving = true;
 
                 $http.post('/PoAprv/SaveVendorPOAprvInfo', {
@@ -883,24 +1024,29 @@
                     vendorCSItem: $scope.VenCSItemGridDisplayCollection,
                     vendorCSTerm: $scope.ReqTermGridDisplayCollection
                 }).then(function (res) {
+
                     $scope.isSaving = false;
+
                     var s = res.data.status;
+
                     if (s === 'S201') {
                         toastr.success("PO Approval Saved Successfully.");
-                        /* $scope.PoPrint();   // auto-print on first save*/
                         $scope.toggleRefreshTable();
 
                     } else if (s === 'S202') {
                         toastr.success("PO Approval Updated Successfully.");
                         $scope.toggleRefreshTable();
+
                     } else {
                         toastr.error("Save Failed. Status: " + (s || "unknown"));
                     }
+
                 }, function () {
                     $scope.isSaving = false;
                     toastr.error("Save Failed.");
                 });
-            };
+            }
+
 
             /* ── Load print data then auto-print (called after S201) ── */
             $scope.PoPrint = function () {

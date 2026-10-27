@@ -2,6 +2,10 @@
     Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
 }
 <style>
+
+    [ng-cloak] {
+        display: none !important;
+    }
     .mode-badge {
         display: inline-block;
         padding: 3px 10px;
@@ -100,12 +104,12 @@
 
                 <!-- Edit button: only in view mode -->
                 @*<div class="btn-group pull-right" style="margin-left:4px;"
-                     ng-show="p===1 && pageMode==='view'">
-                    <button class="button-custom btn-warning" type="button"
-                            ng-click="switchToEdit()">
-                        <i class="fa fa-edit" style="padding-right:5px"></i> Edit
-                    </button>
-                </div>*@
+                         ng-show="p===1 && pageMode==='view'">
+                        <button class="button-custom btn-warning" type="button"
+                                ng-click="switchToEdit()">
+                            <i class="fa fa-edit" style="padding-right:5px"></i> Edit
+                        </button>
+                    </div>*@
 
                 <!-- Back -->
                 <div class="btn-group pull-right" style="margin-left:4px;" ng-show="p===1">
@@ -337,10 +341,10 @@
                            ng-model="VendorCSInfo.Category" ng-readonly="true" />
                 </div>
                 @*<div class="col-lg-2"><label>Bill Type:</label></div>
-                <div class="col-lg-3">
-                    <input type="text" class="form-control input-readonly"
-                           ng-model="VendorCSInfo.BillType" ng-readonly="true" />
-                </div>*@
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control input-readonly"
+                               ng-model="VendorCSInfo.BillType" ng-readonly="true" />
+                    </div>*@
             </div>
 
             <!-- Installment (conditional) -->
@@ -377,22 +381,22 @@
             <!-- PO Amount + Recommended Amount -->
             <div class="row" style="margin-bottom:8px;">
                 <div class="col-sm-1"></div>
-                <div class="col-lg-2"><label>PO Amount:</label></div>
+                <div class="col-lg-2"><label>PO Preparation Amount:</label></div>
                 <div class="col-lg-3">
                     <input type="text" class="form-control input-readonly"
                            ng-model="VendorCSInfo.TolAmt" ng-readonly="true" />
                 </div>
-                <!--<div class="col-lg-2"><label>Recommended Amount:</label></div>
-                <div class="col-lg-3">-->
-                    <!-- VIEW: readonly -->
-                    <!--<input ng-show="pageMode==='view'" type="text"
+                <div class="col-lg-2"><label>Recommended Amount:</label></div>
+                <div class="col-lg-3">
+                    @*VIEW: readonly*@
+                    <input ng-show="pageMode==='view'" type="text"
                            class="form-control input-readonly"
-                           ng-model="VendorCSInfo.RecommendedAmount" ng-readonly="true" />-->
-                    <!-- EDIT: editable -->
-                    <!--<input ng-show="pageMode==='edit'" type="text" class="form-control"
+                           ng-model="VendorCSInfo.RecommendedAmount" ng-readonly="true" />
+                    @*EDIT: editable*@
+                    <input ng-show="pageMode==='edit'" type="text" class="form-control"
                            placeholder="Enter recommended amount"
                            ng-model="VendorCSInfo.RecommendedAmount" />
-                </div>-->
+                </div>
             </div>
 
             <!-- Recom Date + Note -->
@@ -457,6 +461,72 @@
         </div>
 
     </div><!-- /p===1 -->
+    <!-- Recommended Amount Warning Modal -->
+<div class="modal fade"
+     ng-cloak
+     ng-show="showAmountWarning"
+     ng-class="{ 'in': showAmountWarning }"
+     ng-style="showAmountWarning && {
+         'display': 'block',
+         'background': 'rgba(0,0,0,0.45)'
+     }"
+     style="z-index:1050;"
+     role="dialog">
+
+        <div class="modal-dialog modal-sm" style="margin-top:150px;">
+            <div class="modal-content">
+
+                <div class="modal-header"
+                     style="background:#fcf8e3; color:#8a6d3b;">
+                    <button type="button" class="close"
+                            ng-click="cancelAmountWarning()">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        Amount Warning
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>
+                        <strong>Warning!</strong> Recommended Amount
+                        is different from PO Amount.
+                    </p>
+
+                    <p>
+                        <strong>PO Amount:</strong>
+                        {{VendorCSInfo.TolAmt | number:2}}
+                    </p>
+
+                    <p>
+                        <strong>Recommended Amount:</strong>
+                        {{VendorCSInfo.RecommendedAmount | number:2}}
+                    </p>
+
+                    <p>Do you want to continue?</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-default"
+                            ng-click="cancelAmountWarning()">
+                        Cancel
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-warning"
+                            ng-click="confirmAmountWarning()"
+                            ng-disabled="isSaving">
+                        <i class="fa fa-check"></i> Continue
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
     <!-- Loading overlay -->
     <div id="mydiv" data-ng-show="loading">
         <div class="overlay">
@@ -490,6 +560,10 @@
             $scope.VenCSItemGridDisplayCollection = [];
             $scope.ReqTermDataSetupGridData = [];
             $scope.ReqTermGridDisplayCollection = [];
+
+
+            $scope.showAmountWarning = false;
+            $scope.pendingRecommendationSave = false;
 
             /* ── Model ── */
             function emptyInfo() {
@@ -598,7 +672,9 @@
                         $scope.VendorCSInfo.AutoPoNo = h.PONo || "";
                         $scope.VendorCSInfo.CSRecDate = h.PODate || "";
                         $scope.VendorCSInfo.TolAmt = h.TolAmt || "";
-                        $scope.VendorCSInfo.RecommendedAmount = h.POAmt || "";
+                        if (!$scope.VendorCSInfo.PORecmID) {
+                            $scope.VendorCSInfo.RecommendedAmount = h.TolAmt || "";
+                        }
                         $scope.VendorCSInfo.BillType = h.BillType || "";
                         $scope.VendorCSInfo.Category = h.BillCategory || "";
                         $scope.VendorCSInfo.Installment = h.Installment || "";
@@ -674,19 +750,77 @@
             }
 
             /* ── Save ── */
+
+            /* Save button */
             $scope.Post = function () {
+
                 if (!$scope.VendorCSInfo.POPreparationID) {
-                    toastr.error("No PO selected."); return;
+                    toastr.error("No PO selected.");
+                    return;
                 }
-                if (!$scope.VendorCSInfo.RecommendedAmount) {
-                    toastr.error("Recommended Amount is required."); return;
+
+                if ($scope.VendorCSInfo.RecommendedAmount === "" ||
+                    $scope.VendorCSInfo.RecommendedAmount === null ||
+                    $scope.VendorCSInfo.RecommendedAmount === undefined) {
+                    toastr.error("Recommended Amount is required.");
+                    return;
                 }
-                var recomDate = $('#PORecDate').val() || $scope.VendorCSInfo.PORecDate;
+
+                var recomDate = $('#PORecDate').val() ||
+                    $scope.VendorCSInfo.PORecDate;
+
                 if (!recomDate) {
-                    toastr.error("PO Recom Date is required."); return;
+                    toastr.error("PO Recom Date is required.");
+                    return;
                 }
+
                 $scope.VendorCSInfo.PORecDate = recomDate;
                 $scope.VendorCSInfo.Remarks = $scope.VendorCSInfo.RecomRemarks;
+
+                // Convert amounts to numbers, handling comma separators
+                var poAmount = parseFloat(
+                    String($scope.VendorCSInfo.TolAmt || 0).replace(/,/g, '')
+                );
+
+                var recommendedAmount = parseFloat(
+                    String($scope.VendorCSInfo.RecommendedAmount).replace(/,/g, '')
+                );
+
+                // Show warning if Recommended Amount differs from PO Amount
+                if (Math.abs(poAmount - recommendedAmount) > 0.000001) {
+                    $scope.showAmountWarning = true;
+                    $scope.pendingRecommendationSave = true;
+                    return;
+                }
+
+                // Amounts match: save directly
+                saveRecommendation();
+            };
+
+
+            /* Cancel the warning and return to editing */
+            $scope.cancelAmountWarning = function () {
+                $scope.showAmountWarning = false;
+                $scope.pendingRecommendationSave = false;
+            };
+
+
+            /* Confirm and continue saving */
+            $scope.confirmAmountWarning = function () {
+                if (!$scope.pendingRecommendationSave || $scope.isSaving) {
+                    return;
+                }
+
+                $scope.showAmountWarning = false;
+                $scope.pendingRecommendationSave = false;
+
+                saveRecommendation();
+            };
+
+
+            /* Actual save operation */
+            function saveRecommendation() {
+
                 $scope.isSaving = true;
 
                 $http.post('/PoRecom/SaveVendorPORecomInfo', {
@@ -694,22 +828,29 @@
                     vendorCSItem: $scope.VenCSItemGridDisplayCollection,
                     vendorCSTerm: $scope.ReqTermGridDisplayCollection
                 }).then(function (res) {
+
                     $scope.isSaving = false;
+
                     var s = res.data.status;
+
                     if (s === 'S201') {
                         toastr.success("Recommendation Saved Successfully.");
                         $scope.toggleRefreshTable();
+
                     } else if (s === 'S202') {
                         toastr.success("Recommendation Updated Successfully.");
                         $scope.toggleRefreshTable();
+
                     } else {
                         toastr.error("Save Failed. Status: " + (s || "unknown"));
                     }
+
                 }, function () {
                     $scope.isSaving = false;
                     toastr.error("Save Failed.");
                 });
-            };
+            }
+
 
             /* ── Refresh ── */
             $scope.toggleRefreshTable = function () {

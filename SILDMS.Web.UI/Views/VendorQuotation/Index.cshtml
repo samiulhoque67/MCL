@@ -526,14 +526,14 @@
                                 <input class="form-control" style="width:100%; height:18px; font-size:10px"
                                        type="text" min="0"
                                        ng-model="row.QutnQnty"
-                                       ng-blur="checkUnitPrice(row)"
+                                       ng-change="checkUnitPrice(row)"
                                        ng-readonly="viewmode" />
                             </td>
                             <td class="col-lg-1">
                                 <input class="form-control" style="width:100%; height:18px; font-size:10px"
                                        type="text" min="0"
                                        ng-model="row.QutnPrice"
-                                       ng-blur="checkUnitPrice(row)"
+                                       ng-change="checkUnitPrice(row)"
                                        ng-readonly="viewmode" />
                             </td>
                             <td style="width:5%;">{{row.QutnAmt | number:2}}</td>
@@ -541,7 +541,7 @@
                                 <input class="form-control" style="width:100%; height:18px; font-size:10px"
                                        type="text" min="0"
                                        ng-model="row.VatPerc"
-                                       ng-blur="checkVatPerc(row)"
+                                       ng-change="checkVatPerc(row)"
                                        ng-readonly="viewmode" />
                             </td>
                             <td style="width:5%;">{{row.VatAmt | number:2}}</td>
@@ -799,6 +799,34 @@
             </div>
         </div>
     </div>
+
+    @*==================== VAT OPTIONAL CONFIRM MODAL ==================== *@
+    <div class="modal fade" id="confirmNoVatModal" tabindex="-1" role="dialog"
+         style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px; width: 480px;">
+                <div class="modal-header" style="height: 46px;">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">VAT Not Provided</h4>
+                </div>
+                <div class="modal-body" style="min-height: 80px;">
+                    One or more items have no VAT (%).<br>
+                    Do you want to continue with <strong>0% VAT</strong> for those items?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn button-custom"
+                            style="color: white; background-color: #3c8dbc;"
+                            ng-click="confirmSaveWithoutVat()">
+                        Yes, Continue
+                    </button>
+                    <button type="button" class="btn button-custom" data-dismiss="modal"
+                            style="color: white; background-color: #dd4b39;">
+                        No, Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="mydiv" data-ng-show="loading">
         <div class="overlay">
             <div class="loder">
@@ -895,12 +923,11 @@
             var qty = parseFloat(row.QutnQnty) || 0;
             var price = parseFloat(row.QutnPrice) || 0;
             row.QutnAmt = parseFloat((qty * price).toFixed(2));
-            // Recalculate VAT and total after Amt changes
             $scope.checkVatPerc(row);
         };
 
         $scope.checkVatPerc = function (row) {
-            var vatPerc = parseFloat(row.VatPerc) || 0;
+            var vatPerc = parseFloat(row.VatPerc) || 0;   // empty → 0
             var qutnAmt = parseFloat(row.QutnAmt) || 0;
             row.VatAmt = parseFloat(((vatPerc * qutnAmt) / 100).toFixed(2));
             row.TolAmt = parseFloat((qutnAmt + row.VatAmt).toFixed(2));
@@ -1292,9 +1319,13 @@
         };
 
         // ── Save ─────────────────────────────────────────────────────────────────
+        // ── Save ─────────────────────────────────────────────────────────────────
         $scope.Post = function () {
 
-            if (!$scope.uploadedFile && !$scope.editmode) {toastr.error("Document is required to proceed"); return;}
+            if (!$scope.uploadedFile && !$scope.editmode) {
+                toastr.error("Document is required to proceed");
+                return;
+            }
             if (!$('#VendorName').val()) { toastr.error("Vendor Name Required"); return; }
             if (!$('#VendorQutnNo').val()) { toastr.error("Vendor QutnNo. Required"); return; }
             if ($('#QuotationDate').val() == "") { toastr.error("Quotation Date Required"); return; }
@@ -1307,27 +1338,52 @@
                 return val !== null && val !== undefined && val !== "" && !isNaN(val);
             }
 
-            // Qutn Price must be greater than zero
+            // Qutn Price must be > 0
             var invalidPriceRow = ($scope.GridDisplayCollection || []).find(function (row) {
                 return !isNumber(row.QutnPrice) || parseFloat(row.QutnPrice) <= 0;
             });
-
             if (invalidPriceRow) {
                 toastr.error("Quotation Price must be greater than zero for all items.");
                 return;
             }
 
-
-            var invalidRows = $scope.GridDisplayCollection.filter(function (row) {
-                return !isNumber(row.QutnAmt) || !isNumber(row.VatPerc) ||
-                    !isNumber(row.VatAmt) || !isNumber(row.TolAmt);
+            // Make sure amounts are calculated (treat missing Vat as 0)
+            ($scope.GridDisplayCollection || []).forEach(function (row) {
+                $scope.checkUnitPrice(row);
             });
 
-            if (invalidRows.length > 0) {
-                toastr.error("All rows must have valid Qutn Amount, VAT %, VAT Amount, and Total Amount.");
-                return;
+            // Check if any row is missing Vat%
+            var missingVat = ($scope.GridDisplayCollection || []).some(function (row) {
+                return row.VatPerc === null || row.VatPerc === undefined || row.VatPerc === "";
+            });
+
+            if (missingVat) {
+                // Show confirmation modal
+                $('#confirmNoVatModal').modal('show');
+                return;   // wait for user decision
             }
 
+            // All good → proceed to save
+            $scope.doSave();
+        };
+
+        // Called when user clicks "Yes, Continue" on the modal
+        $scope.confirmSaveWithoutVat = function () {
+            $('#confirmNoVatModal').modal('hide');
+
+            // Force missing Vat% to 0 and recalculate
+            ($scope.GridDisplayCollection || []).forEach(function (row) {
+                if (row.VatPerc === null || row.VatPerc === undefined || row.VatPerc === "") {
+                    row.VatPerc = 0;
+                }
+                $scope.checkVatPerc(row);
+            });
+
+            $scope.doSave();
+        };
+
+        // Actual save logic (extracted so it can be called from both paths)
+        $scope.doSave = function () {
             $scope.loading = true;
 
             $http.post('/VendorQuotation/SaveVendorQuotation', {
@@ -1340,28 +1396,30 @@
 
                     if (response.status === "S201") {
                         toastr.success("Data Saved Successfully.");
-                        $scope.VendorQutn.VendorQutnID = response.VendorQutnID; // ← keep ID live
+                        $scope.VendorQutn.VendorQutnID = response.VendorQutnID;
 
                         if ($scope.uploadedFile) {
-                            $scope.SaveDocument($scope.VendorQutn.VendorQutnID)
+                            $scope.SaveDocument($scope.VendorQutn.VendorQutnID);
                         } else {
                             $scope.clearVendorQutn();
-                            window.location.reload();
+                            $scope.toggleRefreshTable();   // or window.location.reload();
                         }
                         return;
                     }
-
                     else if (response.status === "S202") {
                         toastr.success("Data Updated Successfully.");
                         $scope.VendorQutn.VendorQutnID = response.VendorQutnID;
 
                         if ($scope.uploadedFile) {
-                            // replace existing document
+                            // replace existing document → SaveDocument already refreshes
                             $scope.SaveDocument($scope.VendorQutn.VendorQutnID);
+                        } else {
+                            // no new document → still refresh
+                            $scope.clearVendorQutn();
+                            $scope.toggleRefreshTable();   // or window.location.reload();
                         }
                         return;
                     }
-
                     else if (response.status === "ERROR_Duplicate") {
                         toastr.error("This quotation no. already exists");
                         return;
