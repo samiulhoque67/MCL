@@ -139,6 +139,8 @@
 
     <!-- ══════════════ p===2 : PO LIST ══════════════ -->
     <div ng-show="p===2">
+
+       
         <div class="row" style="margin:1%;background-color:#f0f0f0;
                                 box-shadow:2px 2px 5px #888;padding:5px 10px;">
 
@@ -278,7 +280,32 @@
                 </div>
             </div>
         </div>
-
+        <!-- See Workorder Detail against this PO -->
+        <div class="row" style="margin:1%;">
+            <div class="col-lg-12">
+                <div class="po-info-box" style="background:#e8f4f8; border-color:#5bc0de;">
+                    <div class="row">
+                        <div class="col-lg-9" style="padding-top:6px;">
+                            <strong style="color:#31708f;">
+                                <i class="fa fa-file-text-o"></i> See Workorder Detail against this PO
+                            </strong>
+                            @*<span style="margin-left:12px; font-size:12px; color:#555;">
+                                ClientReqNo: {{VendorCSInfo.ClientReqNo || '—'}} |
+                                ClientID: {{VendorCSInfo.ClientID || '—'}}
+                            </span>*@
+                        </div>
+                        <div class="col-lg-3 text-right">
+                            <button type="button"
+                                    class="btn btn-sm btn-info"
+                                    ng-click="openWorkorderDetail()"
+                                    ng-disabled="!VendorCSInfo.ClientReqID">
+                                <i class="fa fa-search"></i> View Workorder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Item grid — always readonly -->
         <div class="row" style="margin:1%;background-color:#f0f0f0;
                                 box-shadow:2px 2px 5px #888;padding:5px 10px;overflow-x:auto;">
@@ -478,7 +505,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="row in ReqTermGridDisplayCollection"
+                        <tr ng-repeat="row in ReqTermGridDisplayCollection | orderBy:'TermsCode'"
                             ng-cloak style="font-size:12px;">
                             <td>{{row.TermsCode}}</td>
                             <td>{{row.TermsName}}</td>
@@ -637,7 +664,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="row in ReqTermGridDisplayCollection"
+                        <tr ng-repeat="row in ReqTermGridDisplayCollection | orderBy:'TermsCode'"
                             ng-cloak style="font-size:12px;">
                             <td>{{row.TermsCode}}</td>
                             <td>{{row.TermsName}}</td>
@@ -710,7 +737,97 @@
         </div>
     </div>
 
+    <!-- Workorder Detail Modal -->
+    <div class="modal fade"
+         ng-cloak
+         ng-show="showWoModal"
+         ng-class="{ 'in': showWoModal }"
+         ng-style="showWoModal && { 'display': 'block', 'background': 'rgba(0,0,0,0.45)' }"
+         style="z-index:1060;"
+         role="dialog">
+        <div class="modal-dialog modal-lg" style="margin-top:60px; width:90%; max-width:1100px;">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#5bc0de; color:#fff;">
+                    <button type="button" class="close" ng-click="closeWorkorderDetail()" style="color:#fff; opacity:0.9;">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-file-text-o"></i> Workorder Detail against this PO
+                    </h4>
+                </div>
+                <div class="modal-body" style="max-height:70vh; overflow-y:auto;">
+                    <div ng-if="woLoading" class="text-center" style="padding:30px;">
+                        <i class="fa fa-spinner fa-spin fa-2x"></i>
+                        <p>Loading workorder...</p>
+                    </div>
 
+                    <div ng-if="!woLoading && !WoInfo">
+                        <div class="alert alert-warning">No workorder found for this Client Requisition.</div>
+                    </div>
+
+                    <div ng-if="!woLoading && WoInfo">
+                        <!-- Header info -->
+                        <div class="row" style="margin-bottom:12px;">
+                            @*<div class="col-md-3"><strong>WO No:</strong> {{WoInfo.AutoWONo || WoInfo.WONo || '—'}}</div>*@
+                            <div class="col-md-3"><strong>WO Date:</strong> {{WoInfo.WODate || '—'}}</div>
+                            <div class="col-md-3"><strong>WO Amount:</strong> {{WoInfo.WOAmt | number:2}}</div>
+                            @*<div class="col-md-3"><strong>Bill Category:</strong> {{WoInfo.BillCategory || '—'}}</div>*@
+                        </div>
+                        <div class="row" style="margin-bottom:12px;">
+                            <div class="col-md-3"><strong>Client Req No:</strong> {{WoInfo.ClientReqNo || '—'}}</div>
+                            <div class="col-md-4"><strong>WO submitted by:</strong> {{WoInfo.SetBy || '—'}}</div>
+                            @*<div class="col-md-3"><strong>Bill Type:</strong> {{WoInfo.BillType || '—'}}</div>
+                                <div class="col-md-3"><strong>Installments:</strong> {{WoInfo.NoOfInstallment || '—'}}</div>
+                                <div class="col-md-3"><strong>Installment Amt:</strong> {{WoInfo.InstallmentAmt | number:2}}</div>*@
+                        </div>
+                        <div class="row" style="margin-bottom:15px;" ng-if="WoInfo.Remarks">
+                            <div class="col-md-12"><strong>Project:</strong> {{WoInfo.Remarks}}</div>
+                        </div>
+
+                        <!-- Items -->
+                        <table class="table table-condensed table-bordered table-striped" style="font-size:12px;">
+                            <thead>
+                                <tr style="background:#82b0c9; color:#010823;">
+                                    <th>Service Item</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th class="text-right">WO Qty</th>
+                                    <th class="text-right">WO Price</th>
+                                    <th class="text-right">WO Amt</th>
+                                    <th class="text-right">ASF %</th>
+                                    <th class="text-right">ASF Amt</th>
+                                    <th class="text-right">VAT %</th>
+                                    <th class="text-right">VAT Amt</th>
+                                    <th class="text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in WoItemList">
+                                    <td>{{item.ServiceItemName}}</td>
+                                    <td>{{item.ServiceCategoryName}}</td>
+                                    <td>{{item.Description}}</td>
+                                    <td class="text-right">{{item.WOQnty | number:2}}</td>
+                                    <td class="text-right">{{item.WOPrice | number:2}}</td>
+                                    <td class="text-right">{{item.WOAmt | number:2}}</td>
+                                    <td class="text-right">{{item.ASFPerc | number:2}}</td>
+                                    <td class="text-right">{{item.TotGivenASFAmt | number:2}}</td>
+                                    <td class="text-right">{{item.VatPerc | number:2}}</td>
+                                    <td class="text-right">{{item.VatAmt | number:2}}</td>
+                                    <td class="text-right">{{item.TolAmt | number:2}}</td>
+                                </tr>
+                                <tr ng-if="!WoItemList || WoItemList.length === 0">
+                                    <td colspan="11" class="text-center text-muted">No items found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="closeWorkorderDetail()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Loading overlay -->
     <div id="mydiv" data-ng-show="loading">
         <div class="overlay">
@@ -1159,6 +1276,47 @@
                 iframe.contentWindow.print();
                 setTimeout(function () { document.body.removeChild(iframe); }, 1000);
             };
+
+
+            /* ── Workorder Modal ── */
+            $scope.showWoModal = false;
+            $scope.woLoading = false;
+            $scope.WoInfo = null;
+            $scope.WoItemList = [];
+
+            $scope.openWorkorderDetail = function () {
+                if (!$scope.VendorCSInfo.ClientReqID) {
+                    toastr.warning("Client Requisition ID not available.");
+                    return;
+                }
+                $scope.showWoModal = true;
+                $scope.woLoading = true;
+                $scope.WoInfo = null;
+                $scope.WoItemList = [];
+
+                $http.post("/PORecom/GetWorkorderDetailByClientReq", {
+                    ClientID: $scope.VendorCSInfo.ClientID,
+                    ClientReqID: $scope.VendorCSInfo.ClientReqID,
+                    ClientReqNo: $scope.VendorCSInfo.ClientReqNo
+                }).then(function (res) {
+                    $scope.woLoading = false;
+                    $scope.WoInfo = res.data.WoInfo || null;
+                    $scope.WoItemList = res.data.WoItemList || [];
+                    if (!$scope.WoInfo) {
+                        toastr.info("No workorder found for this requisition.");
+                    }
+                }, function () {
+                    $scope.woLoading = false;
+                    toastr.error("Failed to load workorder details.");
+                });
+            };
+
+            $scope.closeWorkorderDetail = function () {
+                $scope.showWoModal = false;
+                $scope.WoInfo = null;
+                $scope.WoItemList = [];
+            };
+
 
             /* ── Refresh ── */
             $scope.toggleRefreshTable = function () {

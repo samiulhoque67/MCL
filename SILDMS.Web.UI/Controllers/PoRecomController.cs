@@ -47,6 +47,25 @@ namespace SILDMS.Web.UI.Controllers
         }
 
 
+        public async Task<dynamic> GetWorkorderDetailByClientReq(string ClientID, string ClientReqID, string ClientReqNo)
+        {
+            OBS_WOInfo woInfo = null;
+            List<OBS_WOInfoItem> woItemList = new List<OBS_WOInfoItem>();
+
+            await Task.Run(() => poRecomService.GetWorkorderDetailByClientReq(
+                ClientID, ClientReqID, ClientReqNo, out woInfo, out woItemList));
+
+            var result = Json(new
+            {
+                WoInfo = woInfo,
+                WoItemList = woItemList,
+                msg = "Workorder details loaded."
+            }, JsonRequestBehavior.AllowGet);
+
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
+        }
+
         public async Task<dynamic> GetVendorPORecomQuotationItem(string VendorID, string ClientID, string POPreparationID)
         {
             var VenCSItemList = new List<OBS_VendorCSRecmItem>();

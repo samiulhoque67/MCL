@@ -38,6 +38,8 @@ namespace SILDMS.DataAccess.PoRecom
                         ClientName = reader.GetString("ClientName"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
                         RequisitionDate = reader.GetString("PODate"),
                         VendorID = reader.GetString("VendorID"),
 
@@ -56,6 +58,76 @@ namespace SILDMS.DataAccess.PoRecom
             return VendorInfoList;
         }
 
+
+        public List<OBS_WOInfoItem> GetWorkorderDetailByClientReq(
+    string clientID, string clientReqID, string clientReqNo,
+    out OBS_WOInfo woInfo, out string errorNumber)
+        {
+            errorNumber = string.Empty;
+            woInfo = null;
+            var itemList = new List<OBS_WOInfoItem>();
+
+            DatabaseProviderFactory factory = new DatabaseProviderFactory();
+            SqlDatabase db = factory.CreateDefault() as SqlDatabase;
+
+            using (DbCommand cmd = db.GetStoredProcCommand("OBS_GetWorkorderDetailByClientReq"))
+            {
+                db.AddInParameter(cmd, "@ClientID", SqlDbType.VarChar, clientID);
+                db.AddInParameter(cmd, "@ClientReqID", SqlDbType.VarChar, clientReqID);
+                db.AddInParameter(cmd, "@ClientReqNo", SqlDbType.VarChar, clientReqNo);
+
+                DataSet ds = db.ExecuteDataSet(cmd);
+
+                // Header (Table 0)
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    DataRow r = ds.Tables[0].Rows[0];
+                    woInfo = new OBS_WOInfo
+                    {
+                        WOInfoID = r.GetString("WOInfoID"),
+                        ClientReqID = r.GetString("ClientReqID"),
+                        ClientReqNo = r.GetString("ClientReqNo"),
+                        ClientID = r.GetString("ClientID"),
+                        //AutoWONo = r.GetString("AutoWONo"),
+                        WONo = r.GetString("WONo"),
+                        WODate = r.GetString("WODate"),
+                        WOAmt = r.GetString("WOAmt"),
+                        BillType = r.GetString("BillType"),
+                        BillCategory = r.GetString("BillCategory"),
+                        //NoOfInstallment = r.GetInt32("NoOfInstallment"),
+                        //InstallmentAmt = r.GetDouble("InstallmentAmt"),
+                        Remarks = r.GetString("Remarks"),
+                        SetBy = r.GetString("SetBy"),
+                        //ProcessStatus = r.GetString("ProcessStatus")
+                    };
+                }
+
+                // Items (Table 1)
+                if (ds.Tables.Count > 1 && ds.Tables[1].Rows.Count > 0)
+                {
+                    itemList = ds.Tables[1].AsEnumerable().Select(reader => new OBS_WOInfoItem
+                    {
+                        WOInfoItemID = reader.GetString("WOInfoItemID"),
+                        WOInfoID = reader.GetString("WOInfoID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        ServiceItemName = reader.GetString("ServiceItemName"),
+                        ServiceCategoryName = reader.GetString("ServiceCategoryName"),
+                        Description = reader.GetString("Description"),
+                        WOQnty = reader.GetString("WOQnty"),
+                        WOPrice = reader.GetString("WOPrice"),
+                        WOAmt = reader.GetString("WOAmt"),
+                        ASFPerc = reader.GetString("ASFPerc"),
+                        TotGivenASFAmt = reader.GetInt32("TotGivenASFAmt"),
+                        VatPerc = reader.GetString("VatPerc"),
+                        VatAmt = reader.GetString("VatAmt"),
+                        TolAmt = reader.GetString("TolAmt")
+                    }).ToList();
+                }
+            }
+
+            return itemList;
+        }
         public List<OBS_VendorCSRecmItem> GetPORecomDashBordData(string userID, out string errorNumber)
         {
             errorNumber = string.Empty;

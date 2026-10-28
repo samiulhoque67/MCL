@@ -39,6 +39,8 @@ namespace SILDMS.DataAccess.PoAprv
                         ClientName = reader.GetString("ClientName"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
+                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
                         RequisitionDate = reader.GetString("RequisitionDate"),
                         VendorID = reader.GetString("VendorID"),
 

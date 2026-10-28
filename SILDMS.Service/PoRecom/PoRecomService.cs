@@ -33,8 +33,21 @@ namespace SILDMS.Service.PoRecom
             }
             return ValidationResult.Success;
         }
+        public ValidationResult GetWorkorderDetailByClientReq(
+    string clientID, string clientReqID, string clientReqNo,
+    out OBS_WOInfo woInfo, out List<OBS_WOInfoItem> woItemList)
+        {
+            woInfo = null;
+            woItemList = poRecomData.GetWorkorderDetailByClientReq(
+                clientID, clientReqID, clientReqNo, out woInfo, out errorNumber);
 
-       
+            if (errorNumber.Length > 0)
+            {
+                return new ValidationResult(errorNumber, localizationService.GetResource(errorNumber));
+            }
+            return ValidationResult.Success;
+        }
+
 
         public ValidationResult GetPORecomInfoTermList(string pOPreparationID, out List<OBS_VendorCSRecmTerms> vendorCSInfoTermList)
         {

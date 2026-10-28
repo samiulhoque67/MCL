@@ -58,5 +58,7 @@ namespace SILDMS.Model
         public string UserFullName { get; set; }
         public string WODate { get; set; }
         public string VendorTinNo { get; set; }
+        public string ServiceCategoryID { get; set; }
+        public string ServiceItemID { get; set; }
     }
 }
