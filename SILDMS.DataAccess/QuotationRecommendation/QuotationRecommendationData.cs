@@ -343,6 +343,7 @@ namespace SILDMS.DataAccess.QuotationRecommendation
                 db.AddInParameter(dbCommandWrapper, "@OBS_QtC_DetailType", SqlDbType.Structured, detailDataTable);
                 db.AddInParameter(dbCommandWrapper, "@OBS_Qtc_TermsDtl", SqlDbType.Structured, TermsDtlTable);
                 db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.VarChar, MasterData[0].Operation);
+                db.AddInParameter(dbCommandWrapper, "@Reason", SqlDbType.NVarChar, MasterData[0].ActionReason);
                 db.AddInParameter(dbCommandWrapper, "@SetBy", SqlDbType.VarChar, UserID);
                 db.AddOutParameter(dbCommandWrapper, "@p_Status", DbType.String, 1200);
 

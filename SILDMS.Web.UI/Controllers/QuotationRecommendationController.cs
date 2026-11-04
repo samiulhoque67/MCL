@@ -115,9 +115,9 @@ namespace SILDMS.Web.UI.Controllers
                 string status = _quotationRecommendationService.SaveQuotToClientService(UserID, MasterData, DetailData, AllTermsDtl);
                 if (status != string.Empty)
                 {
-                    string[] statusarr = status.Split(',');
-                    ClientQutnRecmID = statusarr[1];
-                    status = statusarr[0];
+                    int i = status.IndexOf(',');
+                    string id = i >= 0 ? status.Substring(i + 1).Trim() : string.Empty;
+                    status = i >= 0 ? status.Substring(0, i).Trim() : status.Trim();
                 }
                 return Json(new { status = status, ClientQutnRecmID }, JsonRequestBehavior.AllowGet);
             }

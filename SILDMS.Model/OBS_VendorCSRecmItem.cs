@@ -79,5 +79,6 @@ namespace SILDMS.Model
         public string PoAprvDesignation { get; set; }
         public string PoAprvSignature { get; set; }
         public string RecomAmnt { get; set; }
+        public string ProcessStatus { get; set; }
     }
 }

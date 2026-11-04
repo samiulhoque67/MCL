@@ -212,7 +212,8 @@ namespace SILDMS.DataAccess.QuotationToClientService
                         QutnAmt = reader.GetString("QutnAmt"),
                         VatPerc = reader.GetString("VatPerc"),
                         VatAmt = reader.GetString("VatAmt"),
-                        TolAmt = reader.GetString("TolAmt")
+                        TolAmt = reader.GetString("TolAmt"),
+                        CsStatus = reader.GetString("CsStatus")
                     }).ToList();
 
                 }
@@ -473,5 +474,74 @@ namespace SILDMS.DataAccess.QuotationToClientService
                : value;
 
 
+
+        public List<OBS_ClientQutnActionLog> GetActionLogDataService(
+    string ClientReqID,
+    out string _errorNumber)
+        {
+            _errorNumber = string.Empty;
+
+            var list = new List<OBS_ClientQutnActionLog>();
+
+            var db = new DatabaseProviderFactory().CreateDefault() as SqlDatabase;
+
+            using (var cmd = db.GetStoredProcCommand("OBS_GetClientQutnActionLog"))
+            {
+                db.AddInParameter(cmd, "@ClientReqID", DbType.String, ClientReqID);
+                db.AddOutParameter(cmd, _spStatusParam, DbType.String, 10);
+
+                var ds = db.ExecuteDataSet(cmd);
+
+                if (ds.Tables[0].Rows.Count == 0)
+                    return list;
+
+                list = ds.Tables[0].AsEnumerable().Select(r =>
+                    new OBS_ClientQutnActionLog
+                    {
+                        Stage = r.GetString("Stage"),
+                        Action = r.GetString("Action"),
+                        Reason = r.GetString("Reason"),
+                        ActionByName = r.GetString("ActionByName"),
+                        ActionOn = r["ActionOn"] == DBNull.Value
+                            ? (DateTime?)null
+                            : Convert.ToDateTime(r["ActionOn"])
+                    }).ToList();
+            }
+
+            return list;
+        }
+
+        public List<ClientReqData> GetItemVendorDetailDataService(string ClientReqID, string ServiceItemID, out string _errorNumber)
+        {
+            _errorNumber = string.Empty;
+            var list = new List<ClientReqData>();
+            var db = new DatabaseProviderFactory().CreateDefault() as SqlDatabase;
+            using (var cmd = db.GetStoredProcCommand("OBS_GetClientItemVendorDetail"))
+            {
+                db.AddInParameter(cmd, "@ClientReqID", DbType.String, ClientReqID);
+                db.AddInParameter(cmd, "@ServiceItemID", DbType.String, ServiceItemID);
+                db.AddOutParameter(cmd, _spStatusParam, DbType.String, 10);
+                var ds = db.ExecuteDataSet(cmd);
+                if (ds.Tables[0].Rows.Count == 0) return list;
+                list = ds.Tables[0].AsEnumerable().Select(r => new ClientReqData
+                {
+                    SourceType = r.GetString("SourceType"),
+                    ServiceItemName = r.GetString("ServiceItemName"),
+                    Description = r.GetString("Description"),
+                    DeliveryLocation = r.GetString("DeliveryLocation"),
+                    DeliveryDate = r.GetString("DeliveryDate"),
+                    ReqQnty = r.GetString("ReqQnty"),
+                    QutnQnty = r.GetString("QutnQnty"),
+                    ReqUnit = r.GetString("ReqUnit"),
+                    VendorName = r.GetString("VendorName"),
+                    QutnPrice = r.GetString("QutnPrice"),
+                    QutnAmt = r.GetString("QutnAmt"),
+                    VatPerc = r.GetString("VatPerc"),
+                    VatAmt = r.GetString("VatAmt"),
+                    TolAmt = r.GetString("TolAmt")
+                }).ToList();
+            }
+            return list;
+        }
     }
 }

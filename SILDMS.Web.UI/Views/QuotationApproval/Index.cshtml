@@ -201,19 +201,16 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-lg-2">
-                        <button ng-show="ClientDetails[0].DocumentID"
-                                ng-click="ViewDocument()"
-                                class="btn button-custom btn-sm">
-                            <i class="fa fa-eye"></i> View
+                    <div class="col-lg-6">
+                        <span ng-hide="getDocumentList().length"
+                              style="color:#999; font-size:11px;">No document attached</span>
+
+                        <button type="button" ng-repeat="docID in getDocumentList() track by $index"
+                                ng-click="ViewDocument(docID)"
+                                class="btn button-custom btn-sm"
+                                style="margin: 0 4px 4px 0;">
+                            <i class="fa fa-eye"></i> View Doc {{$index + 1}}
                         </button>
-
-                        <!-- No document text -->
-                        <span ng-hide="ClientDetails[0].DocumentID"
-                              style="color:#999; font-size:11px;">
-                            No document attached
-                        </span>
-
                     </div>
                 </div>
 
@@ -1879,33 +1876,36 @@
             $scope.ClientReq.TermsID = "";
             $scope.ClientReq.FormName = "";
         }
+        $scope.getDocumentList = function () {
+            var ids = $scope.ClientDetails && $scope.ClientDetails[0] && $scope.ClientDetails[0].DocumentID;
+            if (!ids) return [];
+            return ids.split(',')
+                .map(function (s) { return s.trim(); })
+                .filter(Boolean);
+        };
 
 
-        $scope.ViewDocument = function () {
-            $scope.loading = true; // Show loading indicator
+        $scope.ViewDocument = function (docID) {
+            if (!docID) {
+                toastr.error("No document selected.");
+                return;
+            }
 
-            // FTP details
-            var ftpDetails = {
-                
-                serverUrl: "MCL/Client_Requisition",
-                documentID: "CR_" + $scope.ClientDetails[0].ClientReqID,
-                ext: "pdf"
-            };
+            // The ViewDocument action appends the extension itself
+            docID = docID.replace(/\.pdf$/i, '');
 
-            // Construct URL with query parameters
+            $scope.loading = true;
+
             var requestUrl = "/ClientRequisition/ViewDocument?" +
-                "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
-                "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
-                "&ext=" + encodeURIComponent(ftpDetails.ext);
+                "&serverUrl=" + encodeURIComponent("MCL/Client_Requisition") +
+                "&DocID=" + encodeURIComponent(docID) +
+                "&ext=" + encodeURIComponent("pdf");
 
-            // Make GET request to fetch the PDF
             $http.get(requestUrl, { responseType: 'arraybuffer' })
                 .then(function (response) {
                     var file = new Blob([response.data], { type: 'application/pdf' });
                     var fileURL = URL.createObjectURL(file);
-                    let zoomParam = "#view=Fit";
-
-                    $("#pdfViewer").attr("src", fileURL + zoomParam);
+                    $("#pdfViewer").attr("src", fileURL + "#view=Fit");
                     $('#ShowPDFModal').modal('show');
                 })
                 .catch(function (error) {
@@ -1913,7 +1913,7 @@
                     console.error(error);
                 })
                 .finally(function () {
-                    $scope.loading = false; // Hide the loading indicator
+                    $scope.loading = false;
                 });
         };
 

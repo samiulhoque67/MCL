@@ -678,10 +678,9 @@ namespace SILDMS.DataAccess
                         VatAmt = reader.GetString("VatAmt"),
                         NegoVatAmt = reader.GetString("VatAmt"),
                         TolAmt = reader.GetString("TolAmt"),
-                        NegoTolAmt = reader.GetString("TolAmt")
-                        // ,
+                        NegoTolAmt = reader.GetString("TolAmt"),
 
-                        //Status = reader.GetString("Status")
+                        ProcessStatus = reader.GetString("ProcessStatus")
                     }).ToList();
                 }
             }

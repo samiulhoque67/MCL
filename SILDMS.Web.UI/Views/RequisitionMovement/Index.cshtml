@@ -630,6 +630,15 @@
                     });
             };
 
+
+            var urlParams = new URLSearchParams(window.location.search);
+            var reqFromUrl = urlParams.get('req');
+
+            if (reqFromUrl) {
+                $scope.clientReqId = reqFromUrl;
+                $scope.GetMovement();
+            }
+
             $scope.KeyPress = function ($event) {
                 if ($event.which === 13) { $scope.GetMovement(); }
             };

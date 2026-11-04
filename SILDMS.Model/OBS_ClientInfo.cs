@@ -139,6 +139,8 @@ namespace SILDMS.Model
         public string VendorName { get; set; }
         public string Operation { get; set; }
         public string ClientQutnAprvItemID { get; set; }
+        public string CsStatus { get; set; }
+        public string SourceType { get; set; }
     }
 
     public class OBS_QutntoClientMaster
@@ -151,8 +153,17 @@ namespace SILDMS.Model
         public string QuotationNote { get; set; }
         public string Operation { get; set; }
         public string ClientQutnRecmID { get; set; }
+        public string ActionReason { get; set; }
     }
 
+    public class OBS_ClientQutnActionLog
+    {
+        public string Stage { get; set; }
+        public string Action { get; set; }
+        public string Reason { get; set; }
+        public string ActionByName { get; set; }
+        public DateTime? ActionOn { get; set; }
+    }
     public class AdvanClaimWo
     {
         public string ClientID { get; set; }

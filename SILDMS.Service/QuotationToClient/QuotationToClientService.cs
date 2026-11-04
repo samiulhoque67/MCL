@@ -32,7 +32,7 @@ namespace SILDMS.Service.QuotationToClient
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
                 : ValidationResult.Success;
         }
-        
+
         ValidationResult IQuotationToClientService.AvailableClientDetailInfoService(string ClientID, string ClientReqID, string ReqType, out List<OBS_ClientDetails> ClientDetails)
         {
             ClientDetails = _iQuotationToClientDataService.AvailableClientDetailInfoDataService(ClientID, ClientReqID, ReqType, out _errorNumber);
@@ -83,6 +83,36 @@ namespace SILDMS.Service.QuotationToClient
             return _errorNumber.Length > 0
                 ? new ValidationResult(_errorNumber, _localizationService.GetResource(_errorNumber))
                 : ValidationResult.Success;
+        }
+
+        public List<ClientReqData> GetItemVendorDetailService(
+    string ClientReqID,
+    string ServiceItemID,
+    out List<ClientReqData> ItemVendorDetail)
+        {
+            string errorNumber = string.Empty;
+
+            ItemVendorDetail = _quotationToClientDataService
+                .GetItemVendorDetailDataService(
+                    ClientReqID,
+                    ServiceItemID,
+                    out errorNumber);
+
+            return ItemVendorDetail;
+        }
+
+        public List<OBS_ClientQutnActionLog> GetActionLogService(
+            string ClientReqID,
+            out List<OBS_ClientQutnActionLog> ActionLog)
+        {
+            string errorNumber = string.Empty;
+
+            ActionLog = _quotationToClientDataService
+                .GetActionLogDataService(
+                    ClientReqID,
+                    out errorNumber);
+
+            return ActionLog;
         }
     }
 }

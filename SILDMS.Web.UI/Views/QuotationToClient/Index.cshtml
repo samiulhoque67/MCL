@@ -180,19 +180,16 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-lg-2">
-                        <button ng-show="Client.DocumentID"
-                                ng-click="ViewDocument()"
-                                class="btn button-custom btn-sm">
-                            <i class="fa fa-eye"></i> View
+                    <div class="col-lg-6">
+                        <span ng-hide="getDocumentList().length"
+                              style="color:#999; font-size:11px;">No document attached</span>
+
+                        <button type="button" ng-repeat="docID in getDocumentList() track by $index"
+                                ng-click="ViewDocument(docID)"
+                                class="btn button-custom btn-sm"
+                                style="margin: 0 4px 4px 0;">
+                            <i class="fa fa-eye"></i> View Doc {{$index + 1}}
                         </button>
-
-                        <!-- No document text -->
-                        <span ng-hide="Client.DocumentID"
-                              style="color:#999; font-size:11px;">
-                            No document attached
-                        </span>
-
                     </div>
                 </div>
             </div>
@@ -402,7 +399,7 @@
                                 <button type="button"
                                         class="button-detail"
                                         style="margin-left: 5px;"
-                                        ng-hide="row.ReqType === 'QC' || pagefunction === 'viewmode' || pagefunction === 'editmode'"
+                                        ng-hide="row.ReqType === 'QC' || row.CsStatus === 'NCS' || pagefunction === 'viewmode' || pagefunction === 'editmode'"
                                         ng-click="detailVendorCS(row)"
                                         data-dismiss="modal"
                                         title="Show detail">
@@ -1397,7 +1394,13 @@
             }).error(function () { $scope.loading = false; });
             $('#QuotationForRecom').modal('show');
         };
-
+        $scope.getDocumentList = function () {
+            var ids = $scope.Client && $scope.Client.DocumentID;
+            if (!ids) return [];
+            return ids.split(',')
+                .map(function (s) { return s.trim(); })
+                .filter(Boolean);
+        };
         $scope.selectSavePageList = function () {
             $http.post('/QuotationRecommendation/AllSavcdClientsQuotation', {   // fixed to match
                 page: $scope.PagingInfo.page, itemsPerPage: $scope.PagingInfo.itemsPerPage,
@@ -1505,17 +1508,21 @@
         $scope.toggleRefreshTable = function () { window.location.reload(); };
         $scope.refreshPage = function () { setTimeout(function () { window.location.reload(); }, 2000); };
 
-        $scope.ViewDocument = function () {
-            $scope.loading = true;
-            var ftpDetails = {
+        $scope.ViewDocument = function (docID) {
+            if (!docID) {
+                toastr.error("No document selected.");
+                return;
+            }
 
-                serverUrl: "MCL/Client_Requisition",
-                documentID: "CR_" + $scope.ClientDetails[0].ClientReqID, ext: "pdf"
-            };
+            // Safety: the ViewDocument action appends the extension itself
+            docID = docID.replace(/\.pdf$/i, '');
+
+            $scope.loading = true;
+
             var url = "/ClientRequisition/ViewDocument?" +
-                "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
-                "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
-                "&ext=" + encodeURIComponent(ftpDetails.ext);
+                "&serverUrl=" + encodeURIComponent("MCL/Client_Requisition") +
+                "&DocID=" + encodeURIComponent(docID) +
+                "&ext=" + encodeURIComponent("pdf");
 
             $http.get(url, { responseType: 'arraybuffer' })
                 .then(function (r) {
@@ -1524,7 +1531,10 @@
                     $("#pdfViewer").attr("src", fileURL + "#view=Fit");
                     $('#ShowPDFModal').modal('show');
                 })
-                .catch(function (e) { toastr.error("Failed to load the PDF."); console.error(e); })
+                .catch(function (e) {
+                    toastr.error("Failed to load the PDF.");
+                    console.error(e);
+                })
                 .finally(function () { $scope.loading = false; });
         };
     });

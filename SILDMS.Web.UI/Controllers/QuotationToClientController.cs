@@ -142,7 +142,21 @@ namespace SILDMS.Web.UI.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<dynamic> GetItemVendorDetail(string ClientReqID, string ServiceItemID)
+        {
+            var ItemVendorDetail = new List<ClientReqData>();
+            await Task.Run(() => _quotationToClientService.GetItemVendorDetailService(ClientReqID, ServiceItemID, out ItemVendorDetail));
+            return Json(new { ItemVendorDetail }, JsonRequestBehavior.AllowGet);
+        }
 
+        [HttpPost]
+        public async Task<dynamic> GetActionLog(string ClientReqID)
+        {
+            var ActionLog = new List<OBS_ClientQutnActionLog>();
+            await Task.Run(() => _quotationToClientService.GetActionLogService(ClientReqID, out ActionLog));
+            return Json(new { ActionLog }, JsonRequestBehavior.AllowGet);
+        }
         //edit and view
     }
 }

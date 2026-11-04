@@ -171,55 +171,52 @@
             </div>
 
             <div class="row">
-
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <label for="upload_documents">
+                        <label for="FileUpload1">
                             Upload Documents <br>
-                            (<span style="color:#ff4900;">PDF Only, Max Size 2MB</span>)
+                            (<span style="color:#ff4900;">PDF Only, Max Size 5MB each</span>)
                         </label>
                     </div>
                 </div>
 
-                <!-- Show file input only when NOT in view mode -->
-                <div ng-hide="viewonlymode" class="col-lg-2">
+                <!-- File picker (hidden in view mode) -->
+                <div ng-hide="viewonlymode" class="col-lg-4">
                     <div class="form-group">
-                        <input type="file"
-                               style="height:25px; float:left; margin-top:5px;"
-                               id="FileUpload1"
-                               accept=".pdf"
-                               ng-model="uploadedFile"
+                        <input type="file" id="FileUpload1" accept=".pdf" multiple
+                               style="height:25px; margin-top:5px;"
                                onchange="angular.element(this).scope().fileSelected(this)" />
+
+                        <!-- Newly selected files (not yet saved) -->
+                        <ul class="list-unstyled" style="margin-top:6px;" ng-show="uploadedFiles.length">
+                            <li ng-repeat="f in uploadedFiles track by $index" style="margin-bottom:2px;">
+                                <i class="fa fa-file-pdf-o text-danger"></i>
+                                {{f.name}} ({{(f.size/1024) | number:0}} KB)
+                                <a href="" ng-click="removeSelectedFile($index)" class="text-danger" title="Remove">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
-                <!-- View section -->
-                <div ng-hide="viewonlymode" class="col-lg-2">
-                    <!-- View button -->
-                    <button ng-show="ClientReq.DocumentID"
-                            ng-click="ViewDocument()"
-                            class="btn button-custom btn-sm">
-                        <i class="fa fa-eye"></i> View
-                    </button>
-
-                </div>
-
-                <div ng-show="viewonlymode" class="col-lg-5">
-                    <div class="form-group" style="display:flex; gap:8px; align-items:center;">
-
-
-                        <!-- View button — only when a document exists -->
-                        <button ng-show="ClientReq.DocumentID"
-                                ng-click="ViewDocument()"
-                                class="btn button-custom btn-sm">
-                            <i class="fa fa-eye"></i> View
-                        </button>
-
-                        <span ng-hide="ClientReq.DocumentID"
+                <!-- Already saved documents -->
+                <div ng-class="viewonlymode ? 'col-lg-5' : 'col-lg-4'">
+                    <div class="form-group">
+                        <span ng-show="viewonlymode && !getDocumentList().length"
                               style="color:#999; font-size:11px;">No document attached</span>
+
+                        <div ng-repeat="docID in getDocumentList() track by $index" style="margin-bottom:3px;">
+                            <button type="button" ng-click="ViewDocument(docID)" class="btn button-custom btn-sm">
+                                <i class="fa fa-eye"></i> View Doc {{$index + 1}}
+                            </button>
+                            <button type="button" ng-hide="viewonlymode" ng-click="removeSavedDocument(docID)"
+                                    class="btn btn-danger btn-xs btn-flat" title="Remove document">
+                                <i class="fa fa-remove"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-
             </div>
 
 
@@ -1000,7 +997,7 @@
 
             // Reset file input
             $('#FileUpload1').val('');
-            $scope.uploadedFile = null;
+            $scope.uploadedFiles = [];
         };
 
         // ── Show client list ────────────────────────────────────────────────────
@@ -1361,17 +1358,51 @@
         };
 
         // ── File selection ──────────────────────────────────────────────────────
-        $scope.uploadedFile = null;
+        $scope.uploadedFiles = [];
+        var MAX_SIZE_MB = 5;
+
         $scope.fileSelected = function (element) {
+            var picked = Array.prototype.slice.call(element.files);
+
             $scope.$apply(function () {
-                $scope.uploadedFile = element.files.length > 0 ? element.files[0] : null;
+                picked.forEach(function (file) {
+                    var ext = file.name.split('.').pop().toLowerCase();
+
+                    if (ext !== 'pdf') {
+                        toastr.error(file.name + ": PDF files only."); return;
+                    }
+                    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+                        toastr.error(file.name + ": must be " + MAX_SIZE_MB + " MB or less."); return;
+                    }
+                    var duplicate = $scope.uploadedFiles.some(function (f) {
+                        return f.name === file.name && f.size === file.size;
+                    });
+                    if (duplicate) {
+                        toastr.warning(file.name + " is already selected."); return;
+                    }
+                    $scope.uploadedFiles.push(file);
+                });
             });
+
+            // Clear the input so the same file can be re-picked and more can be added later
+            element.value = '';
+        };
+
+        $scope.removeSelectedFile = function (idx) {
+            $scope.uploadedFiles.splice(idx, 1);
+        };
+
+        // Saved document IDs (comma-separated in ClientReq.DocumentID)
+        $scope.getDocumentList = function () {
+            var ids = $scope.ClientReq.DocumentID;
+            if (!ids) return [];
+            return ids.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
         };
 
         // ── Save / Post ─────────────────────────────────────────────────────────
         $scope.Post = function () {
-            if (!$scope.uploadedFile && !$scope.editmode) {
-                toastr.error("Document is required to proceed"); return;
+            if (($scope.uploadedFiles.length === 0) && !$scope.editmode) {
+                toastr.error("At least one document is required to proceed"); return;
             }
             if (!$scope.ClientReq.ClientName) {
                 toastr.error("Client Name Required"); return;
@@ -1397,7 +1428,7 @@
                         toastr.success("Data Saved Successfully.");
                         $scope.ClientReq.ClientReqID = response.ClientReqID;
                         // BUG FIX: upload document for both insert AND update
-                        if ($scope.uploadedFile) {
+                        if ($scope.uploadedFiles.length > 0) {
                             $scope.SaveDocument(response.ClientReqID);
                         } else {
                             $scope.clearClientReq();
@@ -1406,7 +1437,7 @@
                     } else if (response.status == "S202") {
                         toastr.success("Data Updated Successfully.");
                         // BUG FIX: also upload/replace document on edit
-                        if ($scope.uploadedFile) {
+                        if ($scope.uploadedFiles.length > 0) {
                             $scope.SaveDocument($scope.ClientReq.ClientReqID);
                         } else {
                             $scope.clearClientReq();
@@ -1434,90 +1465,106 @@
         };
 
         // ── Save Document (FTP upload) ──────────────────────────────────────────
+        // ── Save Documents (sequential FTP upload of every selected file) ───────
         $scope.SaveDocument = function (ClientReqID) {
-            var fileUpload = document.getElementById("FileUpload1");
-            var files = fileUpload.files;
-
+            var files = $scope.uploadedFiles.slice();
             if (files.length === 0) {
-                toastr.error("Please select a file to upload.");
-                return;
-            }
-
-            var file = files[0];
-            var ext = file.name.split('.').pop().toLowerCase();
-            var maxSizeInMB = 2;
-
-            if (file.size > maxSizeInMB * 1024 * 1024) {
-                toastr.error("File size must be 2 MB or less.");
-                return;
-            }
-            if (ext !== "pdf") {
-                toastr.error("Please upload PDF files only.");
+                toastr.error("Please select at least one file to upload.");
                 return;
             }
 
             $scope.loading = true;
 
-            var documentID = "CR_" + ClientReqID;
+            var existingIDs = $scope.getDocumentList();   // keep documents already attached
+            var newIDs = [];
+            var stamp = Date.now();
 
-            var formData = new FormData();
-            formData.append("file", file);
-            formData.append("serverUrl", "MCL/Client_Requisition");
-            formData.append("documentID", documentID);
-            formData.append("ext", "pdf");
+            // Upload one file; returns a jqXHR promise
+            function uploadOne(file, index) {
+                var documentID = "CR_" + ClientReqID + "_" + stamp + "_" + (index + 1);
 
-            $.ajax({
-                url: '/ClientRequisition/SaveDocument',
-                type: "POST",
-                contentType: false,
-                processData: false,
-                data: formData,
-                success: function (result) {
-                    toastr.success("Document uploaded successfully.");
+                var formData = new FormData();
+                formData.append("file", file);
+                formData.append("serverUrl", "MCL/Client_Requisition");
+                formData.append("documentID", documentID);
+                formData.append("ext", "pdf");
 
-                    // BUG FIX: After successful upload, update DocumentID in OBS_ClientReq table
-                    $http.post('/ClientRequisition/UpdateDocumentID', {
-                        ClientReqID: ClientReqID,
-                        DocumentID: documentID
-                    }).success(function (resp) {
-                        if (resp.status === "S200") {
-                            $scope.ClientReq.DocumentID = documentID; // update in scope for View button
-                        }
-                    }).error(function () {
-                        toastr.warning("Document uploaded but failed to link DocumentID to record.");
-                    });
+                return $.ajax({
+                    url: '/ClientRequisition/SaveDocument',
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: formData
+                }).then(function () {
+                    newIDs.push(documentID);
+                });
+            }
 
-                    // Reset file input
-                    document.getElementById("FileUpload1").value = "";
-                    $scope.uploadedFile = null;
+            // Chain uploads one after another
+            var chain = $.Deferred().resolve().promise();
+            files.forEach(function (file, i) {
+                chain = chain.then(function () { return uploadOne(file, i); });
+            });
+
+            chain.done(function () {
+                toastr.success(files.length + " document(s) uploaded successfully.");
+            }).fail(function () {
+                toastr.error("Document upload failed. Please try again.");
+            }).always(function () {
+                // Link whatever uploaded successfully (even if a later file failed)
+                if (newIDs.length === 0) {
+                    $timeout(function () { $scope.loading = false; });
+                    return;
+                }
+
+                var allIDs = existingIDs.concat(newIDs).join(',');
+
+                $http.post('/ClientRequisition/UpdateDocumentID', {
+                    ClientReqID: ClientReqID,
+                    DocumentID: allIDs
+                }).success(function (resp) {
+                    if (resp.status === "S200") {
+                        $scope.ClientReq.DocumentID = allIDs;
+                    }
+                }).error(function () {
+                    toastr.warning("Documents uploaded but failed to link DocumentID to record.");
+                }).finally(function () {
+                    $scope.uploadedFiles = [];
+                    $scope.loading = false;
                     $scope.clearClientReq();
                     $scope.toggleRefreshTable();
-                },
-                error: function (err) {
-                    toastr.error("Document upload failed. Please try again.");
-                    console.error(err);
-                },
-                complete: function () {
-                    $timeout(function () {
-                        $scope.loading = false;
-                    });
-                }
+                });
             });
         };
+        $scope.removeSavedDocument = function (docID) {
+            if (!confirm("Remove this document from the requisition?")) return;
 
+            var remaining = $scope.getDocumentList()
+                .filter(function (d) { return d !== docID; })
+                .join(',');
+
+            $http.post('/ClientRequisition/UpdateDocumentID', {
+                ClientReqID: $scope.ClientReq.ClientReqID,
+                DocumentID: remaining
+            }).success(function (resp) {
+                if (resp.status === "S200") {
+                    $scope.ClientReq.DocumentID = remaining;
+                    toastr.success("Document removed.");
+                } else {
+                    toastr.error("Could not remove document.");
+                }
+            }).error(function () {
+                toastr.error("Could not remove document.");
+            });
+        };
         // ── View Document ───────────────────────────────────────────────────────
-        $scope.ViewDocument = function () {
-            if (!$scope.ClientReq.ClientReqID) {
-                toastr.error("No record selected to view document.");
+        $scope.ViewDocument = function (docID) {
+            if (!docID) {
+                toastr.error("No document selected.");
                 return;
             }
 
             $scope.loading = true;
-
-            // BUG FIX: Use DocumentID from ClientReq model if available, otherwise fall back to CR_ + ID
-            var docID = ($scope.ClientReq.DocumentID && $scope.ClientReq.DocumentID !== "")
-                ? $scope.ClientReq.DocumentID
-                : "CR_" + $scope.ClientReq.ClientReqID;
 
             var requestUrl = "/ClientRequisition/ViewDocument?" +
                 "&serverUrl=" + encodeURIComponent("MCL/Client_Requisition") +

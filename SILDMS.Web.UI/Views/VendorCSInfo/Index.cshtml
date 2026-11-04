@@ -81,6 +81,55 @@
         border: 1px solid #d6e9c6;
     }
 
+    /* Vendor quotation rows whose ProcessStatus is not Done */
+    .not-quoted-row > td {
+        background: #eeeeee !important;
+        color: #999 !important;
+    }
+
+    /* Required qty vs cumulative Nego qty bar */
+    .qty-summary {
+        overflow: hidden;
+        padding: 8px 15px;
+        margin: 5px 0 10px 0;
+        border: 1px solid #ddd;
+        border-left-width: 5px;
+        background: #fff;
+        font-size: 13px;
+    }
+
+        .qty-summary.qty-neutral {
+            border-left-color: #999;
+        }
+
+        .qty-summary.qty-under {
+            border-left-color: #3c8dbc;
+        }
+
+        .qty-summary.qty-ok {
+            border-left-color: #00a65a;
+        }
+
+        .qty-summary.qty-over {
+            border-left-color: #dd4b39;
+            background: #fdf3f1;
+        }
+
+            .qty-summary.qty-over .qty-diff {
+                color: #dd4b39;
+                font-weight: bold;
+            }
+
+        .qty-summary.qty-ok .qty-diff {
+            color: #00a65a;
+            font-weight: bold;
+        }
+
+        .qty-summary.qty-under .qty-diff {
+            color: #3c8dbc;
+            font-weight: bold;
+        }
+
     #mydiv {
         position: fixed;
         top: 0;
@@ -103,6 +152,69 @@
 </style>
 
 <div class="box box-primary box-body" ng-controller="VendorCSInfoCtrl">
+
+    <!-- Reusable: Required Qty vs cumulative Nego Qty -->
+    <script type="text/ng-template" id="qtySummary.html">
+        <div class="qty-summary" ng-class="qtyStatusClass()">
+            <div class="col-lg-3">
+                <strong>Required Qty:</strong>
+                <span ng-show="getReqQty() > 0">{{getReqQty() | number:3}} {{VendorCSInfo.ReqUnit}}</span>
+                <span ng-show="getReqQty() <= 0">n/a</span>
+            </div>
+            <div class="col-lg-2"><strong>Selected Vendors:</strong> {{selectedVendors.length}}</div>
+            <div class="col-lg-4">
+                <strong>{{qtyLabel()}}:</strong>
+                <span ng-show="hasAllocation()">{{allocatedQty() | number:3}}</span>
+                <span ng-hide="hasAllocation()">not chosen yet</span>
+            </div>
+            <div class="col-lg-3 qty-diff" ng-show="qtyApplicable()">
+                <span ng-show="qtyDiff() > 0.0005"><i class="fa fa-exclamation-triangle"></i> Exceeds Required Qty by {{qtyDiff() | number:3}}</span>
+                <span ng-show="qtyDiff() < -0.0005">Remaining to allocate: {{-qtyDiff() | number:3}}</span>
+                <span ng-show="qtyDiff() >= -0.0005 && qtyDiff() <= 0.0005"><i class="fa fa-check"></i> Fully allocated</span>
+            </div>
+        </div>
+    </script>
+
+    <!-- Reusable: award type + recommended vendor -->
+    <script type="text/ng-template" id="awardBlock.html">
+        <div class="row" style="margin-bottom: 6px; margin-right: -15px; margin-left: -31px;">
+            <div class="col-sm-1"></div>
+            <div class="col-lg-2"><label>Award Type:</label></div>
+            <div class="col-lg-8" style="margin-bottom: 6px; margin-right: -15px; margin-left: 5px;">
+                <label class="radio-inline">
+                    <input type="radio" ng-model="VendorCSInfo.AwardMode" value="REC" ng-change="onAwardModeChange()" ng-disabled="pageMode==='view'" />
+                    Recommend one vendor
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" ng-model="VendorCSInfo.AwardMode" value="DIST" ng-change="onAwardModeChange()" ng-disabled="pageMode==='view'" />
+                    Distribute work among selected vendors
+                </label>
+            </div>
+        </div>
+        <div class="row" ng-show="VendorCSInfo.AwardMode==='REC'" style="margin-bottom: 6px; margin-right: -15px; margin-left: -31px;">
+            <div class="col-sm-1"></div>
+            <div class="col-lg-2"><label>CS Recm. Vendor:</label></div>
+            <div class="col-lg-3"  style="margin-bottom: 6px; margin-right: -15px; margin-left: 5px;">
+                <input type="text" class="form-control" placeholder="CS Recm. Vendor"
+                       ng-model="VendorCSInfo.VendorCsRecmName" ng-readonly="true" style="background:#fff;" />
+            </div>
+            <div class="col-lg-1" ng-show="pageMode!=='view'">
+                <button type="button" class="btn btn-default" ng-click="ShowVendorList()" title="Choose the recommended vendor">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </script>
+
+    <!-- Reusable: not-quoted alerts -->
+    <script type="text/ng-template" id="quoteAlerts.html">
+        <div class="alert alert-danger" ng-show="pageMode !== 'view' && notQuotedCount() > 0" style="margin:8px 15px;">
+            <i class="fa fa-exclamation-triangle"></i>
+            <strong>All vendors must be quoted before you can save.</strong>
+            {{notQuotedCount()}} of {{currentVendorRows().length}} requisitioned vendor(s) have not quoted yet. They are greyed out, and Save / Update stays disabled until every vendor has been quoted.
+        </div>
+    </script>
+
     <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
         <h2 class="box-title" style="font-family: math; font-weight: 500;">
             Vendor CS Information
@@ -131,9 +243,11 @@
                             </button>
                         }
                     </div>*@
-                <!-- Save/Update button — hidden in viewmode -->
+                <!-- Save/Update button — hidden in viewmode; disabled when the item is not quoted -->
                 <div class="btn-group pull-right" style="margin-left:4px;margin-right:4px;" ng-hide="pageMode==='view'">
-                    <button class="button-custom btn-success" type="button" data-ng-click="Post()" ng-disabled="btnSave">
+                    <button class="button-custom btn-success" type="button" data-ng-click="Post()"
+                            ng-disabled="btnSave || saveBlocked()"
+                            title="{{ saveBlocked() && pageMode !== 'view' ? 'All vendors must be quoted before saving' : '' }}">
                         <i class="fa fa-save" style="padding-right:5px"></i>
                         {{ pageMode === 'edit' ? 'Update' : 'Save' }}
                     </button>
@@ -255,12 +369,17 @@
         <!-- Vendor list (shown after item selected) -->
         <div class="row" style="margin:1%;background-color:#f0f0f0;box-shadow:2px 2px 5px #888888;padding:5px 10px;" ng-show="isMaterialRowSelected">
             <div class="row" style="padding:11px;margin-right:15px;margin-left:15px;">
+
+                <div ng-include="'quoteAlerts.html'"></div>
+                <div ng-include="'qtySummary.html'"></div>
+
                 <table st-table="MatWiseVendorListCollection" st-safe-src="MatWiseVendorList"
                        class="tableVen table-condensed table-bordered table-hover pnlView" style="width:100%;">
                     <thead>
                         <tr style="font-size:15px;">
                             <th colspan="16" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb">
                                 Selected Item : {{VendorCSInfo.ServiceItemName}}
+                                <span style="font-size:12px;color:#777;margin-left:10px;">(tick the vendors to compare, then recommend one or distribute the work)</span>
                             </th>
                         </tr>
                         <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
@@ -277,28 +396,34 @@
                             <th>Total Price</th>
                             <th>Propose Total Price</th>
                             <th>Delivery Date</th>
+                            <th>Status</th>
                             <th>Action</th>
                             <th>View</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in MatWiseVendorListCollection" style="height:20px;font-size:13px;"
-                            ng-class="{'selected-row': row.selected}" ng-style="getRowStyle(row)">
+                            ng-class="{'selected-row': row.selected, 'not-quoted-row': !isQuoted(row)}" ng-style="getRowStyle(row)">
                             <td>{{row.VendorQutnNo}}</td>
                             <td>{{row.VendorName}}</td>
                             <td>{{row.QutnQnty | number:2}}</td>
-                            <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoQty" ng-blur="checkUnitPrice(row)" /></td>
+                            <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoQty" ng-blur="checkUnitPrice(row)" ng-disabled="!isQuoted(row)" /></td>
                             <td>{{row.ReqUnit}}</td>
                             <td>{{row.QutnPrice | number:2}}</td>
-                            <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoPrice" ng-blur="checkUnitPrice(row)" /></td>
+                            <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoPrice" ng-blur="checkUnitPrice(row)" ng-disabled="!isQuoted(row)" /></td>
                             <td>{{row.VatPerc | number:2}}</td>
                             <td>{{row.VatAmt | number:2}}</td>
                             <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoVatAmt" ng-readonly="true" /></td>
                             <td>{{row.TolAmt | number:3}}</td>
                             <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoTolAmt" ng-readonly="true" /></td>
                             <td>{{row.DeliveryDate}}</td>
+                            <td>
+                                <span class="label label-success" ng-show="isQuoted(row)">Quoted</span>
+                                <span class="label label-danger" ng-hide="isQuoted(row)" title="ProcessStatus: {{row.ProcessStatus || 'n/a'}}">Not quoted</span>
+                            </td>
                             <td style="font-weight:bold" width="23px">
-                                <button type="button" ng-click="selectVendor(row)" title="Select">
+                                <button type="button" ng-click="selectVendor(row)" ng-disabled="!isQuoted(row)"
+                                        title="{{ isQuoted(row) ? 'Select / Deselect' : 'Not quoted - cannot be selected' }}">
                                     <i ng-show="!row.selected" class="fa fa-square-o"></i>
                                     <i ng-show="row.selected" class="fa fa-check-square-o"></i>
                                 </button>
@@ -315,23 +440,8 @@
                 <br />
 
                 <!-- CS Form (new mode) -->
+                <div ng-include="'awardBlock.html'"></div>
                 <div class="row">
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-lg-2"><label>CS Recm. Vendor:</label></div>
-                        <div class="col-lg-3">
-                            <input id="VendorCsRecmName" type="text" class="form-control" placeholder="CS Recm. Vendor"
-                                   ng-model="VendorCSInfo.VendorCsRecmName" ng-readonly="true" />
-                            <input id="CSRecmVendorID" type="hidden" ng-model="VendorCSInfo.CSRecmVendorID" />
-                        </div>
-                        <div class="col-lg-1">
-                            <button type="button" ng-click="ShowVendorList()"
-                                    style="position:absolute;right:1px;top:50%;transform:translateY(-11%) translateX(-75px);padding:4px 10px;border:2px solid black;background:transparent;">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <div class="col-lg-2"><label>CS Date:</label></div>
@@ -407,7 +517,10 @@
             <div class="col-lg-3"><strong>Item:</strong>    {{VendorCSInfo.ServiceItemName}}</div>
         </div>
 
-        <!-- Vendor table — matches the image exactly -->
+        <div ng-include="'quoteAlerts.html'"></div>
+        <div style="margin:0 15px;" ng-include="'qtySummary.html'"></div>
+
+        <!-- Vendor table -->
         <div class="row" style="padding:11px;margin-right:15px;margin-left:15px;overflow-x:auto;">
             <table st-table="VendorCSListCollection" st-safe-src="VendorCSList"
                    style="width:100%;font-size:12px;"
@@ -415,7 +528,7 @@
                 <thead>
                     <tr style="font-size:14px;">
                         <th colspan="16" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb">
-                            Selected Vendor For Item : <strong>{{VendorCSInfo.ServiceItemName}}</strong>
+                            Vendors For Item : <strong>{{VendorCSInfo.ServiceItemName}}</strong>
                         </th>
                     </tr>
                     <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
@@ -426,13 +539,12 @@
                         <th>Nego Qty</th>
                         <th>Unit</th>
                         <th style="text-align:right;">Propose Price</th>
-                        <!-- VAT % column — was missing -->
                         <th style="text-align:right;">Vat %</th>
                         <th style="text-align:right;">Nego Vat Amt</th>
                         <th style="text-align:right;">Propose Total</th>
                         <th style="text-align:right;">Total Price</th>
                         <th>Delivery Date</th>
-                        <!-- Action + View — were missing -->
+                        <th>Status</th>
                         <th ng-show="pageMode==='edit'">Action</th>
                         <th>View</th>
                     </tr>
@@ -441,7 +553,7 @@
                     <tr ng-repeat="row in VendorCSListCollection"
                         style="height:20px;font-size:12px;"
                         ng-style="getRowStyle(row)"
-                        ng-class="{'selected-row': row.selected}">
+                        ng-class="{'selected-row': row.selected, 'not-quoted-row': pageMode!=='view' && !isQuoted(row)}">
 
                         <td>{{row.VendorCSInfoID || row.VendorCSRecmID}}</td>
                         <td>{{row.VendorQutnNo}}</td>
@@ -454,7 +566,8 @@
                             <input ng-show="pageMode==='edit'"
                                    class="form-control" style="width:80px;height:18px;font-size:10px;"
                                    type="text" ng-model="row.NegoQty"
-                                   ng-blur="checkUnitPriceEdit(row)" />
+                                   ng-disabled="!isQuoted(row)"
+                                   ng-blur="checkUnitPrice(row)" />
                         </td>
 
                         <td>{{row.ReqUnit || row.QutnUnit}}</td>
@@ -465,26 +578,25 @@
                             <input ng-show="pageMode==='edit'"
                                    class="form-control" style="width:80px;height:18px;font-size:10px;"
                                    type="text" ng-model="row.NegoPrice"
-                                   ng-blur="checkUnitPriceEdit(row)" />
+                                   ng-disabled="!isQuoted(row)"
+                                   ng-blur="checkUnitPrice(row)" />
                         </td>
 
-                        <!-- VAT % — readonly always, comes from quotation -->
                         <td style="text-align:right;">{{row.VatPerc | number:2}}</td>
-
-                        <!-- Nego Vat Amt — computed, always readonly -->
                         <td style="text-align:right;">{{row.NegoVatAmt | number:2}}</td>
-
-                        <!-- Propose Total (NegoTolAmt) -->
                         <td style="text-align:right;">{{row.NegoTolAmt | number:3}}</td>
-
-                        <!-- Original Total -->
                         <td style="text-align:right;">{{row.TolAmt | number:3}}</td>
-
                         <td>{{row.DeliveryDate}}</td>
+
+                        <td>
+                            <span class="label label-success" ng-show="pageMode==='view' || isQuoted(row)">Quoted</span>
+                            <span class="label label-danger" ng-show="pageMode!=='view' && !isQuoted(row)" title="ProcessStatus: {{row.ProcessStatus || 'n/a'}}">Not quoted</span>
+                        </td>
 
                         <!-- Action checkbox — edit mode only -->
                         <td ng-show="pageMode==='edit'" style="text-align:center;font-weight:bold;">
-                            <button type="button" ng-click="toggleVendorSelectionEdit(row)" title="Select / Deselect">
+                            <button type="button" ng-click="selectVendor(row)" ng-disabled="!isQuoted(row)"
+                                    title="{{ isQuoted(row) ? 'Select / Deselect' : 'Not quoted - cannot be selected' }}">
                                 <i ng-show="!row.selected" class="fa fa-square-o"></i>
                                 <i ng-show="row.selected" class="fa fa-check-square-o"></i>
                             </button>
@@ -504,6 +616,7 @@
         <br />
 
         <!-- CS form fields (view / edit) -->
+        <div ng-include="'awardBlock.html'"></div>
         <div class="row">
             <!-- Row 1: CS Date + CS No -->
             <div class="row">
@@ -522,24 +635,7 @@
                 </div>
             </div>
 
-            <!-- Row 2: CS Recm Vendor -->
-            <div class="row">
-                <div class="col-sm-1"></div>
-                <div class="col-lg-2"><label>CS Recm. Vendor:</label></div>
-                <div class="col-lg-3" ng-readonly="true">
-                    <input type="text" class="form-control" ng-model="VendorCSInfo.VendorCsRecmName" placeholder="CS Recm. Vendor"
-                           ng-readonly="true" style="background:#fff;" />
-                </div>
-                <div class="col-lg-1" ng-show="pageMode==='edit'">
-                    <button type="button" ng-click="ShowVendorList()"
-                            style="position:absolute;right:1px;top:50%;transform:translateY(-0%) translateX(-83px);padding:4px 10px;border:2px solid black;background:transparent;">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
-
-            </div>
-
-            <!-- Row 3: Operation + Note -->
+            <!-- Row 2: Operation + Note -->
             <div class="row">
                 <div class="col-sm-1"></div>
                 <div class="col-lg-2"><label>Operation:</label></div>
@@ -603,7 +699,7 @@
     <!-- ══════════════════════════════════════════════════════════════════
          MODALS
          ══════════════════════════════════════════════════════════════════ -->
-    <!-- CS Recm Vendor picker -->
+    <!-- CS Recm Vendor picker (lists only the ticked vendors) -->
     <div id="VendorInfoModal" class="modal fade">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -613,49 +709,36 @@
                     </button>
                 </div>
                 <div class="modal-body table-responsive">
-                    <table st-table="MatWiseVendorListCollection1" st-safe-src="MatWiseVendorList1"
-                           class="tableVen table-condensed table-bordered table-hover pnlView" style="width:100%;">
+                    <table class="tableVen table-condensed table-bordered table-hover pnlView" style="width:100%;">
                         <thead>
                             <tr style="font-size:15px;">
-                                <th colspan="14" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb">
+                                <th colspan="9" style="text-align:left;color:black;font-weight:100;font-family:math;background:#fff;border:1px solid #3003eb">
                                     Select CS Recommended Vendor — Item : {{VendorCSInfo.ServiceItemName}}
                                 </th>
                             </tr>
                             <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
                                 <th>Quotation No</th>
                                 <th>Vendor Name</th>
-                                <th>ProposeQty</th>
+                                <th>Quoted Qty</th>
                                 <th>Nego Qty</th>
                                 <th>Unit</th>
-                                <th>QutnPrice</th>
-                                <th>Propose Price</th>
+                                <th>Nego Price</th>
                                 <th>Vat %</th>
-                                <th>Vat Amnt</th>
-                                <th>Propose Vat Amnt</th>
-                                <th>Total Price</th>
                                 <th>Propose Total Price</th>
-                                <th>Delivery Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="row in MatWiseVendorListCollection1">
+                            <tr ng-repeat="row in selectedVendors" ng-class="{'selected-row': row.VendorID === VendorCSInfo.CSRecmVendorID}">
                                 <td>{{row.VendorQutnNo}}</td>
                                 <td>{{row.VendorName}}</td>
                                 <td>{{row.QutnQnty | number:2}}</td>
-                                <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoQty" ng-blur="checkUnitPrice(row)" /></td>
-                                <td>{{row.ReqUnit}}</td>
-                                <td>{{row.QutnPrice | number:2}}</td>
-                                <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoPrice" ng-blur="checkUnitPrice(row)" /></td>
+                                <td>{{row.NegoQty | number:2}}</td>
+                                <td>{{row.ReqUnit || row.QutnUnit}}</td>
+                                <td>{{row.NegoPrice | number:2}}</td>
                                 <td>{{row.VatPerc | number:2}}</td>
-                                <td>{{row.VatAmt | number:2}}</td>
-                                <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoVatAmt" ng-readonly="true" /></td>
-                                <td>{{row.TolAmt | number:3}}</td>
-                                <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoTolAmt" ng-readonly="true" /></td>
-                                <td>{{row.DeliveryDate}}</td>
-                                <td>
-                                    <button type="button" ng-click="selectCSRecVendor(row)" data-dismiss="modal">Select</button>
-                                </td>
+                                <td>{{row.NegoTolAmt | number:3}}</td>
+                                <td><button type="button" ng-click="selectCSRecVendor(row)" data-dismiss="modal">Select</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -664,7 +747,29 @@
         </div>
     </div>
 
-    <!-- Search CS Modal — now has View and Edit buttons -->
+    <!-- Pre-save warning (cumulative qty exceeded, price/qty above quotation, ...) -->
+    <div id="QtyWarningModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#f39c12;color:#fff;">
+                    <h4 class="modal-title"><i class="fa fa-exclamation-triangle"></i> Please review before saving</h4>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li ng-repeat="w in saveWarnings track by $index" style="margin-bottom:6px;">{{w}}</li>
+                    </ul>
+                    <p style="margin-top:12px;">Do you want to save anyway?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Go back and review</button>
+                    <button type="button" class="btn btn-warning" ng-click="doSave()" ng-disabled="btnSave">
+                        <i class="fa fa-save"></i> Save anyway
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Search CS Modal — View & Edit buttons + Column Search -->
     <div id="SearchModal" class="modal fade">
         <div class="modal-dialog modal-xl">
@@ -852,6 +957,35 @@
        ══════════════════════════════════════════════════════════════ */
     app.controller('VendorCSInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
+        /* ── Small helpers ───────────────────────────────────────── */
+        var EPS = 0.0005;   // tolerance for 3-decimal quantity comparisons
+
+        function num(v) {
+            var n = parseFloat(v);
+            return isNaN(n) ? 0 : n;
+        }
+        function fmt(n) {
+            return (Math.round(n * 1000) / 1000).toString();
+        }
+        function emptyCS() {
+            return {
+                VendorCSRecmID: "", AutoCSNo: "", CSRecDate: "", Operation: "", Remarks: "",
+                VendorCsRecmName: "", CSRecmVendorID: "",
+                ServiceItemID: "", ServiceItemName: "", ServiceCategoryID: "",
+                ClientReqID: "", ClientID: "", ClientName: "",
+                VendorReqID: "", ClientReqNo: "",
+                Description: "", DeliveryLocation: "", DeliveryDate: "", DeliveryMode: "",
+                RptQutnQty: "", RptQutnUnit: "", VenReqItem: "", RequisitionDate: "",
+                ReqQnty: "", ReqUnit: "",
+                AwardMode: "REC"      // 'REC' = recommend one vendor, 'DIST' = distribute work among selected vendors
+            };
+        }
+        function computeRow(row) {
+            row.NegoAmt = num(row.NegoQty) * num(row.NegoPrice);
+            row.NegoVatAmt = (num(row.VatPerc) * row.NegoAmt) / 100;
+            row.NegoTolAmt = row.NegoAmt + row.NegoVatAmt;
+        }
+
         /* ── State ───────────────────────────────────────────────── */
         $scope.vendorCSItemArray = [];
         $scope.vendorCSTermArray = [];
@@ -859,27 +993,21 @@
         $scope.p = 2;          // 2 = new/select mode, 1 = view/edit mode
         $scope.pageMode = 'new';      // 'new' | 'view' | 'edit'
         $scope.loading = false;
+        $scope.saveWarnings = [];
 
         $scope.masterDataSetupGridData = [];
         $scope.GridDisplayCollection = [];
         $scope.isRowSelected = false;
         $scope.isMaterialRowSelected = false;
-        $scope.selectedVendors = [];
+        $scope.selectedVendors = [];      // rows ticked by the user (shared references with the tables)
         $scope.ReqTermDataSetupGridData = [];
         $scope.ReqTermGridDisplayCollection = [];
         $scope.VendorCSList = [];
         $scope.VendorCSListCollection = [];
+        $scope.MatWiseVendorList = [];
+        $scope.MatWiseVendorListCollection = [];
 
-        /* ── VendorCSInfo model ──────────────────────────────────── */
-        $scope.VendorCSInfo = {
-            VendorCSRecmID: "", AutoCSNo: "", CSRecDate: "", Operation: "", Remarks: "",
-            VendorCsRecmName: "", CSRecmVendorID: "",
-            ServiceItemID: "", ServiceItemName: "", ServiceCategoryID: "",
-            ClientReqID: "", ClientID: "", ClientName: "",
-            VendorReqID: "", ClientReqNo: "",
-            Description: "", DeliveryLocation: "", DeliveryDate: "", DeliveryMode: "",
-            RptQutnQty: "", RptQutnUnit: "", VenReqItem: "", RequisitionDate: ""
-        };
+        $scope.VendorCSInfo = emptyCS();
 
         /* ── Initial load ────────────────────────────────────────── */
         $scope.loading = true;
@@ -889,6 +1017,87 @@
                 $scope.loading = false;
             }).error(function () { $scope.loading = false; });
 
+        /* ══════════════════════════════════════════════════════════
+           QUOTATION STATUS  (ProcessStatus from GetVendorByMaterial)
+           ══════════════════════════════════════════════════════════ */
+
+        // A vendor row is "quoted" only when ProcessStatus === 'Done'.
+        // Change this single function if your status values differ.
+        $scope.isQuoted = function (row) {
+            if (!row) return false;
+
+            // View/Edit rows come from the CSVendor SP. Rows already saved in the CS stay valid,
+            // and if that SP does not return ProcessStatus at all we do not block anything.
+            if ($scope.pageMode !== 'new') {
+                if (row.IsSelected == 1) return true;
+                if (row.ProcessStatus === undefined) return true;
+            }
+            // Requisitioned vendors that have not quoted come back with a NULL quotation
+            if ($scope.pageMode === 'new' && (row.VendorQutnID === null || row.VendorQutnID === undefined || row.VendorQutnID === '')) return false;
+
+            var s = (row.ProcessStatus === null || row.ProcessStatus === undefined) ? '' : String(row.ProcessStatus);
+            return s.trim().toLowerCase() === 'done';
+        };
+
+        $scope.currentVendorRows = function () {
+            if ($scope.pageMode === 'new') {
+                return $scope.isMaterialRowSelected ? ($scope.MatWiseVendorList || []) : [];
+            }
+            return $scope.VendorCSList || [];
+        };
+        $scope.notQuotedCount = function () {
+            return $scope.currentVendorRows().filter(function (r) { return !$scope.isQuoted(r); }).length;
+        };
+        $scope.allNotQuoted = function () {
+            var rows = $scope.currentVendorRows();
+            return rows.length > 0 && $scope.notQuotedCount() === rows.length;
+        };
+        $scope.someNotQuoted = function () {
+            return $scope.notQuotedCount() > 0 && !$scope.allNotQuoted();
+        };
+        // Save / Update is blocked in view mode and when the item has no quoted vendor at all
+        $scope.saveBlocked = function () {
+            return $scope.pageMode === 'view' || $scope.notQuotedCount() > 0;
+        };
+
+        /* ══════════════════════════════════════════════════════════
+           QUANTITY SUMMARY
+           ══════════════════════════════════════════════════════════ */
+        $scope.getReqQty = function () { return num($scope.VendorCSInfo.ReqQnty); };
+        $scope.totalNegoQty = function () {
+            return $scope.selectedVendors.reduce(function (s, v) { return s + num(v.NegoQty); }, 0);
+        };
+        // The recommended vendor's row (Award Type = recommend one)
+        $scope.recmRow = function () {
+            var id = $scope.VendorCSInfo.CSRecmVendorID;
+            if (id === "" || id === null || id === undefined) return undefined;
+            return $scope.selectedVendors.filter(function (v) { return String(v.VendorID) === String(id); })[0];
+        };
+        // recommend one  -> compare the recommended vendor's Nego Qty with Required Qty
+        // distribute     -> compare the cumulative Nego Qty of all ticked vendors with Required Qty
+        $scope.hasAllocation = function () {
+            return $scope.VendorCSInfo.AwardMode === 'DIST' || !!$scope.recmRow();
+        };
+        $scope.allocatedQty = function () {
+            if ($scope.VendorCSInfo.AwardMode === 'DIST') return $scope.totalNegoQty();
+            var r = $scope.recmRow();
+            return r ? num(r.NegoQty) : 0;
+        };
+        $scope.qtyLabel = function () {
+            return $scope.VendorCSInfo.AwardMode === 'DIST' ? 'Cumulative Qty' : 'Recommended Vendor Qty';
+        };
+        $scope.qtyApplicable = function () {
+            return $scope.getReqQty() > 0 && $scope.hasAllocation();
+        };
+        $scope.qtyDiff = function () { return $scope.allocatedQty() - $scope.getReqQty(); };
+        $scope.qtyStatusClass = function () {
+            if (!$scope.qtyApplicable()) return 'qty-neutral';
+            var d = $scope.qtyDiff();
+            if (d > EPS) return 'qty-over';
+            if (Math.abs(d) <= EPS) return 'qty-ok';
+            return 'qty-under';
+        };
+
         /* ── Helper: reset everything to new-CS state ────────────── */
         $scope.startNewCS = function () {
             $scope.p = 2;
@@ -896,19 +1105,15 @@
             $scope.isRowSelected = false;
             $scope.isMaterialRowSelected = false;
             $scope.selectedVendors = [];
+            $scope.selectedRow = null;
+            $scope.selectedMaterialRow = null;
             $scope.ReqTermDataSetupGridData = [];
             $scope.ReqTermGridDisplayCollection = [];
             $scope.VendorCSList = [];
             $scope.VendorCSListCollection = [];
-            $scope.VendorCSInfo = {
-                VendorCSRecmID: "", AutoCSNo: "", CSRecDate: "", Operation: "", Remarks: "",
-                VendorCsRecmName: "", CSRecmVendorID: "",
-                ServiceItemID: "", ServiceItemName: "", ServiceCategoryID: "",
-                ClientReqID: "", ClientID: "", ClientName: "",
-                VendorReqID: "", ClientReqNo: "",
-                Description: "", DeliveryLocation: "", DeliveryDate: "", DeliveryMode: "",
-                RptQutnQty: "", RptQutnUnit: "", VenReqItem: "", RequisitionDate: ""
-            };
+            $scope.MatWiseVendorList = [];
+            $scope.MatWiseVendorListCollection = [];
+            $scope.VendorCSInfo = emptyCS();
             // Reload requisition list
             $http.post('/VendorCSInfo/GetAllRequisition')
                 .success(function (r) { $scope.GridDisplayCollection = [].concat(r.InvitationList); });
@@ -979,74 +1184,85 @@
                 $scope.VendorCSInfo.DeliveryDate = row.DeliveryDate;
                 $scope.VendorCSInfo.DeliveryLocation = row.DeliveryLocation;
                 $scope.VendorCSInfo.DeliveryMode = row.DeliveryMode;
+                $scope.VendorCSInfo.ReqQnty = row.ReqQnty;
+                $scope.VendorCSInfo.ReqUnit = row.ReqUnit;
+
+                $scope.MatWiseVendorList = [];
+                $scope.MatWiseVendorListCollection = [];
 
                 $scope.loading = true;
                 $http.post('/VendorCSInfo/GetVendorByMaterial', { VendorReqID: row.VendorReqID, ServiceItemID: row.ServiceItemID })
                     .success(function (r) {
-                        $scope.MatWiseVendorList = r.MatWiseVendorList;
+                        $scope.MatWiseVendorList = r.MatWiseVendorList || [];
                         $scope.MatWiseVendorListCollection = [].concat($scope.MatWiseVendorList);
                         $scope.loading = false;
+
+                        // Tell the user straight away when nothing can be saved for this item
+                        if ($scope.notQuotedCount() > 0) {
+                            toastr.warning($scope.notQuotedCount() + " of " + $scope.currentVendorRows().length + " requisitioned vendor(s) have not quoted yet. All vendors must be quoted before this CS can be saved.");
+                        }
                     }).error(function () { $scope.loading = false; });
             }
         };
 
-        /* ── Vendor selection (checkbox in vendor table) ─────────── */
-        $scope.selectVendor = function (row) {
-
-            $scope.VendorCSInfo.VendorCsRecmName = null;
-            $scope.VendorCSInfo.CSRecmVendorID = null;
-
-
-
-            var id = row.VendorQutnID;
-            var idx = $scope.selectedVendors.findIndex(function (v) { return v.VendorQutnID === id; });
-
-            if (idx !== -1) {
-                row.selected = false;
-                $scope.selectedVendors = $scope.selectedVendors.filter(function (v) { return v.VendorQutnID !== id; });
-                $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.filter(function (t) { return t.VendorQutnID !== id; });
-                $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
-                return;
-            }
-
-            row.selected = true;
-            var item = {
-                ServiceCategoryID: row.ServiceCategoryID, ServiceCategoryName: row.ServiceCategoryName,
-                ServiceItemID: row.ServiceItemID, ServiceItemName: row.ServiceItemName,
-                Description: row.Description, DeliveryLocation: row.DeliveryLocation,
-                DeliveryDate: row.DeliveryDate, DeliveryMode: row.DeliveryMode,
-                ReqQnty: row.ReqQnty, ReqUnit: row.ReqUnit,
-                VendorQutnNo: row.VendorQutnNo, VendorQutnID: row.VendorQutnID,
-                VendorID: row.VendorID, VendorName: row.VendorName,
-                QutnQnty: row.QutnQnty, NegoQty: row.NegoQty,
-                QutnPrice: row.QutnPrice, NegoPrice: row.NegoPrice,
-                QutnUnit: row.QutnUnit, QutnAmt: row.QutnAmt, NegoAmt: row.NegoAmt,
-                VatPerc: row.VatPerc, VatAmt: row.VatAmt, NegoVatAmt: row.NegoVatAmt,
-                TolAmt: row.TolAmt, NegoTolAmt: row.NegoTolAmt
-            };
-
-            if (!$scope.selectedVendors.some(function (v) { return v.VendorQutnID === id; })) {
-                $scope.selectedVendors.push(item);
-            }
-
+        /* ── Terms helpers ───────────────────────────────────────── */
+        function removeTermsFor(id) {
+            $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.filter(function (t) { return t.VendorQutnID !== id; });
+            $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+        }
+        function loadTermsFor(id) {
             $http.post('/VendorCSInfo/GetVendorCSInfoTermList', { VendorQutnID: id })
                 .success(function (r) {
                     var stillSelected = $scope.selectedVendors.some(function (v) { return v.VendorQutnID === id; });
                     if (!stillSelected) return;
                     $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.filter(function (t) { return t.VendorQutnID !== id; });
-                    $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.concat(r.VendorCSInfoTermList);
+                    $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.concat(r.VendorCSInfoTermList || []);
                     $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                 });
-        };
+        }
 
-        /* ── CS Recm Vendor popup ────────────────────────────────── */
-        $scope.ShowVendorList = function () {
-            if ($scope.selectedVendors.length <= 0) {
-                toastr.error("Please check a vendor first");
+        /* ── Vendor selection (new AND edit mode) ────────────────────
+           Several vendors can be ticked; there is no single "recommended" vendor.
+           selectedVendors holds the row objects themselves, so typing a Nego Qty
+           updates the cumulative total live.                                  */
+        $scope.selectVendor = function (row) {
+            if (!$scope.isQuoted(row)) {
+                toastr.warning("This vendor quotation is not quoted yet (ProcessStatus is not Done) and cannot be selected.");
                 return;
             }
-            $scope.MatWiseVendorList1 = [].concat($scope.selectedVendors);
-            $scope.MatWiseVendorListCollection1 = [].concat($scope.selectedVendors);
+
+            var id = row.VendorQutnID;
+            var idx = $scope.selectedVendors.findIndex(function (v) { return v.VendorQutnID === id; });
+
+            if (idx !== -1) {
+                // un-tick
+                row.selected = false;
+                $scope.selectedVendors.splice(idx, 1);
+                removeTermsFor(id);
+                // un-ticking the recommended vendor clears the recommendation
+                if (String($scope.VendorCSInfo.CSRecmVendorID) === String(row.VendorID)) {
+                    $scope.VendorCSInfo.CSRecmVendorID = "";
+                    $scope.VendorCSInfo.VendorCsRecmName = "";
+                }
+                return;
+            }
+
+            // tick
+            row.selected = true;
+            $scope.selectedVendors.push(row);
+            loadTermsFor(id);
+
+            if ($scope.qtyApplicable() && $scope.qtyDiff() > EPS) {
+                toastr.warning($scope.qtyLabel() + " (" + fmt($scope.allocatedQty()) + ") is now greater than the Required Qty (" + fmt($scope.getReqQty()) + ").");
+            }
+        };
+
+        /* ── CS Recm Vendor popup (Award Type = recommend one) ───── */
+        $scope.ShowVendorList = function () {
+            if ($scope.selectedVendors.length <= 0) {
+                toastr.error("Please tick at least one vendor first.");
+                return;
+            }
             $('#VendorInfoModal').modal('show');
         };
 
@@ -1054,7 +1270,17 @@
             $scope.VendorCSInfo.CSRecmVendorID = row.VendorID;
             $scope.VendorCSInfo.VendorCsRecmName = row.VendorName;
             $scope.VendorCSInfo.RptQutnQty = row.QutnQnty;
-            $scope.VendorCSInfo.RptQutnUnit = row.ReqUnit;
+            $scope.VendorCSInfo.RptQutnUnit = row.ReqUnit || row.QutnUnit;
+            if ($scope.qtyApplicable() && $scope.qtyDiff() > EPS) {
+                toastr.warning("Recommended vendor's Nego Qty (" + fmt($scope.allocatedQty()) + ") is greater than the Required Qty (" + fmt($scope.getReqQty()) + ").");
+            }
+        };
+
+        $scope.onAwardModeChange = function () {
+            if ($scope.VendorCSInfo.AwardMode === 'DIST') {
+                $scope.VendorCSInfo.CSRecmVendorID = "";
+                $scope.VendorCSInfo.VendorCsRecmName = "";
+            }
         };
 
         /* ── Search CS (opens modal) ─────────────────────────────── */
@@ -1069,12 +1295,15 @@
             $('#SearchModal').modal('show');
         };
 
-        /* ── FIX: Load existing CS for view OR edit ──────────────── */
+        /* ── Load existing CS for view OR edit ───────────────────── */
         $scope.loadExistingCS = function (row, mode) {
             $('#SearchModal').modal('hide');
             $scope.loading = true;
             $scope.pageMode = mode;   // 'view' or 'edit'
             $scope.p = 1;
+            $scope.selectedVendors = [];
+            $scope.VendorCSList = [];
+            $scope.VendorCSListCollection = [];
 
             // Populate header
             $scope.VendorCSInfo.VendorCSRecmID = row.VendorCSNumber;
@@ -1082,37 +1311,42 @@
             $scope.VendorCSInfo.CSRecDate = row.CSRecDate;
             $scope.VendorCSInfo.ServiceItemID = row.ServiceItemID;
             $scope.VendorCSInfo.ServiceItemName = row.ServiceItemName;
-            $scope.VendorCSInfo.VendorCsRecmName = row.VendorCSRecmName;
-            $scope.VendorCSInfo.CSRecmVendorID = row.CSRecmVendorID;
+            // A saved CS with a recommended vendor = "recommend one"; without = "distribute"
+            $scope.VendorCSInfo.CSRecmVendorID = row.CSRecmVendorID || "";
+            $scope.VendorCSInfo.VendorCsRecmName = row.CSRecmVendorID ? (row.VendorCSRecmName || "") : "";
+            $scope.VendorCSInfo.AwardMode = row.CSRecmVendorID ? 'REC' : 'DIST';
             $scope.VendorCSInfo.Operation = row.Operation;
             $scope.VendorCSInfo.Remarks = row.Remarks;
             $scope.CSMaterial_Name = row.ServiceItemName;
             $scope.VendorCSInfo.ClientName = row.ClientName;
 
-
-            // Load ALL vendors (selected + unselected) via fixed OBS_CSVendor SP
+            // Load ALL vendors (selected + unselected)
             $http.post('/VendorCSInfo/CSVendor', { CSNumber: row.VendorCSNumber })
                 .success(function (r) {
-                    $scope.VendorCSList = r.VendorCSList;
+                    var list = r.VendorCSList || [];
 
                     // Pre-mark each row so the checkbox icon renders correctly
-                    $scope.VendorCSList.forEach(function (v) {
+                    list.forEach(function (v) {
                         v.selected = (v.IsSelected === true || v.IsSelected === 1);
                     });
 
-                    $scope.VendorCSListCollection = [].concat($scope.VendorCSList);
+                    $scope.VendorCSList = list;
+                    $scope.VendorCSListCollection = [].concat(list);
 
-                    // In edit mode, pre-populate selectedVendors with the already-saved rows
-                    if (mode === 'edit') {
-                        $scope.VendorCSInfo.ServiceCategoryID = $scope.VendorCSList[0].ServiceCategoryID;
-                        $scope.VendorCSInfo.Description = $scope.VendorCSList[0].Description;
-                        $scope.VendorCSInfo.DeliveryDate = $scope.VendorCSList[0].DeliveryDate;
-                        $scope.VendorCSInfo.DeliveryLocation = $scope.VendorCSList[0].DeliveryLocation;
-                        $scope.VendorCSInfo.DeliveryMode = $scope.VendorCSList[0].DeliveryMode;
+                    // Already-saved vendors are the starting selection (view AND edit,
+                    // so switching View -> Edit keeps them)
+                    $scope.selectedVendors = list.filter(function (v) { return v.selected; });
 
-                        $scope.selectedVendors = $scope.VendorCSList.filter(function (v) {
-                            return v.selected;
-                        });
+                    if (list.length > 0) {
+                        $scope.VendorCSInfo.ServiceCategoryID = list[0].ServiceCategoryID;
+                        $scope.VendorCSInfo.Description = list[0].Description;
+                        $scope.VendorCSInfo.DeliveryDate = list[0].DeliveryDate;
+                        $scope.VendorCSInfo.DeliveryLocation = list[0].DeliveryLocation;
+                        $scope.VendorCSInfo.DeliveryMode = list[0].DeliveryMode;
+                        $scope.VendorCSInfo.ReqUnit = list[0].ReqUnit || list[0].QutnUnit;
+
+                        var withReq = list.filter(function (x) { return num(x.ReqQnty) > 0; })[0];
+                        $scope.VendorCSInfo.ReqQnty = withReq ? withReq.ReqQnty : "";
                     }
 
                     $scope.loading = false;
@@ -1126,100 +1360,208 @@
                 }).error(function () { });
         };
 
-
         /* ── Keep old toggleCSSelect for backwards compat ───────── */
         $scope.toggleCSSelect = function (row) {
             $scope.loadExistingCS(row, 'view');
         };
 
+        /* ── Nego calculations (new + edit) ──────────────────────── */
+        $scope.checkUnitPrice = function (row) {
+            if (!$scope.isQuoted(row)) return;
 
-        // Used by the Action checkbox in the edit-mode vendor table.
-        $scope.toggleVendorSelectionEdit = function (row) {
-            row.selected = !row.selected;
-            $scope.VendorCSInfo.VendorCsRecmName = null;
-            $scope.VendorCSInfo.CSRecmVendorID = null;
+            var q = parseFloat(row.NegoQty);
+            var p = parseFloat(row.NegoPrice);
 
+            if (isNaN(q) || q <= 0) {
+                toastr.error("Nego Qty must be a number greater than zero.");
+                row.NegoQty = row.QutnQnty;
+            }
+            if (isNaN(p) || p <= 0) {
+                toastr.error("Nego Price must be a number greater than zero.");
+                row.NegoPrice = row.QutnPrice;
+            }
 
-            if (row.selected) {
-                // Add to selectedVendors if not already there
-                var exists = $scope.selectedVendors.some(function (v) {
-                    return v.VendorQutnID === row.VendorQutnID;
-                });
-                if (!exists) {
-                    $scope.selectedVendors.push(row);
-                }
-            } else {
-                // Remove from selectedVendors
-                $scope.selectedVendors = $scope.selectedVendors.filter(function (v) {
-                    return v.VendorQutnID !== row.VendorQutnID;
-                });
+            computeRow(row);
+
+            // Early, non-blocking feedback (the final check runs again on save)
+            if (row.selected && $scope.qtyApplicable() && $scope.qtyDiff() > EPS) {
+                toastr.warning($scope.qtyLabel() + " (" + fmt($scope.allocatedQty()) + ") is greater than the Required Qty (" + fmt($scope.getReqQty()) + ").");
             }
         };
 
+        /* ══════════════════════════════════════════════════════════
+           VALIDATION
+           errors   → block the save
+           warnings → shown in a confirm dialog, user may continue
+           ══════════════════════════════════════════════════════════ */
+        function getCsDate() {
+            return ($scope.pageMode === 'new')
+                ? $('#CSRecDate1').val()
+                : ($('#CSRecDate').val() || $scope.VendorCSInfo.CSRecDate);
+        }
 
+        $scope.validateCS = function () {
+            var errors = [], warnings = [];
+            var sel = $scope.selectedVendors;
 
-        $scope.checkUnitPriceEdit = function (row) {
-            if (!row.NegoQty || row.NegoQty <= 0) { toastr.error("Quantity cannot be zero or negative!"); row.NegoQty = row.QutnQnty; }
-            if (!row.NegoPrice || row.NegoPrice <= 0) { toastr.error("Price cannot be zero or negative!"); row.NegoPrice = row.QutnPrice; }
-
-            row.NegoAmt = parseFloat(row.NegoQty) * parseFloat(row.NegoPrice);
-            row.NegoVatAmt = (parseFloat(row.VatPerc) * row.NegoAmt) / 100;
-            row.NegoTolAmt = row.NegoAmt + row.NegoVatAmt;
-
-            // Keep selectedVendors in sync
-            var match = $scope.selectedVendors.find(function (v) {
-                return v.VendorQutnID === row.VendorQutnID;
-            });
-            if (match) {
-                match.NegoQty = row.NegoQty;
-                match.NegoPrice = row.NegoPrice;
-                match.NegoAmt = row.NegoAmt;
-                match.NegoVatAmt = row.NegoVatAmt;
-                match.NegoTolAmt = row.NegoTolAmt;
+            if ($scope.pageMode === 'new' && !$scope.VendorCSInfo.ServiceItemID) {
+                errors.push("Please select a requisition item first.");
             }
+            if ($scope.pageMode !== 'view' && $scope.notQuotedCount() > 0) {
+                errors.push("All requisitioned vendors must be quoted before saving (" + $scope.notQuotedCount() + " of " + $scope.currentVendorRows().length + " not quoted yet).");
+            }
+            if (sel.length <= 0) {
+                errors.push("Please select at least one vendor.");
+            }
+
+            var mode = $scope.VendorCSInfo.AwardMode;
+            if (mode === 'REC') {
+                if (!$scope.VendorCSInfo.CSRecmVendorID) {
+                    errors.push("CS Recm. Vendor is required.");
+                } else if (!$scope.recmRow()) {
+                    errors.push("The recommended vendor must be one of the selected vendors.");
+                }
+            } else if (mode === 'DIST' && sel.length === 1) {
+                warnings.push("Only one vendor is selected for distribution, so the whole work goes to that vendor.");
+            }
+
+            // Per-vendor checks
+            var seenVendors = {};
+            var units = {};
+            sel.forEach(function (v) {
+                var label = v.VendorName + " (" + v.VendorQutnNo + ")";
+                var q = num(v.NegoQty), p = num(v.NegoPrice);
+
+                if (q <= 0) errors.push(label + ": Nego Qty must be greater than zero.");
+                if (p <= 0) errors.push(label + ": Nego Price must be greater than zero.");
+
+                if (q > num(v.QutnQnty) + EPS) {
+                    warnings.push(label + ": Nego Qty (" + fmt(q) + ") is more than the quoted qty (" + fmt(num(v.QutnQnty)) + ").");
+                }
+                if (p > num(v.QutnPrice) + EPS) {
+                    warnings.push(label + ": Nego Price (" + fmt(p) + ") is higher than the quoted price (" + fmt(num(v.QutnPrice)) + ").");
+                }
+                if (v.VendorID !== undefined && seenVendors[v.VendorID]) {
+                    warnings.push(v.VendorName + " is selected with more than one quotation.");
+                }
+                seenVendors[v.VendorID] = true;
+                units[v.ReqUnit || v.QutnUnit || ''] = true;
+            });
+
+            if (mode === 'DIST' && Object.keys(units).length > 1) {
+                warnings.push("Selected vendors use different units (" + Object.keys(units).join(", ") + "), so the cumulative qty may not be comparable.");
+            }
+
+            // Cumulative qty vs required qty (goes first in the list)
+            var req = $scope.getReqQty();
+            if (req > 0) {
+                if (mode === 'DIST') {
+                    var tot = $scope.totalNegoQty();
+                    if (tot > req + EPS) {
+                        warnings.unshift("Cumulative Nego Qty (" + fmt(tot) + ") is greater than the Required Qty (" + fmt(req) + ") by " + fmt(tot - req) + ".");
+                    }
+                } else if (mode === 'REC' && $scope.recmRow()) {
+                    var rq = num($scope.recmRow().NegoQty);
+                    if (rq > req + EPS) {
+                        warnings.unshift("Recommended vendor's Nego Qty (" + fmt(rq) + ") is greater than the Required Qty (" + fmt(req) + ") by " + fmt(rq - req) + ".");
+                    }
+                }
+            }
+
+            // Header fields
+            var csDate = getCsDate();
+            if (!csDate) {
+                errors.push("CS Date is required.");
+            } else {
+                var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(String(csDate).trim());
+                if (m) {
+                    var d = new Date(m[3], m[2] - 1, m[1]);
+                    if (d > new Date()) errors.push("CS Date cannot be greater than the system date.");
+                } else if ($scope.pageMode === 'new') {
+                    errors.push("CS Date must be in DD/MM/YYYY format.");
+                }
+            }
+            if (!$scope.VendorCSInfo.Operation) errors.push("Please select an Operation.");
+
+            return { errors: errors, warnings: warnings };
         };
 
         /* ── Save / Update ───────────────────────────────────────── */
         $scope.Post = function () {
+            if ($scope.btnSave) return;     // guard against double-click
 
-            // BUG FIX: guard against double-submit (double-click / slow network)
-            if ($scope.btnSave) {
+            if ($scope.pageMode === 'view') return;
+
+            if ($scope.notQuotedCount() > 0) {
+                toastr.error("Cannot save: all requisitioned vendors must be quoted first. " + $scope.notQuotedCount() + " of " + $scope.currentVendorRows().length + " vendor(s) are not quoted yet.");
                 return;
             }
 
-            if ($scope.pageMode === 'new') {
-                if ($scope.selectedVendors.length <= 0) { toastr.error("Please select at least one vendor"); return; }
-                if (!$scope.VendorCSInfo.VendorCsRecmName) { toastr.error("CS Recm. Vendor is Required"); return; }
-                var csDate = $('#CSRecDate1').val();
-                if (!csDate) { toastr.error("CS Date Required"); return; }
-                $scope.VendorCSInfo.CSRecDate = csDate;
-                if (!$scope.VendorCSInfo.Operation) { toastr.error("Please select an Operation"); return; }
+            var v = $scope.validateCS();
 
-            } else if ($scope.pageMode === 'edit') {
-                if ($scope.selectedVendors.length <= 0) { toastr.error("Please select at least one vendor"); return; }
-                if (!$scope.VendorCSInfo.VendorCsRecmName) { toastr.error("CS Recm. Vendor is Required"); return; }
-                var csDateEdit = $('#CSRecDate').val() || $scope.VendorCSInfo.CSRecDate;
-                if (!csDateEdit) { toastr.error("CS Date Required"); return; }
-                $scope.VendorCSInfo.CSRecDate = csDateEdit;
-                if (!$scope.VendorCSInfo.Operation) { toastr.error("Please select an Operation"); return; }
-
-                if ($scope.selectedVendors.length <= 0) { toastr.error("Please select at least one vendor"); return; }
+            if (v.errors.length > 0) {
+                v.errors.slice(0, 4).forEach(function (e) { toastr.error(e); });
+                if (v.errors.length > 4) toastr.error("...and " + (v.errors.length - 4) + " more problem(s).");
+                return;
             }
 
-            // BUG FIX: lock the button before the request goes out
-            $scope.btnSave = true;
+            if (v.warnings.length > 0) {
+                $scope.saveWarnings = v.warnings;
+                $('#QtyWarningModal').modal('show');
+                return;
+            }
+
+            $scope.doSave();
+        };
+
+        $scope.doSave = function () {
+            if ($scope.btnSave) return;
+            $('#QtyWarningModal').modal('hide');
+
+            // Re-check hard errors in case state changed while the dialog was open
+            var v = $scope.validateCS();
+            if (v.errors.length > 0) {
+                v.errors.slice(0, 4).forEach(function (e) { toastr.error(e); });
+                return;
+            }
+
+            $scope.VendorCSInfo.CSRecDate = getCsDate();
+
+            if ($scope.VendorCSInfo.AwardMode === 'DIST') {
+                // Work is distributed: no single recommended vendor
+                $scope.VendorCSInfo.CSRecmVendorID = "";
+                $scope.VendorCSInfo.VendorCsRecmName = "";
+                $scope.VendorCSInfo.RptQutnQty = $scope.totalNegoQty();
+                $scope.VendorCSInfo.RptQutnUnit = $scope.selectedVendors[0].ReqUnit || $scope.selectedVendors[0].QutnUnit || "";
+            } else {
+                // Recommend one: report qty/unit come from the recommended vendor
+                var rr = $scope.recmRow();
+                if (rr) {
+                    $scope.VendorCSInfo.RptQutnQty = rr.QutnQnty;
+                    $scope.VendorCSInfo.RptQutnUnit = rr.ReqUnit || rr.QutnUnit || "";
+                }
+            }
+
+            var items = $scope.selectedVendors.map(function (r) {
+                computeRow(r);
+                var c = angular.copy(r);
+                delete c.selected;
+                return c;
+            });
+
+            $scope.btnSave = true;      // lock before the request goes out
             $scope.loading = true;
 
             $http.post('/VendorCSInfo/SaveVendorCSInfo', {
                 vendorCS: $scope.VendorCSInfo,
-                vendorCSItem: $scope.selectedVendors,
+                vendorCSItem: items,
                 vendorCSTerm: $scope.ReqTermGridDisplayCollection
             })
                 .success(function (r) {
                     $scope.loading = false;
-                    $scope.btnSave = false;   // BUG FIX: unlock on success
+                    $scope.btnSave = false;
                     if (r.status === 'S201') {
-                    $scope.startNewCS();
+                        $scope.startNewCS();
                         toastr.success("Data Saved Successfully."); $scope.toggleRefreshTable();
                     }
                     else if (r.status === 'S202') { toastr.success("Data Updated Successfully."); $scope.toggleRefreshTable(); }
@@ -1227,72 +1569,20 @@
                 })
                 .error(function () {
                     $scope.loading = false;
-                    $scope.btnSave = false;   // BUG FIX: unlock on error too, or user is stuck forever
+                    $scope.btnSave = false;   // unlock on error too, or user is stuck forever
                     toastr.error("Data Save Failed.");
                 });
-        };
-
-        /* ── Nego calculations ───────────────────────────────────── */
-        $scope.checkUnitPrice = function (row) {
-            if (!row.NegoQty || row.NegoQty <= 0) {
-                toastr.error("Quantity cannot be zero or negative!");
-                row.NegoQty = 1;
-            }
-            if (!row.NegoPrice || row.NegoPrice <= 0) {
-                toastr.error("Price cannot be zero or negative!");
-                row.NegoPrice = 1;
-            }
-            row.NegoAmt = parseFloat(row.NegoQty) * parseFloat(row.NegoPrice);
-            row.NegoVatAmt = (row.VatPerc * row.NegoAmt) / 100;
-            row.NegoTolAmt = row.NegoAmt + row.NegoVatAmt;
-
-            // Sync into selectedVendors (new mode) or VendorCSListCollection (edit mode)
-            var arr = ($scope.pageMode === 'edit') ? $scope.VendorCSListCollection : $scope.selectedVendors;
-            var match = arr.find(function (v) {
-                return v.VendorID === row.VendorID && v.ServiceItemID === row.ServiceItemID;
-            });
-            if (match) {
-                match.NegoQty = row.NegoQty;
-                match.NegoPrice = row.NegoPrice;
-                match.NegoAmt = row.NegoAmt;
-                match.NegoVatAmt = row.NegoVatAmt;
-                match.NegoTolAmt = row.NegoTolAmt;
-            }
         };
 
         /* ── Row style ───────────────────────────────────────────── */
         $scope.getRowStyle = function (row) {
             return row.selected ? { background: '#8bf5d2' } : {};
         };
+
         /* ── View PDF ────────────────────────────────────────────── */
-        $scope.ViewDocument = function (row) {
+        function openQuotationPdf(row) {
             $scope.loading = true;
             var ftpDetails = {
-           
-                serverUrl: "MCL/Vendor_Requisition",
-                documentID: "VR_" + row.VendorQutnID, ext: "pdf"
-            };
-            var url = "/VendorQuotation/ViewDocument?" +
-                "&serverUrl=" + encodeURIComponent(ftpDetails.serverUrl) +
-                "&DocID=" + encodeURIComponent(ftpDetails.documentID) +
-                "&ext=" + encodeURIComponent(ftpDetails.ext);
-
-            $http.get(url, { responseType: 'arraybuffer' })
-                .then(function (r) {
-                    var blob = new Blob([r.data], { type: 'application/pdf' });
-                    $("#pdfViewer").attr("src", URL.createObjectURL(blob) + "#view=Fit");
-                    $('#ShowPDFModal').modal('show');
-                })
-                .catch(function (e) { toastr.error("Failed to load the PDF."); console.error(e); })
-                .finally(function () { $scope.loading = false; });
-        };
-
-
-
-        $scope.ViewDocumentFromList = function (row) {
-            $scope.loading = true;
-            var ftpDetails = {
-          
                 serverUrl: "MCL/Vendor_Requisition",
                 documentID: "VR_" + row.VendorQutnID,
                 ext: "pdf"
@@ -1310,9 +1600,9 @@
                 })
                 .catch(function (e) { toastr.error("Failed to load the PDF."); console.error(e); })
                 .finally(function () { $scope.loading = false; });
-        };
-
-
+        }
+        $scope.ViewDocument = openQuotationPdf;
+        $scope.ViewDocumentFromList = openQuotationPdf;
 
         /* ── Refresh ─────────────────────────────────────────────── */
         $scope.toggleRefreshTable = function () {
