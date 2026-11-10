@@ -1,0 +1,104 @@
+﻿@* Shared modals. Render inside the ng-controller div of each page using Html.Partial. *@
+<!-- Vendor detail (CS / NCS / QC) -->
+<div class="modal fade" id="detailVendorCSModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div style="text-align: right;">
+                <button type="button" class="btn-danger" data-dismiss="modal" aria-hidden="true" style="color: #ffffff;">
+                    <i class="fa fa-remove"></i>
+                </button>
+            </div>
+            <div class="modal-body table-responsive" ng-cloak>
+                <div ng-if="ItemVendorMsg" class="text-center">{{ItemVendorMsg}}</div>
+                <table ng-if="ItemVendorDetail.length" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+                        <tr style="font-size: 15px;">
+                            <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                Vendor Quotation Details
+                            </th>
+                        </tr>
+                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                            <th>Source</th>
+                            <th>Item Name</th>
+                            <th>Description</th>
+                            <th>Requested Qty</th>
+                            <th>Quoted Qty</th>
+                            <th>Unit</th>
+                            <th>Vendor Name</th>
+                            <th>Quoted Unit Price</th>
+                            <th>Vendor Quoted Amount</th>
+                            <th>VAT (%)</th>
+                            <th>VAT Amount</th>
+                            <th>Quoted Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="r in ItemVendorDetail" style="font-size: 12px;">
+                            <td><span class="label" ng-class="r.SourceType === 'CS' ? 'label-primary' : 'label-warning'">{{r.SourceType}}</span></td>
+                            <td>{{r.ServiceItemName}}</td>
+                            <td>{{r.Description}}</td>
+                            <td style="text-align: right;">{{r.ReqQnty | number:2}}</td>
+                            <td style="text-align: right;">{{r.QutnQnty | number:2}}</td>
+                            <td>{{r.ReqUnit}}</td>
+                            <td>{{r.VendorName}}</td>
+                            <td style="text-align: right;">{{r.QutnPrice}}</td>
+                            <td style="text-align: right;">{{r.QutnAmt}}</td>
+                            <td style="text-align: right;">{{r.VatPerc}}</td>
+                            <td style="text-align: right;">{{r.VatAmt}}</td>
+                            <td style="text-align: right;">{{r.TolAmt}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action history (Submit / Recommend / Approve / Back / Postpone with reasons) -->
+<div class="modal fade" id="ActionLogModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div style="text-align: right;">
+                <button type="button" class="btn-danger" data-dismiss="modal" aria-hidden="true" style="color: #ffffff;">
+                    <i class="fa fa-remove"></i>
+                </button>
+            </div>
+            <div class="modal-body table-responsive" ng-cloak>
+                <table class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <thead>
+                        <tr style="font-size: 15px;">
+                            <th colspan="5" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                Action History
+                            </th>
+                        </tr>
+                        <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
+                            <th>Date</th>
+                            <th>Stage</th>
+                            <th>Action</th>
+                            <th>By</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="l in ActionLog" style="font-size: 12px;">
+                            <td>{{formatDate(l.ActionOn)}}</td>
+                            <td>{{stageLabel(l.Stage)}}</td>
+                            <td>
+                                <span class="label"
+                                      ng-class="{'label-success': l.Action === 'Rec' || l.Action === 'Aprv',
+                                                 'label-danger': l.Action === 'Bck',
+                                                 'label-warning': l.Action === 'Pst',
+                                                 'label-default': l.Action === 'Submit' || l.Action === 'Resubmit'}">
+                                    {{actionLabel(l.Action)}}
+                                </span>
+                            </td>
+                            <td>{{l.ActionByName}}</td>
+                            <td>{{l.Reason}}</td>
+                        </tr>
+                        <tr ng-if="!ActionLog.length"><td colspan="5" class="text-center">No history</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

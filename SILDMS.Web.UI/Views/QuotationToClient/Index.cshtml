@@ -6,31 +6,20 @@
         font-size: 12px;
     }
 
-    .box-body, .form-group, .btn, .form-control, .box-header {
+    .box-body, .form-group, .btn, .form-control, .box-header, label,
+    input.form-control, button.form-control, .fa {
         font-size: 12px;
     }
 
     .btn {
-        font-size: 12px;
         padding: 4px 8px;
     }
 
     h3.box-title {
         font-size: 14px;
     }
-
-    input.form-control, button.form-control {
-        font-size: 12px;
-    }
-
-    label {
-        font-size: 12px;
-    }
-
-    .fa {
-        font-size: 12px;
-    }
-
+</style>
+<style>
     .text-success {
         color: green;
         font-size: 14px;
@@ -43,11 +32,17 @@
 </style>
 
 <div class="box box-primary box-body" ng-controller="WorkOrderInfoCntrl">
+
     <!-- Upper buttons -->
     <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
         <h2 class="box-title" style="font-family: math; font-weight: 500;">Quotation to Client</h2>
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" ng-click="showActionLog()" class="button-custom">
+                        <i class="fa fa-history" style="padding-right: 5px;"></i> History
+                    </button>
+                </div>
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom" ng-disabled="btnRefresh">
                         <i class="fa fa-refresh" style="padding-right: 5px;"></i> Refresh
@@ -62,6 +57,13 @@
         </div>
     </div>
 
+    <!-- Returned (Back) banner: filled by loadActionLog when the latest action was Back -->
+    <div class="alert alert-danger" ng-if="BackInfo" style="margin: 5px 15px;">
+        <i class="fa fa-undo"></i>
+        Returned from <b>{{stageLabel(BackInfo.Stage)}}</b> by {{BackInfo.ActionByName}}
+        on {{formatDate(BackInfo.ActionOn)}} &mdash; Reason: <b>{{BackInfo.Reason}}</b>
+    </div>
+
     <div class="box-body">
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12">
@@ -69,9 +71,7 @@
                 <!-- ClientName -->
                 <div class="row">
                     <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="ClientName">Client Name :</label>
-                        </div>
+                        <div class="form-group"><label for="ClientName">Client Name :</label></div>
                     </div>
                     <div class="col-sm-4 col-md-4 col-lg-4">
                         <div style="position: relative;">
@@ -88,15 +88,14 @@
                     <div class="col-lg-1"></div>
                 </div>
 
-                <!-- ClientRequisition No & Date -->
+                <!-- Requisition No & Date -->
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group"><label for="ClientRequisitionNo">Client Requisition No :</label></div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ClientRequisitionNo" name="ClientRequisitionNo" type="text"
-                                   data-ng-model="Client.ClientRequisitionNo" class="form-control" ng-readonly="true" />
+                            <input id="ClientRequisitionNo" type="text" data-ng-model="Client.ClientRequisitionNo" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                     <div class="col-lg-1"></div>
@@ -105,8 +104,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ClientRequisitionDate" name="ClientRequisitionDate" type="text"
-                                   data-ng-model="Client.ClientRequisitionDate" class="form-control" ng-readonly="true" />
+                            <input id="ClientRequisitionDate" type="text" data-ng-model="Client.ClientRequisitionDate" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                 </div>
@@ -118,8 +116,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ContactPerson" name="ContactPerson" type="text"
-                                   data-ng-model="Client.ContactPerson" class="form-control" ng-readonly="true" />
+                            <input id="ContactPerson" type="text" data-ng-model="Client.ContactPerson" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                     <div class="col-lg-1"></div>
@@ -128,8 +125,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ContactNumber" name="ContactNumber" type="text"
-                                   data-ng-model="Client.ContactNumber" class="form-control" ng-readonly="true" />
+                            <input id="ContactNumber" type="text" data-ng-model="Client.ContactNumber" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                 </div>
@@ -141,8 +137,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ContactTIN" name="ContactTIN" type="text"
-                                   data-ng-model="Client.ContactTIN" class="form-control" ng-readonly="true" />
+                            <input id="ContactTIN" type="text" data-ng-model="Client.ContactTIN" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                     <div class="col-lg-1"></div>
@@ -151,8 +146,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ContactBIN" name="ContactBIN" type="text"
-                                   data-ng-model="Client.ContactBIN" class="form-control" ng-readonly="true" />
+                            <input id="ContactBIN" type="text" data-ng-model="Client.ContactBIN" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                 </div>
@@ -162,15 +156,15 @@
                     <div class="col-lg-2">
                         <div class="form-group"><label for="ContactAddress">Contact Address :</label></div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-7">
                         <div class="form-group">
-                            <input id="ContactAddress" name="ContactAddress" type="text"
-                                   data-ng-model="Client.ContactAddress" class="form-control" ng-readonly="true" />
+                            <input id="ContactAddress" type="text" data-ng-model="Client.ContactAddress" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                     <div class="col-lg-1"></div>
                 </div>
 
+                <!-- Uploaded documents -->
                 <div class="row" ng-if="GetClientReqDetails.length > 0">
                     <div class="col-lg-2">
                         <div class="form-group">
@@ -181,28 +175,24 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <span ng-hide="getDocumentList().length"
-                              style="color:#999; font-size:11px;">No document attached</span>
-
+                        <span ng-hide="getDocumentList().length" style="color:#999; font-size:11px;">No document attached</span>
                         <button type="button" ng-repeat="docID in getDocumentList() track by $index"
-                                ng-click="ViewDocument(docID)"
-                                class="btn button-custom btn-sm"
-                                style="margin: 0 4px 4px 0;">
+                                ng-click="ViewDocument(docID)" class="btn button-custom btn-sm" style="margin: 0 4px 4px 0;">
                             <i class="fa fa-eye"></i> View Doc {{$index + 1}}
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
-    <!-- Available Clients Modal (for new save) -->
+    <!-- Available clients modal (new quotation) -->
     <div id="AvailableClients" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div style="text-align: right;">
-                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
-                            aria-hidden="true" style="color: #ffffff;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" aria-hidden="true" style="color: #ffffff;">
                         <i class="fa fa-remove"></i>
                     </button>
                 </div>
@@ -216,34 +206,24 @@
                                 </th>
                             </tr>
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                                <th style="text-align: left;" st-sort="">Client Name</th>
-                                <th style="text-align: left;" st-sort="">Project Name</th>
-                                <th style="text-align: left;" st-sort="">Representative</th>
+                                <th style="text-align: left;">Client Name</th>
+                                <th style="text-align: left;">Project Name</th>
+                                <th style="text-align: left;">Representative</th>
                                 <th class="col-lg-1">Action</th>
                             </tr>
                             <tr>
                                 <th colspan="4">
-                                    <input type="search"
-                                           ng-model="PagingInfo.search"
-                                           ng-model-options="{ debounce: 400 }"
+                                    <input type="search" ng-model="PagingInfo.search" ng-model-options="{ debounce: 400 }"
                                            ng-change="SearchAvailableClients()"
-                                           placeholder="Search Client / Project / Representative..."
-                                           class="input-sm form-control" />
+                                           placeholder="Search Client / Project / Representative..." class="input-sm form-control" />
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in AllAvailableClientsList | orderBy:'IsBack':true">
-                                <td class="hidden">{{row.ClientID}}</td>
-                                <td class="hidden">{{row.ClientReqID}}</td>
-                                <td class="hidden">{{row.ClientReqNo}}</td>
-                                <td class="hidden">{{row.ClientCode}}</td>
-                                <td class="hidden">{{row.ReqType}}</td>
-
                                 <td class="col-lg-2">{{row.ClientName}}</td>
-                                <td class="col-lg-2">{{ row.ProjectName }} </td>
+                                <td class="col-lg-2">{{row.ProjectName}}</td>
                                 <td class="col-lg-2">{{row.UserFullName}}</td>
-
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectAvailableClient(row, 'save')">Select</a>
                                 </td>
@@ -261,7 +241,7 @@
         </div>
     </div>
 
-    <!-- Item & Service List Table -->
+    <!-- Item & service list -->
     <div class="row" ng-if="GetClientReqDetails.length > 0">
         <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
             <table st-table="GetClientReqDetailsCollection" st-safe-src="GetClientReqDetails"
@@ -290,11 +270,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="row in GetClientReqDetailsCollection"
-                        ng-init="initializeDefaults(row)"
-                        ng-cloak
-                        ng-style="{'background-color': row.ReqType === 'QC' ? '#a9c7f8' : ''}"
-                        style="font-size: 12px;">
+                    <tr ng-repeat="row in GetClientReqDetailsCollection" ng-init="initializeDefaults(row)" ng-cloak
+                        ng-style="{'background-color': row.ReqType === 'QC' ? '#a9c7f8' : ''}" style="font-size: 12px;">
 
                         <td style="width: 5%;">{{ row.ServiceItemID }}</td>
                         <td style="width: 5%;">{{ row.ServiceItemName }}</td>
@@ -308,101 +285,57 @@
 
                         <td style="width: 5%;">{{ row.ReqUnit }}</td>
 
-                        <!-- Quotation Price input -->
+                        <!-- Quotation price input -->
                         <td style="width: 6%;">
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
-                                   type="number"
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="number"
                                    ng-readonly="pagefunction === 'viewmode'"
                                    ng-model="row.givenQutnPrice"
                                    ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput0('givenQutnPrice', row)" />
                         </td>
 
-                        <!-- Given Quotation Amount -->
-                        <td ng-show="pagefunction === 'savemode'" style="width: 6%; text-align: right; color: #126e0f;">
-                            {{ row.givenQutnAmt | number: 2 }}
-                        </td>
-                        <td ng-show="pagefunction === 'viewmode' || pagefunction === 'editmode'" style="width: 6%; text-align: right; color: #126e0f;">
-                            {{ row.QutnAmt | number: 2 }}
-                        </td>
+                        <!-- Given quotation amount -->
+                        <td ng-show="pagefunction === 'savemode'" style="width: 6%; text-align: right; color: #126e0f;">{{ row.givenQutnAmt | number: 2 }}</td>
+                        <td ng-show="pagefunction === 'viewmode' || pagefunction === 'editmode'" style="width: 6%; text-align: right; color: #126e0f;">{{ row.QutnAmt | number: 2 }}</td>
 
                         <!-- ASF % -->
                         <td style="width: 6%;">
-                            <!-- savemode: editable GivenASFPerc -->
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px; text-align: right"
-                                   type="text"
-                                   ng-show="pagefunction === 'savemode'"
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px; text-align: right" type="text"
+                                   ng-show="pagefunction === 'savemode' || pagefunction === 'editmode'"
                                    ng-model="row.GivenASFPerc"
                                    ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('GivenASFPerc', row)" />
-                            <!-- editmode: editable ASFPerc from DB -->
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px; text-align: right"
-                                   type="text"
-                                   ng-show="pagefunction === 'editmode'"
-                                   ng-model="row.GivenASFPerc"
-                                   ng-change="calculateRowFields(row)"
-                                   ng-blur="validateInput('GivenASFPerc', row)" />
-                            <!-- viewmode: readonly -->
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
-                                   type="text"
-                                   ng-show="pagefunction === 'viewmode'"
-                                   ng-readonly="true"
-                                   ng-model="row.GivenASFPerc" />
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="text"
+                                   ng-show="pagefunction === 'viewmode'" ng-readonly="true" ng-model="row.GivenASFPerc" />
                         </td>
 
-                        <!-- ASF Amount -->
-                        <td ng-show="pagefunction === 'savemode'" style="width: 6%; text-align: right;">
-                            {{ (row.TotGivenASFAmt | number:2) || '0.00' }}
-                        </td>
-                        <td ng-show="pagefunction === 'viewmode' || pagefunction === 'editmode'" style="width: 6%; text-align: right;">
-                            {{ (row.TotGivenASFAmt | number:2) || row.ASFAmt }}
-                        </td>
+                        <!-- ASF amount -->
+                        <td ng-show="pagefunction === 'savemode'" style="width: 6%; text-align: right;">{{ (row.TotGivenASFAmt | number:2) || '0.00' }}</td>
+                        <td ng-show="pagefunction === 'viewmode' || pagefunction === 'editmode'" style="width: 6%; text-align: right;">{{ (row.TotGivenASFAmt | number:2) || row.ASFAmt }}</td>
 
                         <!-- VAT % -->
                         <td style="width: 6%;">
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px; text-align: right"
-                                   type="text"
-                                   ng-show="pagefunction === 'savemode'"
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px; text-align: right" type="text"
+                                   ng-show="pagefunction === 'savemode' || pagefunction === 'editmode'"
                                    ng-model="row.GivenVatPerc"
                                    ng-change="calculateRowFields(row)"
                                    ng-blur="validateInput('GivenVatPerc', row)" />
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px; text-align: right"
-                                   type="text"
-                                   ng-show="pagefunction === 'editmode'"
-                                   ng-model="row.GivenVatPerc"
-                                   ng-change="calculateRowFields(row)"
-                                   ng-blur="validateInput('GivenVatPerc', row)" />
-                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;"
-                                   type="text"
-                                   ng-show="pagefunction === 'viewmode'"
-                                   ng-readonly="true"
-                                   ng-model="row.GivenVatPerc" />
+                            <input class="form-control" style="width: 100%; height: 18px; font-size: 10px;" type="text"
+                                   ng-show="pagefunction === 'viewmode'" ng-readonly="true" ng-model="row.GivenVatPerc" />
                         </td>
 
-                        <!-- VAT Amount -->
-                        <td ng-show="pagefunction === 'savemode'" style="width: 6%; text-align: right;">
-                            {{ (row.TotGivenVatAmt | number:2) || '0.00' }}
-                        </td>
-                        <td ng-show="pagefunction === 'viewmode' || pagefunction === 'editmode'" style="width: 6%; text-align: right;">
-                            {{ (row.TotGivenVatAmt | number:2) || row.VatAmt }}
-                        </td>
+                        <!-- VAT amount -->
+                        <td ng-show="pagefunction === 'savemode'" style="width: 6%; text-align: right;">{{ (row.TotGivenVatAmt | number:2) || '0.00' }}</td>
+                        <td ng-show="pagefunction === 'viewmode' || pagefunction === 'editmode'" style="width: 6%; text-align: right;">{{ (row.TotGivenVatAmt | number:2) || row.VatAmt }}</td>
 
-                        <!-- Total Amount — FIX: separate spans with ng-show to avoid double-display -->
+                        <!-- Total + vendor-detail button (now for CS, NCS and QC items, in every mode) -->
                         <td style="width: 6%; color: #126e0f; text-align: right;">
                             <div style="display: inline-flex; align-items: center;">
-                                <span ng-show="pagefunction === 'savemode'">
-                                    {{ (row.givenTolAmt | number:2) || '0.00' }}
-                                </span>
-                                <span ng-show="pagefunction === 'viewmode' || pagefunction === 'editmode'">
-                                    {{ (row.givenTolAmt | number:2) || row.TolAmt }}
-                                </span>
-                                <button type="button"
-                                        class="button-detail"
-                                        style="margin-left: 5px;"
-                                        ng-hide="row.ReqType === 'QC' || row.CsStatus === 'NCS' || pagefunction === 'viewmode' || pagefunction === 'editmode'"
-                                        ng-click="detailVendorCS(row)"
-                                        data-dismiss="modal"
-                                        title="Show detail">
+                                <span ng-show="pagefunction === 'savemode'">{{ (row.givenTolAmt | number:2) || '0.00' }}</span>
+                                <span ng-show="pagefunction === 'viewmode' || pagefunction === 'editmode'">{{ (row.givenTolAmt | number:2) || row.TolAmt }}</span>
+                                <button type="button" class="button-detail" style="margin-left: 5px;"
+                                        ng-hide="row.ReqType === 'QC'"
+                                        ng-click="detailVendorCS(row)" title="Show vendor detail">
                                     <i class="fa fa-info"></i>
                                 </button>
                             </div>
@@ -413,65 +346,7 @@
         </div>
     </div>
 
-    <!-- Vendor Detail Popup -->
-    <div class="modal fade" id="detailVendorCSModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div style="text-align: right;">
-                    <button type="button" class="btn-danger" data-dismiss="modal"
-                            aria-hidden="true" style="color: #ffffff;">
-                        <i class="fa fa-remove"></i>
-                    </button>
-                </div>
-                <div class="modal-body table-responsive" ng-cloak>
-                    <table st-table="GetClientReqDataItemPopupCollection" st-safe-src="GetClientReqDataItemPopup"
-                           class="table table-condensed table-bordered table-striped table-hover pnlView">
-                        <thead>
-                            <tr style="font-size: 15px;">
-                                <th colspan="13" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
-                                    Vendor Quotation Details
-                                </th>
-                            </tr>
-                            <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                                <th>Item Name</th>
-                                <th>Description</th>
-                                <th>Delivery Location</th>
-                                <th>Delivery Date</th>
-                                <th>Requested Qty</th>
-                                <th>Quotated Qty</th>
-                                <th>Req Unit</th>
-                                <th>Vendor Name</th>
-                                <th>Quotated Per Unit Price</th>
-                                <th>Vendor Quoted Amount</th>
-                                <th>VAT (%) Rate</th>
-                                <th>VAT Amount</th>
-                                <th>Quotated Total Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="row in GetClientReqDataItemPopupCollection" ng-cloak style="font-size: 12px;">
-                                <td>{{ row.ServiceItemName }}</td>
-                                <td>{{ row.Description }}</td>
-                                <td>{{ row.DeliveryLocation }}</td>
-                                <td>{{ row.DeliveryDate }}</td>
-                                <td style="text-align: right;">{{ row.ReqQnty | number: 2 }}</td>
-                                <td style="text-align: right;">{{ row.QutnQnty | number: 2 }}</td>
-                                <td>{{ row.ReqUnit }}</td>
-                                <td>{{ row.VendorName }}</td>
-                                <td style="text-align: right;">{{ row.QutnPrice }}</td>
-                                <td style="text-align: right;">{{ row.QutnAmt }}</td>
-                                <td style="text-align: right;">{{ row.VatPerc }}</td>
-                                <td style="text-align: right;">{{ row.VatAmt }}</td>
-                                <td style="text-align: right;">{{ row.TolAmt }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Terms & Conditions section -->
+    <!-- Terms & conditions + quotation fields -->
     <div class="box-body" ng-show="showTermsItem === true">
 
         <!-- Terms selection modal -->
@@ -479,8 +354,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div style="text-align: right;">
-                        <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
-                                aria-hidden="true" style="color: #ffffff;">
+                        <button type="button" class="btn-danger" data-dismiss="modal" aria-hidden="true" style="color: #ffffff;">
                             <i class="fa fa-remove"></i>
                         </button>
                     </div>
@@ -494,9 +368,9 @@
                                     </th>
                                 </tr>
                                 <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                                    <th data-ng-click="sort('FormCode')">Form Code</th>
-                                    <th data-ng-click="sort('FormName')">Form Name</th>
-                                    <th data-ng-click="sort('Status')">Status</th>
+                                    <th>Form Code</th>
+                                    <th>Form Name</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                                 <tr>
@@ -515,8 +389,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-primary btn-flat"
-                                                data-ng-click="toggleTermsConditionsSelect(row)">
+                                        <button type="button" class="btn btn-sm btn-primary btn-flat" data-ng-click="toggleTermsConditionsSelect(row)">
                                             <i class="fa fa-edit"></i> Select
                                         </button>
                                     </td>
@@ -525,7 +398,7 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="7" class="text-center">
-                                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="100"></div>
+                                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -547,8 +420,8 @@
                             </th>
                             <th ng-show="pagefunction === 'savemode'" style="background: #ffffff; position: relative; padding: 5px;">
                                 <div style="position: relative; display: inline-block; width: 200px;">
-                                    <input id="FormName" name="FormName" type="text"
-                                           data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true"
+                                    <input id="FormName" name="FormName" type="text" data-ng-model="ClientReq.FormName"
+                                           class="form-control" ng-readonly="true"
                                            style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
                                     <button type="button" ng-click="ShowTermsConditionsList()"
                                             style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
@@ -558,8 +431,7 @@
                                 </div>
                             </th>
                             <th ng-show="pagefunction === 'savemode'" style="background: #ffffff;">
-                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd"
-                                        ng-click="AddReqTermModal()" class="button-detail btn">
+                                <button type="button" id="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
                                     <i class="fa fa-plus" style="padding-right: 3px"></i> Add
                                 </button>
                             </th>
@@ -578,12 +450,10 @@
                             <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
                             <td colspan="13" style="width:6%;">{{row.TermsName}}</td>
                             <td ng-show="pagefunction !== 'viewmode'" class="col-lg-1" style="width:5%;">
-                                <button type="button" class="btn btn-xs btn-primary btn-flat"
-                                        ng-click="toggleReqTermEdit(row,$index)">
+                                <button type="button" class="btn btn-xs btn-primary btn-flat" ng-click="toggleReqTermEdit(row,$index)">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete"
-                                        ng-click="toggleReqTermDelete(row,$index)">
+                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" ng-click="toggleReqTermDelete(row,$index)">
                                     <i class="fa fa-remove"></i>
                                 </button>
                             </td>
@@ -593,7 +463,7 @@
             </div>
         </div>
 
-        <!-- Add/Edit Term Modal -->
+        <!-- Add / Edit term modal -->
         <div id="RequisitionTermModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -603,8 +473,7 @@
                                 <h4 class="modal-title" style="font-family: initial; font-weight: 700">Terms & Conditions Information</h4>
                             </div>
                             <div style="text-align: right;">
-                                <button type="button" class="btn-danger" data-dismiss="modal"
-                                        aria-hidden="true" style="color: #ffffff;">
+                                <button type="button" class="btn-danger" data-dismiss="modal" aria-hidden="true" style="color: #ffffff;">
                                     <i class="fa fa-remove"></i>
                                 </button>
                             </div>
@@ -620,10 +489,8 @@
                                 </div>
                             </div>
                             <div class="col-sm-2">
-                                <input id="TermsCode" name="TermsCode" type="text" class="form-control"
-                                       placeholder="Terms Code" autocomplete="off"
-                                       ng-model="ClientReqTerm.TermsCode"
-                                       style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                                <input id="TermsCode" name="TermsCode" type="text" class="form-control" placeholder="Terms Code" autocomplete="off"
+                                       ng-model="ClientReqTerm.TermsCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
                             </div>
                         </div>
                         <div class="row" style="position:relative;top:5px;">
@@ -635,10 +502,8 @@
                                 </div>
                             </div>
                             <div class="col-sm-8">
-                                <input id="TermsName" name="TermsName" type="text" class="form-control"
-                                       placeholder="Terms Name" autocomplete="off"
-                                       ng-model="ClientReqTerm.TermsName"
-                                       style="height: 25px; background-color:#ffffff; font-size: smaller" />
+                                <input id="TermsName" name="TermsName" type="text" class="form-control" placeholder="Terms Name" autocomplete="off"
+                                       ng-model="ClientReqTerm.TermsName" style="height: 25px; background-color:#ffffff; font-size: smaller" />
                             </div>
                         </div>
                     </div>
@@ -646,8 +511,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="btn-group pull-right" style="margin:2px;">
-                                    <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()"
-                                            class="button-detail btn">
+                                    <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn">
                                         <i class="fa fa-save" style="padding-right: 3px"></i>Add
                                     </button>
                                 </div>
@@ -658,55 +522,21 @@
             </div>
         </div>
 
-        <!-- Delete Term Confirm Modal -->
-        <div class="modal fade" id="deleteReqTermModal" tabindex="-1" role="dialog"
-             style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
-                    <div class="modal-header" style="height: 46px;">
-                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                        <h4 class="modal-title">Delete Selected Item</h4>
-                    </div>
-                    <div class="modal-body" style="height: 80px;">Are you sure to delete this item?</div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn button-custom" data-dismiss="modal"
-                                style="color: white; background-color: red;" ng-click="DeleteReqTerm()">
-                            Yes
-                        </button>
-                        <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quotation No / Date / Note -->
+        <!-- Briefing date / quotation date / project name -->
         <div class="row">
             <div class="col-sm-1 col-md-1 col-lg-1"></div>
             <div class="col-sm-10 col-md-10 col-lg-10">
 
                 <div class="row">
-                    @*<div class="col-lg-2">
-                            <div class="form-group"><label for="QuotationNo">Quotation No :</label></div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <input ng-show="pagefunction === 'savemode'" id="QuotationNo" name="QuotationNo"
-                                       type="text" ng-model="Quotation.QuotationNo" readonly class="form-control" />
-                                <input ng-show="pagefunction === 'viewmode' || pagefunction === 'editmode'" id="QuotationNoSaved"
-                                       name="QuotationNoSaved" type="text" ng-model="SavedClientQutnID" readonly class="form-control" />
-                            </div>
-                        </div>*@
                     <div class="col-lg-2">
                         <div class="form-group"><label for="BriefingDate">Client Briefing Date :</label></div>
                     </div>
                     <div class="col-lg-2">
-                        <!-- savemode & editmode: date picker -->
                         <div ng-show="pagefunction === 'savemode' || pagefunction === 'editmode'" class="form-group">
                             <input id="BriefingDate" name="BriefingDate" readonly type="datetime"
                                    class="DatePicker form-control" placeholder="DD/MM/YYYY"
                                    ng-model="MasterData.BriefingDate" style="height: 25px; background-color:#ffffff;" />
                         </div>
-                        <!-- viewmode: plain text -->
                         <div ng-show="pagefunction === 'viewmode'" class="form-group">
                             <input name="BriefingDateView" readonly type="text" placeholder="DD/MM/YYYY"
                                    ng-model="MasterData.BriefingDate" class="form-control"
@@ -719,10 +549,8 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <!-- savemode: JS-set today's date -->
                             <input ng-show="pagefunction === 'savemode'" id="QuotationDate" name="QuotationDate"
                                    type="text" class="form-control" style="background-color:#ffffff;" readonly />
-                            <!-- view/edit: DB value -->
                             <input ng-show="pagefunction === 'viewmode' || pagefunction === 'editmode'"
                                    type="text" ng-model="MasterData.QuotationDate"
                                    class="form-control" style="background-color:#ffffff;" readonly />
@@ -736,10 +564,8 @@
                     </div>
                     <div class="col-lg-9">
                         <div class="form-group">
-                            <textarea id="QuotationNote" name="QuotationNote"
-                                      ng-readonly="pagefunction === 'viewmode'"
-                                      ng-model="MasterData.QuotationNote"
-                                      class="form-control" rows="3"
+                            <textarea id="QuotationNote" name="QuotationNote" ng-readonly="pagefunction === 'viewmode'"
+                                      ng-model="MasterData.QuotationNote" class="form-control" rows="3"
                                       style="resize: vertical;"></textarea>
                         </div>
                     </div>
@@ -749,16 +575,16 @@
                     <div class="col-lg-9"></div>
                     <div ng-show="pagefunction === 'savemode'" class="col-lg-2">
                         <button type="button" class="btn btn-success saveBtn pull-right"
-                                ng-click="openConfirmModal('save')" data-dismiss="modal" title="Save"
+                                ng-click="openConfirmModal('save')" title="Save"
                                 style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0,0,0,0.1); border-radius: 5px;">
                             <i class="fa fa-check"></i> Submit
                         </button>
                     </div>
                     <div ng-show="pagefunction === 'editmode'" class="col-lg-2">
                         <button type="button" class="btn btn-success saveBtn pull-right"
-                                ng-click="openConfirmModal('edit')" data-dismiss="modal" title="Update"
+                                ng-click="openConfirmModal('edit')" title="Update"
                                 style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0,0,0,0.1); background-color: #ac5604c2; border-radius: 5px;">
-                            <i class="fa fa-check"></i> Update
+                            <i class="fa fa-check"></i> Re-submit
                         </button>
                     </div>
                 </div>
@@ -766,13 +592,12 @@
         </div>
     </div>
 
-    <!-- Saved Quotations Search Modal -->
+    <!-- Saved quotations (view / edit). Edit is offered ONLY for quotations sent Back -->
     <div id="QuotationForRecom" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div style="text-align: right;">
-                    <button type="button" class="btn-danger" data-dismiss="modal"
-                            aria-hidden="true" style="color: #ffffff;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" aria-hidden="true" style="color: #ffffff;">
                         <i class="fa fa-remove"></i>
                     </button>
                 </div>
@@ -781,7 +606,7 @@
                            class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr style="font-size: 15px;">
-                                <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                <th colspan="8" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
                                     All Saved Client Quotations
                                 </th>
                             </tr>
@@ -792,16 +617,14 @@
                                 <th>Requisition Date</th>
                                 <th>Quotation No</th>
                                 <th>Quotation Date</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             <tr>
-                                <th colspan="7">
-                                    <input type="search"
-                                           ng-model="PagingInfo.search"
-                                           ng-model-options="{ debounce: 400 }"
+                                <th colspan="8">
+                                    <input type="search" ng-model="PagingInfo.search" ng-model-options="{ debounce: 400 }"
                                            ng-change="SearchSaveClients()"
-                                           placeholder="Search Client Code / Name / Req No..."
-                                           class="input-sm form-control" />
+                                           placeholder="Search Client Code / Name / Req No..." class="input-sm form-control" />
                                 </th>
                             </tr>
                         </thead>
@@ -813,19 +636,23 @@
                                 <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
                                 <td class="text-center">{{row.QuotationNo}}</td>
                                 <td class="text-center">{{row.ClientAdvanceClaimDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="text-center">
+                                    <span class="label"
+                                          ng-class="{'label-danger': row.ProcessStatus === 'Back',
+                                                     'label-warning': row.ProcessStatus === 'Postponed',
+                                                     'label-success': row.ProcessStatus === 'Done',
+                                                     'label-default': row.ProcessStatus === 'Rcvd'}">
+                                        {{ row.ProcessStatus === 'Rcvd' ? 'Submitted' : row.ProcessStatus }}
+                                    </span>
+                                </td>
                                 <td class="col-lg-2 text-center">
-                                    <button type="button"
-                                            ng-click="selectAvailableClient(row, 'view')"
-                                            class="btn btn-flat btn-primary btn-xs"
-                                            ng-disabled="loading">
+                                    <button type="button" ng-click="selectAvailableClient(row, 'view')"
+                                            class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
                                         <span class="fa fa-search-plus"> View</span>
                                     </button>
-
-                                    <button type="button"
-                                            ng-click="selectAvailableClient(row, 'edit')"
-                                            ng-hide="row.ProcessStatus === 'Done'"
-                                            class="btn btn-flat btn-warning btn-xs"
-                                            style="margin-left: 5px;">
+                                    <button type="button" ng-click="selectAvailableClient(row, 'edit')"
+                                            ng-show="row.ProcessStatus === 'Back'"
+                                            class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
                                         <span class="fa fa-edit"> Edit</span>
                                     </button>
                                 </td>
@@ -843,27 +670,34 @@
         </div>
     </div>
 
-    <!-- Confirm Save/Update Modal -->
-    <div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog"
-         style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
-                <div class="modal-header" style="height: 46px;">
-                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                    <h4 class="modal-title" style="height:30px;">Confirm your Action</h4>
-                </div>
-                <div class="modal-body" style="height:80px;">
-                    <h5 class="modal-title" style="height:30px;">Are you sure to Save?</h5>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="btnSaveMaster" class="btn button-custom"
-                            style="color: white; background-color: darkgreen;" data-dismiss="modal"
-                            ng-click="SaveQCApprove()">
-                        Confirm
+    <!-- Zero-ASF confirmation -->
+    <div id="confirmModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="border-radius: 4px; overflow: hidden;">
+                <div class="modal-header" style="background-color: #3c8dbc; color: #fff; padding: 12px 15px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #fff; opacity: 1;">
+                        <span aria-hidden="true">&times;</span>
                     </button>
-                    <button type="button" class="btn button-custom" data-dismiss="modal"
-                            style="color: white; background-color: darkred;">
-                        Cancel
+                    <h4 class="modal-title" style="font-weight: 600;"><i class="fa fa-exclamation-triangle"></i> Confirmation</h4>
+                </div>
+                <div class="modal-body" style="padding: 25px 20px; text-align: center;">
+                    <div style="font-size: 45px; color: #f39c12; margin-bottom: 12px;">
+                        <i style="font-size:50px" class="fa fa-exclamation-circle"></i>
+                    </div>
+                    <p style="font-size: 15px; margin-bottom: 5px;">
+                        You have set <strong>ASF (%)</strong> to <strong style="color: #dd4b39;">0 (Zero)</strong>.
+                    </p>
+                    <p style="font-size: 14px; color: #777; margin-bottom: 0;">Are you sure you want to proceed?</p>
+                </div>
+                <div class="modal-footer" style="padding: 10px 15px;">
+                    <button type="button" class="btn btn-flat btn-sm btn-default" data-dismiss="modal">
+                        <i class="fa fa-times"></i> Cancel
+                    </button>
+                    <button ng-show="pagefunction === 'savemode'" type="button" class="btn btn-flat btn-sm btn-warning" ng-click="SaveQuotToClient('save')">
+                        <i class="fa fa-check"></i> Proceed
+                    </button>
+                    <button ng-show="pagefunction === 'editmode'" type="button" class="btn btn-flat btn-sm btn-warning" ng-click="SaveQuotToClient('edit')">
+                        <i class="fa fa-check"></i> Proceed
                     </button>
                 </div>
             </div>
@@ -879,7 +713,7 @@
         </div>
     </div>
 
-    <!-- PDF Viewer Modal -->
+    <!-- PDF viewer modal -->
     <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -890,95 +724,21 @@
         </div>
     </div>
 
-
-    <!-- #region Confirmation Modal -->
-    <div id="confirmModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content" style="border-radius: 4px; overflow: hidden;">
-
-                <!-- Header -->
-                <div class="modal-header" style="background-color: #3c8dbc; color: #fff; padding: 12px 15px;">
-                    <button type="button"
-                            class="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                            style="color: #fff; opacity: 1;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-
-                    <h4 class="modal-title" style="font-weight: 600;">
-                        <i class="fa fa-exclamation-triangle"></i>
-                        Confirmation
-                    </h4>
-                </div>
-
-                <!-- Body -->
-                <div class="modal-body" style="padding: 25px 20px; text-align: center;">
-
-                    <div style="font-size: 45px; color: #f39c12; margin-bottom: 12px;">
-                        <i style="font-size:50px" class="fa fa-exclamation-circle"></i>
-                    </div>
-
-                    <p style="font-size: 15px; margin-bottom: 5px;">
-                        You have set <strong>ASF (%)</strong> to
-                        <strong style="color: #dd4b39;">0 (Zero)</strong>.
-                    </p>
-
-                    <p style="font-size: 14px; color: #777; margin-bottom: 0;">
-                        Are you sure you want to proceed?
-                    </p>
-                </div>
-
-                <!-- Footer -->
-                <div class="modal-footer" style="padding: 10px 15px;">
-
-                    <button type="button"
-                            class="btn btn-flat btn-sm btn-default"
-                            data-dismiss="modal">
-                        <i class="fa fa-times"></i>
-                        Cancel
-                    </button>
-
-                    <button ng-show="pagefunction === 'savemode'"
-                            type="button"
-                            class="btn btn-flat btn-sm btn-warning"
-                            ng-click="SaveQuotToClient('save')">
-                        <i class="fa fa-check"></i>
-                        Proceed
-                    </button>
-
-                    <button ng-show="pagefunction === 'editmode'"
-                            type="button"
-                            class="btn btn-flat btn-sm btn-warning"
-                            ng-click="SaveQuotToClient('edit')">
-                        <i class="fa fa-check"></i>
-                        Proceed
-                    </button>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <!-- #endregion -->
+    <!-- Shared modals: vendor detail + action history -->
+    @Html.Partial("_QutnCommonModals")
 
 </div>
 
+<script src="@Url.Content("~/Scripts/qutnCommon.js")?v=1"></script>
 <script type="text/javascript">
     app.controller('WorkOrderInfoCntrl', function ($scope, $http) {
-        $scope.clientReqTermArray = [];
-        $scope.PagingInfo = {
-            page: 1, itemsPerPage: 8,
-            sortBy: null, reverse: false,
-            search: null, totalItems: 0
-        };
+        attachQutnCommon($scope, $http);
 
-        $scope.ClientReq = { TermsID: "", FormName: "" };
-        $scope.ClientReqTerm = { ClientReqTermsID: "", ClientReqID: "", TermsID: "", TermsCode: "", TermsName: "" };
+        $scope.PagingInfo = { page: 1, itemsPerPage: 8, sortBy: null, reverse: false, search: null, totalItems: 0 };
+
         $scope.Client = {
-            ClientName: "", ClientRequisitionNo: "", ClientReqID: "",
-            ClientRequisitionDate: "", ContactPerson: "", ContactNumber: "",
-            ContactTIN: "", ContactBIN: "", ContactAddress: ""
+            ClientName: "", ClientRequisitionNo: "", ClientReqID: "", ClientRequisitionDate: "",
+            ContactPerson: "", ContactNumber: "", ContactTIN: "", ContactBIN: "", ContactAddress: ""
         };
         $scope.MasterData = {
             ClientID: "", ClientReqID: "", ClientReqNo: "",
@@ -990,58 +750,54 @@
         $scope.SavedClientQutnID = '';
         $scope.showTermsItem = false;
         $scope.selectedRows = [];
-        $scope.TermsConditionsList = [];
-        $scope.TermsConditionsDisplayedCollection = [];
 
         // ── Date picker ───────────────────────────────────────────────
-        $('.DatePicker').datepicker({
-            format: "dd/mm/yyyy", autoclose: true
-        }).on('changeDate', function (ev) {
-            var val = $(this).val();
-            $('.datepicker').hide();
-            var s = angular.element($(this)).scope();
-            s.$apply(function () { s.MasterData.BriefingDate = val; });
-        });
+        $('.DatePicker').datepicker({ format: "dd/mm/yyyy", autoclose: true })
+            .on('changeDate', function () {
+                var val = $(this).val();
+                $('.datepicker').hide();
+                var s = angular.element($(this)).scope();
+                s.$apply(function () { s.MasterData.BriefingDate = val; });
+            });
 
-        // Set today's date for save mode
+        // today's date for save mode
         (function () {
             var d = new Date();
-            var dd = String(d.getDate()).padStart(2, '0');
-            var mm = String(d.getMonth() + 1).padStart(2, '0');
-            var yyyy = d.getFullYear();
             var el = document.getElementById("QuotationDate");
-            if (el) el.value = yyyy + '-' + mm + '-' + dd;
+            if (el) el.value = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
         })();
 
-        // ── Search (new save) ─────────────────────────────────────────
-        $scope.SearchAvailableClients = function () {
-            $scope.PagingInfo.page = 1;               // reset on new search
-            $scope.ClearEverything();
-            $http.post('/QuotationToClient/AllAvailableClients', {
+        function setClient(d) {
+            $scope.ClientDetails = [d];
+            $scope.Client = {
+                ClientName: d.ClientName, ClientRequisitionNo: d.ClientReqNo, ClientReqID: d.ClientReqID,
+                ClientRequisitionDate: d.RequisitionDate, ContactPerson: d.ContactPerson, ContactNumber: d.ContactNumber,
+                ContactTIN: d.ClientTinNo, ContactBIN: d.ClientBinNo, ContactAddress: d.Address,
+                DocumentID: d.DocumentID
+            };
+        }
+
+        // ── Search (new quotation) ────────────────────────────────────
+        function loadAvailable() {
+            return $http.post('/QuotationToClient/AllAvailableClients', {
                 page: $scope.PagingInfo.page, itemsPerPage: $scope.PagingInfo.itemsPerPage,
                 sortBy: $scope.PagingInfo.sortBy, reverse: $scope.PagingInfo.reverse,
                 search: $scope.PagingInfo.search, type: "isBack"
             }).success(function (r) {
                 $scope.AllAvailableClientsList = r.AllAvailableClientsList;
                 $scope.AllAvailableClientstCollection = [].concat($scope.AllAvailableClientsList);
-                $scope.PagingInfo.totalItems = r.TotalItems || 0;      // added
+                $scope.PagingInfo.totalItems = r.TotalItems || 0;
                 $scope.loading = false;
             }).error(function () { $scope.loading = false; });
+        }
+
+        $scope.SearchAvailableClients = function () {
+            $scope.PagingInfo.page = 1;
+            $scope.ClearEverything();
+            loadAvailable();
             $('#AvailableClients').modal('show');
         };
-
-        $scope.selectPageList = function () {
-            $http.post('/QuotationToClient/AllAvailableClients', {
-                page: $scope.PagingInfo.page, itemsPerPage: $scope.PagingInfo.itemsPerPage,
-                sortBy: $scope.PagingInfo.sortBy, reverse: $scope.PagingInfo.reverse,
-                search: $scope.PagingInfo.search, type: "isBack"
-            }).success(function (r) {
-                $scope.AllAvailableClientsList = r.AllAvailableClientsList;
-                $scope.AllAvailableClientstCollection = [].concat($scope.AllAvailableClientsList);
-                $scope.PagingInfo.totalItems = r.TotalItems || 0;      // added
-                $scope.loading = false;
-            }).error(function () { $scope.loading = false; });
-        };
+        $scope.selectPageList = function () { loadAvailable(); };
 
         $scope.sortList = function (sortBy) {
             if (sortBy === $scope.PagingInfo.sortBy) {
@@ -1057,52 +813,29 @@
         $scope.selectAvailableClient = function (row, action) {
             $scope.MasterData.ClientReqID = row.ClientReqID;
             $scope.MasterData.ClientID = row.ClientID;
+            $scope.ReqType = row.ReqType;
+            $scope.BackInfo = null;
 
             if (action === 'save') {
                 $scope.pagefunction = 'savemode';
-                $scope.ReqType = row.ReqType;
                 $('#AvailableClients').modal('hide');
-                $scope.loading = true;
-
-                $http.post('/QuotationToClient/AvailableClientDetailInfo', {
-                    ClientID: row.ClientID, ClientReqID: row.ClientReqID, ReqType: row.ReqType
-                }).success(function (r) {
-                    $scope.ClientDetails = r.ClientDetails;
-                    var d = r.ClientDetails[0];
-                    $scope.Client = {
-                        ClientName: d.ClientName, ClientRequisitionNo: d.ClientReqNo,
-                        ClientReqID: d.ClientReqID, ClientRequisitionDate: d.RequisitionDate,
-                        ContactPerson: d.ContactPerson, ContactNumber: d.ContactNumber,
-                        ContactTIN: d.ClientTinNo, ContactBIN: d.ClientBinNo, ContactAddress: d.Address,
-                        DocumentID: d.DocumentID
-                    };
-                    $scope.MasterData.QuotationNote = d.Remarks;
-                    $scope.GetClientReqDataInfo(d.ClientID, d.ClientReqID, null, action);
-                    $scope.loading = false;
-                }).error(function () { $scope.loading = false; });
-
-            } else if (action === 'view' || action === 'edit') {
-                $scope.ReqType = row.ReqType;
+            } else {
                 $scope.pagefunction = (action === 'view') ? 'viewmode' : 'editmode';
                 $('#QuotationForRecom').modal('hide');
-                $scope.loading = true;
-
-                $http.post('/QuotationToClient/AvailableClientDetailInfo', {
-                    ClientID: row.ClientID, ClientReqID: row.ClientReqID, ReqType: $scope.ReqType
-                }).success(function (r) {
-                    $scope.ClientDetails = r.ClientDetails;
-                    var d = r.ClientDetails[0];
-                    $scope.Client = {
-                        ClientName: d.ClientName, ClientRequisitionNo: d.ClientReqNo,
-                        ClientReqID: d.ClientReqID, ClientRequisitionDate: d.RequisitionDate,
-                        ContactPerson: d.ContactPerson, ContactNumber: d.ContactNumber,
-                        ContactTIN: d.ClientTinNo, ContactBIN: d.ClientBinNo, ContactAddress: d.Address,
-                        DocumentID: d.DocumentID
-                    };
-                    $scope.GetClientReqDataInfo(d.ClientID, d.ClientReqID, row.ClientQutnID, action);
-                    $scope.loading = false;
-                }).error(function () { $scope.loading = false; });
+                // history + "returned from ..." banner
+                $scope.loadActionLog(row.ClientReqID, false);
             }
+            $scope.loading = true;
+
+            $http.post('/QuotationToClient/AvailableClientDetailInfo', {
+                ClientID: row.ClientID, ClientReqID: row.ClientReqID, ReqType: $scope.ReqType
+            }).success(function (r) {
+                var d = r.ClientDetails[0];
+                setClient(d);
+                if (action === 'save') $scope.MasterData.QuotationNote = d.Remarks;
+                $scope.GetClientReqDataInfo(d.ClientID, d.ClientReqID, action === 'save' ? null : row.ClientQutnID, action);
+                $scope.loading = false;
+            }).error(function () { $scope.loading = false; });
         };
 
         // ── Load item rows ────────────────────────────────────────────
@@ -1119,29 +852,22 @@
                     }
                 }).error(function () { $scope.loading = false; });
 
-            } else if (action === 'view' || action === 'edit') {
+            } else {   // view / edit
                 $scope.SavedClientQutnID = ClientQutnID;
-
                 $http.post('/QuotationRecommendation/GetClientReqDataInfo', {
                     ClientID: ClientID, ClientReqID: ClientReqID, ClientQutnID: ClientQutnID
                 }).success(function (r) {
                     $scope.GetClientReqDetails = r.GetClientReqDetails;
                     $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
                     $scope.loading = false;
-
                     if ($scope.GetClientReqDetailsCollection.length > 0) {
                         var first = $scope.GetClientReqDetailsCollection[0];
-                        // Populate MasterData from DB
                         $scope.MasterData = {
-                            ClientID: ClientID,
-                            ClientReqID: ClientReqID,
+                            ClientID: ClientID, ClientReqID: ClientReqID,
                             ClientQuotationID: first.ClientQuotationID,
-                            QuotationNo: first.QutnNo,
-                            BriefingDate: first.BriefingDate,
-                            QuotationDate: first.QuotationDate,
-                            QuotationNote: first.Remarks
+                            QuotationNo: first.QutnNo, BriefingDate: first.BriefingDate,
+                            QuotationDate: first.QuotationDate, QuotationNote: first.Remarks
                         };
-                        // Show Terms section
                         $scope.showTermsItem = true;
                         $scope.GetTermsItemList(first.ClientQuotationID, ClientReqID, action);
                     }
@@ -1149,37 +875,24 @@
             }
         };
 
-        // ── initializeDefaults: called once per row via ng-init ───────
-        // FIX: only set defaults in savemode; in view/edit, copy DB values into
-        // the "Given*" fields so the single editable model works correctly.
+        // ── Row defaults / calculation ────────────────────────────────
         $scope.initializeDefaults = function (row) {
+            if (row._initialized) return;
+            row.givenQutnPrice = parseFloat(row.QutnPrice) || 0;
+            row.GivenASFPerc = parseFloat(row.ASFPerc) || 0;
             if ($scope.pagefunction === 'savemode') {
-                // New entry – default price from vendor, VAT = 15
-                if (row._initialized) return;
-                row.givenQutnPrice = parseFloat(row.QutnPrice) || 0;
-                row.GivenASFPerc = parseFloat(row.ASFPerc) || 0;
-                row.GivenVatPerc = 15;
+                row.GivenVatPerc = 15;                       // default VAT for a new entry
                 row._initialized = true;
                 $scope.calculateRowFields(row);
-
-            } else if ($scope.pagefunction === 'editmode' || $scope.pagefunction === 'viewmode') {
-                // Existing entry – load from DB fields
-                if (row._initialized) return;
-                row.givenQutnPrice = parseFloat(row.QutnPrice) || 0;
-                row.GivenASFPerc = parseFloat(row.ASFPerc) || 0;
+            } else {                                          // view / edit: load DB values
                 row.GivenVatPerc = parseFloat(row.VatPerc) || 0;
                 row._initialized = true;
-                // Recalculate so derived fields (TotGivenASFAmt etc.) are populated
-                // but do NOT push into selectedRows again here
                 $scope.recalcOnly(row);
-                // For editmode, register into selectedRows once
-                if ($scope.pagefunction === 'editmode') {
-                    $scope.selectEntity(row, 'edit-init');
-                }
+                if ($scope.pagefunction === 'editmode') $scope.selectEntity(row, 'edit-init');
             }
         };
 
-        // recalcOnly: calculates derived fields without touching selectedRows
+        // calculates derived fields without touching selectedRows
         $scope.recalcOnly = function (row) {
             var qty = parseFloat(($scope.pagefunction === 'savemode') ? row.ReqQnty : row.QutnQnty) || 0;
             row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
@@ -1193,19 +906,17 @@
             row.givenTolAmt = parseFloat(row.givenQutnAmt + row.TotGivenASFAmt + row.TotGivenVatAmt).toFixed(2);
         };
 
-        // calculateRowFields: called on user input (ng-change / ng-blur)
         $scope.calculateRowFields = function (row) {
             $scope.recalcOnly(row);
-            // In savemode or editmode, update selectedRows
             if ($scope.pagefunction === 'savemode' || $scope.pagefunction === 'editmode') {
                 $scope.selectEntity(row, 'save');
             }
         };
 
-        // ── selectEntity ──────────────────────────────────────────────
         $scope.selectEntity = function (row, action) {
             if (action === 'save') {
                 var item = {
+                    ClientQuotationID: ($scope.pagefunction === 'editmode') ? row.ClientQuotationID : undefined,
                     VendorCSAprvID: row.VendorCSAprvID,
                     VendorCSAprvItemID: row.VendorCSAprvItemID,
                     ServiceCategoryID: row.ServiceCategoryID,
@@ -1215,7 +926,7 @@
                     DeliveryLocation: row.DeliveryLocation,
                     DeliveryDate: row.DeliveryDate,
                     DeliveryMode: row.DeliveryMode,
-                    QutnQnty: row.ReqQnty,
+                    QutnQnty: ($scope.pagefunction === 'editmode') ? row.QutnQnty : row.ReqQnty,
                     QutnUnit: row.ReqUnit,
                     VenPrice: row.QutnPrice,
                     MclPrice: row.givenQutnPrice,
@@ -1246,66 +957,42 @@
                 $scope.showTermsItem = $scope.selectedRows.length > 0;
 
             } else if (action === 'edit-init') {
-                // Initial population of selectedRows for editmode (from DB values)
-                var editItem = {
-                    ClientQuotationID: row.ClientQuotationID,
-                    ServiceCategoryID: row.ServiceCategoryID,
-                    TermsID: row.TermsID,
-                    ServiceItemID: row.ServiceItemID,
-                    Description: row.Description,
-                    DeliveryLocation: row.DeliveryLocation,
-                    DeliveryDate: row.DeliveryDate,
-                    DeliveryMode: row.DeliveryMode,
-                    QutnQnty: row.QutnQnty,
-                    QutnUnit: row.ReqUnit,
-                    VenPrice: row.QutnPrice,
-                    MclPrice: row.givenQutnPrice,
-                    QutnAmt: row.givenQutnAmt,
-                    ASFPerc: row.GivenASFPerc,
-                    ASFAmt: row.TotGivenASFAmt,
-                    VatPerc: row.GivenVatPerc,
-                    VatAmt: row.TotGivenVatAmt,
-                    TolAmt: row.givenTolAmt
-                };
-                var dup = $scope.selectedRows.find(function (i) {
-                    return i.ServiceItemID === row.ServiceItemID;
-                });
-                if (!dup) $scope.selectedRows.push(editItem);
+                var dup = $scope.selectedRows.find(function (i) { return i.ServiceItemID === row.ServiceItemID; });
+                if (!dup) {
+                    $scope.selectedRows.push({
+                        ClientQuotationID: row.ClientQuotationID,
+                        ServiceCategoryID: row.ServiceCategoryID,
+                        TermsID: row.TermsID,
+                        ServiceItemID: row.ServiceItemID,
+                        Description: row.Description,
+                        DeliveryLocation: row.DeliveryLocation,
+                        DeliveryDate: row.DeliveryDate,
+                        DeliveryMode: row.DeliveryMode,
+                        QutnQnty: row.QutnQnty,
+                        QutnUnit: row.ReqUnit,
+                        VenPrice: row.QutnPrice,
+                        MclPrice: row.givenQutnPrice,
+                        QutnAmt: row.givenQutnAmt,
+                        ASFPerc: row.GivenASFPerc,
+                        ASFAmt: row.TotGivenASFAmt,
+                        VatPerc: row.GivenVatPerc,
+                        VatAmt: row.TotGivenVatAmt,
+                        TolAmt: row.givenTolAmt
+                    });
+                }
             }
-        };
-
-        // ── Vendor detail popup ───────────────────────────────────────
-        $scope.detailVendorCS = function (row) {
-            $http.post('/QuotationToClient/GetClientReqDataItemPopup', {
-                VendorCSAprvID: row.VendorCSAprvID, ServiceItemID: row.ServiceItemID
-            }).success(function (r) {
-                $scope.GetClientReqDataItemPopup = r.GetClientReqDataItemPopup;
-                $scope.GetClientReqDataItemPopupCollection = [].concat($scope.GetClientReqDataItemPopup);
-                $('#detailVendorCSModal').modal('show');
-                $scope.loading = false;
-            }).error(function () { $scope.loading = false; });
         };
 
         // ── Terms item list ───────────────────────────────────────────
         $scope.GetTermsItemList = function (TempID, ClientReqID, action) {
-            if (action === 'save') {
-                $http.post('/QuotationToClient/GetVendorTermList',
-                    { VendorCSAprvID: TempID, ClientReqID: ClientReqID, ReqType: $scope.ReqType })
-                    .success(function (r) {
-                        $scope.TermsConditionsList = r.VendorTermTermList;
-                        $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-                        $scope.loading = false;
-                    }).error(function () { });
-
-            } else if (action === 'view' || action === 'edit') {
-                $http.post('/QuotationRecommendation/GetVendorTermList',
-                    { ClientQuotationID: TempID, ClientReqID: ClientReqID, ReqType: $scope.ReqType })
-                    .success(function (r) {
-                        $scope.TermsConditionsList = r.VendorTermTermList;
-                        $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-                        $scope.loading = false;
-                    }).error(function () { });
-            }
+            var req = (action === 'save')
+                ? $http.post('/QuotationToClient/GetVendorTermList', { VendorCSAprvID: TempID, ClientReqID: ClientReqID, ReqType: $scope.ReqType })
+                : $http.post('/QuotationRecommendation/GetVendorTermList', { ClientQuotationID: TempID });
+            req.success(function (r) {
+                $scope.TermsConditionsList = r.VendorTermTermList;
+                $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
+                $scope.loading = false;
+            }).error(function () { });
         };
 
         // ── Validation ────────────────────────────────────────────────
@@ -1322,7 +1009,7 @@
             }
         };
 
-        // ── Confirm & Save ────────────────────────────────────────────
+        // ── Confirm & save ────────────────────────────────────────────
         $scope.openConfirmModal = function (action) {
             if (!$scope.MasterData.BriefingDate || $scope.MasterData.BriefingDate.trim() === '') {
                 toastr.error('Please enter a Briefing Date');
@@ -1330,19 +1017,17 @@
                 toastr.error('Given Quotation Amount must be greater than 0.');
             } else if ($scope.selectedRows.some(function (i) { return !i.ASFPerc || i.ASFPerc <= 0; })) {
                 $("#confirmModal").modal("show");
-            }
-            else {
+            } else {
                 $scope.SaveQuotToClient(action);
             }
         };
 
         $scope.SaveQuotToClient = function (action) {
             $("#confirmModal").modal("hide");
-            $scope.MasterData.BriefingDate = $('#BriefingDate').val();
+            $scope.MasterData.BriefingDate = $('#BriefingDate').val() || $scope.MasterData.BriefingDate;
 
             var matches = $scope.ReqType ? $scope.ReqType.match(/\b(QV|QC)\b/g) : [];
             var cleanedReqType = matches ? matches.join(', ') : '';
-
 
             $scope.loading = true;
 
@@ -1352,131 +1037,45 @@
                 DetailData: $scope.selectedRows,
                 AllTermsDtl: $scope.TermsConditionsDisplayedCollection,
                 ReqType: cleanedReqType
-            })
-                .success(function (response) {
-                    var s = (response.status || '').trim();
-
-                    if (s === 'Successfully Submitted' || s === 'Operation Done') {
-                        toastr.success('Data Saved Successfully');
-
-                        // For save: show the new ID.  For edit: show the existing ID.
-                        $scope.Quotation.QuotationNo = response.ClientQutnID;
-                        $scope.SavedClientQutnID = response.ClientQutnID;
-                        $scope.ClearEverything();
-                        $scope.refreshPage();
-                    } else {
-                        // Surface the actual SP error message so it's visible in the toast
-                        toastr.error('Error: ' + (response.ClientQutnID || s));
-                    }
-                    $scope.loading = false;
-                })
-                .error(function () {
-                    $scope.loading = false;
-                    toastr.error('Data Loading Failed.');
-                });
+            }).success(function (response) {
+                var s = (response.status || '').trim();
+                if (s === 'Successfully Submitted' || s === 'Operation Done') {
+                    toastr.success(action === 'edit' ? 'Re-submitted for recommendation.' : 'Data Saved Successfully');
+                    $scope.Quotation.QuotationNo = response.ClientQutnID;
+                    $scope.SavedClientQutnID = response.ClientQutnID;
+                    $scope.ClearEverything();
+                    $scope.refreshPage();
+                } else {
+                    toastr.error('Error: ' + (response.ClientQutnID || response.message || s));
+                }
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+                toastr.error('Data Loading Failed.');
+            });
         };
 
         // ── Search saved quotations ───────────────────────────────────
-        $scope.SearchSaveClients = function () {
-            $scope.PagingInfo.page = 1;               // reset on new search
-            $scope.ClearEverything();
-            $http.post('/QuotationRecommendation/AllSavcdClientsQuotation', {
+        function loadSaved() {
+            return $http.post('/QuotationRecommendation/AllSavcdClientsQuotation', {
                 page: $scope.PagingInfo.page, itemsPerPage: $scope.PagingInfo.itemsPerPage,
                 sortBy: $scope.PagingInfo.sortBy, reverse: $scope.PagingInfo.reverse,
                 search: $scope.PagingInfo.search, type: "isBack"
             }).success(function (r) {
-                $scope.AllQuotationsList = r.AllAvailableClientsList;
-                $scope.AllQuotationsCollection = $scope.AllQuotationsList.filter(function (i) {
-                    return i.ProcessStatus == null || i.ProcessStatus === '';
-                });
-                $scope.PagingInfo.totalItems = r.TotalItems || 0;      // added
+                $scope.AllQuotationsList = r.AllAvailableClientsList;      // status is shown, so no filtering
+                $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsList);
+                $scope.PagingInfo.totalItems = r.TotalItems || 0;
                 $scope.loading = false;
             }).error(function () { $scope.loading = false; });
+        }
+
+        $scope.SearchSaveClients = function () {
+            $scope.PagingInfo.page = 1;
+            $scope.ClearEverything();
+            loadSaved();
             $('#QuotationForRecom').modal('show');
         };
-        $scope.getDocumentList = function () {
-            var ids = $scope.Client && $scope.Client.DocumentID;
-            if (!ids) return [];
-            return ids.split(',')
-                .map(function (s) { return s.trim(); })
-                .filter(Boolean);
-        };
-        $scope.selectSavePageList = function () {
-            $http.post('/QuotationRecommendation/AllSavcdClientsQuotation', {   // fixed to match
-                page: $scope.PagingInfo.page, itemsPerPage: $scope.PagingInfo.itemsPerPage,
-                sortBy: $scope.PagingInfo.sortBy, reverse: $scope.PagingInfo.reverse,
-                search: $scope.PagingInfo.search, type: "isBack"
-            }).success(function (r) {
-                $scope.AllQuotationsList = r.AllAvailableClientsList;
-                $scope.AllQuotationsCollection = $scope.AllQuotationsList.filter(function (i) {
-                    return i.ProcessStatus == null || i.ProcessStatus === '';
-                });
-                $scope.PagingInfo.totalItems = r.TotalItems || 0;      // added
-                $scope.loading = false;
-            }).error(function () { $scope.loading = false; });
-        };
-
-        // ── Terms & Conditions helpers ────────────────────────────────
-        $scope.ShowTermsConditionsList = function () {
-            $http.get("/ClientRequisition/GetTermsConditionsList")
-                .success(function (r) {
-                    $scope.TermsConditionsList = r.termsConditionsList;
-                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-                    $scope.loading = false;
-                }).error(function () { });
-            $('#ClientReqTermsConditionsModal').modal('show');
-        };
-
-        $scope.toggleTermsConditionsSelect = function (row) {
-            $scope.ClientReq.TermsID = row.TermsID;
-            $scope.ClientReq.FormName = row.FormName;
-            $http.post('/ClientRequisition/GetClientReqTermAgainstFormList', { TermsID: row.TermsID })
-                .success(function (r) {
-                    $scope.TermsConditionsList = r.ClientReqTermList;
-                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-                    $scope.loading = false;
-                }).error(function () { $scope.loading = false; });
-            $('#ClientReqTermsConditionsModal').modal('hide');
-        };
-
-        $scope.AddReqTermModal = function () { $('#RequisitionTermModal').modal('show'); };
-
-        $scope.AddReqTerm = function () {
-            if (!$('#TermsCode').val()) { toastr.error("Terms Code is required."); return; }
-            if (!$('#TermsName').val()) { toastr.error("Terms Name is required."); return; }
-            var newTerm = { TermsCode: $('#TermsCode').val(), TermsName: $('#TermsName').val() };
-            $scope.clientReqTermArray.push(newTerm);
-            $scope.TermsConditionsDisplayedCollection = $scope.TermsConditionsDisplayedCollection.concat(newTerm);
-            $scope.resetClientReqTerm();
-            $("#btnAddReqTerm").html('Add');
-            $('#RequisitionTermModal').modal('hide');
-        };
-
-        $scope.resetClientReqTerm = function () {
-            $scope.ClientReqTerm = { ClientReqTermsID: "", ClientReqID: "", TermsID: "", TermsCode: "", TermsName: "" };
-        };
-
-        $scope.toggleReqTermEdit = function (tableRow, index) {
-            $('#RequisitionTermModal').modal('show');
-            $scope.resetClientReqTerm();
-            $scope.ClientReqTerm = angular.copy(tableRow);
-            $scope.TermsConditionsDisplayedCollection.splice(index, 1);
-            $scope.clientReqTermArray.splice(index, 1);
-            $("#btnAddReqTerm").html('Update');
-        };
-
-        $scope.toggleReqTermDelete = function (tableRow, index) {
-            if (!tableRow.ClientReqTermID) {
-                $scope.resetClientReqTerm();
-                $scope.TermsConditionsDisplayedCollection.splice(index, 1);
-                $scope.clientReqTermArray.splice(index, 1);
-                toastr.success('Data deleted successfully.');
-            } else {
-                $scope.resetClientReqTerm();
-                $scope.ClientReqTerm = angular.copy(tableRow);
-                $('#deleteReqTermModal').modal('show');
-            }
-        };
+        $scope.selectSavePageList = function () { loadSaved(); };
 
         // ── Clear everything ──────────────────────────────────────────
         $scope.ClearEverything = function () {
@@ -1485,11 +1084,10 @@
             $scope.pagefunction = '';
             $scope.clientReqTermArray = [];
             $scope.ClientReq = { TermsID: "", FormName: "" };
-            $scope.ClientReqTerm = { ClientReqTermsID: "", ClientReqID: "", TermsID: "", TermsCode: "", TermsName: "" };
+            $scope.resetClientReqTerm();
             $scope.Client = {
-                ClientName: "", ClientRequisitionNo: "", ClientReqID: "",
-                ClientRequisitionDate: "", ContactPerson: "", ContactNumber: "",
-                ContactTIN: "", ContactBIN: "", ContactAddress: ""
+                ClientName: "", ClientRequisitionNo: "", ClientReqID: "", ClientRequisitionDate: "",
+                ContactPerson: "", ContactNumber: "", ContactTIN: "", ContactBIN: "", ContactAddress: ""
             };
             $scope.MasterData = { ClientID: "", ClientReqID: "", BriefingDate: "", QuotationNote: "", QuotationDate: "" };
             $scope.ClientDetails = [];
@@ -1502,40 +1100,25 @@
             $scope.selectedRows = [];
             $scope.Quotation = { QuotationNo: "" };
             $scope.SavedClientQutnID = '';
+            $scope.BackInfo = null;
+            $scope.ActionLog = [];
         };
 
-        // ── Misc ──────────────────────────────────────────────────────
-        $scope.toggleRefreshTable = function () { window.location.reload(); };
-        $scope.refreshPage = function () { setTimeout(function () { window.location.reload(); }, 2000); };
 
-        $scope.ViewDocument = function (docID) {
-            if (!docID) {
-                toastr.error("No document selected.");
-                return;
+        $scope.formatDate = function (dateStr) {
+            if (!dateStr) return '';
+            var d;
+            if (typeof dateStr === 'string' && dateStr.startsWith('/Date(')) {
+                d = new Date(parseInt(dateStr.match(/\d+/)[0], 10));
+            } else {
+                d = new Date(dateStr);
             }
-
-            // Safety: the ViewDocument action appends the extension itself
-            docID = docID.replace(/\.pdf$/i, '');
-
-            $scope.loading = true;
-
-            var url = "/ClientRequisition/ViewDocument?" +
-                "&serverUrl=" + encodeURIComponent("MCL/Client_Requisition") +
-                "&DocID=" + encodeURIComponent(docID) +
-                "&ext=" + encodeURIComponent("pdf");
-
-            $http.get(url, { responseType: 'arraybuffer' })
-                .then(function (r) {
-                    var blob = new Blob([r.data], { type: 'application/pdf' });
-                    var fileURL = URL.createObjectURL(blob);
-                    $("#pdfViewer").attr("src", fileURL + "#view=Fit");
-                    $('#ShowPDFModal').modal('show');
-                })
-                .catch(function (e) {
-                    toastr.error("Failed to load the PDF.");
-                    console.error(e);
-                })
-                .finally(function () { $scope.loading = false; });
+            if (isNaN(d.getTime())) return '';
+            var day = String(d.getDate()).padStart(2, '0');
+            var month = String(d.getMonth() + 1).padStart(2, '0');
+            var year = d.getFullYear();
+            return day + '/' + month + '/' + year;
         };
+
     });
 </script>

@@ -113,6 +113,43 @@
         background-color: #777777;
     }
 
+    /* ── CS state tracker ── */
+    .cs-step {
+        display: inline-block;
+        padding: 1px 6px;
+        margin-right: 2px;
+        border-radius: 3px;
+        font-size: 10px;
+        color: #fff;
+        background: #bbb;
+    }
+
+    .cs-step-done {
+        background: #5cb85c;
+    }
+
+    .cs-step-cur {
+        background: #337ab7;
+    }
+
+    .cs-step-hold {
+        background: #d9534f;
+    }
+
+    .cs-step-back {
+        background: #f0ad4e;
+    }
+
+    .cs-chip {
+        display: inline-block;
+        padding: 1px 6px;
+        margin: 1px 2px 1px 0;
+        border-radius: 8px;
+        font-size: 10px;
+        color: #fff;
+        white-space: nowrap;
+    }
+
     /* ── Print slip container ── */
     #masterRow {
         position: relative;
@@ -134,7 +171,7 @@
                     </div>
 
                     <button type="button" ng-show="MatWiseVendorListCollection.length > 0"
-                            ng-disabled="showPrint"
+                            ng-disabled="showPrint || !printAllowed()" title="{{printAllowed() ? 'Print the Comparative Statement' : 'Available only after the CS has passed every stage'}}"
                             class="button-custom btn-success pull-right"
                             ng-click="SaveAndPrint()">
                         <i class="fa fa-print" style="padding-right: 5px"></i> CS Print
@@ -157,20 +194,21 @@
                        class="tableVen table-condensed table-bordered table-hover pnlView">
 
                     <colgroup>
-                        <col style="width: 24%;">
-                        <col style="width: 24%;">
                         <col style="width: 19%;">
-                        <col style="width: 8%;">
-                        <col style="width: 8%;">
-                        <col style="width: 8%;">
-                        <col style="width: 9%;">
+                        <col style="width: 19%;">
+                        <col style="width: 13%;">
+                        <col style="width: 7%;">
+                        <col style="width: 7%;">
+                        <col style="width: 7%;">
+                        <col style="width: 18%;">
+                        <col style="width: 10%;">
                     </colgroup>
 
                     <thead>
 
                         <!-- Table Title -->
                         <tr style="font-size: 15px;">
-                            <th colspan="7"
+                            <th colspan="8"
                                 style="text-align: left;
            color: black;
            font-weight: 100;
@@ -191,6 +229,8 @@ font-size: 11px;">
                             <th rowspan="2" style="text-align: left; vertical-align: middle;">Representative</th>
 
                             <th colspan="3" style="text-align: center; vertical-align: middle; padding: 2px;">Status</th>
+
+                            <th rowspan="2" style="text-align: center; vertical-align: middle;">CS State</th>
 
                             <th rowspan="2" style="text-align: center; vertical-align: middle;">Action</th>
 
@@ -219,6 +259,7 @@ font-size: 9px;">
                                 <input st-search="UserFullName" placeholder="Representative" class="input-sm form-control" type="search" />
                             </th>
                             <th colspan="3"></th>
+                            <th></th>
                             <th></th>
                         </tr>
 
@@ -272,8 +313,20 @@ font-size: 9px;">
                                 </span>
                             </td>
 
+                            <!-- CS State (stage progress of the CS inside this requisition) -->
+                            <td style="padding: 3px 2px; font-size:11px;">
+                                <span class="cs-chip" style="background:#5cb85c;" ng-show="csSummary(row).done">{{csSummary(row).done}} approved</span>
+                                <span class="cs-chip" style="background:#337ab7;" ng-show="csSummary(row).active">{{csSummary(row).active}} in progress</span>
+                                <span class="cs-chip" style="background:#d9534f;" ng-show="csSummary(row).postponed">{{csSummary(row).postponed}} postponed</span>
+                                <span class="cs-chip" style="background:#f0ad4e;" ng-show="csSummary(row).returned">{{csSummary(row).returned}} sent back</span>
+                                <span class="text-muted" ng-show="!csSummary(row).total">&ndash;</span>
+                            </td>
+
                             <!-- Action -->
                             <td class="text-center" style="font-weight:bold">
+                                <button type="button" class="btn btn-xs btn-info" ng-click="openCSState(row)" title="View the state of every CS in this requisition">
+                                    <i class="fa fa-eye"></i>
+                                </button>
                                 <button type="button"
                                         ng-show="row.RecomAccOperation === 'Rec'
                   && row.VerifyOperation === 'Vrf'
@@ -292,7 +345,7 @@ font-size: 9px;">
 
                     <tfoot>
                         <tr>
-                            <td colspan="7" class="text-center">
+                            <td colspan="8" class="text-center">
                                 <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
                             </td>
                         </tr>
@@ -322,6 +375,7 @@ font-size: 9px;">
                             <th style="text-align: left;" st-sort="">Description</th>
                             <th style="text-align: left;" st-sort="">DeliveryLocation</th>
                             <th style="text-align: left;" st-sort="">DeliveryDate</th>
+                            <th>CS State</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -338,6 +392,9 @@ font-size: 9px;">
                             <td class="col-lg-2 col-md-2 col-sm-2">{{row.Description}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.DeliveryLocation}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.DeliveryDate}}</td>
+                            <td class="col-lg-1 col-md-1 col-sm-1" style="font-size:11px;">
+                                <span class="label" ng-show="csStateForMaterial(row)" ng-class="csStateClass(csStateForMaterial(row))">{{csStateLabel(csStateForMaterial(row))}}</span>
+                            </td>
                             <td class="col-lg-1 col-md-1 col-sm-1 " style="font-weight:bold">
                                 <button type="button" ng-click="selectMaterial(row)" data-dismiss="modal" title="Select">
                                     <i ng-show="!row.selected" class="fa fa-square-o"></i>
@@ -348,13 +405,26 @@ font-size: 9px;">
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="9" class="text-center">
+                            <td colspan="10" class="text-center">
                             </td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
+        </div>
+
+        <!-- State of the selected CS: printing is allowed only after every stage has passed -->
+        <div class="alert" ng-cloak ng-show="currentCS && isMaterialRowSelected" style="margin: 8px 1%;"
+             ng-class="csIsDone(currentCS) ? 'alert-success' : (currentCS.WfState === 'POSTPONED' ? 'alert-danger' : 'alert-warning')">
+            <button type="button" class="btn btn-xs btn-info pull-right" ng-click="csShowHistory(currentCS)"><i class="fa fa-history"></i> History</button>
+            <strong>{{csStateLabel(currentCS)}}</strong>
+            <span ng-show="currentCS.AwardMode"> &nbsp;|&nbsp; Award: {{currentCS.AwardMode === 'DIST' ? 'Distribute work among selected vendors' : 'Recommend one vendor'}}</span>
+            <span ng-show="!csIsDone(currentCS)"> &nbsp;&ndash;&nbsp; CS Print is available only after the CS has passed every stage.</span>
+            <div ng-show="currentCS.LastReason && currentCS.WfState !== 'ACTIVE'" style="margin-top:4px;">
+                <strong>Reason:</strong> {{currentCS.LastReason}}
+                <span class="text-muted" ng-show="currentCS.LastActionByName">({{currentCS.LastActionByName}}, {{currentCS.LastActionOnText}})</span>
+            </div>
         </div>
 
         <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isMaterialRowSelected">
@@ -558,6 +628,71 @@ font-size: 9px;">
                     <tfoot>
                     </tfoot>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- CS STATE : every CS inside the requisition -->
+    <div id="CSStateModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><i class="fa fa-tasks"></i> CS State &ndash; {{csStateModal.reqNo}} <small>{{csStateModal.project}}</small></h4>
+                </div>
+                <div class="modal-body" style="max-height:65vh; overflow:auto;">
+                    <div ng-show="csStateModal.rows.length === 0" class="text-center text-muted">No CS workflow record found for this requisition.</div>
+                    <table class="table table-condensed table-bordered" ng-show="csStateModal.rows.length > 0" style="font-size:12px;">
+                        <thead>
+                            <tr style="background-color:#82b0c9;"><th>Item</th><th>Award</th><th>Progress</th><th>State</th><th style="width:30%;">Reason / last action</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="s in csStateModal.rows" ng-class="{danger: s.WfState==='POSTPONED', warning: s.WfState==='RETURNED', success: csIsDone(s)}">
+                                <td>{{s.ServiceItemName}}</td>
+                                <td>{{s.AwardMode === 'DIST' ? 'Distribute' : 'Recommend one'}}</td>
+                                <td style="white-space:nowrap;"><span ng-repeat="st in csSteps(s)" class="cs-step" ng-class="'cs-step-' + st.cls">{{st.label}}</span></td>
+                                <td><span class="label" ng-class="csStateClass(s)">{{csStateLabel(s)}}</span></td>
+                                <td style="white-space:pre-wrap;">
+                                    <span ng-show="s.LastReason && s.WfState !== 'ACTIVE'">{{s.LastReason}}</span>
+                                    <div class="text-muted" ng-show="s.LastActionByName">{{s.LastAction}} by {{s.LastActionByName}} &middot; {{s.LastActionOnText}}</div>
+                                </td>
+                                <td><button type="button" class="btn btn-xs btn-info" ng-click="csShowHistory(s)" title="Full history"><i class="fa fa-history"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CS HISTORY -->
+    <div id="WfHistoryModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><i class="fa fa-history"></i> CS History</h4>
+                </div>
+                <div class="modal-body" style="max-height:60vh;overflow:auto;">
+                    <div ng-show="wf.history.length === 0" class="text-center text-muted">No history recorded yet.</div>
+                    <table class="table table-condensed table-bordered" ng-show="wf.history.length > 0" style="font-size:12px;">
+                        <thead><tr style="background-color:#82b0c9;"><th>#</th><th>Date</th><th>Page</th><th>Action</th><th>By</th><th>Result</th><th>Award</th><th style="width:35%;">Reason</th></tr></thead>
+                        <tbody>
+                            <tr ng-repeat="h in wf.history" ng-class="{danger: h.Action==='POSTPONE', warning: h.Action==='BACK'}">
+                                <td>{{wf.history.length - $index}}</td>
+                                <td>{{h.ActionOnText}}</td>
+                                <td>{{wf.stageNames[h.Stage] || h.Stage}}</td>
+                                <td><span class="label" ng-class="wfActionClass(h.Action)">{{h.Action}}</span></td>
+                                <td>{{h.ActionByName}}</td>
+                                <td>{{h.FromState}} &rarr; {{h.ToState}}<span ng-show="h.ToStage"> ({{wf.stageNames[h.ToStage] || h.ToStage}})</span></td>
+                                <td>{{h.AwardMode === 'DIST' ? 'Distribute' : (h.AwardMode === 'REC' ? 'Recommend one' : '')}}</td>
+                                <td style="white-space:pre-wrap;">{{h.Reason}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
             </div>
         </div>
     </div>
@@ -828,6 +963,7 @@ font-size: 9px;">
             <p style="margin-top:20px;">
                 Subject: Comparative Statement for {{VendorCSAprv.ProjectName}}
             </p>
+            <p style="margin:2px 0;">Award Type: <strong>{{VendorCSAprv.AwardMode === 'DIST' ? 'Distribute work among selected vendors' : 'Recommend one vendor'}}</strong></p>
         </div>
 
         <table style="width:100%;border-collapse:collapse;margin-top:10px;">
@@ -850,7 +986,7 @@ font-size: 9px;">
                         style="border:1px solid #555;padding:6px 8px;">
                         {{VendorCSAprv.ServiceItemName}}, {{VendorCSAprv.ServiceCategoryName}}
                     </td>
-                    <td style="border:1px solid #555;padding:6px 8px;">{{row.VendorName}}</td>
+                    <td style="border:1px solid #555;padding:6px 8px;">{{row.VendorName}} <strong ng-if="VendorCSAprv.AwardMode === 'DIST' && isAwardedRow(row)">(Awarded)</strong></td>
                     <td style="border:1px solid #555;padding:6px 8px;">{{row.ReqUnit}}</td>
                     <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.NegoQty | number:2}}</td>
                     <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.NegoPrice | number:2}}</td>
@@ -862,7 +998,8 @@ font-size: 9px;">
             </tbody>
         </table>
 
-        <div style="margin-top:20px;">
+        <!-- Recommend one vendor -->
+        <div ng-if="VendorCSAprv.AwardMode !== 'DIST'" style="margin-top:20px;">
             <table style="border-collapse:collapse; border:none;">
                 <tr>
                     <td style="border:none; padding:2px 10px 2px 0;">Approved Service Provider</td>
@@ -888,14 +1025,50 @@ font-size: 9px;">
             </table>
         </div>
 
+        <!-- Distribute work among selected vendors -->
+        <div ng-if="VendorCSAprv.AwardMode === 'DIST'" style="margin-top:20px;">
+            <p style="font-weight:bold;margin:0 0 4px 0;">Approved Service Providers (work distributed)</p>
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th style="border:1px solid #555;padding:5px 8px;text-align:left;">Vendor Name</th>
+                        <th style="border:1px solid #555;padding:5px 8px;text-align:right;">Approved Qty</th>
+                        <th style="border:1px solid #555;padding:5px 8px;text-align:left;">UOM</th>
+                        <th style="border:1px solid #555;padding:5px 8px;text-align:right;">Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="v in printAwardRows()" style="font-size:12px;">
+                        <td style="border:1px solid #555;padding:5px 8px;">{{v.VendorName}}</td>
+                        <td style="border:1px solid #555;padding:5px 8px;text-align:right;">{{v.NegoQty | number:2}}</td>
+                        <td style="border:1px solid #555;padding:5px 8px;">{{v.ReqUnit}}</td>
+                        <td style="border:1px solid #555;padding:5px 8px;text-align:right;">{{v.NegoTolAmt | number:2}}</td>
+                    </tr>
+                    <tr style="font-size:12px;font-weight:bold;">
+                        <td style="border:1px solid #555;padding:5px 8px;">Total</td>
+                        <td style="border:1px solid #555;padding:5px 8px;text-align:right;">{{PrintApprovedQty | number:2}}</td>
+                        <td style="border:1px solid #555;padding:5px 8px;">{{PrintApprovedUnit}}</td>
+                        <td style="border:1px solid #555;padding:5px 8px;text-align:right;">{{PrintApprovedTotal | number:2}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top:6px;"><strong>{{PrintApprovedTotal | number:2}}/- ({{PoPrintGrandTotalWords}} Taka only)</strong></p>
+        </div>
+
         <div style="margin-top:20px;">
             <p style="font-weight:bold;margin:0;">Notes:</p>
-            <ol style="margin-top:4px;padding-left:20px;">
+            <ol ng-if="VendorCSAprv.AwardMode !== 'DIST'" style="margin-top:4px;padding-left:20px;">
                 <li ng-repeat="row in ReqTermGridDisplayCollection | filter:{VendorName: VendorCSAprv.CSRecmVendorName}"
                     ng-cloak style="font-size:13px;">
                     {{row.TermsName}}
                 </li>
             </ol>
+            <div ng-if="VendorCSAprv.AwardMode === 'DIST'" ng-repeat="v in printAwardRows()" style="margin-top:4px;">
+                <p style="font-weight:bold;margin:2px 0;">{{v.VendorName}}</p>
+                <ol style="margin-top:2px;padding-left:20px;">
+                    <li ng-repeat="row in ReqTermGridDisplayCollection | filter:{VendorName: v.VendorName}" ng-cloak style="font-size:13px;">{{row.TermsName}}</li>
+                </ol>
+            </div>
         </div>
 
         <!-- Signatures — Prepared → Recommended by HOD → Recommended by A&F →
@@ -1042,6 +1215,7 @@ font-size: 9px;">
             .success(function (response) {
                 $scope.Invitation = response.InvitationList;
                 $scope.GridDisplayCollection = [].concat($scope.Invitation);
+                $scope.loadCSStates();
                 $scope.ReqTermDataSetupGridData = [];
                 $scope.ReqTermGridDisplayCollection = [];
                 $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
@@ -1148,6 +1322,7 @@ font-size: 9px;">
                 $scope.VendorCSAprv.DeliveryMode = row.DeliveryMode;
 
                 $scope.VendorCSAprv.RptQutnQty = row.ReqQnty;
+                $scope.currentCS = $scope.csStateForMaterial(row);
                 $scope.VendorCSAprv.RptQutnUnit = row.ReqUnit;
 
                 $http.post('/VendorCSAprv/GetVendorByMaterial',
@@ -1173,6 +1348,10 @@ font-size: 9px;">
                         console.log(response);
                         $scope.VendorCSAprv.VendorCSActualAprvID = response.MatWiseVendorList[0].VendorCSActualAprvID;
                         $scope.VendorCSAprv.CSRecmVendorName = response.MatWiseVendorList[0].CSRecmVendorName;
+                        $scope.PrintCSVendors = response.MatWiseVendorList;
+                        $scope.VendorCSAprv.AwardMode = response.MatWiseVendorList[0].AwardMode ||
+                            ($scope.currentCS && $scope.currentCS.AwardMode) ||
+                            (response.MatWiseVendorList[0].CSRecmVendorName ? 'REC' : 'DIST');
                         $scope.VendorCSAprv.CSRecDate = response.MatWiseVendorList[0].CSRecDate;
 
                         $scope.VendorCSAprv.CSPrepNote = response.MatWiseVendorList[0].CSPrepNote;
@@ -1914,6 +2093,7 @@ font-size: 9px;">
         /* ── Save then print the client-side Comparative Statement ──────
            Replaces the old H1Form / Reports-controller submission. */
         $scope.SaveAndPrint = function () {
+            if (!$scope.printAllowed()) { toastr.error("This CS has not passed every stage yet, so it cannot be printed."); return; }
             $scope.loading = true;
 
             $scope.Post().then(function (response) {
@@ -1955,14 +2135,27 @@ font-size: 9px;">
                 return;
             }
 
-            var recRow = $scope.MatWiseVendorListCollection.find(function (v) {
-                return v.VendorName === $scope.VendorCSAprv.CSRecmVendorName;
-            }) || $scope.MatWiseVendorListCollection[0];
+            if ($scope.VendorCSAprv.AwardMode === 'DIST') {
+                var aw = $scope.printAwardRows();
+                if (!aw.length) {
+                    toastr.error("No awarded vendors found for this CS.");
+                    $scope.loading = false;
+                    return;
+                }
+                $scope.PrintApprovedQty = aw.reduce(function (s, v) { return s + csNum(v.NegoQty); }, 0);
+                $scope.PrintApprovedUnit = aw[0].ReqUnit;
+                $scope.PrintApprovedTotal = aw.reduce(function (s, v) { return s + csNum(v.NegoTolAmt); }, 0);
+                $scope.PoPrintGrandTotalWords = numberToWordsTaka($scope.PrintApprovedTotal);
+            } else {
+                var recRow = $scope.MatWiseVendorListCollection.find(function (v) {
+                    return v.VendorName === $scope.VendorCSAprv.CSRecmVendorName;
+                }) || $scope.MatWiseVendorListCollection[0];
 
-            $scope.PrintApprovedQty = recRow ? parseFloat(recRow.NegoQty || 0) : 0;
-            $scope.PrintApprovedUnit = recRow ? recRow.ReqUnit : '';
-            $scope.PrintApprovedTotal = recRow ? parseFloat(recRow.NegoTolAmt || 0) : 0;
-            $scope.PoPrintGrandTotalWords = numberToWordsTaka($scope.PrintApprovedTotal);
+                $scope.PrintApprovedQty = recRow ? parseFloat(recRow.NegoQty || 0) : 0;
+                $scope.PrintApprovedUnit = recRow ? recRow.ReqUnit : '';
+                $scope.PrintApprovedTotal = recRow ? parseFloat(recRow.NegoTolAmt || 0) : 0;
+                $scope.PoPrintGrandTotalWords = numberToWordsTaka($scope.PrintApprovedTotal);
+            }
 
             $timeout(function () {
                 document.getElementById('masterRow').style.display = 'block';
@@ -2083,6 +2276,109 @@ font-size: 9px;">
             $('#SearchModal').modal('hide');
         }
 
+        /* ═══════════════════════════════════════════════════════════
+           CS STATE of every requisition + Award Type printing
+           ═══════════════════════════════════════════════════════════ */
+        $scope.wf = { history: [], stageNames: { PREP: 'CS Preparation', RECM: 'CS Recommendation', ACC: 'Recom Acc', VERIFY: 'CS Verify', APRV: 'CS Approval', DONE: 'Approved' } };
+        $scope.csStates = [];
+        $scope.currentCS = null;
+        $scope.PrintCSVendors = [];
+        $scope.csStateModal = { reqNo: '', project: '', rows: [] };
+        var CS_STEPS = [['PREP', 'Prep'], ['RECM', 'Recom'], ['ACC', 'Acc'], ['VERIFY', 'Verify'], ['APRV', 'Approval']];
+        function csNum(v) { var n = parseFloat(v); return isNaN(n) ? 0 : n; }
+
+        $scope.loadCSStates = function () {
+            var seen = {}, ids = [];
+            ($scope.Invitation || []).forEach(function (r) {
+                var id = r.VendorRequisitionNumber;
+                if (id && !seen[id]) { seen[id] = 1; ids.push(id); }
+            });
+            if (!ids.length) { $scope.csStates = []; return; }
+            $http.post('/VendorCSWorkflow/GetRequisitionStates', { VendorReqIDs: ids.join(',') })
+                .success(function (r) { $scope.csStates = r.states || []; })
+                .error(function () { $scope.csStates = []; });
+        };
+        $scope.csStatesOf = function (reqId) {
+            return ($scope.csStates || []).filter(function (s) { return String(s.VendorReqID) === String(reqId); });
+        };
+        $scope.csIsDone = function (s) { return !!s && s.WfState === 'ACTIVE' && s.CurrentStage === 'DONE'; };
+        $scope.csSummary = function (row) {
+            var list = $scope.csStatesOf(row.VendorRequisitionNumber), r = { total: list.length, done: 0, active: 0, postponed: 0, returned: 0 };
+            list.forEach(function (s) {
+                if (s.WfState === 'POSTPONED') r.postponed++;
+                else if (s.WfState === 'RETURNED') r.returned++;
+                else if ($scope.csIsDone(s)) r.done++;
+                else r.active++;
+            });
+            return r;
+        };
+        $scope.csStateLabel = function (s) {
+            if (!s) return '';
+            var n = $scope.wf.stageNames;
+            if (s.WfState === 'POSTPONED') return 'Postponed at ' + (n[s.HeldAtStage || s.CurrentStage] || s.CurrentStage);
+            if (s.WfState === 'RETURNED') return 'Sent back to CS Preparation';
+            if ($scope.csIsDone(s)) return 'Approved - ready to print';
+            return 'In progress - at ' + (n[s.CurrentStage] || s.CurrentStage);
+        };
+        $scope.csStateClass = function (s) {
+            if (!s) return 'label-default';
+            if (s.WfState === 'POSTPONED') return 'label-danger';
+            if (s.WfState === 'RETURNED') return 'label-warning';
+            return $scope.csIsDone(s) ? 'label-success' : 'label-primary';
+        };
+        $scope.csSteps = function (s) {
+            var cur = s.CurrentStage === 'DONE' ? CS_STEPS.length : CS_STEPS.map(function (x) { return x[0]; }).indexOf(s.CurrentStage);
+            return CS_STEPS.map(function (x, i) {
+                var cls = i < cur ? 'done' : (i === cur ? (s.WfState === 'POSTPONED' ? 'hold' : (s.WfState === 'RETURNED' ? 'back' : 'cur')) : '');
+                return { label: x[1], cls: cls };
+            });
+        };
+        $scope.csStateForMaterial = function (m) {
+            if (!m) return null;
+            var list = $scope.csStates || [];
+            for (var i = 0; i < list.length; i++) { if (m.VendorCSAprvID && list[i].VendorCSAprvID === m.VendorCSAprvID) return list[i]; }
+            for (var j = 0; j < list.length; j++) {
+                if (String(list[j].VendorReqID) === String(m.VendorReqID) && String(list[j].ServiceItemID) === String(m.ServiceItemID)) return list[j];
+            }
+            return null;
+        };
+        $scope.openCSState = function (row) {
+            $scope.csStateModal = { reqNo: row.ClientRequisitionNumber || row.VendorRequisitionNumber, project: row.ProjectName, rows: $scope.csStatesOf(row.VendorRequisitionNumber) };
+            $('#CSStateModal').modal('show');
+        };
+        $scope.wfActionClass = function (a) {
+            return { BACK: 'label-warning', POSTPONE: 'label-danger', RESUME: 'label-success', RECOMMEND: 'label-primary', APPROVE: 'label-success', RESUBMIT: 'label-info' }[a] || 'label-default';
+        };
+        $scope.csShowHistory = function (s) {
+            if (!s || !s.VendorCSRecmID) return;
+            $scope.wf.history = [];
+            $http.post('/VendorCSWorkflow/GetHistory', { Stage: 'PREP', DocID: s.VendorCSRecmID })
+                .success(function (r) { $scope.wf.history = r.history || []; })
+                .error(function () { toastr.error('Could not load the history.'); });
+            $('#WfHistoryModal').modal('show');
+        };
+
+        // Printing is allowed only once the CS has passed every stage.
+        // (When the state is unknown - e.g. an old CS - the previous behaviour is kept.)
+        $scope.printAllowed = function () { return !$scope.currentCS || $scope.csIsDone($scope.currentCS); };
+
+        /* Award Type = DIST : the vendors that actually received work.
+           Order of trust: server flag IsAwarded  >  vendor is in the CS vendor list  >  has an approved quantity. */
+        $scope.isAwardedRow = function (row) {
+            if (row.IsAwarded !== undefined && row.IsAwarded !== null) return !!row.IsAwarded && row.IsAwarded !== '0';
+            var cs = $scope.PrintCSVendors || [];
+            if (cs.length) {
+                return cs.some(function (v) {
+                    if (v.IsAwarded !== undefined && v.IsAwarded !== null && (!v.IsAwarded || v.IsAwarded === '0')) return false;
+                    return (v.VendorID && row.VendorID && String(v.VendorID) === String(row.VendorID)) || (v.VendorName && v.VendorName === row.VendorName);
+                });
+            }
+            return csNum(row.NegoQty) > 0;
+        };
+        $scope.printAwardRows = function () {
+            return ($scope.MatWiseVendorListCollection || []).filter(function (r) { return $scope.isAwardedRow(r); });
+        };
+
         $scope.toggleRefreshTable = function () {
 
             $timeout(function () {
@@ -2128,3 +2424,4 @@ font-size: 9px;">
         };
     }])
 </script>
+

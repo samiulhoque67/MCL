@@ -10,6 +10,7 @@ namespace SILDMS.Model
     public class OBS_VendorCSRecm
     {
         public string VendorCSInfoID { get; set; }
+        public string VendorCSRecmID { get; set; }
         public string VendorQutnID { get; set; }
         public string ServiceCategoryID { get; set; }
         public string POPreparationID { get; set; }
@@ -82,6 +83,10 @@ namespace SILDMS.Model
         public string VenReqItem { get; set; }
         public string Note { get; set; }
         public string ServicesCategoryName { get; set; }
+
+        public string AwardMode { get; set; }   // "REC" or "DIST"
+        public string WfState { get; set; }     // ACTIVE / RETURNED / POSTPONED
+        public string LastReason { get; set; }
     }
     public class OBS_VendorCSReport
     {

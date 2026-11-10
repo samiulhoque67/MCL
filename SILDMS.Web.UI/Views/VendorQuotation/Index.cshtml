@@ -1327,13 +1327,19 @@
             });
         };
 
-        // ── Save ─────────────────────────────────────────────────────────────────
         $scope.Post = function () {
 
+            // Document required for new quotations
             if (!$scope.uploadedFile && !$scope.editmode) {
                 toastr.error("Document is required to proceed");
                 return;
             }
+
+            // Validate file *before* any server save
+            if ($scope.uploadedFile && !$scope.validateDocumentFile($scope.uploadedFile)) {
+                return;   // error already shown
+            }
+
             if (!$('#VendorName').val()) { toastr.error("Vendor Name Required"); return; }
             if (!$('#VendorQutnNo').val()) { toastr.error("Vendor QutnNo. Required"); return; }
             if ($('#QuotationDate').val() == "") { toastr.error("Quotation Date Required"); return; }
@@ -1360,7 +1366,7 @@
                 $scope.checkUnitPrice(row);
             });
 
-            // ── NEW: warn when any Vat(%) is empty or ≤ 0 ─────────────────────────────
+            // Warn when any Vat(%) is empty or ≤ 0
             var hasZeroOrMissingVat = ($scope.GridDisplayCollection || []).some(function (row) {
                 var vat = parseFloat(row.VatPerc);
                 return row.VatPerc === null || row.VatPerc === undefined || row.VatPerc === "" || isNaN(vat) || vat <= 0;
@@ -1368,10 +1374,9 @@
 
             if (hasZeroOrMissingVat) {
                 $('#confirmNoVatModal').modal('show');
-                return;   // wait for user decision
+                return;
             }
 
-            // All good → proceed to save
             $scope.doSave();
         };
 
@@ -1402,29 +1407,19 @@
                 .success(function (response) {
                     $scope.loading = false;
 
-                    if (response.status === "S201") {
-                        toastr.success("Data Saved Successfully.");
+                    if (response.status === "S201" || response.status === "S202") {
                         $scope.VendorQutn.VendorQutnID = response.VendorQutnID;
 
                         if ($scope.uploadedFile) {
+                            // Document must succeed before we treat the operation as complete
                             $scope.SaveDocument($scope.VendorQutn.VendorQutnID);
                         } else {
+                            // Edit with no new file → normal success
+                            toastr.success(response.status === "S201"
+                                ? "Data Saved Successfully."
+                                : "Data Updated Successfully.");
                             $scope.clearVendorQutn();
-                            $scope.toggleRefreshTable();   // or window.location.reload();
-                        }
-                        return;
-                    }
-                    else if (response.status === "S202") {
-                        toastr.success("Data Updated Successfully.");
-                        $scope.VendorQutn.VendorQutnID = response.VendorQutnID;
-
-                        if ($scope.uploadedFile) {
-                            // replace existing document → SaveDocument already refreshes
-                            $scope.SaveDocument($scope.VendorQutn.VendorQutnID);
-                        } else {
-                            // no new document → still refresh
-                            $scope.clearVendorQutn();
-                            $scope.toggleRefreshTable();   // or window.location.reload();
+                            $scope.toggleRefreshTable();
                         }
                         return;
                     }
@@ -1452,15 +1447,9 @@
             }
 
             var file = files[0];
-            var ext = file.name.split('.').pop().toLowerCase();
-            var maxSizeInMB = 2;
 
-            if (file.size > maxSizeInMB * 1024 * 1024) {
-                toastr.error("File size must be 2 MB or less.");
-                return;
-            }
-            if (ext !== "pdf") {
-                toastr.error("Please upload PDF files only.");
+            // Safety net (already validated in Post, but keep it)
+            if (!$scope.validateDocumentFile(file)) {
                 return;
             }
 
@@ -1473,7 +1462,6 @@
             formData.append("serverUrl", "MCL/Vendor_Requisition");
             formData.append("documentID", documentID);
             formData.append("ext", "pdf");
-            // serverIP/ftpPort/ftpUser/ftpPassword are read from config server-side
 
             $.ajax({
                 url: '/VendorQuotation/SaveDocument',
@@ -1482,6 +1470,7 @@
                 processData: false,
                 data: formData,
                 success: function (result) {
+                    // Only now is the whole save considered successful
                     toastr.success("Document uploaded successfully.");
 
                     $http.post('/VendorQuotation/UpdateDocumentID', {
@@ -1497,7 +1486,6 @@
 
                     document.getElementById("FileUpload1").value = "";
 
-                    // BUG FIX: force Angular to notice these scope changes
                     $timeout(function () {
                         $scope.uploadedFile = null;
                         $scope.clearVendorQutn();
@@ -1507,19 +1495,35 @@
                 error: function (err) {
                     toastr.error("Document upload failed. Please try again.");
                     console.error(err);
-                    // BUG FIX
+                    // Data is already in DB but form is left open so the user can retry
+                    // (or you can add a dedicated re-upload path later)
                     $timeout(function () {
                         $scope.loading = false;
                     });
                 },
                 complete: function () {
-                    // BUG FIX: complete may fire after success/error already resolved;
-                    // wrapping in $timeout ensures Angular picks up the final state
                     $timeout(function () {
                         $scope.loading = false;
                     });
                 }
             });
+        };
+
+        $scope.validateDocumentFile = function (file) {
+            if (!file) return false;
+
+            var maxSizeInMB = 2;
+            var ext = (file.name.split('.').pop() || '').toLowerCase();
+
+            if (file.size > maxSizeInMB * 1024 * 1024) {
+                toastr.error("File size must be 2 MB or less.");
+                return false;
+            }
+            if (ext !== "pdf") {
+                toastr.error("Please upload PDF files only.");
+                return false;
+            }
+            return true;
         };
 
         // ── View Document ────────────────────────────────────────────────────────

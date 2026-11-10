@@ -1,4 +1,5 @@
-﻿using SILDMS.Model;
+﻿using SILDMS.DataAccess.VendorCSWorkflow;
+using SILDMS.Model;
 using SILDMS.Service;
 using SILDMS.Service.VendorCSActualAprv;
 using SILDMS.Utillity;
@@ -120,11 +121,21 @@ namespace SILDMS.Web.UI.Controllers
 
         public async Task<dynamic> SaveVendorCSAprv(OBS_VendorCSAprv vendorCS, List<OBS_VendorCSAprvItem> vendorCSItem, List<OBS_VendorCSAprvTerms> vendorCSTerm)
         {
+            // === WORKFLOW GUARD (APRV) ===
+            var wf = new VendorCSWorkflowDataService();
+            string blockMsg;
+            if (wf.IsBlocked("APRV", vendorCS.VendorCSRecmID, out blockMsg))
+                return Json(new { status = "E409", message = blockMsg }, JsonRequestBehavior.AllowGet);
+
             vendorCS.SetBy = UserID;
             vendorCS.RecommendedByName = SILAuthorization.GetUserFullName();
-            vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
-            string status = string.Empty;//, message = string.Empty;
-            status = _vendorCSActualAprvService.SaveVendorCSAprv(vendorCS, vendorCSItem, vendorCSTerm);
+            vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation();
+
+            string status = _vendorCSActualAprvService.SaveVendorCSAprv(vendorCS, vendorCSItem, vendorCSTerm);
+
+            // === WORKFLOW LOG (APRV) ===
+            if (status == "S201" || status == "S202")
+                wf.LogForward("APRV", vendorCS.VendorCSRecmID, "APPROVE", vendorCS.AwardMode, vendorCS.Remarks, UserID);
 
             TempData["VendorCSRecmInfo"] = vendorCS;
             return Json(new { status }, JsonRequestBehavior.AllowGet);
@@ -132,22 +143,42 @@ namespace SILDMS.Web.UI.Controllers
 
         public async Task<dynamic> SaveVendorCSRecAcc(OBS_VendorCSAprv vendorCS, List<OBS_VendorCSAprvItem> vendorCSItem, List<OBS_VendorCSAprvTerms> vendorCSTerm)
         {
+            // === WORKFLOW GUARD (ACC) ===
+            var wf = new VendorCSWorkflowDataService();
+            string blockMsg;
+            if (wf.IsBlocked("ACC", vendorCS.VendorCSRecmID, out blockMsg))
+                return Json(new { status = "E409", message = blockMsg }, JsonRequestBehavior.AllowGet);
+
             vendorCS.SetBy = UserID;
             vendorCS.RecommendedByName = SILAuthorization.GetUserFullName();
-            vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
-            string status = string.Empty;//, message = string.Empty;
-            status = _vendorCSActualAprvService.SaveVendorCSRecAcc(vendorCS, vendorCSItem, vendorCSTerm);
+            vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation();
+
+            string status = _vendorCSActualAprvService.SaveVendorCSRecAcc(vendorCS, vendorCSItem, vendorCSTerm);
+
+            // === WORKFLOW LOG (ACC) ===
+            if (status == "S201" || status == "S202")
+                wf.LogForward("ACC", vendorCS.VendorCSRecmID, "RECOMMEND", vendorCS.AwardMode, vendorCS.Remarks, UserID);
 
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<dynamic> SaveVendorCSRecAudit(OBS_VendorCSAprv vendorCS, List<OBS_VendorCSAprvItem> vendorCSItem, List<OBS_VendorCSAprvTerms> vendorCSTerm)
         {
+            // === WORKFLOW GUARD (VERIFY) ===
+            var wf = new VendorCSWorkflowDataService();
+            string blockMsg;
+            if (wf.IsBlocked("VERIFY", vendorCS.VendorCSRecmID, out blockMsg))
+                return Json(new { status = "E409", message = blockMsg }, JsonRequestBehavior.AllowGet);
+
             vendorCS.SetBy = UserID;
             vendorCS.RecommendedByName = SILAuthorization.GetUserFullName();
-            vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
-            string status = string.Empty;//, message = string.Empty;
-            status = _vendorCSActualAprvService.SaveVendorCSRecAudit(vendorCS, vendorCSItem, vendorCSTerm);
+            vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation();
+
+            string status = _vendorCSActualAprvService.SaveVendorCSRecAudit(vendorCS, vendorCSItem, vendorCSTerm);
+
+            // === WORKFLOW LOG (VERIFY) ===
+            if (status == "S201" || status == "S202")
+                wf.LogForward("VERIFY", vendorCS.VendorCSRecmID, "APPROVE", vendorCS.AwardMode, vendorCS.Remarks, UserID);
 
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }

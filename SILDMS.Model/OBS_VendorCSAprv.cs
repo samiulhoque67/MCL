@@ -79,5 +79,9 @@ namespace SILDMS.Model
         public string VerifyBySignature { get; set; }
         public string ApprovedBySignature { get; set; }
         public string VendorCSActualAprvID { get; set; }
+
+        public string AwardMode { get; set; }   // "REC" or "DIST"
+        public string WfState { get; set; }     // ACTIVE / RETURNED / POSTPONED
+        public string LastReason { get; set; }
     }
 }

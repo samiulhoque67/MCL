@@ -3,75 +3,50 @@
 }
 <style>
     body {
-        font-size: 12px; /* Set global font size */
+        font-size: 12px;
     }
 
-    .box-body, .form-group, .btn, .form-control, .box-header {
+    .box-body, .form-group, .btn, .form-control, .box-header, label,
+    input.form-control, button.form-control, .fa {
         font-size: 12px;
     }
 
     .btn {
-        font-size: 12px;
         padding: 4px 8px;
     }
 
     h3.box-title {
         font-size: 14px;
     }
-
-    input.form-control, button.form-control {
-        font-size: 12px;
-    }
-
-    label {
-        font-size: 12px;
-    }
-
-    /* Adjust icon size */
-    .fa {
-        font-size: 12px;
-        /* padding-right: 3px;*/
-    }
-
-    /* ── Print slip container ── */
-    #masterRow {
-        position: relative;
-    }
 </style>
 
 <div class="box box-primary box-body" ng-controller="QuotationApproveCntrl">
+
     <!-- Upper buttons -->
     <div class="box-header with-border bg-light-blue-gradient" style="height:38px;">
         <h2 class="box-title" style="font-family: math; font-weight: 500;">All Client Quotation Approval Data</h2>
-
         <div class="box-tools pull-right">
             <div class="col-lg-12 pull-right">
-
-                <!-- Quotation Print — client-side HTML report, replaces the old
-                     Crystal Report / H1Form submission entirely. Enabled once a
-                     quotation has been loaded (save/view/edit). -->
+                <!-- Client-side HTML print; enabled once an approved quotation is loaded -->
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
                     <button type="button" ng-show="MasterData.ClientQutnAprvID" ng-disabled="showPrint"
                             class="button-custom btn-success" ng-click="printQuotation()">
                         <i class="fa fa-print" style="padding-right: 5px"></i> Quotation Print
                     </button>
                 </div>
-
                 <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom btn-warning" ng-disabled="btnRefresh">
+                    <button type="button" ng-click="showActionLog()" class="button-custom">
+                        <i class="fa fa-history" style="padding-right: 5px;"></i> History
+                    </button>
+                </div>
+                <div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
+                    <button type="button" data-ng-click="toggleRefreshTable()" class="button-custom" ng-disabled="btnRefresh">
                         <i class="fa fa-refresh" style="padding-right: 5px;"></i> Refresh
                     </button>
                 </div>
-
-                @*<div class="btn-group pull-right" style="margin-left: 4px; margin-right: 4px;">
-                        <button type="button" data-ng-click="SearchSaveClients()" class="button-custom btn-primary" ng-disabled="btnSearch">
-                            <i class="fa fa-search" style="padding-right: 5px;"></i> Search
-                        </button>
-                    </div>*@
             </div>
         </div>
     </div>
-
 
     <div class="box-body">
         <div class="row">
@@ -80,20 +55,16 @@
                 <!-- ClientName -->
                 <div class="row">
                     <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="ClientName">Client Name :</label>
-                        </div>
+                        <div class="form-group"><label for="ClientName">Client Name :</label></div>
                     </div>
                     <div class="col-sm-4 col-md-4 col-lg-4">
                         <div style="position: relative;">
                             <input id="ClientName" name="ClientName" type="text" data-ng-model="Client.ClientName"
-                                   class="form-control" ng-readonly="true"
-                                   placeholder="Client Name"
+                                   class="form-control" ng-readonly="true" placeholder="Client Name"
                                    style="height: 25px; font-size: smaller;" />
-
                             <button type="button" data-ng-click="SearchAvailableClients()"
                                     style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
-                                    padding: 0px 10px; border: 2px solid black; background: transparent;">
+                                           padding: 0px 10px; border: 2px solid black; background: transparent;">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
@@ -101,105 +72,83 @@
                     <div class="col-lg-1"></div>
                 </div>
 
-
-                <!-- ClientRequisition No & Date -->
+                <!-- Requisition No & Date -->
                 <div class="row">
                     <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="ClientRequisitionNo">Client Requisition No :</label>
-                        </div>
+                        <div class="form-group"><label for="ClientRequisitionNo">Client Requisition No :</label></div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ClientRequisitionNo" name="ClientRequisitionNo" type="text" data-ng-model="Client.ClientRequisitionNo" class="form-control" ng-readonly="true" />
+                            <input id="ClientRequisitionNo" type="text" data-ng-model="Client.ClientRequisitionNo" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
-
                     <div class="col-lg-1"></div>
-
                     <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="ClientRequisitionDate">Client Requisition Date:</label>
-                        </div>
+                        <div class="form-group"><label for="ClientRequisitionDate">Client Requisition Date:</label></div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ClientRequisitionDate" name="ClientRequisitionDate" type="text" data-ng-model="Client.ClientRequisitionDate" class="form-control" ng-readonly="true" />
+                            <input id="ClientRequisitionDate" type="text" data-ng-model="Client.ClientRequisitionDate" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                 </div>
 
-                <!-- ClientRequisition Person & Number -->
+                <!-- Contact Person & Number -->
                 <div class="row">
                     <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="ContactPerson">Contact Person :</label>
-                        </div>
+                        <div class="form-group"><label for="ContactPerson">Contact Person :</label></div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ContactPerson" name="ContactPerson" type="text" data-ng-model="Client.ContactPerson" class="form-control" ng-readonly="true" />
+                            <input id="ContactPerson" type="text" data-ng-model="Client.ContactPerson" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
-
                     <div class="col-lg-1"></div>
-
                     <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="ContactNumber">Contact Number :</label>
-                        </div>
+                        <div class="form-group"><label for="ContactNumber">Contact Number :</label></div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ContactNumber" name="ContactNumber" type="text" data-ng-model="Client.ContactNumber" class="form-control" ng-readonly="true" />
+                            <input id="ContactNumber" type="text" data-ng-model="Client.ContactNumber" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                 </div>
 
-                <!-- Client TIN & BIN -->
+                <!-- TIN & BIN -->
                 <div class="row">
                     <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="ContactTIN">Contact TIN :</label>
-                        </div>
+                        <div class="form-group"><label for="ContactTIN">Contact TIN :</label></div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ContactTIN" name="ContactTIN" type="text" data-ng-model="Client.ContactTIN" class="form-control" ng-readonly="true" />
+                            <input id="ContactTIN" type="text" data-ng-model="Client.ContactTIN" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
-
                     <div class="col-lg-1"></div>
-
                     <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="ContactBIN">Contact BIN :</label>
-                        </div>
+                        <div class="form-group"><label for="ContactBIN">Contact BIN :</label></div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <input id="ContactBIN" name="ContactBIN" type="text" data-ng-model="Client.ContactBIN" class="form-control" ng-readonly="true" />
+                            <input id="ContactBIN" type="text" data-ng-model="Client.ContactBIN" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
                 </div>
 
-                <!-- Client Address -->
+                <!-- Address -->
                 <div class="row">
                     <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="ContactAddress">Contact Address :</label>
-                        </div>
+                        <div class="form-group"><label for="ContactAddress">Contact Address :</label></div>
                     </div>
                     <div class="col-lg-7">
                         <div class="form-group">
-                            <input id="ContactAddress" name="ContactAddress" type="text" data-ng-model="Client.ContactAddress" class="form-control" ng-readonly="true" />
+                            <input id="ContactAddress" type="text" data-ng-model="Client.ContactAddress" class="form-control" ng-readonly="true" />
                         </div>
                     </div>
-
                     <div class="col-lg-1"></div>
                 </div>
 
-
+                <!-- Uploaded documents -->
                 <div class="row" ng-if="GetClientReqDetails.length > 0">
                     <div class="col-lg-2">
                         <div class="form-group">
@@ -210,107 +159,82 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <span ng-hide="getDocumentList().length"
-                              style="color:#999; font-size:11px;">No document attached</span>
-
+                        <span ng-hide="getDocumentList().length" style="color:#999; font-size:11px;">No document attached</span>
                         <button type="button" ng-repeat="docID in getDocumentList() track by $index"
-                                ng-click="ViewDocument(docID)"
-                                class="btn button-custom btn-sm"
-                                style="margin: 0 4px 4px 0;">
+                                ng-click="ViewDocument(docID)" class="btn button-custom btn-sm" style="margin: 0 4px 4px 0;">
                             <i class="fa fa-eye"></i> View Doc {{$index + 1}}
                         </button>
                     </div>
                 </div>
 
-
             </div>
         </div>
     </div>
 
+    <!-- Approved quotations list -->
     <div id="QuotationForRecom" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <!-- Modal Header -->
                 <div style="text-align: right;">
-                    <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
-                            aria-hidden="true" style="color: #ffffff;">
+                    <button type="button" class="btn-danger" data-dismiss="modal" aria-hidden="true" style="color: #ffffff;">
                         <i class="fa fa-remove"></i>
                     </button>
                 </div>
-
-                <!-- Modal Body -->
                 <div class="modal-body table-responsive" ng-cloak>
-                    <table st-table="AllQuotationsCollection" st-safe-src="AllQuotationsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                    <table st-table="AllQuotationsCollection" st-safe-src="AllQuotationsList"
+                           class="table table-condensed table-bordered table-striped table-hover pnlView">
                         <thead>
                             <tr style="font-size: 15px;">
                                 <th colspan="14" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
-                                    Quotations for Approval
+                                    Approved Quotations
                                 </th>
                             </tr>
                             <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                                <th style="text-align: left;" st-sort="">Client Name</th>
-                                <th style="text-align: left;" st-sort="">Project Name</th>
-                                <th style="text-align: left;" st-sort="">Representative</th>
-                                <th style="text-align: left;" st-sort="">Client Req No</th>
+                                <th style="text-align: left;">Client Name</th>
+                                <th style="text-align: left;">Project Name</th>
+                                <th style="text-align: left;">Representative</th>
+                                <th style="text-align: left;">Client Req No</th>
                                 <th class="col-lg-1">Action</th>
                             </tr>
                             <tr>
-                                <th colspan="4">
-                                    <input type="search"
-                                           ng-model="PagingInfo.search"
-                                           ng-model-options="{ debounce: 400 }"
+                                <th colspan="5">
+                                    <input type="search" ng-model="PagingInfo.search" ng-model-options="{ debounce: 400 }"
                                            ng-change="SearchAvailableClients()"
-                                           placeholder="Search Client Name / Req No / Representative..."
-                                           class="input-sm form-control" />
+                                           placeholder="Search Client Name / Req No / Representative..." class="input-sm form-control" />
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="row in AllQuotationsList | orderBy:'IsBack':true">
-                                <td class="hidden">{{row.ClientCode}}</td>
-                                <td class="hidden">{{row.ClientName}}</td>
-                                <td class="hidden">{{row.RequisitionDate}}</td>
-                                <td class="hidden">{{row.QuotationNo}}</td>
-                                <td class="hidden">{{row.ClientAdvanceClaimDate}}</td>
-
-                                <td class="hidden">{{row.ClntQutnPrepBy}}</td>
-                                <td class="hidden">{{row.ClntQutnRecmBy}}</td>
-                                <td class="hidden">{{row.ClntQutnAprvBy}}</td>
-                                <td class="hidden">{{row.ClntQutnPrepDesignation}}</td>
-                                <td class="hidden">{{row.ClntQutnRecmDesignation}}</td>
-                                <td class="hidden">{{row.ClntQutnAprvDesignation}}</td>
-
                                 <td class="col-lg-2">{{row.ClientName}}</td>
-                                <td class="col-lg-2">{{ row.ProjectName }} </td>
+                                <td class="col-lg-2">{{row.ProjectName}}</td>
                                 <td class="col-lg-2">{{row.UserFullName}}</td>
                                 <td class="col-lg-2">{{row.ClientReqNo}}</td>
-
                                 <td class="col-lg-1 text-center">
                                     <a class="btn col-center btn-sm btn-flat btn-success" ng-click="selectQuotationForRecom(row, 'save')">Select</a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-
-                    <!-- Pagination and No Item Message -->
-                    <div ng-if="AllQuotationsList.length > 0" class="text-center">
-                        <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" ng-change="selectPageList()"></ul>
+                    <div ng-if="PagingInfo.totalItems > 0" class="text-center">
+                        <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page"
+                            items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true"
+                            rotate="true" force-ellipses="true" ng-change="selectPageList()"></ul>
                     </div>
-                    <div ng-if="AllQuotationsList.length <= 0" class="text-center">
-                        NO ITEM
-                    </div>
+                    <div ng-if="PagingInfo.totalItems <= 0" class="text-center">NO ITEM</div>
                 </div>
             </div>
         </div>
     </div>
 
-
+    <!-- Item and service list (read-only) -->
     <div class="row" ng-if="GetClientReqDetails.length > 0">
         <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-            <table st-table="GetClientReqDetailsCollection" st-safe-src="GetClientReqDetails" class="table table-condensed table-bordered table-striped table-hover pnlView">
+            <table st-table="GetClientReqDetailsCollection" st-safe-src="GetClientReqDetails"
+                   class="table table-condensed table-bordered table-striped table-hover pnlView">
                 <thead>
                     <tr style="font-size: 15px;">
-                        <th colspan="17" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                        <th colspan="18" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
                             Item and Service List
                         </th>
                     </tr>
@@ -322,7 +246,6 @@
                         <th style="text-align: left;">Delivery Date</th>
                         <th style="text-align: left;">Req Unit</th>
                         <th style="text-align: left;">Quoted Qty</th>
-
                         <th style="text-align: left;">C.Qut.Recom Unit Price (without vat)</th>
                         <th style="text-align: left;">Aprv Quoted Unit Price</th>
                         <th style="text-align: left;">C.Qut.Recom Amount (without vat)</th>
@@ -333,6 +256,7 @@
                         <th style="text-align: left;">VAT Amount</th>
                         <th style="text-align: left;">Total C.Qut.Recom Amount (with vat)</th>
                         <th style="text-align: left;">Aprv Total Amount (with vat)</th>
+                        <th style="text-align: left;">Vendor</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -344,47 +268,42 @@
                         <td style="width: 6%;">{{ row.DeliveryDate }}</td>
                         <td style="width: 5%;">{{ row.ReqUnit }}</td>
                         <td style="width: 6%;">{{ row.QutnQnty }}</td>
-
                         <td style="width: 6%;">{{ row.QutnPrice }}</td>
-                        <td style="width: 6%;">{{row.givenQutnPrice}}</td>
+                        <td style="width: 6%;">{{ row.givenQutnPrice }}</td>
                         <td style="width: 6%;">{{ row.ClientQutnAmt }}</td>
                         <td style="width: 6%; color: #126e0f;">{{ row.givenQutnAmt }}</td>
-                        <td style="width: 6%;">{{row.ASFPerc}}</td>
-                        <td style="width: 6%; text-align: right;">
-                            {{ row.TotGivenASFAmt | number:3 }}
-                        </td>
-
-                        <td style="width: 6%;">{{row.GivenVatPerc}}</td>
-                        <td style="width: 6%;">{{ row.TotGivenVatAmt  | number:3}}</td>
+                        <td style="width: 6%;">{{ row.ASFPerc }}</td>
+                        <td style="width: 6%; text-align: right;">{{ row.TotGivenASFAmt | number:3 }}</td>
+                        <td style="width: 6%;">{{ row.GivenVatPerc }}</td>
+                        <td style="width: 6%;">{{ row.TotGivenVatAmt | number:3 }}</td>
                         <td style="width: 6%;">{{ row.TolAmt }}</td>
                         <td style="width: 6%; color: #126e0f;">{{ row.givenTolAmt }}</td>
+                        <td style="width: 3%; text-align: center;">
+                            <button type="button" class="button-detail" ng-click="detailVendorCS(row)" title="Show vendor detail">
+                                <i class="fa fa-info"></i>
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    @*</div>*@
+    <!-- Terms + notes + preview -->
+    <div class="box-body" ng-show="showTermsItem === true">
 
-
-    <div class="box-body" ng-show="showTermsItem===true">
-
-        @*terms and conditons*@
-
-
+        <!-- Terms selection modal -->
         <div id="ClientReqTermsConditionsModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div style="text-align: right;">
-                        <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
-                                aria-hidden="true" style="color: #ffffff;">
+                        <button type="button" class="btn-danger" data-dismiss="modal" aria-hidden="true" style="color: #ffffff;">
                             <i class="fa fa-remove"></i>
                         </button>
                     </div>
                     <div class="modal-body table-responsive">
-                        <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-
-
+                        <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList"
+                               class="table table-condensed table-bordered table-striped table-hover pnlView">
                             <thead>
                                 <tr style="font-size: 15px;">
                                     <th colspan="12" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
@@ -392,10 +311,10 @@
                                     </th>
                                 </tr>
                                 <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormCode')">Form Code</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('FormName')">Form Name</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sort('Status')">Status</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1">Action</th>
+                                    <th>Form Code</th>
+                                    <th>Form Name</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                                 <tr>
                                     <th><input st-search="FormCode" placeholder="Form Code" class="input-sm form-control" type="search" /></th>
@@ -405,15 +324,17 @@
                             <tbody>
                                 <tr ng-repeat="row in TermsConditionsDisplayedCollection">
                                     <td class="hidden">{{row.TermsID}}</td>
-                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">{{row.FormCode}}</td>
-                                    <td class="col-lg-3 col-md-3 col-sm-3 text-center">{{row.FormName}}</td>
-                                    <td class="col-lg-1 col-md-1 col-sm-1 text-center">
+                                    <td class="text-center">{{row.FormCode}}</td>
+                                    <td class="text-center">{{row.FormName}}</td>
+                                    <td class="text-center">
                                         <span ng-attr-class="{{row.Status =='1'? 'label label-success' : 'label label-danger' }}">
                                             {{row.Status == '1'? 'Active':'InActive'}}
                                         </span>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-primary btn-flat btnEdit" data-ng-click="toggleTermsConditionsSelect(row)"><i class="fa fa-edit"></i> Select</button>
+                                        <button type="button" class="btn btn-sm btn-primary btn-flat" data-ng-click="toggleTermsConditionsSelect(row)">
+                                            <i class="fa fa-edit"></i> Select
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -426,49 +347,41 @@
                             </tfoot>
                         </table>
                     </div>
-                    <div class="modal-footer">
-                        <div class="col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- Terms list table -->
         <div class="row">
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-                <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
+                <table st-table="TermsConditionsDisplayedCollection" st-safe-src="TermsConditionsList"
+                       class="table table-condensed table-bordered table-striped table-hover pnlView">
                     <thead>
-                        <tr style="font-size: 15px; border: 1px solid #3003eb; background: #ffffff; ">
-
-                            <th @*colspan="12"*@ style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
+                        <tr style="font-size: 15px; border: 1px solid #3003eb; background: #ffffff;">
+                            <th style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff;">
                                 <span>Terms & Conditions List</span>
                             </th>
-                            <th style="background: #ffffff; position: relative; padding: 5px;">
+                            <th ng-show="pagefunction === 'savemode'" style="background: #ffffff; position: relative; padding: 5px;">
                                 <div style="position: relative; display: inline-block; width: 200px;">
-                                    <input ng-show="pagefunction !== 'viewmode'" id="FormName" name="FormName" type="text"
-                                           data-ng-model="ClientReq.FormName" class="form-control" ng-readonly="true"
+                                    <input id="FormName" name="FormName" type="text" data-ng-model="ClientReq.FormName"
+                                           class="form-control" ng-readonly="true"
                                            style="width: 100%; height: 25px; font-size: smaller; padding-right: 35px;" />
-
                                     <button type="button" ng-click="ShowTermsConditionsList()"
                                             style="position: absolute; right: 1px; top: 50%; transform: translateY(-50%);
-              padding: 0px 10px; border: 2px solid black; background: transparent;">
+                                                   padding: 0px 10px; border: 2px solid black; background: transparent;">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </div>
                             </th>
-                            <th style="background: #ffffff;">
-                                <button type="button" id="btnReqTermAdd" ng-disabled="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
+                            <th ng-show="pagefunction === 'savemode'" style="background: #ffffff;">
+                                <button type="button" id="btnReqTermAdd" ng-click="AddReqTermModal()" class="button-detail btn">
                                     <i class="fa fa-plus" style="padding-right: 3px"></i> Add
                                 </button>
                             </th>
                         </tr>
-
                         <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                            <th style="text-align: left;" st-sort="">Terms Code</th>
-                            <th colspan="13" style="text-align: left;" st-sort="">Terms & Conditions</th>
+                            <th style="text-align: left;">Terms Code</th>
+                            <th colspan="13" style="text-align: left;">Terms & Conditions</th>
                             <th ng-show="pagefunction !== 'viewmode'" style="text-align: left;">Action</th>
                         </tr>
                     </thead>
@@ -479,84 +392,71 @@
                             <td class="hidden">{{row.TermsID}}</td>
                             <td class="col-lg-1" style="width:5%;">{{row.TermsCode}}</td>
                             <td colspan="13" style="width:6%;">{{row.TermsName}}</td>
-
                             <td ng-show="pagefunction !== 'viewmode'" class="col-lg-1" style="width:5%;">
-                                <button type="button" ng-if="row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" ng-if="!row.ClientReqTermsID" class="btn btn-xs btn-primary btn-flat btnEdit" ng-click="toggleReqTermEdit(row,$index)"><i class="fa fa-edit"></i> </button>
-                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" ng-click="toggleReqTermDelete(row,$index)"><i class="fa fa-remove"></i> </button>
+                                <button type="button" class="btn btn-xs btn-primary btn-flat" ng-click="toggleReqTermEdit(row,$index)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-xs btn-primary btn-flat btnDelete" ng-click="toggleReqTermDelete(row,$index)">
+                                    <i class="fa fa-remove"></i>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
-                    <tfoot>
-                    </tfoot>
                 </table>
             </div>
         </div>
 
-
+        <!-- Add / Edit term modal -->
         <div id="RequisitionTermModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="row">
-                            <div class="col-sm-5 col-md-5 col-lg-5">
+                            <div class="col-sm-5">
                                 <h4 class="modal-title" style="font-family: initial; font-weight: 700">Terms & Conditions Information</h4>
                             </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-
-                            </div>
                             <div style="text-align: right;">
-                                <button type="button" class="btn-danger" data-dismiss="modal" ng-click="ResetSearchModel()"
-                                        aria-hidden="true" style="color: #ffffff;">
+                                <button type="button" class="btn-danger" data-dismiss="modal" aria-hidden="true" style="color: #ffffff;">
                                     <i class="fa fa-remove"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
                     <div ng-cloak>
-
                         <div class="row" style="position:relative;top:5px;">
-
-                            <div class="col-sm-1 col-md-1 col-lg-1">
-                            </div>
-
-                            <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-2">
                                 <div class="form-group">
                                     <label for="TermsCode">Terms Code:</label>
                                     <label style="font-size:larger;color:red;">*</label>
                                 </div>
                             </div>
-                            <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div class="col-sm-2">
                                 <input id="TermsCode" name="TermsCode" type="text" class="form-control" placeholder="Terms Code" autocomplete="off"
                                        ng-model="ClientReqTerm.TermsCode" style="height: 25px; background-color:#ffffff; font-size: smaller" />
                             </div>
                         </div>
-
-
                         <div class="row" style="position:relative;top:5px;">
-
-                            <div class="col-sm-1 col-md-1 col-lg-1">
-                            </div>
-
-                            <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-2">
                                 <div class="form-group">
                                     <label for="TermsName">Terms and Conditions:</label>
                                     <label style="font-size:larger;color:red;">*</label>
                                 </div>
                             </div>
-                            <div class="col-sm-8 col-md-8 col-lg-8">
+                            <div class="col-sm-8">
                                 <input id="TermsName" name="TermsName" type="text" class="form-control" placeholder="Terms Name" autocomplete="off"
                                        ng-model="ClientReqTerm.TermsName" style="height: 25px; background-color:#ffffff; font-size: smaller" />
                             </div>
                         </div>
-
-
                     </div>
                     <div class="modal-footer">
-                        <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="btn-group pull-right" style="margin:2px;">
-                                    <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn"><i class="fa fa-save" style="padding-right: 3px"></i>Add</button>
+                                    <button type="button" id="btnAddReqTerm" data-ng-click="AddReqTerm()" class="button-detail btn">
+                                        <i class="fa fa-save" style="padding-right: 3px"></i>Add
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -565,186 +465,47 @@
             </div>
         </div>
 
-        <div class="modal fade" id="deleteReqTermModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
-                    <div class="modal-header" style="height: 46px;">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Delete Selected Item</h4>
-                    </div>
-                    <div class="modal-body" style="height: 80px;">
-                        Are you sure to delete this item?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: red;" ng-click="DeleteReqTerm()">Yes</button>
-                        <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white">No</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        @*terms and conditons ends*@
-
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12">
-
                 <div class="row">
                     <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="QuotationRecNote">Recommended Note :</label>
-                        </div>
+                        <div class="form-group"><label for="QuotationRecNote">Recommended Note :</label></div>
                     </div>
                     <div class="col-lg-10">
                         <div class="form-group">
-                            <textarea id="QuotationRecNote" name="QuotationRecNote" class="form-control" data-ng-model="MasterData.QuotationRecNote"> </textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quotation Rec & Aprv Note & Billing Date -->
-                <div class="row">
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label for="QuotationAprvNote">Approved Note :</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-10">
-                        <div class="form-group">
-                            <textarea id="QuotationAprvNote" readonly name="QuotationAprvNote" class="form-control" autocomplete="off" data-ng-model="MasterData.QuotationAprvNote"> </textarea>
+                            <textarea id="QuotationRecNote" name="QuotationRecNote" class="form-control" readonly
+                                      data-ng-model="MasterData.QuotationRecNote"></textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-9">
-
+                    <div class="col-lg-2">
+                        <div class="form-group"><label for="QuotationAprvNote">Approved Note :</label></div>
                     </div>
+                    <div class="col-lg-10">
+                        <div class="form-group">
+                            <textarea id="QuotationAprvNote" readonly name="QuotationAprvNote" class="form-control" autocomplete="off"
+                                      data-ng-model="MasterData.QuotationAprvNote"></textarea>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="row">
+                    <div class="col-lg-9"></div>
                     <div ng-show="pagefunction === 'savemode'" class="col-lg-2">
-                        <button id="btnSaveMasterInitial" type="button" class="btn btn-success saveBtn pull-right"
-                                ng-click="openConfirmModal('save')" data-dismiss="modal" title="Save"
+                        <button type="button" class="btn btn-success saveBtn pull-right"
+                                ng-click="openConfirmModal('save')" title="Preview"
                                 style="padding: 6px 36px; box-shadow: -4px 5px 0px 0px rgba(0, 0, 0, 0.1); border-radius: 5px;">
                             <i class="fa fa-check"></i> Preview
                         </button>
                     </div>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-    @*Save / Delete Modal*@
-    <div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: fixed; top: 38%; left: 50%; transform: translate(-38%, -50%); background: rgba(0,0,0,0) !important ">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" style="border-radius: 5px; width: 456px; height: 185px;">
-                <div class="modal-header" style="height: 46px;">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" style="height:30px;" id="myModalLabel">Confirm your Action</h4>
-                </div>
-                <div class="modal-body" style="height:80px;">
-                    <h5 class="modal-title" style="height:30px;" id="myModalLabel">Are you sure to Save</h5>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="btnSaveMaster" class="btn button-custom" style="color: white; background-color: darkgreen;" data-dismiss="modal" ng-click="SaveQCApprove()">Confirm</button>
-                    <button type="button" class="btn button-custom" data-dismiss="modal" style="color: white; background-color: darkred;">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 
-    @*edit or view modal*@
-
-    <div id="QuotationForRecom" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetSearchModel()" aria-hidden="true">x</button>
-                    <h3 class="modal-title">Quotations for Recommendation</h3>
-                </div>
-
-                <!-- Modal Body -->
-                <div class="modal-body table-responsive" data-ng-disabled="" ng-cloak>
-                    <table st-table="AllQuotationsCollection" st-safe-src="AllQuotationsList" class="table table-condensed table-bordered table-striped table-hover pnlView">
-                        <thead>
-                            <tr>
-                                <!-- Columns with sorting -->
-                                <th class="col-lg-1 col-md-1 col-sm-1" data-ng-click="sortList('ClientCode')">
-                                    Client Code
-                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientCode' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientName')">
-                                    Client Name
-                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientName' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2" data-ng-click="sortList('ClientReqNo')">
-                                    Requisition No
-                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && !PagingInfo.reverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="PagingInfo.sortBy == 'ClientReqNo' && PagingInfo.reverse" class="fa fa-caret-up"></span>
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Requisition Date
-                                </th>
-                                <th class="col-lg-1 col-md-1 col-sm-1">
-                                    Quotation No
-                                </th>
-                                <th class="col-lg-2 col-md-2 col-sm-2">
-                                    Action
-                                </th>
-                            </tr>
-
-                            <!-- Search Fields -->
-                            <tr>
-                                <th>
-                                    <input st-search="ClientCode" placeholder="Search Client Code" class="input-sm form-control" type="search" />
-                                </th>
-                                <th>
-                                    <input st-search="ClientName" placeholder="Search Client Name" class="input-sm form-control" type="search" />
-                                </th>
-                                <th>
-                                    <input st-search="ClientReqNo" placeholder="Search Req No" class="input-sm form-control" type="search" />
-                                </th>
-                                <th></th> <!-- No search for dates -->
-                                <th></th> <!-- No search for Quotation No -->
-                                <th></th> <!-- No search for Quotation Date -->
-                                <th></th> <!-- No search for Quotation Amount -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="row in AllQuotationsList | orderBy:'IsBack':true">
-                                <td class="text-center">{{row.ClientCode}}</td>
-                                <td class="text-center">{{row.ClientName}}</td>
-                                <td class="text-center">{{row.ClientReqNo}}</td>
-                                <td class="hidden">{{row.RecmRemarks}}</td>
-                                <td class="hidden">{{row.AprvRemarks}}</td>
-                                <td class="text-center">{{row.RequisitionDate | date:'dd/MM/yyyy'}}</td>
-                                <td class="text-center">{{row.QuotationNo}}</td>
-                                <td class="col-lg-2 text-center">
-                                    <button type="button" id="btnSelect" ng-click="selectAvailableClient(row, 'view')" class="btn btn-flat btn-primary btn-xs" ng-disabled="loading">
-                                        <span class="fa fa-search-plus"> View</span>
-                                    </button>
-                                    <button type="button" id="btnEdit" ng-click="selectAvailableClient(row, 'edit')" class="btn btn-flat btn-warning btn-xs" style="margin-left: 5px;">
-                                        <span class="fa fa-edit"> Edit</span>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <!-- Pagination and No Item Message -->
-                    <div ng-if="PagingInfo.totalItems > 0" class="text-center">
-                        <ul uib-pagination total-items="PagingInfo.totalItems" ng-model="PagingInfo.page" items-per-page="{{PagingInfo.itemsPerPage}}" max-size="7" boundary-links="true" rotate="true" force-ellipses="true" ng-change="selectSavePageList()"></ul>
-                    </div>
-                    <div ng-if="PagingInfo.totalItems <= 0" class="text-center">
-                        NO ITEM
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- Loading overlay -->
     <div id="mydiv" data-ng-show="loading">
         <div class="overlay">
             <div class="loder">
@@ -753,40 +514,32 @@
         </div>
     </div>
 
-    @*view pdf modal*@
+    <!-- PDF viewer modal -->
     <div id="ShowPDFModal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body" style="padding: 0; margin: 0;">
-                    <iframe id="pdfViewer"
-                            style="width: 100%; height: 100vh; border: none;"
-                            title="PDF Viewer">
-                    </iframe>
+                    <iframe id="pdfViewer" style="width: 100%; height: 100vh; border: none;" title="PDF Viewer"></iframe>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════════════
-         PRINT SLIP  (hidden div, rendered into iframe on print)
-         Matches the "Client Quotation" layout: title, Prepare For block,
-         Ref/Quotation Num box, item table, Total + Inwords rows, Terms,
-         and the three signature blocks (Prepared/Recommended/Approved).
-         ══════════════════════════════════════════════════════════════ -->
+    <!-- Shared modals: vendor detail + action history -->
+    @Html.Partial("_QutnCommonModals")
+
+    <!-- ══════════════ PRINT SLIP (hidden; rendered into an iframe on print) ══════════════ -->
     <div id="masterRow" style="display:none;">
 
-        <!-- Logo + Company Address (left side of top free space) -->
         <div style="margin-bottom:18px;">
-            <img src="/Content/AdminLTE/img/MCL-logo.png"
-                 alt="MCL Logo"
+            <img src="/Content/AdminLTE/img/MCL-logo.png" alt="MCL Logo"
                  style="max-height:85px; max-width:130px; display:block; margin-bottom:6px;" />
-
             <div style="font-size:11px; line-height:1.35; color:#222;">
                 <strong style="font-size:13px;">MEDIACOM LIMITED</strong><br />
                 SAMSON CENTER<br />
                 Levels - 5 to 7<br />
                 43 South Avenue, Road-126, Plot-CES (G) 5A,<br />
-                Gulshan 1, Dhaka – 1212<br />
+                Gulshan 1, Dhaka &ndash; 1212<br />
                 IP No. 09610939393 extn: 1200/1205<br />
                 email: mediacombd.com, www.mediacombd.com
             </div>
@@ -795,26 +548,18 @@
         <p style="font-size:20px;font-weight:bold;text-decoration:underline;margin:0;">Client Quotation</p>
 
         <div style="display:flex;justify-content:space-between;margin-top:16px;">
-
-            <!-- Prepare For -->
             <div style="width:48%;">
                 <p style="font-weight:bold;margin:0;">Prepare For</p>
                 <p style="margin:2px 0;">Client Code:&nbsp;&nbsp;{{PrintHeader.ClientCode}}</p>
                 <p style="margin:2px 0;">Client Name:&nbsp;&nbsp;{{PrintHeader.ClientName}}</p>
                 <p style="margin:2px 0;">Address:&nbsp;&nbsp;{{PrintHeader.Address}}</p>
             </div>
-
-            <!-- Ref / Quotation box -->
             <div style="width:48%;">
                 <table style="width:100%;border-collapse:collapse;font-size:12px;">
                     <tr>
                         <td style="border:1px solid #000;padding:5px;font-weight:bold;">Ref / Quotation Num</td>
                         <td style="border:1px solid #000;padding:5px;">{{PrintHeader.QuotationNo}}</td>
                     </tr>
-                    @*<tr>
-                            <td style="border:1px solid #000;padding:5px;font-weight:bold;">Revision :</td>
-                            <td style="border:1px solid #000;padding:5px;">-</td>
-                        </tr>*@
                     <tr>
                         <td style="border:1px solid #000;padding:5px;font-weight:bold;">Created by :</td>
                         <td style="border:1px solid #000;padding:5px;">{{PrintHeader.CreatedBy}}</td>
@@ -835,7 +580,6 @@
             </div>
         </div>
 
-        <!-- Item table -->
         <table style="width:100%;border-collapse:collapse;margin-top:14px;font-size:12px;">
             <thead>
                 <tr>
@@ -879,17 +623,13 @@
             </tfoot>
         </table>
 
-        <!-- Terms & Conditions -->
         <div style="margin-top:16px;">
             <p style="margin:0;font-weight:bold;">Terms &amp; Conditions:</p>
             <ul style="list-style-type:none;padding-left:10px;margin-top:4px;">
-                <li ng-repeat="row in PrintTerms" ng-cloak style="margin:2px 0;">
-                    *&nbsp;&nbsp;{{row.TermsName}}
-                </li>
+                <li ng-repeat="row in PrintTerms" ng-cloak style="margin:2px 0;">*&nbsp;&nbsp;{{row.TermsName}}</li>
             </ul>
         </div>
 
-        <!-- Signatures -->
         <div style="margin-top:60px;display:flex;justify-content:space-between;">
             <div style="text-align:center;width:30%;">
                 <div style="height:50px;">
@@ -900,26 +640,7 @@
                 <p style="margin:4px 0 0 0;font-weight:bold;">{{Quotation.ClntQutnPrepBy}}</p>
                 <p style="margin:2px 0;font-size:11px;" ng-show="Quotation.ClntQutnPrepDesignation">{{Quotation.ClntQutnPrepDesignation}}</p>
             </div>
-
-            @*<div style="text-align:center;width:30%;">
-                    <div style="height:50px;">
-                        <img ng-if="Quotation.ClntQutnRecmBySignature" ng-src="{{toSignatureSrc(Quotation.ClntQutnRecmBySignature)}}"
-                             style="max-height:50px;max-width:100%;" />
-                    </div>
-                    <p style="margin:16px 0 0 0;">Quotation Recommended by</p>
-                    <p style="margin:4px 0 0 0;font-weight:bold;">{{Quotation.ClntQutnRecmBy}}</p>
-                    <p style="margin:2px 0;font-size:11px;" ng-show="Quotation.ClntQutnRecmDesignation">{{Quotation.ClntQutnRecmDesignation}}</p>
-                </div>*@
-
-            @*<div style="text-align:center;width:30%;">
-                    <div style="height:50px;">
-                        <img ng-if="Quotation.ClntQutnAprvBySignature" ng-src="{{toSignatureSrc(Quotation.ClntQutnAprvBySignature)}}"
-                             style="max-height:50px;max-width:100%;" />
-                    </div>
-                    <p style="margin:16px 0 0 0;">Quotation Approved by</p>
-                    <p style="margin:4px 0 0 0;font-weight:bold;">{{Quotation.ClntQutnAprvBy}}</p>
-                    <p style="margin:2px 0;font-size:11px;" ng-show="Quotation.ClntQutnAprvDesignation">{{Quotation.ClntQutnAprvDesignation}}</p>
-                </div>*@
+            <!-- Recommended-by / Approved-by signature blocks are intentionally not printed (as in the original) -->
         </div>
 
         <div style="margin-top:30px;">
@@ -929,9 +650,10 @@
 
 </div>
 
+<script src="@Url.Content("~/Scripts/qutnCommon.js")?v=1"></script>
 <script type="text/javascript">
 
-    /* ── Number → Words (South Asian / Lakh-Crore system), Taka + Paisa ──── */
+    /* ── Number → words (Lakh / Crore system), Taka + Paisa ──────────── */
     function numberToWordsCore(num) {
         num = Math.round(num) || 0;
         if (num === 0) return 'Zero';
@@ -946,9 +668,7 @@
             return tensWords[Math.floor(n / 10)] + (n % 10 ? '-' + belowTwenty[n % 10] : '');
         }
         function threeDigits(n) {
-            var h = Math.floor(n / 100);
-            var r = n % 100;
-            var s = '';
+            var h = Math.floor(n / 100), r = n % 100, s = '';
             if (h) s += belowTwenty[h] + ' Hundred';
             if (r) s += (s ? ' ' : '') + twoDigits(r);
             return s;
@@ -957,31 +677,23 @@
         var crore = Math.floor(num / 10000000); num %= 10000000;
         var lakh = Math.floor(num / 100000); num %= 100000;
         var thousand = Math.floor(num / 1000); num %= 1000;
-        var rest = num;
 
         var parts = [];
         if (crore) parts.push(threeDigits(crore) + ' Crore');
         if (lakh) parts.push(threeDigits(lakh) + ' Lakh');
         if (thousand) parts.push(threeDigits(thousand) + ' Thousand');
-        if (rest) parts.push(threeDigits(rest));
-
+        if (num) parts.push(threeDigits(num));
         return parts.join(' ');
     }
 
-    // e.g. 8649.15 -> "Eight Thousand Six Hundred Forty-nine Taka And Fifteen Paisa Only"
     function numberToWordsTakaPaisa(amount) {
         amount = parseFloat(amount) || 0;
         var taka = Math.floor(amount);
         var paisa = Math.round((amount - taka) * 100);
-
         var takaWords = numberToWordsCore(taka) + ' Taka';
-        if (paisa > 0) {
-            return takaWords + ' And ' + numberToWordsCore(paisa) + ' Paisa Only';
-        }
-        return takaWords + ' Only';
+        return paisa > 0 ? takaWords + ' And ' + numberToWordsCore(paisa) + ' Paisa Only' : takaWords + ' Only';
     }
 
-    /* ── Signature helper: turns a raw/base64 string into an <img> src ── */
     function toSignatureSrc(raw) {
         if (!raw) return '';
         if (raw.indexOf('data:image') === 0) return raw;
@@ -989,649 +701,183 @@
     }
 
     app.controller('QuotationApproveCntrl', function ($scope, $http) {
+        attachQutnCommon($scope, $http);
 
         $scope.toSignatureSrc = toSignatureSrc;
 
-        /* ── Print state ── */
         $scope.PrintHeader = {};
         $scope.PrintItems = [];
         $scope.PrintTerms = [];
         $scope.PrintGrandTotal = 0;
         $scope.PrintGrandTotalWords = '';
 
-        $scope.PagingInfo = {
-            page: 1,
-            itemsPerPage: 10,
-            sortBy: null,
-            reverse: false,
-            search: null,
-            totalItems: 0
-        };
-
-        $scope.ClientReq = {
-            TermsID: "",
-            FormName: "",
-        }
-        $scope.ClientReqTerm = {
-            ClientReqTermsID: "",
-            ClientReqID: "",
-            TermsID: "",
-            TermsCode: "",
-            TermsName: ""
-        }
+        $scope.PagingInfo = { page: 1, itemsPerPage: 10, sortBy: null, reverse: false, search: null, totalItems: 0 };
 
         $scope.Client = {
-            ClientName: "",
-            ClientRequisitionNo: "",
-            ClientReqID: "",
-            ClientRequisitionDate: "",
-            ContactPerson: "",
-            ContactNumber: "",
-            ContactTIN: "",
-            ContactBIN: "",
-            ContactAddress: "",
-        }
+            ClientName: "", ClientRequisitionNo: "", ClientReqID: "", ClientRequisitionDate: "",
+            ContactPerson: "", ContactNumber: "", ContactTIN: "", ContactBIN: "", ContactAddress: ""
+        };
+        $scope.MasterData = { ClientID: "", ClientReqID: "", ClientQuotationID: "", ClientQutnRecmID: "", Operation: "", ClientQutnAprvID: "" };
+        $scope.Quotation = { QuotationNo: "" };
+        $scope.pagefunction = '';
+        $scope.showTermsItem = false;
 
-        $scope.MasterData = {
-            ClientID: "",
-            ClientReqID: "",
-            ClientQuotationID: "",
-            ClientQutnRecmID: "",
-            Operation: "",
-            QuotationRecmNote: "",
-            QuotationAprvNote: "",
-            ClientQutnAprvID: ""
-        }
-
-        $scope.Quotation = {
-            QuotationNo: ""
-        }
-
-        $scope.ClientQutnRecmID = '';
-        $scope.SearchAvailableClients = function () {
-            $scope.PagingInfo.page = 1;   // reset to first page on new search
-            $scope.ClearEverything();
-
-            $http.post('/QuotationApproval/AllClientQuotationforApprvData', {
-                page: $scope.PagingInfo.page,
-                itemsPerPage: $scope.PagingInfo.itemsPerPage,
-                sortBy: $scope.PagingInfo.sortBy,
-                reverse: $scope.PagingInfo.reverse,
-                search: $scope.PagingInfo.search,
-                type: "isBack",
-                action: 'AvailableSearch'
-            }).success(function (response) {
-                $scope.AllQuotationsList = response.AllAvailableClientsList;
+        // ── Approved list ─────────────────────────────────────────────
+        function loadList() {
+            return $http.post('/QuotationApproval/AllClientQuotationforApprvData', {
+                page: $scope.PagingInfo.page, itemsPerPage: $scope.PagingInfo.itemsPerPage,
+                sortBy: $scope.PagingInfo.sortBy, reverse: $scope.PagingInfo.reverse,
+                search: $scope.PagingInfo.search, type: "isBack", action: 'AvailableSearch'
+            }).success(function (r) {
+                $scope.AllQuotationsList = r.AllAvailableClientsList;
                 $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsList);
-                $scope.PagingInfo.totalItems = response.TotalItems || 0;
+                $scope.PagingInfo.totalItems = r.TotalItems || 0;
                 $scope.loading = false;
-            }).error(function () {
-                $scope.loading = false;
-            });
+            }).error(function () { $scope.loading = false; });
+        }
+
+        $scope.SearchAvailableClients = function () {
+            $scope.PagingInfo.page = 1;
+            $scope.ClearEverything();
+            loadList();
             $('#QuotationForRecom').modal('show');
         };
+        $scope.selectPageList = function () { loadList(); };
 
-        $scope.selectPageList = function () {
-            $http.post('/QuotationApproval/AllClientQuotationforApprvData', {
-
-                page: $scope.PagingInfo.page,
-                itemsPerPage: $scope.PagingInfo.itemsPerPage,
-                sortBy: $scope.PagingInfo.sortBy,
-                reverse: $scope.PagingInfo.reverse,
-                search: $scope.PagingInfo.search,
-                type: "isBack",
-                action: 'AvailableSearch'
-
-            }).success(function (response) {
-                $scope.AllQuotationsList = response.AllAvailableClientsList;
-                $scope.AllQuotationsCollection = [].concat($scope.AllQuotationsCollection);
-                $scope.loading = false;
-            })
-                .error(function () {
-                    $scope.loading = false;
-                });
-        }
-
-        $scope.sortList = function (sortBy) {
-            if (sortBy === $scope.PagingInfo.sortBy) {
-                $scope.PagingInfo.reverse = !$scope.pagingInfo.reverse;
-            } else {
-                $scope.PagingInfo.sortBy = sortBy;
-                $scope.PagingInfo.reverse = false;
-            }
-            $scope.PagingInfo.page = 1;
-            $scope.Search();
-        };
-
-        $scope.pagefunction = '';
-
-
-        $scope.selectQuotationForRecom = function (row, action) {
-            console.log($scope.AllQuotationsList);
-
-            // Set hidden field or model
+        // ── Select an approved quotation ──────────────────────────────
+        $scope.selectQuotationForRecom = function (row) {
+            // names / designations / signatures for the print slip
             $scope.Quotation.ClntQutnPrepBy = row.ClntQutnPrepBy;
             $scope.Quotation.ClntQutnRecmBy = row.ClntQutnRecmBy;
             $scope.Quotation.ClntQutnAprvBy = row.ClntQutnAprvBy;
-
             $scope.Quotation.ClntQutnPrepDesignation = row.ClntQutnPrepDesignation;
             $scope.Quotation.ClntQutnRecmDesignation = row.ClntQutnRecmDesignation;
             $scope.Quotation.ClntQutnAprvDesignation = row.ClntQutnAprvDesignation;
-
             $scope.Quotation.ClntQutnPrepBySignature = row.ClntQutnPrepBySignature;
             $scope.Quotation.ClntQutnRecmBySignature = row.ClntQutnRecmBySignature;
             $scope.Quotation.ClntQutnAprvBySignature = row.ClntQutnAprvBySignature;
 
-            if (action === 'save') {
-                $scope.pagefunction = 'savemode';
+            $scope.pagefunction = 'savemode';
+            $('#QuotationForRecom').modal('hide');
+            $scope.loading = true;
 
-                $('#QuotationForRecom').modal('hide');
-                $scope.loading = true;
-
-                $http.post('/QuotationToClient/AvailableClientAprvInfo', {
-                    ClientID: row.ClientID, ClientReqID: row.ClientReqID
-                }).success(function (response) {
-                    $scope.ClientDetails = response.ClientDetails;
-                    $scope.Client = {
-                        ClientName: $scope.ClientDetails[0].ClientName,
-                        ClientRequisitionNo: $scope.ClientDetails[0].ClientReqNo,
-                        ClientRequisitionDate: $scope.ClientDetails[0].RequisitionDate,
-                        ContactPerson: $scope.ClientDetails[0].ContactPerson,
-                        ContactNumber: $scope.ClientDetails[0].ContactNumber,
-                        ContactTIN: $scope.ClientDetails[0].ClientTinNo,
-                        ContactBIN: $scope.ClientDetails[0].ClientBinNo,
-                        ContactAddress: $scope.ClientDetails[0].Address
-                    };
-                    $scope.MasterData = {
-                        QuotationRecNote: $scope.ClientDetails[0].RecmRemarks,
-                        QuotationAprvNote: $scope.ClientDetails[0].AprvRemarks,
-                        ClientQutnAprvID: $scope.ClientDetails[0].ClientQutnAprvID
-                    };
-                    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID, $scope.ClientDetails[0].ClientReqID, action);
-                    $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
-            }
-
-            else if (action === 'view' || 'edit') {
-
-                $('#QuotationForRecom').modal('hide');
-                $scope.loading = true;
-
-                $http.post('/QuotationToClient/AvailableClientDetailInfo', {
-                    ClientID: row.ClientID, ClientReqID: row.ClientReqID
-                }).success(function (response) {
-                    $scope.ClientDetails = response.ClientDetails;
-
-                    $scope.Client = {
-                        ClientName: $scope.ClientDetails[0].ClientName,
-                        ClientRequisitionNo: $scope.ClientDetails[0].ClientReqNo,
-                        ClientRequisitionDate: $scope.ClientDetails[0].RequisitionDate,
-                        ContactPerson: $scope.ClientDetails[0].ContactPerson,
-                        ContactNumber: $scope.ClientDetails[0].ContactNumber,
-                        ContactTIN: $scope.ClientDetails[0].ClientTinNo,
-                        ContactBIN: $scope.ClientDetails[0].ClientBinNo,
-                        ContactAddress: $scope.ClientDetails[0].Address,
-                        QuotationRecNote: $scope.ClientDetails[0].RecmRemarks,
-                        QuotationAprvNote: $scope.ClientDetails[0].AprvRemarks
-                    };
-                    $scope.GetClientReqDataInfo($scope.ClientDetails[0].ClientID, $scope.ClientDetails[0].ClientReqID, action);
-                    $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
-            }
+            $http.post('/QuotationToClient/AvailableClientAprvInfo', {
+                ClientID: row.ClientID, ClientReqID: row.ClientReqID
+            }).success(function (response) {
+                var d = response.ClientDetails[0];
+                $scope.ClientDetails = [d];
+                $scope.Client = {
+                    ClientName: d.ClientName, ClientRequisitionNo: d.ClientReqNo, ClientReqID: d.ClientReqID,
+                    ClientRequisitionDate: d.RequisitionDate, ContactPerson: d.ContactPerson, ContactNumber: d.ContactNumber,
+                    ContactTIN: d.ClientTinNo, ContactBIN: d.ClientBinNo, ContactAddress: d.Address,
+                    DocumentID: d.DocumentID
+                };
+                $scope.MasterData = {
+                    ClientReqID: d.ClientReqID,
+                    QuotationRecNote: d.RecmRemarks,
+                    QuotationAprvNote: d.AprvRemarks,
+                    ClientQutnAprvID: d.ClientQutnAprvID
+                };
+                $scope.GetClientReqDataInfo(d.ClientID, d.ClientReqID);
+                $scope.loading = false;
+            }).error(function () { $scope.loading = false; });
         };
 
-        $scope.GetClientReqDataInfo = function (ClientID, ClientReqID, action) {
-            if (action === 'save') {
-                $http.post('/QuotationApproval/GetClientReqDataInfoAprv', {
-                    ClientID: ClientID,
-                    ClientReqID: ClientReqID
-                }).success(function (response) {
+        $scope.GetClientReqDataInfo = function (ClientID, ClientReqID) {
+            $http.post('/QuotationApproval/GetClientReqDataInfoAprv', { ClientID: ClientID, ClientReqID: ClientReqID })
+                .success(function (response) {
                     $scope.GetClientReqDetails = response.GetClientReqDetails;
                     $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
                     $scope.loading = false;
-
-                    $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
-
-                }).error(function () {
-                    $scope.loading = false;
-                });
-            }
-
-            else if (action === 'view' || 'edit') {
-                $http.post('/QuotationApproval/GetClientReqDataInfoAprv', {
-                    ClientID: ClientID,
-                    ClientReqID: ClientReqID
-                }).success(function (response) {
-                    $scope.GetClientReqDetails = response.GetClientReqDetails;
-                    $scope.GetClientReqDetailsCollection = [].concat($scope.GetClientReqDetails);
-                    $scope.loading = false;
-
-                    $scope.MasterData = {
-                        ClientID: $scope.GetClientReqDetailsCollection[0].ClientID,
-                        ClientReqID: $scope.GetClientReqDetailsCollection[0].ClientReqID,
-                        ClientQutnRecmID: $scope.GetClientReqDetailsCollection[0].ClientQutnRecmID
-                    };
-                    $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID, action);
-                }).error(function () {
-                    $scope.loading = false;
-                });
-            }
+                    if ($scope.GetClientReqDetailsCollection.length) {
+                        $scope.GetTermsItemList($scope.GetClientReqDetailsCollection[0].ClientQutnRecmID);
+                    }
+                }).error(function () { $scope.loading = false; });
         };
 
+        $scope.GetTermsItemList = function (RecmID) {
+            $http.post('/QuotationApproval/GetVendorTermList', { ClientQutnRecmID: RecmID })
+                .success(function (response) {
+                    $scope.TermsConditionsList = response.VendorTermTermList;
+                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
+                    $scope.loading = false;
+                }).error(function () { });
+        };
 
-        $scope.showFlag = false;
-        $scope.selectedRows = [];
-        $scope.buttonChecked = false;
-
-        $scope.selectEntity = function (row, action) {
-
-            if (action === 'save') {
-                var selecteditems = {
-                    ClientQuotationRecomID: row.ClientQuotationRecomID,
-                    ClientQutnRecmItemID: row.ClientQutnRecmItemID,
-
-                    ServiceCategoryID: row.ServiceCategoryID, //--
-                    TermsID: row.TermsID,
-                    ServiceItemID: row.ServiceItemID,
-                    Description: row.Description, //--
-                    DeliveryLocation: row.DeliveryLocation, //--
-                    DeliveryDate: row.DeliveryDate, //--
-                    DeliveryMode: row.DeliveryMode, //--
-                    QutnQnty: row.QutnQnty, //--
-                    QutnUnit: row.ReqUnit, //--
-                    VenPrice: row.QutnPrice, //-- VenPrice
-                    MclPrice: row.givenQutnPrice, //--
-                    QutnAmt: row.QutnAmt, //--
-                    ASFPerc: row.ASFPerc,
-                    ASFAmt: row.TotGivenASFAmt,
-                    VatPerc: row.VatPerc, //--
-                    VatAmt: row.VatAmt, //--
-                    TolAmt: row.givenTolAmt
-                }
-
-                var existingItem = $scope.selectedRows.find(item => item.ClientQutnRecmItemID === row.ClientQutnRecmItemID);
-
-                if (existingItem) {
-                    existingItem.MclPrice = row.givenQutnPrice
-                    existingItem.VatPerc = row.GivenVatPerc;
-                    existingItem.VatAmt = row.TotGivenVatAmt;
-                    existingItem.TolAmt = row.givenTolAmt;
-                } else {
-                    $scope.selectedRows.push(selecteditems);
-                }
-                $scope.showTermsItem = $scope.selectedRows.length > 0;
-            }
-
-            else if (action === 'view' || 'edit') {
-                var selecteditems = {
-                    ClientQuotationRecomID: row.ClientQuotationRecomID,
-                    ClientQutnRecmItemID: row.ClientQutnRecmItemID,
-
-                    ServiceCategoryID: row.ServiceCategoryID, //--
-                    TermsID: row.TermsID,
-                    ServiceItemID: row.ServiceItemID,
-                    Description: row.Description, //--
-                    DeliveryLocation: row.DeliveryLocation, //--
-                    DeliveryDate: row.DeliveryDate, //--
-                    DeliveryMode: row.DeliveryMode, //--
-                    QutnQnty: row.QutnQnty, //--
-                    QutnUnit: row.ReqUnit, //--
-                    VenPrice: row.QutnPrice, //-- VenPrice
-                    MclPrice: row.givenQutnPrice, //--
-                    QutnAmt: row.QutnAmt, //--
-                    AFSPerc: row.GivenAFSPerc,
-                    VatAmt: row.TotGivenAFSAmt,
-                    VatPerc: row.VatPerc, //--
-                    VatAmt: row.VatAmt, //--
-                    TolAmt: row.givenTolAmt
-                }
-
-                var existingItem = $scope.selectedRows.find(item => item.ClientQutnRecmItemID === row.ClientQutnRecmItemID);
-
-                if (existingItem) {
-                    existingItem.MclPrice = row.givenQutnPrice
-                    existingItem.VatPerc = row.GivenVatPerc;
-                    existingItem.VatAmt = row.TotGivenVatAmt;
-                    existingItem.TolAmt = row.givenTolAmt;
-                } else {
-                    $scope.selectedRows.push(selecteditems);
-                }
-                $scope.showTermsItem = $scope.selectedRows.length > 0;
-            }
-        }
-
-        $scope.GetTermsItemList = function (TempID, action) {
-            if (action === 'save') {
-                $http.post('/QuotationApproval/GetVendorTermList',
-                    { ClientQutnRecmID: TempID })
-                    .success(function (response) {
-                        $scope.TermsConditionsList = response.VendorTermTermList;
-                        $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-                        $scope.loading = false;
-                    })
-                    .error(function () { });
-            }
-            else if (action === 'view' || 'edit') {
-                $http.post('/QuotationApproval/GetVendorTermList',
-                    { ClientQutnRecmID: TempID })
-                    .success(function (response) {
-                        $scope.TermsConditionsList = response.VendorTermTermList;
-                        $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-                        $scope.loading = false;
-                    })
-                    .error(function () { });
-            }
-        }
-
-
+        // ── Row display values ────────────────────────────────────────
         $scope.initializeDefaults = function (row) {
             row.givenQutnPrice = row.QutnPrice || 0;
             row.GivenVatPerc = row.VatPerc;
-
             $scope.calculateRowFields(row);
         };
 
         $scope.calculateRowFields = function (row) {
-            /* row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
-             row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
-             row.givenQutnAmt = row.givenQutnPrice * (parseFloat(row.QutnQnty) || 0);
-             row.TotGivenVatAmt = row.givenQutnAmt * (row.GivenVatPerc / 100);
-             row.givenTolAmt = row.givenQutnAmt + row.TotGivenVatAmt;*/
-
             row.givenQutnPrice = parseFloat(row.givenQutnPrice) || 0;
-            //row.GivenASFPerc = parseFloat(row.GivenASFPerc) || 0;
-            //row.GivenVatPerc = parseFloat(row.GivenVatPerc) || 0;
-            row.ReqQnty = parseFloat(row.ReqQnty) || 0;
-
-            // 1. Calculate Base Amount
             row.givenQutnAmt = row.givenQutnPrice * row.QutnQnty;
-
-            // 2. Calculate ASF Amount
             row.TotGivenASFAmt = row.givenQutnAmt * (row.ASFPerc / 100);
-
-            // 3. Calculate VAT based on (Base + ASF)
-            const basePlusASF = row.givenQutnAmt + row.TotGivenASFAmt;
-            row.TotGivenVatAmt = basePlusASF * (row.GivenVatPerc / 100);
-
-            // 4. Total Amount
+            row.TotGivenVatAmt = (row.givenQutnAmt + row.TotGivenASFAmt) * (row.GivenVatPerc / 100);
             row.givenTolAmt = row.givenQutnAmt + row.TotGivenASFAmt + row.TotGivenVatAmt;
-
-
-            $scope.selectEntity(row, 'save');
+            $scope.showTermsItem = true;          // reveals the terms / Preview section
         };
 
-        $scope.validateInput = function (field, row) {
-            const floatRegex = /^[0-9]*\.?[0-9]*$/;
-            if (!floatRegex.test(row[field]) || row[field] === '') {
-                row[field] = 0;
-            }
-            $scope.calculateRowFields(row);
-        };
+        // ── Preview = register the loaded approval ID, then print ─────
+        $scope.openConfirmModal = function () { $scope.SaveQuotToClient(); };
 
-        $scope.checkEnter = function (event, row) {
-            if (event.keyCode === 13 || event.keyCode === 9) {
-                $scope.calculateRowFields(row);
-            }
-        };
-
-
-        $scope.openConfirmModal = function (action) {
-            $scope.SaveQuotToClient(action);
-        };
-
-
-        $scope.SaveQuotToClient = function (action) {
-
+        $scope.SaveQuotToClient = function () {
             $http.post('/QuotationApproval/SaveQuotToClientReport', {
                 MasterData: [$scope.MasterData],
-                DetailData: $scope.selectedRows,
+                DetailData: [],
                 AllTermsDtl: $scope.TermsConditionsDisplayedCollection
-
             }).success(function (response) {
-
-                if (response.status === "Successfully Submitted" || response.status === "Operation Done" || response.status === "202") {
-
+                if (response.status === "202" || response.status === "Successfully Submitted" || response.status === "Operation Done") {
                     toastr.success('Previewed Successfully');
-
-                    // Set hidden field or model
-                    $scope.Quotation.QuotationNo = response.ClientQutnAprvID;
-                    if (response.ClientQutnAprvID) {
-                        $scope.MasterData.ClientQutnAprvID = response.ClientQutnAprvID;
-                    }
-
-                    // Print the client-side report right away instead of
-                    // submitting to the old Crystal-report form.
+                    if (response.ClientQutnAprvID) $scope.MasterData.ClientQutnAprvID = response.ClientQutnAprvID;
                     $scope.printQuotation();
-
                 } else {
                     toastr.error('Something went wrong');
                 }
-
                 $scope.loading = false;
-
             }).error(function () {
                 $scope.loading = false;
                 toastr.error('Data Loading Failed.');
             });
         };
 
-
-        $scope.refreshPage = function () {
-            setTimeout(function () {
-                window.location.reload();
-            }, 2000);
-        }
-
-        $scope.getRowStyle = function (row) {
-            if (row.selected) {
-                return { background: '#b9e7d8' };
-            } else {
-                return {};
-            }
-        };
-
-        $scope.SearchSaveClients = function () {
-
-            $scope.ClearEverything();
-
-            $http.post('/QuotationApproval/AllClientQuotationforApprvData', {
-                page: $scope.PagingInfo.page,
-                itemsPerPage: $scope.PagingInfo.itemsPerPage,
-                sortBy: $scope.PagingInfo.sortBy,
-                reverse: $scope.PagingInfo.reverse,
-                search: $scope.PagingInfo.search,
-                type: "isBack",
-                action: 'SaveSearch'
-
-            }).success(function (response) {
-                $scope.AllQuotationsList = response.AllAvailableClientsList;
-                $scope.AllQuotationsCollection = $scope.AllQuotationsList.filter(function (item) {
-                    return item.ProcessStatus == null || item.ProcessStatus === '';
-                });
-                $scope.loading = false;
-            }).error(function () {
-                $scope.loading = false;
-            });
-            $('#QuotationForRecom').modal('show');
-        };
-
-
-        $scope.selectSavePageList = function () {
-            $http.post('/QuotationApproval/AllClientQuotationforApprvData', {
-
-                page: $scope.PagingInfo.page,
-                itemsPerPage: $scope.PagingInfo.itemsPerPage,
-                sortBy: $scope.PagingInfo.sortBy,
-                reverse: $scope.PagingInfo.reverse,
-                search: $scope.PagingInfo.search,
-                type: "isBack",
-                action: 'SaveSearch'
-
-            }).success(function (response) {
-                $scope.AllQuotationsList = response.AllAvailableClientsList;
-                $scope.AllQuotationsCollection = $scope.AllQuotationsList.filter(function (item) {
-                    return item.ProcessStatus == null || item.ProcessStatus === '';
-                });
-                $scope.loading = false;
-            })
-                .error(function () {
-                    $scope.loading = false;
-                });
-        }
-
-
-        /////===============> terms and conditions
-
-        $scope.ShowTermsConditionsList = function () {
-            $http.get("/ClientRequisition/GetTermsConditionsList")
-                .success(function (response) {
-                    console.log(response);
-                    $scope.TermsConditionsList = response.termsConditionsList;
-                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-                    console.log($scope.TermsConditionsDisplayedCollection);
-                    $scope.loading = false;
-                })
-                .error(function () { });
-
-            $('#ClientReqTermsConditionsModal').modal('show');
-        };
-
-        $scope.toggleTermsConditionsSelect = function (row) {
-            $scope.ClientReq.TermsID = row.TermsID;
-            $scope.ClientReq.FormName = row.FormName;
-
-            $http.post('/ClientRequisition/GetClientReqTermAgainstFormList', { TermsID: row.TermsID })
-                .success(function (response) {
-                    $scope.TermsConditionsList = response.ClientReqTermList;
-                    $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-                    $scope.loading = false;
-                }).error(function () {
-                    $scope.loading = false;
-                });
-
-            $('#ClientReqTermsConditionsModal').modal('hide');
-        };
-
-        $scope.AddReqTermModal = function () {
-
-            $('#RequisitionTermModal').modal('show');
-        };
-
-
-        $scope.TermsConditionsList = [];
-        $scope.TermsConditionsDisplayedCollection = [].concat($scope.TermsConditionsList);
-
-        $scope.AddReqTerm = function () {
-            if ($('#TermsCode').val() === "") {
-                toastr.error("Terms Code is required.");
-                return;
-            }
-
-            if ($('#TermsName').val() === "") {
-                toastr.error("Terms Name is required.");
-                return;
-            }
-
-            const newTerm = {
-                TermsCode: $('#TermsCode').val(),
-                TermsName: $('#TermsName').val(),
-            };
-
-            $scope.clientReqTermArray.push(newTerm);
-
-            $scope.TermsConditionsDisplayedCollection = $scope.TermsConditionsList.concat(newTerm);
-
-            $scope.resetClientReqTerm();
-            $("#btnAddReqTerm").html('Add');
-            $('#RequisitionTermModal').modal('hide');
-        };
-
-        $scope.resetClientReqTerm = function () {
-            $scope.ClientReqTerm = {
-                ClientReqTermsID: "",
-                ClientReqID: "",
-                TermsID: "",
-                TermsCode: "",
-                TermsName: ""
-            };
-        };
-
-        $scope.toggleReqTermEdit = function (tableRow, index) {
-            $('#RequisitionTermModal').modal('show');
-            $scope.resetClientReqTerm();
-
-            $scope.ClientReqTerm = angular.copy(tableRow);
-
-            $scope.TermsConditionsDisplayedCollection.splice(index, 1);
-            $scope.clientReqTermArray.splice(index, 1);
-            $("#btnAddReqTerm").html('Update');
-        };
-
-        $scope.toggleReqTermDelete = function (tableRow, index) {
-            if (!tableRow.ClientReqTermID) {
-                $scope.resetClientReqTerm();
-                $scope.TermsConditionsDisplayedCollection.splice(index, 1);
-                $scope.clientReqTermArray.splice(index, 1);
-                toastr.success('Data deleted successfully.');
-            } else {
-                $scope.resetClientReqTerm();
-                $scope.ClientReqTerm = angular.copy(tableRow);
-                $('#deleteReqTermModal').modal('show');
-            }
-        };
-
-
-        /* ── Quotation Print: fetch header/items/terms then render + print ── */
+        // ── Print: fetch header / items / terms, render, print ────────
         $scope.printQuotation = function () {
-            if (!$scope.MasterData.ClientQutnAprvID) {
-                toastr.error("No quotation loaded to print.");
-                return;
-            }
-
+            if (!$scope.MasterData.ClientQutnAprvID) { toastr.error("No quotation loaded to print."); return; }
             $scope.loading = true;
 
             $http.post('/QuotationApproval/GetClientQuotationApprovedPrintData', {
                 ClientQutnAprvID: $scope.MasterData.ClientQutnAprvID
             }).success(function (response) {
-
                 $scope.PrintHeader = response.Header || {};
                 $scope.PrintItems = response.Items || [];
                 $scope.PrintTerms = response.Terms || [];
 
                 var grandTotal = 0;
-                $scope.PrintItems.forEach(function (row) {
-                    grandTotal += parseFloat(row.TolAmt || 0);
-                });
+                $scope.PrintItems.forEach(function (row) { grandTotal += parseFloat(row.TolAmt || 0); });
                 $scope.PrintGrandTotal = grandTotal;
                 $scope.PrintGrandTotalWords = numberToWordsTakaPaisa(grandTotal);
 
                 setTimeout(function () {
                     document.getElementById('masterRow').style.display = 'block';
                     $scope.printData();
-
                     setTimeout(function () {
                         document.getElementById('masterRow').style.display = 'none';
                         $scope.loading = false;
                     }, 800);
                 }, 200);
-
             }).error(function () {
                 $scope.loading = false;
                 toastr.error("Failed to load print data.");
             });
         };
 
-        //print document
-
         $scope.printData = function () {
-            var VendorSlip = document.getElementById("masterRow");
-            if (!VendorSlip) return;
+            var slip = document.getElementById("masterRow");
+            if (!slip) return;
 
-            // Create an iframe dynamically
             var iframe = document.createElement('iframe');
             iframe.style.position = 'absolute';
             iframe.style.width = '0';
@@ -1639,145 +885,48 @@
             iframe.style.border = 'none';
             document.body.appendChild(iframe);
 
-            // Write the content to the iframe document
             var doc = iframe.contentWindow.document;
             doc.open();
             doc.write('<html><head><title>Client Quotation - ' + ($scope.PrintHeader.QuotationNo || '') + '</title>');
-
-            // Add custom styles for printing
             doc.write(`
                 <style>
-                    /* Removing the page margin removes the space Chrome/Edge use
-                       to draw the default print header (date/title) and
-                       footer (url/page number) — this hides them without
-                       touching the browser's print-dialog checkbox. */
-                    @@page {
-                        size: auto;
-                        margin: 0;
-                    }
-                    html, body {
-                        margin: 0;
-                        padding: 0;
-                    }
-                    body {
-                        font-family: Arial, sans-serif;
-                        padding: 20px;
-                        box-sizing: border-box;
-                        font-size: 12px;
-                    }
+                    /* zero page margin hides the browser's default print header / footer */
+                    @@page { size: auto; margin: 0; }
+                    html, body { margin: 0; padding: 0; }
+                    body { font-family: Arial, sans-serif; padding: 20px; box-sizing: border-box; font-size: 12px; }
                     table { width: 100%; border-collapse: collapse; }
                     td, th { padding: 5px; text-align: left; }
                     p { margin: 0; }
                 </style>
             `);
-
             doc.write('</head><body>');
-            doc.write(VendorSlip.outerHTML);
+            doc.write(slip.outerHTML);
             doc.write('</body></html>');
             doc.close();
 
-            // Trigger print on the iframe content
             iframe.contentWindow.focus();
             iframe.contentWindow.print();
-
-            // Remove the iframe from the DOM after printing
             setTimeout(function () { document.body.removeChild(iframe); }, 1000);
-        }
-
-        // Saved document IDs (comma-separated in ClientDetails[0].DocumentID)
-        $scope.getDocumentList = function () {
-            var ids = $scope.ClientDetails && $scope.ClientDetails[0] && $scope.ClientDetails[0].DocumentID;
-            if (!ids) return [];
-            return ids.split(',')
-                .map(function (s) { return s.trim(); })
-                .filter(Boolean);
         };
 
-        $scope.ViewDocument = function (docID) {
-            if (!docID) {
-                toastr.error("No document selected.");
-                return;
-            }
-
-            // The ViewDocument action appends the extension itself
-            docID = docID.replace(/\.pdf$/i, '');
-
-            $scope.loading = true;
-
-            var requestUrl = "/ClientRequisition/ViewDocument?" +
-                "&serverUrl=" + encodeURIComponent("MCL/Client_Requisition") +
-                "&DocID=" + encodeURIComponent(docID) +
-                "&ext=" + encodeURIComponent("pdf");
-
-            $http.get(requestUrl, { responseType: 'arraybuffer' })
-                .then(function (response) {
-                    var file = new Blob([response.data], { type: 'application/pdf' });
-                    var fileURL = URL.createObjectURL(file);
-                    $("#pdfViewer").attr("src", fileURL + "#view=Fit");
-                    $('#ShowPDFModal').modal('show');
-                })
-                .catch(function (error) {
-                    toastr.error("Failed to load the PDF.");
-                    console.error(error);
-                })
-                .finally(function () {
-                    $scope.loading = false;
-                });
-        };
-
+        // ── Clear everything ──────────────────────────────────────────
         $scope.ClearEverything = function () {
             $scope.showTermsItem = false;
-
+            $scope.pagefunction = '';
             $scope.clientReqTermArray = [];
-            $scope.Client = "";
-            $scope.ClientReq = {
-                TermsID: "",
-                FormName: "",
-            }
-
-            $scope.ClientReqTerm = {
-                ClientReqTermsID: "",
-                ClientReqID: "",
-                TermsID: "",
-                TermsCode: "",
-                TermsName: ""
-            }
+            $scope.ClientReq = { TermsID: "", FormName: "" };
+            $scope.resetClientReqTerm();
             $scope.Client = {
-                ClientName: "",
-                ClientRequisitionNo: "",
-                ClientReqID: "",
-                ClientRequisitionDate: "",
-                ContactPerson: "",
-                ContactNumber: "",
-                ContactTIN: "",
-                ContactBIN: "",
-                ContactAddress: "",
-            }
-
-            $scope.MasterData = {
-                ClientID: "",
-                ClientReqID: "",
-                BriefingDate: "",
-                BriefingDate: "",
-                QuotationAprvNote: ""
-            }
+                ClientName: "", ClientRequisitionNo: "", ClientReqID: "", ClientRequisitionDate: "",
+                ContactPerson: "", ContactNumber: "", ContactTIN: "", ContactBIN: "", ContactAddress: ""
+            };
+            $scope.MasterData = { ClientID: "", ClientReqID: "", QuotationRecNote: "", QuotationAprvNote: "", ClientQutnAprvID: "" };
             $scope.ClientDetails = [];
             $scope.GetClientReqDetails = [];
             $scope.GetClientReqDetailsCollection = [];
             $scope.TermsConditionsList = [];
             $scope.TermsConditionsDisplayedCollection = [];
-            $scope.AllAvailableClientsList = [];
-            $scope.AllAvailableClientstCollection = [];
-            $scope.selectedRows = [];
-            $scope.ClientReq.TermsID = "";
-            $scope.ClientReq.FormName = "";
-        }
-
-
-        $scope.toggleRefreshTable = function () {
-            window.location.reload();
-        }
-
-    }
-    )
+            $scope.ActionLog = [];
+        };
+    });
 </script>

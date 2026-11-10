@@ -194,7 +194,7 @@
         <div class="row" ng-show="VendorCSInfo.AwardMode==='REC'" style="margin-bottom: 6px; margin-right: -15px; margin-left: -31px;">
             <div class="col-sm-1"></div>
             <div class="col-lg-2"><label>CS Recm. Vendor:</label></div>
-            <div class="col-lg-3"  style="margin-bottom: 6px; margin-right: -15px; margin-left: 5px;">
+            <div class="col-lg-3" style="margin-bottom: 6px; margin-right: -15px; margin-left: 5px;">
                 <input type="text" class="form-control" placeholder="CS Recm. Vendor"
                        ng-model="VendorCSInfo.VendorCsRecmName" ng-readonly="true" style="background:#fff;" />
             </div>
@@ -258,6 +258,12 @@
                         <i class="fa fa-edit" style="padding-right:5px"></i> Edit
                     </button>
                 </div>
+                <!-- CS WORKFLOW : history (Back / Postpone / Resume are chosen in the Operation drop-down) -->
+                <div class="btn-group pull-right" style="margin-left:4px;margin-right:4px;" ng-show="wfHasDoc()">
+                    <button class="button-custom btn-info" type="button" ng-click="wfShowHistory()" title="Back / Postpone / Recommend history with reasons">
+                        <i class="fa fa-history" style="padding-right:5px"></i> History
+                    </button>
+                </div>
                 <!-- New CS (clear form) -->
                 <div class="btn-group pull-right" style="margin-left:4px;margin-right:4px;" ng-show="pageMode==='view' || pageMode==='edit'">
                     <button class="button-custom" type="button" ng-click="startNewCS()">
@@ -267,6 +273,27 @@
             </div>
         </div>
     </div>
+
+    <!-- CS WORKFLOW BANNER : latest Back / Postpone reason is always visible -->
+    <div class="alert" ng-cloak ng-show="wf.state && wf.state.WfState && wf.state.WfState !== 'ACTIVE'"
+         ng-class="wf.state.WfState === 'POSTPONED' ? 'alert-danger' : 'alert-warning'" style="margin:8px 15px;">
+        <div ng-show="wf.state.WfState === 'POSTPONED'">
+            <i class="fa fa-pause-circle"></i>
+            <strong>POSTPONED</strong> at {{wf.stageNames[wf.state.HeldAtStage || wf.state.CurrentStage]}}
+            <span ng-show="wf.state.LastActionByName"> by {{wf.state.LastActionByName}}</span>
+            <span ng-show="wf.state.LastActionOnText"> on {{wf.state.LastActionOnText}}</span>.
+            No action is possible at any stage until it is resumed.
+        </div>
+        <div ng-show="wf.state.WfState === 'RETURNED'">
+            <i class="fa fa-undo"></i>
+            <strong>SENT BACK to CS Preparation</strong> from {{wf.stageNames[wf.state.HeldAtStage]}}
+            <span ng-show="wf.state.LastActionByName"> by {{wf.state.LastActionByName}}</span>
+            <span ng-show="wf.state.LastActionOnText"> on {{wf.state.LastActionOnText}}</span>.
+            <span ng-show="wf.stage === 'PREP'">Correct it and click <em>Update</em> to send it forward again.</span>
+        </div>
+        <div style="margin-top:4px;"><strong>Reason:</strong> {{wf.state.LastReason}}</div>
+    </div>
+
 
     <!-- ══════════════════════════════════════════════════════════════════
          NEW MODE  (p===2): Requisition list → Items → Vendors → Form
@@ -451,13 +478,19 @@
                         </div>
                         <div class="col-lg-2"><label>Operation:</label></div>
                         <div class="col-lg-3">
-                            <select data-ng-model="VendorCSInfo.Operation" class="form-control">
+                            <select data-ng-model="VendorCSInfo.Operation" class="form-control" ng-change="wf.reason = ''">
                                 <option value="">-- None --</option>
-                                <option value="PRP">Preparation</option>
-                                <option value="Bck">Back</option>
-                                <option value="Pst">Postponed</option>
+                                <option value="PRP" ng-disabled="!wfCanForward()">Preparation</option>
+
+                                <option value="Pst" ng-disabled="!wfCanAct()">Postponed</option>
+                                <option value="Rsm" ng-if="wfCanResume()">Resume</option>
                                 <option value="Can">Cancel</option>
                             </select>
+                            <div ng-show="wfNeedsReason()" style="margin-top:6px;">
+                                <textarea class="form-control" rows="3" maxlength="1000" ng-model="wf.reason"
+                                          placeholder="Reason for {{wfOpLabel()}} (required)" ng-style="!wfReasonOk() && {'border-color':'#a94442'}"></textarea>
+                                <small ng-class="wfReasonOk() ? 'text-muted' : 'text-danger'"><i class="fa fa-asterisk" style="font-size:8px;"></i> Reason is mandatory &ndash; {{(wf.reason || '').trim().length}}/1000 (min 5)</small>
+                            </div>
                         </div>
                     </div>
 
@@ -650,14 +683,20 @@
                             VendorCSInfo.Operation
                         }}
                     </span>
-                    <select ng-show="pageMode==='edit'" data-ng-model="VendorCSInfo.Operation" class="form-control">
+                    <select ng-show="pageMode==='edit'" data-ng-model="VendorCSInfo.Operation" class="form-control" ng-change="wf.reason = ''">
                         <option value="">-- None --</option>
-                        <option value="Rec">Recommended</option>
-                        <option value="PRP">Preparation</option>
-                        <option value="Bck">Back</option>
-                        <option value="Pst">Postponed</option>
+                        <option value="Rec" ng-disabled="!wfCanForward()">Recommended</option>
+                        <option value="PRP" ng-disabled="!wfCanForward()">Preparation</option>
+
+                        <option value="Pst" ng-disabled="!wfCanAct()">Postponed</option>
+                        <option value="Rsm" ng-if="wfCanResume()">Resume</option>
                         <option value="Can">Cancel</option>
                     </select>
+                    <div ng-show="wfNeedsReason()" style="margin-top:6px;">
+                        <textarea class="form-control" rows="3" maxlength="1000" ng-model="wf.reason"
+                                  placeholder="Reason for {{wfOpLabel()}} (required)" ng-style="!wfReasonOk() && {'border-color':'#a94442'}"></textarea>
+                        <small ng-class="wfReasonOk() ? 'text-muted' : 'text-danger'"><i class="fa fa-asterisk" style="font-size:8px;"></i> Reason is mandatory &ndash; {{(wf.reason || '').trim().length}}/1000 (min 5)</small>
+                    </div>
                 </div>
                 <div class="col-lg-2"><label>Note:</label></div>
                 <div class="col-lg-3">
@@ -771,6 +810,47 @@
     </div>
 
     <!-- Search CS Modal — View & Edit buttons + Column Search -->
+    <!-- CS WORKFLOW : history -->
+    <div id="WfHistoryModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><i class="fa fa-history"></i> CS History</h4>
+                </div>
+                <div class="modal-body" style="max-height:60vh;overflow:auto;">
+                    <div ng-show="wf.history.length === 0" class="text-center text-muted">No history recorded yet.</div>
+                    <table class="table table-condensed table-bordered" ng-show="wf.history.length > 0" style="font-size:12px;">
+                        <thead>
+                            <tr style="background-color:#82b0c9;">
+                                <th>#</th>
+                                <th>Date</th>
+                                <th>Page</th>
+                                <th>Action</th>
+                                <th>By</th>
+                                <th>Result</th>
+                                <th>Award</th>
+                                <th style="width:35%;">Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="h in wf.history" ng-class="{danger: h.Action==='POSTPONE', warning: h.Action==='BACK'}">
+                                <td>{{wf.history.length - $index}}</td>
+                                <td>{{h.ActionOnText}}</td>
+                                <td>{{wf.stageNames[h.Stage] || h.Stage}}</td>
+                                <td><span class="label" ng-class="wfActionClass(h.Action)">{{h.Action}}</span></td>
+                                <td>{{h.ActionByName}}</td>
+                                <td>{{h.FromState}} &rarr; {{h.ToState}}<span ng-show="h.ToStage"> ({{wf.stageNames[h.ToStage] || h.ToStage}})</span></td>
+                                <td>{{h.AwardMode === 'DIST' ? 'Distribute' : (h.AwardMode === 'REC' ? 'Recommend one' : '')}}</td>
+                                <td style="white-space:pre-wrap;">{{h.Reason}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+            </div>
+        </div>
+    </div>
     <div id="SearchModal" class="modal fade">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -793,7 +873,7 @@
 
                         <thead>
                             <tr style="font-size:15px;">
-                                <th colspan="6"
+                                <th colspan="8"
                                     style="text-align:left;
                                        color:black;
                                        font-weight:100;
@@ -806,12 +886,14 @@
 
                             <!-- Header -->
                             <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
-                                <th width="8%">CS Number</th>
-                                <th width="15%">Service Name</th>
-                                <th width="10%">CS Date</th>
-                                <th width="40%">Project Name</th>
-                                <th width="15%">Recm. Vendor</th>
-                                <th width="8%">Action</th>
+                                <th style="text-align:center" width="8%">CS Number</th>
+                                <th style="text-align:center" width="15%">Service Name</th>
+                                <th style="text-align:center" width="10%">CS Date</th>
+                                <th style="text-align:center" width="30%">Project Name</th>
+                                <th style="text-align:center" width="15%">Recm. Vendor</th>
+                                <th style="text-align:center" >Award</th>
+                                <th style="text-align:center" >Status / Reason</th>
+                                <th style="text-align:center" width="15%">Action</th>
                             </tr>
 
                             <!-- Search Row -->
@@ -863,11 +945,13 @@
                                 <td>{{row.CSRecDate}}</td>
                                 <td>{{row.Remarks}}</td>
                                 <td>{{row.VendorCSRecmName}}</td>
+                                <td style="font-size:11px;"><span class="label" ng-class="row.AwardMode==='DIST' ? 'label-info' : 'label-default'">{{row.AwardMode==='DIST' ? 'Distribute' : 'Recommend one'}}</span></td>
+                                <td style="font-size:11px;"><span class="label" ng-show="row.WfState && row.WfState !== 'ACTIVE'" ng-class="row.WfState==='POSTPONED' ? 'label-danger' : 'label-warning'">{{row.WfState}}</span> <span ng-show="row.WfState && row.WfState !== 'ACTIVE'" title="{{row.LastReason}}">{{row.LastReason}}</span></td>
                                 <td class="text-center">
-
                                     <div class="btn-group btn-group-xs">
                                         <button type="button"
                                                 class="btn btn-primary btn-flat"
+                                                style="margin-right: 5px;"
                                                 ng-click="loadExistingCS(row,'view')">
                                             <i class="fa fa-eye"></i> View
                                         </button>
@@ -876,10 +960,9 @@
                                                 class="btn btn-warning btn-flat"
                                                 ng-hide="row.ProcessStatus == 1"
                                                 ng-click="loadExistingCS(row,'edit')">
-                                            <i class="fa fa-edit"></i> Edit
+                                            <i class="fa fa-edit"></i> Resubmit
                                         </button>
                                     </div>
-
                                 </td>
                             </tr>
 
@@ -1057,7 +1140,8 @@
         };
         // Save / Update is blocked in view mode and when the item has no quoted vendor at all
         $scope.saveBlocked = function () {
-            return $scope.pageMode === 'view' || $scope.notQuotedCount() > 0;
+            if ($scope.wfIsWorkflowOp()) { return $scope.pageMode === 'view' || !$scope.wfCanSave(); }
+            return $scope.pageMode === 'view' || $scope.notQuotedCount() > 0 || $scope.wfIsPostponed();
         };
 
         /* ══════════════════════════════════════════════════════════
@@ -1314,7 +1398,7 @@
             // A saved CS with a recommended vendor = "recommend one"; without = "distribute"
             $scope.VendorCSInfo.CSRecmVendorID = row.CSRecmVendorID || "";
             $scope.VendorCSInfo.VendorCsRecmName = row.CSRecmVendorID ? (row.VendorCSRecmName || "") : "";
-            $scope.VendorCSInfo.AwardMode = row.CSRecmVendorID ? 'REC' : 'DIST';
+            $scope.VendorCSInfo.AwardMode = row.AwardMode || (row.CSRecmVendorID ? 'REC' : 'DIST');
             $scope.VendorCSInfo.Operation = row.Operation;
             $scope.VendorCSInfo.Remarks = row.Remarks;
             $scope.CSMaterial_Name = row.ServiceItemName;
@@ -1488,6 +1572,8 @@
 
         /* ── Save / Update ───────────────────────────────────────── */
         $scope.Post = function () {
+            if ($scope.wfHandleOperation()) return;
+            if (!$scope.wfPreSave()) return;
             if ($scope.btnSave) return;     // guard against double-click
 
             if ($scope.pageMode === 'view') return;
@@ -1605,6 +1691,159 @@
         $scope.ViewDocumentFromList = openQuotationPdf;
 
         /* ── Refresh ─────────────────────────────────────────────── */
+        /* ═══════════════════════════════════════════════════════════
+   CS WORKFLOW : Back / Postpone / Resume (reason mandatory) + history
+   Award Type (REC / DIST) is read from the CS and carried through every stage
+   ═══════════════════════════════════════════════════════════ */
+        var WF_STAGE = 'PREP';
+        var WF_OBJ = 'VendorCSInfo';
+        $scope.wf = { stage: WF_STAGE, primaryLabel: 'Save', stageNames: { PREP: 'CS Preparation', RECM: 'CS Recommendation', ACC: 'Recom Acc', VERIFY: 'CS Verify', APRV: 'CS Approval' }, state: null, history: [], busy: false, reason: '' };
+        function wfObj() { return $scope[WF_OBJ] || {}; }
+        function wfNum(v) { var n = parseFloat(v); return isNaN(n) ? 0 : n; }
+
+        $scope.wfDocId = function () { var o = wfObj(); return o.VendorCSRecmID || o.AutoCSNo || ''; };
+        $scope.wfHasDoc = function () { return !!$scope.wfDocId(); };
+
+        $scope.wfLoadState = function () {
+            var id = $scope.wfDocId();
+            if (!id) { $scope.wf.state = null; return; }
+            $http.post('/VendorCSWorkflow/GetState', { Stage: WF_STAGE, DocID: id })
+                .success(function (r) { $scope.wf.state = r.state || null; })
+                .error(function () { $scope.wf.state = null; });
+        };
+        // reload the state whenever a different CS is loaded / cleared
+        $scope.$watch(function () { return $scope.wfDocId(); }, function (n, o) { if (n !== o) $scope.wfLoadState(); });
+
+        $scope.wfIsPostponed = function () { return !!($scope.wf.state && $scope.wf.state.WfState === 'POSTPONED'); };
+        // can Back / Postpone be used on this page right now?
+        $scope.wfCanAct = function () {
+            var s = $scope.wf.state;
+            if (!s) return true;
+            if (s.WfState !== 'ACTIVE') return false;
+            return WF_STAGE === 'PREP' ? true : s.CurrentStage === WF_STAGE;
+        };
+        $scope.wfCanResume = function () {
+            var s = $scope.wf.state;
+            return !!(s && s.WfState === 'POSTPONED' && (s.HeldAtStage || s.CurrentStage) === WF_STAGE);
+        };
+        // can the forward action (Recommend / Approve / Save) be used?
+        $scope.wfCanForward = function () {
+            var s = $scope.wf.state;
+            if (!s) return true;
+            if (WF_STAGE === 'PREP') return s.WfState !== 'POSTPONED';
+            return s.WfState === 'ACTIVE' && s.CurrentStage === WF_STAGE;
+        };
+        $scope.wfActionClass = function (a) {
+            return {
+                BACK: 'label-warning', POSTPONE: 'label-danger', RESUME: 'label-success', RECOMMEND: 'label-primary',
+                APPROVE: 'label-success', RESUBMIT: 'label-info'
+            }[a] || 'label-default';
+        };
+
+        /* ── Operation drop-down drives the action:  Bck = Back,  Pst = Postpone,  Rsm = Resume ──
+           Anything else (Rec / Vrf / Aprv / PRP ...) is the normal forward Save of the page. */
+        var WF_OPS = { Bck: 'BACK', Pst: 'POSTPONE', Rsm: 'RESUME' };
+        var WF_LABELS = { Bck: 'Back', Pst: 'Postpone', Rsm: 'Resume' };
+        $scope.wfOp = function () { return wfObj().Operation || ''; };
+        $scope.wfIsWorkflowOp = function () { return !!WF_OPS[$scope.wfOp()]; };
+        $scope.wfNeedsReason = function () { return $scope.wfIsWorkflowOp(); };
+        $scope.wfOpLabel = function () { return WF_LABELS[$scope.wfOp()] || ''; };
+        $scope.wfReasonOk = function () { return ((($scope.wf.reason) || '').trim().length >= 5); };
+        // is the Save button usable for the chosen Operation?
+        $scope.wfCanSave = function () {
+            var op = $scope.wfOp();
+            if (op === 'Bck' || op === 'Pst') return $scope.wfCanAct();
+            if (op === 'Rsm') return $scope.wfCanResume();
+            return $scope.wfCanForward();
+        };
+
+        $scope.wfSend = function (action, reason) {
+            if ($scope.wf.busy) return;
+            $scope.wf.busy = true;
+            $http.post('/VendorCSWorkflow/Act', { Stage: WF_STAGE, DocID: $scope.wfDocId(), Action: action, Reason: reason })
+                .success(function (r) {
+                    $scope.wf.busy = false;
+                    if (r.status === 'S201') {
+                        toastr.success({ BACK: 'Sent back to CS Preparation.', POSTPONE: 'CS postponed.', RESUME: 'CS resumed.' }[action]);
+                        $scope.wf.reason = '';
+                        $scope.wfLoadState();
+                        $scope.toggleRefreshTable();
+                    } else if (r.status === 'E400') { toastr.error('A reason (at least 5 characters) is required.'); }
+                    else if (r.status === 'E409') { toastr.error('Not allowed in the CS\'s current state. Refresh and check its status.'); }
+                    else if (r.status === 'E404') { toastr.error('CS workflow record not found.'); }
+                    else { toastr.error('Action failed (' + r.status + ').'); }
+                })
+                .error(function () { $scope.wf.busy = false; toastr.error('Action failed.'); });
+        };
+
+        // Called at the top of Post(). Returns true when the chosen Operation was a workflow action (handled here).
+        $scope.wfHandleOperation = function () {
+            var action = WF_OPS[$scope.wfOp()];
+            if (!action) return false;
+            if (!$scope.wfHasDoc()) { toastr.error('Open a CS first.'); return true; }
+            if (action === 'RESUME' ? !$scope.wfCanResume() : !$scope.wfCanAct()) {
+                toastr.error('This action is not allowed in the CS\'s current state.'); return true;
+            }
+            if (!$scope.wfReasonOk()) { toastr.error('A reason (at least 5 characters) is required for ' + $scope.wfOpLabel() + '.'); return true; }
+            var msg = {
+                BACK: 'Send this CS back to CS Preparation?',
+                POSTPONE: 'Postpone this CS? It will be stopped at every stage until it is resumed.',
+                RESUME: 'Resume this CS?'
+            }[action];
+            if (!window.confirm(msg)) return true;
+            $scope.wfSend(action, $scope.wf.reason.trim());
+            return true;
+        };
+
+        $scope.wfShowHistory = function () {
+            var id = $scope.wfDocId();
+            if (!id) { toastr.error('Open a CS first.'); return; }
+            $scope.wf.history = [];
+            $http.post('/VendorCSWorkflow/GetHistory', { Stage: WF_STAGE, DocID: id })
+                .success(function (r) { $scope.wf.history = r.history || []; })
+                .error(function () { toastr.error('Could not load the history.'); });
+            $('#WfHistoryModal').modal('show');
+        };
+
+        /* ── Award Type ───────────────────────────────────────────── */
+        // 'REC' = recommend one vendor, 'DIST' = distribute work among selected vendors.
+        // Older CS (before this feature) always had a single vendor, so they default to 'REC'.
+        $scope.wfAwardMode = function () {
+            var o = wfObj();
+            if (o.AwardMode) return o.AwardMode;
+            return $scope.wfHasDoc() ? 'REC' : '';
+        };
+        $scope.wfRows = function () { return $scope.MatWiseVendorListCollection || []; };
+        $scope.wfReqQty = function () {
+            var r = wfNum(wfObj().ReqQnty);
+            if (r > 0) return r;
+            var rows = $scope.wfRows();
+            for (var i = 0; i < rows.length; i++) { var q = wfNum(rows[i].ReqQnty); if (q > 0) return q; }
+            return 0;
+        };
+        $scope.wfAllocQty = function () {
+            return ($scope.selectedVendors || []).reduce(function (s, v) { return s + wfNum(v.NegoQty); }, 0);
+        };
+        $scope.wfQtyDiff = function () { return $scope.wfAllocQty() - $scope.wfReqQty(); };
+        $scope.wfSelectAll = function () {
+            ($scope.wfRows()).forEach(function (row) { if (!row.selected) $scope.selectVendor(row); });
+        };
+
+        // called at the top of Post(): returns false to stop the save
+        $scope.wfPreSave = function () {
+            var s = $scope.wf.state;
+            if (s && s.WfState === 'POSTPONED') { toastr.error('This CS is POSTPONED. Resume it before taking any action.'); return false; }
+            if (s && s.WfState === 'RETURNED' && WF_STAGE !== 'PREP') { toastr.error('This CS was sent back to CS Preparation.'); return false; }
+            if ($scope.wfAwardMode() === 'DIST' && WF_STAGE !== 'RECM' && WF_STAGE !== 'PREP') {
+                if (($scope.selectedVendors || []).length <= 0) { toastr.error('Select the vendors the work is distributed to.'); return false; }
+                var req = $scope.wfReqQty(), alloc = $scope.wfAllocQty();
+                if (req > 0 && alloc > req + 0.0005 &&
+                    !window.confirm('Cumulative qty (' + alloc + ') is greater than the Required Qty (' + req + '). Continue?')) return false;
+            }
+            return true;
+        };
+        $scope.wfLoadState();
+
         $scope.toggleRefreshTable = function () {
             $timeout(function () { window.location.reload(); }, 1000);
         };

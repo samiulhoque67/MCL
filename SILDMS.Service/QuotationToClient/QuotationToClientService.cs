@@ -92,7 +92,7 @@ namespace SILDMS.Service.QuotationToClient
         {
             string errorNumber = string.Empty;
 
-            ItemVendorDetail = _quotationToClientDataService
+            ItemVendorDetail = _iQuotationToClientDataService
                 .GetItemVendorDetailDataService(
                     ClientReqID,
                     ServiceItemID,
@@ -107,7 +107,7 @@ namespace SILDMS.Service.QuotationToClient
         {
             string errorNumber = string.Empty;
 
-            ActionLog = _quotationToClientDataService
+            ActionLog = _iQuotationToClientDataService
                 .GetActionLogDataService(
                     ClientReqID,
                     out errorNumber);

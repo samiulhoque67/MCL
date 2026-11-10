@@ -1,4 +1,5 @@
-﻿using SILDMS.Model;
+﻿using SILDMS.DataAccess.VendorCSWorkflow;
+using SILDMS.Model;
 using SILDMS.Service;
 using SILDMS.Utillity;
 using SILDMS.Utillity.Localization;
@@ -94,16 +95,27 @@ namespace SILDMS.Web.UI.Controllers
             result.MaxJsonLength = Int32.MaxValue;
             return result;
         }
-
         public async Task<dynamic> SaveVendorCSAprv(OBS_VendorCSAprv vendorCS, List<OBS_VendorCSAprvItem> vendorCSItem, List<OBS_VendorCSAprvTerms> vendorCSTerm)
         {
+            // === WORKFLOW GUARD (RECM) ===
+            var wf = new VendorCSWorkflowDataService();
+            string blockMsg;
+            if (wf.IsBlocked("RECM", vendorCS.VendorCSRecmID, out blockMsg))
+                return Json(new { status = "E409", message = blockMsg }, JsonRequestBehavior.AllowGet);
+
+            // === NEW: Retire any stale Item List / Vendor Selection rows left from a previous cycle ===
+            wf.RetireStale(vendorCS.VendorCSRecmID);
+
             vendorCS.SetBy = UserID;
             vendorCS.RecommendedByName = SILAuthorization.GetUserFullName();
-            vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation(); ;
-            string status = string.Empty;//, message = string.Empty;
-            status = _vendorCSInfoService.SaveVendorCSAprv(vendorCS, vendorCSItem, vendorCSTerm);
+            vendorCS.RecommendedByDesignation = SILAuthorization.GetUserDesignation();
 
-            //TempData["VendorCSRecmInfo"] = vendorCS;
+            string status = _vendorCSInfoService.SaveVendorCSAprv(vendorCS, vendorCSItem, vendorCSTerm);
+
+            // === WORKFLOW LOG (RECM) ===
+            if (status == "S201" || status == "S202")
+                wf.LogForward("RECM", vendorCS.VendorCSRecmID, "RECOMMEND", vendorCS.AwardMode, vendorCS.Remarks, UserID);
+
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
 

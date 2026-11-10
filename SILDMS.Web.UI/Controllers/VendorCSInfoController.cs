@@ -1,4 +1,5 @@
-﻿using SILDMS.Model;
+﻿using SILDMS.DataAccess.VendorCSWorkflow;
+using SILDMS.Model;
 using SILDMS.Service;
 using SILDMS.Utillity;
 using SILDMS.Utillity.Localization;
@@ -97,16 +98,22 @@ namespace SILDMS.Web.UI.Controllers
         }
 
         public async Task<dynamic> SaveVendorCSInfo(
-    OBS_VendorCSRecm vendorCS,
-    List<OBS_VendorCSRecmItem> vendorCSItem,
-    List<OBS_VendorCSRecmTerms> vendorCSTerm)
+     OBS_VendorCSRecm vendorCS,
+     List<OBS_VendorCSRecmItem> vendorCSItem,
+     List<OBS_VendorCSRecmTerms> vendorCSTerm)
         {
             if (vendorCS == null)
                 return Json(new { status = "Error", message = "vendorCS is null" }, JsonRequestBehavior.AllowGet);
 
+            // === WORKFLOW GUARD (PREP) ===
+            var wf = new VendorCSWorkflowDataService();   // or inject IVendorCSWorkflowService
+            string blockMsg;
+            if (wf.IsBlocked("PREP", vendorCS.VendorCSRecmID, out blockMsg))
+                return Json(new { status = "E409", message = blockMsg }, JsonRequestBehavior.AllowGet);
+
             vendorCS.SetBy = UserID;
 
-            // Build report object
+            // Build report object (keep your existing code)
             OBS_VendorCSReport objReport = new OBS_VendorCSReport
             {
                 ClientReqNo = vendorCS.ClientReqNo,
@@ -116,23 +123,30 @@ namespace SILDMS.Web.UI.Controllers
                 ClientName = vendorCS.ClientName,
                 VenReqItem = vendorCS.VenReqItem,
                 Note = vendorCS.Remarks,
-                // FIX 4: JS model uses VendorCsRecmName (camelCase mix) — map correctly
                 CSRecmVendorName = vendorCS.VendorCsRecmName,
                 RecommendedByName = SILAuthorization.GetUserFullName(),
                 RecommendedByDesignation = SILAuthorization.GetUserDesignation(),
                 CSPrepDate = vendorCS.CSRecDate,
                 VendorReqID = vendorCS.VendorReqID
             };
-
             if (vendorCSItem != null && vendorCSItem.Any())
                 objReport.ServiceItemID = vendorCSItem[0].ServiceItemID;
-
             TempData["VendorCSprepInfo"] = objReport;
 
             string status = _vendorCSInfoService.SaveVendorCSInfo(vendorCS, vendorCSItem, vendorCSTerm);
+
+            // === WORKFLOW LOG (PREP) ===
+            // For brand-new CS, the SP must return the newly generated ID.
+            // Use the ID that was actually saved (not the empty form value).
+            if (status == "S201" || status == "S202")
+            {
+                string action = (status == "S201") ? "SAVE" : "UPDATE";
+                // When the document was previously RETURNED, LogForward will convert this to RESUBMIT
+                wf.LogForward("PREP", vendorCS.VendorCSRecmID, action, vendorCS.AwardMode, vendorCS.Remarks, UserID);
+            }
+
             return Json(new { status }, JsonRequestBehavior.AllowGet);
         }
-
         //[HttpPost]
         //[Authorize]
         //[SILLogAttribute]
