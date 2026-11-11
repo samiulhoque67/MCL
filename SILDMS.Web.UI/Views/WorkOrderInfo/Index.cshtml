@@ -441,8 +441,8 @@
                                         <i class="fa fa-eye"></i> View
                                     </a>
                                     @*<a class="btn btn-sm btn-flat btn-warning" ng-click="toggleWOInfoSelect(row, 'edit')" style="margin-left:3px;">
-                                        <i class="fa fa-edit"></i> Edit
-                                    </a>*@
+                                            <i class="fa fa-edit"></i> Edit
+                                        </a>*@
                                 </td>
                             </tr>
                         </tbody>
@@ -481,8 +481,8 @@
                         <th>Delivery Date</th>
                         <th>WO Unit</th>
                         @*<th>Quotation Qty</th>
-                        <th>Quotation Price</th>
-                        <th>Quotation Amount</th>*@
+                            <th>Quotation Price</th>
+                            <th>Quotation Amount</th>*@
 
                         <th>WO Qty</th>
                         <th>WO Price</th>
@@ -517,12 +517,12 @@
                         <!--<td class="text-right">
                             {{row.QutnQnty | number:2}}
                         </td>-->
-                                            <!-- Quotation Price -->
-                                            <!--<td class="text-right">
+                        <!-- Quotation Price -->
+                        <!--<td class="text-right">
                             {{row.QutnPrice | number:2}}
                         </td>-->
-                                            <!-- Quotation Amount -->
-                                            <!--<td class="text-right">
+                        <!-- Quotation Amount -->
+                        <!--<td class="text-right">
                             {{row.QutnAmt | number:2}}
                         </td>-->
                         <!-- ================= WO FIELDS ================= -->
@@ -936,73 +936,17 @@
 
         <!-- Signatures -->
         @*<div class="row" style="margin-top:70px;display:flex;justify-content:space-between;">
-            <div style="text-align:center;width:45%;">
-                <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
-                <div>Client Relations Department</div>
-            </div>
-            <div style="text-align:center;width:45%;">
-                <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
-                <div>Accounts Department</div>
-            </div>
-        </div>*@
-
-
-        <div class="modal"
-             ng-show="showWOValueWarning"
-             ng-cloak
-             style="display:block; background:rgba(0,0,0,0.4);"
-             role="dialog">
-
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            Confirm Value Change
-                        </h4>
-                    </div>
-
-                    <div class="modal-body">
-                        <p>
-                            This value differs from the value approved for
-                            the Client Quotation.
-                        </p>
-
-                        <p>
-                            <strong>Field:</strong>
-                            {{pendingWOChange.fieldLabel}}
-                        </p>
-
-                        <p>
-                            <strong>Approved Value:</strong>
-                            {{pendingWOChange.approvedValue | number:2}}
-                        </p>
-
-                        <p>
-                            <strong>New Value:</strong>
-                            {{pendingWOChange.newValue | number:2}}
-                        </p>
-
-                        <p>Do you want to continue with this change?</p>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button"
-                                class="btn btn-default"
-                                ng-click="cancelWOValueChange()">
-                            Cancel
-                        </button>
-
-                        <button type="button"
-                                class="btn btn-warning"
-                                ng-click="acceptWOValueChange()">
-                            Yes, Change It
-                        </button>
-                    </div>
-
+                <div style="text-align:center;width:45%;">
+                    <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
+                    <div>Client Relations Department</div>
                 </div>
-            </div>
-        </div>
+                <div style="text-align:center;width:45%;">
+                    <div style="border-top:1px solid #000;padding-top:4px;">Authorised Signature</div>
+                    <div>Accounts Department</div>
+                </div>
+            </div>*@
+
+
 
         <div style="margin-top:30px">
             <p style="font-style: italic; font-weight: bold;">
@@ -1011,6 +955,65 @@
         </div>
     </div><!-- /masterRow -->
 
+
+
+
+    <div class="modal"
+         ng-show="showWOValueWarning"
+         ng-cloak
+         style="display:block; background:rgba(0,0,0,0.4);"
+         role="dialog">
+
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Confirm Value Change
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>
+                        This value differs from the value approved for
+                        the Client Quotation.
+                    </p>
+
+                    <p>
+                        <strong>Field:</strong>
+                        {{pendingWOChange.fieldLabel}}
+                    </p>
+
+                    <p>
+                        <strong>Approved Value:</strong>
+                        {{pendingWOChange.approvedValue | number:2}}
+                    </p>
+
+                    <p>
+                        <strong>New Value:</strong>
+                        {{pendingWOChange.newValue | number:2}}
+                    </p>
+
+                    <p>Do you want to continue with this change?</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-default"
+                            ng-click="cancelWOValueChange()">
+                        Cancel
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-warning"
+                            ng-click="acceptWOValueChange()">
+                        Yes, Change It
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">

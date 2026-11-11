@@ -199,7 +199,6 @@ namespace SILDMS.DataAccess
             dtReqItem.Columns.Add("VatAmt");
             dtReqItem.Columns.Add("TolAmt");
             dtReqItem.Columns.Add("ClientQutnAprvItemID");
-
             foreach (var item in woInfoItem)
             {
                 DataRow objDataRow = dtReqItem.NewRow();
@@ -217,20 +216,15 @@ namespace SILDMS.DataAccess
                 objDataRow[10] = item.QutnPrice;
                 objDataRow[11] = item.QutnUnit;
                 objDataRow[12] = item.QutnAmt;
-
                 objDataRow[13] = item.WOQnty;
                 objDataRow[14] = item.WOPrice;
                 objDataRow[15] = item.WOAmt;
-
                 objDataRow[16] = item.ASFPerc;
                 objDataRow[17] = item.TotGivenASFAmt;
-
                 objDataRow[18] = item.VatPerc;
                 objDataRow[19] = item.VatAmt;
                 objDataRow[20] = item.TolAmt;
-
                 objDataRow[21] = item.ClientQutnAprvItemID;
-
                 dtReqItem.Rows.Add(objDataRow);
             }
 
@@ -240,30 +234,34 @@ namespace SILDMS.DataAccess
             dtReqTerm.Columns.Add("TermsID");
             dtReqTerm.Columns.Add("TermsCode");
             dtReqTerm.Columns.Add("TermsName");
-            foreach (var item in woInfoTerm)
+
+            // Handle null woInfoTerm
+            if (woInfoTerm != null)
             {
-                DataRow objDataRow = dtReqTerm.NewRow();
-                //objDataRow[0] = item.WOInfoItemID;
-                objDataRow[0] = item.WOInfoID;
-                objDataRow[1] = item.TermsID;
-                objDataRow[2] = item.TermsCode;
-                objDataRow[3] = item.TermsName;
-                dtReqTerm.Rows.Add(objDataRow);
+                foreach (var item in woInfoTerm)
+                {
+                    DataRow objDataRow = dtReqTerm.NewRow();
+                    //objDataRow[0] = item.WOInfoItemID;
+                    objDataRow[0] = item.WOInfoID;
+                    objDataRow[1] = item.TermsID;
+                    objDataRow[2] = item.TermsCode;
+                    objDataRow[3] = item.TermsName;
+                    dtReqTerm.Rows.Add(objDataRow);
+                }
             }
 
             if (string.IsNullOrEmpty(woInfo.WOInfoID))
                 woInfo.Action = "add";
             else
                 woInfo.Action = "edit";
+
             string errorNumber = String.Empty;
             try
             {
-
                 DatabaseProviderFactory factory = new DatabaseProviderFactory();
                 SqlDatabase db = factory.CreateDefault() as SqlDatabase;
                 using (DbCommand dbCommandWrapper = db.GetStoredProcCommand("OBS_SetWOInfo"))
                 {
-
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@WOInfoID", SqlDbType.NVarChar, woInfo.WOInfoID);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.NVarChar, woInfo.ClientID);
@@ -274,7 +272,6 @@ namespace SILDMS.DataAccess
                     db.AddInParameter(dbCommandWrapper, "@WODate", SqlDbType.NVarChar, woInfo.WODate);
                     db.AddInParameter(dbCommandWrapper, "@WOAmt", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.WOAmt));
                     db.AddInParameter(dbCommandWrapper, "@Remarks", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.Remarks));
-
                     db.AddInParameter(dbCommandWrapper, "@BillCategory", SqlDbType.NVarChar, woInfo.BillCategory);
                     db.AddInParameter(dbCommandWrapper, "@BillType", SqlDbType.NVarChar, woInfo.BillType);
                     if (woInfo.BillType == "Default")
@@ -282,10 +279,8 @@ namespace SILDMS.DataAccess
                         woInfo.NoOfInstallment = "1";
                         woInfo.InstallmentAmt = woInfo.WOAmt;
                     }
-
                     db.AddInParameter(dbCommandWrapper, "@NoOfInstallment", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.NoOfInstallment));
                     db.AddInParameter(dbCommandWrapper, "@InstallmentAmt", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(woInfo.InstallmentAmt));
-
                     db.AddInParameter(dbCommandWrapper, "@UserID ", SqlDbType.NVarChar, woInfo.SetBy);
                     db.AddInParameter(dbCommandWrapper, "@OBS_WOInfoItem", SqlDbType.Structured, dtReqItem);
                     db.AddInParameter(dbCommandWrapper, "@OBS_WOInfoTerm", SqlDbType.Structured, dtReqTerm);

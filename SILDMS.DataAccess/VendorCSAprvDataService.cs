@@ -602,7 +602,7 @@ namespace SILDMS.DataAccess
                         DeliveryMode = reader.GetString("DeliveryMode"),
                         ReqQnty = reader.GetString("ReqQnty"),
                         ReqUnit = reader.GetString("ReqUnit"),
-
+                        AwardMode = reader.GetString("AwardMode")
 
 
                     }).ToList();

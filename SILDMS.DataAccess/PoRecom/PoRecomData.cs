@@ -38,8 +38,8 @@ namespace SILDMS.DataAccess.PoRecom
                         ClientName = reader.GetString("ClientName"),
                         ClientReqNo = reader.GetString("ClientReqNo"),
                         ClientReqID = reader.GetString("ClientReqID"),
-                        ServiceCategoryID = reader.GetString("ServiceCategoryID"),
-                        ServiceItemID = reader.GetString("ServiceItemID"),
+                        //ServiceCategoryID = reader.GetString("ServiceCategoryID"),
+                        //ServiceItemID = reader.GetString("ServiceItemID"),
                         RequisitionDate = reader.GetString("PODate"),
                         VendorID = reader.GetString("VendorID"),
 
