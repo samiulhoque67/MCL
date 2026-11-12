@@ -34,6 +34,7 @@ using SILDMS.DataAccess.QuotationApproval;
 using SILDMS.DataAccess.QuotationRecommendation;
 using SILDMS.DataAccess.QuotationToClientService;
 using SILDMS.DataAccess.Reports;
+using SILDMS.DataAccess.RequisitionDelete;
 using SILDMS.DataAccess.ResendFailedSmsEmail;
 using SILDMS.DataAccess.RoleMenuPermission;
 using SILDMS.DataAccess.Roles;
@@ -129,6 +130,7 @@ using SILDMS.Service.QuotationApproval;
 using SILDMS.Service.QuotationRecommendation;
 using SILDMS.Service.QuotationToClient;
 using SILDMS.Service.Reports;
+using SILDMS.Service.RequisitionDelete;
 using SILDMS.Service.ResendFailedSmsEmail;
 using SILDMS.Service.RoleMenuPermission;
 using SILDMS.Service.Roles;
@@ -359,6 +361,10 @@ namespace SILDMS.InfraStructure
 
             kernel.Bind<IWorkDashboardData>().To<WorkDashboardData>();
             kernel.Bind<IWorkDashboardService>().To<WorkDashboardService>();
+
+
+            kernel.Bind<IRequisitionDeleteData>().To<RequisitionDeleteData>();
+            kernel.Bind<IRequisitionDeleteService>().To<RequisitionDeleteService>();
         }
     }
 }

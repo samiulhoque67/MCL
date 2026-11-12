@@ -405,7 +405,21 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="r in (reqFiltered = (ReqGroups | filter:reqSearch)) | limitTo:reqLimit">
-                            <td class="text-center">{{r.ClientReqNo}} <i class="fa fa-user mine-dot" ng-if="r.mine" title="Raised by you"></i></td>
+                            <td class="text-center">
+                                {{r.ClientReqNo}}
+
+                                <!-- Only visible & clickable for the authorized user -->
+                                <br ng-if="currentUserID === '16102400032'" />
+                                <small class="text-muted" ng-if="currentUserID === '16102400032'">
+                                    <a href="/RequisitionDelete/Index?ClientReqID={{r.ClientReqID}}"
+                                       title="Delete this Requisition"
+                                       class="text-danger">
+                                        {{r.ClientReqID}}
+                                    </a>
+                                </small>
+
+                                <i class="fa fa-user mine-dot" ng-if="r.mine" title="Raised by you"></i>
+                            </td>
                             <td>{{r.ClientName}}</td>
                             <td>{{r.ProjectName}}</td>
                             <td>{{r.RaisedBy}}</td>
@@ -578,6 +592,17 @@
                 if (again) { $scope.selectStage(again); } else { $scope.selected = null; $scope.StageItems = []; }
             }
         }
+
+        $http.post('/DashboardMCL/GetWorkDashboard', { OnlyMine: $scope.onlyMine })
+            .then(function (res) {
+                build(res.data);
+                $scope.loadedAt = res.data.LoadedAt || '';
+                $scope.currentUserID = res.data.CurrentUserID;   // ← add this
+                $scope.loading = false;
+            }, function () {
+                $scope.loading = false;
+                toastr.error('Failed to load the dashboard.');
+            });
 
         $scope.load = function () {
             $scope.loading = true;

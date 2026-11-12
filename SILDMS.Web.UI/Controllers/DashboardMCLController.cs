@@ -42,6 +42,7 @@ namespace SILDMS.Web.UI.Controllers
                 Stages = stages,
                 Items = items,
                 LoadedAt = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
+                CurrentUserID = UserID,          // ← add this line
                 msg = "Dashboard loaded."
             }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = Int32.MaxValue;
