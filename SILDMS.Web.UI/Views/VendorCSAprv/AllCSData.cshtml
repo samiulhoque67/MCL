@@ -200,7 +200,7 @@
                         <col style="width: 7%;">
                         <col style="width: 7%;">
                         <col style="width: 7%;">
-                        <col style="width: 18%;">
+                        <col style="width: 8%;">
                         <col style="width: 10%;">
                     </colgroup>
 
@@ -314,7 +314,7 @@ font-size: 9px;">
                             </td>
 
                             <!-- CS State (stage progress of the CS inside this requisition) -->
-                            <td style="padding: 3px 2px; font-size:11px;">
+                            <td style="padding: 3px 2px; font-size:11px; text-align:center">
                                 <span class="cs-chip" style="background:#5cb85c;" ng-show="csSummary(row).done">{{csSummary(row).done}} approved</span>
                                 <span class="cs-chip" style="background:#337ab7;" ng-show="csSummary(row).active">{{csSummary(row).active}} in progress</span>
                                 <span class="cs-chip" style="background:#d9534f;" ng-show="csSummary(row).postponed">{{csSummary(row).postponed}} postponed</span>
@@ -329,8 +329,8 @@ font-size: 9px;">
                                 </button>
                                 <button type="button"
                                         ng-show="row.RecomAccOperation === 'Rec'
-                  && row.VerifyOperation === 'Vrf'
-                  && row.ApprovalOperation === 'Aprv'"
+                                          && row.VerifyOperation === 'Rec'
+                                          && row.ApprovalOperation === 'Rec'"
                                         ng-click="selectInvitation(row)"
                                         data-dismiss="modal"
                                         title="Select">
@@ -497,7 +497,7 @@ font-size: 9px;">
                 </table>
 
                 <div class="row">
-                    <div class="row">
+                    @*<div class="row">
                         <div class="col-sm-1 col-md-1 col-lg-1">
                         </div>
                         <div class="col-lg-2">
@@ -511,8 +511,9 @@ font-size: 9px;">
                             </div>
                         </div>
 
-                    </div>
-                    <div class="row">
+                    </div>*@
+                    <!-- REC: single recommended vendor -->
+                    <div class="row" ng-show="currentCS.AwardMode !== 'DIST'">
                         <div class="col-sm-1 col-md-1 col-lg-1">
                         </div>
                         <div class="col-lg-2">
@@ -524,6 +525,25 @@ font-size: 9px;">
                             <div class="form-group">
                                 <input id="CSRecmVendorName" name="CSRecmVendorName" type="text" class="form-control" placeholder="CS Recm. Vendor" ng-model="VendorCSAprv.CSRecmVendorName" ng-readonly="true" />
                                 <input id="CSRecmVendorID" name="CSRecmVendorID" type="hidden" data-ng-model="VendorCSAprv.CSRecmVendorID" />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- DIST: work distributed among selected vendors -->
+                    <div class="row" ng-show="currentCS.AwardMode === 'DIST'">
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Award Type:</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="form-group" style="padding-top:6px;">
+                                <span class="label label-info">Distribute work among selected vendors</span>
+                                <span class="text-muted" style="margin-left:8px;font-size:12px;"
+                                      ng-show="printAwardRows().length">
+                                    ({{printAwardRows().length}} vendor{{printAwardRows().length > 1 ? 's' : ''}} awarded)
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -951,7 +971,7 @@ font-size: 9px;">
         </div>
 
         <div class="row">
-            <p style="font-weight:bold;font-size:25px;text-align:left;border-bottom:5px solid #000;display:inline-block;margin:0;">
+            <p style="font-weight:bold;font-size:20px;text-align:left;border-bottom:3px solid #000;display:inline-block;margin:0;">
                 Comparative Statement
             </p>
         </div>
@@ -960,10 +980,16 @@ font-size: 9px;">
             <p style="margin:2px 0;">Ref: CS-{{VendorCSAprv.VendorCSActualAprvID}}</p>
             <p style="margin:2px 0;">Date: {{VendorCSAprv.CSRecDate}}</p>
 
-            <p style="margin-top:20px;">
+            <p style="margin-top:15px;">
                 Subject: Comparative Statement for {{VendorCSAprv.ProjectName}}
+                @*<span ng-if="currentCS.AwardMode === 'DIST'"> – Work Distributed Among Selected Vendors</span>
+                <span ng-if="currentCS.AwardMode !== 'DIST'"> – Recommendation of One Vendor</span>*@
             </p>
-            <p style="margin:2px 0;">Award Type: <strong>{{VendorCSAprv.AwardMode === 'DIST' ? 'Distribute work among selected vendors' : 'Recommend one vendor'}}</strong></p>
+            @*<p style="margin:2px 0;">
+                Award Type:
+                <strong ng-if="currentCS.AwardMode === 'DIST'">Distribute work among selected vendors</strong>
+                <strong ng-if="currentCS.AwardMode !== 'DIST'">Recommend one vendor</strong>
+            </p>*@
         </div>
 
         <table style="width:100%;border-collapse:collapse;margin-top:10px;">
@@ -986,7 +1012,15 @@ font-size: 9px;">
                         style="border:1px solid #555;padding:6px 8px;">
                         {{VendorCSAprv.ServiceItemName}}, {{VendorCSAprv.ServiceCategoryName}}
                     </td>
-                    <td style="border:1px solid #555;padding:6px 8px;">{{row.VendorName}} <strong ng-if="VendorCSAprv.AwardMode === 'DIST' && isAwardedRow(row)">(Awarded)</strong></td>
+                    <td style="border:1px solid #555;padding:6px 8px;"
+                        ng-style="currentCS.AwardMode === 'DIST' && isAwardedRow(row) ? {'background':'#e8f5e9','font-weight':'bold'} : {}">
+                        {{row.VendorName}}
+                        <span ng-if="currentCS.AwardMode === 'DIST' && isAwardedRow(row)"
+                              @*style="color:#2e7d32;font-size:11px;"> (Awarded)*@
+                        </span>
+                        <span ng-if="currentCS.AwardMode !== 'DIST' && row.VendorName === VendorCSAprv.CSRecmVendorName"
+                              style="color:#2e7d32;font-size:11px;"> (Recommended)</span>
+                    </td>
                     <td style="border:1px solid #555;padding:6px 8px;">{{row.ReqUnit}}</td>
                     <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.NegoQty | number:2}}</td>
                     <td style="border:1px solid #555;padding:6px 8px;text-align:right;">{{row.NegoPrice | number:2}}</td>
@@ -999,7 +1033,8 @@ font-size: 9px;">
         </table>
 
         <!-- Recommend one vendor -->
-        <div ng-if="VendorCSAprv.AwardMode !== 'DIST'" style="margin-top:20px;">
+        <div ng-if="currentCS.AwardMode !== 'DIST'" style="margin-top:20px;">
+            <p style="font-weight:bold;margin:0 0 6px 0;font-size:13px;">Recommended / Approved Vendor</p>
             <table style="border-collapse:collapse; border:none;">
                 <tr>
                     <td style="border:none; padding:2px 10px 2px 0;">Approved Service Provider</td>
@@ -1026,15 +1061,17 @@ font-size: 9px;">
         </div>
 
         <!-- Distribute work among selected vendors -->
-        <div ng-if="VendorCSAprv.AwardMode === 'DIST'" style="margin-top:20px;">
-            <p style="font-weight:bold;margin:0 0 4px 0;">Approved Service Providers (work distributed)</p>
-            <table style="width:100%;border-collapse:collapse;">
+        <div ng-if="currentCS.AwardMode === 'DIST'" style="margin-top:20px;">
+            <p style="font-weight:bold;margin:0 0 6px 0;font-size:18px;">
+                The Work is being Distributed Among All Above Vendors
+            </p>
+            @*<table style="width:100%;border-collapse:collapse;">
                 <thead>
                     <tr>
-                        <th style="border:1px solid #555;padding:5px 8px;text-align:left;">Vendor Name</th>
-                        <th style="border:1px solid #555;padding:5px 8px;text-align:right;">Approved Qty</th>
+                        <th style="border:1px solid #555;padding:5px 8px;text-align:left;">Awarded Vendor</th>
+                        <th style="border:1px solid #555;padding:5px 8px;text-align:right;">Allocated Qty</th>
                         <th style="border:1px solid #555;padding:5px 8px;text-align:left;">UOM</th>
-                        <th style="border:1px solid #555;padding:5px 8px;text-align:right;">Total Amount</th>
+                        <th style="border:1px solid #555;padding:5px 8px;text-align:right;">Amount (incl. VAT)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1044,27 +1081,32 @@ font-size: 9px;">
                         <td style="border:1px solid #555;padding:5px 8px;">{{v.ReqUnit}}</td>
                         <td style="border:1px solid #555;padding:5px 8px;text-align:right;">{{v.NegoTolAmt | number:2}}</td>
                     </tr>
-                    <tr style="font-size:12px;font-weight:bold;">
-                        <td style="border:1px solid #555;padding:5px 8px;">Total</td>
+                    <tr style="font-size:12px;font-weight:bold;background:#f5f5f5;">
+                        <td style="border:1px solid #555;padding:5px 8px;">Total Distributed</td>
                         <td style="border:1px solid #555;padding:5px 8px;text-align:right;">{{PrintApprovedQty | number:2}}</td>
                         <td style="border:1px solid #555;padding:5px 8px;">{{PrintApprovedUnit}}</td>
                         <td style="border:1px solid #555;padding:5px 8px;text-align:right;">{{PrintApprovedTotal | number:2}}</td>
                     </tr>
                 </tbody>
-            </table>
-            <p style="margin-top:6px;"><strong>{{PrintApprovedTotal | number:2}}/- ({{PoPrintGrandTotalWords}} Taka only)</strong></p>
+            </table>*@
+            <p style="margin-top:6px;">
+                <strong>Total Value of Distributed Work: {{PrintApprovedTotal | number:2}}/- ({{PoPrintGrandTotalWords}} Taka only)</strong>
+            </p>
         </div>
 
         <div style="margin-top:20px;">
-            <p style="font-weight:bold;margin:0;">Notes:</p>
-            <ol ng-if="VendorCSAprv.AwardMode !== 'DIST'" style="margin-top:4px;padding-left:20px;">
+            <p style="font-weight:bold;margin:0;">
+                <span ng-if="currentCS.AwardMode !== 'DIST'">Terms &amp; Conditions :</span>
+                <span ng-if="currentCS.AwardMode === 'DIST'">Terms &amp; Conditions :</span>
+            </p>
+            <ol ng-if="currentCS.AwardMode !== 'DIST'" style="margin-top:4px;padding-left:20px;">
                 <li ng-repeat="row in ReqTermGridDisplayCollection | filter:{VendorName: VendorCSAprv.CSRecmVendorName}"
                     ng-cloak style="font-size:13px;">
                     {{row.TermsName}}
                 </li>
             </ol>
-            <div ng-if="VendorCSAprv.AwardMode === 'DIST'" ng-repeat="v in printAwardRows()" style="margin-top:4px;">
-                <p style="font-weight:bold;margin:2px 0;">{{v.VendorName}}</p>
+            <div ng-if="currentCS.AwardMode === 'DIST'" ng-repeat="v in printAwardRows()" style="margin-top:6px;">
+                <p style="font-size:15px; font-weight:bold; margin:2px 0;">{{v.VendorName}}</p>
                 <ol style="margin-top:2px;padding-left:20px;">
                     <li ng-repeat="row in ReqTermGridDisplayCollection | filter:{VendorName: v.VendorName}" ng-cloak style="font-size:13px;">{{row.TermsName}}</li>
                 </ol>
@@ -1074,7 +1116,7 @@ font-size: 9px;">
         <!-- Signatures — Prepared → Recommended by HOD → Recommended by A&F →
         Verified by IAD → Approved. Image on top, static role caption,
         then the person's name and designation underneath. -->
-        <div style="margin-top:50px;display:flex;justify-content:space-between;flex-wrap:wrap;">
+        <div style="margin-top:25px;display:flex;justify-content:space-between;flex-wrap:wrap;">
 
             <div style="text-align:center;width:19%;">
                 <div style="height:45px;">
@@ -1350,7 +1392,7 @@ font-size: 9px;">
                         $scope.VendorCSAprv.CSRecmVendorName = response.MatWiseVendorList[0].CSRecmVendorName;
                         $scope.PrintCSVendors = response.MatWiseVendorList;
                         $scope.VendorCSAprv.AwardMode = response.MatWiseVendorList[0].AwardMode ||
-                            ($scope.currentCS && $scope.currentCS.AwardMode) ||
+                            ($scope.currentCS && $scope.VendorCSAprv.AwardMode) ||
                             (response.MatWiseVendorList[0].CSRecmVendorName ? 'REC' : 'DIST');
                         $scope.VendorCSAprv.CSRecDate = response.MatWiseVendorList[0].CSRecDate;
 
@@ -2135,7 +2177,7 @@ font-size: 9px;">
                 return;
             }
 
-            if ($scope.VendorCSAprv.AwardMode === 'DIST') {
+            if ($scope.VendorCSAprv.AwardMode=== 'DIST') {
                 var aw = $scope.printAwardRows();
                 if (!aw.length) {
                     toastr.error("No awarded vendors found for this CS.");
@@ -2365,11 +2407,11 @@ font-size: 9px;">
         /* Award Type = DIST : the vendors that actually received work.
            Order of trust: server flag IsAwarded  >  vendor is in the CS vendor list  >  has an approved quantity. */
         $scope.isAwardedRow = function (row) {
-            if (row.IsAwarded !== undefined && row.IsAwarded !== null) return !!row.IsAwarded && row.IsAwarded !== '0';
+            if (row.AwardMode !== undefined && row.AwardMode !== null) return !!row.AwardMode && row.AwardMode !== '0';
             var cs = $scope.PrintCSVendors || [];
             if (cs.length) {
                 return cs.some(function (v) {
-                    if (v.IsAwarded !== undefined && v.IsAwarded !== null && (!v.IsAwarded || v.IsAwarded === '0')) return false;
+                    if (v.AwardMode !== undefined && v.AwardMode !== null && (!v.AwardMode || v.AwardMode === '0')) return false;
                     return (v.VendorID && row.VendorID && String(v.VendorID) === String(row.VendorID)) || (v.VendorName && v.VendorName === row.VendorName);
                 });
             }

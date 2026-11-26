@@ -367,7 +367,7 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                     db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, vendorCSInfo.ClientReqID);
                     db.AddInParameter(dbCommandWrapper, "@ClientID", SqlDbType.BigInt, vendorCSInfo.ClientID);
                     db.AddInParameter(dbCommandWrapper, "@VendorReqID", SqlDbType.NVarChar, vendorCSInfo.VendorReqID);
-                    //db.AddInParameter(dbCommandWrapper, "@CSNo", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.CSNo));
+                    db.AddInParameter(dbCommandWrapper, "@AwardMode", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.AwardMode));
                     db.AddInParameter(dbCommandWrapper, "@CSRecDate", SqlDbType.NVarChar, vendorCSInfo.CSRecDate);
                     db.AddInParameter(dbCommandWrapper, "@Operation", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.Operation));
                     db.AddInParameter(dbCommandWrapper, "@RecommendedBy", SqlDbType.NVarChar, DataValidation.TrimmedOrDefault(vendorCSInfo.RecommendedBy));
@@ -968,10 +968,9 @@ namespace SILDMS.DataAccess.VendorCSActualAprv
                         NegoPrice = reader.GetString("NegoPrice"),
                         NegoAmt = reader.GetString("NegoAmt"),
                         NegoVatAmt = reader.GetString("NegoVatAmt"),
-                        NegoTolAmt = reader.GetString("NegoTolAmt")
-                        // ,
+                        NegoTolAmt = reader.GetString("NegoTolAmt"),
 
-                        //Status = reader.GetString("Status")
+                        AwardMode = reader.GetString("AwardMode")
                     }).ToList();
                 }
             }

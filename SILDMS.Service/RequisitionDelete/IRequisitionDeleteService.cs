@@ -13,7 +13,11 @@ namespace SILDMS.Service.RequisitionDelete
         void GetRequisitionForDelete(string clientReqID,
             out OBS_ClientReqHeader header, out string errorNumber);
 
-        void DeleteEntireRequisition(string clientReqID, string deletedBy, string deleteReason,
-            out string errorNumber);
+        void DeleteEntireRequisition(
+       string clientReqID,
+       string deletedBy,
+       string deleteReason,
+       out string errorNumber,
+       out string errorMessage);
     }
 }

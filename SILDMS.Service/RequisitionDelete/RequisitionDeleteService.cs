@@ -24,10 +24,19 @@ namespace SILDMS.Service.RequisitionDelete
             _data.GetRequisitionForDelete(clientReqID, out header, out errorNumber);
         }
 
-        public void DeleteEntireRequisition(string clientReqID, string deletedBy, string deleteReason,
-            out string errorNumber)
+        public void DeleteEntireRequisition(
+     string clientReqID,
+     string deletedBy,
+     string deleteReason,
+     out string errorNumber,
+     out string errorMessage)
         {
-            _data.DeleteEntireRequisition(clientReqID, deletedBy, deleteReason, out errorNumber);
+            _data.DeleteEntireRequisition(
+                clientReqID,
+                deletedBy,
+                deleteReason,
+                out errorNumber,
+                out errorMessage);
         }
     }
 }

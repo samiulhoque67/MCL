@@ -251,29 +251,29 @@
         </div>
 
         <div class="row" style="margin: 1%; background-color: #f0f0f0; box-shadow: 2px 2px 5px #888888; padding: 5px 10px 5px 10px;" ng-show="isMaterialRowSelected">
-
             <div class="row" style="padding: 11px; margin-right: 15px; margin-left: 15px;">
-
                 <table id="tableId" st-table="MatWiseVendorListCollection" st-safe-src="MatWiseVendorList" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
                     <thead>
                         <tr style="font-size: 15px;">
-                            <th colspan="14" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">Vendor Selection For Item : {{VendorCSAprv.ServiceItemName}}</th>
+                            <th colspan="15" style="text-align: left; color: black; font-weight: 100; font-family: math; background: #ffffff; border: 1px solid #3003eb">
+                                Vendor Selection For Item : {{VendorCSAprv.ServiceItemName}}
+                            </th>
                         </tr>
                         <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
                             <th>Quotation No</th>
                             <th>Vendor Name</th>
-                            <th>ProposeQty</th>
+                            <th class="hidden">ProposeQty</th>
                             <th>Nego Qty</th>
                             <th>Unit</th>
-                            <th>QutnPrice</th>
+                            <th class="hidden">QutnPrice</th>
                             <th>Nego Price</th>
                             <th>Vat %</th>
-                            <th>Vat Amnt</th>
+                            <th class="hidden">Vat Amnt</th>
                             <th>Nego Vat Amnt</th>
-                            <th>Total Price</th>
+                            <th class="hidden">Total Price</th>
                             <th>Nego Total Price</th>
                             <th>Delivery Date</th>
-                            @*<th>Action</th>*@
+                            <th class="hidden">Action</th>
                             <th>View</th>
                         </tr>
                     </thead>
@@ -286,39 +286,43 @@
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.VendorQutnNo}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.VendorName}}</td>
 
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
+                            <td class="hidden">{{row.QutnQnty | number:2}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoQty" ng-value="0" ng-readonly="true" />
                             </td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.ReqUnit}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnPrice | number:2}}</td>
+                            <td class="hidden">{{row.QutnPrice | number:2}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoPrice" ng-value="0" ng-readonly="true" />
                             </td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatPerc | number:2}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatAmt | number:2}}</td>
+                            <td class="hidden">{{row.VatAmt | number:2}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoVatAmt" ng-value="0" ng-readonly="true" />
                             </td>
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:3}}</td>
+                            <td class="hidden">{{row.TolAmt | number:3}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoTolAmt" ng-value="0" ng-readonly="true" />
                             </td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.DeliveryDate}}</td>
 
-                            <td>
-                                <button ng-hide="!row.DocumentID" ng-click="ViewDocument(row)" class="btn button-custom"><i class="fa fa-eye" style="width:11px;"></i></button>
+                            <!-- NEW: select button (same as Recm) -->
+                            <td class="hidden" text-center" style="font-weight:bold">
+                                <button type="button" ng-click="selectVendor(row)" title="Select">
+                                    <i ng-show="!row.selected" class="fa fa-square-o"></i>
+                                    <i ng-show="row.selected" class="fa fa-check-square-o"></i>
+                                </button>
+                            </td>
+
+                            <td class="col-lg-1 col-md-1 col-sm-1">
+                                <button ng-hide="!row.DocumentID" ng-click="ViewDocument(row)" class="btn button-custom">
+                                    <i class="fa fa-eye" style="width:11px;"></i>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="9" class="text-center">
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
 
+                </table>
                 <div class="row">
                     <!-- AWARD TYPE (set in CS Preparation, read-only here) -->
                     <div class="row" ng-show="wfAwardMode()">
@@ -329,7 +333,7 @@
                                 <label class="radio-inline"><input type="radio" ng-checked="wfAwardMode()==='REC'" disabled /> Recommend one vendor</label>
                                 <label class="radio-inline"><input type="radio" ng-checked="wfAwardMode()==='DIST'" disabled /> Distribute work among selected vendors</label>
                                 <span class="text-muted" style="font-size:11px;margin-left:8px;">(decided in CS Preparation &ndash; use <em>Back</em> to change it)</span>
-                                <button type="button" class="btn btn-xs btn-default" style="margin-left:8px;" ng-show="wfAwardMode()==='DIST' && wf.stage !== 'RECM'" ng-click="wfSelectAll()">
+                                <button class="hidden" type="button" style="margin-left:8px;" ng-show="wfAwardMode()==='DIST' && wf.stage !== 'RECM'" ng-click="wfSelectAll()">
                                     <i class="fa fa-check-square-o"></i> Select all vendors
                                 </button>
                             </div>
@@ -397,22 +401,7 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label>CS Accounts Note:</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="form-group">
-                                @*<input id="CSAccNote" name="CSAccNote" type="text" class="form-control" placeholder="CS Recm. Note" ng-model="VendorCSAprv.CSAccNote" ng-readonly="true" />*@
-                                <textarea id="CSAccNote" name="CSAccNote" data-ng-model="VendorCSAprv.CSAccNote" class="form-control" ng-readonly="true"> </textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-1 col-md-1 col-lg-1">
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>CS Verify Date:</label>
+                                <label>CS Recm. Date:</label>
                             </div>
                         </div>
                         <div class="col-lg-3">
@@ -423,15 +412,15 @@
 
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label>Operation:</label>
                                 @*<label>CS No:</label>*@
+                                <label>Operation:</label>
                             </div>
                         </div>
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <select data-ng-model="VendorCSAprv.Operation" class="form-control" ng-change="wf.reason = ''">
                                     <option value="">-- select --</option>
-                                    <option value="Vrf" ng-disabled="!wfCanForward()">Verified</option>
+                                    <option value="Rec" ng-disabled="!wfCanForward()">Recommended</option>
                                     <option value="Bck" ng-disabled="!wfCanAct()">Back (to CS Preparation)</option>
                                     <option value="Pst" ng-disabled="!wfCanAct()">Postponed</option>
                                     <option value="Rsm" ng-if="wfCanResume()">Resume</option>
@@ -442,7 +431,6 @@
                                               placeholder="Reason for {{wfOpLabel()}} (required)" ng-style="!wfReasonOk() && {'border-color':'#a94442'}"></textarea>
                                     <small ng-class="wfReasonOk() ? 'text-muted' : 'text-danger'"><i class="fa fa-asterisk" style="font-size:8px;"></i> Reason is mandatory &ndash; {{(wf.reason || '').trim().length}}/1000 (min 5)</small>
                                 </div>
-                                @*<input id="AutoCSNo" name="AutoCSNo" type="text" class="form-control" placeholder="Auto CS No" ng-model="VendorCSAprv.AutoCSNo" ng-readonly="true" />*@
                             </div>
                         </div>
                     </div>
@@ -450,20 +438,6 @@
                     <div class="row">
                         <div class="col-sm-1 col-md-1 col-lg-1">
                         </div>
-                        @*<div class="col-lg-2">
-                                <div class="form-group">
-                                    <label>Operation:</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <select data-ng-model="VendorCSAprv.Operation" class="form-control">
-                                    <option value="">-- select --</option>
-                                    <option value="Rec">Recommended</option>
-                                    <option value="Bck">Back</option>
-                                    <option value="Pst">Postponed</option>
-                                    <option value="Can">Cancel</option>
-                                </select>
-                            </div>*@
 
                         <div class="col-lg-2">
                             <div class="form-group">
@@ -476,8 +450,11 @@
                                 <textarea id="Remarks" name="Remarks" data-ng-model="VendorCSAprv.Remarks" class="form-control" placeholder="Note for CS"> </textarea>
                             </div>
                         </div>
+
                     </div>
+
                 </div>
+
 
                 <table st-table="ReqTermGridDisplayCollection" st-safe-src="ReqTermDataSetupGridData" class="tableVen table-condensed table-bordered  table-hover pnlView" style="width:100%;">
                     <thead>
@@ -489,6 +466,7 @@
                             <th style="text-align: left;" st-sort="">Terms Code</th>
                             <th style="text-align: left;" st-sort="">Terms & Conditions</th>
                         </tr>
+
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in ReqTermGridDisplayCollection" ng-cloak style="font-size:12px;">
@@ -842,28 +820,48 @@
                         $scope.loading = false;
                     });
 
-                $http.post('/VendorCSRecm/GetVendorByMaterialCSVendor',
-                    {
-                        VendorReqID: row.VendorReqID,
-                        ServiceItemID: row.ServiceItemID
-                    })
+                $http.post('/VendorCSAprv/GetVendorByMaterial', {
+                    VendorReqID: row.VendorReqID,
+                    ServiceItemID: row.ServiceItemID
+                })
                     .success(function (response) {
-                        $scope.VendorCSAprv.CSRecmVendorName = response.MatWiseVendorList[0].CSRecmVendorName;
-                        $scope.VendorCSAprv.AwardMode = response.MatWiseVendorList[0].AwardMode || (response.MatWiseVendorList[0].CSRecmVendorName ? 'REC' : 'DIST');
-                        $scope.VendorCSAprv.CSPrepNote = response.MatWiseVendorList[0].CSPrepNote;
-                        $scope.VendorCSAprv.CSRecmNote = response.MatWiseVendorList[0].CSRecmNote;
-                        $scope.VendorCSAprv.CSAccNote = response.MatWiseVendorList[0].CSAccNote;
+                        $scope.MatWiseVendorList = response.MatWiseVendorList || [];
+                        $scope.MatWiseVendorListCollection = [].concat($scope.MatWiseVendorList);
                         $scope.loading = false;
-                    }).error(function () {
+
+                        // Auto-select when DIST (list is now ready)
+                        if ($scope.wfAwardMode() === 'DIST') {
+                            $timeout(function () {
+                                $scope.wfSelectAll();
+                            }, 50);
+                        }
+                    })
+                    .error(function () {
                         $scope.loading = false;
                     });
-                $http.post('/VendorCSAprv/GetVendorCSAprvTermList', { VendorCSRecmID: $scope.VendorCSAprv.VendorCSRecmID, VendorID: row.VendorID })
-                    .success(function (response) {
 
-                        $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.concat(response.VendorCSAprvTermList);
-                        $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
+                $http.post('/VendorCSRecm/GetVendorByMaterialCSVendor', {
+                    VendorReqID: row.VendorReqID,
+                    ServiceItemID: row.ServiceItemID
+                })
+                    .success(function (response) {
+                        if (response.MatWiseVendorList && response.MatWiseVendorList.length) {
+                            var first = response.MatWiseVendorList[0];
+                            $scope.VendorCSAprv.CSRecmVendorName = first.CSRecmVendorName;
+                            $scope.VendorCSAprv.AwardMode = first.AwardMode || (first.CSRecmVendorName ? 'REC' : 'DIST');
+                            $scope.VendorCSAprv.CSRecmNote = first.CSRecmNote;
+                            $scope.VendorCSAprv.CSPrepNote = first.CSPrepNote;
+                        }
                         $scope.loading = false;
-                    }).error(function () {
+
+                        // Auto-select when DIST (AwardMode is now known)
+                        if ($scope.wfAwardMode() === 'DIST') {
+                            $timeout(function () {
+                                $scope.wfSelectAll();
+                            }, 50);
+                        }
+                    })
+                    .error(function () {
                         $scope.loading = false;
                     });
             }
@@ -930,8 +928,23 @@
                 if ($scope.wfAwardMode() !== 'DIST') { $scope.VendorCSAprv.CSRecmVendorName = row.VendorName; }
                 $http.post('/VendorCSAprv/GetVendorCSAprvTermList', { VendorCSRecmID: $scope.VendorCSAprv.VendorCSRecmID, VendorID: row.VendorID })
                     .success(function (response) {
-
-                        $scope.ReqTermDataSetupGridData = $scope.ReqTermDataSetupGridData.concat(response.VendorCSAprvTermList);
+                        // Append only unique terms (prevents 8 terms x N vendors = 32 rows when Select-all / DIST is used)
+                        var newTerms = response.VendorCSAprvTermList || [];
+                        newTerms.forEach(function (term) {
+                            var exists = $scope.ReqTermDataSetupGridData.some(function (t) {
+                                if (term.VendorCSAprvTermsID && t.VendorCSAprvTermsID) {
+                                    return t.VendorCSAprvTermsID === term.VendorCSAprvTermsID;
+                                }
+                                if (term.TermsID != null && t.TermsID != null && term.VendorID != null && t.VendorID != null) {
+                                    return t.TermsID === term.TermsID && t.VendorID === term.VendorID;
+                                }
+                                return (t.TermsCode === term.TermsCode && t.VendorName === term.VendorName) ||
+                                    (t.TermsName === term.TermsName && t.VendorName === term.VendorName);
+                            });
+                            if (!exists) {
+                                $scope.ReqTermDataSetupGridData.push(term);
+                            }
+                        });
                         $scope.ReqTermGridDisplayCollection = [].concat($scope.ReqTermDataSetupGridData);
                         $scope.loading = false;
                     }).error(function () {
@@ -1802,7 +1815,16 @@
         // Older CS (before this feature) always had a single vendor, so they default to 'REC'.
         $scope.wfAwardMode = function () {
             var o = wfObj();
+
+            // First priority: AwardMode loaded from CS data
             if (o.AwardMode) return o.AwardMode;
+
+            // Second priority: AwardMode loaded from workflow state
+            if ($scope.wf.state && $scope.wf.state.AwardMode) {
+                return $scope.wf.state.AwardMode;
+            }
+
+            // Legacy CS records
             return $scope.wfHasDoc() ? 'REC' : '';
         };
         $scope.wfRows = function () { return $scope.MatWiseVendorListCollection || []; };
@@ -1814,7 +1836,10 @@
             return 0;
         };
         $scope.wfAllocQty = function () {
-            return ($scope.selectedVendors || []).reduce(function (s, v) { return s + wfNum(v.NegoQty); }, 0);
+            var rows = $scope.wfRows() || [];
+            return rows.reduce(function (total, row) {
+                return total + wfNum(row.NegoQty);
+            }, 0);
         };
         $scope.wfQtyDiff = function () { return $scope.wfAllocQty() - $scope.wfReqQty(); };
         $scope.wfSelectAll = function () {

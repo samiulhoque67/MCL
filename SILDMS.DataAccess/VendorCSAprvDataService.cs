@@ -369,6 +369,7 @@ namespace SILDMS.DataAccess
                     // Set parameters 
                     db.AddInParameter(dbCommandWrapper, "@VendorCSAprvID", SqlDbType.NVarChar, vendorCSInfo.VendorCSAprvID);
                     db.AddInParameter(dbCommandWrapper, "@VendorCSRecmID", SqlDbType.NVarChar, vendorCSInfo.VendorCSRecmID);
+                    db.AddInParameter(dbCommandWrapper, "@AwardMode", SqlDbType.NVarChar, vendorCSInfo.AwardMode);
                     db.AddInParameter(dbCommandWrapper, "@ServiceCategoryID", SqlDbType.BigInt, vendorCSInfo.ServiceCategoryID);
                     db.AddInParameter(dbCommandWrapper, "@ServiceItemID", SqlDbType.BigInt, vendorCSInfo.ServiceItemID);
                     db.AddInParameter(dbCommandWrapper, "@ClientReqID", SqlDbType.NVarChar, vendorCSInfo.ClientReqID);
@@ -696,6 +697,7 @@ namespace SILDMS.DataAccess
                         VendorCSRecmID = reader.GetString("VendorCSRecmID"),
                         CSRecmVendorName = reader.GetString("VendorCSRecmName"),
                         CSRecDate = reader.GetString("CSRecDate"),
+                        AwardMode = reader.GetString("AwardMode"),
                         CSPrepNote = reader.GetString("PrepRemarks"),
                         CSRecmNote = reader.GetString("RecmRemarks"),
                         CSAccNote = reader.GetString("RecmAccRemarks"),
@@ -804,10 +806,12 @@ namespace SILDMS.DataAccess
                         VendorQutnID = reader.GetString("VendorQutnID"),
                         VendorCSInfoID = reader.GetString("VendorCSAprvID"),
                         VendorName = reader.GetString("VendorName"),
-                     
-                        ReqQnty = reader.GetString("ReqQnty"),
-                        QutnQnty = reader.GetString("QutnQnty"),
-                        TolAmt = reader.GetString("TolAmt"),
+
+                        NegoQty = reader.GetString("NegoQty"),
+                        QutnUnit = reader.GetString("QutnUnit"),
+                        NegoPrice = reader.GetString("NegoPrice"),
+                        NegoVatAmt = reader.GetString("NegoVatAmt"),
+                        NegoTolAmt = reader.GetString("NegoTolAmt"),
 
                         DeliveryDate = reader.GetString("DeliveryDate"),
                      

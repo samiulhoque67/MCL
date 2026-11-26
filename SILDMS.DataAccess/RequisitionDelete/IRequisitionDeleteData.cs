@@ -14,7 +14,11 @@ namespace SILDMS.DataAccess.RequisitionDelete
         out OBS_ClientReqHeader header, out string errorNumber);
 
         // Performs the actual delete
-        void DeleteEntireRequisition(string clientReqID, string deletedBy, string deleteReason,
-            out string errorNumber);
+        void DeleteEntireRequisition(
+     string clientReqID,
+     string deletedBy,
+     string deleteReason,
+     out string errorNumber,
+     out string errorMessage);
     }
 }

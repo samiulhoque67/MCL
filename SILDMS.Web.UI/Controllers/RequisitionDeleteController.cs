@@ -70,15 +70,24 @@ public class RequisitionDeleteController : Controller
             return Json(new { success = false, msg = "ClientReqID is required." });
 
         string errorNumber = string.Empty;
+        string errorMessage = string.Empty;
 
         await Task.Run(() => _service.DeleteEntireRequisition(
             ClientReqID.Trim(),
             UserID,
             DeleteReason,
-            out errorNumber));
+            out errorNumber,
+            out errorMessage));
 
         if (!string.IsNullOrEmpty(errorNumber))
-            return Json(new { success = false, msg = "Delete failed. Error: " + errorNumber });
+        {
+            return Json(new
+            {
+                success = false,
+                msg = "Delete failed. Error: " + errorMessage,
+                errorMessage = errorMessage
+            });
+        }
 
         return Json(new
         {

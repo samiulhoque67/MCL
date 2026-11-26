@@ -255,15 +255,15 @@
                         <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
                             <th>Quotation No</th>
                             <th>Vendor Name</th>
-                            <th>ProposeQty</th>
+                            <th class="hidden">ProposeQty</th>
                             <th>Nego Qty</th>
                             <th>Unit</th>
-                            <th>QutnPrice</th>
+                            <th  class="hidden">QutnPrice</th>
                             <th>Nego Price</th>
                             <th>Vat %</th>
-                            <th>Vat Amnt</th>
+                            <th  class="hidden">Vat Amnt</th>
                             <th>Nego Vat Amnt</th>
-                            <th>Total Price</th>
+                            <th  class="hidden">Total Price</th>
                             <th>Nego Total Price</th>
                             <th>Delivery Date</th>
                             @*<th>Action</th>*@
@@ -279,21 +279,21 @@
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.VendorQutnNo}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.VendorName}}</td>
 
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:2}}</td>
+                            <td  class="hidden">{{row.QutnQnty | number:2}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoQty" ng-value="0" ng-readonly="true" />
                             </td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.ReqUnit}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnPrice | number:2}}</td>
+                            <td  class="hidden">{{row.QutnPrice | number:2}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoPrice" ng-value="0" ng-readonly="true" />
                             </td>
                             <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatPerc | number:2}}</td>
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.VatAmt | number:2}}</td>
+                            <td  class="hidden">{{row.VatAmt | number:2}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoVatAmt" ng-value="0" ng-readonly="true" />
                             </td>
-                            <td class="col-lg-1 col-md-1 col-sm-1">{{row.TolAmt | number:3}}</td>
+                            <td  class="hidden">{{row.TolAmt | number:3}}</td>
                             <td class="col-lg-1 col-md-1 col-sm-1">
                                 <input class="form-control" style="width:100%; height:18px;font-size:10px" type="text" min="0" ng-model="row.NegoTolAmt" ng-value="0" ng-readonly="true" />
                             </td>
@@ -305,7 +305,7 @@
                                         <i ng-show="row.selected" class="fa fa-check-square-o"></i>
                                     </button>
                                 </td>*@
-                            <td>
+                            <td  class="col-lg-1 col-md-1 col-sm-1">
                                 <button ng-hide="!row.DocumentID" ng-click="ViewDocument(row)" class="btn button-custom"><i class="fa fa-eye" style="width:11px;"></i></button>
                             </td>
                         </tr>
@@ -597,12 +597,14 @@
                         </th>
                     </tr>
                     <tr style="background-color: #82b0c9; color: #010823; font-size: 11px;">
-                        <th class="col-lg-2 col-md-2 col-sm-2">CS Number</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2">Quotation No</th>
+                        <th  class="hidden">CS Number</th>
+                        <th  class="hidden">Quotation No</th>
                         <th class="col-lg-2 col-md-2 col-sm-2">Vendor Name</th>
-                        <th class="col-lg-2 col-md-2 col-sm-2">RequestQty</th>
-                        <th class="col-lg-1 col-md-1 col-sm-1">ProposeQty</th>
-                        <th class="col-lg-1 col-md-1 col-sm-1">Total Price</th>
+                        <th class="col-lg-1 col-md-1 col-sm-1">RequestQty</th>
+                        <th class="col-lg-1 col-md-1 col-sm-1">Unit</th>
+                        <th class="col-lg-2 col-md-2 col-sm-2">NegoPrice</th>
+                        <th class="col-lg-1 col-md-1 col-sm-1">NegoVatAmt</th>
+                        <th class="col-lg-1 col-md-1 col-sm-1">NegoTolAmt</th>
                         <th class="col-lg-2 col-md-2 col-sm-2">Delivery Date</th>
 
                     </tr>
@@ -611,13 +613,15 @@
                     <tr id="rowID" ng-repeat="row in VendorCSListCollection"
                         style="height:20px; font-size:13px;">
 
-                        <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorCSInfoID}}</td>
-                        <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorQutnID}}</td>
+                        <td  class="hidden">{{row.VendorCSInfoID}}</td>
+                        <td  class="hidden">{{row.VendorQutnID}}</td>
                         <td class="col-lg-2 col-md-2 col-sm-2">{{row.VendorName}}</td>
-                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.ReqQnty | number:3}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1" style="text-align:right">{{row.NegoQty | number:3}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnUnit}}</td>
 
-                        <td class="col-lg-1 col-md-1 col-sm-1">{{row.QutnQnty | number:3}}</td>
-                        <td class="col-lg-2 col-md-2 col-sm-2">{{row.TolAmt | number:3}}</td>
+                        <td class="col-lg-2 col-md-2 col-sm-2" style="text-align:right">{{row.NegoPrice | number:3}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1" style="text-align:right">{{row.NegoVatAmt | number:3}}</td>
+                        <td class="col-lg-2 col-md-2 col-sm-2"  style="text-align:right">{{row.NegoTolAmt | number:3}}</td>
 
                         <td class="col-lg-2 col-md-2 col-sm-2">{{row.DeliveryDate}}</td>
 
@@ -1725,7 +1729,11 @@
                 return;
             }
 
+            $scope.VendorCSAprv.AwardMode = $scope.wf.state.AwardMode;
             /*   $scope.VendorCSAprv.CSRecDate = $('#CSRecDate').val();*/
+
+            console.log($scope.ReqTermGridDisplayCollection);
+
             $http.post('/VendorCSRecm/SaveVendorCSAprv',
                 {
                     vendorCS: $scope.VendorCSAprv,
@@ -1954,7 +1962,16 @@
         // Older CS (before this feature) always had a single vendor, so they default to 'REC'.
         $scope.wfAwardMode = function () {
             var o = wfObj();
+
+            // First priority: AwardMode loaded from CS data
             if (o.AwardMode) return o.AwardMode;
+
+            // Second priority: AwardMode loaded from workflow state
+            if ($scope.wf.state && $scope.wf.state.AwardMode) {
+                return $scope.wf.state.AwardMode;
+            }
+
+            // Legacy CS records
             return $scope.wfHasDoc() ? 'REC' : '';
         };
         $scope.wfRows = function () { return $scope.MatWiseVendorListCollection || []; };
@@ -1966,7 +1983,10 @@
             return 0;
         };
         $scope.wfAllocQty = function () {
-            return ($scope.selectedVendors || []).reduce(function (s, v) { return s + wfNum(v.NegoQty); }, 0);
+            var rows = $scope.wfRows() || [];
+            return rows.reduce(function (total, row) {
+                return total + wfNum(row.NegoQty);
+            }, 0);
         };
         $scope.wfQtyDiff = function () { return $scope.wfAllocQty() - $scope.wfReqQty(); };
         $scope.wfSelectAll = function () {

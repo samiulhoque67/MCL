@@ -412,15 +412,15 @@
                         <tr style="background-color:#82b0c9;color:#010823;font-size:11px;">
                             <th>Quotation No</th>
                             <th>Vendor Name</th>
-                            <th>ProposeQty</th>
+                            <th class="hidden">ProposeQty</th>
                             <th>Nego Qty</th>
                             <th>Unit</th>
-                            <th>QutnPrice</th>
+                            <th  class="hidden">QutnPrice</th>
                             <th>Propose Price</th>
                             <th>Vat %</th>
-                            <th>Vat Amnt</th>
+                            <th class="hidden">Vat Amnt</th>
                             <th>Propose Vat Amnt</th>
-                            <th>Total Price</th>
+                            <th  class="hidden">Total Price</th>
                             <th>Propose Total Price</th>
                             <th>Delivery Date</th>
                             <th>Status</th>
@@ -433,16 +433,16 @@
                             ng-class="{'selected-row': row.selected, 'not-quoted-row': !isQuoted(row)}" ng-style="getRowStyle(row)">
                             <td>{{row.VendorQutnNo}}</td>
                             <td>{{row.VendorName}}</td>
-                            <td>{{row.QutnQnty | number:2}}</td>
-                            <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoQty" ng-blur="checkUnitPrice(row)" ng-disabled="!isQuoted(row)" /></td>
+                            <td class="hidden">{{row.QutnQnty | number:2}}</td>
+                            <td><input class="form-control" style="width:100%;height:18px;font-size:10px; text-align:right" type="text" ng-model="row.NegoQty" ng-blur="checkUnitPrice(row)" ng-disabled="!isQuoted(row)" /></td>
                             <td>{{row.ReqUnit}}</td>
-                            <td>{{row.QutnPrice | number:2}}</td>
-                            <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoPrice" ng-blur="checkUnitPrice(row)" ng-disabled="!isQuoted(row)" /></td>
+                            <td class="hidden">{{row.QutnPrice | number:2}}</td>
+                            <td><input class="form-control" style="width:100%;height:18px;font-size:10px; text-align:right" type="text" ng-model="row.NegoPrice" ng-blur="checkUnitPrice(row)" ng-disabled="!isQuoted(row)" /></td>
                             <td>{{row.VatPerc | number:2}}</td>
-                            <td>{{row.VatAmt | number:2}}</td>
-                            <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoVatAmt" ng-readonly="true" /></td>
-                            <td>{{row.TolAmt | number:3}}</td>
-                            <td><input class="form-control" style="width:100%;height:18px;font-size:10px" type="text" ng-model="row.NegoTolAmt" ng-readonly="true" /></td>
+                            <td class="hidden">{{row.VatAmt | number:2}}</td>
+                            <td><input class="form-control" style="width: 100%; height: 18px; font-size: 10px; text-align: right" type="text" ng-model="row.NegoVatAmt" ng-readonly="true" /></td>
+                            <td  class="hidden">{{row.TolAmt | number:3}}</td>
+                            <td><input class="form-control" style="width: 100%; height: 18px; font-size: 10px; text-align: right" type="text" ng-model="row.NegoTolAmt" ng-readonly="true" /></td>
                             <td>{{row.DeliveryDate}}</td>
                             <td>
                                 <span class="label label-success" ng-show="isQuoted(row)">Quoted</span>
@@ -568,14 +568,14 @@
                         <th>CS Number</th>
                         <th>Quotation No</th>
                         <th>Vendor Name</th>
-                        <th style="text-align:right;">ProposeQty</th>
+                        <th style="text-align:right;" class="hidden">ProposeQty</th>
                         <th>Nego Qty</th>
                         <th>Unit</th>
                         <th style="text-align:right;">Propose Price</th>
                         <th style="text-align:right;">Vat %</th>
-                        <th style="text-align:right;">Nego Vat Amt</th>
+                        <th style="text-align:right;"  class="hidden">Nego Vat Amt</th>
                         <th style="text-align:right;">Propose Total</th>
-                        <th style="text-align:right;">Total Price</th>
+                        <th style="text-align:right;"  class="hidden">Total Price</th>
                         <th>Delivery Date</th>
                         <th>Status</th>
                         <th ng-show="pageMode==='edit'">Action</th>
@@ -591,13 +591,13 @@
                         <td>{{row.VendorCSInfoID || row.VendorCSRecmID}}</td>
                         <td>{{row.VendorQutnNo}}</td>
                         <td>{{row.VendorName}}</td>
-                        <td style="text-align:right;">{{row.QutnQnty | number:2}}</td>
+                        <td style="text-align:right;" class="hidden">{{row.QutnQnty | number:2}}</td>
 
                         <!-- Nego Qty: input in edit, plain text in view -->
                         <td>
-                            <span ng-show="pageMode==='view'">{{row.NegoQty | number:2}}</span>
+                            <span ng-show="pageMode==='view'" style="text-align: right">{{row.NegoQty | number:2}}</span>
                             <input ng-show="pageMode==='edit'"
-                                   class="form-control" style="width:80px;height:18px;font-size:10px;"
+                                   class="form-control" style="width:80px;height:18px;font-size:10px; text-align:right"
                                    type="text" ng-model="row.NegoQty"
                                    ng-disabled="!isQuoted(row)"
                                    ng-blur="checkUnitPrice(row)" />
@@ -607,18 +607,18 @@
 
                         <!-- Propose Price: input in edit, plain text in view -->
                         <td>
-                            <span ng-show="pageMode==='view'">{{row.NegoPrice | number:2}}</span>
+                            <span ng-show="pageMode==='view'"  style="text-align: right">{{row.NegoPrice | number:2}}</span>
                             <input ng-show="pageMode==='edit'"
-                                   class="form-control" style="width:80px;height:18px;font-size:10px;"
+                                   class="form-control" style="width:80px;height:18px;font-size:10px; text-align:right"
                                    type="text" ng-model="row.NegoPrice"
                                    ng-disabled="!isQuoted(row)"
                                    ng-blur="checkUnitPrice(row)" />
                         </td>
 
                         <td style="text-align:right;">{{row.VatPerc | number:2}}</td>
-                        <td style="text-align:right;">{{row.NegoVatAmt | number:2}}</td>
+                        <td style="text-align:right;"  class="hidden">{{row.NegoVatAmt | number:2}}</td>
                         <td style="text-align:right;">{{row.NegoTolAmt | number:3}}</td>
-                        <td style="text-align:right;">{{row.TolAmt | number:3}}</td>
+                        <td style="text-align:right;"  class="hidden">{{row.TolAmt | number:3}}</td>
                         <td>{{row.DeliveryDate}}</td>
 
                         <td>
@@ -1118,12 +1118,15 @@
             // Requisitioned vendors that have not quoted come back with a NULL quotation
             if ($scope.pageMode === 'new' && (row.VendorQutnID === null || row.VendorQutnID === undefined || row.VendorQutnID === '')) return false;
 
+            if ($scope.pageMode === 'edit' && (row.VendorQutnID != null || row.VendorQutnID != undefined || row.VendorQutnID != '')) return true;
+
+
             var s = (row.ProcessStatus === null || row.ProcessStatus === undefined) ? '' : String(row.ProcessStatus);
             return s.trim().toLowerCase() === 'done';
         };
 
         $scope.currentVendorRows = function () {
-            if ($scope.pageMode === 'new') {
+            if ($scope.pageMode === 'new' || $scope.pageMode === 'edit') {
                 return $scope.isMaterialRowSelected ? ($scope.MatWiseVendorList || []) : [];
             }
             return $scope.VendorCSList || [];

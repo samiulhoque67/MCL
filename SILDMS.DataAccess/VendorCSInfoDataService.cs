@@ -393,7 +393,13 @@ namespace SILDMS.DataAccess
             }
             catch (Exception ex)
             {
-                errorNumber = ex.InnerException.Message;// "E404"; // Log ex.Message  Insert Log Table               
+                // Prefer the most specific message available
+                errorNumber = (ex.InnerException != null)
+                    ? ex.InnerException.Message
+                    : ex.Message;
+
+                // Better: log the full exception (including stack + inner exceptions)
+                // Logger.Error(ex, "SaveVendorCSInfo failed");
             }
             return errorNumber;
         }

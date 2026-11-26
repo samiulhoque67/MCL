@@ -13,6 +13,7 @@ namespace SILDMS.DataAccess.RequisitionDelete
     public class RequisitionDeleteData : IRequisitionDeleteData
     {
         private readonly string _spStatusParam = "@p_Status";
+        private readonly string _spErrorMessageParam = "@ErrorMessage";
 
         public void GetRequisitionForDelete(string clientReqID,
             out OBS_ClientReqHeader header, out string errorNumber)
@@ -52,11 +53,15 @@ namespace SILDMS.DataAccess.RequisitionDelete
                 }
             }
         }
-
-        public void DeleteEntireRequisition(string clientReqID, string deletedBy, string deleteReason,
-            out string errorNumber)
+        public void DeleteEntireRequisition(
+            string clientReqID,
+            string deletedBy,
+            string deleteReason,
+            out string errorNumber,
+            out string errorMessage)
         {
             errorNumber = string.Empty;
+            errorMessage = string.Empty;
 
             var factory = new DatabaseProviderFactory();
             var db = factory.CreateDefault() as SqlDatabase;
@@ -65,15 +70,25 @@ namespace SILDMS.DataAccess.RequisitionDelete
             {
                 db.AddInParameter(cmd, "@ClientReqID", SqlDbType.NVarChar, clientReqID);
                 db.AddInParameter(cmd, "@DeletedBy", SqlDbType.NVarChar, deletedBy);
-                db.AddInParameter(cmd, "@DeleteReason", SqlDbType.NVarChar, deleteReason ?? (object)DBNull.Value);
+                db.AddInParameter(cmd, "@DeleteReason", SqlDbType.NVarChar,
+                    string.IsNullOrEmpty(deleteReason) ? (object)DBNull.Value : deleteReason);
+
                 db.AddOutParameter(cmd, _spStatusParam, DbType.String, 10);
+                db.AddOutParameter(cmd, _spErrorMessageParam, DbType.String, 4000);
+
                 cmd.CommandTimeout = 120;
 
                 db.ExecuteNonQuery(cmd);
 
-                if (!db.GetParameterValue(cmd, _spStatusParam).IsNullOrZero())
+                var status = db.GetParameterValue(cmd, _spStatusParam);
+                var message = db.GetParameterValue(cmd, _spErrorMessageParam);
+
+                if (!status.IsNullOrZero())
                 {
-                    errorNumber = db.GetParameterValue(cmd, _spStatusParam).PrefixErrorCode();
+                    errorNumber = status.PrefixErrorCode();
+                    errorMessage = message == null || message == DBNull.Value
+                        ? string.Empty
+                        : Convert.ToString(message);
                 }
             }
         }
